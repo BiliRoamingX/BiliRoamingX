@@ -1,5 +1,5 @@
 # SponsorBlock YouTube Vanced Implementation
-In order to use this in YouTube/Vanced you must first apply the smali mods outlined in smali.md (if you mod vanced directly it is not required)
+In order to use this in YouTube/Vanced you must first apply the smali mods applied to vanced (the patching process used for this is currently automated using our closed source tools with no plans to open source it for the time being) (if you mod vanced directly it is not required)
 * First make your edits in android studio and then compile the code to a debug apk
 * Decompile this apk using apktool https://github.com/iBotPeaches/Apktool
 * Take this decompiled folder and look for a folder labeled pl in one of your dex class folders (usually the second one)
