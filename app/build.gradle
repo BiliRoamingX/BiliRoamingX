@@ -5,12 +5,19 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "pl.jakubweg"
+        applicationId "vanced.integrations"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         multiDexEnabled false
+
+        Properties properties = new Properties()
+        if (rootProject.file("local.properties").exists()) {
+            properties.load(rootProject.file("local.properties").newDataInputStream())
+        }
+
+        buildConfigField "String", "YT_API_KEY", "\"${properties.getProperty("youtubeAPIKey", "")}\""
     }
 
     buildTypes {
