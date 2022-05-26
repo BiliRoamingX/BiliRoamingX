@@ -27,10 +27,10 @@ jobs:
         distribution: 'zulu'
 
     - name: Grant execute permission for gradlew
-      run: chmod +x gradlew.sh
+      run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew.sh --no-daemon build
+      run: ./gradlew --no-daemon build
 
     - name: Github Tag Bump
       uses: anothrNick/github-tag-action@1.39.0
