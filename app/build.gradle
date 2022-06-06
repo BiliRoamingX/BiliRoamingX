@@ -4,7 +4,7 @@ android {
     compileSdkVersion 32
 
     defaultConfig {
-        applicationId "revanced.integrationspp"
+        applicationId "revanced.integrationsapp"
         minSdkVersion 23
         targetSdkVersion 31
         versionCode 1
