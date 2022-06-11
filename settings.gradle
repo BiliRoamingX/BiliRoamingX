@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name = "sb"
+rootProject.name = "integrations"

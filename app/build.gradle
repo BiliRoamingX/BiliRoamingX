@@ -2,11 +2,12 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 32
+    namespace 'vanced.integrations'
 
     defaultConfig {
         applicationId "revanced.integrationsapp"
         minSdkVersion 23
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
         multiDexEnabled false
@@ -33,6 +34,6 @@ android {
 
 dependencies {
     implementation 'androidx.annotation:annotation:1.3.0'
-    implementation "androidx.constraintlayout:constraintlayout:2.1.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
 }
 
