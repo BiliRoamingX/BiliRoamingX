@@ -2,10 +2,10 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 32
-    namespace 'vanced.integrations'
+    namespace 'app.revanced.integrations'
 
     defaultConfig {
-        applicationId "revanced.integrationsapp"
+        applicationId "app.revanced.integrations"
         minSdkVersion 23
         targetSdkVersion 32
         versionCode 1
