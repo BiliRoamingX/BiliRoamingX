@@ -20,6 +20,12 @@ allprojects {
     }
 }
 
+// Tracking issue https://github.com/semantic-release/semantic-release/issues/963
+task publish(type: DefaultTask) {
+    group = 'publish'
+    description = 'Dummy publish to pass the verification phase of the gradle-semantic-release-plugin'
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
