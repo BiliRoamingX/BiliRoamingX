@@ -5,9 +5,11 @@ on:
   push:
     branches: 
       - main
+      - dev
   pull_request:
     branches:
       - main
+      - dev
 
 jobs:
   build:
@@ -17,31 +19,22 @@ jobs:
       uses: styfle/cancel-workflow-action@0.9.0
       with:
         access_token: ${{ secrets.GITHUB_TOKEN }}
-
     - name: Checkout Repo
       uses: actions/checkout@v3
-
     - name: Set up JDK 11
       uses: actions/setup-java@v3
       with:
         java-version: '11'
         distribution: 'zulu'
-
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: "lts/*"
     - name: Build with Gradle
       run: ./gradlew --no-daemon build
-
-    - name: Github Tag Bump
-      uses: anothrNick/github-tag-action@1.39.0
+    - name: Setup semantic-release
+      run: npm install -g semantic-release @semantic-release/git @semantic-release/changelog gradle-semantic-release-plugin -D
+    - name: Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        WITH_V: true
-      id: bump_version
-
-    - name: Upload APKs to Release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ./app/build/outputs/apk/release/*.apk
-        tag: ${{ steps.bump_version.outputs.new_tag }}
-        token: ${{ secrets.GITHUB_TOKEN }}
-        file_glob: true
+      run: npx semantic-release
