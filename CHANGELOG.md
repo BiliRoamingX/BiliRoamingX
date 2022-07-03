@@ -1,3 +1,10 @@
+# [0.20.0](https://github.com/revanced/revanced-integrations/compare/v0.19.1...v0.20.0) (2022-07-03)
+
+
+### Features
+
+* block suggestions ([#46](https://github.com/revanced/revanced-integrations/issues/46)) ([ecb7088](https://github.com/revanced/revanced-integrations/commit/ecb708898e62adb02efe3650fbc85cd2b5cece95))
+
 ## [0.19.1](https://github.com/revanced/revanced-integrations/compare/v0.19.0...v0.19.1) (2022-07-02)
 
 
