@@ -1,3 +1,10 @@
+## [0.20.1](https://github.com/revanced/revanced-integrations/compare/v0.20.0...v0.20.1) (2022-07-05)
+
+
+### Bug Fixes
+
+* Fix NPE when opening video from different App ([#53](https://github.com/revanced/revanced-integrations/issues/53)) ([3c0408f](https://github.com/revanced/revanced-integrations/commit/3c0408fa09793cbab335065c323ec57eb2a591d2))
+
 # [0.20.0](https://github.com/revanced/revanced-integrations/compare/v0.19.1...v0.20.0) (2022-07-03)
 
 
