@@ -1,3 +1,10 @@
+# [0.21.0](https://github.com/revanced/revanced-integrations/compare/v0.20.1...v0.21.0) (2022-07-05)
+
+
+### Features
+
+* `swipe-controls` ([#50](https://github.com/revanced/revanced-integrations/issues/50)) ([4e27c9f](https://github.com/revanced/revanced-integrations/commit/4e27c9f88c4fe9381e1ba1833da1252828a1627e))
+
 ## [0.20.1](https://github.com/revanced/revanced-integrations/compare/v0.20.0...v0.20.1) (2022-07-05)
 
 
