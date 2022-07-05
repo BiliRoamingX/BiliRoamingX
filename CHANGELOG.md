@@ -1,3 +1,10 @@
+## [0.21.1](https://github.com/revanced/revanced-integrations/compare/v0.21.0...v0.21.1) (2022-07-05)
+
+
+### Bug Fixes
+
+* fix build not creating new release ([9c981f7](https://github.com/revanced/revanced-integrations/commit/9c981f72034a6e8c20df764ee19428ca4306a183))
+
 # [0.21.0](https://github.com/revanced/revanced-integrations/compare/v0.20.1...v0.21.0) (2022-07-05)
 
 
