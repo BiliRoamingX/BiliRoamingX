@@ -1,3 +1,10 @@
+## [0.21.3](https://github.com/revanced/revanced-integrations/compare/v0.21.2...v0.21.3) (2022-07-06)
+
+
+### Bug Fixes
+
+* Reduce padding DPI for swipe zones ([b944f6b](https://github.com/revanced/revanced-integrations/commit/b944f6bd5928c42658987e7dbbc56feb404e2a76))
+
 ## [0.21.2](https://github.com/revanced/revanced-integrations/compare/v0.21.1...v0.21.2) (2022-07-06)
 
 
