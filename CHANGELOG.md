@@ -1,3 +1,10 @@
+## [0.21.2](https://github.com/revanced/revanced-integrations/compare/v0.21.1...v0.21.2) (2022-07-06)
+
+
+### Bug Fixes
+
+* remove long-press from swipe-controls ([7c559bb](https://github.com/revanced/revanced-integrations/commit/7c559bb13c6c5c0292a67bf2c0fdf4d5f8b04823))
+
 ## [0.21.1](https://github.com/revanced/revanced-integrations/compare/v0.21.0...v0.21.1) (2022-07-05)
 
 
