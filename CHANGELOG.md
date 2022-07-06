@@ -1,3 +1,10 @@
+## [0.21.4](https://github.com/revanced/revanced-integrations/compare/v0.21.3...v0.21.4) (2022-07-06)
+
+
+### Bug Fixes
+
+* change overlay time of swipe-controls ([#60](https://github.com/revanced/revanced-integrations/issues/60)) ([7da963c](https://github.com/revanced/revanced-integrations/commit/7da963cf8ebdf25e7498b4a2fc9a76c9f8c59bad))
+
 ## [0.21.3](https://github.com/revanced/revanced-integrations/compare/v0.21.2...v0.21.3) (2022-07-06)
 
 
