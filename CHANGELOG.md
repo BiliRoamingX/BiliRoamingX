@@ -1,3 +1,10 @@
+## [0.21.7](https://github.com/revanced/revanced-integrations/compare/v0.21.6...v0.21.7) (2022-07-07)
+
+
+### Bug Fixes
+
+* enable wide-search-bar by default ([#67](https://github.com/revanced/revanced-integrations/issues/67)) ([fabc4e0](https://github.com/revanced/revanced-integrations/commit/fabc4e0548faa3a8d4d2a894a9f452a770b8bbb7))
+
 ## [0.21.6](https://github.com/revanced/revanced-integrations/compare/v0.21.5...v0.21.6) (2022-07-07)
 
 
