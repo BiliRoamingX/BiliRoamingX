@@ -1,3 +1,10 @@
+## [0.21.6](https://github.com/revanced/revanced-integrations/compare/v0.21.5...v0.21.6) (2022-07-07)
+
+
+### Bug Fixes
+
+* use Log.d for debugging ([#66](https://github.com/revanced/revanced-integrations/issues/66)) ([605124b](https://github.com/revanced/revanced-integrations/commit/605124bc607952eb91e57c2b3e3594fb62464534))
+
 ## [0.21.5](https://github.com/revanced/revanced-integrations/compare/v0.21.4...v0.21.5) (2022-07-07)
 
 
