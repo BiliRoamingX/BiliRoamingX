@@ -1,3 +1,10 @@
+## [0.21.5](https://github.com/revanced/revanced-integrations/compare/v0.21.4...v0.21.5) (2022-07-07)
+
+
+### Bug Fixes
+
+* don't enable debug log by default ([bf7f138](https://github.com/revanced/revanced-integrations/commit/bf7f138615fed0e336174559282ed1a058646985))
+
 ## [0.21.4](https://github.com/revanced/revanced-integrations/compare/v0.21.3...v0.21.4) (2022-07-06)
 
 
