@@ -1,3 +1,10 @@
+## [0.21.8](https://github.com/revanced/revanced-integrations/compare/v0.21.7...v0.21.8) (2022-07-08)
+
+
+### Bug Fixes
+
+* Block some more movies in adblocker ([#69](https://github.com/revanced/revanced-integrations/issues/69)) ([391ce64](https://github.com/revanced/revanced-integrations/commit/391ce64c252cf6fa858b26334dd4563b42672f67))
+
 ## [0.21.7](https://github.com/revanced/revanced-integrations/compare/v0.21.6...v0.21.7) (2022-07-07)
 
 
