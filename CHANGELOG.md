@@ -1,3 +1,10 @@
+## [0.21.9](https://github.com/revanced/revanced-integrations/compare/v0.21.8...v0.21.9) (2022-07-08)
+
+
+### Bug Fixes
+
+* remove int argument from buffer functions ([#71](https://github.com/revanced/revanced-integrations/issues/71)) ([7de1994](https://github.com/revanced/revanced-integrations/commit/7de199421c37b3fd77488f60bbd5d492e3bd810e))
+
 ## [0.21.8](https://github.com/revanced/revanced-integrations/compare/v0.21.7...v0.21.8) (2022-07-08)
 
 
