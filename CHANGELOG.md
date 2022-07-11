@@ -1,3 +1,10 @@
+# [0.22.0](https://github.com/revanced/revanced-integrations/compare/v0.21.9...v0.22.0) (2022-07-11)
+
+
+### Features
+
+* `swipe-controls` rewrite ([#64](https://github.com/revanced/revanced-integrations/issues/64)) ([fcabebf](https://github.com/revanced/revanced-integrations/commit/fcabebf3a74fd517e7ac72d3231cb68fad37b8cd))
+
 ## [0.21.9](https://github.com/revanced/revanced-integrations/compare/v0.21.8...v0.21.9) (2022-07-08)
 
 
