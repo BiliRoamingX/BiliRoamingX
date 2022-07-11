@@ -1,3 +1,10 @@
+## [0.22.1](https://github.com/revanced/revanced-integrations/compare/v0.22.0...v0.22.1) (2022-07-11)
+
+
+### Bug Fixes
+
+* `hdr-auto-brightness` patch ([#74](https://github.com/revanced/revanced-integrations/issues/74)) ([7314032](https://github.com/revanced/revanced-integrations/commit/7314032a38f2c70f4e56326b592c5a01be218f88))
+
 # [0.22.0](https://github.com/revanced/revanced-integrations/compare/v0.21.9...v0.22.0) (2022-07-11)
 
 
