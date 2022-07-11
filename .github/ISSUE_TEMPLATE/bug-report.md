@@ -1,8 +1,10 @@
 ---
 name: Bug report
-about: Create a bug report on the patcher. Do not submit suggestions for patches here.
+about: Create a bug report on the integrations. Do not submit suggestions for patches
+  here.
 title: 'problem: some problem'
 labels: bug
+assignees: ''
 
 ---
 

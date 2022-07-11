@@ -1,8 +1,10 @@
 ---
 name: Feature request
-about: Suggest a change for the patcher. Do not submit suggestions for patches here.
+about: Suggest a change for the integrations. Do not submit suggestions for patches
+  here.
 title: 'feat: some feature'
 labels: feature-request
+assignees: ''
 
 ---
 
