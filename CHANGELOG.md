@@ -1,3 +1,10 @@
+# [0.24.0](https://github.com/revanced/revanced-integrations/compare/v0.23.2...v0.24.0) (2022-07-12)
+
+
+### Features
+
+* `force-vp9-codec` integrations ([#76](https://github.com/revanced/revanced-integrations/issues/76)) ([8a0029c](https://github.com/revanced/revanced-integrations/commit/8a0029c81cfd29788b1d556cdd31feacc152b3c1))
+
 ## [0.23.2](https://github.com/revanced/revanced-integrations/compare/v0.23.1...v0.23.2) (2022-07-12)
 
 
