@@ -1,3 +1,10 @@
+## [0.23.1](https://github.com/revanced/revanced-integrations/compare/v0.23.0...v0.23.1) (2022-07-12)
+
+
+### Bug Fixes
+
+* crash when buffer value is less than 1 ([e2d9623](https://github.com/revanced/revanced-integrations/commit/e2d962355cf34dccfd233f65f475acbb8b895694))
+
 # [0.23.0](https://github.com/revanced/revanced-integrations/compare/v0.22.1...v0.23.0) (2022-07-12)
 
 
