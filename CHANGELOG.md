@@ -1,3 +1,10 @@
+## [0.23.2](https://github.com/revanced/revanced-integrations/compare/v0.23.1...v0.23.2) (2022-07-12)
+
+
+### Bug Fixes
+
+* untangle RYD from SB. fixes [#79](https://github.com/revanced/revanced-integrations/issues/79) ([56eaef0](https://github.com/revanced/revanced-integrations/commit/56eaef0670121cd262de51862c8d23fd34724999))
+
 ## [0.23.1](https://github.com/revanced/revanced-integrations/compare/v0.23.0...v0.23.1) (2022-07-12)
 
 
