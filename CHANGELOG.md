@@ -1,3 +1,16 @@
+# [0.23.0](https://github.com/revanced/revanced-integrations/compare/v0.22.1...v0.23.0) (2022-07-12)
+
+
+### Bug Fixes
+
+* use `getLong` instead of `getFloat` ([577a734](https://github.com/revanced/revanced-integrations/commit/577a7348fe023aba4858cceb0830062ee0a653d1))
+* wrong description for issue templates ([ea581d4](https://github.com/revanced/revanced-integrations/commit/ea581d48e29b3f40d12e82448788a1151d4892d1))
+
+
+### Features
+
+* added issue templates. ([#77](https://github.com/revanced/revanced-integrations/issues/77)) ([51016ef](https://github.com/revanced/revanced-integrations/commit/51016efcb7c7fcc73f25ecfab48ffa96fbae4f47))
+
 ## [0.22.1](https://github.com/revanced/revanced-integrations/compare/v0.22.0...v0.22.1) (2022-07-11)
 
 
