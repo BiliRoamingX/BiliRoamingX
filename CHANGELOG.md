@@ -1,3 +1,10 @@
+## [0.24.1](https://github.com/revanced/revanced-integrations/compare/v0.24.0...v0.24.1) (2022-07-14)
+
+
+### Bug Fixes
+
+* `swipe-controls` with active engagement panel ([#82](https://github.com/revanced/revanced-integrations/issues/82)) ([669cb29](https://github.com/revanced/revanced-integrations/commit/669cb295a1621d2da2ee2b4a5801228a3e2e62ff))
+
 # [0.24.0](https://github.com/revanced/revanced-integrations/compare/v0.23.2...v0.24.0) (2022-07-12)
 
 
