@@ -1,3 +1,10 @@
+## [0.24.2](https://github.com/revanced/revanced-integrations/compare/v0.24.1...v0.24.2) (2022-07-14)
+
+
+### Bug Fixes
+
+* set debug to false by default ([95b9406](https://github.com/revanced/revanced-integrations/commit/95b940670190c155ba14b1f0a56db3647201e601))
+
 ## [0.24.1](https://github.com/revanced/revanced-integrations/compare/v0.24.0...v0.24.1) (2022-07-14)
 
 
