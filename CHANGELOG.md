@@ -1,3 +1,10 @@
+# [0.25.0](https://github.com/revanced/revanced-integrations/compare/v0.24.2...v0.25.0) (2022-07-16)
+
+
+### Features
+
+* `return-youtube-dislikes` patch ([#81](https://github.com/revanced/revanced-integrations/issues/81)) ([2d513b5](https://github.com/revanced/revanced-integrations/commit/2d513b5100101cc3cd0393ed72bd7e09b9e11409))
+
 ## [0.24.2](https://github.com/revanced/revanced-integrations/compare/v0.24.1...v0.24.2) (2022-07-14)
 
 
