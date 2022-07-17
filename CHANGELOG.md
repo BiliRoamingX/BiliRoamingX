@@ -1,3 +1,10 @@
+## [0.25.2](https://github.com/revanced/revanced-integrations/compare/v0.25.1...v0.25.2) (2022-07-17)
+
+
+### Bug Fixes
+
+* rename class `ReturnYouTubeDislikesPatch` to `ReturnYouTubeDislikePatch` ([a94fb8c](https://github.com/revanced/revanced-integrations/commit/a94fb8c119744d25a48f7dbafe2c4264cef87a36))
+
 ## [0.25.1](https://github.com/revanced/revanced-integrations/compare/v0.25.0...v0.25.1) (2022-07-17)
 
 
