@@ -1,3 +1,10 @@
+## [0.25.1](https://github.com/revanced/revanced-integrations/compare/v0.25.0...v0.25.1) (2022-07-17)
+
+
+### Bug Fixes
+
+* `old-quality-layout` patch ([5a5e882](https://github.com/revanced/revanced-integrations/commit/5a5e8824c5ec9665819605ed55ec9fd020b82333))
+
 # [0.25.0](https://github.com/revanced/revanced-integrations/compare/v0.24.2...v0.25.0) (2022-07-16)
 
 
