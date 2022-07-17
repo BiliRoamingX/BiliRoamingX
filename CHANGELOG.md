@@ -1,3 +1,11 @@
+# [0.27.0](https://github.com/revanced/revanced-integrations/compare/v0.26.0...v0.27.0) (2022-07-17)
+
+
+### Features
+
+* better default settings for `sponsorblock` patch ([0a0101f](https://github.com/revanced/revanced-integrations/commit/0a0101f35e8e0828f072a18b607cdb772fb4b00f))
+* remove use of unused class `Dialogs` ([5a67ca2](https://github.com/revanced/revanced-integrations/commit/5a67ca22b8e019d9af3f20b885d41c53b19dc18b))
+
 # [0.26.0](https://github.com/revanced/revanced-integrations/compare/v0.25.2...v0.26.0) (2022-07-17)
 
 
