@@ -1,3 +1,10 @@
+## [0.27.2](https://github.com/revanced/revanced-integrations/compare/v0.27.1...v0.27.2) (2022-07-18)
+
+
+### Bug Fixes
+
+* make all patches toggleable with settings ([#87](https://github.com/revanced/revanced-integrations/issues/87)) ([6d3d274](https://github.com/revanced/revanced-integrations/commit/6d3d274599150faefac5cebebbb1340aa9fd6ff1))
+
 ## [0.27.1](https://github.com/revanced/revanced-integrations/compare/v0.27.0...v0.27.1) (2022-07-18)
 
 
