@@ -1,3 +1,10 @@
+## [0.27.1](https://github.com/revanced/revanced-integrations/compare/v0.27.0...v0.27.1) (2022-07-18)
+
+
+### Bug Fixes
+
+* `swipe-controls` incompatible with `disable-fullscreen-panels` ([#88](https://github.com/revanced/revanced-integrations/issues/88)) ([1f9b01c](https://github.com/revanced/revanced-integrations/commit/1f9b01c142135513862685f871994b13bf8d8ffa))
+
 # [0.27.0](https://github.com/revanced/revanced-integrations/compare/v0.26.0...v0.27.0) (2022-07-17)
 
 
