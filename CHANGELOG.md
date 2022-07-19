@@ -1,3 +1,10 @@
+## [0.27.3](https://github.com/revanced/revanced-integrations/compare/v0.27.2...v0.27.3) (2022-07-19)
+
+
+### Bug Fixes
+
+* quick quality list flyout view visibility in `old-quality-layout` patch ([#86](https://github.com/revanced/revanced-integrations/issues/86)) ([996434c](https://github.com/revanced/revanced-integrations/commit/996434c5740d81d989fe9fa927cc432a3e84c5c4))
+
 ## [0.27.2](https://github.com/revanced/revanced-integrations/compare/v0.27.1...v0.27.2) (2022-07-18)
 
 
