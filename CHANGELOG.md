@@ -1,3 +1,10 @@
+## [0.27.4](https://github.com/revanced/revanced-integrations/compare/v0.27.3...v0.27.4) (2022-07-21)
+
+
+### Bug Fixes
+
+* disable-fullscreen-panels patch not working ([#90](https://github.com/revanced/revanced-integrations/issues/90)) ([e625a17](https://github.com/revanced/revanced-integrations/commit/e625a17e99cc5b8411c932de6b7b37bb1549e53c))
+
 ## [0.27.3](https://github.com/revanced/revanced-integrations/compare/v0.27.2...v0.27.3) (2022-07-19)
 
 
