@@ -1,3 +1,10 @@
+## [0.27.5](https://github.com/revanced/revanced-integrations/compare/v0.27.4...v0.27.5) (2022-07-21)
+
+
+### Bug Fixes
+
+* rename DisableAutoCaptions patch ([#91](https://github.com/revanced/revanced-integrations/issues/91)) ([2890467](https://github.com/revanced/revanced-integrations/commit/2890467ce1e1b8d9d761fa9114291c006ba60703))
+
 ## [0.27.4](https://github.com/revanced/revanced-integrations/compare/v0.27.3...v0.27.4) (2022-07-21)
 
 
