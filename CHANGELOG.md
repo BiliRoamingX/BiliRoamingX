@@ -1,3 +1,10 @@
+## [0.27.6](https://github.com/revanced/revanced-integrations/compare/v0.27.5...v0.27.6) (2022-07-21)
+
+
+### Bug Fixes
+
+* wrong naming of ForceDisableCaptions ([#93](https://github.com/revanced/revanced-integrations/issues/93)) ([21d56f8](https://github.com/revanced/revanced-integrations/commit/21d56f89b392982154dd3684070b9cd4d83d89e3))
+
 ## [0.27.5](https://github.com/revanced/revanced-integrations/compare/v0.27.4...v0.27.5) (2022-07-21)
 
 
