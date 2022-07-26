@@ -1,3 +1,10 @@
+## [0.28.1](https://github.com/revanced/revanced-integrations/compare/v0.28.0...v0.28.1) (2022-07-26)
+
+
+### Bug Fixes
+
+* `default-video-quality` patch crashing ([#100](https://github.com/revanced/revanced-integrations/issues/100)) ([c6b7528](https://github.com/revanced/revanced-integrations/commit/c6b7528eaea76cf04851f4085d6e6a48731fb2dc))
+
 # [0.28.0](https://github.com/revanced/revanced-integrations/compare/v0.27.6...v0.28.0) (2022-07-24)
 
 
