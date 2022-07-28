@@ -1,3 +1,15 @@
+# [0.29.0](https://github.com/revanced/revanced-integrations/compare/v0.28.1...v0.29.0) (2022-07-28)
+
+
+### Bug Fixes
+
+* solution shouldn't be required ([#104](https://github.com/revanced/revanced-integrations/issues/104)) ([93a5edc](https://github.com/revanced/revanced-integrations/commit/93a5edc2ba776097af380631ce4c99dd1427fc97))
+
+
+### Features
+
+* toast notifications for `remember-quality` patch ([#106](https://github.com/revanced/revanced-integrations/issues/106)) ([35ee341](https://github.com/revanced/revanced-integrations/commit/35ee3415f000846926fbce06e3a9db1fc3af7e0c))
+
 ## [0.28.1](https://github.com/revanced/revanced-integrations/compare/v0.28.0...v0.28.1) (2022-07-26)
 
 
