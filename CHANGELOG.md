@@ -1,3 +1,10 @@
+## [0.30.1](https://github.com/revanced/revanced-integrations/compare/v0.30.0...v0.30.1) (2022-07-31)
+
+
+### Bug Fixes
+
+* sb does not turn off ([97c184b](https://github.com/revanced/revanced-integrations/commit/97c184b5fb09c515b345b2cc58e538721418267a))
+
 # [0.30.0](https://github.com/revanced/revanced-integrations/compare/v0.29.0...v0.30.0) (2022-07-31)
 
 
