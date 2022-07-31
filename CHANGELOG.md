@@ -1,3 +1,10 @@
+## [0.30.4](https://github.com/revanced/revanced-integrations/compare/v0.30.3...v0.30.4) (2022-07-31)
+
+
+### Bug Fixes
+
+* `sponsorblock` settings not getting saved ([#112](https://github.com/revanced/revanced-integrations/issues/112)) ([256302e](https://github.com/revanced/revanced-integrations/commit/256302e914d7ee038fb4be76bd2b8883f3e1f841))
+
 ## [0.30.3](https://github.com/revanced/revanced-integrations/compare/v0.30.2...v0.30.3) (2022-07-31)
 
 
