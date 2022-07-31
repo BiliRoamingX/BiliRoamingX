@@ -1,4 +1,4 @@
-# ReVanced Integrations 
+# ReVanced Integrations  
 
 # How to use debugging:
 - Usage on Windows: ```adb logcat | findstr "revanced" > log.txt```
