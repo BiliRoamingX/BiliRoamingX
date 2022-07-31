@@ -1,3 +1,10 @@
+## [0.30.3](https://github.com/revanced/revanced-integrations/compare/v0.30.2...v0.30.3) (2022-07-31)
+
+
+### Bug Fixes
+
+* app crashes on first start ([#111](https://github.com/revanced/revanced-integrations/issues/111)) ([0f5e89c](https://github.com/revanced/revanced-integrations/commit/0f5e89c5e3c90f643b194f30b623594d1cf5471d))
+
 ## [0.30.2](https://github.com/revanced/revanced-integrations/compare/v0.30.1...v0.30.2) (2022-07-31)
 
 
