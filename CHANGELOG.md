@@ -1,3 +1,10 @@
+# [0.31.0](https://github.com/revanced/revanced-integrations/compare/v0.30.4...v0.31.0) (2022-08-03)
+
+
+### Features
+
+* remove `ForceCodecPatch` ([#115](https://github.com/revanced/revanced-integrations/issues/115)) ([532de7e](https://github.com/revanced/revanced-integrations/commit/532de7e9a177bd45627051176d90b8a5f97fc792))
+
 ## [0.30.4](https://github.com/revanced/revanced-integrations/compare/v0.30.3...v0.30.4) (2022-07-31)
 
 
