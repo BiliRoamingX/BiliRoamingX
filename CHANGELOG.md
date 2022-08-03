@@ -1,3 +1,10 @@
+## [0.31.1](https://github.com/revanced/revanced-integrations/compare/v0.31.0...v0.31.1) (2022-08-03)
+
+
+### Bug Fixes
+
+* logic in `VideoAdsPatch` ([#116](https://github.com/revanced/revanced-integrations/issues/116)) ([f474541](https://github.com/revanced/revanced-integrations/commit/f47454109417d59f9fa8955b9080d8ad659926e2))
+
 # [0.31.0](https://github.com/revanced/revanced-integrations/compare/v0.30.4...v0.31.0) (2022-08-03)
 
 
