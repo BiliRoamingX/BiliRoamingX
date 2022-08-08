@@ -1,3 +1,10 @@
+## [0.31.2](https://github.com/revanced/revanced-integrations/compare/v0.31.1...v0.31.2) (2022-08-08)
+
+
+### Bug Fixes
+
+* unintentional like button detection ([#119](https://github.com/revanced/revanced-integrations/issues/119)) ([f64b178](https://github.com/revanced/revanced-integrations/commit/f64b17869ecfc7e74d520f9ad1c0d3a9ed60e10c))
+
 ## [0.31.1](https://github.com/revanced/revanced-integrations/compare/v0.31.0...v0.31.1) (2022-08-03)
 
 
