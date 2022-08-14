@@ -1,3 +1,10 @@
+# [0.32.0](https://github.com/revanced/revanced-integrations/compare/v0.31.2...v0.32.0) (2022-08-14)
+
+
+### Features
+
+* `tablet-mini-player` patch ([e43de8b](https://github.com/revanced/revanced-integrations/commit/e43de8b0b41c2771879755224d7ee3ccb7b4ae94))
+
 ## [0.31.2](https://github.com/revanced/revanced-integrations/compare/v0.31.1...v0.31.2) (2022-08-08)
 
 
