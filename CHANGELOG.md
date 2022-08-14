@@ -1,3 +1,10 @@
+## [0.33.1](https://github.com/revanced/revanced-integrations/compare/v0.33.0...v0.33.1) (2022-08-14)
+
+
+### Bug Fixes
+
+* decode bytebuffer properly ([#121](https://github.com/revanced/revanced-integrations/issues/121)) ([d257b6d](https://github.com/revanced/revanced-integrations/commit/d257b6d193dbd98b89c1e3cdb7f9465d13583478))
+
 # [0.33.0](https://github.com/revanced/revanced-integrations/compare/v0.32.0...v0.33.0) (2022-08-14)
 
 
