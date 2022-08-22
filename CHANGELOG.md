@@ -1,3 +1,15 @@
+# [0.36.0](https://github.com/revanced/revanced-integrations/compare/v0.35.0...v0.36.0) (2022-08-22)
+
+
+### Bug Fixes
+
+* default values for settings ([6f5596f](https://github.com/revanced/revanced-integrations/commit/6f5596f2271a03b5fe09e045cd69fc94404d2fa1))
+
+
+### Features
+
+* setting for downloader package name ([8b09228](https://github.com/revanced/revanced-integrations/commit/8b092280e1718b1a286ddcd9a3575505fdef5d04))
+
 # [0.35.0](https://github.com/revanced/revanced-integrations/compare/v0.34.0...v0.35.0) (2022-08-22)
 
 
