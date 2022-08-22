@@ -1,3 +1,10 @@
+# [0.35.0](https://github.com/revanced/revanced-integrations/compare/v0.34.0...v0.35.0) (2022-08-22)
+
+
+### Features
+
+* `downloads` patch ([#89](https://github.com/revanced/revanced-integrations/issues/89)) ([6aa02e5](https://github.com/revanced/revanced-integrations/commit/6aa02e50632031ad44cfc38ff3db5b7797ac88c6))
+
 # [0.34.0](https://github.com/revanced/revanced-integrations/compare/v0.33.1...v0.34.0) (2022-08-22)
 
 
