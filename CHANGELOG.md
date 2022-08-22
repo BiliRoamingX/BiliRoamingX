@@ -1,3 +1,10 @@
+# [0.34.0](https://github.com/revanced/revanced-integrations/compare/v0.33.1...v0.34.0) (2022-08-22)
+
+
+### Features
+
+* `settings` patch framework ([#113](https://github.com/revanced/revanced-integrations/issues/113)) ([276a2bc](https://github.com/revanced/revanced-integrations/commit/276a2bc3566d3ef59b95c06683d6cd9fe256170b))
+
 ## [0.33.1](https://github.com/revanced/revanced-integrations/compare/v0.33.0...v0.33.1) (2022-08-14)
 
 
