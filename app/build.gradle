@@ -34,7 +34,8 @@ android {
 }
 
 dependencies {
+    //implementation 'com.github.TeamNewPipe:NewPipeExtractor:v0.22.1'
+
     compileOnly 'androidx.annotation:annotation:1.4.0'
-    compileOnly 'androidx.constraintlayout:constraintlayout:2.1.4'
 }
 
