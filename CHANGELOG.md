@@ -1,3 +1,10 @@
+## [0.36.1](https://github.com/revanced/revanced-integrations/compare/v0.36.0...v0.36.1) (2022-08-24)
+
+
+### Bug Fixes
+
+* restart prompt for `tablet-miniplayer` patch setting ([#124](https://github.com/revanced/revanced-integrations/issues/124)) ([a9a69ec](https://github.com/revanced/revanced-integrations/commit/a9a69ecfeb91b20d080da0c559437926f98a704d))
+
 # [0.36.0](https://github.com/revanced/revanced-integrations/compare/v0.35.0...v0.36.0) (2022-08-22)
 
 
