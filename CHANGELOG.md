@@ -1,3 +1,10 @@
+## [0.36.2](https://github.com/revanced/revanced-integrations/compare/v0.36.1...v0.36.2) (2022-08-25)
+
+
+### Bug Fixes
+
+* restart when toggling the downloads button ([#125](https://github.com/revanced/revanced-integrations/issues/125)) ([afd4815](https://github.com/revanced/revanced-integrations/commit/afd4815a22811eda1b63ef68066c57782a657c33))
+
 ## [0.36.1](https://github.com/revanced/revanced-integrations/compare/v0.36.0...v0.36.1) (2022-08-24)
 
 
