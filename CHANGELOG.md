@@ -1,3 +1,10 @@
+## [0.36.3](https://github.com/revanced/revanced-integrations/compare/v0.36.2...v0.36.3) (2022-08-26)
+
+
+### Bug Fixes
+
+* change default value for autorepeat setting ([#126](https://github.com/revanced/revanced-integrations/issues/126)) ([c6c2556](https://github.com/revanced/revanced-integrations/commit/c6c255609f0d58e9097dd898dbf9cce3a5cf3dc4))
+
 ## [0.36.2](https://github.com/revanced/revanced-integrations/compare/v0.36.1...v0.36.2) (2022-08-25)
 
 
