@@ -1,3 +1,10 @@
+## [0.36.4](https://github.com/revanced/revanced-integrations/compare/v0.36.3...v0.36.4) (2022-08-27)
+
+
+### Bug Fixes
+
+* pull down to reload the home page ([#129](https://github.com/revanced/revanced-integrations/issues/129)) ([96d427f](https://github.com/revanced/revanced-integrations/commit/96d427f2ba8a896fa7faebd65fa8cc9a834aa2b8))
+
 ## [0.36.3](https://github.com/revanced/revanced-integrations/compare/v0.36.2...v0.36.3) (2022-08-26)
 
 
