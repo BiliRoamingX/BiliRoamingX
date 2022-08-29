@@ -1,3 +1,10 @@
+## [0.36.5](https://github.com/revanced/revanced-integrations/compare/v0.36.4...v0.36.5) (2022-08-29)
+
+
+### Bug Fixes
+
+* revert "pull up to refresh" ([cb7e90c](https://github.com/revanced/revanced-integrations/commit/cb7e90c41ed019822f5bd8ade259875ba09a027c))
+
 ## [0.36.4](https://github.com/revanced/revanced-integrations/compare/v0.36.3...v0.36.4) (2022-08-27)
 
 
