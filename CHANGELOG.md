@@ -1,3 +1,10 @@
+## [0.36.6](https://github.com/revanced/revanced-integrations/compare/v0.36.5...v0.36.6) (2022-09-08)
+
+
+### Bug Fixes
+
+* android api 23 compat ([136fb7b](https://github.com/revanced/revanced-integrations/commit/136fb7bcbb12b94924bb1a6ac449b8d35f9f4e0f)), closes [revanced/revanced-integrations#136](https://github.com/revanced/revanced-integrations/issues/136)
+
 ## [0.36.5](https://github.com/revanced/revanced-integrations/compare/v0.36.4...v0.36.5) (2022-08-29)
 
 
