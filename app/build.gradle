@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "app.revanced.integrations"
-        minSdkVersion 24
+        minSdkVersion 23
         targetSdkVersion 32
         versionCode 1
         versionName "1.0"
@@ -34,8 +34,6 @@ android {
 }
 
 dependencies {
-    //implementation 'com.github.TeamNewPipe:NewPipeExtractor:v0.22.1'
-
     compileOnly 'androidx.annotation:annotation:1.4.0'
 }
 
