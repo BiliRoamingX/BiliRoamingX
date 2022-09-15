@@ -1,3 +1,10 @@
+# [0.37.0](https://github.com/revanced/revanced-integrations/compare/v0.36.6...v0.37.0) (2022-09-15)
+
+
+### Features
+
+* `disable-auto-captions` patch ([#133](https://github.com/revanced/revanced-integrations/issues/133)) ([233d332](https://github.com/revanced/revanced-integrations/commit/233d33247326b68a651525604f215d30fa3da1d4))
+
 ## [0.36.6](https://github.com/revanced/revanced-integrations/compare/v0.36.5...v0.36.6) (2022-09-08)
 
 
