@@ -1,3 +1,10 @@
+## [0.37.1](https://github.com/revanced/revanced-integrations/compare/v0.37.0...v0.37.1) (2022-09-15)
+
+
+### Bug Fixes
+
+* `general-ads` litho ads filter ([#139](https://github.com/revanced/revanced-integrations/issues/139)) ([68d7f98](https://github.com/revanced/revanced-integrations/commit/68d7f98efc879a00f69a2a2e04a98ced17458b08))
+
 # [0.37.0](https://github.com/revanced/revanced-integrations/compare/v0.36.6...v0.37.0) (2022-09-15)
 
 
