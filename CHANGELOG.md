@@ -1,3 +1,10 @@
+## [0.37.2](https://github.com/revanced/revanced-integrations/compare/v0.37.1...v0.37.2) (2022-09-15)
+
+
+### Bug Fixes
+
+* consolidate ad filters ([#140](https://github.com/revanced/revanced-integrations/issues/140)) ([8a39551](https://github.com/revanced/revanced-integrations/commit/8a39551abacc5e62a3c60dbdc2644afc9babe156))
+
 ## [0.37.1](https://github.com/revanced/revanced-integrations/compare/v0.37.0...v0.37.1) (2022-09-15)
 
 
