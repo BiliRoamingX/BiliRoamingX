@@ -1,3 +1,10 @@
+## [0.37.4](https://github.com/revanced/revanced-integrations/compare/v0.37.3...v0.37.4) (2022-09-18)
+
+
+### Bug Fixes
+
+* **sponsorblock:** handle response error code 400 ([#143](https://github.com/revanced/revanced-integrations/issues/143)) ([40f9af0](https://github.com/revanced/revanced-integrations/commit/40f9af0efdacd33e77478f5edc8d41c68a638e3c))
+
 ## [0.37.3](https://github.com/revanced/revanced-integrations/compare/v0.37.2...v0.37.3) (2022-09-15)
 
 
