@@ -1,3 +1,10 @@
+# [0.38.0](https://github.com/revanced/revanced-integrations/compare/v0.37.4...v0.38.0) (2022-09-20)
+
+
+### Features
+
+* disable `swipe-controls` when player controls are visible ([#123](https://github.com/revanced/revanced-integrations/issues/123)) ([6d8c0a0](https://github.com/revanced/revanced-integrations/commit/6d8c0a0c738ce976a7a37d2e1e3d38e6ebc29d09))
+
 ## [0.37.4](https://github.com/revanced/revanced-integrations/compare/v0.37.3...v0.37.4) (2022-09-18)
 
 
