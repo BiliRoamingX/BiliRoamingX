@@ -1,3 +1,15 @@
+# [0.40.0](https://github.com/revanced/revanced-integrations/compare/v0.39.0...v0.40.0) (2022-09-21)
+
+
+### Bug Fixes
+
+* disable sponsorblock on shorts ([#135](https://github.com/revanced/revanced-integrations/issues/135)) ([3797438](https://github.com/revanced/revanced-integrations/commit/37974389ac27e98d18cdfc67c61c0945b53bd0c1))
+
+
+### Features
+
+* `disable-auto-player-popup-panels` patch ([#145](https://github.com/revanced/revanced-integrations/issues/145)) ([3fd6df8](https://github.com/revanced/revanced-integrations/commit/3fd6df82770acacb6fc16b176521abd98080756f))
+
 # [0.39.0](https://github.com/revanced/revanced-integrations/compare/v0.38.0...v0.39.0) (2022-09-21)
 
 
