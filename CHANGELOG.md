@@ -1,3 +1,10 @@
+# [0.39.0](https://github.com/revanced/revanced-integrations/compare/v0.38.0...v0.39.0) (2022-09-21)
+
+
+### Features
+
+* `hide-time-and-seekbar` patch ([#146](https://github.com/revanced/revanced-integrations/issues/146)) ([7e2f48e](https://github.com/revanced/revanced-integrations/commit/7e2f48eb3e92c49c4ea0516f9a8e7e5fbfb39965))
+
 # [0.38.0](https://github.com/revanced/revanced-integrations/compare/v0.37.4...v0.38.0) (2022-09-20)
 
 
