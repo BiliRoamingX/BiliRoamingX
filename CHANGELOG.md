@@ -1,3 +1,10 @@
+# [0.41.0](https://github.com/revanced/revanced-integrations/compare/v0.40.0...v0.41.0) (2022-09-21)
+
+
+### Features
+
+* `tiktok-feed-filter` , `tiktok-settings` and `tiktok-force-login` patch ([#142](https://github.com/revanced/revanced-integrations/issues/142)) ([c3f79eb](https://github.com/revanced/revanced-integrations/commit/c3f79eb27bf71c02299fdd6892179fd081eca07e))
+
 # [0.40.0](https://github.com/revanced/revanced-integrations/compare/v0.39.0...v0.40.0) (2022-09-21)
 
 
