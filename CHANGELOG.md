@@ -1,3 +1,5 @@
+## [0.41.2](https://github.com/revanced/revanced-integrations/compare/v0.41.1...v0.41.2) (2022-09-22)
+
 ## [0.41.1](https://github.com/revanced/revanced-integrations/compare/v0.41.0...v0.41.1) (2022-09-22)
 
 # [0.41.0](https://github.com/revanced/revanced-integrations/compare/v0.40.0...v0.41.0) (2022-09-21)
