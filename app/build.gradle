@@ -1,14 +1,17 @@
-apply plugin: 'com.android.application'
-apply plugin: 'org.jetbrains.kotlin.android'
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
 
 android {
-    compileSdkVersion 32
+    compileSdk 32
+    buildToolsVersion "32.0.0"
     namespace 'app.revanced.integrations'
 
     defaultConfig {
         applicationId "app.revanced.integrations"
-        minSdkVersion 23
-        targetSdkVersion 32
+        minSdk 23
+        targetSdk 32
         versionCode 1
         versionName "1.0"
         multiDexEnabled false
@@ -31,9 +34,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
 }
 
 dependencies {
-    compileOnly 'androidx.annotation:annotation:1.4.0'
+    compileOnly 'androidx.annotation:annotation:1.5.0'
 }
-
