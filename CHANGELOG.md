@@ -1,3 +1,10 @@
+# [0.42.0](https://github.com/revanced/revanced-integrations/compare/v0.41.2...v0.42.0) (2022-09-23)
+
+
+### Features
+
+* **tiktok:** adapt `tiktok-download` with `tiktok-settings`. ([#152](https://github.com/revanced/revanced-integrations/issues/152)) ([5a710aa](https://github.com/revanced/revanced-integrations/commit/5a710aa0330741d6ff84dd526e1e59d679e6923c))
+
 ## [0.41.2](https://github.com/revanced/revanced-integrations/compare/v0.41.1...v0.41.2) (2022-09-22)
 
 ## [0.41.1](https://github.com/revanced/revanced-integrations/compare/v0.41.0...v0.41.1) (2022-09-22)
