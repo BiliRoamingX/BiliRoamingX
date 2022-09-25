@@ -1,3 +1,10 @@
+## [0.42.2](https://github.com/revanced/revanced-integrations/compare/v0.42.1...v0.42.2) (2022-09-25)
+
+
+### Bug Fixes
+
+* **swipe-controls:** crash on SDK below 24 ([#157](https://github.com/revanced/revanced-integrations/issues/157)) ([4c72ac1](https://github.com/revanced/revanced-integrations/commit/4c72ac1cd5ee2aae8478171e56e488563459a0f7))
+
 ## [0.42.1](https://github.com/revanced/revanced-integrations/compare/v0.42.0...v0.42.1) (2022-09-23)
 
 
