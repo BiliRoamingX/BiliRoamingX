@@ -1,3 +1,10 @@
+# [0.43.0](https://github.com/revanced/revanced-integrations/compare/v0.42.2...v0.43.0) (2022-09-26)
+
+
+### Features
+
+* enable minification  ([#158](https://github.com/revanced/revanced-integrations/issues/158)) ([8dde925](https://github.com/revanced/revanced-integrations/commit/8dde925b47ff30afc373303b0fdb65c86f9ba82b))
+
 ## [0.42.2](https://github.com/revanced/revanced-integrations/compare/v0.42.1...v0.42.2) (2022-09-25)
 
 
