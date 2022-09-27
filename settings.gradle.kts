@@ -7,4 +7,5 @@ dependencyResolutionManagement {
     }
 }
 include(":app")
+include(":dummy")
 rootProject.name = "integrations"

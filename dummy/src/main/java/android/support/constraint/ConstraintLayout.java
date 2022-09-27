@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 
 /**
  * "CompileOnly" class
- * because android.support.constraint.ConstraintLayout is deprecated
+ * because android.support.android.support.constraint.ConstraintLayout is deprecated
  * in favour of androidx.constraintlayout.widget.ConstraintLayout.
  *
  * This class will not be included and "replaced" by the real package's class.
