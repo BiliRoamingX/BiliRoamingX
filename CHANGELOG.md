@@ -1,3 +1,10 @@
+## [0.43.1](https://github.com/revanced/revanced-integrations/compare/v0.43.0...v0.43.1) (2022-09-27)
+
+
+### Bug Fixes
+
+* move dummy classes to `dummy` module ([#162](https://github.com/revanced/revanced-integrations/issues/162)) ([fa0ad3a](https://github.com/revanced/revanced-integrations/commit/fa0ad3a57b437bfc2d34062ac54e56b6900bafab))
+
 # [0.43.0](https://github.com/revanced/revanced-integrations/compare/v0.42.2...v0.43.0) (2022-09-26)
 
 
