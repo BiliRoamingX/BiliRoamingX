@@ -1,3 +1,10 @@
+# [0.44.0](https://github.com/revanced/revanced-integrations/compare/v0.43.1...v0.44.0) (2022-09-28)
+
+
+### Features
+
+* `hide-email-address` patch ([#149](https://github.com/revanced/revanced-integrations/issues/149)) ([4cc8a22](https://github.com/revanced/revanced-integrations/commit/4cc8a22c26c20164d88bff8953d1de53e2041753))
+
 ## [0.43.1](https://github.com/revanced/revanced-integrations/compare/v0.43.0...v0.43.1) (2022-09-27)
 
 
