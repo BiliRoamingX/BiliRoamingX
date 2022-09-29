@@ -1,3 +1,10 @@
+# [0.45.0](https://github.com/revanced/revanced-integrations/compare/v0.44.1...v0.45.0) (2022-09-29)
+
+
+### Features
+
+* `disable-startup-shorts-player` patch ([#164](https://github.com/revanced/revanced-integrations/issues/164)) ([149a90a](https://github.com/revanced/revanced-integrations/commit/149a90a2e8711a95ec4a310c7ba1e8f0ef6a218f))
+
 ## [0.44.1](https://github.com/revanced/revanced-integrations/compare/v0.44.0...v0.44.1) (2022-09-29)
 
 
