@@ -1,3 +1,10 @@
+## [0.44.1](https://github.com/revanced/revanced-integrations/compare/v0.44.0...v0.44.1) (2022-09-29)
+
+
+### Bug Fixes
+
+* **hide-email-address:** invalid initial switch toggle state ([#163](https://github.com/revanced/revanced-integrations/issues/163)) ([8bb93a4](https://github.com/revanced/revanced-integrations/commit/8bb93a439be21c2f564f3bc2adaedf669977f1fb))
+
 # [0.44.0](https://github.com/revanced/revanced-integrations/compare/v0.43.1...v0.44.0) (2022-09-28)
 
 
