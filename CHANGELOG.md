@@ -1,3 +1,10 @@
+# [0.46.0](https://github.com/revanced/revanced-integrations/compare/v0.45.0...v0.46.0) (2022-09-30)
+
+
+### Features
+
+* **general-ads:** block additional home ads ([5a24e84](https://github.com/revanced/revanced-integrations/commit/5a24e8486809b73f6c5a95b3f6d28a3da1cddbb8))
+
 # [0.45.0](https://github.com/revanced/revanced-integrations/compare/v0.44.1...v0.45.0) (2022-09-29)
 
 
