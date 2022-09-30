@@ -1,3 +1,10 @@
+## [0.46.1](https://github.com/revanced/revanced-integrations/compare/v0.46.0...v0.46.1) (2022-09-30)
+
+
+### Bug Fixes
+
+* **general-ads:** remove duplicate blocklist entry ([#165](https://github.com/revanced/revanced-integrations/issues/165)) ([9bcb04d](https://github.com/revanced/revanced-integrations/commit/9bcb04de8e8bd0c8c46ce797db42eb758e632580))
+
 # [0.46.0](https://github.com/revanced/revanced-integrations/compare/v0.45.0...v0.46.0) (2022-09-30)
 
 
