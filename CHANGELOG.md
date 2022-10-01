@@ -1,3 +1,10 @@
+## [0.46.2](https://github.com/revanced/revanced-integrations/compare/v0.46.1...v0.46.2) (2022-10-01)
+
+
+### Performance Improvements
+
+* **general-ads:** hook pathBuilder ([c7756e1](https://github.com/revanced/revanced-integrations/commit/c7756e1299bdc2e241525ad89561ea67bc372e3a))
+
 ## [0.46.1](https://github.com/revanced/revanced-integrations/compare/v0.46.0...v0.46.1) (2022-09-30)
 
 
