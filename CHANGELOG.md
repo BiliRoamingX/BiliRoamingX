@@ -1,3 +1,15 @@
+## [0.46.3](https://github.com/revanced/revanced-integrations/compare/v0.46.2...v0.46.3) (2022-10-02)
+
+
+### Bug Fixes
+
+* **general-ads:** block remaining ads ([18a749f](https://github.com/revanced/revanced-integrations/commit/18a749f87def79642205d685fef0af2bea21c087))
+
+
+### Performance Improvements
+
+* **general-ads:** initialize blocks once ([5add970](https://github.com/revanced/revanced-integrations/commit/5add970f610c567f4b49f2a2ec8574ab393b5b5c))
+
 ## [0.46.2](https://github.com/revanced/revanced-integrations/compare/v0.46.1...v0.46.2) (2022-10-01)
 
 
