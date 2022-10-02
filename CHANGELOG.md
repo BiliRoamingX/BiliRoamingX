@@ -1,3 +1,10 @@
+# [0.47.0](https://github.com/revanced/revanced-integrations/compare/v0.46.3...v0.47.0) (2022-10-02)
+
+
+### Features
+
+* **general-ads:** block carousel ad ([26c208e](https://github.com/revanced/revanced-integrations/commit/26c208e9ed37ebc686f88756e3203f886cadba10))
+
 ## [0.46.3](https://github.com/revanced/revanced-integrations/compare/v0.46.2...v0.46.3) (2022-10-02)
 
 
