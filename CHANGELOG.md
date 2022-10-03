@@ -1,3 +1,10 @@
+## [0.47.1](https://github.com/revanced/revanced-integrations/compare/v0.47.0...v0.47.1) (2022-10-03)
+
+
+### Bug Fixes
+
+* **general-ads:** null check for identifier ([d10c546](https://github.com/revanced/revanced-integrations/commit/d10c5462f4a1ec20715686d07fb1219f3e4a1f78))
+
 # [0.47.0](https://github.com/revanced/revanced-integrations/compare/v0.46.3...v0.47.0) (2022-10-02)
 
 
