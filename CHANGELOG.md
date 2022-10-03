@@ -1,3 +1,15 @@
+# [0.48.0](https://github.com/revanced/revanced-integrations/compare/v0.47.1...v0.48.0) (2022-10-03)
+
+
+### Bug Fixes
+
+* **youtube/general-ads:** do not block ads on `download_` ([e78a801](https://github.com/revanced/revanced-integrations/commit/e78a8014bc8db5177648af16146078227addd1b7))
+
+
+### Features
+
+* `hide-video-buttons` patch ([bf82e02](https://github.com/revanced/revanced-integrations/commit/bf82e0219fff0eb8512adf270f43d129a62a31ac))
+
 ## [0.47.1](https://github.com/revanced/revanced-integrations/compare/v0.47.0...v0.47.1) (2022-10-03)
 
 
