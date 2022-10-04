@@ -1,3 +1,10 @@
+## [0.49.1](https://github.com/revanced/revanced-integrations/compare/v0.49.0...v0.49.1) (2022-10-04)
+
+
+### Bug Fixes
+
+* **youtube/sponsorblock:** parse the error response on code 400 ([#169](https://github.com/revanced/revanced-integrations/issues/169)) ([5ab26a4](https://github.com/revanced/revanced-integrations/commit/5ab26a427b06c2b073be9f572e7fa9ad0f7b2270))
+
 # [0.49.0](https://github.com/revanced/revanced-integrations/compare/v0.48.0...v0.49.0) (2022-10-04)
 
 
