@@ -1,3 +1,10 @@
+# [0.49.0](https://github.com/revanced/revanced-integrations/compare/v0.48.0...v0.49.0) (2022-10-04)
+
+
+### Features
+
+* **youtube/remember-video-quality:** remember current quality option ([90f7392](https://github.com/revanced/revanced-integrations/commit/90f7392e1a7e331c84cd95ccb11c13d19c92832e))
+
 # [0.48.0](https://github.com/revanced/revanced-integrations/compare/v0.47.1...v0.48.0) (2022-10-03)
 
 
