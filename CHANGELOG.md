@@ -1,3 +1,10 @@
+# [0.50.0](https://github.com/revanced/revanced-integrations/compare/v0.49.1...v0.50.0) (2022-10-06)
+
+
+### Features
+
+* **youtube/general-ads:** do not hide community posts by default ([576991a](https://github.com/revanced/revanced-integrations/commit/576991a7dffa7b5ce92b60932cb6b89daf64c5db))
+
 ## [0.49.1](https://github.com/revanced/revanced-integrations/compare/v0.49.0...v0.49.1) (2022-10-04)
 
 
