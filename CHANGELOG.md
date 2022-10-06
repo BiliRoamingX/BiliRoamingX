@@ -1,3 +1,10 @@
+# [0.51.0](https://github.com/revanced/revanced-integrations/compare/v0.50.0...v0.51.0) (2022-10-06)
+
+
+### Features
+
+* **youtube/return-youtube-dislike:** decrease request timeout ([#171](https://github.com/revanced/revanced-integrations/issues/171)) ([c372e0e](https://github.com/revanced/revanced-integrations/commit/c372e0e9bdf21ec35b7edbae5e841236f27bd850))
+
 # [0.50.0](https://github.com/revanced/revanced-integrations/compare/v0.49.1...v0.50.0) (2022-10-06)
 
 
