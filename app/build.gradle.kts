@@ -7,14 +7,14 @@ plugins {
 }
 
 android {
-    compileSdk = 32
-    buildToolsVersion = "32.0.0"
+    compileSdk = 33
+    buildToolsVersion = "33.0.0"
     namespace = "app.revanced.integrations"
 
     defaultConfig {
         applicationId = "app.revanced.integrations"
         minSdk = 23
-        targetSdk = 32
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = false
