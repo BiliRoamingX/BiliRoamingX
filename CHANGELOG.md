@@ -1,3 +1,10 @@
+## [0.52.1](https://github.com/revanced/revanced-integrations/compare/v0.52.0...v0.52.1) (2022-10-16)
+
+
+### Performance Improvements
+
+* remove obsolete SDK checks ([#174](https://github.com/revanced/revanced-integrations/issues/174)) ([1755662](https://github.com/revanced/revanced-integrations/commit/1755662a7aa87bebf5ab0d2bd3e51df0aafd4a92))
+
 # [0.52.0](https://github.com/revanced/revanced-integrations/compare/v0.51.1...v0.52.0) (2022-10-13)
 
 
