@@ -1,3 +1,10 @@
+# [0.53.0](https://github.com/revanced/revanced-integrations/compare/v0.52.1...v0.53.0) (2022-10-20)
+
+
+### Features
+
+* **youtube:** `hide-mix-playlists` patch ([#177](https://github.com/revanced/revanced-integrations/issues/177)) ([0e6a92f](https://github.com/revanced/revanced-integrations/commit/0e6a92fb33fbe660c71dcf15146cde7131693619))
+
 ## [0.52.1](https://github.com/revanced/revanced-integrations/compare/v0.52.0...v0.52.1) (2022-10-16)
 
 
