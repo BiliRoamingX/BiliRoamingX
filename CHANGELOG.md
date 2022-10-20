@@ -1,3 +1,10 @@
+# [0.54.0](https://github.com/revanced/revanced-integrations/compare/v0.53.0...v0.54.0) (2022-10-20)
+
+
+### Features
+
+* **youtube:** `hide-captions-button` patch ([#175](https://github.com/revanced/revanced-integrations/issues/175)) ([867645e](https://github.com/revanced/revanced-integrations/commit/867645ea5b853c01e9f3f0a87797b0bba62460fa))
+
 # [0.53.0](https://github.com/revanced/revanced-integrations/compare/v0.52.1...v0.53.0) (2022-10-20)
 
 
