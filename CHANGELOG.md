@@ -1,3 +1,15 @@
+# [0.55.0](https://github.com/revanced/revanced-integrations/compare/v0.54.1...v0.55.0) (2022-10-22)
+
+
+### Bug Fixes
+
+* revert removing getAppContext() ([0be0ffd](https://github.com/revanced/revanced-integrations/commit/0be0ffd42abdf20e699a63e02b3474b82d798f24))
+
+
+### Features
+
+* remove getAppContext() ([#182](https://github.com/revanced/revanced-integrations/issues/182)) ([f4650b1](https://github.com/revanced/revanced-integrations/commit/f4650b1139e94577d702c8aa141ee19455547e58))
+
 ## [0.54.1](https://github.com/revanced/revanced-integrations/compare/v0.54.0...v0.54.1) (2022-10-22)
 
 
