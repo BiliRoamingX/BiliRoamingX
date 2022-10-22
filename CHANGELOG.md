@@ -1,3 +1,10 @@
+## [0.54.1](https://github.com/revanced/revanced-integrations/compare/v0.54.0...v0.54.1) (2022-10-22)
+
+
+### Bug Fixes
+
+* **youtube/general-ads:** remove leftover ad banner ([#179](https://github.com/revanced/revanced-integrations/issues/179)) ([0253fef](https://github.com/revanced/revanced-integrations/commit/0253fef2aa5d695521ec70694931522705328d05))
+
 # [0.54.0](https://github.com/revanced/revanced-integrations/compare/v0.53.0...v0.54.0) (2022-10-20)
 
 
