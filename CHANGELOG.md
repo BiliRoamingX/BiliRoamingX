@@ -1,3 +1,10 @@
+# [0.57.0](https://github.com/revanced/revanced-integrations/compare/v0.56.0...v0.57.0) (2022-10-25)
+
+
+### Features
+
+* `hide-artist-card` patch ([#186](https://github.com/revanced/revanced-integrations/issues/186)) ([ac3a835](https://github.com/revanced/revanced-integrations/commit/ac3a835215299d9f0be330678bd91adee6f61210))
+
 # [0.56.0](https://github.com/revanced/revanced-integrations/compare/v0.55.1...v0.56.0) (2022-10-25)
 
 
