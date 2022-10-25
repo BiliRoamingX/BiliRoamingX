@@ -1,3 +1,15 @@
+# [0.59.0](https://github.com/revanced/revanced-integrations/compare/v0.58.0...v0.59.0) (2022-10-25)
+
+
+### Bug Fixes
+
+* add missing list separator ([5566cfd](https://github.com/revanced/revanced-integrations/commit/5566cfdda94988df1d54106577bb784c69f00dfb))
+
+
+### Features
+
+* `comment` patch ([#185](https://github.com/revanced/revanced-integrations/issues/185)) ([97efc17](https://github.com/revanced/revanced-integrations/commit/97efc17da7ed442516cd0d51264eeaa6d1fe15be))
+
 # [0.58.0](https://github.com/revanced/revanced-integrations/compare/v0.57.0...v0.58.0) (2022-10-25)
 
 
