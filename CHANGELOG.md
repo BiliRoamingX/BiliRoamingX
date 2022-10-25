@@ -1,3 +1,10 @@
+# [0.58.0](https://github.com/revanced/revanced-integrations/compare/v0.57.0...v0.58.0) (2022-10-25)
+
+
+### Features
+
+* `hide-album-cards` patch ([#184](https://github.com/revanced/revanced-integrations/issues/184)) ([74c96be](https://github.com/revanced/revanced-integrations/commit/74c96beb208e30d4a0d8e7f510e49e9fab18cbf9))
+
 # [0.57.0](https://github.com/revanced/revanced-integrations/compare/v0.56.0...v0.57.0) (2022-10-25)
 
 
