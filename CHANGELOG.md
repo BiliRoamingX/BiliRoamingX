@@ -1,3 +1,10 @@
+## [0.55.1](https://github.com/revanced/revanced-integrations/compare/v0.55.0...v0.55.1) (2022-10-25)
+
+
+### Bug Fixes
+
+* **youtube/theme:** theme litho UI components ([#176](https://github.com/revanced/revanced-integrations/issues/176)) ([f06935d](https://github.com/revanced/revanced-integrations/commit/f06935ddacf86cd606740dc8b6ec0c7dd54c5cce))
+
 # [0.55.0](https://github.com/revanced/revanced-integrations/compare/v0.54.1...v0.55.0) (2022-10-22)
 
 
