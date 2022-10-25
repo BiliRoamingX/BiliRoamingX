@@ -1,3 +1,10 @@
+# [0.56.0](https://github.com/revanced/revanced-integrations/compare/v0.55.1...v0.56.0) (2022-10-25)
+
+
+### Features
+
+* `hide-crowdfunding-box` patch ([#183](https://github.com/revanced/revanced-integrations/issues/183)) ([db71824](https://github.com/revanced/revanced-integrations/commit/db718242e7ffa0db0f8933616275b60755b6a070))
+
 ## [0.55.1](https://github.com/revanced/revanced-integrations/compare/v0.55.0...v0.55.1) (2022-10-25)
 
 
