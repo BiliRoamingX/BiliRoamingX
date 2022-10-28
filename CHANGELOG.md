@@ -1,3 +1,10 @@
+# [0.60.0](https://github.com/revanced/revanced-integrations/compare/v0.59.0...v0.60.0) (2022-10-28)
+
+
+### Features
+
+* **youtube/return-youtube-dislike:** compatibility for old and new button layout ([a92c932](https://github.com/revanced/revanced-integrations/commit/a92c932a20e72ba55880081325fceee443955de5))
+
 # [0.59.0](https://github.com/revanced/revanced-integrations/compare/v0.58.0...v0.59.0) (2022-10-25)
 
 
