@@ -1,3 +1,10 @@
+# [0.63.0](https://github.com/revanced/revanced-integrations/compare/v0.62.0...v0.63.0) (2022-10-29)
+
+
+### Features
+
+* **youtube/sponsorblock:** skip segments once automatically ([#190](https://github.com/revanced/revanced-integrations/issues/190)) ([06bebd7](https://github.com/revanced/revanced-integrations/commit/06bebd7017980880765a5735b1dc0502a01c5037))
+
 # [0.62.0](https://github.com/revanced/revanced-integrations/compare/v0.61.0...v0.62.0) (2022-10-29)
 
 
