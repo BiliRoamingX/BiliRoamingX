@@ -1,3 +1,10 @@
+# [0.61.0](https://github.com/revanced/revanced-integrations/compare/v0.60.0...v0.61.0) (2022-10-29)
+
+
+### Features
+
+* **youtube/microg-support:** handle availability of Vanced MicroG ([afa9d3c](https://github.com/revanced/revanced-integrations/commit/afa9d3cbb12f8abd9a7f1beb74e454fee6e4b0a7))
+
 # [0.60.0](https://github.com/revanced/revanced-integrations/compare/v0.59.0...v0.60.0) (2022-10-28)
 
 
