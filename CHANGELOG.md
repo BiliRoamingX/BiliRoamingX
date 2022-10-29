@@ -1,3 +1,10 @@
+# [0.62.0](https://github.com/revanced/revanced-integrations/compare/v0.61.0...v0.62.0) (2022-10-29)
+
+
+### Features
+
+* **youtube/comments:** hide shorts comments button ([#188](https://github.com/revanced/revanced-integrations/issues/188)) ([69a585d](https://github.com/revanced/revanced-integrations/commit/69a585da6f49b343664eda7fe9119007234dc077))
+
 # [0.61.0](https://github.com/revanced/revanced-integrations/compare/v0.60.0...v0.61.0) (2022-10-29)
 
 
