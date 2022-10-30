@@ -1,3 +1,10 @@
+# [0.64.0](https://github.com/revanced/revanced-integrations/compare/v0.63.1...v0.64.0) (2022-10-30)
+
+
+### Features
+
+* `hide-watch-in-vr` patch ([#191](https://github.com/revanced/revanced-integrations/issues/191)) ([fb20ae1](https://github.com/revanced/revanced-integrations/commit/fb20ae19e868032b29c90039bff66e7cafa2d972))
+
 ## [0.63.1](https://github.com/revanced/revanced-integrations/compare/v0.63.0...v0.63.1) (2022-10-30)
 
 
