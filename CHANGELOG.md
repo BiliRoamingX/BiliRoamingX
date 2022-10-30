@@ -1,3 +1,10 @@
+## [0.63.1](https://github.com/revanced/revanced-integrations/compare/v0.63.0...v0.63.1) (2022-10-30)
+
+
+### Bug Fixes
+
+* **youtube/general-ads-patch:** `BlockRule` for comments on old and new layout ([#192](https://github.com/revanced/revanced-integrations/issues/192)) ([d28d657](https://github.com/revanced/revanced-integrations/commit/d28d65734e46e77db3a9cce2b1f323b593fc1a46))
+
 # [0.63.0](https://github.com/revanced/revanced-integrations/compare/v0.62.0...v0.63.0) (2022-10-29)
 
 
