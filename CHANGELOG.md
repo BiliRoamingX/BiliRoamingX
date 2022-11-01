@@ -1,3 +1,10 @@
+# [0.65.0](https://github.com/revanced/revanced-integrations/compare/v0.64.1...v0.65.0) (2022-11-01)
+
+
+### Features
+
+* **youtube/fix-playback:** check faster for video length ([ac69b36](https://github.com/revanced/revanced-integrations/commit/ac69b36773bf9fcad5b4cc4cd4340eb01d1230c7))
+
 ## [0.64.1](https://github.com/revanced/revanced-integrations/compare/v0.64.0...v0.64.1) (2022-11-01)
 
 
