@@ -1,3 +1,10 @@
+# [0.66.0](https://github.com/revanced/revanced-integrations/compare/v0.65.0...v0.66.0) (2022-11-01)
+
+
+### Features
+
+* **youtube:** bump patches compatibility to v17.43.36 ([#194](https://github.com/revanced/revanced-integrations/issues/194)) ([6da66be](https://github.com/revanced/revanced-integrations/commit/6da66be067fdfe0db376925ecf5c96aa01162a2c))
+
 # [0.65.0](https://github.com/revanced/revanced-integrations/compare/v0.64.1...v0.65.0) (2022-11-01)
 
 
