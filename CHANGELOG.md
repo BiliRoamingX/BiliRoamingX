@@ -1,3 +1,10 @@
+## [0.64.1](https://github.com/revanced/revanced-integrations/compare/v0.64.0...v0.64.1) (2022-11-01)
+
+
+### Bug Fixes
+
+* **youtube/video-ads:** add switch to temporarily fix buffering issues ([8b4bed8](https://github.com/revanced/revanced-integrations/commit/8b4bed8ab372cd9a0e18d3ba34c7b4a73f604d77))
+
 # [0.64.0](https://github.com/revanced/revanced-integrations/compare/v0.63.1...v0.64.0) (2022-10-30)
 
 
