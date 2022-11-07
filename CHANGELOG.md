@@ -1,3 +1,10 @@
+## [0.67.1](https://github.com/revanced/revanced-integrations/compare/v0.67.0...v0.67.1) (2022-11-07)
+
+
+### Bug Fixes
+
+* **youtube/hide-info-cards:** remove initial popup of info-cards ([#199](https://github.com/revanced/revanced-integrations/issues/199)) ([85971bc](https://github.com/revanced/revanced-integrations/commit/85971bcd5e25e05d565e7d18d97b672363113ded))
+
 # [0.67.0](https://github.com/revanced/revanced-integrations/compare/v0.66.0...v0.67.0) (2022-11-05)
 
 
