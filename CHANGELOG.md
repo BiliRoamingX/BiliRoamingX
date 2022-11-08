@@ -1,3 +1,10 @@
+## [0.67.2](https://github.com/revanced/revanced-integrations/compare/v0.67.1...v0.67.2) (2022-11-08)
+
+
+### Bug Fixes
+
+* **youtube/hide-endscreen-cards:** restore functionality ([#200](https://github.com/revanced/revanced-integrations/issues/200)) ([d866558](https://github.com/revanced/revanced-integrations/commit/d86655874ba37c380c3dfefad0380a728ea5e74f))
+
 ## [0.67.1](https://github.com/revanced/revanced-integrations/compare/v0.67.0...v0.67.1) (2022-11-07)
 
 
