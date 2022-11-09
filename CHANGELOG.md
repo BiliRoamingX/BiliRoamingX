@@ -1,3 +1,10 @@
+# [0.68.0](https://github.com/revanced/revanced-integrations/compare/v0.67.2...v0.68.0) (2022-11-09)
+
+
+### Features
+
+* **youtube:** `open-links-directly` patch ([#201](https://github.com/revanced/revanced-integrations/issues/201)) ([c3c1656](https://github.com/revanced/revanced-integrations/commit/c3c16563ea4e55234b8dea24732ce5e53bb562c8))
+
 ## [0.67.2](https://github.com/revanced/revanced-integrations/compare/v0.67.1...v0.67.2) (2022-11-08)
 
 
