@@ -1,3 +1,10 @@
+## [0.68.1](https://github.com/revanced/revanced-integrations/compare/v0.68.0...v0.68.1) (2022-11-13)
+
+
+### Bug Fixes
+
+* **youtube/theme:** return correct color value ([#202](https://github.com/revanced/revanced-integrations/issues/202)) ([f8cb38e](https://github.com/revanced/revanced-integrations/commit/f8cb38e57a531b8e358c66e7c9e2f4fb6ccbcb2e))
+
 # [0.68.0](https://github.com/revanced/revanced-integrations/compare/v0.67.2...v0.68.0) (2022-11-09)
 
 
