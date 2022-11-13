@@ -1,3 +1,10 @@
+## [0.68.2](https://github.com/revanced/revanced-integrations/compare/v0.68.1...v0.68.2) (2022-11-13)
+
+
+### Performance Improvements
+
+* **youtube/general-ads-patch:** reduce amount of components to filter ([#204](https://github.com/revanced/revanced-integrations/issues/204)) ([502feaf](https://github.com/revanced/revanced-integrations/commit/502feaf4448bf0442f852fbb8fdcb639239664db))
+
 ## [0.68.1](https://github.com/revanced/revanced-integrations/compare/v0.68.0...v0.68.1) (2022-11-13)
 
 
