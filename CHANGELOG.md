@@ -1,3 +1,10 @@
+## [0.68.3](https://github.com/revanced/revanced-integrations/compare/v0.68.2...v0.68.3) (2022-11-13)
+
+
+### Bug Fixes
+
+* **youtube/general-ads-patch:** exclude playlists wrapper from filtering ([#206](https://github.com/revanced/revanced-integrations/issues/206)) ([e357ac6](https://github.com/revanced/revanced-integrations/commit/e357ac664b920a348bc8e98fc2b2a11e40045353))
+
 ## [0.68.2](https://github.com/revanced/revanced-integrations/compare/v0.68.1...v0.68.2) (2022-11-13)
 
 
