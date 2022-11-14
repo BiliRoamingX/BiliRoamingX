@@ -1,3 +1,10 @@
+## [0.69.2](https://github.com/revanced/revanced-integrations/compare/v0.69.1...v0.69.2) (2022-11-14)
+
+
+### Bug Fixes
+
+* **youtube/general-ads-patch:** revert reducing filter exclusions ([af86dd8](https://github.com/revanced/revanced-integrations/commit/af86dd8ec6084be7f42de1edaa14501d2c0a2eb7))
+
 ## [0.69.1](https://github.com/revanced/revanced-integrations/compare/v0.69.0...v0.69.1) (2022-11-14)
 
 
