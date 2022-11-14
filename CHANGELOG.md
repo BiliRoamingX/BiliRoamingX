@@ -1,3 +1,10 @@
+## [0.69.1](https://github.com/revanced/revanced-integrations/compare/v0.69.0...v0.69.1) (2022-11-14)
+
+
+### Bug Fixes
+
+* **youtube/theme:** revert comment box background color hook ([#210](https://github.com/revanced/revanced-integrations/issues/210)) ([197f003](https://github.com/revanced/revanced-integrations/commit/197f0034a18d3ed796f9a2076aca9659987ed2ed))
+
 # [0.69.0](https://github.com/revanced/revanced-integrations/compare/v0.68.3...v0.69.0) (2022-11-14)
 
 
