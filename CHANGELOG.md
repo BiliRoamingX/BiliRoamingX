@@ -1,3 +1,15 @@
+# [0.70.0](https://github.com/revanced/revanced-integrations/compare/v0.69.2...v0.70.0) (2022-11-14)
+
+
+### Bug Fixes
+
+* **youtube/general-ads:** do not force to restart on general ads switches ([7f18520](https://github.com/revanced/revanced-integrations/commit/7f1852064695f3281e31e8f7c6d9f8801751c400))
+
+
+### Features
+
+* **youtube/general-ads:** hide self sponsored cards ([e93ce3e](https://github.com/revanced/revanced-integrations/commit/e93ce3eaa92930688da770555be9d18de84e594e))
+
 ## [0.69.2](https://github.com/revanced/revanced-integrations/compare/v0.69.1...v0.69.2) (2022-11-14)
 
 
