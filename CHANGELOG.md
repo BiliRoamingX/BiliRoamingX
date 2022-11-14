@@ -1,3 +1,10 @@
+# [0.69.0](https://github.com/revanced/revanced-integrations/compare/v0.68.3...v0.69.0) (2022-11-14)
+
+
+### Features
+
+* **youtube/theme:** color explore drawer background ([#203](https://github.com/revanced/revanced-integrations/issues/203)) ([cb40408](https://github.com/revanced/revanced-integrations/commit/cb404086ad7b74a4280ccfaaed49e1edafe6eaf8))
+
 ## [0.68.3](https://github.com/revanced/revanced-integrations/compare/v0.68.2...v0.68.3) (2022-11-13)
 
 
