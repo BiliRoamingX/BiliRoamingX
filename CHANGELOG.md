@@ -1,3 +1,10 @@
+# [0.74.0](https://github.com/revanced/revanced-integrations/compare/v0.73.0...v0.74.0) (2022-11-20)
+
+
+### Features
+
+* **youtube:** `disable-zoom-haptics` patch ([#217](https://github.com/revanced/revanced-integrations/issues/217)) ([fe74f6d](https://github.com/revanced/revanced-integrations/commit/fe74f6d8a6740a4d4544344474756c8ac717748f))
+
 # [0.73.0](https://github.com/revanced/revanced-integrations/compare/v0.72.0...v0.73.0) (2022-11-20)
 
 
