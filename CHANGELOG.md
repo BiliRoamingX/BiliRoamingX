@@ -1,3 +1,10 @@
+# [0.73.0](https://github.com/revanced/revanced-integrations/compare/v0.72.0...v0.73.0) (2022-11-20)
+
+
+### Features
+
+* **youtube/general-ads:** block the separator by its identifier ([6ceff7c](https://github.com/revanced/revanced-integrations/commit/6ceff7c9b36570d115db7df4fdc20c76d5935dc3))
+
 # [0.72.0](https://github.com/revanced/revanced-integrations/compare/v0.71.0...v0.72.0) (2022-11-19)
 
 
