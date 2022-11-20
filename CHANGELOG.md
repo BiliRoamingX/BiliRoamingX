@@ -1,3 +1,10 @@
+## [0.74.1](https://github.com/revanced/revanced-integrations/compare/v0.74.0...v0.74.1) (2022-11-20)
+
+
+### Bug Fixes
+
+* **youtube/general-ads:** hide bytecode home ad view ([c3e88c7](https://github.com/revanced/revanced-integrations/commit/c3e88c79e9e7de0700c4e0ade349e47173002567))
+
 # [0.74.0](https://github.com/revanced/revanced-integrations/compare/v0.73.0...v0.74.0) (2022-11-20)
 
 
