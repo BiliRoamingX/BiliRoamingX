@@ -1,3 +1,10 @@
+# [0.75.0](https://github.com/revanced/revanced-integrations/compare/v0.74.1...v0.75.0) (2022-11-21)
+
+
+### Features
+
+* **twitch:** integrations code for patches ([#216](https://github.com/revanced/revanced-integrations/issues/216)) ([d4c3b74](https://github.com/revanced/revanced-integrations/commit/d4c3b74a9a49c7595cf63e3ccedc03586bc2de8d))
+
 ## [0.74.1](https://github.com/revanced/revanced-integrations/compare/v0.74.0...v0.74.1) (2022-11-20)
 
 
