@@ -45,4 +45,5 @@ android {
 dependencies {
     compileOnly(project(mapOf("path" to ":dummy")))
     compileOnly("androidx.annotation:annotation:1.5.0")
+    compileOnly("androidx.appcompat:appcompat:1.5.1")
 }
