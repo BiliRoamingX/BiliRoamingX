@@ -1,3 +1,16 @@
+# [0.76.0](https://github.com/revanced/revanced-integrations/compare/v0.75.0...v0.76.0) (2022-11-22)
+
+
+### Bug Fixes
+
+* **youtube/general-ads:** hide reels shelf ([1f48749](https://github.com/revanced/revanced-integrations/commit/1f48749958675926dd71b08e079497daed2b332b))
+* **youtube/general-ads:** make restarting mandatory when toggling shorts ([25978ae](https://github.com/revanced/revanced-integrations/commit/25978ae4a4982782bc18830a1c160b2ac1dfb7e8))
+
+
+### Features
+
+* **youtube/debugging:** do not require restarting on toggle ([ee1f895](https://github.com/revanced/revanced-integrations/commit/ee1f895e877e515898118ff440066645de0a6a76))
+
 # [0.75.0](https://github.com/revanced/revanced-integrations/compare/v0.74.1...v0.75.0) (2022-11-21)
 
 
