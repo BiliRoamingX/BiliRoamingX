@@ -1,3 +1,15 @@
+# [0.77.0](https://github.com/revanced/revanced-integrations/compare/v0.76.0...v0.77.0) (2022-11-24)
+
+
+### Bug Fixes
+
+* invalid syntax error ([d4a23ed](https://github.com/revanced/revanced-integrations/commit/d4a23ed5c931993e9c642d0948e9551f848f480c))
+
+
+### Features
+
+* **youtube/general-ads:** hide movie ad from search ([767201c](https://github.com/revanced/revanced-integrations/commit/767201ce05f01db692828b453d2b31487f88e015))
+
 # [0.76.0](https://github.com/revanced/revanced-integrations/compare/v0.75.0...v0.76.0) (2022-11-22)
 
 
