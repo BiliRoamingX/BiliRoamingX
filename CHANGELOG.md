@@ -1,3 +1,10 @@
+## [0.77.1](https://github.com/revanced/revanced-integrations/compare/v0.77.0...v0.77.1) (2022-11-24)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** don't block the UI thread ([#221](https://github.com/revanced/revanced-integrations/issues/221)) ([b2eab33](https://github.com/revanced/revanced-integrations/commit/b2eab33e02241c62122da3063c12dc17cae2611e))
+
 # [0.77.0](https://github.com/revanced/revanced-integrations/compare/v0.76.0...v0.77.0) (2022-11-24)
 
 
