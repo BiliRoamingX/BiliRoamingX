@@ -1,3 +1,10 @@
+# [0.78.0](https://github.com/revanced/revanced-integrations/compare/v0.77.1...v0.78.0) (2022-11-25)
+
+
+### Features
+
+* **tiktok:** `sim-spoof` patch ([#219](https://github.com/revanced/revanced-integrations/issues/219)) ([cea3a5e](https://github.com/revanced/revanced-integrations/commit/cea3a5edc74e96efd79d4a4f9b363694d85216a6))
+
 ## [0.77.1](https://github.com/revanced/revanced-integrations/compare/v0.77.0...v0.77.1) (2022-11-24)
 
 
