@@ -1,3 +1,10 @@
+## [0.78.1](https://github.com/revanced/revanced-integrations/compare/v0.78.0...v0.78.1) (2022-11-29)
+
+
+### Bug Fixes
+
+* **twitch/settings:** add missing classes ([#226](https://github.com/revanced/revanced-integrations/issues/226)) ([35aa4f9](https://github.com/revanced/revanced-integrations/commit/35aa4f92c6fc36d5421d41fb005e2298e1e8ed70))
+
 # [0.78.0](https://github.com/revanced/revanced-integrations/compare/v0.77.1...v0.78.0) (2022-11-25)
 
 
