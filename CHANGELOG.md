@@ -1,3 +1,10 @@
+## [0.79.1](https://github.com/revanced/revanced-integrations/compare/v0.79.0...v0.79.1) (2022-11-30)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** feedback when dislikes hidden ([#224](https://github.com/revanced/revanced-integrations/issues/224)) ([37869dc](https://github.com/revanced/revanced-integrations/commit/37869dc5b8b0b0cae97c6a3caf73dfb419af8f79))
+
 # [0.79.0](https://github.com/revanced/revanced-integrations/compare/v0.78.1...v0.79.0) (2022-11-30)
 
 
