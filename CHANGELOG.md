@@ -1,3 +1,10 @@
+# [0.80.0](https://github.com/revanced/revanced-integrations/compare/v0.79.1...v0.80.0) (2022-11-30)
+
+
+### Features
+
+* **twitch:** remove `block-embedded-ads` patch ([#230](https://github.com/revanced/revanced-integrations/issues/230)) ([2f32786](https://github.com/revanced/revanced-integrations/commit/2f327866616d9449963aefb9067b35138a4f4844))
+
 ## [0.79.1](https://github.com/revanced/revanced-integrations/compare/v0.79.0...v0.79.1) (2022-11-30)
 
 
