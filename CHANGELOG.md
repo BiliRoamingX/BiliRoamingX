@@ -1,3 +1,10 @@
+# [0.81.0](https://github.com/revanced/revanced-integrations/compare/v0.80.0...v0.81.0) (2022-12-03)
+
+
+### Features
+
+* **youtube/return-youtube-dislike:** show dislike as a percentage ([#234](https://github.com/revanced/revanced-integrations/issues/234)) ([7840bc4](https://github.com/revanced/revanced-integrations/commit/7840bc48ba5309eebadeb0f708570bac9f7166e0))
+
 # [0.80.0](https://github.com/revanced/revanced-integrations/compare/v0.79.1...v0.80.0) (2022-11-30)
 
 
