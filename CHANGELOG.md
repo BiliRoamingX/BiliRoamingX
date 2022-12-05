@@ -1,3 +1,11 @@
+# [0.82.0](https://github.com/revanced/revanced-integrations/compare/v0.81.0...v0.82.0) (2022-12-05)
+
+
+### Features
+
+* **youtube/debugging:** print stack traces ([a9d2487](https://github.com/revanced/revanced-integrations/commit/a9d24872a89f9039956993d8290713dcde3f0ead))
+* **youtube/return-youtube-dislike:** do not debug log when updating the text ([080e22b](https://github.com/revanced/revanced-integrations/commit/080e22b1bf18f9c09e7687aa694d6601318bd99b))
+
 # [0.81.0](https://github.com/revanced/revanced-integrations/compare/v0.80.0...v0.81.0) (2022-12-03)
 
 
