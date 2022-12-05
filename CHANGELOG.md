@@ -1,3 +1,10 @@
+# [0.83.0](https://github.com/revanced/revanced-integrations/compare/v0.82.0...v0.83.0) (2022-12-05)
+
+
+### Features
+
+* **twitch:** `block-embedded-ads` patch ([#231](https://github.com/revanced/revanced-integrations/issues/231)) ([a098594](https://github.com/revanced/revanced-integrations/commit/a09859470688c88afe1e0ee1688068656feda521))
+
 # [0.82.0](https://github.com/revanced/revanced-integrations/compare/v0.81.0...v0.82.0) (2022-12-05)
 
 
