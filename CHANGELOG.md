@@ -1,3 +1,10 @@
+## [0.83.1](https://github.com/revanced/revanced-integrations/compare/v0.83.0...v0.83.1) (2022-12-06)
+
+
+### Bug Fixes
+
+* inconsistencies in preference switches ([#235](https://github.com/revanced/revanced-integrations/issues/235)) ([d64a0f9](https://github.com/revanced/revanced-integrations/commit/d64a0f95995e6fbd96127941cf16133c5661dfe4))
+
 # [0.83.0](https://github.com/revanced/revanced-integrations/compare/v0.82.0...v0.83.0) (2022-12-05)
 
 
