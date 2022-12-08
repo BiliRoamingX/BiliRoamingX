@@ -28,10 +28,11 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: "latest"
+        cache: 'npm'
     - name: Build with Gradle
       run: ./gradlew build --no-daemon
     - name: Setup semantic-release
-      run: npm install -g semantic-release @semantic-release/git @semantic-release/changelog gradle-semantic-release-plugin -D
+      run: npm install semantic-release @semantic-release/git @semantic-release/changelog gradle-semantic-release-plugin -D
     - name: Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
