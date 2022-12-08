@@ -29,7 +29,7 @@ jobs:
       with:
         node-version: "latest"
     - name: Build with Gradle
-      run: ./gradlew --no-daemon build
+      run: ./gradlew build --no-daemon
     - name: Setup semantic-release
       run: npm install -g semantic-release @semantic-release/git @semantic-release/changelog gradle-semantic-release-plugin -D
     - name: Release
