@@ -1,3 +1,10 @@
+# [0.84.0](https://github.com/revanced/revanced-integrations/compare/v0.83.1...v0.84.0) (2022-12-08)
+
+
+### Features
+
+* **youtube/general-ads:** block new ad in home feed ([934b981](https://github.com/revanced/revanced-integrations/commit/934b981605515128c9d38f09768392f8d1c7bd98))
+
 ## [0.83.1](https://github.com/revanced/revanced-integrations/compare/v0.83.0...v0.83.1) (2022-12-06)
 
 
