@@ -1,3 +1,10 @@
+## [0.84.2](https://github.com/revanced/revanced-integrations/compare/v0.84.1...v0.84.2) (2022-12-20)
+
+
+### Bug Fixes
+
+* migrate old to new settings correctly ([#241](https://github.com/revanced/revanced-integrations/issues/241)) ([98ce2df](https://github.com/revanced/revanced-integrations/commit/98ce2df47dded785986dee3c64becf96956f5eb6))
+
 ## [0.84.1](https://github.com/revanced/revanced-integrations/compare/v0.84.0...v0.84.1) (2022-12-18)
 
 
