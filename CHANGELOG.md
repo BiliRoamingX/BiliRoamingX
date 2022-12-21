@@ -1,3 +1,10 @@
+# [0.86.0](https://github.com/revanced/revanced-integrations/compare/v0.85.1...v0.86.0) (2022-12-21)
+
+
+### Features
+
+* **youtube/return-youtube-dislike:** debug connection statistics, toast on error, high priority background threads ([#236](https://github.com/revanced/revanced-integrations/issues/236)) ([693ef08](https://github.com/revanced/revanced-integrations/commit/693ef08c6c2ebb2a4dde9194583ac77ae3af9fc6))
+
 ## [0.85.1](https://github.com/revanced/revanced-integrations/compare/v0.85.0...v0.85.1) (2022-12-21)
 
 
