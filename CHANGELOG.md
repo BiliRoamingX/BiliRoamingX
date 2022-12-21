@@ -1,3 +1,10 @@
+# [0.85.0](https://github.com/revanced/revanced-integrations/compare/v0.84.2...v0.85.0) (2022-12-21)
+
+
+### Features
+
+* **youtube/general-ads:** hide grid of shorts ([d125d20](https://github.com/revanced/revanced-integrations/commit/d125d20974774fbe2b4a61b6ddad66f76d161e42))
+
 ## [0.84.2](https://github.com/revanced/revanced-integrations/compare/v0.84.1...v0.84.2) (2022-12-20)
 
 
