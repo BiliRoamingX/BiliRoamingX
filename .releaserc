@@ -7,11 +7,7 @@
     }
   ],
   "plugins": [
-     ["@semantic-release/commit-analyzer", {
-      "releaseRules": [
-        {"type": "build", "release": "patch"}
-      ]
-    }],
+    "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     "@semantic-release/changelog",
     "gradle-semantic-release-plugin",
@@ -32,6 +28,13 @@
             "path": "app/build/outputs/apk/release/*.apk"
           }
         ]
+      }
+    ],
+    [
+      "@saithodev/semantic-release-backmerge",
+      {
+        branches: [{from: "main", to: "dev"}],
+        clearWorkspace: true
       }
     ]
   ]
