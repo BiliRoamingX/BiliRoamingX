@@ -1,3 +1,10 @@
+# [0.88.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.87.0...v0.88.0-dev.1) (2022-12-29)
+
+
+### Features
+
+* **youtube:** `hide-breaking-news-shelf` patch ([#258](https://github.com/revanced/revanced-integrations/issues/258)) ([eec90ee](https://github.com/revanced/revanced-integrations/commit/eec90ee04cdfcad08f0448c0f2e860e6eb25294f))
+
 # [0.87.0](https://github.com/revanced/revanced-integrations/compare/v0.86.1...v0.87.0) (2022-12-26)
 
 
