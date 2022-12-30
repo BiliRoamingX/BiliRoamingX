@@ -1,3 +1,10 @@
+# [0.89.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.88.0...v0.89.0-dev.1) (2022-12-30)
+
+
+### Features
+
+* **youtube/general-ads-patch:** hide channel member shelf ([#257](https://github.com/revanced/revanced-integrations/issues/257)) ([87799e5](https://github.com/revanced/revanced-integrations/commit/87799e5c553f71e01c59d4ba38898bba571d8134))
+
 # [0.88.0](https://github.com/revanced/revanced-integrations/compare/v0.87.0...v0.88.0) (2022-12-29)
 
 
