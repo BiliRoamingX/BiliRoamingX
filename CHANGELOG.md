@@ -1,3 +1,10 @@
+## [0.89.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.89.0...v0.89.1-dev.1) (2022-12-30)
+
+
+### Performance Improvements
+
+* **youtube/general-ads-patch:** reduce list of ignored component names ([#261](https://github.com/revanced/revanced-integrations/issues/261)) ([8d233a2](https://github.com/revanced/revanced-integrations/commit/8d233a2f82f49b93adb90e2b11c9fa46836dd9b0))
+
 # [0.89.0](https://github.com/revanced/revanced-integrations/compare/v0.88.0...v0.89.0) (2022-12-30)
 
 
