@@ -27,7 +27,8 @@
           {
             "path": "app/build/outputs/apk/release/*.apk"
           }
-        ]
+        ],
+        successComment: false
       }
     ],
     [
