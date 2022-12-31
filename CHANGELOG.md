@@ -1,3 +1,10 @@
+# [0.91.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.90.0...v0.91.0-dev.1) (2022-12-31)
+
+
+### Features
+
+* **youtube:** `copy-video-url` patch ([#263](https://github.com/revanced/revanced-integrations/issues/263)) ([e856d9d](https://github.com/revanced/revanced-integrations/commit/e856d9dccdf11888005e757e84a06523ad2c8dc5))
+
 # [0.90.0](https://github.com/revanced/revanced-integrations/compare/v0.89.0...v0.90.0) (2022-12-31)
 
 
