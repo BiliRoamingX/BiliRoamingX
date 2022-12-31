@@ -1,3 +1,15 @@
+# [0.91.0](https://github.com/revanced/revanced-integrations/compare/v0.90.0...v0.91.0) (2022-12-31)
+
+
+### Bug Fixes
+
+* **youtube/general-ads:** restore swipe back to exit gesture ([#264](https://github.com/revanced/revanced-integrations/issues/264)) ([76c36da](https://github.com/revanced/revanced-integrations/commit/76c36daee09be00d36477ea21c8b97f11444b7d2))
+
+
+### Features
+
+* **youtube:** `copy-video-url` patch ([#263](https://github.com/revanced/revanced-integrations/issues/263)) ([e856d9d](https://github.com/revanced/revanced-integrations/commit/e856d9dccdf11888005e757e84a06523ad2c8dc5))
+
 # [0.91.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.91.0-dev.1...v0.91.0-dev.2) (2022-12-31)
 
 
