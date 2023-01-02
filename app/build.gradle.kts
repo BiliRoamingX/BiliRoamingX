@@ -8,29 +8,31 @@ plugins {
 
 android {
     compileSdk = 33
-    buildToolsVersion = "33.0.0"
+    buildToolsVersion = "33.0.1"
     namespace = "app.revanced.integrations"
 
     defaultConfig {
         applicationId = "app.revanced.integrations"
         minSdk = 23
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
         multiDexEnabled = false
-
-        val properties = Properties()
-        if (rootProject.file("local.properties").exists()) {
-            properties.load(FileInputStream(rootProject.file("local.properties")))
-        }
-
-        buildConfigField("String", "YT_API_KEY", "\"${properties.getProperty("youtubeAPIKey", "")}\"")
+        versionName = project.version as String
     }
 
     buildTypes {
         release {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        applicationVariants.all {
+            outputs.all {
+                this as com.android.build.gradle.internal.api.ApkVariantOutputImpl
+
+                outputFileName = "${rootProject.name}-$versionName.apk"
+            }
         }
     }
     compileOptions {
