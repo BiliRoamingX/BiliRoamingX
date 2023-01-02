@@ -1,3 +1,11 @@
+## [0.91.1](https://github.com/revanced/revanced-integrations/compare/v0.91.0...v0.91.1) (2023-01-02)
+
+
+### Bug Fixes
+
+* revert removing workaround task `publish` ([64c31b8](https://github.com/revanced/revanced-integrations/commit/64c31b84e76a270513efb4ae111afae507cacad4))
+* **twitch/block-embedded-ads:** rewrite Kotlin classes to Java ([#270](https://github.com/revanced/revanced-integrations/issues/270)) ([843dd9d](https://github.com/revanced/revanced-integrations/commit/843dd9de9e7fcd0b2b609e8af9a705faa1e23bc6))
+
 # [0.91.0](https://github.com/revanced/revanced-integrations/compare/v0.90.0...v0.91.0) (2022-12-31)
 
 
