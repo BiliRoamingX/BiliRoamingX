@@ -15,16 +15,8 @@ android {
         applicationId = "app.revanced.integrations"
         minSdk = 23
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
         multiDexEnabled = false
-
-        val properties = Properties()
-        if (rootProject.file("local.properties").exists()) {
-            properties.load(FileInputStream(rootProject.file("local.properties")))
-        }
-
-        buildConfigField("String", "YT_API_KEY", "\"${properties.getProperty("youtubeAPIKey", "")}\"")
+        versionName = project.version as String
     }
 
     buildTypes {
