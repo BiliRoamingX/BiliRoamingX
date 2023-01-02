@@ -4,11 +4,12 @@ plugins {
 
 android {
     namespace = "app.revanced.dummy"
-    compileSdk = 32
+    compileSdk = 33
+    buildToolsVersion = "33.0.1"
 
     defaultConfig {
-        minSdk = 26
-        targetSdk = 32
+        minSdk = 23
+        targetSdk = 33
     }
 
     buildTypes {
@@ -24,7 +25,4 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-}
-
-dependencies {
 }
