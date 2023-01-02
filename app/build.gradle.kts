@@ -22,7 +22,17 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        applicationVariants.all {
+            outputs.all {
+                this as com.android.build.gradle.internal.api.ApkVariantOutputImpl
+
+                outputFileName = "${rootProject.name}-$versionName.apk"
+            }
         }
     }
     compileOptions {
