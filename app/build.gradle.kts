@@ -8,7 +8,7 @@ plugins {
 
 android {
     compileSdk = 33
-    buildToolsVersion = "33.0.0"
+    buildToolsVersion = "33.0.1"
     namespace = "app.revanced.integrations"
 
     defaultConfig {
