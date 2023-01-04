@@ -1,3 +1,10 @@
+## [0.91.2](https://github.com/revanced/revanced-integrations/compare/v0.91.1...v0.91.2) (2023-01-04)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** use manufacturer specific span styles ([#265](https://github.com/revanced/revanced-integrations/issues/265)) ([8f8e8ea](https://github.com/revanced/revanced-integrations/commit/8f8e8ea87edccfabb7e02608dd9765fb8a48e092))
+
 ## [0.91.1](https://github.com/revanced/revanced-integrations/compare/v0.91.0...v0.91.1) (2023-01-02)
 
 
