@@ -51,3 +51,5 @@ dependencies {
     compileOnly("com.squareup.okhttp3:okhttp:4.10.0")
     compileOnly("com.squareup.retrofit2:retrofit:2.9.0")
 }
+
+tasks.register("publish") { dependsOn("build") }
