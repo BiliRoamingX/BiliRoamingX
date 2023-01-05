@@ -1,3 +1,10 @@
+## [0.91.3-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.91.2...v0.91.3-dev.1) (2023-01-05)
+
+
+### Bug Fixes
+
+* ensure thread safety for class `StringRef` ([#273](https://github.com/revanced/revanced-integrations/issues/273)) ([f5c5fcb](https://github.com/revanced/revanced-integrations/commit/f5c5fcb5e46f43b2e5abbbc4f55a1cf1c52e0549))
+
 ## [0.91.2](https://github.com/revanced/revanced-integrations/compare/v0.91.1...v0.91.2) (2023-01-04)
 
 
