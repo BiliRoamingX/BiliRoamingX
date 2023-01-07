@@ -1,3 +1,10 @@
+## [0.92.2](https://github.com/revanced/revanced-integrations/compare/v0.92.1...v0.92.2) (2023-01-07)
+
+
+### Bug Fixes
+
+* load numeric preferences as type String ([212d3a7](https://github.com/revanced/revanced-integrations/commit/212d3a72d879189c061fb77805cda81ca0519495))
+
 ## [0.92.2-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.92.1...v0.92.2-dev.1) (2023-01-07)
 
 
