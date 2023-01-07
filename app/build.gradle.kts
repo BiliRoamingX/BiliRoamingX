@@ -48,6 +48,8 @@ dependencies {
     compileOnly(project(mapOf("path" to ":dummy")))
     compileOnly("androidx.annotation:annotation:1.5.0")
     compileOnly("androidx.appcompat:appcompat:1.5.1")
-    compileOnly("com.squareup.okhttp3:okhttp:4.10.0")
+    compileOnly("com.squareup.okhttp3:okhttp:5.0.0-alpha.11")
     compileOnly("com.squareup.retrofit2:retrofit:2.9.0")
 }
+
+tasks.register("publish") { dependsOn("build") }
