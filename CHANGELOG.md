@@ -1,3 +1,10 @@
+## [0.92.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.92.0...v0.92.1-dev.1) (2023-01-07)
+
+
+### Bug Fixes
+
+* save preferences with correct type ([56c1a3c](https://github.com/revanced/revanced-integrations/commit/56c1a3c03c67393285a7499e9d3e92eb710691f0))
+
 # [0.92.0](https://github.com/revanced/revanced-integrations/compare/v0.91.2...v0.92.0) (2023-01-07)
 
 
