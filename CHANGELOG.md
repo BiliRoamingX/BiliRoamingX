@@ -1,3 +1,10 @@
+# [0.92.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.91.3-dev.1...v0.92.0-dev.1) (2023-01-07)
+
+
+### Features
+
+* **youtube:** `remember-playback-rate` patch ([b5c0c84](https://github.com/revanced/revanced-integrations/commit/b5c0c843a502a7f4938053d136e826fbf7399e7b))
+
 ## [0.91.3-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.91.2...v0.91.3-dev.1) (2023-01-05)
 
 
