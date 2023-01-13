@@ -12,7 +12,8 @@ on:
       - dev
 
 jobs:
-  build:
+  release:
+    name: Release
     runs-on: ubuntu-latest
     steps:
     - name: Cancel previou runs
