@@ -20,6 +20,11 @@ jobs:
       uses: styfle/cancel-workflow-action@0.11.0
     - name: Checkout
       uses: actions/checkout@v3
+      width:
+        # Make sure the release step uses its own credentials:
+        # https://github.com/cycjimmy/semantic-release-action#private-packages
+        fersist-credentials: false
+        fetch-depth: 0
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:
