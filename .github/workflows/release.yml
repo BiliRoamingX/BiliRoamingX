@@ -23,7 +23,7 @@ jobs:
       with:
         # Make sure the release step uses its own credentials:
         # https://github.com/cycjimmy/semantic-release-action#private-packages
-        fersist-credentials: false
+        persist-credentials: false
         fetch-depth: 0
     - name: Set up JDK
       uses: actions/setup-java@v3
