@@ -1,3 +1,10 @@
+## [0.93.1](https://github.com/revanced/revanced-integrations/compare/v0.93.0...v0.93.1) (2023-01-17)
+
+
+### Bug Fixes
+
+* **youtube/microg-support:** open download link if Vanced MicroG is missing ([#290](https://github.com/revanced/revanced-integrations/issues/290)) ([0af87e2](https://github.com/revanced/revanced-integrations/commit/0af87e29085fb5b55cd80ccb61f6e58f72fc5271))
+
 # [0.93.0](https://github.com/revanced/revanced-integrations/compare/v0.92.2...v0.93.0) (2023-01-14)
 
 
