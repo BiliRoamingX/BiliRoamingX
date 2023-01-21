@@ -1,3 +1,10 @@
+## [0.93.2-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.93.1...v0.93.2-dev.1) (2023-01-21)
+
+
+### Bug Fixes
+
+* **youtube:** save new instead of default value ([#298](https://github.com/revanced/revanced-integrations/issues/298)) ([559bbf9](https://github.com/revanced/revanced-integrations/commit/559bbf9778f20ac0f5ce3af677230a1ec28a55ff))
+
 ## [0.93.1](https://github.com/revanced/revanced-integrations/compare/v0.93.0...v0.93.1) (2023-01-17)
 
 
