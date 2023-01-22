@@ -1,3 +1,10 @@
+# [0.94.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.94.0-dev.2...v0.94.0-dev.3) (2023-01-22)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** gracefully exit if Vanced MicroG is missing or not running ([#303](https://github.com/revanced/revanced-integrations/issues/303)) ([03764bc](https://github.com/revanced/revanced-integrations/commit/03764bcc651c6b723a999a58ed9cc9d253075905))
+
 # [0.94.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.94.0-dev.1...v0.94.0-dev.2) (2023-01-22)
 
 
