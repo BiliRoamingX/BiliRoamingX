@@ -1,3 +1,10 @@
+# [0.94.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.94.0-dev.1...v0.94.0-dev.2) (2023-01-22)
+
+
+### Features
+
+* **youtube/microg-support:** check if Vanced MicroG is running in the background ([#301](https://github.com/revanced/revanced-integrations/issues/301)) ([6e31b78](https://github.com/revanced/revanced-integrations/commit/6e31b7889a2488b3d61042111437a6ed4eec019c))
+
 # [0.94.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.93.2-dev.1...v0.94.0-dev.1) (2023-01-22)
 
 
