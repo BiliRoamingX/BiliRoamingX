@@ -1,3 +1,10 @@
+# [0.94.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.93.2-dev.1...v0.94.0-dev.1) (2023-01-22)
+
+
+### Features
+
+* **youtube:** `open-links-externally` patch ([4cbe833](https://github.com/revanced/revanced-integrations/commit/4cbe8338b3f4ab49139168d7a3d0c9ebebf68952))
+
 ## [0.93.2-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.93.1...v0.93.2-dev.1) (2023-01-21)
 
 
