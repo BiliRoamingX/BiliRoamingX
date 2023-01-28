@@ -1,3 +1,10 @@
+# [0.94.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.94.0-dev.3...v0.94.0-dev.4) (2023-01-28)
+
+
+### Features
+
+* **youtube/general-ads:** remove hiding video shelf ([04147c1](https://github.com/revanced/revanced-integrations/commit/04147c17c98bccea27e0293a71ffccc97f5a155d))
+
 # [0.94.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.94.0-dev.2...v0.94.0-dev.3) (2023-01-22)
 
 
