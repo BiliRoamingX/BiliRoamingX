@@ -1,3 +1,20 @@
+# [0.94.0](https://github.com/revanced/revanced-integrations/compare/v0.93.1...v0.94.0) (2023-01-28)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** do not fetch voting stats when watching shorts ([#302](https://github.com/revanced/revanced-integrations/issues/302)) ([7551f01](https://github.com/revanced/revanced-integrations/commit/7551f0104c463714749acc6abedbea5cd7afb52f))
+* **youtube/return-youtube-dislike:** gracefully exit if Vanced MicroG is missing or not running ([#303](https://github.com/revanced/revanced-integrations/issues/303)) ([03764bc](https://github.com/revanced/revanced-integrations/commit/03764bcc651c6b723a999a58ed9cc9d253075905))
+* **youtube:** save new instead of default value ([#298](https://github.com/revanced/revanced-integrations/issues/298)) ([559bbf9](https://github.com/revanced/revanced-integrations/commit/559bbf9778f20ac0f5ce3af677230a1ec28a55ff))
+
+
+### Features
+
+* **youtube/general-ads:** remove hiding video shelf ([04147c1](https://github.com/revanced/revanced-integrations/commit/04147c17c98bccea27e0293a71ffccc97f5a155d))
+* **youtube/microg-support:** check if Vanced MicroG is running in the background ([#301](https://github.com/revanced/revanced-integrations/issues/301)) ([6e31b78](https://github.com/revanced/revanced-integrations/commit/6e31b7889a2488b3d61042111437a6ed4eec019c))
+* **youtube:** `open-links-externally` patch ([4cbe833](https://github.com/revanced/revanced-integrations/commit/4cbe8338b3f4ab49139168d7a3d0c9ebebf68952))
+* **youtube:** show toasts along exceptions ([#293](https://github.com/revanced/revanced-integrations/issues/293)) ([dbf1f3f](https://github.com/revanced/revanced-integrations/commit/dbf1f3f0ce0500752e5d6c4ce49d7d2b27cc6dc4))
+
 # [0.94.0-dev.6](https://github.com/revanced/revanced-integrations/compare/v0.94.0-dev.5...v0.94.0-dev.6) (2023-01-28)
 
 
