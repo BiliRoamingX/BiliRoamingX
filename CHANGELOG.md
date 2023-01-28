@@ -1,3 +1,10 @@
+# [0.94.0-dev.6](https://github.com/revanced/revanced-integrations/compare/v0.94.0-dev.5...v0.94.0-dev.6) (2023-01-28)
+
+
+### Features
+
+* **youtube:** show toasts along exceptions ([#293](https://github.com/revanced/revanced-integrations/issues/293)) ([dbf1f3f](https://github.com/revanced/revanced-integrations/commit/dbf1f3f0ce0500752e5d6c4ce49d7d2b27cc6dc4))
+
 # [0.94.0-dev.5](https://github.com/revanced/revanced-integrations/compare/v0.94.0-dev.4...v0.94.0-dev.5) (2023-01-28)
 
 
