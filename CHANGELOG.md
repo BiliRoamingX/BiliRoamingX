@@ -1,3 +1,10 @@
+# [0.94.0-dev.5](https://github.com/revanced/revanced-integrations/compare/v0.94.0-dev.4...v0.94.0-dev.5) (2023-01-28)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** do not fetch voting stats when watching shorts ([#302](https://github.com/revanced/revanced-integrations/issues/302)) ([7551f01](https://github.com/revanced/revanced-integrations/commit/7551f0104c463714749acc6abedbea5cd7afb52f))
+
 # [0.94.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.94.0-dev.3...v0.94.0-dev.4) (2023-01-28)
 
 
