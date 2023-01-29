@@ -1,3 +1,11 @@
+## [0.94.1](https://github.com/revanced/revanced-integrations/compare/v0.94.0...v0.94.1) (2023-01-29)
+
+
+### Bug Fixes
+
+* **youtube/sponsorblock:** fix saving and loading settings ([#304](https://github.com/revanced/revanced-integrations/issues/304)) ([49aedae](https://github.com/revanced/revanced-integrations/commit/49aedae3fcbb4ec1cfe6b9291c95ccac6935d1d0))
+* **youtube:** resolve duplicate preference keys ([#307](https://github.com/revanced/revanced-integrations/issues/307)) ([27d1392](https://github.com/revanced/revanced-integrations/commit/27d1392a73ba634e4d05c0c22849bb933a8f04b3))
+
 ## [0.94.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.94.0...v0.94.1-dev.1) (2023-01-28)
 
 
