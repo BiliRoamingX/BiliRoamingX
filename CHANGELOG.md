@@ -1,3 +1,11 @@
+# [0.95.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.94.1...v0.95.0-dev.1) (2023-02-01)
+
+
+### Features
+
+* `spoof-wifi-connection` patch ([#297](https://github.com/revanced/revanced-integrations/issues/297)) ([293eae4](https://github.com/revanced/revanced-integrations/commit/293eae4a46ee8acf3484ac271a1ccf194853d42e))
+* spoof-wifi-connection patch ([6679e6e](https://github.com/revanced/revanced-integrations/commit/6679e6ee45385c8a3cf559f685dae7e6cf1f0c1f))
+
 ## [0.94.1](https://github.com/revanced/revanced-integrations/compare/v0.94.0...v0.94.1) (2023-01-29)
 
 
