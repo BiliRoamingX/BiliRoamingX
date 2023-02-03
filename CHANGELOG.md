@@ -1,3 +1,10 @@
+# [0.95.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.95.0-dev.1...v0.95.0-dev.2) (2023-02-03)
+
+
+### Features
+
+* **youtube:** `hide-player-buttons` patch ([d5bcef2](https://github.com/revanced/revanced-integrations/commit/d5bcef2cdbe5dfdb1ad2552e7fde339cee1a3f27))
+
 # [0.95.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.94.1...v0.95.0-dev.1) (2023-02-01)
 
 
