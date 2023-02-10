@@ -1,3 +1,10 @@
+# [0.96.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.95.0...v0.96.0-dev.1) (2023-02-10)
+
+
+### Features
+
+* **youtube/general-ads:** hide pill to view products ([43e419e](https://github.com/revanced/revanced-integrations/commit/43e419e6a6b7e6da372b5ec970a70ae86702b706))
+
 # [0.95.0](https://github.com/revanced/revanced-integrations/compare/v0.94.1...v0.95.0) (2023-02-03)
 
 
