@@ -1,3 +1,10 @@
+## [0.96.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.96.0...v0.96.1-dev.1) (2023-02-11)
+
+
+### Bug Fixes
+
+* **youtube/minimized-playback:** disable when playing shorts ([1dd84a3](https://github.com/revanced/revanced-integrations/commit/1dd84a37851359143140d1d1df664c3eab680fa7))
+
 # [0.96.0](https://github.com/revanced/revanced-integrations/compare/v0.95.0...v0.96.0) (2023-02-10)
 
 
