@@ -3,7 +3,7 @@ name: Release
 on:
   workflow_dispatch:
   push:
-    branches: 
+    branches:
       - main
       - dev
   pull_request:
@@ -16,7 +16,7 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-    - name: Cancel previou runs
+    - name: Cancel previous runs
       uses: styfle/cancel-workflow-action@0.11.0
     - name: Checkout
       uses: actions/checkout@v3
@@ -33,11 +33,11 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: "latest"
+        node-version: "18"
         cache: 'npm'
     - name: Setup semantic-release
-      run: npm install semantic-release@19.0.5 @saithodev/semantic-release-backmerge @semantic-release/git @semantic-release/changelog gradle-semantic-release-plugin@1.7.4 -D
+      run: npm install
     - name: Release
       env:
         GITHUB_TOKEN: ${{ secrets.REPOSITORY_PUSH_ACCESS }}
-      run: npx semantic-release
+      run: npm exec semantic-release
