@@ -1,3 +1,10 @@
+## [0.96.2-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.96.2-dev.1...v0.96.2-dev.2) (2023-02-13)
+
+
+### Bug Fixes
+
+* **youtube/general-ads:** do not hide chapters when hiding preview comments ([cfb7aab](https://github.com/revanced/revanced-integrations/commit/cfb7aab77991e8a123fb6956e699df8ad53bf59d))
+
 ## [0.96.2-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.96.1...v0.96.2-dev.1) (2023-02-11)
 
 
