@@ -1,3 +1,15 @@
+# [0.97.0](https://github.com/revanced/revanced-integrations/compare/v0.96.2...v0.97.0) (2023-02-14)
+
+
+### Bug Fixes
+
+* **youtube/general-ads:** block other kind of survey ([cdf43ef](https://github.com/revanced/revanced-integrations/commit/cdf43efcf29a04b354313749057119e3de030cb1))
+
+
+### Features
+
+* **youtube/general-ads:** hide web search results ([9df1e46](https://github.com/revanced/revanced-integrations/commit/9df1e460c56bf0d5cb3c9d04853d07b22cef35bb))
+
 # [0.97.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.96.2...v0.97.0-dev.1) (2023-02-14)
 
 
