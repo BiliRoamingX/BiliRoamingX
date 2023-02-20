@@ -1,3 +1,16 @@
+# [0.98.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.98.0-dev.1...v0.98.0-dev.2) (2023-02-20)
+
+
+### Bug Fixes
+
+* **youtube/hide-watch-in-vr:** fix descriptions ([96fcc0b](https://github.com/revanced/revanced-integrations/commit/96fcc0b1c70c277c99a99db9ca2d50f649a41a70))
+
+
+### Features
+
+* **youtube/general-ads:** hide channel bar ([35c4266](https://github.com/revanced/revanced-integrations/commit/35c4266e8b8ad7cf9fb5d14cf6cbc8ae65cc78df))
+* **youtube/general-ads:** hide horizontal video shelf ([fd975ec](https://github.com/revanced/revanced-integrations/commit/fd975ecd2a91ea7ac713d3b7badf373c7d53ad5c))
+
 # [0.98.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.97.0...v0.98.0-dev.1) (2023-02-18)
 
 
