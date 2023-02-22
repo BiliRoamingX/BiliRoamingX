@@ -1,3 +1,21 @@
+# [0.98.0](https://github.com/revanced/revanced-integrations/compare/v0.97.0...v0.98.0) (2023-02-22)
+
+
+### Bug Fixes
+
+* remove nullable annotation in Kotlin code ([b5a29fd](https://github.com/revanced/revanced-integrations/commit/b5a29fdce195ab47edd61d1d684def1ac919297c))
+* **twitter:** make `hide-ads` patch compatible with any version ([6655988](https://github.com/revanced/revanced-integrations/commit/665598836abfcead9c5e68ce7831a4137465df39))
+* **youtube/hide-watch-in-vr:** fix descriptions ([96fcc0b](https://github.com/revanced/revanced-integrations/commit/96fcc0b1c70c277c99a99db9ca2d50f649a41a70))
+
+
+### Features
+
+* **twitter:** `hide-recommended-users` patch ([96eea3d](https://github.com/revanced/revanced-integrations/commit/96eea3d4fc096f389840481b146dcf1542cb9c43))
+* **youtube/general-ads:** hide channel bar ([35c4266](https://github.com/revanced/revanced-integrations/commit/35c4266e8b8ad7cf9fb5d14cf6cbc8ae65cc78df))
+* **youtube/general-ads:** hide full-screen feed banner ([da1572c](https://github.com/revanced/revanced-integrations/commit/da1572c28d20e2549d0e2a68591f23bb68d8cc9c))
+* **youtube/general-ads:** hide horizontal video shelf ([fd975ec](https://github.com/revanced/revanced-integrations/commit/fd975ecd2a91ea7ac713d3b7badf373c7d53ad5c))
+* **youtube/open-links-directly:** skip every redirect url ([2d73b8b](https://github.com/revanced/revanced-integrations/commit/2d73b8b29b14ab9ce20fa33ea4ebfa66984c5903))
+
 # [0.98.0-dev.5](https://github.com/revanced/revanced-integrations/compare/v0.98.0-dev.4...v0.98.0-dev.5) (2023-02-22)
 
 
