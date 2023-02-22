@@ -1,3 +1,10 @@
+# [0.98.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.98.0-dev.3...v0.98.0-dev.4) (2023-02-22)
+
+
+### Bug Fixes
+
+* remove nullable annotation in Kotlin code ([b5a29fd](https://github.com/revanced/revanced-integrations/commit/b5a29fdce195ab47edd61d1d684def1ac919297c))
+
 # [0.98.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.98.0-dev.2...v0.98.0-dev.3) (2023-02-22)
 
 
