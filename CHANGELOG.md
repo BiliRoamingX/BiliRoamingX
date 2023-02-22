@@ -1,3 +1,10 @@
+# [0.99.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.98.0...v0.99.0-dev.1) (2023-02-22)
+
+
+### Features
+
+* **youtube:** remove patch `open-links-directly` ([dce882b](https://github.com/revanced/revanced-integrations/commit/dce882b12809c074ae796b3551ddd82806bd084d))
+
 # [0.98.0](https://github.com/revanced/revanced-integrations/compare/v0.97.0...v0.98.0) (2023-02-22)
 
 
