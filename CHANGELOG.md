@@ -1,3 +1,10 @@
+# [0.98.0-dev.5](https://github.com/revanced/revanced-integrations/compare/v0.98.0-dev.4...v0.98.0-dev.5) (2023-02-22)
+
+
+### Features
+
+* **youtube/open-links-directly:** skip every redirect url ([2d73b8b](https://github.com/revanced/revanced-integrations/commit/2d73b8b29b14ab9ce20fa33ea4ebfa66984c5903))
+
 # [0.98.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.98.0-dev.3...v0.98.0-dev.4) (2023-02-22)
 
 
