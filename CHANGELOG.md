@@ -1,3 +1,15 @@
+# [0.98.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.98.0-dev.2...v0.98.0-dev.3) (2023-02-22)
+
+
+### Bug Fixes
+
+* **twitter:** make `hide-ads` patch compatible with any version ([6655988](https://github.com/revanced/revanced-integrations/commit/665598836abfcead9c5e68ce7831a4137465df39))
+
+
+### Features
+
+* **twitter:** `hide-recommended-users` patch ([96eea3d](https://github.com/revanced/revanced-integrations/commit/96eea3d4fc096f389840481b146dcf1542cb9c43))
+
 # [0.98.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.98.0-dev.1...v0.98.0-dev.2) (2023-02-20)
 
 
