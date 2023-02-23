@@ -1,3 +1,11 @@
+# [0.99.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.99.0-dev.1...v0.99.0-dev.2) (2023-02-23)
+
+
+### Features
+
+* **youtube/general-ads:** hide quick actions in fullscreen ([ae862cb](https://github.com/revanced/revanced-integrations/commit/ae862cbac6f9a9b717617469d202b48923a1d3b4))
+* **youtube/general-ads:** hide related videos in quick action ([cfc571c](https://github.com/revanced/revanced-integrations/commit/cfc571c12cb012b86c8bfa8bf7df1c77b9711a21))
+
 # [0.99.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.98.0...v0.99.0-dev.1) (2023-02-22)
 
 
