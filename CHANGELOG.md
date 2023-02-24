@@ -1,3 +1,10 @@
+# [0.99.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.99.0-dev.2...v0.99.0-dev.3) (2023-02-24)
+
+
+### Features
+
+* **youtube/return-youtube-dislike:** support for shorts ([#312](https://github.com/revanced/revanced-integrations/issues/312)) ([0aef5e6](https://github.com/revanced/revanced-integrations/commit/0aef5e60e280b63490dac8d1b706e896fdf913a2))
+
 # [0.99.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.99.0-dev.1...v0.99.0-dev.2) (2023-02-23)
 
 
