@@ -1,3 +1,10 @@
+# [0.100.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.99.0...v0.100.0-dev.1) (2023-02-24)
+
+
+### Features
+
+* **youtube/general-ads:** hide image shelf from search results ([db6ce55](https://github.com/revanced/revanced-integrations/commit/db6ce554779d58b23685b1794e17f89342abbd87))
+
 # [0.99.0](https://github.com/revanced/revanced-integrations/compare/v0.98.0...v0.99.0) (2023-02-24)
 
 
