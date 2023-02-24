@@ -1,3 +1,10 @@
+# [0.100.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.100.0-dev.1...v0.100.0-dev.2) (2023-02-24)
+
+
+### Features
+
+* **youtube/general-ads:** do not hide components in library tab ([3c00e58](https://github.com/revanced/revanced-integrations/commit/3c00e58c13fa11da68ff21f4d76e341bc24c5737))
+
 # [0.100.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.99.0...v0.100.0-dev.1) (2023-02-24)
 
 
