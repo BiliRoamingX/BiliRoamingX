@@ -1,3 +1,12 @@
+# [0.99.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.99.0-dev.3...v0.99.0-dev.4) (2023-02-24)
+
+
+### Bug Fixes
+
+* **youtube/general-ads:** check for quick actions in path instead of component identifier ([476902e](https://github.com/revanced/revanced-integrations/commit/476902e9cedbc068a815897dd22eabdb52dee84a))
+* **youtube/general-ads:** use correct setting to hide related videos in quick actions ([e626bd0](https://github.com/revanced/revanced-integrations/commit/e626bd08c1249cb5594d15c77d06cae8ae27e055))
+* **youtube/general-ads:** use correct setting to hide related videos in quick actions ([05bfc68](https://github.com/revanced/revanced-integrations/commit/05bfc689078beb9a21adc6c4555afe0862e304f7))
+
 # [0.99.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.99.0-dev.2...v0.99.0-dev.3) (2023-02-24)
 
 
