@@ -1,3 +1,10 @@
+# [0.100.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.100.0-dev.2...v0.100.0-dev.3) (2023-02-25)
+
+
+### Bug Fixes
+
+* **youtube/general-ads:** hide chapters in video description ([#326](https://github.com/revanced/revanced-integrations/issues/326)) ([f31e3a0](https://github.com/revanced/revanced-integrations/commit/f31e3a02a0965da0c1f901e9d6afcfe4f6f6b608))
+
 # [0.100.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.100.0-dev.1...v0.100.0-dev.2) (2023-02-24)
 
 
