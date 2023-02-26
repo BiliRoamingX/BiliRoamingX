@@ -1,3 +1,10 @@
+# [0.100.0-dev.6](https://github.com/revanced/revanced-integrations/compare/v0.100.0-dev.5...v0.100.0-dev.6) (2023-02-26)
+
+
+### Bug Fixes
+
+* **youtube/hide-floating-microphone-button:** reboot when changing settings ([919f285](https://github.com/revanced/revanced-integrations/commit/919f2855edff0acc96c42ea733fff41a55211e48))
+
 # [0.100.0-dev.5](https://github.com/revanced/revanced-integrations/compare/v0.100.0-dev.4...v0.100.0-dev.5) (2023-02-26)
 
 
