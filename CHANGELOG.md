@@ -1,3 +1,11 @@
+# [0.100.0-dev.5](https://github.com/revanced/revanced-integrations/compare/v0.100.0-dev.4...v0.100.0-dev.5) (2023-02-26)
+
+
+### Features
+
+* **youtube/hide-autoplay-button:** do not disable autoplay button when hidden ([519c2bd](https://github.com/revanced/revanced-integrations/commit/519c2bd5118db41fc512a665d9454b902134ba2c))
+* **youtube:** `hide-floating-microphone-button` patch ([cb77e96](https://github.com/revanced/revanced-integrations/commit/cb77e96da91bb4707d8559757cd86a7583f8048b))
+
 # [0.100.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.100.0-dev.3...v0.100.0-dev.4) (2023-02-26)
 
 
