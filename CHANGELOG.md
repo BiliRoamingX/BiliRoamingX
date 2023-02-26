@@ -1,3 +1,10 @@
+# [0.100.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.100.0-dev.3...v0.100.0-dev.4) (2023-02-26)
+
+
+### Bug Fixes
+
+* **youtube/general-ads:** hide any kind of buttoned ad ([0b3508b](https://github.com/revanced/revanced-integrations/commit/0b3508bd8dcd6e031f1a7625ee5214fd093ee3f5))
+
 # [0.100.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.100.0-dev.2...v0.100.0-dev.3) (2023-02-25)
 
 
