@@ -1,3 +1,10 @@
+## [0.100.2-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.100.1...v0.100.2-dev.1) (2023-03-14)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** fix right to left text layout ([#333](https://github.com/revanced/revanced-integrations/issues/333)) ([2dd1431](https://github.com/revanced/revanced-integrations/commit/2dd14313a64930acbb544f4ad971c51dcfbb80e1))
+
 ## [0.100.1](https://github.com/revanced/revanced-integrations/compare/v0.100.0...v0.100.1) (2023-03-14)
 
 
