@@ -1,3 +1,10 @@
+## [0.100.2-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.100.2-dev.1...v0.100.2-dev.2) (2023-03-14)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** layout fix for low dpi devices ([#335](https://github.com/revanced/revanced-integrations/issues/335)) ([46e0272](https://github.com/revanced/revanced-integrations/commit/46e0272f9e96e7893e6fbb919d90248f59addaf9))
+
 ## [0.100.2-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.100.1...v0.100.2-dev.1) (2023-03-14)
 
 
