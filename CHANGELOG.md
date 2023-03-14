@@ -1,3 +1,19 @@
+# [0.100.0-dev.6](https://github.com/revanced/revanced-integrations/compare/v0.100.0-dev.5...v0.100.0-dev.6) (2023-03-14)
+
+
+### Bug Fixes
+
+* **youtube/hide-floating-microphone-button:** reboot when changing settings ([919f285](https://github.com/revanced/revanced-integrations/commit/919f2855edff0acc96c42ea733fff41a55211e48))
+* **youtube/remember-video-quality:** treat any connection as wifi except mobile and bluetooth ([1f90f7b](https://github.com/revanced/revanced-integrations/commit/1f90f7b9cca2445c776f4f0c8af1ddd0c9bde5f0))
+* **youtube/return-youtube-dislike:** improve segmented like/dislike layout ([416c695](https://github.com/revanced/revanced-integrations/commit/416c695837debefb4762d381f25157de480614cc))
+
+
+### Features
+
+* **youtube/general-ads:** hide new type of ad ([844bc3b](https://github.com/revanced/revanced-integrations/commit/844bc3b24fe9a2d6b69367d79ad99e452e8a7604))
+* **youtube/general-ads:** hide new type of ad ([#331](https://github.com/revanced/revanced-integrations/issues/331)) ([7e64e05](https://github.com/revanced/revanced-integrations/commit/7e64e05709c63b4631e845799e756a678138813b))
+* **youtube:** remove `custom-video-buffer` patch ([#1718](https://github.com/revanced/revanced-integrations/issues/1718)) ([d5919a8](https://github.com/revanced/revanced-integrations/commit/d5919a8a2cff09bb884ea01ca6b01d8d2d0b8980))
+
 # [0.100.0-dev.6](https://github.com/revanced/revanced-integrations/compare/v0.100.0-dev.5...v0.100.0-dev.6) (2023-02-26)
 
 
