@@ -1,3 +1,10 @@
+## [0.100.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.100.0...v0.100.1-dev.1) (2023-03-14)
+
+
+### Bug Fixes
+
+* minor syntax issue ([1e1504d](https://github.com/revanced/revanced-integrations/commit/1e1504d118d656492df0bee30364e966a8dc99b4))
+
 # [0.100.0](https://github.com/revanced/revanced-integrations/compare/v0.99.0...v0.100.0) (2023-03-14)
 
 
