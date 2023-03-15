@@ -1,3 +1,10 @@
+## [0.100.2-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.100.2-dev.2...v0.100.2-dev.3) (2023-03-15)
+
+
+### Bug Fixes
+
+* **youtube/spoof-signature-verification:** fix audio during home feed video playback ([#336](https://github.com/revanced/revanced-integrations/issues/336)) ([68d0930](https://github.com/revanced/revanced-integrations/commit/68d09305b990b411efffeeb02aa638e59eee9e5d))
+
 ## [0.100.2-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.100.2-dev.1...v0.100.2-dev.2) (2023-03-14)
 
 
