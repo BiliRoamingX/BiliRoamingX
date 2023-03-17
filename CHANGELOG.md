@@ -1,3 +1,10 @@
+# [0.101.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.100.2-dev.3...v0.101.0-dev.1) (2023-03-17)
+
+
+### Features
+
+* **youtube/spoof-signature-verification:** automatic signature spoofing ([d16980e](https://github.com/revanced/revanced-integrations/commit/d16980ef2f18b7b5752be36f0183985c6c398ea1))
+
 ## [0.100.2-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.100.2-dev.2...v0.100.2-dev.3) (2023-03-15)
 
 
