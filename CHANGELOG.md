@@ -1,3 +1,10 @@
+# [0.101.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.101.0-dev.1...v0.101.0-dev.2) (2023-03-19)
+
+
+### Bug Fixes
+
+* **youtube/remember-playback-speed:**  allow to not remember playback speed ([#338](https://github.com/revanced/revanced-integrations/issues/338)) ([7627e5d](https://github.com/revanced/revanced-integrations/commit/7627e5d057fdfb5847b2406b609634489efd3cbf))
+
 # [0.101.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.100.2-dev.3...v0.101.0-dev.1) (2023-03-17)
 
 
