@@ -1,3 +1,38 @@
+# [0.101.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.101.0-dev.1...v0.101.0-dev.2) (2023-03-19)
+
+
+### Bug Fixes
+
+* **youtube/remember-playback-speed:**  allow to not remember playback speed ([#338](https://github.com/revanced/revanced-integrations/issues/338)) ([7627e5d](https://github.com/revanced/revanced-integrations/commit/7627e5d057fdfb5847b2406b609634489efd3cbf))
+
+# [0.101.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.100.2-dev.3...v0.101.0-dev.1) (2023-03-17)
+
+
+### Features
+
+* **youtube/spoof-signature-verification:** automatic signature spoofing ([d16980e](https://github.com/revanced/revanced-integrations/commit/d16980ef2f18b7b5752be36f0183985c6c398ea1))
+
+## [0.100.2-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.100.2-dev.2...v0.100.2-dev.3) (2023-03-15)
+
+
+### Bug Fixes
+
+* **youtube/spoof-signature-verification:** fix audio during home feed video playback ([#336](https://github.com/revanced/revanced-integrations/issues/336)) ([68d0930](https://github.com/revanced/revanced-integrations/commit/68d09305b990b411efffeeb02aa638e59eee9e5d))
+
+## [0.100.2-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.100.2-dev.1...v0.100.2-dev.2) (2023-03-14)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** layout fix for low dpi devices ([#335](https://github.com/revanced/revanced-integrations/issues/335)) ([46e0272](https://github.com/revanced/revanced-integrations/commit/46e0272f9e96e7893e6fbb919d90248f59addaf9))
+
+## [0.100.2-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.100.1...v0.100.2-dev.1) (2023-03-14)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** fix right to left text layout ([#333](https://github.com/revanced/revanced-integrations/issues/333)) ([2dd1431](https://github.com/revanced/revanced-integrations/commit/2dd14313a64930acbb544f4ad971c51dcfbb80e1))
+
 ## [0.100.1](https://github.com/revanced/revanced-integrations/compare/v0.100.0...v0.100.1) (2023-03-14)
 
 
