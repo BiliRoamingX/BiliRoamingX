@@ -1,3 +1,12 @@
+## [0.101.1](https://github.com/revanced/revanced-integrations/compare/v0.101.0...v0.101.1) (2023-04-13)
+
+
+### Bug Fixes
+
+* **youtube/spoof-signature-verification:** additional fixes for subtitle locations ([#346](https://github.com/revanced/revanced-integrations/issues/346)) ([eeddb59](https://github.com/revanced/revanced-integrations/commit/eeddb59b0815b9e92869fc7c1d1f49d51039ce2e))
+* **youtube/spoof-signature-verification:** fixed subtitles in wrong location ([#343](https://github.com/revanced/revanced-integrations/issues/343)) ([1a0a6ee](https://github.com/revanced/revanced-integrations/commit/1a0a6ee90be8168f46ada6dfc736f3609a921561))
+* **youtube/spoof-signature-verification:** spoof videos in playlists ([86bedb2](https://github.com/revanced/revanced-integrations/commit/86bedb2183c01bd06afaa10221e2a1504ee20ed3))
+
 # [0.101.0](https://github.com/revanced/revanced-integrations/compare/v0.100.1...v0.101.0) (2023-03-29)
 
 
