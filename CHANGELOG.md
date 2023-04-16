@@ -1,3 +1,10 @@
+# [0.103.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.1...v0.103.0-dev.2) (2023-04-16)
+
+
+### Features
+
+* **youtube/sponsorblock:** skip to video highlight ([#352](https://github.com/revanced/revanced-integrations/issues/352)) ([03f09cf](https://github.com/revanced/revanced-integrations/commit/03f09cf7bce1747b1d402f3a3e16dd69c364dfce))
+
 # [0.103.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.102.0...v0.103.0-dev.1) (2023-04-16)
 
 
