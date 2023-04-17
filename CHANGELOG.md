@@ -1,3 +1,10 @@
+# [0.103.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.2...v0.103.0-dev.3) (2023-04-17)
+
+
+### Features
+
+* **youtube/general-ads:** hide new type of movie offer ad ([da7b669](https://github.com/revanced/revanced-integrations/commit/da7b669c97d18bef51de98ddfde8a514ebb61ecf))
+
 # [0.103.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.1...v0.103.0-dev.2) (2023-04-16)
 
 
