@@ -1,3 +1,10 @@
+# [0.103.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.3...v0.103.0-dev.4) (2023-04-18)
+
+
+### Bug Fixes
+
+* minor syntax error ([8797765](https://github.com/revanced/revanced-integrations/commit/8797765efa0fb98b6e11a7198ecce3943df3daf5))
+
 # [0.103.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.2...v0.103.0-dev.3) (2023-04-17)
 
 
