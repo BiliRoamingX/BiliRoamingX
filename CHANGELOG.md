@@ -1,3 +1,10 @@
+# [0.103.0-dev.6](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.5...v0.103.0-dev.6) (2023-04-19)
+
+
+### Bug Fixes
+
+* **youtube/sponsorblock:** always show the video time without segments using left to right layout ([#359](https://github.com/revanced/revanced-integrations/issues/359)) ([86c2789](https://github.com/revanced/revanced-integrations/commit/86c27890ada8739ea272f8783eb4ef526b808a27))
+
 # [0.103.0-dev.5](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.4...v0.103.0-dev.5) (2023-04-19)
 
 
