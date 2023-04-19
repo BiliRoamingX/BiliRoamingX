@@ -1,3 +1,10 @@
+# [0.103.0-dev.5](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.4...v0.103.0-dev.5) (2023-04-19)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** render dislikes when scrolling into the screen ([#350](https://github.com/revanced/revanced-integrations/issues/350)) ([41c07f7](https://github.com/revanced/revanced-integrations/commit/41c07f77f47d726fdc16120bb5695407a7dec1fc))
+
 # [0.103.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.3...v0.103.0-dev.4) (2023-04-18)
 
 
