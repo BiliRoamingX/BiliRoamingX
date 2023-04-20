@@ -1,3 +1,10 @@
+# [0.103.0-dev.7](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.6...v0.103.0-dev.7) (2023-04-20)
+
+
+### Bug Fixes
+
+* **youtube/hide-video-action-buttons:** fix 'hide share button' ([#360](https://github.com/revanced/revanced-integrations/issues/360)) ([a2af2c0](https://github.com/revanced/revanced-integrations/commit/a2af2c0c9ffc2f961773bfb8d546aff68c2d1c27))
+
 # [0.103.0-dev.6](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.5...v0.103.0-dev.6) (2023-04-19)
 
 
