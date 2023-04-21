@@ -1,3 +1,67 @@
+# [0.103.0-dev.7](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.6...v0.103.0-dev.7) (2023-04-20)
+
+
+### Bug Fixes
+
+* **youtube/hide-video-action-buttons:** fix 'hide share button' ([#360](https://github.com/revanced/revanced-integrations/issues/360)) ([a2af2c0](https://github.com/revanced/revanced-integrations/commit/a2af2c0c9ffc2f961773bfb8d546aff68c2d1c27))
+
+# [0.103.0-dev.6](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.5...v0.103.0-dev.6) (2023-04-19)
+
+
+### Bug Fixes
+
+* **youtube/sponsorblock:** always show the video time without segments using left to right layout ([#359](https://github.com/revanced/revanced-integrations/issues/359)) ([86c2789](https://github.com/revanced/revanced-integrations/commit/86c27890ada8739ea272f8783eb4ef526b808a27))
+
+# [0.103.0-dev.5](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.4...v0.103.0-dev.5) (2023-04-19)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** render dislikes when scrolling into the screen ([#350](https://github.com/revanced/revanced-integrations/issues/350)) ([41c07f7](https://github.com/revanced/revanced-integrations/commit/41c07f77f47d726fdc16120bb5695407a7dec1fc))
+
+# [0.103.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.3...v0.103.0-dev.4) (2023-04-18)
+
+
+### Bug Fixes
+
+* minor syntax error ([8797765](https://github.com/revanced/revanced-integrations/commit/8797765efa0fb98b6e11a7198ecce3943df3daf5))
+
+# [0.103.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.2...v0.103.0-dev.3) (2023-04-17)
+
+
+### Features
+
+* **youtube/general-ads:** hide new type of movie offer ad ([da7b669](https://github.com/revanced/revanced-integrations/commit/da7b669c97d18bef51de98ddfde8a514ebb61ecf))
+
+# [0.103.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.103.0-dev.1...v0.103.0-dev.2) (2023-04-16)
+
+
+### Features
+
+* **youtube/sponsorblock:** skip to video highlight ([#352](https://github.com/revanced/revanced-integrations/issues/352)) ([03f09cf](https://github.com/revanced/revanced-integrations/commit/03f09cf7bce1747b1d402f3a3e16dd69c364dfce))
+
+# [0.103.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.102.0...v0.103.0-dev.1) (2023-04-16)
+
+
+### Bug Fixes
+
+* **youtube/general-ads:** hide new types of ads ([#339](https://github.com/revanced/revanced-integrations/issues/339)) ([6528d44](https://github.com/revanced/revanced-integrations/commit/6528d444b49759ee1137c9b0eb8e1079fb4cc97c))
+* **youtube/return-youtube-dislike:** fix error toast when voting ([#349](https://github.com/revanced/revanced-integrations/issues/349)) ([e3d923d](https://github.com/revanced/revanced-integrations/commit/e3d923d564ae572c5e0e10a86ce17b8009ec8c42))
+* **youtube/return-youtube-dislike:** stale dislike data shown after opening / closing the app during shorts playback ([#356](https://github.com/revanced/revanced-integrations/issues/356)) ([212e4f2](https://github.com/revanced/revanced-integrations/commit/212e4f2ce43360776fe20467c4142c9936b22d42))
+* **youtube/settings:** fix dialog not shown if dismissed with back button ([584de16](https://github.com/revanced/revanced-integrations/commit/584de16236ff758c2067ee84ba4cc04d765d49ba))
+* **youtube/sponsorblock:** change default behavior to better match the browser ([#353](https://github.com/revanced/revanced-integrations/issues/353)) ([b959c8e](https://github.com/revanced/revanced-integrations/commit/b959c8ef98e869201c8bc2609943108283fea453))
+* **youtube/sponsorblock:** settings do not show default behavior ([#351](https://github.com/revanced/revanced-integrations/issues/351)) ([6dbccfd](https://github.com/revanced/revanced-integrations/commit/6dbccfd472d843b5c3f0efed39b575d3ea7ac04f))
+* **youtube/sponsorblock:** update HTTP user agent ([#344](https://github.com/revanced/revanced-integrations/issues/344)) ([3025103](https://github.com/revanced/revanced-integrations/commit/3025103014a4521a437cfde0a417535e7751b517))
+
+
+### Features
+
+* **youtube/general-ads:** block new type of ad ([6265a91](https://github.com/revanced/revanced-integrations/commit/6265a91841f8b037be22dd5fd5399dbeeb666745))
+* **youtube/general-ads:** hide new type of ad ([5ba4cbd](https://github.com/revanced/revanced-integrations/commit/5ba4cbd4e097d863924731d363dd5bb8849e1394))
+* **youtube/general-ads:** hide new type of ad ([f818490](https://github.com/revanced/revanced-integrations/commit/f8184905bd9601bf63e30963ff337d24f2599794))
+* **youtube/settings:** disable preference control if the feature is turned off.  show a dialog explaining side effects of some patches ([#328](https://github.com/revanced/revanced-integrations/issues/328)) ([a0ad968](https://github.com/revanced/revanced-integrations/commit/a0ad968aaa66422e67de2a61d76bc7aa88f08bf6))
+* **youtube:** user selectable default video speed and quality ([#354](https://github.com/revanced/revanced-integrations/issues/354)) ([14223f4](https://github.com/revanced/revanced-integrations/commit/14223f40b5ca48f35bbecfd849dff20dfd309d92))
+
 # [0.102.0](https://github.com/revanced/revanced-integrations/compare/v0.101.1...v0.102.0) (2023-04-13)
 
 

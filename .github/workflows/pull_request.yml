@@ -26,5 +26,5 @@ jobs:
             
             ## Dependencies before merge
 
-            - [] https://github.com/revanced/revanced-patches
+            - [ ] https://github.com/revanced/revanced-patches
           pr_draft: true
