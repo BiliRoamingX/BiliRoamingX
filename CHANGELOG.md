@@ -1,3 +1,10 @@
+## [0.103.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.103.0...v0.103.1-dev.1) (2023-04-22)
+
+
+### Bug Fixes
+
+* **youtube/sponsorblock:** Include milliseconds in the voting menu ([#362](https://github.com/revanced/revanced-integrations/issues/362)) ([1ada30d](https://github.com/revanced/revanced-integrations/commit/1ada30d5c925f1b0f21d45865240780e4ecd84d7))
+
 # [0.103.0](https://github.com/revanced/revanced-integrations/compare/v0.102.0...v0.103.0) (2023-04-21)
 
 
