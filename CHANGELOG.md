@@ -1,3 +1,10 @@
+## [0.103.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.103.1-dev.1...v0.103.1-dev.2) (2023-04-23)
+
+
+### Bug Fixes
+
+* **youtube/hide-video-action-buttons:** fix hide action buttons not working for some users ([#366](https://github.com/revanced/revanced-integrations/issues/366)) ([afd9b6e](https://github.com/revanced/revanced-integrations/commit/afd9b6e30566d735075c16d3f5173e406c965a8c))
+
 ## [0.103.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.103.0...v0.103.1-dev.1) (2023-04-22)
 
 
