@@ -1,3 +1,18 @@
+# [0.104.0](https://github.com/revanced/revanced-integrations/compare/v0.103.0...v0.104.0) (2023-04-24)
+
+
+### Bug Fixes
+
+* **spoof-wifi-connection:** fixed crash when wifi is disabled ([#363](https://github.com/revanced/revanced-integrations/issues/363)) ([7fc8e88](https://github.com/revanced/revanced-integrations/commit/7fc8e882d8d268484b6e273fdb0371db2feef1d3))
+* **youtube/hide-video-action-buttons:** fix hide action buttons not working for some users ([#366](https://github.com/revanced/revanced-integrations/issues/366)) ([246deb1](https://github.com/revanced/revanced-integrations/commit/246deb16020adda26d9d0a0449157f4855678d18))
+* **youtube/sponsorblock:** Include milliseconds in the voting menu ([#362](https://github.com/revanced/revanced-integrations/issues/362)) ([6952c50](https://github.com/revanced/revanced-integrations/commit/6952c505957153d7fdeb7ee42b3f824c155993f5))
+
+
+### Features
+
+* **youtube/wide-searchbar:** rename patch ([8493f57](https://github.com/revanced/revanced-integrations/commit/8493f57879f0075c73932240b61bf0c52efda0ed))
+* **youtube:** remove non working patch `hide-my-mix` ([436a84e](https://github.com/revanced/revanced-integrations/commit/436a84ee0785e5b0bed1b9a4a02b5be86eff4a4a))
+
 # [0.104.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.103.1-dev.2...v0.104.0-dev.1) (2023-04-24)
 
 
