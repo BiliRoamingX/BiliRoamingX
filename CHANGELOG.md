@@ -1,3 +1,12 @@
+# [0.104.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.103.1-dev.2...v0.104.0-dev.1) (2023-04-24)
+
+
+### Features
+
+* **youtube/wide-searchbar:** rename patch ([2320880](https://github.com/revanced/revanced-integrations/commit/2320880a42bf37335ececf1f8e6cb83bd57f347d))
+* **youtube:** bump compatibility to `18.15.40` ([#367](https://github.com/revanced/revanced-integrations/issues/367)) ([52a3193](https://github.com/revanced/revanced-integrations/commit/52a31930870b838e766d08c3203bd8cd7ae443ba))
+* **youtube:** remove non working patch `hide-my-mix` ([98edcdd](https://github.com/revanced/revanced-integrations/commit/98edcdd589c0d3615530b44c8bbaeb94ae599afb))
+
 ## [0.103.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.103.1-dev.1...v0.103.1-dev.2) (2023-04-23)
 
 
