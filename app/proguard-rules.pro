@@ -20,6 +20,8 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -dontobfuscate
+-dontoptimize
+-keepattributes *  # https://www.guardsquare.com/manual/configuration/attributes
 -keep class app.revanced.** {
   *;
 }
