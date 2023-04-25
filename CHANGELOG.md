@@ -1,3 +1,10 @@
+## [0.104.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.104.0...v0.104.1-dev.1) (2023-04-25)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** fix dislikes using wrong font if dark mode is enabled during video playback ([#368](https://github.com/revanced/revanced-integrations/issues/368)) ([3b37a3b](https://github.com/revanced/revanced-integrations/commit/3b37a3b41f7bfbc4a6d6d12e2deb2acd9bb2ccc8))
+
 # [0.104.0](https://github.com/revanced/revanced-integrations/compare/v0.103.0...v0.104.0) (2023-04-24)
 
 
