@@ -1,3 +1,10 @@
+## [0.104.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.104.1-dev.1...v0.104.1-dev.2) (2023-04-25)
+
+
+### Bug Fixes
+
+* **youtube/spoof-signature-verification:** additional fixes for subtitle window positions ([#369](https://github.com/revanced/revanced-integrations/issues/369)) ([6f2ae31](https://github.com/revanced/revanced-integrations/commit/6f2ae313cf492166d64e5e33e759f2b234191b64))
+
 ## [0.104.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.104.0...v0.104.1-dev.1) (2023-04-25)
 
 
