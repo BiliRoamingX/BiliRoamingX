@@ -1,3 +1,10 @@
+# [0.105.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.104.1-dev.2...v0.105.0-dev.1) (2023-04-26)
+
+
+### Features
+
+* **youtube/sponsorblock:** automatically hide skip button ([#365](https://github.com/revanced/revanced-integrations/issues/365)) ([75dad2f](https://github.com/revanced/revanced-integrations/commit/75dad2f3071c19aa097ebdc7bd83d1ce9afb78ea))
+
 ## [0.104.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.104.1-dev.1...v0.104.1-dev.2) (2023-04-25)
 
 
