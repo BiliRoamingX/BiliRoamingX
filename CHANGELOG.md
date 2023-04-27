@@ -1,3 +1,17 @@
+# [0.105.0](https://github.com/revanced/revanced-integrations/compare/v0.104.0...v0.105.0) (2023-04-27)
+
+
+### Bug Fixes
+
+* **youtube/minimized-playback:** disable minimized playback for shorts ([#371](https://github.com/revanced/revanced-integrations/issues/371)) ([df4b03f](https://github.com/revanced/revanced-integrations/commit/df4b03fed5a0622b18bf4a8dca1940d26a590d8f))
+* **youtube/return-youtube-dislike:** fix dislikes using wrong font if dark mode is enabled during video playback ([#368](https://github.com/revanced/revanced-integrations/issues/368)) ([3b37a3b](https://github.com/revanced/revanced-integrations/commit/3b37a3b41f7bfbc4a6d6d12e2deb2acd9bb2ccc8))
+* **youtube/spoof-signature-verification:** additional fixes for subtitle window positions ([#369](https://github.com/revanced/revanced-integrations/issues/369)) ([6f2ae31](https://github.com/revanced/revanced-integrations/commit/6f2ae313cf492166d64e5e33e759f2b234191b64))
+
+
+### Features
+
+* **youtube/sponsorblock:** automatically hide skip button ([#365](https://github.com/revanced/revanced-integrations/issues/365)) ([75dad2f](https://github.com/revanced/revanced-integrations/commit/75dad2f3071c19aa097ebdc7bd83d1ce9afb78ea))
+
 # [0.105.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.105.0-dev.1...v0.105.0-dev.2) (2023-04-27)
 
 
