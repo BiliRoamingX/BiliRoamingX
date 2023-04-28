@@ -1,3 +1,10 @@
+## [0.105.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.105.0...v0.105.1-dev.1) (2023-04-28)
+
+
+### Bug Fixes
+
+* **youtube:** no longer need to restart the app after changing `copy-video-url` or `downloads` patch ([#372](https://github.com/revanced/revanced-integrations/issues/372)) ([6b15514](https://github.com/revanced/revanced-integrations/commit/6b155148854fbfe155c9384ba8976b5ddf3d5992))
+
 # [0.105.0](https://github.com/revanced/revanced-integrations/compare/v0.104.0...v0.105.0) (2023-04-27)
 
 
