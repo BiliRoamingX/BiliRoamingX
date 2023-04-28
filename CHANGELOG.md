@@ -1,3 +1,10 @@
+# [0.106.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.105.1-dev.2...v0.106.0-dev.1) (2023-04-28)
+
+
+### Features
+
+* **youtube/spoof-app-version:** user selectable version to spoof ([#375](https://github.com/revanced/revanced-integrations/issues/375)) ([f6f6c93](https://github.com/revanced/revanced-integrations/commit/f6f6c93c57bdbec13f09acd802f58554cb981f3a))
+
 ## [0.105.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.105.1-dev.1...v0.105.1-dev.2) (2023-04-28)
 
 
