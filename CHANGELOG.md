@@ -1,3 +1,10 @@
+# [0.106.0-dev.5](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.4...v0.106.0-dev.5) (2023-04-30)
+
+
+### Features
+
+* **youtube/general-ads:** hide new type of ad ([15f9c90](https://github.com/revanced/revanced-integrations/commit/15f9c90941535e93a0779118158c5b4a8accb799))
+
 # [0.106.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.3...v0.106.0-dev.4) (2023-04-30)
 
 
