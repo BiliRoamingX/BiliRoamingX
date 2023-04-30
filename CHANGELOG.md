@@ -1,3 +1,10 @@
+# [0.106.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.1...v0.106.0-dev.2) (2023-04-30)
+
+
+### Features
+
+* add appreciation message for new contributors ([78d56d4](https://github.com/revanced/revanced-integrations/commit/78d56d4fe182999555ddf5881a10880e3726782e))
+
 # [0.106.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.105.1-dev.2...v0.106.0-dev.1) (2023-04-28)
 
 
