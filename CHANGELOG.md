@@ -1,3 +1,10 @@
+# [0.106.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.2...v0.106.0-dev.3) (2023-04-30)
+
+
+### Features
+
+* **youtube/hide-get-premium:** hide get premium advertisements under video player ([#376](https://github.com/revanced/revanced-integrations/issues/376)) ([36fd284](https://github.com/revanced/revanced-integrations/commit/36fd2844c468a4a9af3fe6ee5e62775f1e8dbe56))
+
 # [0.106.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.1...v0.106.0-dev.2) (2023-04-30)
 
 
