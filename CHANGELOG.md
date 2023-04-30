@@ -1,3 +1,10 @@
+# [0.106.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.3...v0.106.0-dev.4) (2023-04-30)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** support old UI layouts ([#378](https://github.com/revanced/revanced-integrations/issues/378)) ([d3f8fb9](https://github.com/revanced/revanced-integrations/commit/d3f8fb97399aafe98a4198234338c6d0196a7e75))
+
 # [0.106.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.2...v0.106.0-dev.3) (2023-04-30)
 
 
