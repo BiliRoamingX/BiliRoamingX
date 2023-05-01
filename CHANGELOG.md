@@ -1,3 +1,10 @@
+# [0.106.0-dev.6](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.5...v0.106.0-dev.6) (2023-05-01)
+
+
+### Features
+
+* **youtube/general-ads:** hide multiple audio track button on video player overlay ([#377](https://github.com/revanced/revanced-integrations/issues/377)) ([7fc7336](https://github.com/revanced/revanced-integrations/commit/7fc73368f161ee1973f36323054f8cbb53b6e7ce))
+
 # [0.106.0-dev.5](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.4...v0.106.0-dev.5) (2023-04-30)
 
 
