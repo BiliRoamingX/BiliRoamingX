@@ -1,3 +1,66 @@
+# [0.106.0-dev.7](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.6...v0.106.0-dev.7) (2023-05-01)
+
+
+### Bug Fixes
+
+* **youtube/general-ads:** remove broken ad filter ([#355](https://github.com/revanced/revanced-integrations/issues/355)) ([061ebc6](https://github.com/revanced/revanced-integrations/commit/061ebc65465b2c8ef087c681070b465b82e3ebd5))
+
+# [0.106.0-dev.6](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.5...v0.106.0-dev.6) (2023-05-01)
+
+
+### Features
+
+* **youtube/general-ads:** hide multiple audio track button on video player overlay ([#377](https://github.com/revanced/revanced-integrations/issues/377)) ([7fc7336](https://github.com/revanced/revanced-integrations/commit/7fc73368f161ee1973f36323054f8cbb53b6e7ce))
+
+# [0.106.0-dev.5](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.4...v0.106.0-dev.5) (2023-04-30)
+
+
+### Features
+
+* **youtube/general-ads:** hide new type of ad ([15f9c90](https://github.com/revanced/revanced-integrations/commit/15f9c90941535e93a0779118158c5b4a8accb799))
+
+# [0.106.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.3...v0.106.0-dev.4) (2023-04-30)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** support old UI layouts ([#378](https://github.com/revanced/revanced-integrations/issues/378)) ([d3f8fb9](https://github.com/revanced/revanced-integrations/commit/d3f8fb97399aafe98a4198234338c6d0196a7e75))
+
+# [0.106.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.2...v0.106.0-dev.3) (2023-04-30)
+
+
+### Features
+
+* **youtube/hide-get-premium:** hide get premium advertisements under video player ([#376](https://github.com/revanced/revanced-integrations/issues/376)) ([36fd284](https://github.com/revanced/revanced-integrations/commit/36fd2844c468a4a9af3fe6ee5e62775f1e8dbe56))
+
+# [0.106.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.1...v0.106.0-dev.2) (2023-04-30)
+
+
+### Features
+
+* add appreciation message for new contributors ([78d56d4](https://github.com/revanced/revanced-integrations/commit/78d56d4fe182999555ddf5881a10880e3726782e))
+
+# [0.106.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.105.1-dev.2...v0.106.0-dev.1) (2023-04-28)
+
+
+### Features
+
+* **youtube/spoof-app-version:** user selectable version to spoof ([#375](https://github.com/revanced/revanced-integrations/issues/375)) ([f6f6c93](https://github.com/revanced/revanced-integrations/commit/f6f6c93c57bdbec13f09acd802f58554cb981f3a))
+
+## [0.105.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.105.1-dev.1...v0.105.1-dev.2) (2023-04-28)
+
+
+### Bug Fixes
+
+* **youtube/spoof-signature-verification:** more fixes for subtitle window positions  ([#374](https://github.com/revanced/revanced-integrations/issues/374)) ([8cc1b6e](https://github.com/revanced/revanced-integrations/commit/8cc1b6ea4af4e642fb2d97233d50f34b0113f2c0))
+
+## [0.105.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.105.0...v0.105.1-dev.1) (2023-04-28)
+
+
+### Bug Fixes
+
+* **youtube:** no longer need to restart the app after changing `copy-video-url` or `downloads` patch ([#372](https://github.com/revanced/revanced-integrations/issues/372)) ([6b15514](https://github.com/revanced/revanced-integrations/commit/6b155148854fbfe155c9384ba8976b5ddf3d5992))
+
 # [0.105.0](https://github.com/revanced/revanced-integrations/compare/v0.104.0...v0.105.0) (2023-04-27)
 
 

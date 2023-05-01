@@ -44,7 +44,7 @@ android {
 dependencies {
     compileOnly(project(mapOf("path" to ":dummy")))
     compileOnly("androidx.annotation:annotation:1.6.0")
-    compileOnly("androidx.appcompat:appcompat:1.6.1")
+    compileOnly("androidx.appcompat:appcompat:1.7.0-alpha02")
     compileOnly("com.squareup.okhttp3:okhttp:5.0.0-alpha.11")
     compileOnly("com.squareup.retrofit2:retrofit:2.9.0")
 }
