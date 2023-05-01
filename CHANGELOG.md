@@ -1,3 +1,10 @@
+# [0.106.0-dev.7](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.6...v0.106.0-dev.7) (2023-05-01)
+
+
+### Bug Fixes
+
+* **youtube/general-ads:** remove broken ad filter ([#355](https://github.com/revanced/revanced-integrations/issues/355)) ([061ebc6](https://github.com/revanced/revanced-integrations/commit/061ebc65465b2c8ef087c681070b465b82e3ebd5))
+
 # [0.106.0-dev.6](https://github.com/revanced/revanced-integrations/compare/v0.106.0-dev.5...v0.106.0-dev.6) (2023-05-01)
 
 
