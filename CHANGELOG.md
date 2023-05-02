@@ -1,3 +1,10 @@
+# [0.107.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.107.0-dev.2...v0.107.0-dev.3) (2023-05-02)
+
+
+### Features
+
+* **youtube:** `navigation-buttons` patch ([68f42fc](https://github.com/revanced/revanced-integrations/commit/68f42fc9800210f6c4d6f8e85c0132bf0cbc06d3))
+
 # [0.107.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.107.0-dev.1...v0.107.0-dev.2) (2023-05-02)
 
 
