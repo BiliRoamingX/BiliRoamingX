@@ -1,3 +1,10 @@
+## [0.107.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.107.0...v0.107.1-dev.1) (2023-05-02)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** fix potential error toast when using old UI layout ([#384](https://github.com/revanced/revanced-integrations/issues/384)) ([6c36bee](https://github.com/revanced/revanced-integrations/commit/6c36beeda139156bfbb5a17bc89aa63c25afa83c))
+
 # [0.107.0](https://github.com/revanced/revanced-integrations/compare/v0.106.0...v0.107.0) (2023-05-02)
 
 
