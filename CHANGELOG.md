@@ -1,3 +1,16 @@
+# [0.107.0](https://github.com/revanced/revanced-integrations/compare/v0.106.0...v0.107.0) (2023-05-02)
+
+
+### Bug Fixes
+
+* **youtube/theme:** set correct default seekbar color ([a91b036](https://github.com/revanced/revanced-integrations/commit/a91b0363a8aca4e195c9da4e48e2c332c1b1a7a6))
+
+
+### Features
+
+* **youtube/theme:** change seekbar color via preference ([1185cee](https://github.com/revanced/revanced-integrations/commit/1185ceedf7fdb40759261ae8560e79604c8cb743))
+* **youtube:** `navigation-buttons` patch ([68f42fc](https://github.com/revanced/revanced-integrations/commit/68f42fc9800210f6c4d6f8e85c0132bf0cbc06d3))
+
 # [0.107.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.107.0-dev.2...v0.107.0-dev.3) (2023-05-02)
 
 
