@@ -1,3 +1,10 @@
+# [0.107.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.107.0-dev.1...v0.107.0-dev.2) (2023-05-02)
+
+
+### Bug Fixes
+
+* **youtube/theme:** set correct default seekbar color ([a91b036](https://github.com/revanced/revanced-integrations/commit/a91b0363a8aca4e195c9da4e48e2c332c1b1a7a6))
+
 # [0.107.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.106.0...v0.107.0-dev.1) (2023-05-02)
 
 
