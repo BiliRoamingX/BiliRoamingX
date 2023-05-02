@@ -1,3 +1,10 @@
+# [0.107.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.106.0...v0.107.0-dev.1) (2023-05-02)
+
+
+### Features
+
+* **youtube/theme:** change seekbar color via preference ([1185cee](https://github.com/revanced/revanced-integrations/commit/1185ceedf7fdb40759261ae8560e79604c8cb743))
+
 # [0.106.0](https://github.com/revanced/revanced-integrations/compare/v0.105.0...v0.106.0) (2023-05-01)
 
 
