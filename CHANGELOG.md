@@ -1,3 +1,10 @@
+# [0.108.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.107.1-dev.3...v0.108.0-dev.1) (2023-05-03)
+
+
+### Features
+
+* **youtube/settings:** add reset button to edit preference dialog ([#383](https://github.com/revanced/revanced-integrations/issues/383)) ([cb5a4d0](https://github.com/revanced/revanced-integrations/commit/cb5a4d0c9b3b340928695fcb1d10b164a6dcef27))
+
 ## [0.107.1-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.107.1-dev.2...v0.107.1-dev.3) (2023-05-03)
 
 
