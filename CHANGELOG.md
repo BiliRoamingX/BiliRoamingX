@@ -1,3 +1,10 @@
+## [0.107.1-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.107.1-dev.2...v0.107.1-dev.3) (2023-05-03)
+
+
+### Bug Fixes
+
+* **youtube/theme:** fix toast shown on fresh app install ([#381](https://github.com/revanced/revanced-integrations/issues/381)) ([2dc431f](https://github.com/revanced/revanced-integrations/commit/2dc431f1bf54c12dfc45c4511a0b0792e214be4f))
+
 ## [0.107.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.107.1-dev.1...v0.107.1-dev.2) (2023-05-03)
 
 
