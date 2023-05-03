@@ -1,3 +1,10 @@
+## [0.107.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.107.1-dev.1...v0.107.1-dev.2) (2023-05-03)
+
+
+### Bug Fixes
+
+* **youtube/sponsorblock:** fix skip button in wrong location when full screen and comments visible ([#387](https://github.com/revanced/revanced-integrations/issues/387)) ([486b79b](https://github.com/revanced/revanced-integrations/commit/486b79b4e4927d4c05cfb4d5222a1d74fe60e327))
+
 ## [0.107.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.107.0...v0.107.1-dev.1) (2023-05-02)
 
 
