@@ -1,3 +1,10 @@
+# [0.108.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.1...v0.108.0-dev.2) (2023-05-05)
+
+
+### Bug Fixes
+
+* **youtube/theme:** fix app crash if user clears seekbar color ([#390](https://github.com/revanced/revanced-integrations/issues/390)) ([e2f5290](https://github.com/revanced/revanced-integrations/commit/e2f52905dc445f881666c06877c3a69306335dcb))
+
 # [0.108.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.107.1-dev.3...v0.108.0-dev.1) (2023-05-03)
 
 
