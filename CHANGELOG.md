@@ -1,3 +1,10 @@
+# [0.108.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.2...v0.108.0-dev.3) (2023-05-07)
+
+
+### Features
+
+* **youtube:** `hide-load-more-button` patch ([#389](https://github.com/revanced/revanced-integrations/issues/389)) ([7da9d44](https://github.com/revanced/revanced-integrations/commit/7da9d440eedfc895b49aac40498f0279156ad117))
+
 # [0.108.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.1...v0.108.0-dev.2) (2023-05-05)
 
 
