@@ -1,3 +1,10 @@
+# [0.108.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.3...v0.108.0-dev.4) (2023-05-07)
+
+
+### Features
+
+* **youtube/hide-player-overlay:** make it toggleable in settings ([#382](https://github.com/revanced/revanced-integrations/issues/382)) ([1b4aa0f](https://github.com/revanced/revanced-integrations/commit/1b4aa0fcc6b89acd4156e93685b1da7519aa7148))
+
 # [0.108.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.2...v0.108.0-dev.3) (2023-05-07)
 
 
