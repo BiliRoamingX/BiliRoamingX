@@ -1,3 +1,10 @@
+# [0.108.0-dev.5](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.4...v0.108.0-dev.5) (2023-05-09)
+
+
+### Bug Fixes
+
+* **youtube/remember-video-quality:** fix default video quality/speed being applied when resuming app ([#392](https://github.com/revanced/revanced-integrations/issues/392)) ([c97d1b7](https://github.com/revanced/revanced-integrations/commit/c97d1b7ee5be6a0f097f2995321608bc74f5822c))
+
 # [0.108.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.3...v0.108.0-dev.4) (2023-05-07)
 
 
