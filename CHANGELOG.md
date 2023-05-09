@@ -1,3 +1,10 @@
+# [0.108.0-dev.6](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.5...v0.108.0-dev.6) (2023-05-09)
+
+
+### Bug Fixes
+
+* **youtube/spoof-app-version:** restore watch history preview ([#394](https://github.com/revanced/revanced-integrations/issues/394)) ([4c7f737](https://github.com/revanced/revanced-integrations/commit/4c7f737913a0c3690f8230c51f6dd217e8b04c7a))
+
 # [0.108.0-dev.5](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.4...v0.108.0-dev.5) (2023-05-09)
 
 
