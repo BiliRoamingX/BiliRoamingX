@@ -1,3 +1,10 @@
+# [0.108.0-dev.7](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.6...v0.108.0-dev.7) (2023-05-10)
+
+
+### Bug Fixes
+
+* **youtube/hide-ads:** don't filter for `reels_player_overlay` ([415c194](https://github.com/revanced/revanced-integrations/commit/415c1948fccdc8eb27b76b043996017c5c56eac3))
+
 # [0.108.0-dev.6](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.5...v0.108.0-dev.6) (2023-05-09)
 
 
