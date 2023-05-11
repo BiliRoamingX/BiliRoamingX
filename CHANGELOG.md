@@ -1,3 +1,10 @@
+# [0.108.0-dev.9](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.8...v0.108.0-dev.9) (2023-05-11)
+
+
+### Features
+
+* **youtube/video-speed:** change custom video speeds inside app settings ([#393](https://github.com/revanced/revanced-integrations/issues/393)) ([b42790f](https://github.com/revanced/revanced-integrations/commit/b42790fbca0f6c854d41871834fd6266dd2ea106))
+
 # [0.108.0-dev.8](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.7...v0.108.0-dev.8) (2023-05-11)
 
 
