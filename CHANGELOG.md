@@ -1,3 +1,10 @@
+# [0.108.0-dev.12](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.11...v0.108.0-dev.12) (2023-05-13)
+
+
+### Bug Fixes
+
+* **youtube/swipe-controls:** restart when "press to swipe" preference is changed ([#399](https://github.com/revanced/revanced-integrations/issues/399)) ([a3d754c](https://github.com/revanced/revanced-integrations/commit/a3d754c209e443135759850c7634708b23330a7c))
+
 # [0.108.0-dev.11](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.10...v0.108.0-dev.11) (2023-05-12)
 
 
