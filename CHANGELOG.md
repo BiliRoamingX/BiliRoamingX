@@ -1,3 +1,10 @@
+# [0.108.0-dev.15](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.14...v0.108.0-dev.15) (2023-05-15)
+
+
+### Features
+
+* **youtube:** import / export of revanced settings ([#388](https://github.com/revanced/revanced-integrations/issues/388)) ([c3f08d8](https://github.com/revanced/revanced-integrations/commit/c3f08d8d7e8116496611b85508fbd54bb3a71992))
+
 # [0.108.0-dev.14](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.13...v0.108.0-dev.14) (2023-05-14)
 
 
