@@ -1,3 +1,10 @@
+# [0.108.0-dev.16](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.15...v0.108.0-dev.16) (2023-05-16)
+
+
+### Features
+
+* **youtube:** add options to disable toasts on connection errors ([#402](https://github.com/revanced/revanced-integrations/issues/402)) ([ae18edd](https://github.com/revanced/revanced-integrations/commit/ae18edd047d7979307bc28f28db17bae2c5cc226))
+
 # [0.108.0-dev.15](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.14...v0.108.0-dev.15) (2023-05-15)
 
 
