@@ -1,3 +1,10 @@
+# [0.108.0-dev.17](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.16...v0.108.0-dev.17) (2023-05-16)
+
+
+### Bug Fixes
+
+* **youtube/sponsorblock:** fix toast shown when scrubbing thru a paused video ([#401](https://github.com/revanced/revanced-integrations/issues/401)) ([7da5673](https://github.com/revanced/revanced-integrations/commit/7da56738a14a36fbf66f05d28fd886baaafbee3f))
+
 # [0.108.0-dev.16](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.15...v0.108.0-dev.16) (2023-05-16)
 
 
