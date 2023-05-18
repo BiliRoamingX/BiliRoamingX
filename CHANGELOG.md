@@ -1,3 +1,12 @@
+# [0.108.0-dev.18](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.17...v0.108.0-dev.18) (2023-05-18)
+
+
+### Features
+
+* add capability to filter from protobuf buffer ([5652c32](https://github.com/revanced/revanced-integrations/commit/5652c323455b58f6760d4938c79d704c22fd546c))
+* **youtube/hide-shorts-components:** hide navigation bar ([ac13d10](https://github.com/revanced/revanced-integrations/commit/ac13d1030561905a81059ad0db31a749833a31cd))
+* **youtube:** add `hide-shorts-components` patch ([5ec90db](https://github.com/revanced/revanced-integrations/commit/5ec90db28a46e8f5d79f4793c141a7411a2da05d))
+
 # [0.108.0-dev.17](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.16...v0.108.0-dev.17) (2023-05-16)
 
 
