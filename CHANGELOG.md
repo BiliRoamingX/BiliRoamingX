@@ -1,3 +1,10 @@
+# [0.108.0-dev.19](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.18...v0.108.0-dev.19) (2023-05-19)
+
+
+### Features
+
+* **youtube:** support version `18.19.35` ([b47a781](https://github.com/revanced/revanced-integrations/commit/b47a781ba710e6fb66e144ef95cdd51af358e4de))
+
 # [0.108.0-dev.18](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.17...v0.108.0-dev.18) (2023-05-18)
 
 
