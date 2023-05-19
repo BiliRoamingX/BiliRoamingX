@@ -1,3 +1,10 @@
+# [0.108.0-dev.20](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.19...v0.108.0-dev.20) (2023-05-19)
+
+
+### Features
+
+* **youtube/copy-video-url:** add tap and hold functionality to copy video url buttons ([#403](https://github.com/revanced/revanced-integrations/issues/403)) ([80689ef](https://github.com/revanced/revanced-integrations/commit/80689eff5b2deb971feb1fc59e987ef835506bae))
+
 # [0.108.0-dev.19](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.18...v0.108.0-dev.19) (2023-05-19)
 
 
