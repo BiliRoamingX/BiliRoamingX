@@ -1,3 +1,10 @@
+# [0.108.0-dev.21](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.20...v0.108.0-dev.21) (2023-05-19)
+
+
+### Bug Fixes
+
+* **youtube/settings:** fix non functional back button in settings ([#404](https://github.com/revanced/revanced-integrations/issues/404)) ([0c55d70](https://github.com/revanced/revanced-integrations/commit/0c55d70370dad9275dfb5bc3817f71d4290f5a13))
+
 # [0.108.0-dev.20](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.19...v0.108.0-dev.20) (2023-05-19)
 
 
