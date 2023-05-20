@@ -1,3 +1,15 @@
+# [0.108.0-dev.22](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.21...v0.108.0-dev.22) (2023-05-20)
+
+
+### Bug Fixes
+
+* **twitter:** correctly resolve to integrations methods ([cd93917](https://github.com/revanced/revanced-integrations/commit/cd93917148e2f7695effb15183f53b84ddb9800a))
+
+
+### Features
+
+* **twitter/hide-recommended-users:** hide "Who to follow" ([c7cabc0](https://github.com/revanced/revanced-integrations/commit/c7cabc0b5799464ed75d290dfae5fcd2faa4fc94))
+
 # [0.108.0-dev.21](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.20...v0.108.0-dev.21) (2023-05-19)
 
 
