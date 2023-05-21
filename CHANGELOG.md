@@ -1,3 +1,10 @@
+# [0.108.0-dev.23](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.22...v0.108.0-dev.23) (2023-05-21)
+
+
+### Features
+
+* **reddit:** add `sanitize-sharing-links` patch ([#407](https://github.com/revanced/revanced-integrations/issues/407)) ([191cc71](https://github.com/revanced/revanced-integrations/commit/191cc711de1ecbf6632fc27d32ee4f0c81413c57))
+
 # [0.108.0-dev.22](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.21...v0.108.0-dev.22) (2023-05-20)
 
 
