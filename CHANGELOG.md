@@ -1,3 +1,10 @@
+# [0.108.0-dev.24](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.23...v0.108.0-dev.24) (2023-05-22)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** fix dislikes not showing for video opened from feed autoplay ([#408](https://github.com/revanced/revanced-integrations/issues/408)) ([307315c](https://github.com/revanced/revanced-integrations/commit/307315c43c68a47c983384351a617f5c5f508b4f))
+
 # [0.108.0-dev.23](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.22...v0.108.0-dev.23) (2023-05-21)
 
 
