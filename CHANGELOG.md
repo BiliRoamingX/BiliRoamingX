@@ -1,3 +1,43 @@
+# [0.108.0](https://github.com/revanced/revanced-integrations/compare/v0.107.0...v0.108.0) (2023-05-24)
+
+
+### Bug Fixes
+
+* **twitter:** correctly resolve to integrations methods ([cd93917](https://github.com/revanced/revanced-integrations/commit/cd93917148e2f7695effb15183f53b84ddb9800a))
+* **youtube/hide-ads:** don't filter for `reels_player_overlay` ([415c194](https://github.com/revanced/revanced-integrations/commit/415c1948fccdc8eb27b76b043996017c5c56eac3))
+* **youtube/remember-video-quality:** do not show 'auto' in video resolution picker if a default quality is set ([#400](https://github.com/revanced/revanced-integrations/issues/400)) ([e30d120](https://github.com/revanced/revanced-integrations/commit/e30d1201c992f4896a0b7106230377d78506cd6f))
+* **youtube/remember-video-quality:** fix default video quality/speed being applied when resuming app ([#392](https://github.com/revanced/revanced-integrations/issues/392)) ([c97d1b7](https://github.com/revanced/revanced-integrations/commit/c97d1b7ee5be6a0f097f2995321608bc74f5822c))
+* **youtube/return-youtube-dislike:** fix dislikes not showing for video opened from feed autoplay ([#408](https://github.com/revanced/revanced-integrations/issues/408)) ([307315c](https://github.com/revanced/revanced-integrations/commit/307315c43c68a47c983384351a617f5c5f508b4f))
+* **youtube/return-youtube-dislike:** fix potential error toast when using old UI layout ([#384](https://github.com/revanced/revanced-integrations/issues/384)) ([6c36bee](https://github.com/revanced/revanced-integrations/commit/6c36beeda139156bfbb5a17bc89aa63c25afa83c))
+* **youtube/return-youtube-dislikes:** fix temporarily frozen video after opening a shorts ([#396](https://github.com/revanced/revanced-integrations/issues/396)) ([6a94bd2](https://github.com/revanced/revanced-integrations/commit/6a94bd2237be9cde6256c83fcec72b3f0de83496))
+* **youtube/settings:** fix non functional back button in settings ([#404](https://github.com/revanced/revanced-integrations/issues/404)) ([0c55d70](https://github.com/revanced/revanced-integrations/commit/0c55d70370dad9275dfb5bc3817f71d4290f5a13))
+* **youtube/sponsorblock:** fix skip button in wrong location when full screen and comments visible ([#387](https://github.com/revanced/revanced-integrations/issues/387)) ([486b79b](https://github.com/revanced/revanced-integrations/commit/486b79b4e4927d4c05cfb4d5222a1d74fe60e327))
+* **youtube/sponsorblock:** fix toast shown when scrubbing thru a paused video ([#401](https://github.com/revanced/revanced-integrations/issues/401)) ([7da5673](https://github.com/revanced/revanced-integrations/commit/7da56738a14a36fbf66f05d28fd886baaafbee3f))
+* **youtube/spoof-app-version:** restore watch history preview ([#394](https://github.com/revanced/revanced-integrations/issues/394)) ([4c7f737](https://github.com/revanced/revanced-integrations/commit/4c7f737913a0c3690f8230c51f6dd217e8b04c7a))
+* **youtube/swipe-controls:** restart when "press to swipe" preference is changed ([#399](https://github.com/revanced/revanced-integrations/issues/399)) ([a3d754c](https://github.com/revanced/revanced-integrations/commit/a3d754c209e443135759850c7634708b23330a7c))
+* **youtube/theme:** apply custom seekbar color to video thumbnails ([#391](https://github.com/revanced/revanced-integrations/issues/391)) ([ae99408](https://github.com/revanced/revanced-integrations/commit/ae994086360b45340ed1ed896c35917d785bb4f9))
+* **youtube/theme:** fix app crash if user clears seekbar color ([#390](https://github.com/revanced/revanced-integrations/issues/390)) ([e2f5290](https://github.com/revanced/revanced-integrations/commit/e2f52905dc445f881666c06877c3a69306335dcb))
+* **youtube/theme:** fix toast shown on fresh app install ([#381](https://github.com/revanced/revanced-integrations/issues/381)) ([2dc431f](https://github.com/revanced/revanced-integrations/commit/2dc431f1bf54c12dfc45c4511a0b0792e214be4f))
+
+
+### Features
+
+* add capability to filter from protobuf buffer ([5652c32](https://github.com/revanced/revanced-integrations/commit/5652c323455b58f6760d4938c79d704c22fd546c))
+* **reddit:** add `sanitize-sharing-links` patch ([#407](https://github.com/revanced/revanced-integrations/issues/407)) ([191cc71](https://github.com/revanced/revanced-integrations/commit/191cc711de1ecbf6632fc27d32ee4f0c81413c57))
+* **twitch:** add `auto-claim-channel-points` patch ([#398](https://github.com/revanced/revanced-integrations/issues/398)) ([d7f050b](https://github.com/revanced/revanced-integrations/commit/d7f050ba2ff513c91cccbf0095fc7756dbb47400))
+* **twitter/hide-recommended-users:** hide "Who to follow" ([c7cabc0](https://github.com/revanced/revanced-integrations/commit/c7cabc0b5799464ed75d290dfae5fcd2faa4fc94))
+* **youtube/copy-video-url:** add tap and hold functionality to copy video url buttons ([#403](https://github.com/revanced/revanced-integrations/issues/403)) ([80689ef](https://github.com/revanced/revanced-integrations/commit/80689eff5b2deb971feb1fc59e987ef835506bae))
+* **youtube/hide-player-overlay:** make it toggleable in settings ([#382](https://github.com/revanced/revanced-integrations/issues/382)) ([1b4aa0f](https://github.com/revanced/revanced-integrations/commit/1b4aa0fcc6b89acd4156e93685b1da7519aa7148))
+* **youtube/hide-shorts-components:** hide navigation bar ([ac13d10](https://github.com/revanced/revanced-integrations/commit/ac13d1030561905a81059ad0db31a749833a31cd))
+* **youtube/settings:** add reset button to edit preference dialog ([#383](https://github.com/revanced/revanced-integrations/issues/383)) ([cb5a4d0](https://github.com/revanced/revanced-integrations/commit/cb5a4d0c9b3b340928695fcb1d10b164a6dcef27))
+* **youtube/video-speed:** change custom video speeds inside app settings ([#393](https://github.com/revanced/revanced-integrations/issues/393)) ([b42790f](https://github.com/revanced/revanced-integrations/commit/b42790fbca0f6c854d41871834fd6266dd2ea106))
+* **youtube:** `hide-load-more-button` patch ([#389](https://github.com/revanced/revanced-integrations/issues/389)) ([7da9d44](https://github.com/revanced/revanced-integrations/commit/7da9d440eedfc895b49aac40498f0279156ad117))
+* **youtube:** add `hide-filter-bar` patch ([9649c3d](https://github.com/revanced/revanced-integrations/commit/9649c3dbc8406c3639c4fff9dd179d6d29886e60))
+* **youtube:** add `hide-shorts-components` patch ([5ec90db](https://github.com/revanced/revanced-integrations/commit/5ec90db28a46e8f5d79f4793c141a7411a2da05d))
+* **youtube:** add options to disable toasts on connection errors ([#402](https://github.com/revanced/revanced-integrations/issues/402)) ([ae18edd](https://github.com/revanced/revanced-integrations/commit/ae18edd047d7979307bc28f28db17bae2c5cc226))
+* **youtube:** import / export of revanced settings ([#388](https://github.com/revanced/revanced-integrations/issues/388)) ([c3f08d8](https://github.com/revanced/revanced-integrations/commit/c3f08d8d7e8116496611b85508fbd54bb3a71992))
+* **youtube:** support version `18.19.35` ([b47a781](https://github.com/revanced/revanced-integrations/commit/b47a781ba710e6fb66e144ef95cdd51af358e4de))
+
 # [0.108.0-dev.24](https://github.com/revanced/revanced-integrations/compare/v0.108.0-dev.23...v0.108.0-dev.24) (2023-05-22)
 
 
