@@ -1,3 +1,10 @@
+# [0.109.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.108.1-dev.2...v0.109.0-dev.1) (2023-05-26)
+
+
+### Features
+
+* **remove-screen-capture-restriction:** remove app constraint ([#411](https://github.com/revanced/revanced-integrations/issues/411)) ([31251f0](https://github.com/revanced/revanced-integrations/commit/31251f0214b6d37a9407975a23dbdd43e3cad611))
+
 ## [0.108.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.108.1-dev.1...v0.108.1-dev.2) (2023-05-26)
 
 
