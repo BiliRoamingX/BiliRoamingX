@@ -1,3 +1,10 @@
+# [0.109.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.109.0-dev.3...v0.109.0-dev.4) (2023-05-27)
+
+
+### Features
+
+* **youtube/hide-shorts-components:** hide channel bar & sound button ([1714700](https://github.com/revanced/revanced-integrations/commit/1714700fb18d58123672bdc501f9caa77788af4f))
+
 # [0.109.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.109.0-dev.2...v0.109.0-dev.3) (2023-05-27)
 
 
