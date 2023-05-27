@@ -1,3 +1,10 @@
+# [0.109.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.109.0-dev.2...v0.109.0-dev.3) (2023-05-27)
+
+
+### Features
+
+* **youtube/hide-seekbar:** more fine grained hiding of seekbar ([#409](https://github.com/revanced/revanced-integrations/issues/409)) ([40def9e](https://github.com/revanced/revanced-integrations/commit/40def9e036129e9f70549db5fd219f18618e931d))
+
 # [0.109.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.109.0-dev.1...v0.109.0-dev.2) (2023-05-27)
 
 
