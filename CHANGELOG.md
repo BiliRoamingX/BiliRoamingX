@@ -1,3 +1,10 @@
+# [0.109.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.109.0-dev.1...v0.109.0-dev.2) (2023-05-27)
+
+
+### Features
+
+* **youtube/hide-shorts-components:** hide shorts info panel ([#415](https://github.com/revanced/revanced-integrations/issues/415)) ([f5df201](https://github.com/revanced/revanced-integrations/commit/f5df20134c376c351b5d7d9881c45876463734f9))
+
 # [0.109.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.108.1-dev.2...v0.109.0-dev.1) (2023-05-26)
 
 
