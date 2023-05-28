@@ -1,3 +1,10 @@
+# [0.109.0-dev.5](https://github.com/revanced/revanced-integrations/compare/v0.109.0-dev.4...v0.109.0-dev.5) (2023-05-28)
+
+
+### Bug Fixes
+
+* **youtube/hide-shorts-components:** hide new type of Shorts in feed ([f13a993](https://github.com/revanced/revanced-integrations/commit/f13a99351c82682d982b0d430a2ae2d57a5fe148))
+
 # [0.109.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.109.0-dev.3...v0.109.0-dev.4) (2023-05-27)
 
 
