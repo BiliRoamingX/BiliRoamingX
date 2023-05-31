@@ -1,3 +1,59 @@
+# [0.109.0-dev.6](https://github.com/revanced/revanced-integrations/compare/v0.109.0-dev.5...v0.109.0-dev.6) (2023-05-29)
+
+
+### Features
+
+* **youtube/hide-ads:** hide new type of ad ([2592508](https://github.com/revanced/revanced-integrations/commit/25925085adbfc9b36918ecc4da55d76215db74ef))
+
+# [0.109.0-dev.5](https://github.com/revanced/revanced-integrations/compare/v0.109.0-dev.4...v0.109.0-dev.5) (2023-05-28)
+
+
+### Bug Fixes
+
+* **youtube/hide-shorts-components:** hide new type of Shorts in feed ([f13a993](https://github.com/revanced/revanced-integrations/commit/f13a99351c82682d982b0d430a2ae2d57a5fe148))
+
+# [0.109.0-dev.4](https://github.com/revanced/revanced-integrations/compare/v0.109.0-dev.3...v0.109.0-dev.4) (2023-05-27)
+
+
+### Features
+
+* **youtube/hide-shorts-components:** hide channel bar & sound button ([1714700](https://github.com/revanced/revanced-integrations/commit/1714700fb18d58123672bdc501f9caa77788af4f))
+
+# [0.109.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.109.0-dev.2...v0.109.0-dev.3) (2023-05-27)
+
+
+### Features
+
+* **youtube/hide-seekbar:** more fine grained hiding of seekbar ([#409](https://github.com/revanced/revanced-integrations/issues/409)) ([40def9e](https://github.com/revanced/revanced-integrations/commit/40def9e036129e9f70549db5fd219f18618e931d))
+
+# [0.109.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.109.0-dev.1...v0.109.0-dev.2) (2023-05-27)
+
+
+### Features
+
+* **youtube/hide-shorts-components:** hide shorts info panel ([#415](https://github.com/revanced/revanced-integrations/issues/415)) ([f5df201](https://github.com/revanced/revanced-integrations/commit/f5df20134c376c351b5d7d9881c45876463734f9))
+
+# [0.109.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.108.1-dev.2...v0.109.0-dev.1) (2023-05-26)
+
+
+### Features
+
+* **remove-screen-capture-restriction:** remove app constraint ([#411](https://github.com/revanced/revanced-integrations/issues/411)) ([31251f0](https://github.com/revanced/revanced-integrations/commit/31251f0214b6d37a9407975a23dbdd43e3cad611))
+
+## [0.108.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.108.1-dev.1...v0.108.1-dev.2) (2023-05-26)
+
+
+### Bug Fixes
+
+* **youtube/downloads:** rename patch to `external-downloads` ([#414](https://github.com/revanced/revanced-integrations/issues/414)) ([b3c7e7f](https://github.com/revanced/revanced-integrations/commit/b3c7e7f63828d299199f80d09c1349de22d8d198))
+
+## [0.108.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.108.0...v0.108.1-dev.1) (2023-05-25)
+
+
+### Bug Fixes
+
+* **youtube/hide-player-buttons:** fix previous/next button showing if previous video exists ([#412](https://github.com/revanced/revanced-integrations/issues/412)) ([60f25a2](https://github.com/revanced/revanced-integrations/commit/60f25a2af0bee0301bb84ac69b586343485003bb))
+
 # [0.108.0](https://github.com/revanced/revanced-integrations/compare/v0.107.0...v0.108.0) (2023-05-24)
 
 
