@@ -1,3 +1,21 @@
+# [0.109.0](https://github.com/revanced/revanced-integrations/compare/v0.108.0...v0.109.0) (2023-05-31)
+
+
+### Bug Fixes
+
+* **youtube/downloads:** rename patch to `external-downloads` ([#414](https://github.com/revanced/revanced-integrations/issues/414)) ([b3c7e7f](https://github.com/revanced/revanced-integrations/commit/b3c7e7f63828d299199f80d09c1349de22d8d198))
+* **youtube/hide-player-buttons:** fix previous/next button showing if previous video exists ([#412](https://github.com/revanced/revanced-integrations/issues/412)) ([60f25a2](https://github.com/revanced/revanced-integrations/commit/60f25a2af0bee0301bb84ac69b586343485003bb))
+* **youtube/hide-shorts-components:** hide new type of Shorts in feed ([f13a993](https://github.com/revanced/revanced-integrations/commit/f13a99351c82682d982b0d430a2ae2d57a5fe148))
+
+
+### Features
+
+* **remove-screen-capture-restriction:** remove app constraint ([#411](https://github.com/revanced/revanced-integrations/issues/411)) ([31251f0](https://github.com/revanced/revanced-integrations/commit/31251f0214b6d37a9407975a23dbdd43e3cad611))
+* **youtube/hide-ads:** hide new type of ad ([2592508](https://github.com/revanced/revanced-integrations/commit/25925085adbfc9b36918ecc4da55d76215db74ef))
+* **youtube/hide-seekbar:** more fine grained hiding of seekbar ([#409](https://github.com/revanced/revanced-integrations/issues/409)) ([40def9e](https://github.com/revanced/revanced-integrations/commit/40def9e036129e9f70549db5fd219f18618e931d))
+* **youtube/hide-shorts-components:** hide channel bar & sound button ([1714700](https://github.com/revanced/revanced-integrations/commit/1714700fb18d58123672bdc501f9caa77788af4f))
+* **youtube/hide-shorts-components:** hide shorts info panel ([#415](https://github.com/revanced/revanced-integrations/issues/415)) ([f5df201](https://github.com/revanced/revanced-integrations/commit/f5df20134c376c351b5d7d9881c45876463734f9))
+
 # [0.109.0-dev.6](https://github.com/revanced/revanced-integrations/compare/v0.109.0-dev.5...v0.109.0-dev.6) (2023-05-29)
 
 
