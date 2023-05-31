@@ -1,3 +1,10 @@
+## [0.109.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.109.0...v0.109.1-dev.1) (2023-05-31)
+
+
+### Bug Fixes
+
+* **youtube/swipe-controls:** require restart if settings are changed ([#417](https://github.com/revanced/revanced-integrations/issues/417)) ([f951897](https://github.com/revanced/revanced-integrations/commit/f9518979448bf40f0a85ad88ac5971ade9343566))
+
 # [0.109.0](https://github.com/revanced/revanced-integrations/compare/v0.108.0...v0.109.0) (2023-05-31)
 
 
