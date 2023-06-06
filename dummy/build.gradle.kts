@@ -26,3 +26,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
+
+dependencies {
+    compileOnly("androidx.preference:preference:1.2.0")
+    //compileOnly("com.google.protobuf:protobuf-javalite:3.23.2")
+    // only make GeneratedMessageLite#unknownFields public, to make compile success
+    // also patcher will patch it
+    compileOnly(files("libs/protobuf-javalite-3.23.0-mod.jar"))
+}

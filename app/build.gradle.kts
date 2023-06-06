@@ -1,3 +1,7 @@
+@file:SuppressLint("KtxExtensionAvailable")
+
+import android.annotation.SuppressLint
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -10,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "app.revanced.integrations"
-        minSdk = 23
+        minSdk = 24
         targetSdk = 33
         multiDexEnabled = false
         versionName = project.version as String
@@ -47,6 +51,11 @@ dependencies {
     compileOnly("androidx.appcompat:appcompat:1.7.0-alpha02")
     compileOnly("com.squareup.okhttp3:okhttp:5.0.0-alpha.11")
     compileOnly("com.squareup.retrofit2:retrofit:2.9.0")
+    compileOnly("androidx.preference:preference:1.2.0")
+    //compileOnly("com.google.protobuf:protobuf-javalite:3.23.2")
+    // only make GeneratedMessageLite#unknownFields public, to make compile success
+    // also patcher will patch it
+    compileOnly(files("libs/protobuf-javalite-3.23.0-mod.jar"))
 }
 
 tasks.register("publish") { dependsOn("build") }
