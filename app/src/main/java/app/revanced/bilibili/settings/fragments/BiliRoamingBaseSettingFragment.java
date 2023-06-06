@@ -17,9 +17,10 @@ import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.ReVancedUtils;
 import app.revanced.bilibili.utils.Reflex;
 
-public class BiliRoamingBaseSettingFragment extends BasePreferenceFragment {
+public abstract class BiliRoamingBaseSettingFragment extends BasePreferenceFragment {
 
     private final String prefsXmlName;
+    private boolean resumed;
 
     public BiliRoamingBaseSettingFragment(String prefsXmlName) {
         this.prefsXmlName = prefsXmlName;
@@ -57,6 +58,18 @@ public class BiliRoamingBaseSettingFragment extends BasePreferenceFragment {
         super.onDestroy();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        resumed = true;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        resumed = false;
+    }
+
     private static Method setOnNavigateToScreenListenerMethod = null;
 
     @SuppressLint("RestrictedApi")
@@ -83,6 +96,7 @@ public class BiliRoamingBaseSettingFragment extends BasePreferenceFragment {
     }
 
     protected void onPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (!resumed) return;
         for (Settings item : Settings.values()) {
             if (item.key.equals(key) && item.needReboot) {
                 int titleId = ReVancedUtils.getResId("biliroaming_need_reboot_dialog_title", "string");

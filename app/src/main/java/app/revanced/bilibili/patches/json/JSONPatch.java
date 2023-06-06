@@ -27,11 +27,15 @@ import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Constants;
 import tv.danmaku.bili.ui.main.event.model.EventEntranceModel;
 import tv.danmaku.bili.ui.main2.api.AccountMine;
+import tv.danmaku.bili.ui.main2.resource.MainResourceManager;
+import tv.danmaku.bili.ui.main2.resource.MainResourceManagerEx;
 import tv.danmaku.bili.ui.splash.ad.model.SplashData;
 import tv.danmaku.bili.ui.splash.ad.model.SplashShowData;
 
+@SuppressWarnings("unused")
 public class JSONPatch {
     public static List<BottomItem> drawerItems = new ArrayList<>();
+    public static List<BottomItem> bottomItems = new ArrayList<>();
 
     public static Object parseObjectHook(Object obj) {
         Object data = obj instanceof GeneralResponse ? ((GeneralResponse<?>) obj).data : obj;
@@ -92,6 +96,8 @@ public class JSONPatch {
                 return null;
         } else if (data instanceof AccountMine) {
             customizeMine((AccountMine) data);
+        } else if (data instanceof MainResourceManager.TabResponse) {
+            customizeHomeTab(((MainResourceManager.TabResponse) data).tabData);
         }
         return obj;
     }
@@ -103,7 +109,7 @@ public class JSONPatch {
         }
     }
 
-    public static boolean drawerShowing(Set<String> items, String item) {
+    public static boolean shouldShowing(Set<String> items, String item) {
         if (items.contains(item)) return true;
         return items.size() == 1 && items.contains(Constants.ALL_VALUE);
     }
@@ -120,7 +126,7 @@ public class JSONPatch {
             MenuGroup section = sectionListV2.get(i);
             String title = section.title;
             if (!TextUtils.isEmpty(title))
-                drawerItems.add(new BottomItem("【标题项目】", null, title, drawerShowing(items, title)));
+                drawerItems.add(new BottomItem("【标题项目】", null, title, shouldShowing(items, title)));
             List<MenuGroup.Item> itemList = section.itemList;
             if (itemList == null || itemList.isEmpty())
                 continue;
@@ -130,7 +136,7 @@ public class JSONPatch {
                     return false;
                 String uri = item.uri;
                 String id = String.valueOf(item.id);
-                boolean showing = drawerShowing(items, id);
+                boolean showing = shouldShowing(items, id);
                 drawerItems.add(new BottomItem(itemTitle, uri, id, showing));
                 if (purifyRedDot) {
                     item.redDot = 0;
@@ -143,7 +149,7 @@ public class JSONPatch {
                 String buttonText = button.text;
                 if (!TextUtils.isEmpty(buttonText)) {
                     String uri = button.jumpUrl;
-                    boolean showing = drawerShowing(items, buttonText);
+                    boolean showing = shouldShowing(items, buttonText);
                     drawerItems.add(new BottomItem("按钮：", uri, buttonText, showing));
                     if (!showing)
                         section.button = null;
@@ -152,6 +158,153 @@ public class JSONPatch {
             if (drawerStyle != 0)
                 section.style = drawerStyle;
         }
-        sectionListV2.removeIf(section -> !TextUtils.isEmpty(section.title) && !drawerShowing(items, section.title));
+        sectionListV2.removeIf(section -> !TextUtils.isEmpty(section.title) && !shouldShowing(items, section.title));
+    }
+
+    private static void customizeHomeTab(MainResourceManager.TabData data) {
+        bottomItems.clear();
+        Set<String> items = Settings.SHOWING_BOTTOM_ITEMS.getStringSet();
+        data.bottom.removeIf(tab -> {
+            var uri = tab.uri;
+            var id = tab.tabId;
+            var showing = shouldShowing(items, id);
+            bottomItems.add(new BottomItem(tab.name, uri, id, showing));
+            return !showing;
+        });
+
+        if (Settings.DRAWER.getBoolean()) {
+            data.bottom.removeIf(tab -> {
+                String uri = tab.uri;
+                return !TextUtils.isEmpty(uri) && uri.startsWith("bilibili://user_center/mine");
+            });
+        }
+
+        if (Settings.PURIFY_GAME.getBoolean()) {
+            data.top.removeIf(tab -> {
+                String uri = tab.uri;
+                return !TextUtils.isEmpty(uri) && uri.startsWith("bilibili://game_center/home");
+            });
+        }
+
+        configTab(data.tab);
+    }
+
+    private static void configTab(List<MainResourceManager.Tab> tabs) {
+        if (tabs == null || tabs.isEmpty())
+            return;
+        var hasBangumiCN = false;
+        var hasBangumiTW = false;
+        var hasMovieCN = false;
+        var hasMovieTW = false;
+        var hasKoreaHK = false;
+        var hasKoreaTW = false;
+        for (int i = 0; i < tabs.size(); i++) {
+            var tab = tabs.get(i);
+            switch (tab.uri) {
+                case "bilibili://pgc/home":
+                    hasBangumiCN = true;
+                    break;
+                case "bilibili://following/home_activity_tab/6544":
+                    hasBangumiTW = true;
+                    break;
+                case "bilibili://pgc/home?home_flow_type=2":
+                    hasMovieCN = true;
+                    break;
+                case "bilibili://following/home_activity_tab/168644":
+                    hasMovieTW = true;
+                    break;
+                case "bilibili://following/home_activity_tab/163541":
+                    hasKoreaHK = true;
+                    break;
+                case "bilibili://following/home_activity_tab/95636":
+                    hasKoreaTW = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (Settings.ADD_BANGUMI.getBoolean()) {
+            if (!hasBangumiCN) {
+                var tab = MainResourceManagerEx.newTab();
+                tab.tabId = "50";
+                tab.name = "追番（大陸）";
+                tab.uri = "bilibili://pgc/home";
+                tab.reportId = "bangumi";
+                tab.pos = 50;
+                tabs.add(tab);
+            }
+            if (!hasBangumiTW) {
+                var tab = MainResourceManagerEx.newTab();
+                tab.tabId = "60";
+                tab.name = "追番（港澳台）";
+                tab.uri = "bilibili://following/home_activity_tab/6544";
+                tab.reportId = "bangumi";
+                tab.pos = 60;
+                tabs.add(tab);
+            }
+        }
+        if (Settings.ADD_MOVIE.getBoolean()) {
+            if (!hasMovieCN) {
+                var tab = MainResourceManagerEx.newTab();
+                tab.tabId = "70";
+                tab.name = "影視（大陸）";
+                tab.uri = "bilibili://pgc/home?home_flow_type=2";
+                tab.reportId = "film";
+                tab.pos = 70;
+                tabs.add(tab);
+            }
+            if (!hasMovieTW) {
+                var tab = MainResourceManagerEx.newTab();
+                tab.tabId = "80";
+                tab.name = "戏剧（港澳台）";
+                tab.uri = "bilibili://following/home_activity_tab/168644";
+                tab.reportId = "jptv";
+                tab.pos = 80;
+                tabs.add(tab);
+            }
+        }
+        if (Settings.ADD_KOREA.getBoolean()) {
+            if (!hasKoreaHK) {
+                var tab = MainResourceManagerEx.newTab();
+                tab.tabId = "803";
+                tab.name = "韩综（港澳）";
+                tab.uri = "bilibili://following/home_activity_tab/163541";
+                tab.reportId = "koreavhk";
+                tab.pos = 803;
+                tabs.add(tab);
+            }
+            if (!hasKoreaTW) {
+                var tab = MainResourceManagerEx.newTab();
+                tab.tabId = "804";
+                tab.name = "韩综（台湾）";
+                tab.uri = "bilibili://following/home_activity_tab/95636";
+                tab.reportId = "koreavtw";
+                tab.pos = 804;
+                tabs.add(tab);
+            }
+        }
+        Set<String> tabSet = Settings.HIDED_HOME_TAB.getStringSet();
+        if (tabSet.isEmpty()) return;
+        tabs.removeIf(tab -> {
+            switch (tab.uri) {
+                case "bilibili://live/home":
+                    return tabSet.contains("live");
+                case "bilibili://pegasus/promo":
+                    return tabSet.contains("promo");
+                case "bilibili://pegasus/hottopic":
+                    return tabSet.contains("hottopic");
+                case "bilibili://pgc/home":
+                case "bilibili://following/home_activity_tab/6544":
+                    return tabSet.contains("bangumi");
+                case "bilibili://pgc/home?home_flow_type=2":
+                case "bilibili://following/home_activity_tab/168644":
+                    return tabSet.contains("movie");
+                case "bilibili://following/home_activity_tab/95636":
+                case "bilibili://following/home_activity_tab/163541":
+                    return tabSet.contains("korea");
+                default:
+                    return tabSet.contains("other_tabs");
+            }
+        });
     }
 }

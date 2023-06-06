@@ -28,16 +28,22 @@ public enum Settings {
     SHOWING_DRAWER_ITEMS("showing_drawer_items", STRING_SET, Set.of(Constants.ALL_VALUE)),
     PURIFY_DRAWER_RED_DOT("purify_drawer_reddot", BOOLEAN, FALSE),
     DRAWER_STYLE("drawer_style_value", STRING, "0"),
+    REMOVE_VIP_SECTION("remove_vip_section", BOOLEAN, FALSE, true),
     REMOVE_CMD_DMS("remove_video_cmd_dms", BOOLEAN, FALSE),
+    SHOWING_BOTTOM_ITEMS("showing_bottom_items", STRING_SET, Set.of(Constants.ALL_VALUE)),
+    DRAWER("drawer", BOOLEAN, FALSE),
+    PURIFY_GAME("purify_game", BOOLEAN, FALSE),
+    ADD_BANGUMI("add_bangumi", BOOLEAN, FALSE),
+    ADD_MOVIE("add_movie", BOOLEAN, FALSE),
+    ADD_KOREA("add_korea", BOOLEAN, FALSE),
+    HIDED_HOME_TAB("customize_home_tab", STRING_SET, Collections.EMPTY_SET),
 
     TEENAGER_MODE_DIALOG("teenagers_mode_dialog", BOOLEAN, FALSE),
     REPLACE_STORY_VIDEO("replace_story_video", BOOLEAN, FALSE),
     FORBID_SWITCH_LIVE_ROOM("forbid_switch_live_room", BOOLEAN, FALSE),
     BLOCK_WORD_SEARCH("block_word_search", BOOLEAN, FALSE),
-
     BLOCK_UP_RCMD_ADS("block_up_rcmd_ads", BOOLEAN, FALSE),
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),
-    PURIFY_GAME("purify_game", BOOLEAN, FALSE),
     PURIFY_SEARCH("purify_search", BOOLEAN, FALSE),
     PURIFY_LIVE_POPUPS("purify_live_popups", STRING_SET, Collections.EMPTY_SET);
 
