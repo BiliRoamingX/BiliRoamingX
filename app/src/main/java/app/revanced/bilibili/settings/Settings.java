@@ -2,6 +2,8 @@ package app.revanced.bilibili.settings;
 
 import static java.lang.Boolean.FALSE;
 import static app.revanced.bilibili.settings.Settings.ValueType.BOOLEAN;
+import static app.revanced.bilibili.settings.Settings.ValueType.INTEGER;
+import static app.revanced.bilibili.settings.Settings.ValueType.LONG;
 import static app.revanced.bilibili.settings.Settings.ValueType.STRING;
 import static app.revanced.bilibili.settings.Settings.ValueType.STRING_SET;
 
@@ -11,11 +13,12 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import app.revanced.bilibili.utils.Constants;
 import app.revanced.bilibili.utils.LogHelper;
-import app.revanced.bilibili.utils.ReVancedUtils;
+import app.revanced.bilibili.utils.Utils;
 
 
 public enum Settings {
@@ -37,6 +40,21 @@ public enum Settings {
     ADD_MOVIE("add_movie", BOOLEAN, FALSE),
     ADD_KOREA("add_korea", BOOLEAN, FALSE),
     HIDED_HOME_TAB("customize_home_tab", STRING_SET, Collections.EMPTY_SET),
+    FILTER_HOME_RECOMMEND("customize_home_recommend", STRING_SET, Collections.EMPTY_SET),
+    LOW_PLAY_COUNT_LIMIT("hide_low_play_count_recommend_limit", LONG, 0L),
+    SHORT_DURATION_LIMIT("hide_short_duration_recommend_limit", INTEGER, 0),
+    LONG_DURATION_LIMIT("hide_long_duration_recommend_limit", INTEGER, 0),
+    HOME_RCMD_FILTER_TITLE("home_filter_keywords_title", STRING_SET, Collections.EMPTY_SET),
+    HOME_RCMD_FILTER_TITLE_REGEX_MODE("home_filter_title_regex_mode", BOOLEAN, FALSE),
+    HOME_RCMD_FILTER_REASON("home_filter_keywords_reason", STRING_SET, Collections.EMPTY_SET),
+    HOME_RCMD_FILTER_REASON_REGEX_MODE("home_filter_reason_regex_mode", BOOLEAN, FALSE),
+    HOME_RCMD_FILTER_UID("home_filter_keywords_uid", STRING_SET, Collections.EMPTY_SET),
+    HOME_RCMD_FILTER_UP("home_filter_keywords_up", STRING_SET, Collections.EMPTY_SET),
+    HOME_RCMD_FILTER_UP_REGEX_MODE("home_filter_up_regex_mode", BOOLEAN, FALSE),
+    HOME_RCMD_FILTER_CATEGORY("home_filter_keywords_category", STRING_SET, Collections.EMPTY_SET),
+    HOME_RCMD_FILTER_CHANNEL("home_filter_keywords_channel", STRING_SET, Collections.EMPTY_SET),
+    HOME_DISABLE_AUTO_REFRESH("disable_auto_refresh", BOOLEAN, FALSE),
+    HOME_FILTER_APPLY_TO_VIDEO("home_filter_apply_to_relate", BOOLEAN, FALSE),
 
     TEENAGER_MODE_DIALOG("teenagers_mode_dialog", BOOLEAN, FALSE),
     REPLACE_STORY_VIDEO("replace_story_video", BOOLEAN, FALSE),
@@ -76,7 +94,7 @@ public enum Settings {
     }
 
     static {
-        Context context = ReVancedUtils.getContext();
+        Context context = Utils.getContext();
         prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         loadAllSettings();
     }
@@ -173,6 +191,13 @@ public enum Settings {
         }
         editor.apply();
         setValue(newValue);
+    }
+
+    public void appendValue(String value) {
+        var stringSet = getStringSet();
+        var newSet = new HashSet<>(stringSet);
+        newSet.add(value);
+        saveValue(newSet);
     }
 
     public boolean getBoolean() {

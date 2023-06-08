@@ -14,7 +14,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import app.revanced.bilibili.settings.Settings;
-import app.revanced.bilibili.utils.ReVancedUtils;
+import app.revanced.bilibili.utils.Utils;
 import app.revanced.bilibili.utils.Reflex;
 
 public abstract class BiliRoamingBaseSettingFragment extends BasePreferenceFragment {
@@ -36,7 +36,7 @@ public abstract class BiliRoamingBaseSettingFragment extends BasePreferenceFragm
         fixPreferenceManager();
         getPreferenceManager().setSharedPreferencesName(Settings.PREFS_NAME);
         @SuppressLint("DiscouragedApi")
-        int resId = ReVancedUtils.getResId(prefsXmlName, "xml");
+        int resId = Utils.getResId(prefsXmlName, "xml");
         addPreferencesFromResource(resId);
     }
 
@@ -86,7 +86,7 @@ public abstract class BiliRoamingBaseSettingFragment extends BasePreferenceFragm
                 }
             }
             // not use activity context, see com.bilibili.app.preferences.BiliPreferencesActivity#getSharedPreferences
-            var preferenceManager = new PreferenceManager(ReVancedUtils.getContext());
+            var preferenceManager = new PreferenceManager(Utils.getContext());
             preferenceManagerField.set(this, preferenceManager);
             if (setOnNavigateToScreenListenerMethod != null) {
                 setOnNavigateToScreenListenerMethod.invoke(preferenceManager, this);
@@ -99,13 +99,13 @@ public abstract class BiliRoamingBaseSettingFragment extends BasePreferenceFragm
         if (!resumed) return;
         for (Settings item : Settings.values()) {
             if (item.key.equals(key) && item.needReboot) {
-                int titleId = ReVancedUtils.getResId("biliroaming_need_reboot_dialog_title", "string");
-                int confirmId = ReVancedUtils.getResId("biliroaming_need_reboot_dialog_confirm", "string");
-                int laterId = ReVancedUtils.getResId("biliroaming_need_reboot_dialog_later", "string");
+                int titleId = Utils.getResId("biliroaming_need_reboot_dialog_title", "string");
+                int confirmId = Utils.getResId("biliroaming_need_reboot_dialog_confirm", "string");
+                int laterId = Utils.getResId("biliroaming_need_reboot_dialog_later", "string");
                 new AlertDialog.Builder(requireContext())
                         .setTitle(titleId)
                         .setNegativeButton(laterId, null)
-                        .setPositiveButton(confirmId, (dialog, which) -> ReVancedUtils.reboot())
+                        .setPositiveButton(confirmId, (dialog, which) -> Utils.reboot())
                         .show();
                 break;
             }

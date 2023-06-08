@@ -96,8 +96,7 @@ public class LogHelper {
      */
     public static void error(@NonNull LogMessage message, @Nullable Throwable ex) {
         String messageString = message.buildMessageString();
-        String outerClassSimpleName = message.findOuterClassSimpleName();
-        String logMessage = REVANCED_LOG_PREFIX + outerClassSimpleName;
+        String logMessage = REVANCED_LOG_PREFIX + message.findOuterClassSimpleName();
         if (ex == null) {
             Log.e(logMessage, messageString);
         } else {

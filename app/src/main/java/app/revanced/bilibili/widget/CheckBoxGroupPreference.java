@@ -18,13 +18,23 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import app.revanced.bilibili.utils.Utils;
+
 public class CheckBoxGroupPreference extends PreferenceCategory implements CheckBoxButtonPreference.OnPreferenceClickListener {
     private CharSequence[] mEntries;
     private CharSequence[] mEntryValues;
+    private CharSequence[] mEntrySummaries;
 
     private OnPreferenceItemClickListener mItemClickListener;
 
     private final Set<String> mValues = new HashSet<>();
+
+    private final static int sSummariesAttr;
+
+    static {
+        // borrowed from tv.danmaku.bili.widget.RadioGroupPreference
+        sSummariesAttr = Utils.getResId("radioEntrySummaries", "attr");
+    }
 
     public interface OnPreferenceItemClickListener {
         boolean onItemClick(CheckBoxGroupPreference groupPreference, CheckBoxButtonPreference itemPreference);
@@ -41,10 +51,11 @@ public class CheckBoxGroupPreference extends PreferenceCategory implements Check
     }
 
     private void initPreference(Context context, AttributeSet attrs) {
-        int[] attr = new int[]{android.R.attr.entries, android.R.attr.entryValues};
+        int[] attr = new int[]{android.R.attr.entries, android.R.attr.entryValues, sSummariesAttr};
         TypedArray ta = context.obtainStyledAttributes(attrs, attr);
         mEntries = ta.getTextArray(0);
         mEntryValues = ta.getTextArray(1);
+        mEntrySummaries = ta.getTextArray(2);
         ta.recycle();
     }
 
@@ -76,12 +87,37 @@ public class CheckBoxGroupPreference extends PreferenceCategory implements Check
         setEntryValues(getContext().getResources().getTextArray(entryValuesResId));
     }
 
+    public CharSequence[] getEntrySummaries() {
+        return mEntrySummaries;
+    }
+
+    public void setEntrySummaries(CharSequence[] entrySummaries) {
+        mEntrySummaries = entrySummaries;
+    }
+
+    public void setEntrySummaries(@ArrayRes int entrySummariesResId) {
+        setEntrySummaries(getContext().getResources().getTextArray(entrySummariesResId));
+    }
+
     public OnPreferenceItemClickListener getItemClickListener() {
         return mItemClickListener;
     }
 
     public void setItemClickListener(OnPreferenceItemClickListener itemClickListener) {
         mItemClickListener = itemClickListener;
+    }
+
+    public CheckBoxButtonPreference findPreferenceByCheckBoxValue(String value) {
+        for (int i = 0; i < getPreferenceCount(); i++) {
+            Preference preference = getPreference(i);
+            if (preference instanceof CheckBoxButtonPreference) {
+                CheckBoxButtonPreference buttonPreference = (CheckBoxButtonPreference) preference;
+                String prefValue = (buttonPreference).getValue();
+                if (value.equals(prefValue))
+                    return buttonPreference;
+            }
+        }
+        return null;
     }
 
     @Nullable
@@ -142,6 +178,8 @@ public class CheckBoxGroupPreference extends PreferenceCategory implements Check
         removeAll();
         super.onAttachedToHierarchy(preferenceManager);
         CharSequence[] entries = mEntries;
+        CharSequence[] values = mEntryValues;
+        CharSequence[] summaries = mEntrySummaries;
         if (entries == null || entries.length == 0)
             return;
         for (int i = 0; i < entries.length; i++) {
@@ -151,12 +189,16 @@ public class CheckBoxGroupPreference extends PreferenceCategory implements Check
             CheckBoxButtonPreference preference = new CheckBoxButtonPreference(getContext());
             preference.setTitle(entry);
             preference.setPersistent(false);
-            CharSequence[] values = mEntryValues;
             if (values == null || i >= values.length)
                 continue;
             CharSequence value = values[i];
             if (!TextUtils.isEmpty(value))
                 preference.setValue(value.toString());
+            if (summaries != null && summaries.length > 0 && i < summaries.length) {
+                CharSequence summary = summaries[i];
+                if (!TextUtils.isEmpty(summary))
+                    preference.setSummary(summary);
+            }
             addPreference(preference);
         }
         checkPreferenceState();

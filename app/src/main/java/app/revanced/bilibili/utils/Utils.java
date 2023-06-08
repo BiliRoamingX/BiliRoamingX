@@ -5,10 +5,12 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
 
-public class ReVancedUtils {
+public class Utils {
     @SuppressLint("StaticFieldLeak")
     public static Context context;
     private static String mobiApp = "";
@@ -23,6 +25,36 @@ public class ReVancedUtils {
     @SuppressLint("DiscouragedApi")
     public static int getResId(String name, String type) {
         return context.getResources().getIdentifier(name, type, context.getPackageName());
+    }
+
+    public static String getString(String idName) {
+        return context.getString(getResId(idName, "string"));
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    public static Drawable getDrawable(String idName) {
+        return context.getDrawable(getResId(idName, "drawable"));
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    public static Drawable getDrawable(Context context, String idName) {
+        return context.getDrawable(getResId(idName, "drawable"));
+    }
+
+    public static int getColor(String idName) {
+        return context.getColor(getResId(idName, "color"));
+    }
+
+    public static int getColor(Context context, String idName) {
+        return context.getColor(getResId(idName, "color"));
+    }
+
+    public static ColorStateList getColorStateList(String idName) {
+        return context.getColorStateList(getResId(idName, "drawable"));
+    }
+
+    public static ColorStateList getColorStateList(Context context, String idName) {
+        return context.getColorStateList(getResId(idName, "drawable"));
     }
 
     public static void reboot() {
@@ -64,5 +96,21 @@ public class ReVancedUtils {
             }
         }
         return mobiApp;
+    }
+
+    public static boolean isPink() {
+        return "android".equals(getMobiApp());
+    }
+
+    public static boolean isBlue() {
+        return "android_b".equals(getMobiApp());
+    }
+
+    public static boolean isPlay() {
+        return "android_i".equals(getMobiApp());
+    }
+
+    public static boolean isHd() {
+        return "android_hd".equals(getMobiApp());
     }
 }
