@@ -15,4 +15,17 @@ public class ArrayUtils {
             result[i++] = Long.parseLong(s);
         return result;
     }
+
+    public static boolean contains(int[] array, int e) {
+        for (int l : array) if (l == e) return true;
+        return false;
+    }
+
+    public static int[] toIntArray(Collection<String> collection) {
+        var result = new int[collection.size()];
+        var i = 0;
+        for (String s : collection)
+            result[i++] = Integer.parseInt(s);
+        return result;
+    }
 }

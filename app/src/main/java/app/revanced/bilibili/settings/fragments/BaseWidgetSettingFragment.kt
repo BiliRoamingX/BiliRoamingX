@@ -10,10 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.SwitchCompat
 import app.revanced.bilibili.utils.*
 import com.bilibili.lib.ui.BaseFragment
@@ -285,6 +282,40 @@ open class BaseWidgetSettingFragment : BaseFragment() {
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
+    }
+
+    protected fun rootViewTemplate(): Triple<LinearLayout, LinearLayout, TextView> {
+        val rootView = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = ViewGroup.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            )
+        }
+        val contentScrollView = ScrollView(context).apply {
+            scrollBarStyle = ScrollView.SCROLLBARS_OUTSIDE_OVERLAY
+            layoutParams = LinearLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                0
+            ).apply {
+                weight = 1F
+            }
+        }
+        rootView.addView(contentScrollView)
+        val contentView = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(16.dp, 10.dp, 16.dp, 10.dp)
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+        contentScrollView.addView(contentView)
+
+        val saveButton = saveButton()
+        rootView.addView(saveButton)
+
+        return Triple(rootView, contentView, saveButton)
     }
 
     protected fun ViewGroup.getKeywords() = children
