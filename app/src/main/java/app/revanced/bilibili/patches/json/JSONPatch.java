@@ -13,6 +13,7 @@ import com.bilibili.bililive.videoliveplayer.net.beans.attentioncard.LiveRoomRec
 import com.bilibili.bililive.videoliveplayer.net.beans.gateway.roominfo.BiliLiveRoomInfo;
 import com.bilibili.bililive.videoliveplayer.net.beans.gateway.userinfo.BiliLiveRoomUserInfo;
 import com.bilibili.bililive.videoliveplayer.net.beans.gateway.userinfo.FunctionCard;
+import com.bilibili.bililive.videoliveplayer.net.beans.giftpendant.LiveGiftPendantInfo;
 import com.bilibili.lib.homepage.mine.MenuGroup;
 import com.bilibili.okretro.GeneralResponse;
 import com.bilibili.search.api.SearchRank;
@@ -70,13 +71,19 @@ public class JSONPatch {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("shoppingCard"))
                 return null;
         } else if (data instanceof BiliLiveRoomInfo) {
+            BiliLiveRoomInfo roomInfo = (BiliLiveRoomInfo) data;
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("follow")) {
-                BiliLiveRoomInfo.FunctionCard card = ((BiliLiveRoomInfo) data).functionCard;
+                BiliLiveRoomInfo.FunctionCard card = roomInfo.functionCard;
                 if (card != null)
                     card.followCard = null;
             }
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("banner"))
-                ((BiliLiveRoomInfo) data).bannerInfo = null;
+                roomInfo.bannerInfo = null;
+            if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("giftStar")) {
+                LiveGiftPendantInfo pendantInfo = roomInfo.revenueGiftPendantInfo;
+                if (pendantInfo != null)
+                    pendantInfo.liveGiftStarPendantInfo = null;
+            }
         } else if (data instanceof LiveRoomRecommendCard) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("follow"))
                 return null;
