@@ -339,13 +339,13 @@ public class PegasusPatch {
     private static void disableAutoRefresh(Config config) {
         if (config == null || !Settings.HOME_DISABLE_AUTO_REFRESH.getBoolean())
             return;
-        if (Utils.isPink() || Utils.isPlay()) {
+        if (Utils.isPink() || Utils.isBlue() || Utils.isPlay()) {
             // only exist on android and android_i now
             config.autoRefreshTimeByActive = -1L;
             config.autoRefreshTimeByAppear = -1L;
             config.autoRefreshTimeByBehavior = -1;
         }
-        if (Utils.isPink()) {
+        if (Utils.isPink() || Utils.isBlue()) {
             // only exist on android now
             config.autoRefreshByBehavior = -1;
         }
