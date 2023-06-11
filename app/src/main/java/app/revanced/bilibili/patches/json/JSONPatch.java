@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.bilibili.ad.adview.videodetail.danmakuv2.model.Dm;
 import com.bilibili.ad.adview.videodetail.danmakuv2.model.DmAdvert;
+import com.bilibili.app.authorspace.api.BiliSpace;
 import com.bilibili.bililive.room.biz.reverse.bean.LiveRoomReserveInfo;
 import com.bilibili.bililive.room.biz.shopping.beans.LiveGoodsCardInfo;
 import com.bilibili.bililive.room.biz.shopping.beans.LiveShoppingGotoBuyInfo;
@@ -105,6 +106,8 @@ public class JSONPatch {
             customizeMine((AccountMine) data);
         } else if (data instanceof MainResourceManager.TabResponse) {
             customizeHomeTab(((MainResourceManager.TabResponse) data).tabData);
+        } else if (data instanceof BiliSpace) {
+            customizeSpace(((BiliSpace) data));
         }
         return obj;
     }
@@ -313,5 +316,82 @@ public class JSONPatch {
                     return tabSet.contains("other_tabs");
             }
         });
+    }
+
+    private static void customizeSpace(BiliSpace space) {
+        Set<String> values = Settings.CUSTOMIZE_SPACE.getStringSet();
+        if (values.isEmpty()) return;
+        if (space.tab != null && !space.tab.isEmpty())
+            space.tab.removeIf(tab -> {
+                String param = tab.param;
+                if (TextUtils.isEmpty(param))
+                    return false;
+                String tabKey = "tab." + param;
+                return values.contains(tabKey);
+            });
+        for (String value : values) {
+            switch (value) {
+                case "liveEntry":
+                    space.liveEntry = null;
+                    break;
+                case "chargeResult":
+                    space.chargeResult = null;
+                    break;
+                case "guard":
+                    space.guard = null;
+                    break;
+                case "adV2":
+                    space.ad = null;
+                    space.adV2 = null;
+                    break;
+                case "archiveVideo":
+                    space.archiveVideo = null;
+                    break;
+                case "article":
+                    space.article = null;
+                    break;
+                case "audio":
+                    space.audio = null;
+                    break;
+                case "season":
+                    space.season = null;
+                    break;
+                case "coinVideo":
+                    space.coinVideo = null;
+                    break;
+                case "recommendVideo":
+                    space.recommendVideo = null;
+                    break;
+                case "followComicList":
+                    space.followComicList = null;
+                    break;
+                case "spaceGame":
+                    space.spaceGame = null;
+                    break;
+                case "cheeseVideo":
+                    space.cheeseVideo = null;
+                    break;
+                case "fansDress":
+                    space.fansDress = null;
+                    break;
+                case "favoriteBox":
+                    space.favoriteBox = null;
+                    break;
+                case "comicList":
+                    space.comicList = null;
+                    break;
+                case "ugcSeasonList":
+                    space.ugcSeasonList = null;
+                    break;
+                case "contractResource":
+                    space.contractResource = null;
+                    break;
+                case "nftShowModule":
+                    space.nftShowModule = null;
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

@@ -71,6 +71,7 @@ public enum Settings {
     DYNAMIC_PURIFY_CAMPUS("purify_campus", BOOLEAN, FALSE),
     DISABLE_LIVE_ROOM_DOUBLE_CLICK("disable_live_room_double_click", BOOLEAN, FALSE),
     REMEMBER_LOSSLESS_SETTING("remember_lossless_setting", BOOLEAN, FALSE),
+    CUSTOMIZE_SPACE("customize_space", STRING_SET, Collections.EMPTY_SET),
 
     TEENAGER_MODE_DIALOG("teenagers_mode_dialog", BOOLEAN, FALSE),
     REPLACE_STORY_VIDEO("replace_story_video", BOOLEAN, FALSE),
