@@ -70,6 +70,7 @@ public enum Settings {
     DYNAMIC_PURIFY_CITY("purify_city", BOOLEAN, FALSE),
     DYNAMIC_PURIFY_CAMPUS("purify_campus", BOOLEAN, FALSE),
     DISABLE_LIVE_ROOM_DOUBLE_CLICK("disable_live_room_double_click", BOOLEAN, FALSE),
+    REMEMBER_LOSSLESS_SETTING("remember_lossless_setting", BOOLEAN, FALSE),
 
     TEENAGER_MODE_DIALOG("teenagers_mode_dialog", BOOLEAN, FALSE),
     REPLACE_STORY_VIDEO("replace_story_video", BOOLEAN, FALSE),
@@ -78,7 +79,9 @@ public enum Settings {
     BLOCK_UP_RCMD_ADS("block_up_rcmd_ads", BOOLEAN, FALSE),
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),
     PURIFY_SEARCH("purify_search", BOOLEAN, FALSE),
-    PURIFY_LIVE_POPUPS("purify_live_popups", STRING_SET, Collections.EMPTY_SET);
+    PURIFY_LIVE_POPUPS("purify_live_popups", STRING_SET, Collections.EMPTY_SET),
+
+    LOSSLESS_ENABLED("lossless_enabled", BOOLEAN, FALSE);
 
     public static final String PREFS_NAME = "biliroaming";
 

@@ -23,6 +23,14 @@ import com.bapis.bilibili.app.dynamic.v2.DynamicListEx;
 import com.bapis.bilibili.app.dynamic.v2.Extend;
 import com.bapis.bilibili.app.dynamic.v2.Module;
 import com.bapis.bilibili.app.interfaces.v1.DefaultWordsReq;
+import com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReply;
+import com.bapis.bilibili.app.playurl.v1.ConfValue;
+import com.bapis.bilibili.app.playurl.v1.ConfValueEx;
+import com.bapis.bilibili.app.playurl.v1.PlayAbilityConf;
+import com.bapis.bilibili.app.playurl.v1.PlayConfEditReq;
+import com.bapis.bilibili.app.playurl.v1.PlayConfReply;
+import com.bapis.bilibili.app.playurl.v1.PlayConfReq;
+import com.bapis.bilibili.app.playurl.v1.PlayViewReply;
 import com.bapis.bilibili.app.view.v1.TFInfoReq;
 import com.bapis.bilibili.app.view.v1.VideoGuide;
 import com.bapis.bilibili.app.view.v1.ViewProgressReply;
@@ -62,6 +70,12 @@ public class MossPatch {
         } else if (req instanceof TFInfoReq) {
             if (Settings.REMOVE_CMD_DMS.getBoolean())
                 return HookFlags.STOP_EXECUTION;
+        } else if (req instanceof PlayConfEditReq) {
+            if (Settings.REMEMBER_LOSSLESS_SETTING.getBoolean()) {
+                ((PlayConfEditReq) req).getPlayConfList().stream()
+                        .filter(e -> e.getConfTypeValue() == 30/*LOSSLESS*/).findFirst()
+                        .ifPresent(e -> Settings.LOSSLESS_ENABLED.saveValue(e.getConfValue().getSwitchVal()));
+            }
         }
         return null;
     }
@@ -109,6 +123,24 @@ public class MossPatch {
         } else if (reply instanceof DynTabReply) {
             DynTabReply dynTabReply = (DynTabReply) reply;
             purifyDynTabs(dynTabReply);
+        } else if (reply instanceof PlayViewReply) {
+            if (Settings.REMEMBER_LOSSLESS_SETTING.getBoolean()) {
+                PlayAbilityConf playConf = ((PlayViewReply) reply).getPlayConf();
+                if (playConf.hasLossLessConf()) {
+                    ConfValue confValue = playConf.getLossLessConf().getConfValue();
+                    ConfValueEx.setSwitchVal(confValue, Settings.LOSSLESS_ENABLED.getBoolean());
+                }
+            }
+        } else if (reply instanceof PlayViewUniteReply) {
+            PlayViewUniteReply playReply = (PlayViewUniteReply) reply;
+            if (Settings.REMEMBER_LOSSLESS_SETTING.getBoolean()) {
+                playReply.getPlayDeviceConf().getDeviceConfsMap().forEach((key, deviceConf) -> {
+                    if (key == 30/*LOSSLESS*/) {
+                        com.bapis.bilibili.playershared.ConfValue confValue = deviceConf.getConfValue();
+                        com.bapis.bilibili.playershared.ConfValueEx.setSwitchVal(confValue, Settings.LOSSLESS_ENABLED.getBoolean());
+                    }
+                });
+            }
         }
         return reply;
     }
@@ -118,9 +150,21 @@ public class MossPatch {
      * or null to not intercept method execution,
      * or {@code handler}, or a proxy handler like {@link MossResponseHandlerProxy}
      */
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Nullable
     public static <ReqT extends GeneratedMessageLite<?, ?>, RespT extends GeneratedMessageLite<?, ?>>
-    Object hookAsyncBefore(@NonNull ReqT req, @Nullable MossResponseHandler<RespT> handler) {
+    Object hookAsyncBefore(@NonNull ReqT req, @Nullable MossResponseHandler handler) {
+        if (handler != null && req instanceof PlayConfReq) {
+            if (Settings.REMEMBER_LOSSLESS_SETTING.getBoolean()) {
+                return MossResponseHandlerProxy.<PlayConfReply>get(handler, v -> {
+                    if (v != null) {
+                        ConfValue confValue = v.getPlayConf().getLossLessConf().getConfValue();
+                        ConfValueEx.setSwitchVal(confValue, Settings.LOSSLESS_ENABLED.getBoolean());
+                    }
+                    return v;
+                });
+            }
+        }
         return null;
     }
 
