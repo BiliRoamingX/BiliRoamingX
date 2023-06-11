@@ -1,6 +1,7 @@
 package app.revanced.bilibili.patches.protobuf;
 
 import android.text.TextUtils;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,7 @@ import com.bapis.bilibili.app.playurl.v1.PlayViewReply;
 import com.bapis.bilibili.app.view.v1.TFInfoReq;
 import com.bapis.bilibili.app.view.v1.VideoGuide;
 import com.bapis.bilibili.app.view.v1.ViewProgressReply;
+import com.bapis.bilibili.app.view.v1.ViewReply;
 import com.bapis.bilibili.app.viewunite.v1.VideoGuideEx;
 import com.bapis.bilibili.community.service.dm.v1.DmViewReply;
 import com.bapis.bilibili.community.service.dm.v1.DmViewReplyEx;
@@ -51,6 +53,7 @@ import java.util.stream.Collectors;
 
 import app.revanced.bilibili.api.MossResponseHandlerProxy;
 import app.revanced.bilibili.meta.HookFlags;
+import app.revanced.bilibili.patches.AutoLikePatch;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.ArrayUtils;
 
@@ -141,6 +144,11 @@ public class MossPatch {
                     }
                 });
             }
+        } else if (reply instanceof ViewReply) {
+            ViewReply viewReply = (ViewReply) reply;
+            long aid = viewReply.getArc().getAid();
+            int like = viewReply.getReqUser().getLike();
+            AutoLikePatch.detail = Pair.create(aid, like);
         }
         return reply;
     }

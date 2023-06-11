@@ -81,6 +81,7 @@ public enum Settings {
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),
     PURIFY_SEARCH("purify_search", BOOLEAN, FALSE),
     PURIFY_LIVE_POPUPS("purify_live_popups", STRING_SET, Collections.EMPTY_SET),
+    AUTO_LIKE("auto_like", BOOLEAN, FALSE),
 
     LOSSLESS_ENABLED("lossless_enabled", BOOLEAN, FALSE);
 
