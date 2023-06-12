@@ -16,28 +16,32 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-    - name: Cancel previous runs
-      uses: styfle/cancel-workflow-action@0.11.0
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        # Make sure the release step uses its own credentials:
-        # https://github.com/cycjimmy/semantic-release-action#private-packages
-        persist-credentials: false
-        fetch-depth: 0
-    - name: Set up JDK
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'zulu'
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: "18"
-        cache: 'npm'
-    - name: Setup semantic-release
-      run: npm install
-    - name: Release
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPOSITORY_PUSH_ACCESS }}
-      run: npm exec semantic-release
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          # Make sure the release step uses its own credentials:
+          # https://github.com/cycjimmy/semantic-release-action#private-packages
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ runner.home }}/.gradle/caches
+            ${{ runner.home }}/.gradle/wrapper
+            .gradle
+            build
+            node_modules
+          key: ${{ runner.os }}-gradle-npm-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'package-lock.json') }}
+      - name: Setup Java
+        run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
+      - name: Build with Gradle
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew clean --no-daemon
+      - name: Setup semantic-release
+        run: npm install
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPOSITORY_PUSH_ACCESS }}
+        run: npm exec semantic-release
