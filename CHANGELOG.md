@@ -1,3 +1,17 @@
+# [0.110.0](https://github.com/revanced/revanced-integrations/compare/v0.109.0...v0.110.0) (2023-06-12)
+
+
+### Bug Fixes
+
+* **youtube/swipe-controls:** require restart if settings are changed ([#417](https://github.com/revanced/revanced-integrations/issues/417)) ([f951897](https://github.com/revanced/revanced-integrations/commit/f9518979448bf40f0a85ad88ac5971ade9343566))
+
+
+### Features
+
+* **reddit:** add `hide-promoted` patch ([#419](https://github.com/revanced/revanced-integrations/issues/419)) ([7eb209d](https://github.com/revanced/revanced-integrations/commit/7eb209d8533f68cd344c331482b38bfcf4baca06))
+* **youtube/hide-ads:** hide mix playlists ([aa72125](https://github.com/revanced/revanced-integrations/commit/aa721253170890a35640b860be569932b8536345))
+* **youtube/swipe-controls:** add option to save and restore brightness ([b5a71a8](https://github.com/revanced/revanced-integrations/commit/b5a71a843eaecaf9f2566d0b6a3c21422b14a44f))
+
 # [0.110.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.109.1-dev.1...v0.110.0-dev.1) (2023-06-12)
 
 
