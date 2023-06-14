@@ -1,3 +1,10 @@
+## [0.110.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.110.1-dev.1...v0.110.1-dev.2) (2023-06-14)
+
+
+### Bug Fixes
+
+* **youtube:** separate `hide-ads` to `hide-layout-components` patch ([bdce029](https://github.com/revanced/revanced-integrations/commit/bdce0298c404be6e5c3ae6854f3609d82ad76e28))
+
 ## [0.110.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.110.0...v0.110.1-dev.1) (2023-06-14)
 
 
