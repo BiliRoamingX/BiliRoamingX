@@ -1,15 +1,16 @@
-package com.bapis.bilibili.app.playerunite.v1;
+package com.bapis.bilibili.app.listener.v1;
 
-import com.bapis.bilibili.playershared.VideoVod;
 import com.google.protobuf.GeneratedMessageLite;
 
-public class PlayViewUniteReq extends GeneratedMessageLite {
+import java.util.List;
+
+public class PlayHistoryResp extends GeneratedMessageLite {
     @Override
     protected Object dynamicMethod(MethodToInvoke methodToInvoke, Object o, Object o1) {
         return null;
     }
 
-    public VideoVod getVod() {
+    public List<DetailItem> getListList() {
         throw new UnsupportedOperationException("Stub");
     }
 }

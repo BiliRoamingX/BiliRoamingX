@@ -72,6 +72,7 @@ public enum Settings {
     DISABLE_LIVE_ROOM_DOUBLE_CLICK("disable_live_room_double_click", BOOLEAN, FALSE),
     REMEMBER_LOSSLESS_SETTING("remember_lossless_setting", BOOLEAN, FALSE),
     CUSTOMIZE_SPACE("customize_space", STRING_SET, Collections.EMPTY_SET),
+    UNLOCK_PLAY_LIMIT("play_arc_conf", BOOLEAN, FALSE),
 
     TEENAGER_MODE_DIALOG("teenagers_mode_dialog", BOOLEAN, FALSE),
     REPLACE_STORY_VIDEO("replace_story_video", BOOLEAN, FALSE),

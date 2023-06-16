@@ -16,6 +16,7 @@ import com.bilibili.bililive.videoliveplayer.net.beans.gateway.userinfo.BiliLive
 import com.bilibili.bililive.videoliveplayer.net.beans.gateway.userinfo.FunctionCard;
 import com.bilibili.bililive.videoliveplayer.net.beans.giftpendant.LiveGiftPendantInfo;
 import com.bilibili.lib.homepage.mine.MenuGroup;
+import com.bilibili.lib.sharewrapper.online.api.ShareChannels;
 import com.bilibili.okretro.GeneralResponse;
 import com.bilibili.search.api.SearchRank;
 import com.bilibili.search.api.SearchReferral;
@@ -108,6 +109,8 @@ public class JSONPatch {
             customizeHomeTab(((MainResourceManager.TabResponse) data).tabData);
         } else if (data instanceof BiliSpace) {
             customizeSpace(((BiliSpace) data));
+        } else if (data instanceof ShareChannels) {
+            addListenButton((ShareChannels) data);
         }
         return obj;
     }
@@ -393,5 +396,27 @@ public class JSONPatch {
                     break;
             }
         }
+    }
+
+    private static void addListenButton(ShareChannels shareChannels) {
+        if (!Settings.UNLOCK_PLAY_LIMIT.getBoolean()) return;
+        var belowChannels = shareChannels.getBelowChannels();
+        if (belowChannels == null || belowChannels.isEmpty()) return;
+        var alreadyHas = false;
+        var toInsertIdx = -1;
+        for (int i = 0; i < belowChannels.size(); i++) {
+            var channelItem = belowChannels.get(i);
+            var shareChannel = channelItem.getShareChannel();
+            if ("PLAY_BACKGROUND_OFF".equals(shareChannel))
+                toInsertIdx = i;
+            if ("LISTEN".equals(shareChannel))
+                alreadyHas = true;
+        }
+        if (alreadyHas || toInsertIdx == -1) return;
+        var listenChannel = new ShareChannels.ChannelItem();
+        listenChannel.setName("听视频");
+        listenChannel.setShareChannel("LISTEN");
+        listenChannel.setPicture("https://i0.hdslb.com/bfs/share/f88d8c420a59ff1ca5975b38722408056e7337b7.png");
+        belowChannels.add(toInsertIdx, listenChannel);
     }
 }

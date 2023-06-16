@@ -11,4 +11,12 @@ public class PlayViewReply extends GeneratedMessageLite {
     public PlayAbilityConf getPlayConf() {
         throw new UnsupportedOperationException("Stub");
     }
+
+    public PlayArcConf getPlayArc() {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public VideoInfo getVideoInfo() {
+        throw new UnsupportedOperationException("Stub");
+    }
 }

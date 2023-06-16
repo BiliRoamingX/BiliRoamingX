@@ -1,13 +1,13 @@
-package com.bapis.bilibili.app.playurl.v1;
+package com.bapis.bilibili.app.view.v1;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bilibili.lib.moss.api.MossException;
 
-public class PlayURLMoss {
+public class ViewMoss {
     @Nullable
-    public PlayViewReply playView(@NonNull PlayViewReq playViewReq) throws MossException {
+    public ViewReply view(@NonNull ViewReq req) throws MossException {
         throw new UnsupportedOperationException("Stub");
     }
 }

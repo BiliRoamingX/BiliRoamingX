@@ -1,6 +1,12 @@
 package com.bapis.bilibili.pgc.gateway.player.v1;
 
-public class PlayViewReq {
+import com.google.protobuf.GeneratedMessageLite;
+
+public class PlayViewReq extends GeneratedMessageLite {
+    @Override
+    protected Object dynamicMethod(MethodToInvoke methodToInvoke, Object o, Object o1) {
+        return null;
+    }
 
     public int getDownload() {
         throw new UnsupportedOperationException("Stub");

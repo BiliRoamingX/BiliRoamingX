@@ -1,11 +1,13 @@
 package app.revanced.bilibili.patches.protobuf;
 
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bapis.bilibili.app.archive.middleware.v1.PlayerArgs;
 import com.bapis.bilibili.app.dynamic.v1.DynRedReply;
 import com.bapis.bilibili.app.dynamic.v1.DynRedReplyEx;
 import com.bapis.bilibili.app.dynamic.v2.CardVideoDynList;
@@ -24,21 +26,48 @@ import com.bapis.bilibili.app.dynamic.v2.DynamicListEx;
 import com.bapis.bilibili.app.dynamic.v2.Extend;
 import com.bapis.bilibili.app.dynamic.v2.Module;
 import com.bapis.bilibili.app.interfaces.v1.DefaultWordsReq;
+import com.bapis.bilibili.app.listener.v1.BKArcPart;
+import com.bapis.bilibili.app.listener.v1.DashItem;
+import com.bapis.bilibili.app.listener.v1.DetailItem;
+import com.bapis.bilibili.app.listener.v1.DetailItemEx;
+import com.bapis.bilibili.app.listener.v1.FormatDescription;
+import com.bapis.bilibili.app.listener.v1.PlayDASH;
+import com.bapis.bilibili.app.listener.v1.PlayHistoryReq;
+import com.bapis.bilibili.app.listener.v1.PlayHistoryResp;
+import com.bapis.bilibili.app.listener.v1.PlayInfo;
+import com.bapis.bilibili.app.listener.v1.PlayURLReq;
+import com.bapis.bilibili.app.listener.v1.PlayURLResp;
+import com.bapis.bilibili.app.listener.v1.PlaylistReq;
+import com.bapis.bilibili.app.listener.v1.PlaylistResp;
+import com.bapis.bilibili.app.listener.v1.RcmdPlaylistReq;
+import com.bapis.bilibili.app.listener.v1.RcmdPlaylistResp;
 import com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReply;
+import com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReq;
+import com.bapis.bilibili.app.playurl.v1.ArcConf;
+import com.bapis.bilibili.app.playurl.v1.ArcConfEx;
+import com.bapis.bilibili.app.playurl.v1.CodeType;
 import com.bapis.bilibili.app.playurl.v1.ConfValue;
 import com.bapis.bilibili.app.playurl.v1.ConfValueEx;
 import com.bapis.bilibili.app.playurl.v1.PlayAbilityConf;
+import com.bapis.bilibili.app.playurl.v1.PlayArcConf;
 import com.bapis.bilibili.app.playurl.v1.PlayConfEditReq;
 import com.bapis.bilibili.app.playurl.v1.PlayConfReply;
 import com.bapis.bilibili.app.playurl.v1.PlayConfReq;
+import com.bapis.bilibili.app.playurl.v1.PlayURLMoss;
 import com.bapis.bilibili.app.playurl.v1.PlayViewReply;
+import com.bapis.bilibili.app.playurl.v1.PlayViewReq;
+import com.bapis.bilibili.app.view.v1.ConfigEx;
 import com.bapis.bilibili.app.view.v1.TFInfoReq;
 import com.bapis.bilibili.app.view.v1.VideoGuide;
+import com.bapis.bilibili.app.view.v1.ViewMoss;
 import com.bapis.bilibili.app.view.v1.ViewProgressReply;
 import com.bapis.bilibili.app.view.v1.ViewReply;
+import com.bapis.bilibili.app.view.v1.ViewReq;
 import com.bapis.bilibili.app.viewunite.v1.VideoGuideEx;
 import com.bapis.bilibili.community.service.dm.v1.DmViewReply;
 import com.bapis.bilibili.community.service.dm.v1.DmViewReplyEx;
+import com.bapis.bilibili.playershared.PlayArcConfEx;
+import com.bilibili.lib.moss.api.MossException;
 import com.bilibili.lib.moss.api.MossResponseHandler;
 import com.google.protobuf.GeneratedMessageLite;
 import com.google.protobuf.UnknownFieldSetLite;
@@ -46,6 +75,7 @@ import com.google.protobuf.UnknownFieldSetLite;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -54,6 +84,7 @@ import java.util.stream.Collectors;
 import app.revanced.bilibili.api.MossResponseHandlerProxy;
 import app.revanced.bilibili.meta.HookFlags;
 import app.revanced.bilibili.patches.AutoLikePatch;
+import app.revanced.bilibili.patches.VideoQualityPatch;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.ArrayUtils;
 
@@ -66,7 +97,7 @@ public class MossPatch {
      */
     @Nullable
     public static <ReqT extends GeneratedMessageLite<?, ?>>
-    Object hookBlockingBefore(@NonNull ReqT req) {
+    Object hookBlockingBefore(@NonNull GeneratedMessageLite<?, ?> req) {
         if (req instanceof DefaultWordsReq) {
             if (Settings.PURIFY_SEARCH.getBoolean())
                 return HookFlags.STOP_EXECUTION;
@@ -79,6 +110,14 @@ public class MossPatch {
                         .filter(e -> e.getConfTypeValue() == 30/*LOSSLESS*/).findFirst()
                         .ifPresent(e -> Settings.LOSSLESS_ENABLED.saveValue(e.getConfValue().getSwitchVal()));
             }
+        } else if (req instanceof com.bapis.bilibili.pgc.gateway.player.v1.PlayViewReq) {
+            VideoQualityPatch.unlockLimit((com.bapis.bilibili.pgc.gateway.player.v1.PlayViewReq) req);
+        } else if (req instanceof com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq) {
+            VideoQualityPatch.unlockLimit((com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq) req);
+        } else if (req instanceof com.bapis.bilibili.app.playurl.v1.PlayViewReq) {
+            VideoQualityPatch.unlockLimit((com.bapis.bilibili.app.playurl.v1.PlayViewReq) req);
+        } else if (req instanceof PlayViewUniteReq) {
+            VideoQualityPatch.unlockLimit((PlayViewUniteReq) req);
         }
         return null;
     }
@@ -88,7 +127,7 @@ public class MossPatch {
      */
     @Nullable
     public static <ReqT extends GeneratedMessageLite<?, ?>, RespT extends GeneratedMessageLite<?, ?>>
-    RespT hookBlockingAfter(@NonNull ReqT req, @Nullable RespT reply) {
+    GeneratedMessageLite<?, ?> hookBlockingAfter(@NonNull GeneratedMessageLite<?, ?> req, @Nullable GeneratedMessageLite<?, ?> reply, MossException error) throws MossException {
         if (reply instanceof com.bapis.bilibili.app.view.v1.ViewProgressReply) {
             if (Settings.REMOVE_CMD_DMS.getBoolean())
                 com.bapis.bilibili.app.view.v1.ViewProgressReplyEx.setVideoGuide((ViewProgressReply) reply, VideoGuide.newBuilder().build());
@@ -127,11 +166,19 @@ public class MossPatch {
             DynTabReply dynTabReply = (DynTabReply) reply;
             purifyDynTabs(dynTabReply);
         } else if (reply instanceof PlayViewReply) {
+            PlayViewReply playViewReply = (PlayViewReply) reply;
             if (Settings.REMEMBER_LOSSLESS_SETTING.getBoolean()) {
-                PlayAbilityConf playConf = ((PlayViewReply) reply).getPlayConf();
+                PlayAbilityConf playConf = playViewReply.getPlayConf();
                 if (playConf.hasLossLessConf()) {
                     ConfValue confValue = playConf.getLossLessConf().getConfValue();
                     ConfValueEx.setSwitchVal(confValue, Settings.LOSSLESS_ENABLED.getBoolean());
+                }
+            }
+            if (Settings.UNLOCK_PLAY_LIMIT.getBoolean()) {
+                PlayArcConf playArc = playViewReply.getPlayArc();
+                for (ArcConf arcConf : new ArcConf[]{playArc.getCastConf(), playArc.getBackgroundPlayConf(), playArc.getSmallWindowConf()}) {
+                    ArcConfEx.setIsSupport(arcConf, true);
+                    ArcConfEx.setDisabled(arcConf, false);
                 }
             }
         } else if (reply instanceof PlayViewUniteReply) {
@@ -144,13 +191,33 @@ public class MossPatch {
                     }
                 });
             }
+            if (Settings.UNLOCK_PLAY_LIMIT.getBoolean()) {
+                var supportedConf = com.bapis.bilibili.playershared.ArcConf.newBuilder()
+                        .setIsSupport(true).setDisabled(false).build();
+                var arcConfs = PlayArcConfEx.getMutableArcConfsMap(playReply.getPlayArcConf());
+                // CASTCONF,BACKGROUNDPLAY,SMALLWINDOW,LISTEN
+                for (int key : new int[]{2, 9, 23, 36})
+                    arcConfs.put(key, supportedConf);
+            }
         } else if (reply instanceof ViewReply) {
             ViewReply viewReply = (ViewReply) reply;
             long aid = viewReply.getArc().getAid();
             int like = viewReply.getReqUser().getLike();
             AutoLikePatch.detail = Pair.create(aid, like);
+            if (Settings.UNLOCK_PLAY_LIMIT.getBoolean())
+                ConfigEx.setShowListenButton(viewReply.getConfig(), true);
+        } else if (reply instanceof PlayURLResp) {
+            if (Settings.UNLOCK_PLAY_LIMIT.getBoolean()) {
+                PlayURLReq playURLReq = (PlayURLReq) req;
+                PlayURLResp playURLResp = (PlayURLResp) reply;
+                return reconstructPlayUrlResponse(playURLReq, playURLResp);
+            }
         }
-        return reply;
+        if (error != null) {
+            throw error;
+        } else {
+            return reply;
+        }
     }
 
     /**
@@ -161,9 +228,10 @@ public class MossPatch {
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Nullable
     public static <ReqT extends GeneratedMessageLite<?, ?>, RespT extends GeneratedMessageLite<?, ?>>
-    Object hookAsyncBefore(@NonNull ReqT req, @Nullable MossResponseHandler handler) {
-        if (handler != null && req instanceof PlayConfReq) {
-            if (Settings.REMEMBER_LOSSLESS_SETTING.getBoolean()) {
+    Object hookAsyncBefore(@NonNull GeneratedMessageLite<?, ?> req, @Nullable MossResponseHandler handler) {
+        if (handler == null) return null;
+        if (req instanceof PlayConfReq) {
+            if (Settings.REMEMBER_LOSSLESS_SETTING.getBoolean())
                 return MossResponseHandlerProxy.<PlayConfReply>get(handler, v -> {
                     if (v != null) {
                         ConfValue confValue = v.getPlayConf().getLossLessConf().getConfValue();
@@ -171,7 +239,27 @@ public class MossPatch {
                     }
                     return v;
                 });
-            }
+        } else if (req instanceof PlaylistReq) {
+            if (Settings.UNLOCK_PLAY_LIMIT.getBoolean())
+                return MossResponseHandlerProxy.<PlaylistResp>get(handler, v -> {
+                    if (v != null)
+                        reconstructListenPlaylistResponse(v.getListList());
+                    return v;
+                });
+        } else if (req instanceof RcmdPlaylistReq) {
+            if (Settings.UNLOCK_PLAY_LIMIT.getBoolean())
+                return MossResponseHandlerProxy.<RcmdPlaylistResp>get(handler, v -> {
+                    if (v != null)
+                        reconstructListenPlaylistResponse(v.getListList());
+                    return v;
+                });
+        } else if (req instanceof PlayHistoryReq) {
+            if (Settings.UNLOCK_PLAY_LIMIT.getBoolean())
+                return MossResponseHandlerProxy.<PlayHistoryResp>get(handler, v -> {
+                    if (v != null)
+                        reconstructListenPlaylistResponse(v.getListList());
+                    return v;
+                });
         }
         return null;
     }
@@ -302,5 +390,123 @@ public class MossPatch {
             return contents.stream().anyMatch(text::contains);
         }
         return false;
+    }
+
+    private static void reconstructListenPlaylistResponse(List<DetailItem> items) {
+        var needPartItems = items.stream()
+                .filter(e -> e.getPlayable() != 0)
+                .peek(e -> DetailItemEx.setPlayable(e, 0))
+                .filter(e -> e.getPartsCount() <= 0)
+                .collect(Collectors.toList());
+        if (needPartItems.isEmpty())
+            return;
+        var playerArgs = PlayerArgs.newBuilder()
+                .setFnval(VideoQualityPatch.MAX_FNVAL)
+                .setForceHost(2)
+                .setQn(64)
+                .build();
+        var commViewReq = ViewReq.newBuilder()
+                .setFnval(VideoQualityPatch.MAX_FNVAL)
+                .setForceHost(2)
+                .setFourk(1)
+                .setPlayerArgs(playerArgs)
+                .setQn(64);
+        var viewMoss = new ViewMoss();
+        for (var item : needPartItems) {
+            var oid = item.getArc().getOid();
+            var viewReq = commViewReq.setAid(oid).build();
+            ViewReply viewReply = null;
+            try {
+                viewReply = viewMoss.view(viewReq);
+            } catch (MossException ignored) {
+            }
+            if (viewReply == null)
+                continue;
+            var parts = viewReply.getPagesList().stream().map(p ->
+                    BKArcPart.newBuilder()
+                            .setDuration(p.getPage().getDuration())
+                            .setOid(oid)
+                            .setPage(p.getPage().getPage())
+                            .setSubId(p.getPage().getCid())
+                            .setTitle(p.getPage().getPart())
+                            .build()
+            ).collect(Collectors.toList());
+            DetailItemEx.addAllParts(item, parts);
+        }
+    }
+
+    private static PlayURLResp reconstructPlayUrlResponse(PlayURLReq playURLReq, PlayURLResp playURLResp) {
+        var playable = playURLResp.getPlayable();
+        var playerInfo = playURLResp.getPlayerInfoMap();
+        if (playable == 0 && !playerInfo.isEmpty())
+            return playURLResp;
+        var commPlayViewReq = PlayViewReq.newBuilder()
+                .setAid(playURLReq.getItem().getOid())
+                .setQn(playURLReq.getPlayerArgs().getQn())
+                .setFnval((int) playURLReq.getPlayerArgs().getFnval())
+                .setForceHost((int) playURLReq.getPlayerArgs().getForceHost())
+                .setFourk(true)
+                .setPreferCodecType(CodeType.CODE265);
+        var newPlayerInfo = new LinkedHashMap<Long, PlayInfo>();
+        var playURLMoss = new PlayURLMoss();
+        for (var subId : playURLReq.getItem().getSubIdList()) {
+            var playViewReq = commPlayViewReq.setCid(subId).build();
+            PlayViewReply playViewReply = null;
+            try {
+                playViewReply = playURLMoss.playView(playViewReq);
+            } catch (MossException ignored) {
+            }
+            if (playViewReply == null)
+                continue;
+            var videoInfo = playViewReply.getVideoInfo();
+            var deadline = new long[]{0L};
+            var audios = videoInfo.getDashAudioList().stream().map(a -> {
+                if (deadline[0] == 0L) {
+                    var query = Uri.parse(a.getBaseUrl()).getQueryParameter("deadline");
+                    if (!TextUtils.isEmpty(query)) try {
+                        deadline[0] = Long.parseLong(query);
+                    } catch (NumberFormatException ignored) {
+                    }
+                }
+                return DashItem.newBuilder()
+                        .setId(a.getId())
+                        .setSize(a.getSize())
+                        .setBandwidth(a.getBandwidth())
+                        .setBaseUrl(a.getBaseUrl())
+                        .addAllBackupUrl(a.getBackupUrlList())
+                        .build();
+            }).collect(Collectors.toList());
+            var playDASH = PlayDASH.newBuilder()
+                    .addAllAudio(audios)
+                    .setDuration((int) Math.ceil(videoInfo.getTimelength() / 1000.0))
+                    .setMinBufferTime(0.0F)
+                    .build();
+            var formats = videoInfo.getStreamListList().stream().map(s -> {
+                var si = s.getStreamInfo();
+                return FormatDescription.newBuilder()
+                        .setDescription(si.getDescription())
+                        .setDisplayDesc(si.getDisplayDesc())
+                        .setFormat(si.getFormat())
+                        .setQuality(si.getQuality())
+                        .setSuperscript(si.getSuperscript())
+                        .build();
+            }).collect(Collectors.toList());
+            var playInfo = PlayInfo.newBuilder()
+                    .setFnval((int) playURLReq.getPlayerArgs().getFnval())
+                    .setFormat(videoInfo.getFormat())
+                    .setLength(videoInfo.getTimelength())
+                    .setQn(videoInfo.getQuality())
+                    .setVideoCodecid(videoInfo.getVideoCodecid())
+                    .setPlayDash(playDASH)
+                    .addAllFormats(formats)
+                    .setExpireTime(deadline[0])
+                    .build();
+            newPlayerInfo.put(subId, playInfo);
+        }
+        return PlayURLResp.newBuilder()
+                .setItem(playURLReq.getItem())
+                .setPlayable(0)
+                .putAllPlayerInfo(newPlayerInfo)
+                .build();
     }
 }
