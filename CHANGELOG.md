@@ -1,3 +1,10 @@
+## [0.110.1-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.110.1-dev.2...v0.110.1-dev.3) (2023-06-16)
+
+
+### Bug Fixes
+
+* **reddit/hide-ads:** only filter promoted links ([efc2b9b](https://github.com/revanced/revanced-integrations/commit/efc2b9b6a39de93d6cc1052dfcea457aeaf949b2))
+
 ## [0.110.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.110.1-dev.1...v0.110.1-dev.2) (2023-06-14)
 
 
