@@ -57,6 +57,8 @@ import com.bapis.bilibili.app.playurl.v1.PlayURLMoss;
 import com.bapis.bilibili.app.playurl.v1.PlayViewReply;
 import com.bapis.bilibili.app.playurl.v1.PlayViewReq;
 import com.bapis.bilibili.app.view.v1.ConfigEx;
+import com.bapis.bilibili.app.view.v1.LikeCustomEx;
+import com.bapis.bilibili.app.view.v1.ReplyStyleEx;
 import com.bapis.bilibili.app.view.v1.TFInfoReq;
 import com.bapis.bilibili.app.view.v1.VideoGuide;
 import com.bapis.bilibili.app.view.v1.ViewMoss;
@@ -66,6 +68,13 @@ import com.bapis.bilibili.app.view.v1.ViewReq;
 import com.bapis.bilibili.app.viewunite.v1.VideoGuideEx;
 import com.bapis.bilibili.community.service.dm.v1.DmViewReply;
 import com.bapis.bilibili.community.service.dm.v1.DmViewReplyEx;
+import com.bapis.bilibili.main.community.reply.v1.EmptyPage;
+import com.bapis.bilibili.main.community.reply.v1.EmptyPageEx;
+import com.bapis.bilibili.main.community.reply.v1.MainListReply;
+import com.bapis.bilibili.main.community.reply.v1.MainListReq;
+import com.bapis.bilibili.main.community.reply.v1.SubjectControl;
+import com.bapis.bilibili.main.community.reply.v1.SubjectControlEx;
+import com.bapis.bilibili.main.community.reply.v1.TextStyle;
 import com.bapis.bilibili.playershared.PlayArcConfEx;
 import com.bilibili.lib.moss.api.MossException;
 import com.bilibili.lib.moss.api.MossResponseHandler;
@@ -88,7 +97,7 @@ import app.revanced.bilibili.patches.VideoQualityPatch;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.ArrayUtils;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "unchecked", "rawtypes"})
 public class MossPatch {
     /**
      * @return {@link HookFlags#STOP_EXECUTION} to stop method execution and return null,
@@ -206,6 +215,10 @@ public class MossPatch {
             AutoLikePatch.detail = Pair.create(aid, like);
             if (Settings.UNLOCK_PLAY_LIMIT.getBoolean())
                 ConfigEx.setShowListenButton(viewReply.getConfig(), true);
+            if (Settings.BLOCK_COMMENT_GUIDE.getBoolean()) {
+                LikeCustomEx.clearLikeComment(viewReply.getLikeCustom());
+                ReplyStyleEx.clearBadgeType(viewReply.getReplyPreface());
+            }
         } else if (reply instanceof PlayURLResp) {
             if (Settings.UNLOCK_PLAY_LIMIT.getBoolean()) {
                 PlayURLReq playURLReq = (PlayURLReq) req;
@@ -225,7 +238,6 @@ public class MossPatch {
      * or null to not intercept method execution,
      * or {@code handler}, or a proxy handler like {@link MossResponseHandlerProxy}
      */
-    @SuppressWarnings({"unchecked", "rawtypes"})
     @Nullable
     public static <ReqT extends GeneratedMessageLite<?, ?>, RespT extends GeneratedMessageLite<?, ?>>
     Object hookAsyncBefore(@NonNull GeneratedMessageLite<?, ?> req, @Nullable MossResponseHandler handler) {
@@ -260,6 +272,18 @@ public class MossPatch {
                         reconstructListenPlaylistResponse(v.getListList());
                     return v;
                 });
+        } else if (req instanceof MainListReq) {
+            long type = ((MainListReq) req).getType();
+            if (Settings.BLOCK_VIDEO_COMMENT.getBoolean() && type == 1L) {
+                blockVideoComment(handler);
+                return HookFlags.STOP_EXECUTION;
+            } else if (Settings.BLOCK_COMMENT_GUIDE.getBoolean()) {
+                return MossResponseHandlerProxy.<MainListReply>get(handler, v -> {
+                    if (v != null)
+                        blockCommentGuide(v);
+                    return v;
+                });
+            }
         }
         return null;
     }
@@ -392,7 +416,7 @@ public class MossPatch {
         return false;
     }
 
-    private static void reconstructListenPlaylistResponse(List<DetailItem> items) {
+    static void reconstructListenPlaylistResponse(List<DetailItem> items) {
         var needPartItems = items.stream()
                 .filter(e -> e.getPlayable() != 0)
                 .peek(e -> DetailItemEx.setPlayable(e, 0))
@@ -508,5 +532,52 @@ public class MossPatch {
                 .setPlayable(0)
                 .putAllPlayerInfo(newPlayerInfo)
                 .build();
+    }
+
+    static void blockVideoComment(MossResponseHandler handler) {
+        var textStyle = TextStyle.newBuilder()
+                .setFontSize(14)
+                .setTextDayColor("#FF61666D")
+                .setTextNightColor("#FFA2A7AE")
+                .build();
+        var text = EmptyPage.Text.newBuilder()
+                .setRaw("评论区已由漫游屏蔽")
+                .setStyle(textStyle)
+                .build();
+        var emptyPage = EmptyPage.newBuilder()
+                .setImageUrl("https://i0.hdslb.com/bfs/app-res/android/img_holder_forbid_style1.webp")
+                .addTexts(text)
+                .build();
+        var subjectControl = SubjectControl.newBuilder()
+                .setEmptyPage(emptyPage)
+                .build();
+        var reply = MainListReply.newBuilder()
+                .setSubjectControl(subjectControl)
+                .build();
+        handler.onNext(reply);
+    }
+
+    static void blockCommentGuide(MainListReply reply) {
+        var subjectControl = reply.getSubjectControl();
+        SubjectControlEx.clearEmptyBackgroundTextPlain(subjectControl);
+        SubjectControlEx.clearEmptyBackgroundTextHighlight(subjectControl);
+        SubjectControlEx.clearEmptyBackgroundUri(subjectControl);
+        var emptyPage = subjectControl.getEmptyPage();
+        EmptyPageEx.clearLeftButton(emptyPage);
+        EmptyPageEx.clearRightButton(emptyPage);
+        var textsList = emptyPage.getTextsList();
+        if (textsList.size() > 1) {
+            EmptyPageEx.clearTexts(emptyPage);
+            var textStyle = TextStyle.newBuilder()
+                    .setFontSize(14)
+                    .setTextDayColor("#FF61666D")
+                    .setTextNightColor("#FFA2A7AE")
+                    .build();
+            var text = EmptyPage.Text.newBuilder()
+                    .setRaw("还没有评论哦")
+                    .setStyle(textStyle)
+                    .build();
+            EmptyPageEx.addTexts(emptyPage, text);
+        }
     }
 }

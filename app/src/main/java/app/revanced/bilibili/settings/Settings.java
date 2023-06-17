@@ -73,6 +73,8 @@ public enum Settings {
     REMEMBER_LOSSLESS_SETTING("remember_lossless_setting", BOOLEAN, FALSE),
     CUSTOMIZE_SPACE("customize_space", STRING_SET, Collections.EMPTY_SET),
     UNLOCK_PLAY_LIMIT("play_arc_conf", BOOLEAN, FALSE),
+    BLOCK_VIDEO_COMMENT("block_video_comment", BOOLEAN, FALSE),
+    BLOCK_COMMENT_GUIDE("block_comment_guide", BOOLEAN, FALSE),
 
     TEENAGER_MODE_DIALOG("teenagers_mode_dialog", BOOLEAN, FALSE),
     REPLACE_STORY_VIDEO("replace_story_video", BOOLEAN, FALSE),

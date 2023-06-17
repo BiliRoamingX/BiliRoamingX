@@ -26,4 +26,12 @@ public class ViewReply extends GeneratedMessageLite {
     public List<ViewPage> getPagesList() {
         throw new UnsupportedOperationException("Stub");
     }
+
+    public LikeCustom getLikeCustom() {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public ReplyStyle getReplyPreface() {
+        throw new UnsupportedOperationException("Stub");
+    }
 }
