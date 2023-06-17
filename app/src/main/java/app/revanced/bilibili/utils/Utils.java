@@ -86,28 +86,31 @@ public class Utils {
 
     public static String getMobiApp() {
         if (TextUtils.isEmpty(mobiApp)) {
+            String mobiApp = null;
             try {
                 mobiApp = context.getPackageManager()
                         .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA)
                         .metaData.getString("MOBI_APP");
-                if (TextUtils.isEmpty(mobiApp)) {
-                    switch (context.getPackageName()) {
-                        case Constants.BLUE_PACKAGE_NAME:
-                            mobiApp = "android_b";
-                            break;
-                        case Constants.PLAY_PACKAGE_NAME:
-                            mobiApp = "android_i";
-                            break;
-                        case Constants.HD_PACKAGE_NAME:
-                            mobiApp = "android_hd";
-                            break;
-                        default:
-                            mobiApp = "android";
-                            break;
-                    }
-                }
             } catch (PackageManager.NameNotFoundException ignored) {
             }
+            if (TextUtils.isEmpty(mobiApp)) {
+                switch (context.getPackageName()) {
+                    case Constants.BLUE_PACKAGE_NAME:
+                        mobiApp = "android_b";
+                        break;
+                    case Constants.PLAY_PACKAGE_NAME:
+                        mobiApp = "android_i";
+                        break;
+                    case Constants.HD_PACKAGE_NAME:
+                        mobiApp = "android_hd";
+                        break;
+                    case Constants.PINK_PACKAGE_NAME:
+                    default:
+                        mobiApp = "android";
+                        break;
+                }
+            }
+            Utils.mobiApp = mobiApp;
         }
         return mobiApp;
     }
