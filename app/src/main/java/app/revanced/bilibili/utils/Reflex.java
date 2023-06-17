@@ -86,11 +86,13 @@ public class Reflex {
         static final class Field extends MemberCacheKey {
             private final Class<?> clazz;
             private final String name;
+            private final boolean isType;
 
-            public Field(Class<?> clazz, String name) {
-                super(Objects.hash(clazz, name));
+            public Field(Class<?> clazz, String name, boolean isType) {
+                super(Objects.hash(clazz, name, isType));
                 this.clazz = clazz;
                 this.name = name;
+                this.isType = isType;
             }
 
             @Override
@@ -98,13 +100,18 @@ public class Reflex {
                 if (this == o) return true;
                 if (!(o instanceof Field)) return false;
                 Field field = (Field) o;
-                return Objects.equals(clazz, field.clazz) && Objects.equals(name, field.name);
+                return isType == field.isType && Objects.equals(clazz, field.clazz) && Objects.equals(name, field.name);
             }
 
             @NonNull
             @Override
             public String toString() {
-                return clazz.getName() + "#" + name;
+                var str = clazz.getName() + "#" + name;
+                if (isType) {
+                    return str + "#type";
+                } else {
+                    return str;
+                }
             }
         }
 
@@ -236,7 +243,7 @@ public class Reflex {
      * @throws NoSuchFieldError In case the field was not found.
      */
     public static Field findField(Class<?> clazz, String fieldName) throws NoSuchFieldError {
-        var key = new MemberCacheKey.Field(clazz, fieldName);
+        var key = new MemberCacheKey.Field(clazz, fieldName, false);
 
         return fieldCache.computeIfAbsent(key, k -> {
             try {
@@ -293,17 +300,27 @@ public class Reflex {
      * @throws NoSuchFieldError In case no matching field was not found.
      */
     public static Field findFirstFieldByExactType(Class<?> clazz, Class<?> type) {
-        Class<?> clz = clazz;
-        do {
-            for (Field field : clz.getDeclaredFields()) {
-                if (field.getType() == type) {
-                    field.setAccessible(true);
-                    return field;
+        var key = new MemberCacheKey.Field(clazz, type.getName(), true);
+        return fieldCache.computeIfAbsent(key, k -> {
+            Class<?> clz = clazz;
+            do {
+                for (Field field : clz.getDeclaredFields()) {
+                    if (field.getType() == type) {
+                        field.setAccessible(true);
+                        return Optional.of(field);
+                    }
                 }
-            }
-        } while ((clz = clz.getSuperclass()) != null);
+            } while ((clz = clz.getSuperclass()) != null);
+            return Optional.empty();
+        }).orElseThrow(() -> new NoSuchFieldError(key.toString()));
+    }
 
-        throw new NoSuchFieldError("Field of type " + type.getName() + " in class " + clazz.getName());
+    public static Field findFirstFieldByExactTypeOrNull(Class<?> clazz, Class<?> type) {
+        try {
+            return findFirstFieldByExactType(clazz, type);
+        } catch (NoSuchFieldError e) {
+            return null;
+        }
     }
 
     /**
@@ -1353,4 +1370,29 @@ public class Reflex {
     }
 
     //#################################################################################################
+
+    public static Object getFirstFieldByExactType(Object obj, Class<?> type) {
+        try {
+            return findFirstFieldByExactType(obj.getClass(), type).get(obj);
+        } catch (IllegalAccessException e) {
+            // should not happen
+            throw new IllegalAccessError(e.getMessage());
+        }
+    }
+
+    public static Object getFirstFieldByExactTypeOrNull(Object obj, Class<?> type) {
+        try {
+            return getFirstFieldByExactType(obj, type);
+        } catch (NoSuchFieldError e) {
+            return null;
+        }
+    }
+
+    public static Object getFieldValue(Object obj, Field field) {
+        try {
+            return field.get(obj);
+        } catch (IllegalAccessException e) {
+            throw new IllegalAccessError(e.getMessage());
+        }
+    }
 }

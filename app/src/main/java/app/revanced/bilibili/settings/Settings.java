@@ -84,6 +84,8 @@ public enum Settings {
     PURIFY_LIVE_POPUPS("purify_live_popups", STRING_SET, Collections.EMPTY_SET),
     AUTO_LIKE("auto_like", BOOLEAN, FALSE),
     SAVE_COMMENT_IMAGE("save_comment_image", BOOLEAN, FALSE),
+    COMMENT_COPY("comment_copy", BOOLEAN, FALSE),
+    COMMENT_COPY_ENHANCE("comment_copy_enhance", BOOLEAN, FALSE),
 
     LOSSLESS_ENABLED("lossless_enabled", BOOLEAN, FALSE);
 

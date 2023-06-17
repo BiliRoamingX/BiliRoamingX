@@ -10,7 +10,6 @@ import android.view.HapticFeedbackConstants;
 import com.bilibili.lib.imageviewer.fragment.ImageFragment;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -63,7 +62,6 @@ public class CommentImagePatch {
     }
 
     private static final int imageViewId = Utils.getResId("image_view", "id");
-    private static String cacheUrlFieldName = null;
 
     public static void bindClickListener(ImageFragment fragment) {
         if (!Settings.SAVE_COMMENT_IMAGE.getBoolean()) return;
@@ -71,17 +69,9 @@ public class CommentImagePatch {
         if (arguments == null || arguments.isEmpty()) return;
         var imageItem = arguments.getParcelable("image_item");
         if (imageItem == null) return;
-        if (cacheUrlFieldName == null) {
-            Field field = null;
-            try {
-                field = Reflex.findFirstFieldByExactType(imageItem.getClass().getSuperclass(), String.class);
-            } catch (Throwable ignored) {
-            }
-            if (field != null)
-                cacheUrlFieldName = field.getName();
-        }
-        if (cacheUrlFieldName == null) return;
-        var imageUrl = (String) Reflex.getObjectField(imageItem, cacheUrlFieldName);
+        var field = Reflex.findFirstFieldByExactTypeOrNull(imageItem.getClass().getSuperclass(), String.class);
+        if (field == null) return;
+        var imageUrl = (String) Reflex.getFieldValue(imageItem, field);
         if (TextUtils.isEmpty(imageUrl) || !imageUrl.startsWith("http"))
             return;
         var atIndex = imageUrl.indexOf('@');
