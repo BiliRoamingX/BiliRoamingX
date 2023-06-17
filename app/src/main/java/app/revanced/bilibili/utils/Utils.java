@@ -64,11 +64,11 @@ public class Utils {
     }
 
     public static ColorStateList getColorStateList(String idName) {
-        return context.getColorStateList(getResId(idName, "drawable"));
+        return context.getColorStateList(getResId(idName, "color"));
     }
 
     public static ColorStateList getColorStateList(Context context, String idName) {
-        return context.getColorStateList(getResId(idName, "drawable"));
+        return context.getColorStateList(getResId(idName, "color"));
     }
 
     public static void reboot() {
