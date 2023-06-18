@@ -1,3 +1,10 @@
+# [0.111.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.111.0-dev.1...v0.111.0-dev.2) (2023-06-18)
+
+
+### Bug Fixes
+
+* **youtube/hide-layout-components:** preserve gap when hiding expandable chips ([b47a214](https://github.com/revanced/revanced-integrations/commit/b47a214067031c099df990d4c83a1d96ab7b3c34))
+
 # [0.111.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.110.1-dev.3...v0.111.0-dev.1) (2023-06-18)
 
 
