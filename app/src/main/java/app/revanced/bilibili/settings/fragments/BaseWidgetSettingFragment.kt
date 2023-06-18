@@ -3,7 +3,9 @@ package app.revanced.bilibili.settings.fragments
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.Typeface
+import android.text.InputFilter.LengthFilter
 import android.text.TextUtils
+import android.text.method.DigitsKeyListener
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -42,6 +44,7 @@ open class BaseWidgetSettingFragment : BaseFragment() {
         type: Int = EditorInfo.TYPE_CLASS_NUMBER
     ): Pair<LinearLayout, EditText> {
         val layout = LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -66,6 +69,62 @@ open class BaseWidgetSettingFragment : BaseFragment() {
         }
         layout.addView(textView)
         layout.addView(editText)
+        return Pair(layout, editText)
+    }
+
+    protected fun textInputWithButtonItem(
+        name: String,
+        text: CharSequence = "",
+        hint: CharSequence = "",
+        buttonName: String = "",
+        type: Int = EditorInfo.TYPE_CLASS_TEXT,
+        maxLength: Int = 0,
+        digits: String = "",
+        onButtonClick: (EditText) -> Unit = {},
+    ): Pair<LinearLayout, EditText> {
+        val layout = LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+        val textView = TextView(context).apply {
+            this.text = name
+            setSingleLine()
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+        val editText = EditText(context).apply {
+            setText(text)
+            setHint(hint)
+            inputType = type
+            if (maxLength != 0)
+                filters = arrayOf(LengthFilter(maxLength))
+            if (digits.isNotEmpty())
+                keyListener = DigitsKeyListener.getInstance(digits)
+            layoutParams = LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply { weight = 1F }
+        }
+        val button = Button(context).apply {
+            this.text = buttonName
+            setOnClickListener { onButtonClick(editText) }
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+        if (buttonName.isEmpty())
+            button.visibility = View.GONE
+        layout.addView(textView)
+        layout.addView(editText)
+        layout.addView(button)
         return Pair(layout, editText)
     }
 

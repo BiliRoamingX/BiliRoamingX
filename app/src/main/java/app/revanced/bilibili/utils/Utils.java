@@ -10,6 +10,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.view.Surface;
+import android.view.WindowManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -165,5 +167,12 @@ public class Utils {
             bytes = in.read(buffer);
         }
         return bytesCopied;
+    }
+
+    @SuppressWarnings("deprecation")
+    public static boolean currentIsLandscape() {
+        WindowManager windowManager = context.getSystemService(WindowManager.class);
+        int orientation = windowManager.getDefaultDisplay().getOrientation();
+        return orientation == Surface.ROTATION_90 || orientation == Surface.ROTATION_270;
     }
 }

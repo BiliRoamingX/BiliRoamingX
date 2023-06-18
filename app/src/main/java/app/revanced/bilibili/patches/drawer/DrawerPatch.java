@@ -21,7 +21,7 @@ public class DrawerPatch {
 
     public static void onMainActivityCreate(MainActivityV2 activity) {
         if (!Settings.DRAWER.getBoolean()) return;
-        ViewGroup contentView = (ViewGroup) activity.findViewById(Window.ID_ANDROID_CONTENT);
+        ViewGroup contentView = activity.findViewById(Window.ID_ANDROID_CONTENT);
         View view = contentView.getChildAt(0);
         contentView.removeViewInLayout(view);
         drawerLayout = new DrawerLayoutEx(activity);

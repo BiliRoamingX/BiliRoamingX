@@ -1,7 +1,9 @@
 package app.revanced.bilibili.settings;
 
 import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static app.revanced.bilibili.settings.Settings.ValueType.BOOLEAN;
+import static app.revanced.bilibili.settings.Settings.ValueType.FLOAT;
 import static app.revanced.bilibili.settings.Settings.ValueType.INTEGER;
 import static app.revanced.bilibili.settings.Settings.ValueType.LONG;
 import static app.revanced.bilibili.settings.Settings.ValueType.STRING;
@@ -76,6 +78,18 @@ public enum Settings {
     BLOCK_VIDEO_COMMENT("block_video_comment", BOOLEAN, FALSE),
     BLOCK_COMMENT_GUIDE("block_comment_guide", BOOLEAN, FALSE),
     DISABLE_MAIN_PAGE_STORY("disable_main_page_story", BOOLEAN, FALSE, true),
+
+    SUBTITLE_AUTO_GENERATE("auto_generate_subtitle", BOOLEAN, FALSE),
+    SUBTITLE_ADD_CLOSE("subtitle_add_close", BOOLEAN, FALSE),
+    SUBTITLE_STYLE_SWITCH("custom_subtitle", BOOLEAN, TRUE),
+    SUBTITLE_REMOVE_BG("subtitle_remove_bg", BOOLEAN, TRUE),
+    SUBTITLE_BOLD_TEXT("subtitle_bold", BOOLEAN, TRUE),
+    SUBTITLE_FONT_SIZE_PORTRAIT("subtitle_font_size_portrait", INTEGER, 0),
+    SUBTITLE_FONT_SIZE_LANDSCAPE("subtitle_font_size_landscape", INTEGER, 0),
+    SUBTITLE_FILL_COLOR("subtitle_font_color2", STRING, "FFFFFFFF"),
+    SUBTITLE_STROKE_COLOR("subtitle_stroke_color", STRING, "FF000000"),
+    SUBTITLE_STROKE_WIDTH("subtitle_stroke_width", FLOAT, 5.0f),
+    SUBTITLE_OFFSET("subtitle_offset", INTEGER, 0),
 
     TEENAGER_MODE_DIALOG("teenagers_mode_dialog", BOOLEAN, FALSE),
     REPLACE_STORY_VIDEO("replace_story_video", BOOLEAN, FALSE),
