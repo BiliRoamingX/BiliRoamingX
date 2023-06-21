@@ -1,3 +1,45 @@
+# [0.111.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.111.0-dev.2...v0.111.0-dev.3) (2023-06-21)
+
+
+### Bug Fixes
+
+* **youtube/client-spoof:** use new visitor data to work around playback issues ([be9c948](https://github.com/revanced/revanced-integrations/commit/be9c948ce6135ec7fad4d7e7dc18be64e9dbb3eb))
+
+# [0.111.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.111.0-dev.1...v0.111.0-dev.2) (2023-06-18)
+
+
+### Bug Fixes
+
+* **youtube/hide-layout-components:** preserve gap when hiding expandable chips ([b47a214](https://github.com/revanced/revanced-integrations/commit/b47a214067031c099df990d4c83a1d96ab7b3c34))
+
+# [0.111.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.110.1-dev.3...v0.111.0-dev.1) (2023-06-18)
+
+
+### Features
+
+* **youtube/hide-layout-components:** separate hiding expandable chips and chapters ([80fb3a3](https://github.com/revanced/revanced-integrations/commit/80fb3a31dd4604b0d1d72c6033624d2d780746ea))
+
+## [0.110.1-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.110.1-dev.2...v0.110.1-dev.3) (2023-06-16)
+
+
+### Bug Fixes
+
+* **reddit/hide-ads:** only filter promoted links ([efc2b9b](https://github.com/revanced/revanced-integrations/commit/efc2b9b6a39de93d6cc1052dfcea457aeaf949b2))
+
+## [0.110.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.110.1-dev.1...v0.110.1-dev.2) (2023-06-14)
+
+
+### Bug Fixes
+
+* **youtube:** separate `hide-ads` to `hide-layout-components` patch ([bdce029](https://github.com/revanced/revanced-integrations/commit/bdce0298c404be6e5c3ae6854f3609d82ad76e28))
+
+## [0.110.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.110.0...v0.110.1-dev.1) (2023-06-14)
+
+
+### Bug Fixes
+
+* don't include all Litho patches, when not included ([9952581](https://github.com/revanced/revanced-integrations/commit/9952581a325b780f7dea074cc4ed138d7ac2758b))
+
 # [0.110.0](https://github.com/revanced/revanced-integrations/compare/v0.109.0...v0.110.0) (2023-06-12)
 
 
