@@ -1,3 +1,10 @@
+# [0.111.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.111.0-dev.2...v0.111.0-dev.3) (2023-06-21)
+
+
+### Bug Fixes
+
+* **youtube/client-spoof:** use new visitor data to work around playback issues ([be9c948](https://github.com/revanced/revanced-integrations/commit/be9c948ce6135ec7fad4d7e7dc18be64e9dbb3eb))
+
 # [0.111.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.111.0-dev.1...v0.111.0-dev.2) (2023-06-18)
 
 
