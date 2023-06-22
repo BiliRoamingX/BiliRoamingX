@@ -21,10 +21,15 @@
 #-renamesourcefileattribute SourceFile
 -dontobfuscate
 -dontoptimize
--keepattributes *  # https://www.guardsquare.com/manual/configuration/attributes
--keep class app.revanced.** {
-  *;
+#-keepattributes *  # https://www.guardsquare.com/manual/configuration/attributes
+-keepattributes RuntimeVisible*Annotations
+-assumenosideeffects class kotlin.jvm.internal.Intrinsics {
+    public static void check*(...);
+    public static void throw*(...);
 }
--keep class com.google.** {
-  *;
+-assumenosideeffects class java.util.Objects {
+    public static ** requireNonNull(...);
 }
+-keep class app.revanced.all.** { *; }
+-keep class app.revanced.bilibili.** { *; }
+-keep class **Ex
