@@ -1,6 +1,5 @@
 package app.revanced.bilibili.patches.okhttp;
 
-import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 
 import java.net.HttpURLConnection;
@@ -10,7 +9,6 @@ import app.revanced.bilibili.utils.LogHelper;
 import app.revanced.bilibili.utils.SubtitleHelper;
 import app.revanced.bilibili.utils.Utils;
 
-@Keep
 @SuppressWarnings("unused")
 public class OkHttpPatch {
     public static boolean shouldHook(String url, int code) {
