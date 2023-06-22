@@ -7,4 +7,8 @@ public class DmViewReq extends GeneratedMessageLite {
     protected Object dynamicMethod(MethodToInvoke method, Object arg0, Object arg1) {
         return null;
     }
+
+    public String getSpmid() {
+        return "";
+    }
 }

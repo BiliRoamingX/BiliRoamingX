@@ -5,6 +5,7 @@ package app.revanced.bilibili.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -74,3 +75,9 @@ inline fun String.toIntColor(error: Int = Color.BLACK): Int = try {
 } catch (_: IllegalArgumentException) {
     error
 }
+
+@SuppressLint("ApplySharedPref")
+inline fun SharedPreferences.edit(
+    commit: Boolean = false,
+    action: SharedPreferences.Editor.() -> Unit
+) = edit().apply(action).run { if (commit) commit() else apply() }

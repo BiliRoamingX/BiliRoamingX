@@ -68,6 +68,9 @@ import com.bapis.bilibili.app.view.v1.ViewReq;
 import com.bapis.bilibili.app.viewunite.v1.VideoGuideEx;
 import com.bapis.bilibili.community.service.dm.v1.DmViewReply;
 import com.bapis.bilibili.community.service.dm.v1.DmViewReplyEx;
+import com.bapis.bilibili.community.service.dm.v1.DmViewReq;
+import com.bapis.bilibili.community.service.dm.v1.SubtitleItem;
+import com.bapis.bilibili.community.service.dm.v1.VideoSubtitleEx;
 import com.bapis.bilibili.main.community.reply.v1.EmptyPage;
 import com.bapis.bilibili.main.community.reply.v1.EmptyPageEx;
 import com.bapis.bilibili.main.community.reply.v1.MainListReply;
@@ -96,6 +99,7 @@ import app.revanced.bilibili.patches.AutoLikePatch;
 import app.revanced.bilibili.patches.VideoQualityPatch;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.ArrayUtils;
+import app.revanced.bilibili.utils.Utils;
 
 @SuppressWarnings({"unused", "unchecked", "rawtypes"})
 public class MossPatch {
@@ -146,8 +150,9 @@ public class MossPatch {
                 VideoGuideEx.clearContractCard(videoGuide);
             }
         } else if (reply instanceof DmViewReply) {
+            DmViewReq dmViewReq = (DmViewReq) req;
+            DmViewReply dmViewReply = (DmViewReply) reply;
             if (Settings.REMOVE_CMD_DMS.getBoolean()) {
-                DmViewReply dmViewReply = (DmViewReply) reply;
                 DmViewReplyEx.clearActivityMeta(dmViewReply);
                 try {
                     DmViewReplyEx.clearCommand(dmViewReply);
@@ -155,6 +160,7 @@ public class MossPatch {
                 }
                 dmViewReply.unknownFields = UnknownFieldSetLite.getDefaultInstance();
             }
+            return addSubtitles(dmViewReq, dmViewReply);
         } else if (reply instanceof DynAllReply) {
             DynAllReply dynAllReply = (DynAllReply) reply;
             if (Settings.DYNAMIC_RM_TOPIC_OF_ALL.getBoolean())
@@ -579,5 +585,45 @@ public class MossPatch {
                     .build();
             EmptyPageEx.addTexts(emptyPage, text);
         }
+    }
+
+    static DmViewReply addSubtitles(DmViewReq dmViewReq, DmViewReply dmViewReply) {
+        if (!Settings.SUBTITLE_AUTO_GENERATE.getBoolean() && !Settings.SUBTITLE_ADD_CLOSE.getBoolean())
+            return dmViewReply;
+        if (dmViewReply == null) return null;
+        var extraSubtitles = new ArrayList<SubtitleItem>();
+        if (Settings.SUBTITLE_AUTO_GENERATE.getBoolean()) {
+            var subtitles = dmViewReply.getSubtitle().getSubtitlesList();
+            final SubtitleItem[] hantSub = {null};
+            var lanCodes = subtitles.stream().map(e -> {
+                if (e.getLan().equals("zh-Hant")) hantSub[0] = e;
+                return e.getLan();
+            }).collect(Collectors.toList());
+            if (lanCodes.contains("zh-Hant") && !lanCodes.contains("zh-CN")) {
+                var cnUrl = Uri.parse(hantSub[0].getSubtitleUrl()).buildUpon()
+                        .appendQueryParameter("zh_converter", "t2cn").build().toString();
+                var cnId = hantSub[0].getId() + 1;
+                var cnSub = SubtitleItem.newBuilder()
+                        .setLan("zh-CN")
+                        .setLanDoc("简中（生成）")
+                        .setLanDocBrief("简中")
+                        .setSubtitleUrl(cnUrl)
+                        .setId(cnId)
+                        .setIdStr(String.valueOf(cnId))
+                        .build();
+                extraSubtitles.add(cnSub);
+            }
+        }
+        if (Settings.SUBTITLE_ADD_CLOSE.getBoolean()
+                && dmViewReq.getSpmid().contains("pgc")
+                && (!dmViewReply.getSubtitle().getSubtitlesList().isEmpty() || !extraSubtitles.isEmpty())) {
+            var closeSub = SubtitleItem.newBuilder()
+                    .setLan("nodisplay")
+                    .setLanDoc(Utils.getString("Player_option_subtitle_lan_doc_nodisplay"))
+                    .build();
+            extraSubtitles.add(closeSub);
+        }
+        VideoSubtitleEx.addAllSubtitles(dmViewReply.getSubtitle(), extraSubtitles);
+        return dmViewReply;
     }
 }

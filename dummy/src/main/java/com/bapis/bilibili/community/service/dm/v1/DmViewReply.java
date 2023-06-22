@@ -19,4 +19,8 @@ public class DmViewReply extends GeneratedMessageLite {
      */
     static void access$8000(DmViewReply reply) {
     }
+
+    public VideoSubtitle getSubtitle() {
+        throw new UnsupportedOperationException("Stub");
+    }
 }

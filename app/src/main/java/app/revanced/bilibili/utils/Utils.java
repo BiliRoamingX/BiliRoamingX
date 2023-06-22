@@ -16,8 +16,10 @@ import android.view.WindowManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 public class Utils {
@@ -155,6 +157,10 @@ public class Utils {
 
     public static void async(Runnable runnable) {
         executor.execute(runnable);
+    }
+
+    public static <T> Future<T> submitTask(Callable<T> task) {
+        return executor.submit(task);
     }
 
     public static long copyStream(InputStream in, OutputStream out) throws IOException {
