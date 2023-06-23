@@ -1,3 +1,10 @@
+## [0.111.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.111.0...v0.111.1-dev.1) (2023-06-23)
+
+
+### Bug Fixes
+
+* **youtube/client-spoof:** update settings text for known side effects of spoof signature  ([#424](https://github.com/revanced/revanced-integrations/issues/424)) ([d7a3973](https://github.com/revanced/revanced-integrations/commit/d7a3973ef1e6c4443fc4d89f063bc6bf3446bec3))
+
 # [0.111.0](https://github.com/revanced/revanced-integrations/compare/v0.110.0...v0.111.0) (2023-06-21)
 
 
