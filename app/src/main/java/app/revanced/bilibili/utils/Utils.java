@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,7 +27,7 @@ public class Utils {
     @SuppressLint("StaticFieldLeak")
     public static Context context;
     private static String mobiApp = "";
-    public static Handler handler = new Handler(Looper.getMainLooper());
+    public static Handler mainHandler = new Handler(Looper.getMainLooper());
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public static Context getContext() {
@@ -47,6 +48,10 @@ public class Utils {
 
     public static String getString(String idName, Object... formatArgs) {
         return context.getString(getResId(idName, "string"), formatArgs);
+    }
+
+    public static String[] getStringArray(String idName) {
+        return context.getResources().getStringArray(getResId(idName, "array"));
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -148,10 +153,10 @@ public class Utils {
             if (isCurrentlyOnMainThread()) {
                 runnable.run();
             } else {
-                handler.post(runnable);
+                mainHandler.post(runnable);
             }
         } else {
-            handler.postDelayed(runnable, delayMills);
+            mainHandler.postDelayed(runnable, delayMills);
         }
     }
 
@@ -180,5 +185,20 @@ public class Utils {
         WindowManager windowManager = context.getSystemService(WindowManager.class);
         int orientation = windowManager.getDefaultDisplay().getOrientation();
         return orientation == Surface.ROTATION_90 || orientation == Surface.ROTATION_270;
+    }
+
+    // codes will filled by patcher
+    public static String signQuery(Map<String, String> params) {
+        return "";
+    }
+
+    // codes will filled by patcher
+    public static String getAppKey() {
+        return "";
+    }
+
+    // codes will filled by patcher
+    public static String getAccessKey() {
+        return "";
     }
 }

@@ -1,9 +1,12 @@
+@file:JvmName("Jsons")
+@file:Suppress("NOTHING_TO_INLINE")
+
 package app.revanced.bilibili.utils
 
 import org.json.JSONArray
 import org.json.JSONObject
 
-fun String?.toJSONObject() = JSONObject(this.orEmpty())
+inline fun String?.toJSONObject() = JSONObject(this.orEmpty())
 
 @Suppress("UNCHECKED_CAST")
 fun <T> JSONArray.asSequence() = (0 until length()).asSequence().map { get(it) as T }
@@ -11,4 +14,4 @@ fun <T> JSONArray.asSequence() = (0 until length()).asSequence().map { get(it) a
 operator fun JSONArray.iterator(): Iterator<JSONObject> =
     (0 until length()).asSequence().map { get(it) as JSONObject }.iterator()
 
-fun JSONArray?.orEmpty() = this ?: JSONArray()
+inline fun JSONArray?.orEmpty() = this ?: JSONArray()

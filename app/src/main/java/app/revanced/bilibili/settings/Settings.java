@@ -24,7 +24,7 @@ import app.revanced.bilibili.utils.Utils;
 
 
 public enum Settings {
-    DEBUG("debug", BOOLEAN, FALSE),
+    DEBUG("debug", BOOLEAN, TRUE),
     HALF_SCREEN_QUALITY("half_screen_quality", STRING, "0"),
     FULL_SCREEN_QUALITY("full_screen_quality", STRING, "0"),
     FORCE_OLD_PLAYER("force_old_player", BOOLEAN, FALSE, true),
@@ -103,6 +103,19 @@ public enum Settings {
     SAVE_COMMENT_IMAGE("save_comment_image", BOOLEAN, FALSE),
     COMMENT_COPY("comment_copy", BOOLEAN, FALSE),
     COMMENT_COPY_ENHANCE("comment_copy_enhance", BOOLEAN, FALSE),
+
+    UNLOCK_AREA_LIMIT("main_func", BOOLEAN, FALSE),
+    ALLOW_DOWNLOAD("allow_download", BOOLEAN, FALSE),
+    ALLOW_MINI_PLAY("allow_mini_play", BOOLEAN, FALSE),
+    TW_SERVER("tw_server", STRING, ""),
+    HK_SERVER("hk_server", STRING, ""),
+    CN_SERVER("cn_server", STRING, ""),
+    TH_SERVER("th_server", STRING, ""),
+    TW_SERVER_ACCESS_KEY("tw_server_accessKey", STRING, ""),
+    HK_SERVER_ACCESS_KEY("hk_server_accessKey", STRING, ""),
+    CN_SERVER_ACCESS_KEY("cn_server_accessKey", STRING, ""),
+    TH_SERVER_ACCESS_KEY("th_server_accessKey", STRING, ""),
+    UPOS_HOST("upos_host", STRING, ""),
 
     LOSSLESS_ENABLED("lossless_enabled", BOOLEAN, FALSE);
 

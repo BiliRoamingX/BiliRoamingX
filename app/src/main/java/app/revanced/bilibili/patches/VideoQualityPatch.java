@@ -5,20 +5,17 @@ import com.bapis.bilibili.playershared.VideoVod;
 import com.bapis.bilibili.playershared.VideoVodEx;
 
 import app.revanced.bilibili.settings.Settings;
-import app.revanced.bilibili.utils.LogHelper;
+import app.revanced.bilibili.utils.Constants;
 
 public class VideoQualityPatch {
-    public static final int MAX_FNVAL = 16 | 64 | 128 | 256 | 512 | 1024 | 2048;
 
     public static int halfScreenQuality() {
         String qualityStr = Settings.HALF_SCREEN_QUALITY.getString();
-        LogHelper.error(() -> "kofua, halfScreenQuality: " + qualityStr);
         return Integer.parseInt(qualityStr);
     }
 
     public static int fullScreenQuality() {
         String qualityStr = Settings.FULL_SCREEN_QUALITY.getString();
-        LogHelper.error(() -> "kofua, fullScreenQuality: " + qualityStr);
         return Integer.parseInt(qualityStr);
     }
 
@@ -40,7 +37,7 @@ public class VideoQualityPatch {
         int halfScreenQuality = halfScreenQuality();
         int fulledScreenQuality = fullScreenQuality();
         if (halfScreenQuality != 0 || fulledScreenQuality != 0) {
-            com.bapis.bilibili.pgc.gateway.player.v1.PlayViewReqEx.setFnval(playViewReq, MAX_FNVAL);
+            com.bapis.bilibili.pgc.gateway.player.v1.PlayViewReqEx.setFnval(playViewReq, Constants.MAX_FNVAL);
             com.bapis.bilibili.pgc.gateway.player.v1.PlayViewReqEx.setFourk(playViewReq, true);
         }
     }
@@ -54,7 +51,7 @@ public class VideoQualityPatch {
         int halfScreenQuality = halfScreenQuality();
         int fulledScreenQuality = fullScreenQuality();
         if (halfScreenQuality != 0 || fulledScreenQuality != 0) {
-            com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReqEx.setFnval(playViewReq, MAX_FNVAL);
+            com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReqEx.setFnval(playViewReq, Constants.MAX_FNVAL);
             com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReqEx.setFourk(playViewReq, true);
         }
     }
@@ -68,7 +65,7 @@ public class VideoQualityPatch {
         int halfScreenQuality = halfScreenQuality();
         int fulledScreenQuality = fullScreenQuality();
         if (halfScreenQuality != 0 || fulledScreenQuality != 0) {
-            com.bapis.bilibili.app.playurl.v1.PlayViewReqEx.setFnval(playViewReq, MAX_FNVAL);
+            com.bapis.bilibili.app.playurl.v1.PlayViewReqEx.setFnval(playViewReq, Constants.MAX_FNVAL);
             com.bapis.bilibili.app.playurl.v1.PlayViewReqEx.setFourk(playViewReq, true);
         }
     }
@@ -83,7 +80,7 @@ public class VideoQualityPatch {
         int halfScreenQuality = halfScreenQuality();
         int fulledScreenQuality = fullScreenQuality();
         if (halfScreenQuality != 0 || fulledScreenQuality != 0) {
-            VideoVodEx.setFnval(videoVod, MAX_FNVAL);
+            VideoVodEx.setFnval(videoVod, Constants.MAX_FNVAL);
             VideoVodEx.setFourk(videoVod, true);
         }
     }
@@ -93,7 +90,7 @@ public class VideoQualityPatch {
      */
     public static int getMatchedHalfScreenQuality() {
         int halfScreenQuality = halfScreenQuality();
-        if (halfScreenQuality != 1) //not follow fullscreen quality
+        if (halfScreenQuality != 1) // not follow fullscreen quality
             return halfScreenQuality;
         return defaultQn();
     }

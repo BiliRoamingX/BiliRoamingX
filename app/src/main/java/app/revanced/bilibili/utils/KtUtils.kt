@@ -12,6 +12,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
+import androidx.preference.Preference
+import org.json.JSONObject
+import java.io.InputStream
+import java.lang.reflect.Proxy
+import java.net.URL
+import java.util.TreeMap
+import java.util.concurrent.Future
+import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
 @get:JvmName("sp2px")
@@ -81,3 +89,118 @@ inline fun SharedPreferences.edit(
     commit: Boolean = false,
     action: SharedPreferences.Editor.() -> Unit
 ) = edit().apply(action).run { if (commit) commit() else apply() }
+
+fun getStreamContent(input: InputStream) = try {
+    input.bufferedReader().use { it.readText() }
+} catch (e: Throwable) {
+    LogHelper.error({ "get stream content failed" }, e)
+    null
+}
+
+fun fetchJson(url: String) = try {
+    JSONObject(URL(url).readText())
+} catch (_: Throwable) {
+    null
+}
+
+@JvmInline
+value class Area(val value: String) {
+    override fun toString() = value
+
+    companion object {
+        @JvmStatic
+        val CN = Area("cn")
+
+        @JvmStatic
+        val HK = Area("hk")
+
+        @JvmStatic
+        val TW = Area("tw")
+
+        @JvmStatic
+        val TH = Area("th")
+
+        @JvmStatic
+        val GLOBAl = Area("global")
+
+        fun of(value: String?) = when (value) {
+            CN.value -> CN
+            HK.value -> HK
+            TW.value -> TW
+            TH.value -> TH
+            GLOBAl.value -> GLOBAl
+            else -> null
+        }
+    }
+}
+
+val countryTask: Future<Area> by lazy {
+    Utils.submitTask {
+        fun JSONObject.optStringFix(name: String, fallback: String = "") =
+            if (isNull(name)) fallback else optString(name, fallback)
+
+        when (arrayOf(Constants.ZONE_URL, Constants.INFO_URL).firstNotNullOfOrNull { url ->
+            fetchJson(url)?.optJSONObject("data")?.optStringFix("country")
+                .let { if (it.isNullOrEmpty()) null else it }
+        }) {
+            "中国" -> Area.CN
+            "香港", "澳门" -> Area.HK
+            "台湾" -> Area.TW
+            else -> Area.GLOBAl
+        }.also { LogHelper.debug { "当前地区: $it" } }
+    }
+}
+
+val country: Area?
+    get() = try {
+        countryTask.get(5L, TimeUnit.SECONDS)
+    } catch (_: Throwable) {
+        null
+    }
+
+@Suppress("DEPRECATION")
+val versionCode by lazy {
+    Utils.getContext().packageManager.getPackageInfo(Utils.getContext().packageName, 0).versionCode
+}
+
+inline fun <T, R> T.runCatchingOrNull(block: T.() -> R?) = try {
+    block()
+} catch (e: Throwable) {
+    null
+}
+
+fun Preference.onClick(onClick: (Preference) -> Boolean) {
+    val clickListenerField = Reflex.findFieldIfExists(Preference::class.java, "mOnClickListener")
+        ?: return
+    val proxy = Proxy.newProxyInstance(
+        javaClass.classLoader,
+        arrayOf(clickListenerField.type)
+    ) { _, _, args ->
+        val preference = args[0] as Preference
+        onClick(preference)
+    }
+    clickListenerField.set(this, proxy)
+}
+
+fun signQuery(query: String?, extraMap: Map<String, String> = emptyMap()): String? {
+    query ?: return null
+    val queryMap = query.split('&')
+        .map { it.split('=', limit = 2) }
+        .filter { it.size == 2 }
+        .associate { Pair(it[0], it[1]) }
+    return signQuery(queryMap, extraMap)
+}
+
+fun signQuery(query: Map<String, String>, extraMap: Map<String, String> = emptyMap()): String {
+    val queryMap = TreeMap<String, String>()
+    queryMap.putAll(query)
+    queryMap["appkey"] = Utils.getAppKey()
+    queryMap["build"] = versionCode.toString()
+    queryMap["device"] = "android"
+    queryMap["mobi_app"] = Utils.getMobiApp()
+    queryMap["platform"] = "android"
+    queryMap.putAll(extraMap)
+    queryMap.remove("ts")
+    queryMap.remove("sign")
+    return Utils.signQuery(queryMap)
+}

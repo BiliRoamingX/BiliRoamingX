@@ -15,7 +15,7 @@ public class BLRoutePatch {
                         .build();
             }
         }
-        LogHelper.error(() -> "kofua, route uri: " + uri);
+        LogHelper.debug(() -> "kofua, route uri: " + uri);
         return uri;
     }
 }

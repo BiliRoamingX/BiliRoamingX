@@ -99,6 +99,7 @@ import app.revanced.bilibili.patches.AutoLikePatch;
 import app.revanced.bilibili.patches.VideoQualityPatch;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.ArrayUtils;
+import app.revanced.bilibili.utils.Constants;
 import app.revanced.bilibili.utils.Utils;
 
 @SuppressWarnings({"unused", "unchecked", "rawtypes"})
@@ -126,11 +127,15 @@ public class MossPatch {
         } else if (req instanceof com.bapis.bilibili.pgc.gateway.player.v1.PlayViewReq) {
             VideoQualityPatch.unlockLimit((com.bapis.bilibili.pgc.gateway.player.v1.PlayViewReq) req);
         } else if (req instanceof com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq) {
+            com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq playViewReq = (com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq) req;
             VideoQualityPatch.unlockLimit((com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq) req);
+            BangumiPlayUrlHook.hookPlayViewPGCBefore(playViewReq);
         } else if (req instanceof com.bapis.bilibili.app.playurl.v1.PlayViewReq) {
             VideoQualityPatch.unlockLimit((com.bapis.bilibili.app.playurl.v1.PlayViewReq) req);
         } else if (req instanceof PlayViewUniteReq) {
-            VideoQualityPatch.unlockLimit((PlayViewUniteReq) req);
+            PlayViewUniteReq playViewUniteReq = (PlayViewUniteReq) req;
+            VideoQualityPatch.unlockLimit(playViewUniteReq);
+            BangumiPlayUrlHook.hookPlayViewUniteBefore(playViewUniteReq);
         }
         return null;
     }
@@ -197,6 +202,7 @@ public class MossPatch {
                 }
             }
         } else if (reply instanceof PlayViewUniteReply) {
+            PlayViewUniteReq playReq = (PlayViewUniteReq) req;
             PlayViewUniteReply playReply = (PlayViewUniteReply) reply;
             if (Settings.REMEMBER_LOSSLESS_SETTING.getBoolean()) {
                 playReply.getPlayDeviceConf().getDeviceConfsMap().forEach((key, deviceConf) -> {
@@ -214,6 +220,7 @@ public class MossPatch {
                 for (int key : new int[]{2, 9, 23, 36})
                     arcConfs.put(key, supportedConf);
             }
+            return BangumiPlayUrlHook.hookPlayViewUniteAfter(playReq, playReply, error);
         } else if (reply instanceof ViewReply) {
             ViewReply viewReply = (ViewReply) reply;
             long aid = viewReply.getArc().getAid();
@@ -231,6 +238,10 @@ public class MossPatch {
                 PlayURLResp playURLResp = (PlayURLResp) reply;
                 return reconstructPlayUrlResponse(playURLReq, playURLResp);
             }
+        } else if (reply instanceof com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReply) {
+            com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq playReq = (com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq) req;
+            com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReply playReply = (com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReply) reply;
+            return BangumiPlayUrlHook.hookPlayViewPGCAfter(playReq, playReply, error);
         }
         if (error != null) {
             throw error;
@@ -431,12 +442,12 @@ public class MossPatch {
         if (needPartItems.isEmpty())
             return;
         var playerArgs = PlayerArgs.newBuilder()
-                .setFnval(VideoQualityPatch.MAX_FNVAL)
+                .setFnval(Constants.MAX_FNVAL)
                 .setForceHost(2)
                 .setQn(64)
                 .build();
         var commViewReq = ViewReq.newBuilder()
-                .setFnval(VideoQualityPatch.MAX_FNVAL)
+                .setFnval(Constants.MAX_FNVAL)
                 .setForceHost(2)
                 .setFourk(1)
                 .setPlayerArgs(playerArgs)
