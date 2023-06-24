@@ -32,4 +32,4 @@
 }
 -keep class app.revanced.all.** { *; }
 -keep class app.revanced.bilibili.** { *; }
--keep class **Ex
+-keep class **Ex { *; }

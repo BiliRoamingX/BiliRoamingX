@@ -2,6 +2,7 @@ package app.revanced.bilibili.utils
 
 import android.net.Uri
 import app.revanced.bilibili.settings.Settings
+import com.bapis.bilibili.app.playurl.v1.CodeType
 import com.bapis.bilibili.app.playurl.v1.PlayURLMoss
 import com.bapis.bilibili.app.playurl.v1.PlayViewReq
 import java.util.concurrent.Future
@@ -46,13 +47,15 @@ object UposReplacer {
     val baseUposList: Future<List<String>> by lazy {
         Utils.submitTask {
             val bCacheRegex = Regex("""cn-.*\.bilivideo""")
+            // https://b23.tv/BV1XX4y1k7U2 FOREVER1
             val playViewReq = PlayViewReq.newBuilder().apply {
-                setAid(355749246L)
-                setCid(1115447032L)
+                setAid(354638380L)
+                setCid(1085240781L)
                 setQn(Constants.MAX_QN.toLong())
                 setFnval(Constants.MAX_FNVAL)
                 setFourk(true)
                 setForceHost(2)
+                setPreferCodecType(CodeType.CODE265)
             }.build()
             val reply = PlayURLMoss().playView(playViewReq)
             val officialList = reply?.videoInfo?.run {

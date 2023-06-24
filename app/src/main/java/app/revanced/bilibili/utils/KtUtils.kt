@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.preference.Preference
 import org.json.JSONObject
+import java.io.File
 import java.io.InputStream
 import java.lang.reflect.Proxy
 import java.net.URL
@@ -204,3 +205,7 @@ fun signQuery(query: Map<String, String>, extraMap: Map<String, String> = emptyM
     queryMap.remove("sign")
     return Utils.signQuery(queryMap)
 }
+
+val logFile by lazy { File(Utils.getContext().externalCacheDir, "log.txt") }
+
+val oldLogFile by lazy { File(Utils.getContext().externalCacheDir, "old_log.txt") }

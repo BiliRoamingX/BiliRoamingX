@@ -2,11 +2,14 @@ package app.revanced.bilibili.utils;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.ActivityThread;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -200,5 +203,21 @@ public class Utils {
     // codes will filled by patcher
     public static String getAccessKey() {
         return "";
+    }
+
+    public static String getCurrentProcessName() {
+        String name = "";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            name = Application.getProcessName();
+        } else try {
+            name = ActivityThread.currentProcessName();
+        } catch (Throwable ignored) {
+        }
+        return name;
+    }
+
+    public static boolean isInMainProcess() {
+        String name = getCurrentProcessName();
+        return !name.isEmpty() && !name.contains(":");
     }
 }

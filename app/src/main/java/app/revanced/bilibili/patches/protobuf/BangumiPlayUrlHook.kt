@@ -281,6 +281,7 @@ object BangumiPlayUrlHook {
         }.build()
     }.onFailure { LogHelper.error({ "Failed to reconstruct response" }, it) }
         .getOrDefault(response)
+        .also { LogHelper.debug { "playurl reconstruct response: $it" } }
 
     private fun reconstructResponseUnite(
         req: PlayViewUniteReq,
@@ -317,6 +318,7 @@ object BangumiPlayUrlHook {
         }.build()
     }.onFailure { LogHelper.error({ "Failed to reconstruct unite response" }, it) }
         .getOrDefault(response)
+        .also { LogHelper.debug { "playurl reconstruct unite response: $it" } }
 
     private fun JSONObject.toVideoInfo(
         preferCodec: Int, isDownload: Boolean

@@ -82,6 +82,7 @@ import com.bapis.bilibili.playershared.PlayArcConfEx;
 import com.bilibili.lib.moss.api.MossException;
 import com.bilibili.lib.moss.api.MossResponseHandler;
 import com.google.protobuf.GeneratedMessageLite;
+import com.google.protobuf.GeneratedMessageLiteEx;
 import com.google.protobuf.UnknownFieldSetLite;
 
 import java.util.ArrayList;
@@ -100,6 +101,7 @@ import app.revanced.bilibili.patches.VideoQualityPatch;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.ArrayUtils;
 import app.revanced.bilibili.utils.Constants;
+import app.revanced.bilibili.utils.MossDebugPrinter;
 import app.revanced.bilibili.utils.Utils;
 
 @SuppressWarnings({"unused", "unchecked", "rawtypes"})
@@ -146,6 +148,7 @@ public class MossPatch {
     @Nullable
     public static <ReqT extends GeneratedMessageLite<?, ?>, RespT extends GeneratedMessageLite<?, ?>>
     GeneratedMessageLite<?, ?> hookBlockingAfter(@NonNull GeneratedMessageLite<?, ?> req, @Nullable GeneratedMessageLite<?, ?> reply, MossException error) throws MossException {
+        MossDebugPrinter.printBlocking(req, reply);
         if (reply instanceof com.bapis.bilibili.app.view.v1.ViewProgressReply) {
             if (Settings.REMOVE_CMD_DMS.getBoolean())
                 com.bapis.bilibili.app.view.v1.ViewProgressReplyEx.setVideoGuide((ViewProgressReply) reply, VideoGuide.newBuilder().build());
@@ -163,7 +166,7 @@ public class MossPatch {
                     DmViewReplyEx.clearCommand(dmViewReply);
                 } catch (Throwable ignored) {
                 }
-                dmViewReply.unknownFields = UnknownFieldSetLite.getDefaultInstance();
+                GeneratedMessageLiteEx.setUnknownFields(dmViewReply, UnknownFieldSetLite.getDefaultInstance());
             }
             return addSubtitles(dmViewReq, dmViewReply);
         } else if (reply instanceof DynAllReply) {
@@ -259,6 +262,7 @@ public class MossPatch {
     public static <ReqT extends GeneratedMessageLite<?, ?>, RespT extends GeneratedMessageLite<?, ?>>
     Object hookAsyncBefore(@NonNull GeneratedMessageLite<?, ?> req, @Nullable MossResponseHandler handler) {
         if (handler == null) return null;
+        handler = MossDebugPrinter.printAsync(req, handler);
         if (req instanceof PlayConfReq) {
             if (Settings.REMEMBER_LOSSLESS_SETTING.getBoolean())
                 return MossResponseHandlerProxy.<PlayConfReply>get(handler, v -> {
@@ -302,7 +306,10 @@ public class MossPatch {
                 });
             }
         }
-        return null;
+        if (Settings.DEBUG.getBoolean())
+            return handler;
+        else
+            return null;
     }
 
     private static void purifyDynTabs(DynTabReply dynTabReply) {
