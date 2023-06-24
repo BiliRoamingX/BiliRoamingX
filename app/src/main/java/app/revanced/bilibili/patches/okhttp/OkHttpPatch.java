@@ -1,12 +1,15 @@
 package app.revanced.bilibili.patches.okhttp;
 
 import android.annotation.SuppressLint;
+import android.net.Uri;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
 import java.net.HttpURLConnection;
 import java.util.concurrent.TimeUnit;
 
+import app.revanced.bilibili.api.BiliRoamingApi;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.LogHelper;
 import app.revanced.bilibili.utils.SubtitleHelper;
@@ -18,6 +21,8 @@ public class OkHttpPatch {
         if (shouldConvertSubtitle(url, code)) {
             return true;
         } else if (shouldUnlockBangumi(url, code)) {
+            return true;
+        } else if (shouldFixSpace(url, code)) {
             return true;
         }
         return false;
@@ -32,6 +37,8 @@ public class OkHttpPatch {
             return convertSubtitle(response);
         } else if (shouldUnlockBangumi(url, code)) {
             return BangumiSeasonHook.unlockBangumi(response);
+        } else if (shouldFixSpace(url, code)) {
+            return fixSpace(url, response);
         }
         return response;
     }
@@ -43,6 +50,12 @@ public class OkHttpPatch {
     private static boolean shouldUnlockBangumi(String url, int code) {
         return Settings.UNLOCK_AREA_LIMIT.getBoolean()
                 && url.startsWith("https://api.bilibili.com/pgc/view/v2/app/season")
+                && code == HttpURLConnection.HTTP_OK;
+    }
+
+    private static boolean shouldFixSpace(String url, int code) {
+        return Settings.FIX_SPACE.getBoolean()
+                && url.startsWith("https://app.bilibili.com/x/v2/space?")
                 && code == HttpURLConnection.HTTP_OK;
     }
 
@@ -78,5 +91,18 @@ public class OkHttpPatch {
         } catch (Throwable ignored) {
         }
         return newResponse;
+    }
+
+    static String fixSpace(String url, String response) {
+        if (response.contains("\"code\":0"))
+            return response;
+        var vmid = Uri.parse(url).getQueryParameter("vmid");
+        if (TextUtils.isEmpty(vmid))
+            return response;
+        var mid = Long.parseLong(vmid);
+        var data = BiliRoamingApi.getSpace(mid);
+        if (data == null)
+            return response;
+        return "{\"code\":0,\"data\":" + data + "}";
     }
 }
