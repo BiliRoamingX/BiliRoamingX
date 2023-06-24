@@ -11,6 +11,7 @@ import static app.revanced.bilibili.settings.Settings.ValueType.STRING_SET;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
@@ -18,6 +19,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import app.revanced.bilibili.utils.Area;
 import app.revanced.bilibili.utils.Constants;
 import app.revanced.bilibili.utils.LogHelper;
 import app.revanced.bilibili.utils.Utils;
@@ -114,6 +116,12 @@ public enum Settings {
     FIX_SPACE("fix_space", BOOLEAN, TRUE),
     CUSTOMIZE_SPACE("customize_space", STRING_SET, Collections.EMPTY_SET),
 
+    // 搜索页
+    PURIFY_SEARCH("purify_search", BOOLEAN, FALSE),
+    FILTER_SEARCH_TYPE("filter_search_type", STRING_SET, Collections.EMPTY_SET),
+    SEARCH_BANGUMI("search_area_bangumi", BOOLEAN, FALSE),
+    SEARCH_MOVIE("search_area_movie", BOOLEAN, FALSE),
+
     // 字幕
     SUBTITLE_AUTO_GENERATE("auto_generate_subtitle", BOOLEAN, FALSE),
     SUBTITLE_ADD_CLOSE("subtitle_add_close", BOOLEAN, FALSE),
@@ -134,7 +142,6 @@ public enum Settings {
 
     // 去广告杂项
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),
-    PURIFY_SEARCH("purify_search", BOOLEAN, FALSE),
 
     // 非配置项
     LOSSLESS_ENABLED("lossless_enabled", BOOLEAN, FALSE);
@@ -144,6 +151,8 @@ public enum Settings {
 
     public static final SharedPreferences prefs;
     public static final SharedPreferences cachePrefs;
+
+    private static final Set<SharedPreferences.OnSharedPreferenceChangeListener> preferenceChangeListener = new HashSet<>();
 
     @NonNull
     public final String key;
@@ -308,6 +317,7 @@ public enum Settings {
     }
 
     public static void onPreferenceChanged(SharedPreferences preferences, String key) {
+        LogHelper.debug(() -> "onPreferenceChanged, key: " + key);
         for (Settings settings : values()) {
             if (settings.key.equals(key)) {
                 switch (settings.valueType) {
@@ -341,6 +351,58 @@ public enum Settings {
                 break;
             }
         }
+        for (SharedPreferences.OnSharedPreferenceChangeListener listener : preferenceChangeListener)
+            listener.onSharedPreferenceChanged(preferences, key);
+    }
+
+    public static void registerPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        preferenceChangeListener.add(listener);
+    }
+
+    public static void unregisterPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        preferenceChangeListener.remove(listener);
+    }
+
+    public static String getServerByArea(String area) {
+        if (TextUtils.isEmpty(area))
+            return "";
+        if (Area.CN.value.equals(area)) {
+            return CN_SERVER.getString();
+        } else if (Area.HK.value.equals(area)) {
+            return HK_SERVER.getString();
+        } else if (Area.TW.value.equals(area)) {
+            return TW_SERVER.getString();
+        } else if (Area.TH.value.equals(area)) {
+            return TH_SERVER.getString();
+        } else {
+            return "";
+        }
+    }
+
+    public static String getAccessKeyByArea(String area) {
+        if (TextUtils.isEmpty(area))
+            return "";
+        if (Area.CN.value.equals(area)) {
+            return CN_SERVER_ACCESS_KEY.getString();
+        } else if (Area.HK.value.equals(area)) {
+            return HK_SERVER_ACCESS_KEY.getString();
+        } else if (Area.TW.value.equals(area)) {
+            return TW_SERVER_ACCESS_KEY.getString();
+        } else if (Area.TH.value.equals(area)) {
+            return TH_SERVER_ACCESS_KEY.getString();
+        } else {
+            return "";
+        }
+    }
+
+    public static boolean getExtraSearchByType(String type) {
+        if (TextUtils.isEmpty(type))
+            return false;
+        if ("bangumi".equals(type))
+            return SEARCH_BANGUMI.getBoolean();
+        if ("movie".equals(type))
+            return Settings.SEARCH_MOVIE.getBoolean();
+        return false;
     }
 
     public enum ValueType {

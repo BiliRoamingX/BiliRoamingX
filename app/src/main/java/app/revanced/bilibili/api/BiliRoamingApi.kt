@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicReference
 import java.util.zip.GZIPInputStream
 import java.util.zip.InflaterInputStream
 
-class CustomServerException(val errors: Map<String, String>) : Throwable() {
+class CustomServerException(private val errors: Map<String, String>) : Throwable() {
     override val message: String
         get() = errors.asSequence().joinToString("\n") { "${it.key}: ${it.value}" }.trim()
 }
@@ -33,19 +33,14 @@ object BiliRoamingApi {
     private const val BILI_SEASON_URL = "api.bilibili.com/pgc/view/web/season"
     private const val BILI_CARD_URL = "https://account.bilibili.com/api/member/getCardByMid"
     private const val PATH_PLAYURL = "/pgc/player/api/playurl"
+    private const val BILI_SEARCH_URL = "/x/v2/search/type"
+
     private const val THAILAND_PATH_PLAYURL = "/intl/gateway/v2/ogv/playurl"
+    private const val THAILAND_PATH_SEARCH = "/intl/gateway/v2/app/search/type"
 
     private val twRegex = Regex("僅.*台")
     private val hkRegex = Regex("僅.*港")
     private val thRegex = Regex("[仅|僅].*[东南亚|其他]")
-
-    private fun getCustomizeAccessKey(area: Area): String = when (area) {
-        Area.TW -> Settings.TW_SERVER_ACCESS_KEY.string
-        Area.HK -> Settings.HK_SERVER_ACCESS_KEY.string
-        Area.TH -> Settings.TH_SERVER_ACCESS_KEY.string
-        Area.CN -> Settings.CN_SERVER_ACCESS_KEY.string
-        else -> ""
-    }
 
     @JvmStatic
     fun getPlayUrl(queryString: String?, priorityArea: Array<Area>? = null): String? {
@@ -65,7 +60,8 @@ object BiliRoamingApi {
                 Area.TH to thUrl,
                 Area.CN to cnUrl
             ).filter { (k, v) ->
-                (getCustomizeAccessKey(k).isNotEmpty() || k != country) && v.isNotEmpty()
+                (Settings.getAccessKeyByArea(k.value)
+                    .isNotEmpty() || k != country) && v.isNotEmpty()
             }.let { hostList.putAll(it) }
 
         val epIdStartIdx = queryString.indexOf("ep_id=")
@@ -100,7 +96,8 @@ object BiliRoamingApi {
         val errors = mutableMapOf<String, String>()
 
         for ((area, host) in hostList.toList().asReversed()) {
-            val accessKey = getCustomizeAccessKey(area).ifEmpty { Utils.getAccessKey() }
+            val accessKey = Settings.getAccessKeyByArea(area.value)
+                .ifEmpty { Utils.getAccessKey() }
             val extraMap = if (area == Area.TH) mapOf(
                 "area" to area.value,
                 "appkey" to "7d089525d3611b1c",
@@ -141,6 +138,55 @@ object BiliRoamingApi {
     }
 
     @JvmStatic
+    fun getAreaSearchBangumi(query: Map<String, String>, area: String, type: String): String? {
+        if (area == "th")
+            return getThailandSearchBangumi(query, type)
+        val hostUrl = Settings.getServerByArea(area).ifEmpty { return null }
+        val uri = Uri.Builder()
+            .scheme("https")
+            .encodedAuthority(hostUrl + BILI_SEARCH_URL)
+            .encodedQuery(
+                signQuery(
+                    query, mapOf(
+                        "type" to type,
+                        "build" to "6400000",
+                        "area" to area,
+                    )
+                )
+            )
+            .toString()
+        return getContent(uri)
+    }
+
+    @JvmStatic
+    fun getThailandSearchBangumi(query: Map<String, String>, type: String): String? {
+        val thUrl = Settings.TH_SERVER.string.ifEmpty { return null }
+        val uri = Uri.Builder()
+            .scheme("https")
+            .encodedAuthority(thUrl + THAILAND_PATH_SEARCH)
+            .encodedQuery(
+                signQuery(
+                    query, mapOf(
+                        "type" to type,
+                        "appkey" to "7d089525d3611b1c",
+                        "build" to "1001310",
+                        "mobi_app" to "bstar_a",
+                        "platform" to "android",
+                        "s_locale" to "zh_SG",
+                        "c_locale" to "zh_SG",
+                        "sim_code" to "52004",
+                        "lang" to "hans",
+                    )
+                )
+            )
+            .toString()
+        return getContent(uri)?.replace(
+            "bstar://bangumi/season/",
+            "https://bangumi.bilibili.com/anime/"
+        )
+    }
+
+    @JvmStatic
     fun getSpace(mid: Long): String? {
         val content = getContent("$BILI_CARD_URL?mid=$mid")
             ?.toJSONObject() ?: return null
@@ -167,7 +213,7 @@ object BiliRoamingApi {
         }"},"vip":{"vipType":0,"vipDueDate":0,"dueRemark":"","accessStatus":0,"vipStatus":0,"vipStatusWarn":"","themeType":0,"label":{"path":"","text":"","label_theme":"","text_color":"","bg_style":0,"bg_color":"","border_color":""}},"silence":0,"end_time":0,"silence_url":"","likes":{"like_num":0,"skr_tip":"该页面由哔哩漫游修复"},"pr_info":{},"relation":{"status":1},"is_deleted":0,"honours":{"colour":{"dark":"#CE8620","normal":"#F0900B"},"tags":null},"profession":{}},"images":{"imgUrl":"https://i0.hdslb.com/bfs/album/16b6731618d911060e26f8fc95684c26bddc897c.jpg","night_imgurl":"https://i0.hdslb.com/bfs/album/ca79ebb2ebeee86c5634234c688b410661ea9623.png","has_garb":true,"goods_available":true},"live":{"roomStatus":0,"roundStatus":0,"liveStatus":0,"url":"","title":"","cover":"","online":0,"roomid":0,"broadcast_type":0,"online_hidden":0,"link":""},"archive":{"order":[{"title":"最新发布","value":"pubdate"},{"title":"最多播放","value":"click"}],"count":9999,"item":[]},"series":{"item":[]},"play_game":{"count":0,"item":[]},"article":{"count":0,"item":[],"lists_count":0,"lists":[]},"season":{"count":0,"item":[]},"coin_archive":{"count":0,"item":[]},"like_archive":{"count":0,"item":[]},"audios":{"count":0,"item":[]},"favourite2":{"count":0,"item":[]},"comic":{"count":0,"item":[]},"ugc_season":{"count":0,"item":[]},"cheese":{"count":0,"item":[]},"fans_effect":{},"tab2":[{"title":"动态","param":"dynamic"},{"title":"投稿","param":"contribute","items":[{"title":"视频","param":"video"}]}]}"""
     }
 
-    fun fixThailandPlayurl(result: String): String {
+    private fun fixThailandPlayurl(result: String): String {
         val input = JSONObject(result)
         val videoInfo = result.toJSONObject().optJSONObject("data")?.optJSONObject("video_info")
         val streamList = videoInfo?.optJSONArray("stream_list")

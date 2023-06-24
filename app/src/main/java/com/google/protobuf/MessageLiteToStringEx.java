@@ -264,7 +264,10 @@ final class MessageLiteToStringEx {
         buffer.append(pascalCaseToSnakeCase(name));
 
         if (object instanceof String) {
-            buffer.append(": \"").append((String) object).append('"');
+            String string = (String) object;
+            if ((string.startsWith("bilibili://") || string.startsWith("http")) && string.length() >= 256)
+                string = string.substring(0, 256);
+            buffer.append(": \"").append(string).append('"');
         } else if (object instanceof ByteString) {
             ByteString bytes = (ByteString) object;
             buffer.append(": \"");

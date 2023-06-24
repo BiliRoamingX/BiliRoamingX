@@ -79,6 +79,9 @@ import com.bapis.bilibili.main.community.reply.v1.SubjectControl;
 import com.bapis.bilibili.main.community.reply.v1.SubjectControlEx;
 import com.bapis.bilibili.main.community.reply.v1.TextStyle;
 import com.bapis.bilibili.playershared.PlayArcConfEx;
+import com.bapis.bilibili.polymer.app.search.v1.SearchAllRequest;
+import com.bapis.bilibili.polymer.app.search.v1.SearchAllResponse;
+import com.bapis.bilibili.polymer.app.search.v1.SearchByTypeRequest;
 import com.bilibili.lib.moss.api.MossException;
 import com.bilibili.lib.moss.api.MossResponseHandler;
 import com.google.protobuf.GeneratedMessageLite;
@@ -98,6 +101,7 @@ import app.revanced.bilibili.api.MossResponseHandlerProxy;
 import app.revanced.bilibili.meta.HookFlags;
 import app.revanced.bilibili.patches.AutoLikePatch;
 import app.revanced.bilibili.patches.VideoQualityPatch;
+import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.ArrayUtils;
 import app.revanced.bilibili.utils.Constants;
@@ -305,6 +309,20 @@ public class MossPatch {
                     return v;
                 });
             }
+        } else if (req instanceof SearchAllRequest) {
+            if (Settings.SEARCH_BANGUMI.getBoolean()
+                    || Settings.SEARCH_MOVIE.getBoolean()
+                    || !Settings.FILTER_SEARCH_TYPE.getStringSet().isEmpty()) {
+                return MossResponseHandlerProxy.<SearchAllResponse>get(handler, v -> {
+                    if (v != null)
+                        BangumiSeasonHook.searchAllResponseHook(v);
+                    return v;
+                });
+            }
+        } else if (req instanceof SearchByTypeRequest) {
+            SearchByTypeRequest searchByTypeRequest = (SearchByTypeRequest) req;
+            if (BangumiSeasonHook.handlerExtraSearch(searchByTypeRequest, handler))
+                return HookFlags.STOP_EXECUTION;
         }
         if (Settings.DEBUG.getBoolean())
             return handler;

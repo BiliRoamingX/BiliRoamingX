@@ -104,32 +104,18 @@ fun fetchJson(url: String) = try {
     null
 }
 
-@JvmInline
-value class Area(val value: String) {
+enum class Area(@JvmField val value: String) {
+    CN("cn"), HK("hk"), TW("tw"), TH("th"), GLOBAL("global");
+
     override fun toString() = value
 
     companion object {
-        @JvmStatic
-        val CN = Area("cn")
-
-        @JvmStatic
-        val HK = Area("hk")
-
-        @JvmStatic
-        val TW = Area("tw")
-
-        @JvmStatic
-        val TH = Area("th")
-
-        @JvmStatic
-        val GLOBAl = Area("global")
-
         fun of(value: String?) = when (value) {
             CN.value -> CN
             HK.value -> HK
             TW.value -> TW
             TH.value -> TH
-            GLOBAl.value -> GLOBAl
+            GLOBAL.value -> GLOBAL
             else -> null
         }
     }
@@ -147,7 +133,7 @@ val countryTask: Future<Area> by lazy {
             "中国" -> Area.CN
             "香港", "澳门" -> Area.HK
             "台湾" -> Area.TW
-            else -> Area.GLOBAl
+            else -> Area.GLOBAL
         }.also { LogHelper.debug { "当前地区: $it" } }
     }
 }
@@ -209,3 +195,12 @@ fun signQuery(query: Map<String, String>, extraMap: Map<String, String> = emptyM
 val logFile by lazy { File(Utils.getContext().externalCacheDir, "log.txt") }
 
 val oldLogFile by lazy { File(Utils.getContext().externalCacheDir, "old_log.txt") }
+
+fun checkErrorToast(json: JSONObject, isCustomServer: Boolean = false) {
+    if (json.optInt("code", 0) != 0) {
+        Toasts.showShort(
+            (if (isCustomServer) "请求解析服务器发生错误: " else "请求发生错误: ")
+                    + json.optString("message", "未知错误")
+        )
+    }
+}
