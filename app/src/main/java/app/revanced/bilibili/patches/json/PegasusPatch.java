@@ -239,9 +239,13 @@ public class PegasusPatch {
             reason = ((SmallCoverV10Item) item).rcmdReason;
         } else if (item instanceof SmallCoverV2Item) {
             SmallCoverV2Item coverItem = (SmallCoverV2Item) item;
-            if (coverItem.rcmdReasonV2 != null) {
-                reason = coverItem.rcmdReasonV2;
-            } else {
+            try {
+                if (coverItem.rcmdReasonV2 != null) {
+                    reason = coverItem.rcmdReasonV2;
+                } else {
+                    reason = coverItem.rcmdReason;
+                }
+            } catch (NoSuchFieldError ignored) {
                 reason = coverItem.rcmdReason;
             }
         } else if (item instanceof SmallCoverV9Item) {
