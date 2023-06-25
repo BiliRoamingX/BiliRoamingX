@@ -321,7 +321,7 @@ public class MossPatch {
             }
         } else if (req instanceof SearchByTypeRequest) {
             SearchByTypeRequest searchByTypeRequest = (SearchByTypeRequest) req;
-            if (BangumiSeasonHook.handlerExtraSearch(searchByTypeRequest, handler))
+            if (BangumiSeasonHook.handleExtraSearch(searchByTypeRequest, handler))
                 return HookFlags.STOP_EXECUTION;
         }
         if (Settings.DEBUG.getBoolean())

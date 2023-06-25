@@ -203,7 +203,7 @@ object BangumiSeasonHook {
     }
 
     @JvmStatic
-    fun handlerExtraSearch(
+    fun handleExtraSearch(
         request: SearchByTypeRequest,
         handler: MossResponseHandler<Any>
     ): Boolean {
