@@ -18,7 +18,7 @@ public class LiveRoomPatch {
             if ((Boolean) Reflex.callMethod(playerBridge, "isPlaying")) {
                 Reflex.callMethod(playerBridge, "pause");
             } else {
-                Reflex.callMethod(playerBridge, "play");
+                Reflex.callMethod(playerBridge, "resume");
             }
             return true;
         } catch (Throwable e) {
