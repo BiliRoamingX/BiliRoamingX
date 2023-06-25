@@ -116,7 +116,7 @@ enum class Area(@JvmField val value: String) {
             TW.value -> TW
             TH.value -> TH
             GLOBAL.value -> GLOBAL
-            else -> null
+            else -> error("invalid area value: $value")
         }
     }
 }

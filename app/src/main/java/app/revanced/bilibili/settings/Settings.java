@@ -363,32 +363,28 @@ public enum Settings {
         preferenceChangeListener.remove(listener);
     }
 
-    public static String getServerByArea(String area) {
-        if (TextUtils.isEmpty(area))
-            return "";
-        if (Area.CN.value.equals(area)) {
+    public static String getServerByArea(Area area) {
+        if (Area.CN == area) {
             return CN_SERVER.getString();
-        } else if (Area.HK.value.equals(area)) {
+        } else if (Area.HK == area) {
             return HK_SERVER.getString();
-        } else if (Area.TW.value.equals(area)) {
+        } else if (Area.TW == area) {
             return TW_SERVER.getString();
-        } else if (Area.TH.value.equals(area)) {
+        } else if (Area.TH == area) {
             return TH_SERVER.getString();
         } else {
             return "";
         }
     }
 
-    public static String getAccessKeyByArea(String area) {
-        if (TextUtils.isEmpty(area))
-            return "";
-        if (Area.CN.value.equals(area)) {
+    public static String getAccessKeyByArea(Area area) {
+        if (Area.CN == area) {
             return CN_SERVER_ACCESS_KEY.getString();
-        } else if (Area.HK.value.equals(area)) {
+        } else if (Area.HK == area) {
             return HK_SERVER_ACCESS_KEY.getString();
-        } else if (Area.TW.value.equals(area)) {
+        } else if (Area.TW == area) {
             return TW_SERVER_ACCESS_KEY.getString();
-        } else if (Area.TH.value.equals(area)) {
+        } else if (Area.TH == area) {
             return TH_SERVER_ACCESS_KEY.getString();
         } else {
             return "";

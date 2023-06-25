@@ -1,6 +1,8 @@
 package app.revanced.bilibili.patches.okhttp
 
+import android.net.Uri
 import app.revanced.bilibili.api.BiliRoamingApi.getAreaSearchBangumi
+import app.revanced.bilibili.api.BiliRoamingApi.getThaiSeason
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import com.bapis.bilibili.pagination.PaginationReply
@@ -11,20 +13,21 @@ import com.bilibili.search.result.pages.BiliMainSearchResultPage.PageTypes
 import org.json.JSONObject
 import java.util.Locale
 
-data class SearchType(val area: String, val text: String, val type: String, val typeStr: String)
+data class SearchType(val area: Area, val text: String, val type: String, val typeStr: String)
 
 object BangumiSeasonHook {
     val lastSeasonInfo = hashMapOf<String, String?>()
+    private const val FAIL_CODE = -404
     private val originalPageTypes by lazy { PageTypes.`$VALUES` }
 
     private val searchTypes = mapOf(
-        931 to SearchType("cn", "陆(影)", "8", "movie"),
-        364364 to SearchType("hk", "港(影)", "8", "movie"),
-        889464 to SearchType("tw", "台(影)", "8", "movie"),
-        114 to SearchType("th", "泰", "7", "bangumi"),
-        514 to SearchType("cn", "陆", "7", "bangumi"),
-        1919 to SearchType("hk", "港", "7", "bangumi"),
-        810 to SearchType("tw", "台", "7", "bangumi")
+        931 to SearchType(Area.CN, "陆(影)", "8", "movie"),
+        364364 to SearchType(Area.HK, "港(影)", "8", "movie"),
+        889464 to SearchType(Area.TW, "台(影)", "8", "movie"),
+        114 to SearchType(Area.TH, "泰", "7", "bangumi"),
+        514 to SearchType(Area.CN, "陆", "7", "bangumi"),
+        1919 to SearchType(Area.HK, "港", "7", "bangumi"),
+        810 to SearchType(Area.TW, "台", "7", "bangumi")
     )
 
     init {
@@ -37,51 +40,138 @@ object BangumiSeasonHook {
     }
 
     @JvmStatic
-    fun unlockBangumi(response: String): String {
+    fun unlockBangumi(url: String, response: String): String {
         if (!Settings.UNLOCK_AREA_LIMIT.boolean)
             return response
         val jo = response.toJSONObject()
-        jo.optInt("code").takeIf { it == 0 }
-            ?: return response
+        val code = jo.optInt("code")
         val data = jo.optJSONObject("data")
-        lastSeasonInfo["title"] = data?.optString("title")
-        lastSeasonInfo["season_id"] = data?.optString("season_id")
-        data?.optJSONObject("rights")?.run {
+        if (code == FAIL_CODE || data == null) {
+            return unlockThaiBangumi(url, response)
+        } else if (code != 0) {
+            return response
+        }
+        lastSeasonInfo.clear()
+        lastSeasonInfo["title"] = data.optString("title")
+        lastSeasonInfo["season_id"] = data.optString("season_id")
+        data.optJSONObject("rights")?.run {
             put("area_limit", 0)
             if (Settings.ALLOW_DOWNLOAD.boolean) {
                 put("allow_download", 1)
                 put("only_vip_download", 0)
             }
         }
-        val badgeColor = "#FB7299"
-        val badgeNightColor = "#BB5B76"
-        data?.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
+        data.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
             it.optJSONObject("data")?.optJSONArray("episodes").orEmpty().asSequence<JSONObject>()
-        }.forEach { episode ->
-            val badge = episode.optString("badge")
-            val badgeInfo = episode.optJSONObject("badge_info")
-            val badgeInfoText = badgeInfo?.optString("text")
-            if (badge != badgeInfoText) {
-                badgeInfo?.run {
-                    put("bg_color", badgeColor)
-                    put("bg_color_night", badgeNightColor)
-                    put("text", badge)
-                }
-            }
-            episode.optJSONObject("rights")?.run {
-                put("area_limit", 0)
-                put("allow_dm", 1)
-                if (Settings.ALLOW_DOWNLOAD.boolean)
-                    put("allow_download", 1)
-            }
-            if (episode.has("cid") && episode.has("id")) {
-                val cid = episode.optInt("cid").toString()
-                val epId = episode.optInt("id").toString()
-                lastSeasonInfo[cid] = epId
-                lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
+        }.forEach(::onEachEpisode)
+        return jo.toString()
+    }
+
+    private fun onEachEpisode(episode: JSONObject) {
+        val badge = episode.optString("badge")
+        val badgeInfo = episode.optJSONObject("badge_info")
+        val badgeInfoText = badgeInfo?.optString("text")
+        if (badge != badgeInfoText) {
+            badgeInfo?.run {
+                put("bg_color", "#FB7299")
+                put("bg_color_night", "#BB5B76")
+                put("text", badge)
             }
         }
-        return jo.toString()
+        episode.optJSONObject("rights")?.run {
+            put("area_limit", 0)
+            put("allow_dm", 1)
+            if (Settings.ALLOW_DOWNLOAD.boolean)
+                put("allow_download", 1)
+        }
+        if (episode.has("cid") && episode.has("id")) {
+            val cid = episode.optInt("cid").toString()
+            val epId = episode.optInt("id").toString()
+            lastSeasonInfo[cid] = epId
+            lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
+        }
+        Settings.CN_SERVER_ACCESS_KEY.string.ifEmpty { return }
+        if (episode.optInt("status") == 13)
+            episode.put("status", 2)
+    }
+
+    private fun unlockThaiBangumi(url: String, response: String): String {
+        Uri.parse(url)?.run {
+            getQueryParameter("ep_id")?.let {
+                lastSeasonInfo.clear()
+                lastSeasonInfo["ep_id"] = it
+            }
+            getQueryParameter("season_id")?.let {
+                lastSeasonInfo.clear()
+                lastSeasonInfo["season_id"] = it
+            }
+        }
+        LogHelper.info { "Info: $lastSeasonInfo" }
+        val (newCode, newResult) = getThaiSeason(lastSeasonInfo)?.toJSONObject()?.let {
+            it.optInt("code", FAIL_CODE) to it.optJSONObject("result")
+        } ?: (FAIL_CODE to null)
+        if (isBangumiWithWatchPermission(newResult, newCode)) {
+            lastSeasonInfo["title"] = newResult?.optString("title")
+            lastSeasonInfo["season_id"] = newResult?.optString("season_id")
+            lastSeasonInfo["watch_platform"] = newResult?.optJSONObject("rights")?.apply {
+                if (has("allow_comment") && getInt("allow_comment") == 0) {
+                    remove("allow_comment")
+                    put("area_limit", 1)
+                    lastSeasonInfo["allow_comment"] = "0"
+                }
+            }?.optInt("watch_platform")?.toString()
+            for (episode in newResult?.optJSONArray("episodes").orEmpty()) {
+                onEachThaiEpisode(episode)
+                if (episode.has("cid") && episode.has("id")) {
+                    val cid = episode.optInt("cid").toString()
+                    val epId = episode.optInt("id").toString()
+                    lastSeasonInfo[cid] = epId
+                    lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
+                    episode.optJSONArray("subtitles")?.let {
+                        if (it.length() > 0) {
+                            lastSeasonInfo["area"] = "th"
+                            lastSeasonInfo["sb$cid"] = it.toString()
+                        }
+                    }
+                }
+            }
+            newResult?.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
+                it.optJSONObject("data")?.optJSONArray("episodes").orEmpty()
+                    .asSequence<JSONObject>()
+            }.forEach(::onEachThaiEpisode)
+            newResult?.optJSONArray("prevueSection").orEmpty().asSequence<JSONObject>().flatMap {
+                it.optJSONArray("episodes").orEmpty().asSequence<JSONObject>()
+            }.forEach(::onEachThaiEpisode)
+            if (Settings.ALLOW_DOWNLOAD.boolean && newResult != null) {
+                newResult.optJSONObject("rights")?.run {
+                    put("allow_download", 1)
+                    put("only_vip_download", 0)
+                }
+            }
+            if (Settings.CN_SERVER_ACCESS_KEY.string.isNotEmpty() && newResult != null)
+                if (newResult.optInt("status") == 13)
+                    newResult.put("status", 2)
+        }
+        return newResult?.let {
+            JSONObject().apply {
+                put("code", 0)
+                put("data", it)
+            }.toString()
+        } ?: response
+    }
+
+    private fun isBangumiWithWatchPermission(result: JSONObject?, code: Int) =
+        result?.optJSONObject("rights")?.run {
+            !optBoolean("area_limit", true) || optInt("area_limit", 1) == 0
+        } ?: run { code != FAIL_CODE }
+
+    private fun onEachThaiEpisode(episode: JSONObject) {
+        if (Settings.ALLOW_DOWNLOAD.boolean)
+            episode.optJSONObject("rights")
+                ?.put("allow_download", 1)
+        Settings.CN_SERVER_ACCESS_KEY.string.ifEmpty { return }
+        if (episode.optInt("status") == 13)
+            episode.put("status", 2)
     }
 
     @JvmStatic
@@ -134,7 +224,7 @@ object BangumiSeasonHook {
 
     private fun retrieveExtraSearch(
         request: SearchByTypeRequest,
-        area: String,
+        area: Area,
         type: String
     ): SearchByTypeResponse? {
         val pn = request.pagination.next.ifEmpty { "1" }
@@ -285,7 +375,7 @@ object BangumiSeasonHook {
     fun onOgvSearchResultFragmentVisible(fragment: OgvSearchResultFragment) {
         val from = fragment.arguments?.getString("from") ?: return
         for (type in searchTypes) {
-            if (type.value.area == from && fragment.typeForBiliRoaming == type.value.type.toInt()) {
+            if (type.value.area.value == from && fragment.typeForBiliRoaming == type.value.type.toInt()) {
                 fragment.typeForBiliRoaming = type.key
                 break
             }
@@ -298,7 +388,7 @@ object BangumiSeasonHook {
         for (searchType in searchTypes) {
             val area = searchType.value.area
             val typeStr = searchType.value.typeStr
-            if (area == currentArea?.value)
+            if (area == currentArea)
                 continue
             if (Settings.getServerByArea(area).isNotEmpty()
                 && Settings.getExtraSearchByType(typeStr)

@@ -153,7 +153,31 @@ public class MossPatch {
     public static <ReqT extends GeneratedMessageLite<?, ?>, RespT extends GeneratedMessageLite<?, ?>>
     GeneratedMessageLite<?, ?> hookBlockingAfter(@NonNull GeneratedMessageLite<?, ?> req, @Nullable GeneratedMessageLite<?, ?> reply, MossException error) throws MossException {
         MossDebugPrinter.printBlocking(req, reply);
-        if (reply instanceof com.bapis.bilibili.app.view.v1.ViewProgressReply) {
+        if (req instanceof PlayViewUniteReq) {
+            PlayViewUniteReq playReq = (PlayViewUniteReq) req;
+            PlayViewUniteReply playReply = (PlayViewUniteReply) reply;
+            if (Settings.REMEMBER_LOSSLESS_SETTING.getBoolean() && playReply != null) {
+                playReply.getPlayDeviceConf().getDeviceConfsMap().forEach((key, deviceConf) -> {
+                    if (key == 30/*LOSSLESS*/) {
+                        com.bapis.bilibili.playershared.ConfValue confValue = deviceConf.getConfValue();
+                        com.bapis.bilibili.playershared.ConfValueEx.setSwitchVal(confValue, Settings.LOSSLESS_ENABLED.getBoolean());
+                    }
+                });
+            }
+            if (Settings.UNLOCK_PLAY_LIMIT.getBoolean() && playReply != null) {
+                var supportedConf = com.bapis.bilibili.playershared.ArcConf.newBuilder()
+                        .setIsSupport(true).setDisabled(false).build();
+                var arcConfs = PlayArcConfEx.getMutableArcConfsMap(playReply.getPlayArcConf());
+                // CASTCONF,BACKGROUNDPLAY,SMALLWINDOW,LISTEN
+                for (int key : new int[]{2, 9, 23, 36})
+                    arcConfs.put(key, supportedConf);
+            }
+            return BangumiPlayUrlHook.hookPlayViewUniteAfter(playReq, playReply, error);
+        } else if (req instanceof com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq) {
+            com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq playReq = (com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq) req;
+            com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReply playReply = (com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReply) reply;
+            return BangumiPlayUrlHook.hookPlayViewPGCAfter(playReq, playReply, error);
+        } else if (reply instanceof com.bapis.bilibili.app.view.v1.ViewProgressReply) {
             if (Settings.REMOVE_CMD_DMS.getBoolean())
                 com.bapis.bilibili.app.view.v1.ViewProgressReplyEx.setVideoGuide((ViewProgressReply) reply, VideoGuide.newBuilder().build());
         } else if (reply instanceof com.bapis.bilibili.app.viewunite.v1.ViewProgressReply) {
@@ -208,26 +232,6 @@ public class MossPatch {
                     ArcConfEx.setDisabled(arcConf, false);
                 }
             }
-        } else if (reply instanceof PlayViewUniteReply) {
-            PlayViewUniteReq playReq = (PlayViewUniteReq) req;
-            PlayViewUniteReply playReply = (PlayViewUniteReply) reply;
-            if (Settings.REMEMBER_LOSSLESS_SETTING.getBoolean()) {
-                playReply.getPlayDeviceConf().getDeviceConfsMap().forEach((key, deviceConf) -> {
-                    if (key == 30/*LOSSLESS*/) {
-                        com.bapis.bilibili.playershared.ConfValue confValue = deviceConf.getConfValue();
-                        com.bapis.bilibili.playershared.ConfValueEx.setSwitchVal(confValue, Settings.LOSSLESS_ENABLED.getBoolean());
-                    }
-                });
-            }
-            if (Settings.UNLOCK_PLAY_LIMIT.getBoolean()) {
-                var supportedConf = com.bapis.bilibili.playershared.ArcConf.newBuilder()
-                        .setIsSupport(true).setDisabled(false).build();
-                var arcConfs = PlayArcConfEx.getMutableArcConfsMap(playReply.getPlayArcConf());
-                // CASTCONF,BACKGROUNDPLAY,SMALLWINDOW,LISTEN
-                for (int key : new int[]{2, 9, 23, 36})
-                    arcConfs.put(key, supportedConf);
-            }
-            return BangumiPlayUrlHook.hookPlayViewUniteAfter(playReq, playReply, error);
         } else if (reply instanceof ViewReply) {
             ViewReply viewReply = (ViewReply) reply;
             long aid = viewReply.getArc().getAid();
@@ -245,10 +249,6 @@ public class MossPatch {
                 PlayURLResp playURLResp = (PlayURLResp) reply;
                 return reconstructPlayUrlResponse(playURLReq, playURLResp);
             }
-        } else if (reply instanceof com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReply) {
-            com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq playReq = (com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq) req;
-            com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReply playReply = (com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReply) reply;
-            return BangumiPlayUrlHook.hookPlayViewPGCAfter(playReq, playReply, error);
         }
         if (error != null) {
             throw error;

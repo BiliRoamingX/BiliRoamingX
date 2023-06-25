@@ -36,7 +36,7 @@ public class OkHttpPatch {
         if (shouldConvertSubtitle(url, code)) {
             return convertSubtitle(response);
         } else if (shouldUnlockBangumi(url, code)) {
-            return BangumiSeasonHook.unlockBangumi(response);
+            return BangumiSeasonHook.unlockBangumi(url, response);
         } else if (shouldFixSpace(url, code)) {
             return fixSpace(url, response);
         }

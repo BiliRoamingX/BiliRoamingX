@@ -139,7 +139,7 @@ public class JSONPatch {
             MenuGroup section = sectionListV2.get(i);
             String title = section.title;
             if (!TextUtils.isEmpty(title))
-                drawerItems.add(new BottomItem("【标题项目】", null, title, shouldShowing(items, title)));
+                drawerItems.add(new BottomItem("【标题项目】", null, title));
             List<MenuGroup.Item> itemList = section.itemList;
             if (itemList == null || itemList.isEmpty())
                 continue;
@@ -150,7 +150,7 @@ public class JSONPatch {
                 String uri = item.uri;
                 String id = String.valueOf(item.id);
                 boolean showing = shouldShowing(items, id);
-                drawerItems.add(new BottomItem(itemTitle, uri, id, showing));
+                drawerItems.add(new BottomItem(itemTitle, uri, id));
                 if (purifyRedDot) {
                     item.redDot = 0;
                     item.redDotRorNew = false;
@@ -163,7 +163,7 @@ public class JSONPatch {
                 if (!TextUtils.isEmpty(buttonText)) {
                     String uri = button.jumpUrl;
                     boolean showing = shouldShowing(items, buttonText);
-                    drawerItems.add(new BottomItem("按钮：", uri, buttonText, showing));
+                    drawerItems.add(new BottomItem("按钮：", uri, buttonText));
                     if (!showing)
                         section.button = null;
                 }
@@ -181,7 +181,7 @@ public class JSONPatch {
             var uri = tab.uri;
             var id = tab.tabId;
             var showing = shouldShowing(items, id);
-            bottomItems.add(new BottomItem(tab.name, uri, id, showing));
+            bottomItems.add(new BottomItem(tab.name, uri, id));
             return !showing;
         });
 
