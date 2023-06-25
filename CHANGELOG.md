@@ -1,3 +1,10 @@
+## [0.111.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.111.1-dev.1...v0.111.1-dev.2) (2023-06-25)
+
+
+### Bug Fixes
+
+* **youtube/disable-fullscreen-panels:** prompt to restart after turning on/off ([#426](https://github.com/revanced/revanced-integrations/issues/426)) ([328ecff](https://github.com/revanced/revanced-integrations/commit/328ecff18bf301ec8993bba49356f9813de1d901))
+
 ## [0.111.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.111.0...v0.111.1-dev.1) (2023-06-23)
 
 
