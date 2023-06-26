@@ -12,10 +12,13 @@ import com.bilibili.search.ogv.OgvSearchResultFragment
 import com.bilibili.search.result.pages.BiliMainSearchResultPage.PageTypes
 import org.json.JSONObject
 import java.util.Locale
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 data class SearchType(val area: Area, val text: String, val type: String, val typeStr: String)
 
 object BangumiSeasonHook {
+    @JvmStatic
     val lastSeasonInfo = hashMapOf<String, String?>()
     private const val FAIL_CODE = -404
     private val originalPageTypes by lazy { PageTypes.`$VALUES` }
@@ -97,13 +100,17 @@ object BangumiSeasonHook {
 
     private fun unlockThaiBangumi(url: String, response: String): String {
         Uri.parse(url)?.run {
-            getQueryParameter("ep_id")?.let {
-                lastSeasonInfo.clear()
-                lastSeasonInfo["ep_id"] = it
+            getQueryParameter("ep_id")?.let { epId ->
+                if (lastSeasonInfo["ep_id"].let { it != null && it != epId }) {
+                    lastSeasonInfo.clear()
+                    lastSeasonInfo["ep_id"] = epId
+                }
             }
             getQueryParameter("season_id")?.let {
-                lastSeasonInfo.clear()
-                lastSeasonInfo["season_id"] = it
+                if (lastSeasonInfo["season_id"] != it) {
+                    lastSeasonInfo.clear()
+                    lastSeasonInfo["season_id"] = it
+                }
             }
         }
         LogHelper.info { "Info: $lastSeasonInfo" }
@@ -111,16 +118,17 @@ object BangumiSeasonHook {
             it.optInt("code", FAIL_CODE) to it.optJSONObject("result")
         } ?: (FAIL_CODE to null)
         if (isBangumiWithWatchPermission(newResult, newCode)) {
-            lastSeasonInfo["title"] = newResult?.optString("title")
-            lastSeasonInfo["season_id"] = newResult?.optString("season_id")
-            lastSeasonInfo["watch_platform"] = newResult?.optJSONObject("rights")?.apply {
+            val seasonId = newResult.optString("season_id")
+            lastSeasonInfo["title"] = newResult.optString("title")
+            lastSeasonInfo["season_id"] = seasonId
+            newResult.optJSONObject("rights")?.apply {
                 if (has("allow_comment") && getInt("allow_comment") == 0) {
                     remove("allow_comment")
                     put("area_limit", 1)
                     lastSeasonInfo["allow_comment"] = "0"
                 }
-            }?.optInt("watch_platform")?.toString()
-            for (episode in newResult?.optJSONArray("episodes").orEmpty()) {
+            }
+            for (episode in newResult.optJSONArray("episodes").orEmpty()) {
                 onEachThaiEpisode(episode)
                 if (episode.has("cid") && episode.has("id")) {
                     val cid = episode.optInt("cid").toString()
@@ -129,26 +137,26 @@ object BangumiSeasonHook {
                     lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
                     episode.optJSONArray("subtitles")?.let {
                         if (it.length() > 0) {
-                            lastSeasonInfo["area"] = "th"
+                            lastSeasonInfo["area$seasonId"] = "th"
                             lastSeasonInfo["sb$cid"] = it.toString()
                         }
                     }
                 }
             }
-            newResult?.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
+            newResult.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
                 it.optJSONObject("data")?.optJSONArray("episodes").orEmpty()
                     .asSequence<JSONObject>()
             }.forEach(::onEachThaiEpisode)
-            newResult?.optJSONArray("prevueSection").orEmpty().asSequence<JSONObject>().flatMap {
+            newResult.optJSONArray("prevueSection").orEmpty().asSequence<JSONObject>().flatMap {
                 it.optJSONArray("episodes").orEmpty().asSequence<JSONObject>()
             }.forEach(::onEachThaiEpisode)
-            if (Settings.ALLOW_DOWNLOAD.boolean && newResult != null) {
+            if (Settings.ALLOW_DOWNLOAD.boolean) {
                 newResult.optJSONObject("rights")?.run {
                     put("allow_download", 1)
                     put("only_vip_download", 0)
                 }
             }
-            if (Settings.CN_SERVER_ACCESS_KEY.string.isNotEmpty() && newResult != null)
+            if (Settings.CN_SERVER_ACCESS_KEY.string.isNotEmpty())
                 if (newResult.optInt("status") == 13)
                     newResult.put("status", 2)
         }
@@ -160,10 +168,13 @@ object BangumiSeasonHook {
         } ?: response
     }
 
-    private fun isBangumiWithWatchPermission(result: JSONObject?, code: Int) =
-        result?.optJSONObject("rights")?.run {
+    @OptIn(ExperimentalContracts::class)
+    private fun isBangumiWithWatchPermission(newResult: JSONObject?, code: Int): Boolean {
+        contract { returns(true) implies (newResult != null) }
+        return newResult?.optJSONObject("rights")?.run {
             !optBoolean("area_limit", true) || optInt("area_limit", 1) == 0
-        } ?: run { code != FAIL_CODE }
+        } ?: run { code != FAIL_CODE && newResult != null }
+    }
 
     private fun onEachThaiEpisode(episode: JSONObject) {
         if (Settings.ALLOW_DOWNLOAD.boolean)

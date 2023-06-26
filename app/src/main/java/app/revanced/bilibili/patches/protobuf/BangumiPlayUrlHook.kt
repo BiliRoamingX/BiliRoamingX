@@ -25,12 +25,9 @@ import com.google.protobuf.Any
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.concurrent.CountDownLatch
 import kotlin.math.abs
 
 object BangumiPlayUrlHook {
-    var countDownLatch: CountDownLatch? = null
-
     private const val PGC_ANY_MODEL_TYPE_URL =
         "type.googleapis.com/bilibili.app.playerunite.pgcanymodel.PGCAnyModel"
     private val codecMap = mapOf(
@@ -110,7 +107,6 @@ object BangumiPlayUrlHook {
                     ?: lastSeasonInfo["season_id"] ?: "0"
                 val (thaiSeason, thaiEp) = getThaiSeason(seasonId, req.epId)
                 val content = getPlayUrl(reconstructQuery(req, response, thaiEp))
-                countDownLatch?.countDown()
                 if (content == null) {
                     throw CustomServerException(mapOf("未知错误" to "请检查哔哩漫游设置中解析服务器设置。"))
                 } else {
@@ -151,7 +147,6 @@ object BangumiPlayUrlHook {
             return try {
                 val (thaiSeason, thaiEp) = getThaiSeason(seasonId, reqEpId)
                 val content = getPlayUrl(reconstructQueryUnite(req, supplement, thaiEp))
-                countDownLatch?.countDown()
                 if (content == null) {
                     throw CustomServerException(mapOf("未知错误" to "请检查哔哩漫游设置中解析服务器设置。"))
                 } else {

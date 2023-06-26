@@ -80,7 +80,7 @@ object BiliRoamingApi {
         val epIdEndIdx = queryString.indexOf("&", epIdStartIdx)
         val epId = queryString.substring(epIdStartIdx + 6, epIdEndIdx)
 
-        if (!lastSeasonInfo.containsKey("ep_ids") || lastSeasonInfo["ep_ids"]?.contains(epId) != true)
+        if (lastSeasonInfo["ep_ids"].let { it == null || epId !in it })
             lastSeasonInfo.clear()
 
         lastSeasonInfo["title"]?.run {
@@ -130,10 +130,10 @@ object BiliRoamingApi {
             getContent(uri)?.let {
                 LogHelper.debug { "use server $area $host for playurl" }
                 if (it.contains("\"code\":0")) {
-                    lastSeasonInfo["area"] = area.value
+                    lastSeasonInfo["area$seasonId"] = area.value
                     lastSeasonInfo["epid"] = epId
                     if (seasonId != null && !Settings.cachePrefs.contains(seasonId)
-                        || Area.of(Settings.cachePrefs.getString(seasonId, null)) != area
+                        || Settings.cachePrefs.getString(seasonId, null) != area.value
                     ) {
                         Settings.cachePrefs.edit {
                             putString(seasonId, area.value)
@@ -269,6 +269,19 @@ object BiliRoamingApi {
     }
 
     @JvmStatic
+    fun getThailandSubtitles(epId: String?): String? {
+        LogHelper.debug { "Getting subtitle $epId form thailand" }
+        epId ?: return null
+        val thUrl = Settings.TH_SERVER.string.ifEmpty { return null }
+        val uri = Uri.Builder()
+            .scheme("https")
+            .encodedAuthority(thUrl + THAILAND_PATH_SUBTITLES)
+            .appendQueryParameter("ep_id", epId)
+            .toString()
+        return getContent(uri)
+    }
+
+    @JvmStatic
     fun fixThailandSeason(result: JSONObject) {
         val episodes = JSONArray()
 
@@ -314,8 +327,7 @@ object BiliRoamingApi {
         for (i in result.optJSONArray("styles").orEmpty())
             style.put(i.optString("name"))
         result.put("style", style)
-        result.optJSONObject("rights")?.put("watch_platform", 1)
-            ?.put("allow_comment", 0)
+        result.optJSONObject("rights")?.put("allow_comment", 0)
         result.apply {
             put("actors", result.optJSONObject("actor")?.optString("info"))
             put("is_paster_ads", 0)
