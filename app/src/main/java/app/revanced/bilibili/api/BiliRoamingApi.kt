@@ -7,6 +7,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
+import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import org.json.JSONArray
@@ -75,10 +76,14 @@ object BiliRoamingApi {
             ).filter { (k, v) ->
                 (Settings.getAccessKeyByArea(k).isNotEmpty() || k != country) && v.isNotEmpty()
             }.let { hostList.putAll(it) }
+        if (hostList.isEmpty()) return null
 
         val epIdStartIdx = queryString.indexOf("ep_id=")
+        if (epIdStartIdx == -1) return null
         val epIdEndIdx = queryString.indexOf("&", epIdStartIdx)
+        if (epIdEndIdx == -1) return null
         val epId = queryString.substring(epIdStartIdx + 6, epIdEndIdx)
+        if (epId.isEmpty()) return null
 
         if (lastSeasonInfo["ep_ids"].let { it == null || epId !in it })
             lastSeasonInfo.clear()
@@ -93,11 +98,9 @@ object BiliRoamingApi {
             if (hostList.containsKey(area)) hostList[area]
         }
 
-        if (hostList.isEmpty()) return null
+        val seasonId = lastSeasonInfo["season_id"] ?: "ep$epId"
 
-        val seasonId = lastSeasonInfo["season_id"] ?: if (epId.isEmpty()) null else "ep$epId"
-
-        if (seasonId != null && Settings.cachePrefs.contains(seasonId)) {
+        if (Settings.cachePrefs.contains(seasonId)) {
             val cachedArea = Area.of(Settings.cachePrefs.getString(seasonId, null))
             if (hostList.containsKey(cachedArea)) {
                 LogHelper.debug { "use cached area $cachedArea for $seasonId" }
@@ -130,9 +133,9 @@ object BiliRoamingApi {
             getContent(uri)?.let {
                 LogHelper.debug { "use server $area $host for playurl" }
                 if (it.contains("\"code\":0")) {
-                    lastSeasonInfo["area$seasonId"] = area.value
+                    seasonAreasCache[seasonId] = area
                     lastSeasonInfo["epid"] = epId
-                    if (seasonId != null && !Settings.cachePrefs.contains(seasonId)
+                    if (!Settings.cachePrefs.contains(seasonId)
                         || Settings.cachePrefs.getString(seasonId, null) != area.value
                     ) {
                         Settings.cachePrefs.edit {
@@ -309,13 +312,11 @@ object BiliRoamingApi {
                 ep.put("ep_index", eid + 1)
                 ep.put("section_index", sid + 1)
                 fixRight(ep)
-                if (ep.optInt("cid", 0) == 0) {
-                    ep.put("cid", ep.optInt("id"))
-                    ep.optJSONObject("rights")?.put("allow_dm", 0)
-                }
-                if (ep.optInt("aid", 0) == 0) {
-                    ep.put("aid", result.optInt("season_id"))
-                    ep.optJSONObject("rights")?.put("area_limit", 1)
+                ep.put("cid", ep.optInt("id"))
+                ep.put("aid", result.optInt("season_id"))
+                ep.optJSONObject("rights")?.run {
+                    put("allow_dm", 0)
+                    put("area_limit", 1)
                 }
                 episodes.put(ep)
             }

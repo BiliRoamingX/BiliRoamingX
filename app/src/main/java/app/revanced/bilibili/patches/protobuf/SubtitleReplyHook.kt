@@ -3,6 +3,8 @@ package app.revanced.bilibili.patches.protobuf
 import android.net.Uri
 import app.revanced.bilibili.api.BiliRoamingApi
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
+import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
+import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.subtitlesCache
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import com.bapis.bilibili.community.service.dm.v1.DmViewReply
@@ -19,16 +21,16 @@ object SubtitleReplyHook {
         val extraSubtitles = ArrayList<SubtitleItem>()
         if (Settings.UNLOCK_AREA_LIMIT.boolean && Settings.TH_SERVER.string.isNotEmpty()) {
             val cid = dmViewReq.oid.toString()
-            val seasonId = dmViewReq.pid
+            val seasonId = dmViewReq.pid.toString()
             val lastSeasonInfo = lastSeasonInfo
-            val sArea = lastSeasonInfo["area$seasonId"]
+            val seasonAreasCache = seasonAreasCache
+            val sArea = seasonAreasCache[seasonId]
             val epId = lastSeasonInfo[cid]
-            val epArea = lastSeasonInfo["area$epId"]
-            if (Area.TH.value.let { it == sArea || it == epArea }) {
-                val sb = lastSeasonInfo["sb$cid"]
-                val subtitles = sb?.let { JSONArray(it) } ?: run {
+            val epArea = seasonAreasCache["ep$epId"]
+            if (Area.TH.let { it == sArea || it == epArea }) {
+                val subtitles = subtitlesCache[seasonId]?.get(cid) ?: run {
                     val res = BiliRoamingApi.getThailandSubtitles(
-                        lastSeasonInfo[cid] ?: lastSeasonInfo["epid"]
+                        epId ?: lastSeasonInfo["epid"]
                     )?.toJSONObject()
                     if (res != null && res.optInt("code") == 0) {
                         res.optJSONObject("data")

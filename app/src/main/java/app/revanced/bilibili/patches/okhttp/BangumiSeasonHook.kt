@@ -10,6 +10,7 @@ import com.bapis.bilibili.polymer.app.search.v1.*
 import com.bilibili.lib.moss.api.MossResponseHandler
 import com.bilibili.search.ogv.OgvSearchResultFragment
 import com.bilibili.search.result.pages.BiliMainSearchResultPage.PageTypes
+import org.json.JSONArray
 import org.json.JSONObject
 import java.util.Locale
 import kotlin.contracts.ExperimentalContracts
@@ -20,6 +21,21 @@ data class SearchType(val area: Area, val text: String, val type: String, val ty
 object BangumiSeasonHook {
     @JvmStatic
     val lastSeasonInfo = hashMapOf<String, String?>()
+
+    @JvmStatic
+    val seasonAreasCache = object : LinkedHashMap<String, Area>(8, 1.0F, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, Area>): Boolean {
+            return size > 6
+        }
+    }
+
+    @JvmStatic
+    val subtitlesCache = object : LinkedHashMap<String, HashMap<String, JSONArray>>(8, 1.0F, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, HashMap<String, JSONArray>>): Boolean {
+            return size > 6
+        }
+    }
+
     private const val FAIL_CODE = -404
     private val originalPageTypes by lazy { PageTypes.`$VALUES` }
 
@@ -100,17 +116,13 @@ object BangumiSeasonHook {
 
     private fun unlockThaiBangumi(url: String, response: String): String {
         Uri.parse(url)?.run {
-            getQueryParameter("ep_id")?.let { epId ->
-                if (lastSeasonInfo["ep_id"].let { it != null && it != epId }) {
-                    lastSeasonInfo.clear()
-                    lastSeasonInfo["ep_id"] = epId
-                }
+            getQueryParameter("ep_id")?.let {
+                lastSeasonInfo.clear()
+                lastSeasonInfo["ep_id"] = it
             }
             getQueryParameter("season_id")?.let {
-                if (lastSeasonInfo["season_id"] != it) {
-                    lastSeasonInfo.clear()
-                    lastSeasonInfo["season_id"] = it
-                }
+                lastSeasonInfo.clear()
+                lastSeasonInfo["season_id"] = it
             }
         }
         LogHelper.info { "Info: $lastSeasonInfo" }
@@ -135,10 +147,9 @@ object BangumiSeasonHook {
                     val epId = episode.optInt("id").toString()
                     lastSeasonInfo[cid] = epId
                     lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
-                    episode.optJSONArray("subtitles")?.let {
-                        if (it.length() > 0) {
-                            lastSeasonInfo["area$seasonId"] = "th"
-                            lastSeasonInfo["sb$cid"] = it.toString()
+                    episode.optJSONArray("subtitles")?.takeIf { it.length() > 0 }?.let {
+                        subtitlesCache.compute(seasonId) { _, v ->
+                            (v ?: hashMapOf()).apply { this[cid] = it }
                         }
                     }
                 }
