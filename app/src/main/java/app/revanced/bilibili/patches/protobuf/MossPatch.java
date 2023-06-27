@@ -18,6 +18,7 @@ import com.bapis.bilibili.app.dynamic.v2.DynAllReplyEx;
 import com.bapis.bilibili.app.dynamic.v2.DynTab;
 import com.bapis.bilibili.app.dynamic.v2.DynTabReply;
 import com.bapis.bilibili.app.dynamic.v2.DynTabReplyEx;
+import com.bapis.bilibili.app.dynamic.v2.DynTabReq;
 import com.bapis.bilibili.app.dynamic.v2.DynVideoReply;
 import com.bapis.bilibili.app.dynamic.v2.DynVideoReplyEx;
 import com.bapis.bilibili.app.dynamic.v2.DynamicItem;
@@ -212,9 +213,6 @@ public class MossPatch {
         } else if (reply instanceof DynRedReply) {
             if (Settings.DYNAMIC_PREFER_VIDEO_TAB.getBoolean())
                 DynRedReplyEx.setDefaultTab((DynRedReply) reply, "video");
-        } else if (reply instanceof DynTabReply) {
-            DynTabReply dynTabReply = (DynTabReply) reply;
-            purifyDynTabs(dynTabReply);
         } else if (reply instanceof PlayViewReply) {
             PlayViewReply playViewReply = (PlayViewReply) reply;
             if (Settings.REMEMBER_LOSSLESS_SETTING.getBoolean()) {
@@ -322,6 +320,15 @@ public class MossPatch {
             SearchByTypeRequest searchByTypeRequest = (SearchByTypeRequest) req;
             if (BangumiSeasonHook.handleExtraSearch(searchByTypeRequest, handler))
                 return HookFlags.STOP_EXECUTION;
+        } else if (req instanceof DynTabReq) {
+            if (Settings.DYNAMIC_PURIFY_CITY.getBoolean()
+                    || Settings.DYNAMIC_PURIFY_CAMPUS.getBoolean()) {
+                return MossResponseHandlerProxy.<DynTabReply>get(handler, v -> {
+                    if (v != null)
+                        purifyDynTabs(v);
+                    return v;
+                });
+            }
         }
         if (Settings.DEBUG.getBoolean())
             return handler;
