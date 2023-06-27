@@ -1,3 +1,10 @@
+## [0.111.1-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.111.1-dev.2...v0.111.1-dev.3) (2023-06-27)
+
+
+### Performance Improvements
+
+* return earlier when possible ([#427](https://github.com/revanced/revanced-integrations/issues/427)) ([12f3f97](https://github.com/revanced/revanced-integrations/commit/12f3f975525863e593216ecf36ca817d162474e1))
+
 ## [0.111.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.111.1-dev.1...v0.111.1-dev.2) (2023-06-25)
 
 
