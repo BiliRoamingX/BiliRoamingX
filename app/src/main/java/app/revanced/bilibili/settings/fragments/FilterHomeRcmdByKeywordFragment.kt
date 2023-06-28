@@ -9,11 +9,17 @@ import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Toasts
 
 class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
+    companion object {
+        const val EXTRA_FROM = "biliroaming_from"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val from = arguments?.getString(EXTRA_FROM).orEmpty()
+
         val (root, content, saveButton) = rootViewTemplate()
         val applyToRelateSwitch = switchPrefsItem(string("biliroaming_apply_to_relate_title"))
             .let { content.addView(it.first); it.second }
@@ -113,7 +119,8 @@ class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
             Settings.HOME_RCMD_FILTER_UP_REGEX_MODE.saveValue(upRegexMode)
             Settings.HOME_FILTER_APPLY_TO_VIDEO.saveValue(applyToRelateSwitch.isChecked)
 
-            Toasts.showShortWithId("biliroaming_save_success_and_refresh_home")
+            if (from == "home")
+                Toasts.showShortWithId("biliroaming_save_success_and_refresh_home")
             requireActivity().onBackPressed()
         }
 

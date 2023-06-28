@@ -2,6 +2,11 @@ package app.revanced.bilibili.patches.json;
 
 import android.text.TextUtils;
 
+import com.bapis.bilibili.app.view.v1.Relate;
+import com.bapis.bilibili.app.view.v1.RelatesFeedReply;
+import com.bapis.bilibili.app.view.v1.RelatesFeedReplyEx;
+import com.bapis.bilibili.app.view.v1.ViewReply;
+import com.bapis.bilibili.app.view.v1.ViewReplyEx;
 import com.bilibili.app.comm.list.common.api.model.PlayerArgs;
 import com.bilibili.app.comm.list.common.data.DislikeReason;
 import com.bilibili.app.comm.list.common.data.ThreePointItem;
@@ -41,6 +46,13 @@ import app.revanced.bilibili.utils.Toasts;
 import app.revanced.bilibili.utils.Utils;
 
 public class PegasusPatch {
+
+    private static Set<String> cachedTitileSet = Collections.emptySet();
+    private static List<Pattern> cachedTitleRegexes = Collections.emptyList();
+    private static Set<String> cachedReasonSet = Collections.emptySet();
+    private static List<Pattern> cachedReasonRegexes = Collections.emptyList();
+    private static Set<String> cachedUpSet = Collections.emptySet();
+    private static List<Pattern> cachedUpRegexes = Collections.emptyList();
 
     private static final long REASON_ID_TITLE = 1145140L;
     private static final long REASON_ID_RCMD_REASON = 1145141L;
@@ -224,6 +236,90 @@ public class PegasusPatch {
         return false;
     }
 
+    private static boolean isPromoteRelate(Relate relate, boolean removeRelatePromote) {
+        return removeRelatePromote && (relate.getFromSourceType()) == 2L || "cm".equals(relate.getGoto());
+    }
+
+    private static boolean isNotAvRelate(Relate relate, boolean removeRelatePromote, boolean removeRelateOnlyAv) {
+        return removeRelatePromote && removeRelateOnlyAv && !"av".equals(relate.getGoto());
+    }
+
+    private static boolean isLowPlayCountRelate(Relate relate, long playCountLimit) {
+        if (playCountLimit == 0L) return false;
+        var text = relate.getStatV2().getViewVt().getText();
+        if (TextUtils.isEmpty(text)) return false;
+        var playCount = toPlayCount(text);
+        if (playCount == -1L) return false;
+        return playCount < playCountLimit;
+    }
+
+    private static boolean isDurationInvalidRelate(Relate relate, int shortDuration, int longDuration) {
+        if (shortDuration == 0 && longDuration == 0)
+            return false;
+        long duration = relate.getDuration();
+        if (longDuration != 0 && duration > longDuration) return true;
+        return shortDuration != 0 && duration < shortDuration;
+    }
+
+    private static boolean isContainsBlockKwdRelate(
+            Relate item,
+            boolean titleRegexMode,
+            Set<String> titleSet,
+            List<Pattern> titleRegexes,
+            boolean reasonRegexMode,
+            Set<String> reasonSet,
+            List<Pattern> reasonRegexes,
+            boolean upRegexMode,
+            Set<String> upSet,
+            List<Pattern> upRegexes,
+            long[] uidArray
+    ) {
+        if (!titleSet.isEmpty()) {
+            String title = item.getTitle();
+            if (titleRegexMode && !TextUtils.isEmpty(title)) {
+                for (int i = 0; i < titleRegexes.size(); i++)
+                    if (titleRegexes.get(i).matcher(title).find())
+                        return true;
+            } else if (!TextUtils.isEmpty(title))
+                for (String s : titleSet)
+                    if (title.contains(s))
+                        return true;
+        }
+
+        if (uidArray.length > 0) {
+            long upId = item.getAuthor().getMid();
+            if (upId != 0L && ArrayUtils.contains(uidArray, upId))
+                return true;
+        }
+
+        if (!upSet.isEmpty()) {
+            String upName = item.getAuthor().getName();
+            if (upRegexMode && !TextUtils.isEmpty(upName)) {
+                for (int i = 0; i < upRegexes.size(); i++)
+                    if (upRegexes.get(i).matcher(upName).find())
+                        return true;
+            } else if (!TextUtils.isEmpty(upName))
+                for (String s : upSet)
+                    if (upName.contains(s))
+                        return true;
+        }
+
+        if (!reasonSet.isEmpty()) {
+            String reason = item.getRcmdReasonStyle().getText();
+            if (reasonRegexMode && !TextUtils.isEmpty(reason)) {
+                for (int i = 0; i < reasonRegexes.size(); i++)
+                    if (reasonRegexes.get(i).matcher(reason).find())
+                        return true;
+            } else if (!TextUtils.isEmpty(reason)) {
+                for (String s : reasonSet)
+                    if (s.contains(reason))
+                        return true;
+            }
+        }
+
+        return false;
+    }
+
     private static void removeAdBanner(BasicIndexItem item) {
         if (!(item instanceof BannersItem)) return;
         List<BannerItemV2> banners = ((BannersItem) item).getBanners();
@@ -359,13 +455,6 @@ public class PegasusPatch {
         }
     }
 
-    private static Set<String> cachedTitileSet = Collections.emptySet();
-    private static List<Pattern> cachedTitleRegexes = Collections.emptyList();
-    private static Set<String> cachedReasonSet = Collections.emptySet();
-    private static List<Pattern> cachedReasonRegexes = Collections.emptyList();
-    private static Set<String> cachedUpSet = Collections.emptySet();
-    private static List<Pattern> cachedUpRegexes = Collections.emptyList();
-
     public static void pegasusHook(GeneralResponse<PegasusFeedResponse> response) {
         var data = response.data;
         if (data == null) return;
@@ -442,6 +531,83 @@ public class PegasusPatch {
             );
         });
         items.forEach(PegasusPatch::appendReasons);
+    }
+
+    public static void filterViewRelates(ViewReply viewReply) {
+        if (Settings.REMOVE_RELATE_PROMOTE.getBoolean()
+                && Settings.REMOVE_RELATE_ONLY_AV.getBoolean()
+                && Settings.REMOVE_RELATE_NOTHING.getBoolean()) {
+            ViewReplyEx.clearRelates(viewReply);
+            ViewReplyEx.clearPagination(viewReply);
+            return;
+        }
+        List<Integer> indexes = getToRemoveRelateIndexes(viewReply.getRelatesList());
+        for (int i = indexes.size() - 1; i >= 0; i--)
+            ViewReplyEx.removeRelates(viewReply, indexes.get(i));
+    }
+
+    public static void filterRelatesFeed(RelatesFeedReply feedReply) {
+        List<Integer> indexes = getToRemoveRelateIndexes(feedReply.getListList());
+        for (int i = indexes.size() - 1; i >= 0; i--)
+            RelatesFeedReplyEx.removeList(feedReply, indexes.get(i));
+    }
+
+    public static List<Integer> getToRemoveRelateIndexes(List<Relate> relates) {
+        boolean removeRelatePromote = Settings.REMOVE_RELATE_PROMOTE.getBoolean();
+        boolean removeRelateOnlyAv = Settings.REMOVE_RELATE_ONLY_AV.getBoolean();
+        boolean applyToVideo = Settings.HOME_FILTER_APPLY_TO_VIDEO.getBoolean();
+        long playCountLimit = Settings.LOW_PLAY_COUNT_LIMIT.getLong();
+        var shortDurationLimit = Settings.SHORT_DURATION_LIMIT.getInt();
+        int longDurationLimit = Settings.LONG_DURATION_LIMIT.getInt();
+        Set<String> titleSet = Settings.HOME_RCMD_FILTER_TITLE.getStringSet();
+        boolean titleRegexMode = Settings.HOME_RCMD_FILTER_TITLE_REGEX_MODE.getBoolean();
+        List<Pattern> titleRegexes;
+        if (titleRegexMode && cachedTitileSet.equals(titleSet))
+            titleRegexes = cachedTitleRegexes;
+        else if (titleRegexMode) {
+            cachedTitileSet = new HashSet<>(titleSet);
+            titleRegexes = titleSet.stream().map(Pattern::compile).collect(Collectors.toList());
+            cachedTitleRegexes = titleRegexes;
+        } else {
+            titleRegexes = Collections.emptyList();
+        }
+        Set<String> reasonSet = Settings.HOME_RCMD_FILTER_REASON.getStringSet();
+        boolean reasonRegexMode = Settings.HOME_RCMD_FILTER_REASON_REGEX_MODE.getBoolean();
+        List<Pattern> reasonRegexes;
+        if (reasonRegexMode && cachedReasonSet.equals(reasonSet))
+            reasonRegexes = cachedReasonRegexes;
+        else if (reasonRegexMode) {
+            cachedReasonSet = new HashSet<>(reasonSet);
+            reasonRegexes = reasonSet.stream().map(Pattern::compile).collect(Collectors.toList());
+            cachedReasonRegexes = reasonRegexes;
+        } else {
+            reasonRegexes = Collections.emptyList();
+        }
+        Set<String> upSet = Settings.HOME_RCMD_FILTER_UP.getStringSet();
+        boolean upRegexMode = Settings.HOME_RCMD_FILTER_UP_REGEX_MODE.getBoolean();
+        List<Pattern> upRegexes;
+        if (upRegexMode && cachedUpSet.equals(upSet))
+            upRegexes = cachedUpRegexes;
+        else if (upRegexMode) {
+            cachedUpSet = new HashSet<>(upSet);
+            upRegexes = upSet.stream().map(Pattern::compile).collect(Collectors.toList());
+            cachedUpRegexes = upRegexes;
+        } else {
+            upRegexes = Collections.emptyList();
+        }
+        Set<String> uidSet = Settings.HOME_RCMD_FILTER_UID.getStringSet();
+        long[] uidArray = ArrayUtils.toLongArray(uidSet);
+        List<Integer> idxList = new ArrayList<>();
+        for (int i = 0; i < relates.size(); i++) {
+            Relate relate = relates.get(i);
+            if (isPromoteRelate(relate, removeRelatePromote)
+                    || isNotAvRelate(relate, removeRelatePromote, removeRelateOnlyAv)
+                    || (applyToVideo && (isLowPlayCountRelate(relate, playCountLimit)
+                    || isDurationInvalidRelate(relate, shortDurationLimit, longDurationLimit)
+                    || isContainsBlockKwdRelate(relate, titleRegexMode, titleSet, titleRegexes, reasonRegexMode, reasonSet, reasonRegexes, upRegexMode, upSet, upRegexes, uidArray))))
+                idxList.add(i);
+        }
+        return idxList;
     }
 
     public static boolean onFeedClick(DislikeReason reason) {
