@@ -47,6 +47,7 @@ android {
 }
 
 dependencies {
+    implementation(project(mapOf("path" to ":extend")))
     compileOnly(project(mapOf("path" to ":dummy")))
     compileOnly("androidx.annotation:annotation:1.6.0")
     compileOnly("androidx.appcompat:appcompat:1.7.0-alpha02")

@@ -30,6 +30,7 @@
 
 package com.google.protobuf;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -41,8 +42,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-
-import app.revanced.bilibili.utils.Reflex;
 
 /**
  * Helps generate {@link String} representations of {@link MessageLite} protos.
@@ -265,7 +264,7 @@ final class MessageLiteToStringEx {
 
         if (object instanceof String) {
             String string = (String) object;
-            if ((string.startsWith("bilibili://") || string.startsWith("http")) && string.length() >= 256)
+            if ((string.startsWith("bilibili://") || string.startsWith("http")) && string.length() > 256)
                 string = string.substring(0, 256);
             buffer.append(": \"").append(string).append('"');
         } else if (object instanceof ByteString) {
@@ -292,8 +291,15 @@ final class MessageLiteToStringEx {
                 }
                 if (realClass == null)
                     realClass = typeMap.get(typeUrl);
-                if (realClass != null)
-                    realObject = (GeneratedMessageLite<?, ?>) Reflex.callStaticMethod(realClass, "parseFrom", any.getValue());
+                if (realClass != null) {
+                    try {
+                        Method parseFromMethod = realClass.getDeclaredMethod("parseFrom", ByteString.class);
+                        parseFromMethod.setAccessible(true);
+                        realObject = (GeneratedMessageLite<?, ?>) parseFromMethod.invoke(null, any.getValue());
+                    } catch (NoSuchMethodException | IllegalAccessException |
+                             InvocationTargetException ignored) {
+                    }
+                }
             }
             reflectivePrintWithIndent(realObject, buffer, indent + 2);
             buffer.append('\n');
