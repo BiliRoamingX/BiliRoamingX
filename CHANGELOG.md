@@ -1,3 +1,24 @@
+## [0.111.1-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.111.1-dev.2...v0.111.1-dev.3) (2023-06-27)
+
+
+### Performance Improvements
+
+* return earlier when possible ([#427](https://github.com/revanced/revanced-integrations/issues/427)) ([12f3f97](https://github.com/revanced/revanced-integrations/commit/12f3f975525863e593216ecf36ca817d162474e1))
+
+## [0.111.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.111.1-dev.1...v0.111.1-dev.2) (2023-06-25)
+
+
+### Bug Fixes
+
+* **youtube/disable-fullscreen-panels:** prompt to restart after turning on/off ([#426](https://github.com/revanced/revanced-integrations/issues/426)) ([328ecff](https://github.com/revanced/revanced-integrations/commit/328ecff18bf301ec8993bba49356f9813de1d901))
+
+## [0.111.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.111.0...v0.111.1-dev.1) (2023-06-23)
+
+
+### Bug Fixes
+
+* **youtube/client-spoof:** update settings text for known side effects of spoof signature  ([#424](https://github.com/revanced/revanced-integrations/issues/424)) ([d7a3973](https://github.com/revanced/revanced-integrations/commit/d7a3973ef1e6c4443fc4d89f063bc6bf3446bec3))
+
 # [0.111.0](https://github.com/revanced/revanced-integrations/compare/v0.110.0...v0.111.0) (2023-06-21)
 
 
