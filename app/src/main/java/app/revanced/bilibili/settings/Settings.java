@@ -145,6 +145,7 @@ public enum Settings {
     TEENAGER_MODE_DIALOG("teenagers_mode_dialog", BOOLEAN, FALSE),
     COMMENT_COPY("comment_copy", BOOLEAN, FALSE),
     COMMENT_COPY_ENHANCE("comment_copy_enhance", BOOLEAN, FALSE),
+    BLOCK_UPDATE("block_update", BOOLEAN, FALSE),
 
     // 去广告杂项
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),

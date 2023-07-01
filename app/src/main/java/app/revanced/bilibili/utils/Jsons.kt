@@ -15,3 +15,7 @@ operator fun JSONArray.iterator(): Iterator<JSONObject> =
     (0 until length()).asSequence().map { get(it) as JSONObject }.iterator()
 
 inline fun JSONArray?.orEmpty() = this ?: JSONArray()
+
+inline fun Map<String, Any>.toJson() = JSONObject(this).toString()
+
+inline fun Map<String, Any>.toJsonObject() = JSONObject(this)

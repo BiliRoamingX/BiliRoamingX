@@ -6,7 +6,10 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
+import org.json.JSONObject;
+
 import java.net.HttpURLConnection;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import app.revanced.bilibili.api.BiliRoamingApi;
@@ -24,6 +27,8 @@ public class OkHttpPatch {
             return true;
         } else if (shouldFixSpace(url, code)) {
             return true;
+        } else if (shouldBlockUpdate(url, code)) {
+            return true;
         }
         return false;
     }
@@ -39,6 +44,8 @@ public class OkHttpPatch {
             return BangumiSeasonHook.unlockBangumi(url, response);
         } else if (shouldFixSpace(url, code)) {
             return fixSpace(url, response);
+        } else if (shouldBlockUpdate(url, code)) {
+            return blockUpdate();
         }
         return response;
     }
@@ -56,6 +63,12 @@ public class OkHttpPatch {
     private static boolean shouldFixSpace(String url, int code) {
         return Settings.FIX_SPACE.getBoolean()
                 && url.startsWith("https://app.bilibili.com/x/v2/space?")
+                && code == HttpURLConnection.HTTP_OK;
+    }
+
+    private static boolean shouldBlockUpdate(String url, int code) {
+        return Settings.BLOCK_UPDATE.getBoolean()
+                && url.startsWith("https://app.bilibili.com/x/v2/version/fawkes/upgrade")
                 && code == HttpURLConnection.HTTP_OK;
     }
 
@@ -104,5 +117,9 @@ public class OkHttpPatch {
         if (data == null)
             return response;
         return "{\"code\":0,\"data\":" + data + "}";
+    }
+
+    static String blockUpdate() {
+        return new JSONObject(Map.of("code", -304, "message", "没有改动")).toString();
     }
 }
