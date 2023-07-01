@@ -1,6 +1,12 @@
 package app.revanced.bilibili.patches.okhttp
 
+import android.annotation.SuppressLint
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.view.Gravity
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.fragment.app.Fragment
 import app.revanced.bilibili.api.BiliRoamingApi.getAreaSearchBangumi
 import app.revanced.bilibili.api.BiliRoamingApi.getThaiSeason
 import app.revanced.bilibili.settings.Settings
@@ -12,6 +18,8 @@ import com.bilibili.search.ogv.OgvSearchResultFragment
 import com.bilibili.search.result.pages.BiliMainSearchResultPage.PageTypes
 import org.json.JSONArray
 import org.json.JSONObject
+import java.lang.ref.WeakReference
+import java.net.URL
 import java.util.Locale
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
@@ -38,6 +46,8 @@ object BangumiSeasonHook {
 
     private const val FAIL_CODE = -404
     private val originalPageTypes by lazy { PageTypes.`$VALUES` }
+
+    private var invalidFragmentRef = WeakReference<Fragment>(null)
 
     private val searchTypes = mapOf(
         931 to SearchType(Area.CN, "陆(影)", "8", "movie"),
@@ -138,6 +148,7 @@ object BangumiSeasonHook {
                     remove("allow_comment")
                     put("area_limit", 1)
                     lastSeasonInfo["allow_comment"] = "0"
+                    setCommentInvalidFragmentContent()
                 }
             }
             for (episode in newResult.optJSONArray("episodes").orEmpty()) {
@@ -402,6 +413,35 @@ object BangumiSeasonHook {
                 break
             }
         }
+    }
+
+    @JvmStatic
+    fun setCommentInvalidFragmentContent() {
+        invalidFragmentRef.get()?.let {
+            onCommentInvalidFragmentViewCreated(it)
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    @JvmStatic
+    fun onCommentInvalidFragmentViewCreated(fragment: Fragment): Boolean {
+        invalidFragmentRef = WeakReference(fragment)
+        val view = fragment.view ?: return false
+        if (lastSeasonInfo["allow_comment"] != "0") return false
+        view.findViewByIdName<TextView>("info").run {
+            gravity = Gravity.CENTER
+            text = "由于泰区番剧评论会串到其他正常视频中\n因而禁止泰区评论"
+        }
+        val forbidIcon = view.findViewByIdName<ImageView>("forbid_icon")
+        Utils.async {
+            runCatchingOrNull {
+                URL("https://i0.hdslb.com/bfs/app-res/android/img_holder_forbid_style1.webp")
+                    .openStream().let { BitmapFactory.decodeStream(it) }
+            }?.let {
+                Utils.runOnMainThread { forbidIcon.setImageBitmap(it) }
+            }
+        }
+        return true
     }
 
     private fun addAreaTags(reply: SearchAllResponse) {
