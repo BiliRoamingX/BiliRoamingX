@@ -204,3 +204,7 @@ fun checkErrorToast(json: JSONObject, isCustomServer: Boolean = false) {
         )
     }
 }
+
+val cachePrefs: SharedPreferences by lazy {
+    Utils.getContext().getSharedPreferences("biliroaming_cache", Context.MODE_PRIVATE)
+}

@@ -100,8 +100,8 @@ object BiliRoamingApi {
 
         val seasonId = lastSeasonInfo["season_id"] ?: "ep$epId"
 
-        if (Settings.cachePrefs.contains(seasonId)) {
-            val cachedArea = Area.of(Settings.cachePrefs.getString(seasonId, null))
+        if (cachePrefs.contains(seasonId)) {
+            val cachedArea = Area.of(cachePrefs.getString(seasonId, null))
             if (hostList.containsKey(cachedArea)) {
                 LogHelper.debug { "use cached area $cachedArea for $seasonId" }
                 hostList[cachedArea]
@@ -135,10 +135,10 @@ object BiliRoamingApi {
                 if (it.contains("\"code\":0")) {
                     seasonAreasCache[seasonId] = area
                     lastSeasonInfo["epid"] = epId
-                    if (!Settings.cachePrefs.contains(seasonId)
-                        || Settings.cachePrefs.getString(seasonId, null) != area.value
+                    if (!cachePrefs.contains(seasonId)
+                        || cachePrefs.getString(seasonId, null) != area.value
                     ) {
-                        Settings.cachePrefs.edit {
+                        cachePrefs.edit {
                             putString(seasonId, area.value)
                             lastSeasonInfo["ep_ids"]?.split(";")
                                 ?.forEach { epId -> putString("ep$epId", area.value) }

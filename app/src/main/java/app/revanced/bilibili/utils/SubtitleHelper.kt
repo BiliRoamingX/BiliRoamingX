@@ -3,7 +3,6 @@ package app.revanced.bilibili.utils
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.BitmapFactory.Options
-import app.revanced.bilibili.settings.Settings
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
@@ -141,10 +140,10 @@ object SubtitleHelper {
 
     @JvmStatic
     fun checkDictUpdate(): Boolean {
-        val lastCheckTime = Settings.cachePrefs.getLong("subtitle_dict_last_check_time", 0)
+        val lastCheckTime = cachePrefs.getLong("subtitle_dict_last_check_time", 0)
         if (System.currentTimeMillis() - lastCheckTime < checkInterval && dictExist)
             return false
-        Settings.cachePrefs.edit {
+        cachePrefs.edit {
             putLong("subtitle_dict_last_check_time", System.currentTimeMillis())
         }
         val url = "https://api.github.com/repos/BBSub/ZhConvertDict/releases/latest"
@@ -152,7 +151,7 @@ object SubtitleHelper {
             JSONObject(URL(url).readText())
         }.getOrNull() ?: return if (!dictExist) downloadDictFromCdn() else false
         val tagName = json.optString("tag_name")
-        val latestVer = Settings.cachePrefs.getString("subtitle_dict_latest_version", null) ?: ""
+        val latestVer = cachePrefs.getString("subtitle_dict_latest_version", null) ?: ""
         if (latestVer != tagName || !dictExist) {
             val sha256sum = json.optString("body")
                 .takeUnless { it.isNullOrEmpty() } ?: return false
@@ -170,7 +169,7 @@ object SubtitleHelper {
                     && (dictFile.takeIf { it.exists() }?.delete() != false)
                     && tmpDictFile.renameTo(dictFile)
                 ) {
-                    Settings.cachePrefs.edit {
+                    cachePrefs.edit {
                         putString("subtitle_dict_latest_version", tagName)
                     }
                     return true

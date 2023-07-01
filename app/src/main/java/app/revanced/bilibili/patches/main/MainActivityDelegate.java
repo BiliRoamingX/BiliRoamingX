@@ -12,11 +12,11 @@ import tv.danmaku.bili.MainActivityV2;
 public class MainActivityDelegate {
     public static void onCreate(MainActivityV2 activity) {
         DrawerPatch.onMainActivityCreate(activity);
+        Utils.async(PlaybackSpeedPatch::refreshOverrideSpeedList);
         SubtitleParamsCache.updateFont();
         KtUtils.getCountryTask();
         UposReplacer.getBaseUposList();
         Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypes));
-        PlaybackSpeedPatch.refreshOverrideSpeedList();
     }
 
     public static void onStart(MainActivityV2 activity) {

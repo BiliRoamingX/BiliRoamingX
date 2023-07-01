@@ -153,10 +153,8 @@ public enum Settings {
     LOSSLESS_ENABLED("lossless_enabled", BOOLEAN, FALSE);
 
     public static final String PREFS_NAME = "biliroaming";
-    public static final String CACHE_PREFS_NAME = "biliroaming_cache";
 
     public static final SharedPreferences prefs;
-    public static final SharedPreferences cachePrefs;
 
     private static final Set<SharedPreferences.OnSharedPreferenceChangeListener> preferenceChangeListener = new HashSet<>();
 
@@ -187,7 +185,6 @@ public enum Settings {
     static {
         Context context = Utils.getContext();
         prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        cachePrefs = context.getSharedPreferences(CACHE_PREFS_NAME, Context.MODE_PRIVATE);
         loadAllSettings();
     }
 
