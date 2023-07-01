@@ -6,10 +6,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
-import org.json.JSONObject;
-
 import java.net.HttpURLConnection;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import app.revanced.bilibili.api.BiliRoamingApi;
@@ -20,6 +17,9 @@ import app.revanced.bilibili.utils.Utils;
 
 @SuppressWarnings("unused")
 public class OkHttpPatch {
+    private static final String RES_NO_UPDATE = "{\"code\":-304,\"message\":\"没有改动\"}";
+    private static final String RES_MATERIAL_EMPTY = "{\"code\":0,\"data\":{\"container\":[]},\"message\":\"success\"}";
+
     public static boolean shouldHook(String url, int code) {
         if (shouldConvertSubtitle(url, code)) {
             return true;
@@ -28,6 +28,8 @@ public class OkHttpPatch {
         } else if (shouldFixSpace(url, code)) {
             return true;
         } else if (shouldBlockUpdate(url, code)) {
+            return true;
+        } else if (shouldBlockBangumiPageAds(url, code)) {
             return true;
         }
         return false;
@@ -45,7 +47,9 @@ public class OkHttpPatch {
         } else if (shouldFixSpace(url, code)) {
             return fixSpace(url, response);
         } else if (shouldBlockUpdate(url, code)) {
-            return blockUpdate();
+            return RES_NO_UPDATE;
+        } else if (shouldBlockBangumiPageAds(url, code)) {
+            return RES_MATERIAL_EMPTY;
         }
         return response;
     }
@@ -55,7 +59,7 @@ public class OkHttpPatch {
     }
 
     private static boolean shouldUnlockBangumi(String url, int code) {
-        return Settings.UNLOCK_AREA_LIMIT.getBoolean()
+        return (Settings.UNLOCK_AREA_LIMIT.getBoolean() || Settings.BLOCK_BANGUMI_PAGE_ADS.getBoolean())
                 && url.startsWith("https://api.bilibili.com/pgc/view/v2/app/season")
                 && code == HttpURLConnection.HTTP_OK;
     }
@@ -69,6 +73,13 @@ public class OkHttpPatch {
     private static boolean shouldBlockUpdate(String url, int code) {
         return Settings.BLOCK_UPDATE.getBoolean()
                 && url.startsWith("https://app.bilibili.com/x/v2/version/fawkes/upgrade")
+                && code == HttpURLConnection.HTTP_OK;
+    }
+
+    private static boolean shouldBlockBangumiPageAds(String url, int code) {
+        return Settings.BLOCK_BANGUMI_PAGE_ADS.getBoolean()
+                && (url.startsWith("https://api.bilibili.com/pgc/activity/deliver/material/receive")
+                || url.startsWith("https://api.bilibili.com/pgc/activity/deliver/material/receive-activity"))
                 && code == HttpURLConnection.HTTP_OK;
     }
 
@@ -117,9 +128,5 @@ public class OkHttpPatch {
         if (data == null)
             return response;
         return "{\"code\":0,\"data\":" + data + "}";
-    }
-
-    static String blockUpdate() {
-        return new JSONObject(Map.of("code", -304, "message", "没有改动")).toString();
     }
 }

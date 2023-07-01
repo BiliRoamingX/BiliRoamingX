@@ -94,14 +94,10 @@ object BangumiPlayUrlHook {
         reply: PlayViewReply?,
         error: MossException?
     ): PlayViewReply? {
-        if (!Settings.UNLOCK_AREA_LIMIT.boolean) {
-            if (error != null) throw error
-            else return reply
-        }
         if (error is NetworkException)
             throw error
         val response = reply ?: PlayViewReply.newBuilder().build()
-        if (needProxy(response)) {
+        if (Settings.UNLOCK_AREA_LIMIT.boolean && needProxy(response)) {
             return try {
                 val seasonId = req.seasonId.toString().takeIf { it != "0" }
                     ?: lastSeasonInfo["season_id"] ?: "0"
@@ -115,6 +111,10 @@ object BangumiPlayUrlHook {
             } catch (e: CustomServerException) {
                 showPlayerError(response, "请求解析中服务器发生错误(点此查看更多)\n${e.message}")
             }
+        } else if (isDownloadPGC) {
+            return fixDownloadProto(response)
+        } else if (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean) {
+            return purifyViewInfo(response)
         }
         return response
     }
@@ -125,10 +125,6 @@ object BangumiPlayUrlHook {
         reply: PlayViewUniteReply?,
         error: MossException?
     ): PlayViewUniteReply? {
-        if (!Settings.UNLOCK_AREA_LIMIT.boolean) {
-            if (error != null) throw error
-            else return reply
-        }
         if (error is NetworkException)
             throw error
         val response = reply ?: PlayViewUniteReply.newBuilder().build()
@@ -143,7 +139,7 @@ object BangumiPlayUrlHook {
         if (seasonId == "0" && reqEpId == 0L)
             return reply
         val supplement = PlayViewReply.parseFrom(supplementAny.value.toByteArray())
-        if (needProxyUnite(response, supplement)) {
+        if (Settings.UNLOCK_AREA_LIMIT.boolean && needProxyUnite(response, supplement)) {
             return try {
                 val (thaiSeason, thaiEp) = getThaiSeason(seasonId, reqEpId)
                 val content = getPlayUrl(reconstructQueryUnite(req, supplement, thaiEp))
@@ -159,6 +155,10 @@ object BangumiPlayUrlHook {
                     response, supplement, "请求解析中服务器发生错误(点此查看更多)\n${e.message}"
                 )
             }
+        } else if (isDownloadUnite) {
+            return fixDownloadProtoUnite(response)
+        } else if (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean) {
+            return purifyViewInfoUnite(response, supplement)
         }
         return response
     }
@@ -182,6 +182,46 @@ object BangumiPlayUrlHook {
             } ?: throw CustomServerException(mapOf("解析服务器错误" to "无法获取剧集信息"))
         }
         return season to ep
+    }
+
+    private fun fixDownloadProto(response: PlayViewReply) = response.toBuilder().apply {
+        videoInfo = videoInfo.toBuilder().apply { fixDownloadProto() }.build()
+    }.build()
+
+    private fun fixDownloadProtoUnite(response: PlayViewUniteReply) = response.toBuilder().apply {
+        val videoInfo = VideoInfo.parseFrom(response.toByteArray())
+        val newVideoInfo = videoInfo.toBuilder().apply { fixDownloadProto() }.build()
+        vodInfo = VodInfo.parseFrom(newVideoInfo.toByteArray())
+    }.build()
+
+    private fun purifyViewInfo(response: PlayViewReply) = run {
+        response.toBuilder().apply {
+            playExtConf = playExtConf.toBuilder().apply { clearFreyaConfig() }.build()
+            viewInfo = viewInfo.toBuilder().apply {
+                clearAnimation()
+                clearCouponInfo()
+                if (endPage.dialog.type != "pay")
+                    clearEndPage()
+                clearHighDefinitionTrialInfo()
+                clearPayTip()
+                if (popWin.buttonList.all { it.actionType != "pay" })
+                    clearPopWin()
+                if (toast.button.actionType != "pay")
+                    clearToast()
+                if (tryWatchPromptBar.buttonList.all { it.actionType != "pay" })
+                    clearTryWatchPromptBar()
+                clearExtToast()
+            }.build()
+        }.build()
+    }
+
+    private fun purifyViewInfoUnite(response: PlayViewUniteReply, supplement: PlayViewReply) = run {
+        response.toBuilder().apply {
+            this.supplement = Any.newBuilder().apply {
+                typeUrl = PGC_ANY_MODEL_TYPE_URL
+                value = purifyViewInfo(supplement).toByteString()
+            }.build()
+        }.build()
     }
 
     private fun needProxy(response: PlayViewReply): Boolean {

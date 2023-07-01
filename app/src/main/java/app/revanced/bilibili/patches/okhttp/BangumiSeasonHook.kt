@@ -70,17 +70,19 @@ object BangumiSeasonHook {
 
     @JvmStatic
     fun unlockBangumi(url: String, response: String): String {
-        if (!Settings.UNLOCK_AREA_LIMIT.boolean)
-            return response
         val jo = response.toJSONObject()
         val code = jo.optInt("code")
         val data = jo.optJSONObject("data")
-        if (code == FAIL_CODE || data == null) {
+        if (Settings.UNLOCK_AREA_LIMIT.boolean && (code == FAIL_CODE || data == null)) {
             return unlockThaiBangumi(url, response)
-        } else if (code != 0) {
+        } else if (data == null || code != 0) {
             return response
         }
         lastSeasonInfo.clear()
+        if (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean)
+            data.put("activity_entrance", JSONArray())
+        if (!Settings.UNLOCK_AREA_LIMIT.boolean)
+            return jo.toString()
         lastSeasonInfo["title"] = data.optString("title")
         lastSeasonInfo["season_id"] = data.optString("season_id")
         data.optJSONObject("rights")?.run {

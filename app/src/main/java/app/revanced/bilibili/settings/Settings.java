@@ -114,6 +114,7 @@ public enum Settings {
     BLOCK_COMMENT_GUIDE("block_comment_guide", BOOLEAN, FALSE),
     BLOCK_VIDEO_COMMENT("block_video_comment", BOOLEAN, FALSE),
     BLOCK_UP_RCMD_ADS("block_up_rcmd_ads", BOOLEAN, FALSE),
+    BLOCK_BANGUMI_PAGE_ADS("block_bangumi_page_ads", BOOLEAN, FALSE),
     REMOVE_RELATE_PROMOTE("remove_video_relate_promote", BOOLEAN, FALSE),
     REMOVE_RELATE_ONLY_AV("remove_video_relate_only_av", BOOLEAN, FALSE),
     REMOVE_RELATE_NOTHING("remove_video_relate_nothing", BOOLEAN, FALSE),
