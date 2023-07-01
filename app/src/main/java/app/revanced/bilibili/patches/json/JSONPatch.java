@@ -32,6 +32,9 @@ import tv.danmaku.bili.ui.main.event.model.EventEntranceModel;
 import tv.danmaku.bili.ui.main2.api.AccountMine;
 import tv.danmaku.bili.ui.main2.resource.MainResourceManager;
 import tv.danmaku.bili.ui.main2.resource.MainResourceManagerEx;
+import tv.danmaku.bili.ui.offline.api.EpPlayable;
+import tv.danmaku.bili.ui.offline.api.OgvApiResponse;
+import tv.danmaku.bili.ui.offline.api.OgvApiResponseV2;
 import tv.danmaku.bili.ui.splash.ad.model.SplashData;
 import tv.danmaku.bili.ui.splash.ad.model.SplashShowData;
 
@@ -111,6 +114,10 @@ public class JSONPatch {
             customizeSpace(((BiliSpace) data));
         } else if (data instanceof ShareChannels) {
             addListenButton((ShareChannels) data);
+        } else if (data instanceof OgvApiResponse) {
+            unlockOgvResponse((OgvApiResponse<?>) data);
+        } else if (data instanceof OgvApiResponseV2) {
+            unlockOgvResponseV2((OgvApiResponseV2) data);
         }
         return obj;
     }
@@ -418,5 +425,26 @@ public class JSONPatch {
         listenChannel.setShareChannel("LISTEN");
         listenChannel.setPicture("https://i0.hdslb.com/bfs/share/f88d8c420a59ff1ca5975b38722408056e7337b7.png");
         belowChannels.add(toInsertIdx, listenChannel);
+    }
+
+    private static void unlockOgvResponse(OgvApiResponse<?> response) {
+        if (!Settings.ALLOW_DOWNLOAD.getBoolean()) return;
+        if (!(response.result instanceof List)) return;
+        List<?> items = (List<?>) response.result;
+        for (int i = 0; i < items.size(); i++) {
+            Object item = items.get(i);
+            if (item instanceof EpPlayable)
+                ((EpPlayable) item).isPlayable = 1;
+        }
+    }
+
+    private static void unlockOgvResponseV2(OgvApiResponseV2 response) {
+        if (!Settings.ALLOW_DOWNLOAD.getBoolean()) return;
+        var data = response.getData();
+        if (data == null) return;
+        var params = data.getEpPlayableParams();
+        if (params == null || params.isEmpty()) return;
+        for (int i = 0; i < params.size(); i++)
+            params.get(i).setPlayableType(0);
     }
 }

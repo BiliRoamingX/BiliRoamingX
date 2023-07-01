@@ -2,7 +2,6 @@ package app.revanced.bilibili.patches.protobuf
 
 import android.net.Uri
 import app.revanced.bilibili.api.BiliRoamingApi
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.subtitlesCache
 import app.revanced.bilibili.settings.Settings
@@ -20,18 +19,20 @@ object SubtitleReplyHook {
         val result = dmViewReply ?: DmViewReply.newBuilder().build()
         val extraSubtitles = ArrayList<SubtitleItem>()
         if (Settings.UNLOCK_AREA_LIMIT.boolean && Settings.TH_SERVER.string.isNotEmpty()) {
-            val cid = dmViewReq.oid.toString()
+            // when thailand, epId equals oid(cid), seasonId equals pid(aid)
+            val epId = dmViewReq.oid.toString()
             val seasonId = dmViewReq.pid.toString()
-            val lastSeasonInfo = lastSeasonInfo
             val seasonAreasCache = seasonAreasCache
             val sArea = seasonAreasCache[seasonId]
-            val epId = lastSeasonInfo[cid]
             val epArea = seasonAreasCache["ep$epId"]
-            if (Area.TH.let { it == sArea || it == epArea }) {
-                val subtitles = subtitlesCache[seasonId]?.get(cid) ?: run {
-                    val res = BiliRoamingApi.getThailandSubtitles(
-                        epId ?: lastSeasonInfo["epid"]
-                    )?.toJSONObject()
+            if (Area.TH.let { it == sArea || it == epArea } ||
+                (cachePrefs.contains(seasonId) && Area.TH == Area.of(
+                    cachePrefs.getString(seasonId, null)
+                )) || (cachePrefs.contains("ep$epId") && Area.TH == Area.of(
+                    cachePrefs.getString("ep$epId", null)
+                ))) {
+                val subtitles = subtitlesCache[seasonId]?.get(epId) ?: run {
+                    val res = BiliRoamingApi.getThailandSubtitles(epId)?.toJSONObject()
                     if (res != null && res.optInt("code") == 0) {
                         res.optJSONObject("data")
                             ?.optJSONArray("subtitles").orEmpty()
