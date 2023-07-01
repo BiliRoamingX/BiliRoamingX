@@ -1,5 +1,6 @@
 package app.revanced.bilibili.patches.main;
 
+import app.revanced.bilibili.patches.PlaybackSpeedPatch;
 import app.revanced.bilibili.patches.drawer.DrawerPatch;
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.utils.KtUtils;
@@ -15,6 +16,7 @@ public class MainActivityDelegate {
         KtUtils.getCountryTask();
         UposReplacer.getBaseUposList();
         Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypes));
+        PlaybackSpeedPatch.refreshOverrideSpeedList();
     }
 
     public static void onStart(MainActivityV2 activity) {

@@ -653,8 +653,8 @@ object BiliRoamingApi {
                     latch.countDown()
                 }
             }
-            Utils.mainHandler.post {
-                val webView = WebView(Utils.getContext(), null)
+            Utils.runOnMainThread {
+                val webView = WebView(Utils.getContext())
                 webView.addJavascriptInterface(listener, "listener")
                 webView.webViewClient = object : WebViewClient() {
                     override fun onPageFinished(view: WebView, url: String) {

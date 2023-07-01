@@ -47,6 +47,9 @@ public enum Settings {
     FULL_SCREEN_QUALITY("full_screen_quality", STRING, "0"),
     FORCE_OLD_PLAYER("force_old_player", BOOLEAN, FALSE, true),
     REMEMBER_LOSSLESS_SETTING("remember_lossless_setting", BOOLEAN, FALSE),
+    DEFAULT_PLAYBACK_SPEED("default_playback_speed", FLOAT, 0f),
+    LONG_PRESS_PLAYBACK_SPEED("long_press_playback_speed", FLOAT, 0f),
+    OVERRIDE_PLAYBACK_SPEED("playback_speed_override", STRING, ""),
 
     // 首页
     SHOWING_BOTTOM_ITEMS("showing_bottom_items", STRING_SET, Set.of(Constants.ALL_VALUE)),
