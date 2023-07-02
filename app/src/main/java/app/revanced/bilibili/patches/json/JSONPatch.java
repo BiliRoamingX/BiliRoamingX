@@ -199,6 +199,9 @@ public class JSONPatch {
             });
         }
 
+        if (Settings.ADD_CHANNEL.getBoolean())
+            addChannelTab(data.bottom);
+
         if (Settings.PURIFY_GAME.getBoolean()) {
             data.top.removeIf(tab -> {
                 String uri = tab.uri;
@@ -207,6 +210,33 @@ public class JSONPatch {
         }
 
         configTab(data.tab);
+    }
+
+    private static void addChannelTab(List<MainResourceManager.Tab> tabs) {
+        var hasChannel = false;
+        for (int i = 0; i < tabs.size(); i++) {
+            var tabUri = tabs.get(i).uri;
+            if (!TextUtils.isEmpty(tabUri) && tabUri.startsWith("bilibili://pegasus/channel")) {
+                hasChannel = true;
+                break;
+            }
+        }
+        if (hasChannel) return;
+        var newTab = MainResourceManagerEx.newTab();
+        newTab.tabId = "123";
+        newTab.reportId = "频道Bottom";
+        newTab.name = "频道";
+        newTab.uri = "bilibili://main/top_category";
+        newTab.icon = "http://i0.hdslb.com/bfs/archive/e16c9303e9edbf23031f545fcafc44d1f60cd07b.png";
+        newTab.iconSelected = "http://i0.hdslb.com/bfs/archive/f6739d905dee57d2c0429d9b66acb3f39b294aff.png";
+        var pos = 2;
+        newTab.pos = pos;
+        for (int i = 0; i < tabs.size(); i++) {
+            var tab = tabs.get(i);
+            var tabPos = tab.pos;
+            tab.pos = tabPos >= pos ? tabPos + 1 : tabPos;
+        }
+        tabs.add(0, newTab);
     }
 
     private static void configTab(List<MainResourceManager.Tab> tabs) {

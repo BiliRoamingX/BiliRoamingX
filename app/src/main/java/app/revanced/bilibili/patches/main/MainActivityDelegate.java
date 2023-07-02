@@ -1,5 +1,9 @@
 package app.revanced.bilibili.patches.main;
 
+import android.app.Activity;
+
+import java.lang.ref.WeakReference;
+
 import app.revanced.bilibili.patches.PlaybackSpeedPatch;
 import app.revanced.bilibili.patches.drawer.DrawerPatch;
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
@@ -10,7 +14,10 @@ import app.revanced.bilibili.utils.Utils;
 import tv.danmaku.bili.MainActivityV2;
 
 public class MainActivityDelegate {
+    public static WeakReference<Activity> mainActivityRef = new WeakReference<>(null);
+
     public static void onCreate(MainActivityV2 activity) {
+        mainActivityRef = new WeakReference<>(activity);
         DrawerPatch.onMainActivityCreate(activity);
         Utils.async(PlaybackSpeedPatch::refreshOverrideSpeedList);
         SubtitleParamsCache.updateFont();
