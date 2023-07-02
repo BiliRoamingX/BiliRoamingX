@@ -149,6 +149,7 @@ public enum Settings {
     COMMENT_COPY("comment_copy", BOOLEAN, FALSE),
     COMMENT_COPY_ENHANCE("comment_copy_enhance", BOOLEAN, FALSE),
     BLOCK_UPDATE("block_update", BOOLEAN, FALSE),
+    BLOCK_FOLLOW_BUTTON("block_follow_button", STRING_SET, Collections.EMPTY_SET),
 
     // 去广告杂项
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),
