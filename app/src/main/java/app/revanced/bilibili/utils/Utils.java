@@ -6,6 +6,7 @@ import android.app.ActivityThread;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
@@ -16,6 +17,9 @@ import android.text.TextUtils;
 import android.view.Surface;
 import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -203,6 +207,18 @@ public class Utils {
     // codes will filled by patcher
     public static String getAccessKey() {
         return "";
+    }
+
+    // codes will filled by patcher
+    @NonNull
+    public static SharedPreferences blkvPrefsByName(String name, boolean multiProcess) {
+        throw new UnsupportedOperationException();
+    }
+
+    // codes will filled by patcher
+    @NonNull
+    public static SharedPreferences blkvPrefsByFile(File file, boolean multiProcess) {
+        throw new UnsupportedOperationException();
     }
 
     public static String getCurrentProcessName() {

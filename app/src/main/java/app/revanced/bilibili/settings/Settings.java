@@ -151,12 +151,14 @@ public enum Settings {
     COMMENT_COPY_ENHANCE("comment_copy_enhance", BOOLEAN, FALSE),
     BLOCK_UPDATE("block_update", BOOLEAN, FALSE),
     BLOCK_FOLLOW_BUTTON("block_follow_button", STRING_SET, Collections.EMPTY_SET),
+    CUSTOM_THEME("custom_theme", BOOLEAN, FALSE),
 
     // 去广告杂项
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),
 
     // 非配置项
-    LOSSLESS_ENABLED("lossless_enabled", BOOLEAN, FALSE);
+    LOSSLESS_ENABLED("lossless_enabled", BOOLEAN, FALSE),
+    CUSTOM_COLOR("biliroaming_custom_color", INTEGER, -0xe6b7d);
 
     public static final String PREFS_NAME = "biliroaming";
 
@@ -261,6 +263,7 @@ public enum Settings {
 
     @SuppressWarnings("unchecked")
     public void saveValue(Object newValue) {
+        setValue(newValue);
         SharedPreferences.Editor editor = prefs.edit();
         switch (valueType) {
             case BOOLEAN:
@@ -285,7 +288,6 @@ public enum Settings {
                 throw new IllegalStateException(name());
         }
         editor.apply();
-        setValue(newValue);
     }
 
     public void appendValue(String value) {

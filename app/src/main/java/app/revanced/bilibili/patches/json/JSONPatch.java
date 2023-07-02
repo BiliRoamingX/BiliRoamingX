@@ -179,6 +179,8 @@ public class JSONPatch {
                 section.style = drawerStyle;
         }
         sectionListV2.removeIf(section -> !TextUtils.isEmpty(section.title) && !shouldShowing(items, section.title));
+        if (Settings.CUSTOM_THEME.getBoolean())
+            mine.garbEntrance = null;
     }
 
     private static void customizeHomeTab(MainResourceManager.TabData data) {

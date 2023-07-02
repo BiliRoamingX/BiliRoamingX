@@ -75,7 +75,10 @@ inline fun Context.inflateLayout(
 inline fun <T : View> View.findViewByIdName(idName: String): T =
     findViewById(Utils.getResId(idName, "id"))
 
-inline fun Int.toHexColor() = "%08X".format(0xFFFFFFFF.toInt() and this)
+@JvmOverloads
+inline fun Int.toHexColor(alpha: Boolean = true) = if (alpha)
+    "%08X".format(0xFFFFFFFF.toInt() and this)
+else "%06X".format(0xFFFFFF and this)
 
 @ColorInt
 @JvmOverloads
@@ -207,4 +210,14 @@ fun checkErrorToast(json: JSONObject, isCustomServer: Boolean = false) {
 
 val cachePrefs: SharedPreferences by lazy {
     Utils.getContext().getSharedPreferences("biliroaming_cache", Context.MODE_PRIVATE)
+}
+
+val abPrefs by lazy {
+    val abPath = "prod/blconfig/ab.sp"
+    val file = File(Utils.getContext().getDir("foundation", Context.MODE_PRIVATE), abPath)
+    Utils.blkvPrefsByFile(file, true)
+}
+
+val blkvPrefs by lazy {
+    Utils.blkvPrefsByName("instance.bili_preference", true)
 }

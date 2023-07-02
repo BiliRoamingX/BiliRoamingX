@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import java.lang.ref.WeakReference;
 
+import app.revanced.bilibili.patches.CustomThemePatch;
 import app.revanced.bilibili.patches.PlaybackSpeedPatch;
 import app.revanced.bilibili.patches.drawer.DrawerPatch;
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
@@ -19,6 +20,7 @@ public class MainActivityDelegate {
     public static void onCreate(MainActivityV2 activity) {
         mainActivityRef = new WeakReference<>(activity);
         DrawerPatch.onMainActivityCreate(activity);
+        CustomThemePatch.refresh();
         Utils.async(PlaybackSpeedPatch::refreshOverrideSpeedList);
         SubtitleParamsCache.updateFont();
         KtUtils.getCountryTask();
