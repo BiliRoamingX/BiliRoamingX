@@ -1,3 +1,10 @@
+## [0.111.2-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.111.1...v0.111.2-dev.1) (2023-07-02)
+
+
+### Bug Fixes
+
+* **youtube/spoof-signature-verification:** remove auto re-enable functionality ([#428](https://github.com/revanced/revanced-integrations/issues/428)) ([8afe82c](https://github.com/revanced/revanced-integrations/commit/8afe82c0e078880d58e3adef23618a6feaf52e7e))
+
 ## [0.111.1](https://github.com/revanced/revanced-integrations/compare/v0.111.0...v0.111.1) (2023-07-01)
 
 
