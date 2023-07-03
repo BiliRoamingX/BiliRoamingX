@@ -37,7 +37,7 @@ object CustomThemePatch {
 
     @JvmStatic
     fun refresh() {
-        getThemeNamesMap().run {
+        getThemeNames().run {
             this[CUSTOM_THEME_NAME1] = CUSTOM_THEME_ID1
             this[CUSTOM_THEME_NAME2] = CUSTOM_THEME_ID2
         }
@@ -57,7 +57,7 @@ object CustomThemePatch {
 
     // codes will filled by patcher
     @JvmStatic
-    fun getThemeNamesMap(): MutableMap<String, Int> {
+    fun getThemeNames(): MutableMap<String, Int> {
         return mutableMapOf()
     }
 
