@@ -23,6 +23,14 @@ object CustomThemePatch {
     private const val CUSTOM_THEME_ID2 = 1919810 // ん？
 
     init {
+        getThemeNames().run {
+            this[CUSTOM_THEME_NAME1] = CUSTOM_THEME_ID1
+            this[CUSTOM_THEME_NAME2] = CUSTOM_THEME_ID2
+        }
+        getColorIds().run {
+            this[CUSTOM_THEME_ID1] = CUSTOM_THEME_ID1
+            this[CUSTOM_THEME_ID2] = CUSTOM_THEME_ID2
+        }
         Settings.registerPreferenceChangeListener { _, key ->
             if (key == Settings.CUSTOM_THEME.key) refresh()
         }
@@ -37,10 +45,6 @@ object CustomThemePatch {
 
     @JvmStatic
     fun refresh() {
-        getThemeNames().run {
-            this[CUSTOM_THEME_NAME1] = CUSTOM_THEME_ID1
-            this[CUSTOM_THEME_NAME2] = CUSTOM_THEME_ID2
-        }
         getColorArray().run {
             generateColorArray(customColor).let { colors ->
                 put(CUSTOM_THEME_ID1, colors)
@@ -71,6 +75,12 @@ object CustomThemePatch {
     @JvmStatic
     fun getAllThemes(): MutableMap<Long, Any> {
         return mutableMapOf()
+    }
+
+    // codes will filled by patcher
+    @JvmStatic
+    fun getColorIds(): SparseArray<Int> {
+        return SparseArray()
     }
 
     // codes will filled by patcher
