@@ -1,3 +1,10 @@
+## [0.111.2-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.111.2-dev.1...v0.111.2-dev.2) (2023-07-03)
+
+
+### Bug Fixes
+
+* **reddit/sanitize-sharing-links:** update patch to support latest app version ([#430](https://github.com/revanced/revanced-integrations/issues/430)) ([d947de2](https://github.com/revanced/revanced-integrations/commit/d947de2e03683889f11fc461dc53e08fee735ca8))
+
 ## [0.111.2-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.111.1...v0.111.2-dev.1) (2023-07-02)
 
 
