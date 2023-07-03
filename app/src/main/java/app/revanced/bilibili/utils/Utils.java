@@ -221,6 +221,11 @@ public class Utils {
         throw new UnsupportedOperationException();
     }
 
+    // codes will filled by patcher
+    public static boolean isEffectiveVip() {
+        return false;
+    }
+
     public static String getCurrentProcessName() {
         String name = "";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
