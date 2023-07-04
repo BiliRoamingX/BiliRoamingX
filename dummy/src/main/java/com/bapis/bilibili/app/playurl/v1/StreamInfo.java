@@ -919,4 +919,16 @@ public final class StreamInfo extends GeneratedMessageLite<StreamInfo, StreamInf
     public static StreamInfo parseFrom(CodedInputStream codedInputStream, ExtensionRegistryLite extensionRegistryLite) throws IOException {
         return (StreamInfo) GeneratedMessageLite.parseFrom(DEFAULT_INSTANCE, codedInputStream, extensionRegistryLite);
     }
+
+    /**
+     * setNeedVip
+     */
+    static void access$1500(StreamInfo streamInfo, boolean needVip) {
+    }
+
+    /**
+     * setVipFree
+     */
+    static void access$3400(StreamInfo streamInfo, boolean vipFree) {
+    }
 }

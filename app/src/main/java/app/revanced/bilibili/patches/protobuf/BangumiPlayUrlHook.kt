@@ -64,13 +64,17 @@ object BangumiPlayUrlHook {
     )
 
     private var isDownloadPGC = false
+    private var allowDownloadPGC = false
+
     private var isDownloadUnite = false
+    private var allowDownloadUnite = false
 
     @JvmStatic
     fun hookPlayViewPGCBefore(req: PlayViewReq) {
+        isDownloadPGC = req.download >= 1
         if (!Settings.UNLOCK_AREA_LIMIT.boolean) return
-        isDownloadPGC = Settings.ALLOW_DOWNLOAD.boolean && req.download >= 1
-        if (isDownloadPGC) {
+        allowDownloadPGC = Settings.ALLOW_DOWNLOAD.boolean && isDownloadPGC
+        if (allowDownloadPGC) {
             PlayViewReqEx.setFnval(req, Constants.MAX_FNVAL)
             PlayViewReqEx.setFourk(req, true)
             PlayViewReqEx.setDownload(req, 0)
@@ -79,9 +83,10 @@ object BangumiPlayUrlHook {
 
     @JvmStatic
     fun hookPlayViewUniteBefore(req: PlayViewUniteReq) {
+        isDownloadUnite = req.vod.download >= 1
         if (!Settings.UNLOCK_AREA_LIMIT.boolean) return
-        isDownloadUnite = Settings.ALLOW_DOWNLOAD.boolean && req.vod.download >= 1
-        if (isDownloadUnite) {
+        allowDownloadUnite = Settings.ALLOW_DOWNLOAD.boolean && isDownloadUnite
+        if (allowDownloadUnite) {
             VideoVodEx.setFnval(req.vod, Constants.MAX_FNVAL)
             VideoVodEx.setFourk(req.vod, true)
             VideoVodEx.setDownload(req.vod, 0)
@@ -106,17 +111,19 @@ object BangumiPlayUrlHook {
                 if (content == null) {
                     throw CustomServerException(mapOf("未知错误" to "请检查哔哩漫游设置中解析服务器设置。"))
                 } else {
-                    reconstructResponse(req, response, content, isDownloadPGC, thaiSeason, thaiEp)
+                    reconstructResponse(
+                        req, response, content, allowDownloadPGC, thaiSeason, thaiEp
+                    )
                 }
             } catch (e: CustomServerException) {
                 showPlayerError(response, "请求解析中服务器发生错误(点此查看更多)\n${e.message}")
             }
-        } else if (isDownloadPGC) {
+        } else if (error == null && allowDownloadPGC) {
             return fixDownloadProto(response)
-        } else if (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean) {
+        } else if (error == null && Settings.BLOCK_BANGUMI_PAGE_ADS.boolean) {
             return purifyViewInfo(response)
         }
-        return response
+        if (error != null) throw error else return reply
     }
 
     @JvmStatic
@@ -132,12 +139,12 @@ object BangumiPlayUrlHook {
         val typeUrl = supplementAny.typeUrl
         // Only handle pgc video
         if (reply != null && typeUrl != PGC_ANY_MODEL_TYPE_URL)
-            return reply
+            if (error != null) throw error else return reply
         val extraContent = req.extraContentMap
         val seasonId = extraContent.getOrDefault("season_id", "0")
         val reqEpId = extraContent.getOrDefault("ep_id", "0").toLong()
         if (seasonId == "0" && reqEpId == 0L)
-            return reply
+            if (error != null) throw error else return reply
         val supplement = PlayViewReply.parseFrom(supplementAny.value.toByteArray())
         if (Settings.UNLOCK_AREA_LIMIT.boolean && needProxyUnite(response, supplement)) {
             return try {
@@ -147,7 +154,7 @@ object BangumiPlayUrlHook {
                     throw CustomServerException(mapOf("未知错误" to "请检查哔哩漫游设置中解析服务器设置。"))
                 } else {
                     reconstructResponseUnite(
-                        req, response, supplement, content, isDownloadUnite, thaiSeason, thaiEp
+                        req, response, supplement, content, allowDownloadUnite, thaiSeason, thaiEp
                     )
                 }
             } catch (e: CustomServerException) {
@@ -155,12 +162,12 @@ object BangumiPlayUrlHook {
                     response, supplement, "请求解析中服务器发生错误(点此查看更多)\n${e.message}"
                 )
             }
-        } else if (isDownloadUnite) {
+        } else if (error == null && allowDownloadUnite) {
             return fixDownloadProtoUnite(response)
-        } else if (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean) {
+        } else if (error == null && Settings.BLOCK_BANGUMI_PAGE_ADS.boolean) {
             return purifyViewInfoUnite(response, supplement)
         }
-        return response
+        if (error != null) throw error else return reply
     }
 
     private fun getThaiSeason(

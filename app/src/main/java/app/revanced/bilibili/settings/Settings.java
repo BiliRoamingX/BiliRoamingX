@@ -50,6 +50,7 @@ public enum Settings {
     DEFAULT_PLAYBACK_SPEED("default_playback_speed", FLOAT, 0f),
     LONG_PRESS_PLAYBACK_SPEED("long_press_playback_speed", FLOAT, 0f),
     OVERRIDE_PLAYBACK_SPEED("playback_speed_override", STRING, ""),
+    TRIAL_VIP_QUALITY("trial_vip_quality", BOOLEAN, FALSE),
 
     // 首页
     SHOWING_BOTTOM_ITEMS("showing_bottom_items", STRING_SET, Set.of(Constants.ALL_VALUE)),

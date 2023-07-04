@@ -34,6 +34,7 @@ import com.bapis.bilibili.app.playurl.v1.PlayConfEditReq;
 import com.bapis.bilibili.app.playurl.v1.PlayConfReply;
 import com.bapis.bilibili.app.playurl.v1.PlayConfReq;
 import com.bapis.bilibili.app.playurl.v1.PlayViewReply;
+import com.bapis.bilibili.app.playurl.v1.PlayViewReq;
 import com.bapis.bilibili.app.view.v1.ConfigEx;
 import com.bapis.bilibili.app.view.v1.LikeCustomEx;
 import com.bapis.bilibili.app.view.v1.RelatesFeedReply;
@@ -62,11 +63,13 @@ import com.google.protobuf.UnknownFieldSetLite;
 import app.revanced.bilibili.api.MossResponseHandlerProxy;
 import app.revanced.bilibili.meta.HookFlags;
 import app.revanced.bilibili.patches.AutoLikePatch;
+import app.revanced.bilibili.patches.TrialQualityPatch;
 import app.revanced.bilibili.patches.VideoQualityPatch;
 import app.revanced.bilibili.patches.json.PegasusPatch;
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.MossDebugPrinter;
+import app.revanced.bilibili.utils.Utils;
 
 @SuppressWarnings({"unused", "unchecked", "rawtypes"})
 public class MossPatch {
@@ -175,6 +178,7 @@ public class MossPatch {
             if (Settings.DYNAMIC_PREFER_VIDEO_TAB.getBoolean())
                 DynRedReplyEx.setDefaultTab((DynRedReply) reply, "video");
         } else if (reply instanceof PlayViewReply) {
+            PlayViewReq playViewReq = (PlayViewReq) req;
             PlayViewReply playViewReply = (PlayViewReply) reply;
             if (Settings.REMEMBER_LOSSLESS_SETTING.getBoolean()) {
                 PlayAbilityConf playConf = playViewReply.getPlayConf();
@@ -190,6 +194,9 @@ public class MossPatch {
                     ArcConfEx.setDisabled(arcConf, false);
                 }
             }
+            if (playViewReq.getDownload() < 1 && !Utils.isEffectiveVip()
+                    && Settings.FORCE_OLD_PLAYER.getBoolean() && Settings.TRIAL_VIP_QUALITY.getBoolean())
+                TrialQualityPatch.makeVipFree(playViewReply.getVideoInfo());
         } else if (reply instanceof ViewReply) {
             ViewReply viewReply = (ViewReply) reply;
             long aid = viewReply.getArc().getAid();
