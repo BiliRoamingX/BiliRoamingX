@@ -1,3 +1,10 @@
+# [0.112.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.111.3-dev.1...v0.112.0-dev.1) (2023-07-05)
+
+
+### Features
+
+* remove unnecessary notice ([be3955f](https://github.com/revanced/revanced-integrations/commit/be3955fee45d22966006156a5475ef91b6f2b981))
+
 ## [0.111.3-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.111.2...v0.111.3-dev.1) (2023-07-05)
 
 
