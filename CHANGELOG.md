@@ -1,3 +1,10 @@
+## [0.111.3-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.111.2...v0.111.3-dev.1) (2023-07-05)
+
+
+### Bug Fixes
+
+* **youtube/hide-ads:** remove duplicate filter ([#432](https://github.com/revanced/revanced-integrations/issues/432)) ([ea7ee56](https://github.com/revanced/revanced-integrations/commit/ea7ee56276a4a88f156a06c8f614360561231908))
+
 ## [0.111.2](https://github.com/revanced/revanced-integrations/compare/v0.111.1...v0.111.2) (2023-07-03)
 
 
