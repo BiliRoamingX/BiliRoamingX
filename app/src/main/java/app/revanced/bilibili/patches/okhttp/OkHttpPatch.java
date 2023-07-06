@@ -105,7 +105,8 @@ public class OkHttpPatch {
             try {
                 dictReady = Utils.submitTask(SubtitleHelper::checkDictUpdate)
                         .get(60, TimeUnit.SECONDS);
-            } catch (Throwable ignored) {
+            } catch (Throwable error) {
+                LogHelper.error(() -> "check dict update failed", error);
             }
             if (!dictReady)
                 dictReady = SubtitleHelper.getDictExist();

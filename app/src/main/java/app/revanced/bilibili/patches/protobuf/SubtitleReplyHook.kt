@@ -72,6 +72,7 @@ object SubtitleReplyHook {
         }
         if (extraSubtitles.isNotEmpty())
             VideoSubtitleEx.addAllSubtitles(result.subtitle, extraSubtitles)
+        LogHelper.debug { "modified dmView response: $result" }
         return result
     }
 

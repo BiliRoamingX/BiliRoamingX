@@ -149,7 +149,8 @@ object SubtitleHelper {
         val url = "https://api.github.com/repos/BBSub/ZhConvertDict/releases/latest"
         val json = runCatching {
             JSONObject(URL(url).readText())
-        }.getOrNull() ?: return if (!dictExist) downloadDictFromCdn() else false
+        }.onFailure { LogHelper.error({ "failed to get dict api response" }, it) }
+            .getOrNull() ?: return if (!dictExist) downloadDictFromCdn() else false
         val tagName = json.optString("tag_name")
         val latestVer = cachePrefs.getString("subtitle_dict_latest_version", null) ?: ""
         if (latestVer != tagName || !dictExist) {
@@ -176,6 +177,7 @@ object SubtitleHelper {
                 }
                 tmpDictFile.delete()
             }.onFailure {
+                LogHelper.error({ "failed to download subtitle convert dict" }, it)
                 tmpDictFile.delete()
             }
         }
