@@ -122,6 +122,7 @@ public enum Settings {
     REMOVE_RELATE_NOTHING("remove_video_relate_nothing", BOOLEAN, FALSE),
     DISABLE_AUTO_SELECT("disable_auto_select", BOOLEAN, FALSE),
     DISABLE_AUTO_SUBSCRIBE("disable_auto_subscribe", BOOLEAN, FALSE),
+    FILTER_STORY("filter_story", STRING_SET, Collections.EMPTY_SET),
 
     // 用户空间页
     FIX_SPACE("fix_space", BOOLEAN, TRUE),

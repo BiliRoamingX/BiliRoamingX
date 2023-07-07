@@ -20,6 +20,8 @@ import com.bilibili.lib.sharewrapper.online.api.ShareChannels;
 import com.bilibili.okretro.GeneralResponse;
 import com.bilibili.search.api.SearchRank;
 import com.bilibili.search.api.SearchReferral;
+import com.bilibili.video.story.StoryDetail;
+import com.bilibili.video.story.api.StoryFeedResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,6 +120,8 @@ public class JSONPatch {
             unlockOgvResponse((OgvApiResponse<?>) data);
         } else if (data instanceof OgvApiResponseV2) {
             unlockOgvResponseV2((OgvApiResponseV2) data);
+        } else if (data instanceof StoryFeedResponse) {
+            filterStory((StoryFeedResponse) data);
         }
         return obj;
     }
@@ -478,5 +482,20 @@ public class JSONPatch {
         if (params == null || params.isEmpty()) return;
         for (int i = 0; i < params.size(); i++)
             params.get(i).setPlayableType(0);
+    }
+
+    private static void filterStory(StoryFeedResponse storyFeedResponse) {
+        Set<String> filters = Settings.FILTER_STORY.getStringSet();
+        List<StoryDetail> items;
+        if (!filters.isEmpty() && (items = storyFeedResponse.getItems()) != null) {
+            items.removeIf(e -> {
+                String aGoto = e.getGoto();
+                if (!TextUtils.isEmpty(aGoto))
+                    for (String filter : filters)
+                        if (aGoto.contains(filter))
+                            return true;
+                return false;
+            });
+        }
     }
 }
