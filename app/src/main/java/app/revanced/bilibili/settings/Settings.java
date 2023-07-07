@@ -154,13 +154,15 @@ public enum Settings {
     BLOCK_UPDATE("block_update", BOOLEAN, FALSE),
     BLOCK_FOLLOW_BUTTON("block_follow_button", STRING_SET, Collections.EMPTY_SET),
     CUSTOM_THEME("custom_theme", BOOLEAN, FALSE),
+    SKIN("skin", BOOLEAN, FALSE),
 
     // 去广告杂项
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),
 
     // 非配置项
     LOSSLESS_ENABLED("lossless_enabled", BOOLEAN, FALSE),
-    CUSTOM_COLOR("biliroaming_custom_color", INTEGER, -0xe6b7d);
+    CUSTOM_COLOR("biliroaming_custom_color", INTEGER, -0xe6b7d),
+    SKIN_JSON("skin_json", STRING, "");
 
     public static final String PREFS_NAME = "biliroaming";
 

@@ -18,4 +18,4 @@ inline fun JSONArray?.orEmpty() = this ?: JSONArray()
 
 inline fun Map<String, Any>.toJson() = JSONObject(this).toString()
 
-inline fun Map<String, Any>.toJsonObject() = JSONObject(this)
+inline fun Map<String, Any>.toJSONObject() = JSONObject(this)

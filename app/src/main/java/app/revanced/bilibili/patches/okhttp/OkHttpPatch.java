@@ -6,6 +6,9 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -33,6 +36,7 @@ public class OkHttpPatch {
                 || shouldBlockBangumiMaterial(url, code)
                 || shouldPurifySeasonRcmd(url, code)
                 || shouldPurifyCards(url, code)
+                || shouldImportSkin(url, code)
                 /* for convenient to add a new line */;
     }
 
@@ -55,6 +59,8 @@ public class OkHttpPatch {
             return purifySeasonRcmd(response);
         } else if (shouldPurifyCards(url, code)) {
             return RES_CARDS_EMPTY;
+        } else if (shouldImportSkin(url, code)) {
+            return importSkin(response);
         }
         return response;
     }
@@ -100,6 +106,13 @@ public class OkHttpPatch {
         return Settings.BLOCK_UP_RCMD_ADS.getBoolean()
                 && (url.startsWith("https://api.bilibili.com/pgc/season/player/cards")
                 || url.startsWith("https://api.bilibili.com/pgc/season/player/ogv/cards"))
+                && code == HttpURLConnection.HTTP_OK;
+    }
+
+    public static boolean shouldImportSkin(String url, int code) {
+        return Settings.SKIN.getBoolean()
+                && !Settings.SKIN_JSON.getString().isEmpty()
+                && url.startsWith("https://app.bilibili.com/x/resource/show/skin")
                 && code == HttpURLConnection.HTTP_OK;
     }
 
@@ -168,5 +181,23 @@ public class OkHttpPatch {
         for (int i = toRemoveIdxList.size() - 1; i >= 0; i--)
             cards.remove(toRemoveIdxList.get(i));
         return json.toString();
+    }
+
+    static String importSkin(String response) {
+        JSONObject skin;
+        try {
+            skin = new JSONObject(Settings.SKIN_JSON.getString());
+        } catch (Exception e) {
+            return response;
+        }
+        skin.remove("package_md5");
+        JSONObject jo = Jsons.toJSONObject(response);
+        JSONObject data = jo.optJSONObject("data");
+        if (data == null) return response;
+        try {
+            data.put("user_equip", skin);
+        } catch (JSONException ignored) {
+        }
+        return jo.toString();
     }
 }

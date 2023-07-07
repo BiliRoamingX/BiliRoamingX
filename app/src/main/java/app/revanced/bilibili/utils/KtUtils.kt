@@ -172,6 +172,20 @@ fun Preference.onClick(onClick: (Preference) -> Boolean) {
     clickListenerField.set(this, proxy)
 }
 
+fun Preference.onChange(onClick: (preference: Preference, newValue: Any?) -> Boolean) {
+    val changeListenerField = Reflex.findFieldIfExists(Preference::class.java, "mOnChangeListener")
+        ?: return
+    val proxy = Proxy.newProxyInstance(
+        javaClass.classLoader,
+        arrayOf(changeListenerField.type)
+    ) { _, _, args ->
+        val preference = args[0] as Preference
+        val newValue = args[1]
+        onClick(preference, newValue)
+    }
+    changeListenerField.set(this, proxy)
+}
+
 fun signQuery(query: String?, extraMap: Map<String, String> = emptyMap()): String? {
     query ?: return null
     val queryMap = query.split('&')
