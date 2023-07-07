@@ -172,7 +172,7 @@ fun Preference.onClick(onClick: (Preference) -> Boolean) {
     clickListenerField.set(this, proxy)
 }
 
-fun Preference.onChange(onClick: (preference: Preference, newValue: Any?) -> Boolean) {
+fun Preference.onChange(onChange: (preference: Preference, newValue: Any?) -> Boolean) {
     val changeListenerField = Reflex.findFieldIfExists(Preference::class.java, "mOnChangeListener")
         ?: return
     val proxy = Proxy.newProxyInstance(
@@ -181,7 +181,7 @@ fun Preference.onChange(onClick: (preference: Preference, newValue: Any?) -> Boo
     ) { _, _, args ->
         val preference = args[0] as Preference
         val newValue = args[1]
-        onClick(preference, newValue)
+        onChange(preference, newValue)
     }
     changeListenerField.set(this, proxy)
 }
