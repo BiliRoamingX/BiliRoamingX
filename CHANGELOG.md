@@ -1,3 +1,10 @@
+# [0.112.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.112.0-dev.1...v0.112.0-dev.2) (2023-07-07)
+
+
+### Features
+
+* **youtube:** support version `18.23.35` ([#433](https://github.com/revanced/revanced-integrations/issues/433)) ([dec7348](https://github.com/revanced/revanced-integrations/commit/dec73482038b3cc8b2031fd876643f89d937d142))
+
 # [0.112.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.111.3-dev.1...v0.112.0-dev.1) (2023-07-05)
 
 
