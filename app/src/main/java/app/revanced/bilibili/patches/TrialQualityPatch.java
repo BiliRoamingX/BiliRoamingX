@@ -7,6 +7,7 @@ import com.bapis.bilibili.app.playurl.v1.Stream;
 import com.bapis.bilibili.app.playurl.v1.StreamInfoEx;
 import com.bapis.bilibili.app.playurl.v1.VideoInfo;
 
+import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Utils;
 
 public class TrialQualityPatch {
@@ -27,7 +28,8 @@ public class TrialQualityPatch {
     }
 
     public static void onBindOnline(boolean selected, TextView strokeBadge, TextView solidBadge) {
-        if (!Utils.isEffectiveVip() && Utils.getString("try_listening_tips") // 限免中
+        if (Settings.FORCE_OLD_PLAYER.getBoolean() && Settings.TRIAL_VIP_QUALITY.getBoolean()
+                && !Utils.isEffectiveVip() && Utils.getString("try_listening_tips") // 限免中
                 .equals(solidBadge.getText().toString())) {
             solidBadge.setVisibility(View.GONE);
             var strokeText = selected ? Utils.getString("player_try_watching") // 试看中

@@ -23,7 +23,9 @@ public class OkHttpPatch {
     private static final String RES_MATERIAL_EMPTY = "{\"code\":0,\"data\":{\"container\":[]},\"message\":\"success\"}";
     private static final String RES_CARDS_EMPTY = "{\"code\":0,\"data\":[]}";
 
+    @SuppressLint("DefaultLocale")
     public static boolean shouldHook(String url, int code) {
+        LogHelper.debug(() -> String.format("OkHttpPatch.shouldHook, code: %d, url: %s", code, url));
         return shouldConvertSubtitle(url, code)
                 || shouldUnlockBangumi(url, code)
                 || shouldFixSpace(url, code)
@@ -58,7 +60,9 @@ public class OkHttpPatch {
     }
 
     private static boolean shouldConvertSubtitle(String url, int code) {
-        return url.contains("zh_converter=t2cn") && code == HttpURLConnection.HTTP_OK;
+        return (url.contains("zh_converter=t2cn")
+                || url.contains("zh_converter%3Dt2cn") // free flow, url starts with https://proxy-tf-all-ws.bilivideo.com
+        ) && code == HttpURLConnection.HTTP_OK;
     }
 
     private static boolean shouldUnlockBangumi(String url, int code) {
