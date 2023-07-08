@@ -1,3 +1,17 @@
+# [0.112.0](https://github.com/revanced/revanced-integrations/compare/v0.111.2...v0.112.0) (2023-07-08)
+
+
+### Bug Fixes
+
+* **youtube/hide-ads:** remove duplicate filter ([#432](https://github.com/revanced/revanced-integrations/issues/432)) ([ea7ee56](https://github.com/revanced/revanced-integrations/commit/ea7ee56276a4a88f156a06c8f614360561231908))
+* **youtube/hide-layout-components:**  hide mix playlists ([789e0c8](https://github.com/revanced/revanced-integrations/commit/789e0c8bcb1c2e964abcc496144d2f614c36fc0e))
+
+
+### Features
+
+* remove unnecessary notice ([be3955f](https://github.com/revanced/revanced-integrations/commit/be3955fee45d22966006156a5475ef91b6f2b981))
+* **youtube:** support version `18.23.35` ([#433](https://github.com/revanced/revanced-integrations/issues/433)) ([dec7348](https://github.com/revanced/revanced-integrations/commit/dec73482038b3cc8b2031fd876643f89d937d142))
+
 # [0.112.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.112.0-dev.2...v0.112.0-dev.3) (2023-07-08)
 
 
