@@ -160,6 +160,8 @@ public enum Settings {
     TEXT_FOLD_COMMENT_MAX_LINES("text_fold_comment_max_lines", INTEGER, Constants.DEF_COMMENT_MAX_LINES),
     TEXT_FOLD_DYN_MAX_LINES("text_fold_dyn_max_lines", INTEGER, Constants.DEF_DYN_MAX_LINES),
     TEXT_FOLD_DYN_LINES_TO_ALL("text_fold_dyn_lines_to_all", INTEGER, Constants.DEF_DYN_LINES_TO_ALL),
+    BLOCK_MODULES("block_modules", BOOLEAN, FALSE),
+    BLOCK_MODULES_EXCEPTION("block_modules_exception", STRING_SET, Collections.EMPTY_SET),
 
     // 去广告杂项
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),

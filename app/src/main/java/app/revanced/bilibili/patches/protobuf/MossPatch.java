@@ -35,6 +35,8 @@ import com.bapis.bilibili.app.playurl.v1.PlayConfReply;
 import com.bapis.bilibili.app.playurl.v1.PlayConfReq;
 import com.bapis.bilibili.app.playurl.v1.PlayViewReply;
 import com.bapis.bilibili.app.playurl.v1.PlayViewReq;
+import com.bapis.bilibili.app.resource.v1.ListReply;
+import com.bapis.bilibili.app.resource.v1.ListReq;
 import com.bapis.bilibili.app.view.v1.ConfigEx;
 import com.bapis.bilibili.app.view.v1.LikeCustomEx;
 import com.bapis.bilibili.app.view.v1.RelatesFeedReply;
@@ -218,6 +220,10 @@ public class MossPatch {
         } else if (reply instanceof RelatesFeedReply) {
             RelatesFeedReply feedReply = (RelatesFeedReply) reply;
             PegasusPatch.filterRelatesFeed(feedReply);
+        } else if (reply instanceof ListReply) {
+            ListReq listReq = (ListReq) req;
+            ListReply listReply = (ListReply) reply;
+            ModuleListReplyHook.hook(listReq, listReply);
         }
         if (error != null) {
             throw error;
