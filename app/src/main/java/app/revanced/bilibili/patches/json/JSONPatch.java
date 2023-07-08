@@ -39,6 +39,8 @@ import tv.danmaku.bili.ui.offline.api.OgvApiResponse;
 import tv.danmaku.bili.ui.offline.api.OgvApiResponseV2;
 import tv.danmaku.bili.ui.splash.ad.model.SplashData;
 import tv.danmaku.bili.ui.splash.ad.model.SplashShowData;
+import tv.danmaku.bili.videopage.player.features.qoe.DmQoeInfo;
+import tv.danmaku.bili.videopage.player.gemini.qoe.GeminiDmQoeInfo;
 
 @SuppressWarnings("unused")
 public class JSONPatch {
@@ -122,6 +124,12 @@ public class JSONPatch {
             unlockOgvResponseV2((OgvApiResponseV2) data);
         } else if (data instanceof StoryFeedResponse) {
             filterStory((StoryFeedResponse) data);
+        } else if (data instanceof DmQoeInfo) {
+            if (Settings.BLOCK_DM_FEEDBACK.getBoolean())
+                ((DmQoeInfo) data).setShow(false);
+        } else if (data instanceof GeminiDmQoeInfo) {
+            if (Settings.BLOCK_DM_FEEDBACK.getBoolean())
+                ((GeminiDmQoeInfo) data).setShow(false);
         }
         return obj;
     }
