@@ -99,6 +99,7 @@ public enum Settings {
     PURIFY_DRAWER_RED_DOT("purify_drawer_reddot", BOOLEAN, FALSE),
     REMOVE_VIP_SECTION("remove_vip_section", BOOLEAN, FALSE, true),
     SHOWING_DRAWER_ITEMS("showing_drawer_items", STRING_SET, Set.of(Constants.ALL_VALUE)),
+    SWITCH_DARK_DIALOG("switch_dark_dialog", BOOLEAN, FALSE),
 
     // 直播间
     FORBID_SWITCH_LIVE_ROOM("forbid_switch_live_room", BOOLEAN, FALSE),

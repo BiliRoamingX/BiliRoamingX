@@ -29,7 +29,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-
+@SuppressWarnings("unused")
 public class Utils {
     @SuppressLint("StaticFieldLeak")
     public static Context context;
@@ -222,7 +222,13 @@ public class Utils {
     }
 
     // codes will filled by patcher
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isEffectiveVip() {
+        return false;
+    }
+
+    // codes will filled by patcher
+    public static boolean isNightFollowSystem() {
         return false;
     }
 
