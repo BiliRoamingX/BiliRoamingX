@@ -11,4 +11,7 @@ public class Constants {
     public static final String ZONE_URL = "https://api.bilibili.com/x/web-interface/zone";
     public static final int MAX_FNVAL = 16 | 64 | 128 | 256 | 512 | 1024 | 2048;
     public static final int MAX_QN = 127;
+    public static final int DEF_COMMENT_MAX_LINES = 6;
+    public static final int DEF_DYN_MAX_LINES = 4;
+    public static final int DEF_DYN_LINES_TO_ALL = 10;
 }

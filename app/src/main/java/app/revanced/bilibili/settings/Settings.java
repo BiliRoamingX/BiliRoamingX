@@ -157,6 +157,9 @@ public enum Settings {
     BLOCK_FOLLOW_BUTTON("block_follow_button", STRING_SET, Collections.EMPTY_SET),
     CUSTOM_THEME("custom_theme", BOOLEAN, FALSE),
     SKIN("skin", BOOLEAN, FALSE),
+    TEXT_FOLD_COMMENT_MAX_LINES("text_fold_comment_max_lines", INTEGER, Constants.DEF_COMMENT_MAX_LINES),
+    TEXT_FOLD_DYN_MAX_LINES("text_fold_dyn_max_lines", INTEGER, Constants.DEF_DYN_MAX_LINES),
+    TEXT_FOLD_DYN_LINES_TO_ALL("text_fold_dyn_lines_to_all", INTEGER, Constants.DEF_DYN_LINES_TO_ALL),
 
     // 去广告杂项
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),

@@ -330,6 +330,65 @@ open class BaseWidgetSettingFragment : BaseFragment() {
         return Pair(layout, switcher)
     }
 
+    protected fun seekBarItem(
+        name: String,
+        current: Int,
+        indicator: String = string("biliroaming_text_fold_line"),
+        max: Int = 100,
+    ): Pair<LinearLayout, SeekBar> {
+        val layout = LinearLayout(activity).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            setPadding(0, 8.dp, 0, 8.dp)
+        }
+        val nameView = TextView(activity).apply {
+            text = name
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
+            setSingleLine()
+            ellipsize = TextUtils.TruncateAt.END
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+        val progressView = TextView(activity).apply {
+            text = indicator.format(current)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14F)
+            TypedValue().apply {
+                context.theme.resolveAttribute(android.R.attr.textColorSecondary, this, true)
+            }.data.let { setTextColor(it) }
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+        val seekBarView = SeekBar(activity).apply {
+            progress = current
+            this.max = max
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            setPadding(paddingLeft, 8.dp, paddingRight, 8.dp)
+            setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+                override fun onProgressChanged(
+                    seekBar: SeekBar?, progress: Int, fromUser: Boolean
+                ) {
+                    progressView.text = indicator.format(progress)
+                }
+            })
+        }
+        layout.addView(nameView)
+        layout.addView(progressView)
+        layout.addView(seekBarView)
+        return Pair(layout, seekBarView)
+    }
+
     protected fun saveButton() = TextView(context).apply {
         setBackgroundColor(Utils.getColor(context, "Wh0"))
         setRippleForeground()
