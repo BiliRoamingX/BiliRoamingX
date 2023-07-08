@@ -1,3 +1,10 @@
+# [0.112.0-dev.3](https://github.com/revanced/revanced-integrations/compare/v0.112.0-dev.2...v0.112.0-dev.3) (2023-07-08)
+
+
+### Bug Fixes
+
+* **youtube/hide-layout-components:**  hide mix playlists ([789e0c8](https://github.com/revanced/revanced-integrations/commit/789e0c8bcb1c2e964abcc496144d2f614c36fc0e))
+
 # [0.112.0-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.112.0-dev.1...v0.112.0-dev.2) (2023-07-07)
 
 
