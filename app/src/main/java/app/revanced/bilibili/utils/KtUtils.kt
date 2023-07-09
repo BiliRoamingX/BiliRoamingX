@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.preference.Preference
+import androidx.preference.PreferenceManager
 import org.json.JSONObject
 import java.io.File
 import java.io.InputStream
@@ -184,6 +185,32 @@ fun Preference.onChange(onChange: (preference: Preference, newValue: Any?) -> Bo
         onChange(preference, newValue)
     }
     changeListenerField.set(this, proxy)
+}
+
+private val onPreferenceTreeClickListenerField by lazy {
+    PreferenceManager::class.java.declaredFields.find { f ->
+        f.type.isInterface && f.type.declaredMethods.let {
+            it.size == 1 && it[0].returnType == Boolean::class.javaPrimitiveType && it[0].parameterTypes.let { ts ->
+                ts.size == 1 && ts[0] == Preference::class.java
+            }
+        }
+    }.also { it?.isAccessible = true }
+}
+
+fun PreferenceManager.onPreferenceTreeClick(action: ((Preference) -> Boolean)?) {
+    val field = onPreferenceTreeClickListenerField ?: return
+    if (action == null) {
+        field.set(this, null)
+        return
+    }
+    val proxy = Proxy.newProxyInstance(
+        javaClass.classLoader,
+        arrayOf(field.type)
+    ) { _, _, args ->
+        val preference = args[0] as Preference
+        action(preference)
+    }
+    field.set(this, proxy)
 }
 
 fun signQuery(query: String?, extraMap: Map<String, String> = emptyMap()): String? {

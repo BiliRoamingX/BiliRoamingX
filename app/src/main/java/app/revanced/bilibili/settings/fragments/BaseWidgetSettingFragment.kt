@@ -15,6 +15,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.appcompat.widget.SwitchCompat
 import app.revanced.bilibili.utils.*
+import app.revanced.bilibili.widget.HdBaseToolbar
 import com.bilibili.lib.ui.BaseFragment
 
 open class BaseWidgetSettingFragment : BaseFragment() {
@@ -410,10 +411,23 @@ open class BaseWidgetSettingFragment : BaseFragment() {
                 FrameLayout.LayoutParams.MATCH_PARENT
             )
         }
+        if (Utils.isHd()) {
+            val title = arguments?.getString(BiliRoamingBaseSettingFragment.EXTRA_TITLE).orEmpty()
+                .ifEmpty { string("biliroaming_settings_title") }
+            val toolbar = HdBaseToolbar(requireContext(), title) {
+                parentFragmentManager.popBackStack()
+            }.apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+            }
+            rootView.addView(toolbar)
+        }
         val contentScrollView = ScrollView(context).apply {
             scrollBarStyle = ScrollView.SCROLLBARS_OUTSIDE_OVERLAY
             layoutParams = LinearLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT,
                 0
             ).apply {
                 weight = 1F
