@@ -126,7 +126,7 @@ class CustomizeSubtitleStyleFragment : BaseWidgetSettingFragment() {
             )
             Settings.SUBTITLE_OFFSET.saveValue(offset.text.toString().toIntOrNull() ?: 0)
             SubtitleParamsCache.update()
-            requireActivity().onBackPressed()
+            parentFragmentManager.popBackStack()
         }
 
         refreshFontStatus()

@@ -29,15 +29,36 @@ public class SubjectControl extends GeneratedMessageLite<SubjectControl, Subject
     }
 
     /**
+     * clearEmptyBackgroundTextPlain
+     * for hd
+     */
+    static void access$5500(SubjectControl subjectControl) {
+    }
+
+    /**
      * clearEmptyBackgroundTextHighlight
      */
     static void access$6800(SubjectControl subjectControl) {
     }
 
     /**
+     * clearEmptyBackgroundTextHighlight
+     * for hd
+     */
+    static void access$5800(SubjectControl subjectControl) {
+    }
+
+    /**
      * clearEmptyBackgroundUri
      */
     static void access$7100(SubjectControl subjectControl) {
+    }
+
+    /**
+     * clearEmptyBackgroundUri
+     * for hd
+     */
+    static void access$6100(SubjectControl subjectControl) {
     }
 
     public static Builder newBuilder() {

@@ -121,7 +121,7 @@ class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
 
             if (from == "home")
                 Toasts.showShortWithId("biliroaming_save_success_and_refresh_home")
-            requireActivity().onBackPressed()
+            parentFragmentManager.popBackStack()
         }
 
         return root

@@ -139,7 +139,7 @@ public enum Settings {
     // 字幕
     SUBTITLE_AUTO_GENERATE("auto_generate_subtitle", BOOLEAN, FALSE),
     SUBTITLE_ADD_CLOSE("subtitle_add_close", BOOLEAN, FALSE),
-    SUBTITLE_STYLE_SWITCH("custom_subtitle", BOOLEAN, TRUE),
+    SUBTITLE_STYLE_SWITCH("custom_subtitle", BOOLEAN, FALSE),
     SUBTITLE_REMOVE_BG("subtitle_remove_bg", BOOLEAN, TRUE),
     SUBTITLE_BOLD_TEXT("subtitle_bold", BOOLEAN, TRUE),
     SUBTITLE_FONT_SIZE_PORTRAIT("subtitle_font_size_portrait", INTEGER, 0),

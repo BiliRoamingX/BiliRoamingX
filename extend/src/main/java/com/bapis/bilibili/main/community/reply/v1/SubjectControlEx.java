@@ -12,4 +12,16 @@ public class SubjectControlEx {
     public static void clearEmptyBackgroundUri(SubjectControl subjectControl) {
         SubjectControl.access$7100(subjectControl);
     }
+
+    public static void clearEmptyBackgroundTextPlainHd(SubjectControl subjectControl) {
+        SubjectControl.access$5500(subjectControl);
+    }
+
+    public static void clearEmptyBackgroundTextHighlightHd(SubjectControl subjectControl) {
+        SubjectControl.access$5800(subjectControl);
+    }
+
+    public static void clearEmptyBackgroundUriHd(SubjectControl subjectControl) {
+        SubjectControl.access$6100(subjectControl);
+    }
 }

@@ -38,7 +38,7 @@ class TextFoldFragment : BaseWidgetSettingFragment() {
                 ?: Constants.DEF_DYN_MAX_LINES)
             Settings.TEXT_FOLD_DYN_LINES_TO_ALL.saveValue(dynLinesToAllItem.progress.takeIf { it != 0 }
                 ?: Constants.DEF_DYN_LINES_TO_ALL)
-            requireActivity().onBackPressed()
+            parentFragmentManager.popBackStack()
         }
 
         return root

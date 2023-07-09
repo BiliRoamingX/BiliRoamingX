@@ -56,7 +56,7 @@ class FilterDynamicByKeywordFragment : BaseWidgetSettingFragment() {
             Settings.DYNAMIC_PURIFY_TOPIC.saveValue(topicGroup.getKeywords())
 
             Toasts.showShortWithId("biliroaming_save_success_and_refresh_dynamic")
-            requireActivity().onBackPressed()
+            parentFragmentManager.popBackStack()
         }
 
         return root

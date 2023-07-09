@@ -8,6 +8,8 @@ import com.bapis.bilibili.main.community.reply.v1.SubjectControlEx;
 import com.bapis.bilibili.main.community.reply.v1.TextStyle;
 import com.bilibili.lib.moss.api.MossResponseHandler;
 
+import app.revanced.bilibili.utils.Utils;
+
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class CommentHook {
     public static void blockVideoComment(MossResponseHandler handler) {
@@ -35,9 +37,15 @@ public class CommentHook {
 
     public static void blockCommentGuide(MainListReply reply) {
         var subjectControl = reply.getSubjectControl();
-        SubjectControlEx.clearEmptyBackgroundTextPlain(subjectControl);
-        SubjectControlEx.clearEmptyBackgroundTextHighlight(subjectControl);
-        SubjectControlEx.clearEmptyBackgroundUri(subjectControl);
+        if (Utils.isHd()) {
+            SubjectControlEx.clearEmptyBackgroundTextPlainHd(subjectControl);
+            SubjectControlEx.clearEmptyBackgroundTextHighlightHd(subjectControl);
+            SubjectControlEx.clearEmptyBackgroundUriHd(subjectControl);
+        } else {
+            SubjectControlEx.clearEmptyBackgroundTextPlain(subjectControl);
+            SubjectControlEx.clearEmptyBackgroundTextHighlight(subjectControl);
+            SubjectControlEx.clearEmptyBackgroundUri(subjectControl);
+        }
         var emptyPage = subjectControl.getEmptyPage();
         EmptyPageEx.clearLeftButton(emptyPage);
         EmptyPageEx.clearRightButton(emptyPage);
