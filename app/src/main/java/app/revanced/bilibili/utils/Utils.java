@@ -36,6 +36,10 @@ public class Utils {
     private static String mobiApp = "";
     public static Handler mainHandler = new Handler(Looper.getMainLooper());
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private static Boolean isPink = null;
+    private static Boolean isBlue = null;
+    private static Boolean isPlay = null;
+    private static Boolean isHd = null;
 
     public static Context getContext() {
         if (context == null) {
@@ -132,19 +136,39 @@ public class Utils {
     }
 
     public static boolean isPink() {
-        return "android".equals(getMobiApp());
+        Boolean pink = isPink;
+        if (pink == null) {
+            pink = "android".equals(getMobiApp());
+            isPink = pink;
+        }
+        return pink;
     }
 
     public static boolean isBlue() {
-        return "android_b".equals(getMobiApp());
+        Boolean blue = isBlue;
+        if (blue == null) {
+            blue = "android_b".equals(getMobiApp());
+            isBlue = blue;
+        }
+        return blue;
     }
 
     public static boolean isPlay() {
-        return "android_i".equals(getMobiApp());
+        Boolean play = isPlay;
+        if (play == null) {
+            play = "android_i".equals(getMobiApp());
+            isPlay = play;
+        }
+        return play;
     }
 
     public static boolean isHd() {
-        return "android_hd".equals(getMobiApp());
+        Boolean hd = isHd;
+        if (hd == null) {
+            hd = "android_hd".equals(getMobiApp());
+            isHd = hd;
+        }
+        return hd;
     }
 
     public static boolean isCurrentlyOnMainThread() {

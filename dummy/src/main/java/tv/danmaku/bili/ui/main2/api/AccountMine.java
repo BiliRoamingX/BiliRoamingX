@@ -19,6 +19,15 @@ public class AccountMine {
     @JSONField(name = "mall_home")
     public GarbEntrance garbEntrance;
 
+    @JSONField(name = "ipad_sections")
+    public List<MenuGroup.Item> padSectionList;
+
+    @JSONField(name = "ipad_recommend_sections")
+    public List<MenuGroup.Item> recommendSectionList;
+
+    @JSONField(name = "ipad_more_sections")
+    public List<MenuGroup.Item> moreSectionList;
+
     @Keep
     /* loaded from: classes12.dex */
     public static class GarbEntrance {

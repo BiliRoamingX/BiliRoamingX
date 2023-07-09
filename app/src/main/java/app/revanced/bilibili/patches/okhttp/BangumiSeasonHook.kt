@@ -15,6 +15,7 @@ import com.bapis.bilibili.pagination.PaginationReply
 import com.bapis.bilibili.polymer.app.search.v1.*
 import com.bilibili.lib.moss.api.MossResponseHandler
 import com.bilibili.search.ogv.OgvSearchResultFragment
+import com.bilibili.search.result.bangumi.ogv.BangumiSearchResultFragment
 import com.bilibili.search.result.pages.BiliMainSearchResultPage.PageTypes
 import org.json.JSONArray
 import org.json.JSONObject
@@ -407,7 +408,18 @@ object BangumiSeasonHook {
     }
 
     @JvmStatic
-    fun onOgvSearchResultFragmentVisible(fragment: OgvSearchResultFragment) {
+    fun onSearchResultFragmentVisible(fragment: OgvSearchResultFragment) {
+        val from = fragment.arguments?.getString("from") ?: return
+        for (type in searchTypes) {
+            if (type.value.area.value == from && fragment.typeForBiliRoaming == type.value.type.toInt()) {
+                fragment.typeForBiliRoaming = type.key
+                break
+            }
+        }
+    }
+
+    @JvmStatic
+    fun onSearchResultFragmentVisible(fragment: BangumiSearchResultFragment) {
         val from = fragment.arguments?.getString("from") ?: return
         for (type in searchTypes) {
             if (type.value.area.value == from && fragment.typeForBiliRoaming == type.value.type.toInt()) {

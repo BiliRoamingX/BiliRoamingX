@@ -86,7 +86,7 @@ public class MossPatch {
         if (req instanceof DefaultWordsReq) {
             if (Settings.PURIFY_SEARCH.getBoolean())
                 return HookFlags.STOP_EXECUTION;
-        } else if (req instanceof TFInfoReq) {
+        } else if (!Utils.isHd() && req instanceof TFInfoReq) {
             if (Settings.REMOVE_CMD_DMS.getBoolean())
                 return HookFlags.STOP_EXECUTION;
         } else if (req instanceof PlayConfEditReq) {

@@ -13,6 +13,7 @@ import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Utils;
 import tv.danmaku.bili.MainActivityV2;
 import tv.danmaku.bili.ui.main2.mine.HomeUserCenterFragment;
+import tv.danmaku.bilibilihd.ui.main.mine.HdHomeUserCenterFragment;
 
 public class DrawerPatch {
     private static DrawerLayoutEx drawerLayout;
@@ -26,7 +27,7 @@ public class DrawerPatch {
         contentView.removeViewInLayout(view);
         drawerLayout = new DrawerLayoutEx(activity);
         drawerLayout.addView(view, 0, view.getLayoutParams());
-        HomeUserCenterFragment mineFragment = new HomeUserCenterFragment();
+        Fragment mineFragment = Utils.isHd() ? new HdHomeUserCenterFragment() : new HomeUserCenterFragment();
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .add(mineFragment, "mine")

@@ -24,12 +24,14 @@ import com.bilibili.video.story.StoryDetail;
 import com.bilibili.video.story.api.StoryFeedResponse;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 import app.revanced.bilibili.meta.BottomItem;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Constants;
+import app.revanced.bilibili.utils.Utils;
 import tv.danmaku.bili.ui.main.event.model.EventEntranceModel;
 import tv.danmaku.bili.ui.main2.api.AccountMine;
 import tv.danmaku.bili.ui.main2.resource.MainResourceManager;
@@ -49,15 +51,24 @@ public class JSONPatch {
 
     public static Object parseObjectHook(Object obj) {
         Object data = obj instanceof GeneralResponse ? ((GeneralResponse<?>) obj).data : obj;
-        if (data instanceof SplashData) {
+        if (!Utils.isHd() && data instanceof SplashData) {
             if (Settings.PURIFY_SPLASH.getBoolean()) {
                 SplashData splashData = (SplashData) data;
                 splashData.splashList.clear();
                 splashData.strategyList.clear();
             }
-        } else if (data instanceof SplashShowData) {
+        } else if (!Utils.isHd() && data instanceof SplashShowData) {
             if (Settings.PURIFY_SEARCH.getBoolean())
                 ((SplashShowData) data).strategyList.clear();
+        } else if (Utils.isHd() && data instanceof tv.danmaku.bili.ui.splash.SplashData) {
+            if (Settings.PURIFY_SPLASH.getBoolean()) {
+                tv.danmaku.bili.ui.splash.SplashData splashData = (tv.danmaku.bili.ui.splash.SplashData) data;
+                splashData.splashList.clear();
+                splashData.strategyList.clear();
+            }
+        } else if (Utils.isHd() && data instanceof tv.danmaku.bili.ui.splash.SplashShowData) {
+            if (Settings.PURIFY_SPLASH.getBoolean())
+                ((tv.danmaku.bili.ui.splash.SplashShowData) data).strategyList.clear();
         } else if (data instanceof EventEntranceModel) {
             if (Settings.PURIFY_GAME.getBoolean()) {
                 EventEntranceModel model = (EventEntranceModel) data;
@@ -76,7 +87,7 @@ public class JSONPatch {
                 info.shoppingCardDetail = null;
                 info.recommendCardDetail = null;
             }
-        } else if (data instanceof LiveGoodsCardInfo || data instanceof LiveShoppingRecommendCardGoodsDetail) {
+        } else if (data instanceof LiveGoodsCardInfo || (!Utils.isHd() && data instanceof LiveShoppingRecommendCardGoodsDetail)) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("shoppingCard"))
                 return null;
         } else if (data instanceof BiliLiveRoomInfo) {
@@ -96,7 +107,7 @@ public class JSONPatch {
         } else if (data instanceof LiveRoomRecommendCard) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("follow"))
                 return null;
-        } else if (data instanceof LiveRoomReserveInfo) {
+        } else if (!Utils.isHd() && data instanceof LiveRoomReserveInfo) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("reserve"))
                 ((LiveRoomReserveInfo) data).showReserveDetail = false;
         } else if (data instanceof BiliLiveRoomUserInfo) {
@@ -120,14 +131,14 @@ public class JSONPatch {
             addListenButton((ShareChannels) data);
         } else if (data instanceof OgvApiResponse) {
             unlockOgvResponse((OgvApiResponse<?>) data);
-        } else if (data instanceof OgvApiResponseV2) {
+        } else if (!Utils.isHd() && data instanceof OgvApiResponseV2) {
             unlockOgvResponseV2((OgvApiResponseV2) data);
         } else if (data instanceof StoryFeedResponse) {
             filterStory((StoryFeedResponse) data);
         } else if (data instanceof DmQoeInfo) {
             if (Settings.BLOCK_DM_FEEDBACK.getBoolean())
                 ((DmQoeInfo) data).setShow(false);
-        } else if (data instanceof GeminiDmQoeInfo) {
+        } else if (!Utils.isHd() && data instanceof GeminiDmQoeInfo) {
             if (Settings.BLOCK_DM_FEEDBACK.getBoolean())
                 ((GeminiDmQoeInfo) data).setShow(false);
         }
@@ -151,46 +162,68 @@ public class JSONPatch {
         Set<String> items = Settings.SHOWING_DRAWER_ITEMS.getStringSet();
         boolean purifyRedDot = Settings.PURIFY_DRAWER_RED_DOT.getBoolean();
         int drawerStyle = Integer.parseInt(Settings.DRAWER_STYLE.getString());
-        List<MenuGroup> sectionListV2 = mine.sectionListV2;
-        if (sectionListV2 == null || sectionListV2.isEmpty())
-            return;
-        for (int i = 0; i < sectionListV2.size(); i++) {
-            MenuGroup section = sectionListV2.get(i);
-            String title = section.title;
-            if (!TextUtils.isEmpty(title))
-                drawerItems.add(new BottomItem("【标题项目】", null, title));
-            List<MenuGroup.Item> itemList = section.itemList;
-            if (itemList == null || itemList.isEmpty())
-                continue;
-            section.itemList.removeIf(item -> {
-                String itemTitle = item.title;
-                if (TextUtils.isEmpty(itemTitle))
-                    return false;
-                String uri = item.uri;
-                String id = String.valueOf(item.id);
-                boolean showing = shouldShowing(items, id);
-                drawerItems.add(new BottomItem(itemTitle, uri, id));
-                if (purifyRedDot) {
-                    item.redDot = 0;
-                    item.redDotRorNew = false;
-                }
-                return !showing;
-            });
-            MenuGroup.MineButton button = section.button;
-            if (button != null) {
-                String buttonText = button.text;
-                if (!TextUtils.isEmpty(buttonText)) {
-                    String uri = button.jumpUrl;
-                    boolean showing = shouldShowing(items, buttonText);
-                    drawerItems.add(new BottomItem("按钮：", uri, buttonText));
-                    if (!showing)
-                        section.button = null;
-                }
+        if (Utils.isHd()) {
+            var menuGroups = Arrays.asList(mine.padSectionList, mine.recommendSectionList, mine.moreSectionList);
+            for (int i = 0; i < menuGroups.size(); i++) {
+                var menuItems = menuGroups.get(i);
+                if (menuItems == null || menuItems.isEmpty()) continue;
+                menuItems.removeIf(item -> {
+                    String itemTitle = item.title;
+                    if (TextUtils.isEmpty(itemTitle))
+                        return false;
+                    String uri = item.uri;
+                    String id = String.valueOf(item.id);
+                    boolean showing = shouldShowing(items, id);
+                    drawerItems.add(new BottomItem(itemTitle, uri, id));
+                    if (purifyRedDot) {
+                        item.redDot = 0;
+                        item.redDotRorNew = false;
+                    }
+                    return !showing;
+                });
             }
-            if (drawerStyle != 0)
-                section.style = drawerStyle;
+        } else {
+            List<MenuGroup> sectionListV2 = mine.sectionListV2;
+            if (sectionListV2 == null || sectionListV2.isEmpty())
+                return;
+            for (int i = 0; i < sectionListV2.size(); i++) {
+                MenuGroup section = sectionListV2.get(i);
+                String title = section.title;
+                if (!TextUtils.isEmpty(title))
+                    drawerItems.add(new BottomItem("【标题项目】", null, title));
+                List<MenuGroup.Item> itemList = section.itemList;
+                if (itemList == null || itemList.isEmpty())
+                    continue;
+                section.itemList.removeIf(item -> {
+                    String itemTitle = item.title;
+                    if (TextUtils.isEmpty(itemTitle))
+                        return false;
+                    String uri = item.uri;
+                    String id = String.valueOf(item.id);
+                    boolean showing = shouldShowing(items, id);
+                    drawerItems.add(new BottomItem(itemTitle, uri, id));
+                    if (purifyRedDot) {
+                        item.redDot = 0;
+                        item.redDotRorNew = false;
+                    }
+                    return !showing;
+                });
+                MenuGroup.MineButton button = section.button;
+                if (button != null) {
+                    String buttonText = button.text;
+                    if (!TextUtils.isEmpty(buttonText)) {
+                        String uri = button.jumpUrl;
+                        boolean showing = shouldShowing(items, buttonText);
+                        drawerItems.add(new BottomItem("按钮：", uri, buttonText));
+                        if (!showing)
+                            section.button = null;
+                    }
+                }
+                if (drawerStyle != 0)
+                    section.style = drawerStyle;
+            }
+            sectionListV2.removeIf(section -> !TextUtils.isEmpty(section.title) && !shouldShowing(items, section.title));
         }
-        sectionListV2.removeIf(section -> !TextUtils.isEmpty(section.title) && !shouldShowing(items, section.title));
         if (Settings.CUSTOM_THEME.getBoolean())
             mine.garbEntrance = null;
     }
