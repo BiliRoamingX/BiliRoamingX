@@ -45,7 +45,7 @@ object MossDebugPrinter {
         var mossMethod = ""
         val stackTrace = Thread.currentThread().stackTrace
         stackTrace.forEachIndexed { index, element ->
-            if (element.methodName.startsWith("asyncUnaryCall")) {
+            if (element.methodName.let { it.startsWith("asyncUnaryCall") || it.startsWith("asyncServerStreamingCall") }) {
                 stackTrace.getOrNull(index + 1)?.let {
                     mossMethod = "${it.className}#${it.methodName}"
                 }

@@ -46,6 +46,7 @@ import com.bapis.bilibili.app.view.v1.VideoGuide;
 import com.bapis.bilibili.app.view.v1.ViewProgressReply;
 import com.bapis.bilibili.app.view.v1.ViewReply;
 import com.bapis.bilibili.app.viewunite.v1.VideoGuideEx;
+import com.bapis.bilibili.broadcast.message.main.TopActivityReply;
 import com.bapis.bilibili.community.service.dm.v1.DmViewReply;
 import com.bapis.bilibili.community.service.dm.v1.DmViewReplyEx;
 import com.bapis.bilibili.community.service.dm.v1.DmViewReq;
@@ -58,6 +59,7 @@ import com.bapis.bilibili.polymer.app.search.v1.SearchByTypeRequest;
 import com.bilibili.lib.moss.api.MossException;
 import com.bilibili.lib.moss.api.MossResponseHandler;
 import com.bilibili.lib.moss.api.NetworkException;
+import com.google.protobuf.Empty;
 import com.google.protobuf.GeneratedMessageLite;
 import com.google.protobuf.GeneratedMessageLiteEx;
 import com.google.protobuf.UnknownFieldSetLite;
@@ -305,6 +307,16 @@ public class MossPatch {
                     if (v != null)
                         DynamicHook.purifyDynTabs(v);
                     return v;
+                });
+            }
+        } else if (req instanceof Empty) {
+            if (Settings.BLOCK_TOP_ACTIVITY.getBoolean()) {
+                return MossResponseHandlerProxy.get(handler, v -> {
+                    if (v instanceof TopActivityReply) {
+                        return null;
+                    } else {
+                        return v;
+                    }
                 });
             }
         }
