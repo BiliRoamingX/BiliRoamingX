@@ -125,7 +125,7 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
     } catch (_: Throwable) {
     }
 
-    protected fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+    protected open fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if (!resumed) return
         for (item in Settings.values()) {
             if (item.key == key && item.needReboot) {

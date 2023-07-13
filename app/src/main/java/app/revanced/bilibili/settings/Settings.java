@@ -77,7 +77,7 @@ public enum Settings {
     DRAWER("drawer", BOOLEAN, FALSE),
     DISABLE_MAIN_PAGE_STORY("disable_main_page_story", BOOLEAN, FALSE, true),
     ADD_CHANNEL("add_channel", BOOLEAN, FALSE, true),
-    BLOCK_TOP_ACTIVITY("block_top_activity", BOOLEAN, FALSE),
+    BLOCK_TOP_ACTIVITY("block_top_activity", BOOLEAN, FALSE, true),
 
     // 动态页
     DYNAMIC_PREFER_VIDEO_TAB("prefer_video_tab", BOOLEAN, FALSE),
