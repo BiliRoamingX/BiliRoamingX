@@ -1,3 +1,10 @@
+## [0.112.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.112.0...v0.112.1-dev.1) (2023-07-14)
+
+
+### Bug Fixes
+
+* **youtube/sponsorblock:** fix some segments skipping slightly too late ([#436](https://github.com/revanced/revanced-integrations/issues/436)) ([f694928](https://github.com/revanced/revanced-integrations/commit/f69492819e52e0fd99c4e10390fd39f26c3a9c48))
+
 # [0.112.0](https://github.com/revanced/revanced-integrations/compare/v0.111.2...v0.112.0) (2023-07-08)
 
 
