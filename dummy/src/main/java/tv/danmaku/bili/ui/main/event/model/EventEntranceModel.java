@@ -1,7 +1,9 @@
 package tv.danmaku.bili.ui.main.event.model;
 
+import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
+@Keep
 public class EventEntranceModel {
     @Nullable
     private String hash;

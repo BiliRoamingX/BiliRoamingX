@@ -71,9 +71,8 @@ public class JSONPatch {
                 ((tv.danmaku.bili.ui.splash.SplashShowData) data).strategyList.clear();
         } else if (data instanceof EventEntranceModel) {
             if (Settings.PURIFY_GAME.getBoolean()) {
-                EventEntranceModel model = (EventEntranceModel) data;
-                model.setHash("");
-                model.setOnline(null);
+                // no problem, see com.bilibili.okretro.BiliApiDataCallback
+                return null;
             }
         } else if (data instanceof DmAdvert) {
             if (Settings.BLOCK_UP_RCMD_ADS.getBoolean()) {
