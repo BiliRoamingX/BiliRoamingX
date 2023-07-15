@@ -1,3 +1,10 @@
+# [0.113.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.112.1-dev.2...v0.113.0-dev.1) (2023-07-15)
+
+
+### Features
+
+* **youtube:** rename `video-speed` to `playback-speed` ([#438](https://github.com/revanced/revanced-integrations/issues/438)) ([630776f](https://github.com/revanced/revanced-integrations/commit/630776fd3514435dd83ef1c765a4f5b007e8e2f2))
+
 ## [0.112.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.112.1-dev.1...v0.112.1-dev.2) (2023-07-15)
 
 
