@@ -1,3 +1,10 @@
+## [0.112.1-dev.2](https://github.com/revanced/revanced-integrations/compare/v0.112.1-dev.1...v0.112.1-dev.2) (2023-07-15)
+
+
+### Bug Fixes
+
+* **YouTube - Hide Shorts Components:** hide sound button ([a2b1630](https://github.com/revanced/revanced-integrations/commit/a2b1630df8d330f3c0cbf77e9ea46b9d1c51adde))
+
 ## [0.112.1-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.112.0...v0.112.1-dev.1) (2023-07-14)
 
 
