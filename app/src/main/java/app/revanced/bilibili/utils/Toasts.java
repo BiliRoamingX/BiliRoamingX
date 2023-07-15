@@ -43,12 +43,12 @@ public class Toasts {
     }
 
     // codes will filled by patcher
-    public static void cancel() {
+    static void cancel() {
         // nop
     }
 
     // codes will filled by patcher
-    private static void show(Context context, String message, int duration) {
+    static void show(Context context, String message, int duration) {
         // nop
     }
 }

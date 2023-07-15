@@ -32,9 +32,9 @@ class BackupFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_backu
                 addCategory(Intent.CATEGORY_OPENABLE)
             }
             try {
+                Toasts.showShortWithId("biliroaming_toast_pls_choose_save_path")
                 val title = Utils.getString("biliroaming_backup_title")
                 startActivityForResult(Intent.createChooser(intent, title), REQ_CODE_BACKUP)
-                Toasts.showShortWithId("biliroaming_toast_pls_choose_save_path")
             } catch (ex: ActivityNotFoundException) {
                 Toasts.showShortWithId("biliroaming_pls_install_file_manager")
             }
@@ -46,9 +46,9 @@ class BackupFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_backu
                 addCategory(Intent.CATEGORY_OPENABLE)
             }
             try {
+                Toasts.showShortWithId("biliroaming_toast_pls_choose_restore_path")
                 val title = Utils.getString("biliroaming_restore_title")
                 startActivityForResult(Intent.createChooser(intent, title), REQ_CODE_RESTORE)
-                Toasts.showShortWithId("biliroaming_toast_pls_choose_restore_path")
             } catch (ex: ActivityNotFoundException) {
                 Toasts.showShortWithId("biliroaming_pls_install_file_manager")
             }
@@ -105,6 +105,11 @@ class BackupFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_backu
             .show()
     }
 
+    /**
+     * do something after backup restore finished.
+     *
+     * notice: you can get a restored settings here.
+     */
     private fun afterRestore() {
         if (Settings.BLOCK_TOP_ACTIVITY.boolean) {
             blkvPrefs.edit {
