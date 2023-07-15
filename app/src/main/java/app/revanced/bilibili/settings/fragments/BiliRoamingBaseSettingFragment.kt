@@ -129,13 +129,13 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
         if (!resumed) return
         for (item in Settings.values()) {
             if (item.key == key && item.needReboot) {
-                val titleId = Utils.getResId("biliroaming_need_reboot_dialog_title", "string")
-                val confirmId = Utils.getResId("biliroaming_need_reboot_dialog_confirm", "string")
-                val laterId = Utils.getResId("biliroaming_need_reboot_dialog_later", "string")
+                val message = Utils.getString("biliroaming_need_reboot_dialog_message")
+                val confirm = Utils.getString("biliroaming_need_reboot_dialog_confirm")
+                val later = Utils.getString("biliroaming_need_reboot_dialog_later")
                 AlertDialog.Builder(requireContext())
-                    .setTitle(titleId)
-                    .setNegativeButton(laterId, null)
-                    .setPositiveButton(confirmId) { _, _ -> Utils.reboot() }
+                    .setMessage(message)
+                    .setNegativeButton(later, null)
+                    .setPositiveButton(confirm) { _, _ -> Utils.reboot() }
                     .show()
                 break
             }

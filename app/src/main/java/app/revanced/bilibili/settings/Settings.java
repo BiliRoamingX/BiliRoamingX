@@ -174,7 +174,7 @@ public enum Settings {
 
     public static final String PREFS_NAME = "biliroaming";
 
-    public static final SharedPreferences prefs;
+    public static SharedPreferences prefs;
 
     private static final Set<SharedPreferences.OnSharedPreferenceChangeListener> preferenceChangeListener = new HashSet<>();
 
@@ -203,6 +203,10 @@ public enum Settings {
     }
 
     static {
+        reload();
+    }
+
+    public static void reload() {
         Context context = Utils.getContext();
         prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         loadAllSettings();
