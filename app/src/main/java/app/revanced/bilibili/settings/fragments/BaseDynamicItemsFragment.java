@@ -1,5 +1,6 @@
 package app.revanced.bilibili.settings.fragments;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -12,11 +13,13 @@ import java.util.Set;
 import app.revanced.bilibili.meta.BottomItem;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Constants;
+import app.revanced.bilibili.utils.Utils;
 import app.revanced.bilibili.widget.CheckBoxGroupPreference;
 
 public abstract class BaseDynamicItemsFragment extends BiliRoamingBaseSettingFragment {
     private final Settings setting;
     private final List<BottomItem> allItems;
+    private boolean hintShown = false;
 
     public BaseDynamicItemsFragment(String prefsXmlName, Settings setting, List<BottomItem> allItems) {
         super(prefsXmlName);
@@ -46,5 +49,18 @@ public abstract class BaseDynamicItemsFragment extends BiliRoamingBaseSettingFra
         }
         preference.setValues(selectedValues);
         preference.notifyChanged();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (hintShown) return;
+        if (allItems.isEmpty()) {
+            hintShown = true;
+            new AlertDialog.Builder(requireContext())
+                    .setMessage(Utils.getString("biliroaming_hint_open_from_mine"))
+                    .setPositiveButton(Utils.getString("biliroaming_get_it"), null)
+                    .show();
+        }
     }
 }

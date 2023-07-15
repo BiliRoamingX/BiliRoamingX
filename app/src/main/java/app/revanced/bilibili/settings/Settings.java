@@ -27,6 +27,7 @@ import app.revanced.bilibili.utils.Utils;
 
 public enum Settings {
     DEBUG("debug", BOOLEAN, FALSE, true),
+    SHOW_HINT("show_hint", BOOLEAN, FALSE),
 
     // 解锁番剧限制
     UNLOCK_AREA_LIMIT("main_func", BOOLEAN, FALSE),
