@@ -70,6 +70,24 @@ public class LogHelper {
     }
 
     /**
+     * Logs warn messages using the outer class name of the code calling this method.
+     */
+    public static void warn(@NonNull LogMessage message) {
+        warn(message, null);
+    }
+
+    /**
+     * Logs warn messages using the outer class name of the code calling this method.
+     */
+    public static void warn(@NonNull LogMessage message, @Nullable Exception ex) {
+        var logMessage = message.buildMessageString();
+        var logTag = REVANCED_LOG_PREFIX + message.findOuterClassSimpleName();
+        if (ex != null)
+            logMessage = logMessage + '\n' + Log.getStackTraceString(ex);
+        log(logMessage, (m) -> Log.w(logTag, m));
+    }
+
+    /**
      * Logs information messages using the outer class name of the code calling this method.
      */
     public static void info(@NonNull LogMessage message) {

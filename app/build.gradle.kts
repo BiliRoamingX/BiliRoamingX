@@ -48,6 +48,7 @@ android {
 
 dependencies {
     implementation(project(mapOf("path" to ":extend")))
+    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
     compileOnly(project(mapOf("path" to ":dummy")))
     compileOnly("androidx.annotation:annotation:1.6.0")
     compileOnly("androidx.appcompat:appcompat:1.7.0-alpha02")
