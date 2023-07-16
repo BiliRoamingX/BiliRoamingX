@@ -1,3 +1,10 @@
+# [0.113.0-dev.3](https://github.com/ReVanced/revanced-integrations/compare/v0.113.0-dev.2...v0.113.0-dev.3) (2023-07-16)
+
+
+### Bug Fixes
+
+* **youtube/return-youtube-dislike:** fix dislikes not showing in some situations ([#439](https://github.com/ReVanced/revanced-integrations/issues/439)) ([7a28c2f](https://github.com/ReVanced/revanced-integrations/commit/7a28c2fa13438947931b8c41ef73b128a32530eb))
+
 # [0.113.0-dev.2](https://github.com/ReVanced/revanced-integrations/compare/v0.113.0-dev.1...v0.113.0-dev.2) (2023-07-16)
 
 
