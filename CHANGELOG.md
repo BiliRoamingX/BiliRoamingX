@@ -1,3 +1,10 @@
+# [0.113.0-dev.2](https://github.com/ReVanced/revanced-integrations/compare/v0.113.0-dev.1...v0.113.0-dev.2) (2023-07-16)
+
+
+### Features
+
+* **YouTube - Hide ads:** hide new type of buttoned ad ([9f21c72](https://github.com/ReVanced/revanced-integrations/commit/9f21c7268e5a08f542f5b090316486aadf4a5acd))
+
 # [0.113.0-dev.1](https://github.com/revanced/revanced-integrations/compare/v0.112.1-dev.2...v0.113.0-dev.1) (2023-07-15)
 
 
