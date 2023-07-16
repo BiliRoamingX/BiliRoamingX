@@ -83,15 +83,18 @@ object SubtitleReplyHook {
         val replaceable = "zh-Hans" !in lanCodes
         val replaceToFurry = replaceable && "cn" in lanCodes
         val replaceToKKTV = replaceable && !replaceToFurry && "cn.kktv" in lanCodes
+        val replaceToIqiyi =
+            replaceable && !replaceToFurry && !replaceToKKTV && "cn.iqiyi" in lanCodes
         for (subtitle in this) {
             SubtitleItem.newBuilder().apply {
                 id = subtitle.optLong("id")
                 idStr = subtitle.optLong("id").toString()
                 subtitleUrl = subtitle.optString("url")
                 lan = subtitle.optString("key").let {
-                    if ((it == "cn" && replaceToFurry) || (it == "cn.kktv" && replaceToKKTV)) {
-                        "zh-Hans"
-                    } else it
+                    if ((it == "cn" && replaceToFurry)
+                        || (it == "cn.kktv" && replaceToKKTV)
+                        || (it == "cn.iqiyi" && replaceToIqiyi)
+                    ) "zh-Hans" else it
                 }
                 lanDoc = subtitle.optString("title")
             }.build().let { subList.add(it) }
