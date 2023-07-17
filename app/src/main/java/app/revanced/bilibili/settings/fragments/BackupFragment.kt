@@ -6,10 +6,12 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.preference.Preference
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
+import org.lsposed.hiddenapibypass.HiddenApiBypass
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -78,11 +80,13 @@ class BackupFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_backu
         } else if (requestCode == REQ_CODE_RESTORE) {
             Utils.async {
                 runCatching {
-                    Utils.getContext().deleteSharedPreferences(Settings.PREFS_NAME)
                     resolver.openInputStream(uri)?.use { input ->
                         BackupHelper.restore(input)
                     }
                 }.onSuccess {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                        HiddenApiBypass.addHiddenApiExemptions("Landroid")
+                    Utils.getContext().callMethod("reloadSharedPreferences")
                     Settings.reload()
                     afterRestore()
                     Utils.runOnMainThread { showNeedRebootDialog() }
