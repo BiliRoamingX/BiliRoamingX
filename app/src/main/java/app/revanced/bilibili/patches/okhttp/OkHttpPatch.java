@@ -22,7 +22,7 @@ import app.revanced.bilibili.utils.Utils;
 
 @SuppressWarnings("unused")
 public class OkHttpPatch {
-    private static final String RES_NO_UPDATE = "{\"code\":-304,\"message\":\"没有改动\"}";
+    private static final String RES_NO_UPDATE = "{\"code\":-1,\"message\":\"哼，休想要我更新！<(￣︶￣)>\"}";
     private static final String RES_MATERIAL_EMPTY = "{\"code\":0,\"data\":{\"container\":[]},\"message\":\"success\"}";
     private static final String RES_CARDS_EMPTY = "{\"code\":0,\"data\":[]}";
 
