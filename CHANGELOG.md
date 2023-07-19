@@ -1,3 +1,10 @@
+# [0.113.0-dev.5](https://github.com/ReVanced/revanced-integrations/compare/v0.113.0-dev.4...v0.113.0-dev.5) (2023-07-19)
+
+
+### Bug Fixes
+
+* **YouTube - Spoof client:** show video time and chapters while using seekbar ([#435](https://github.com/ReVanced/revanced-integrations/issues/435)) ([a0f831a](https://github.com/ReVanced/revanced-integrations/commit/a0f831ac3f3773a0b47a0fb532d0bf58f6aa96d7))
+
 # [0.113.0-dev.4](https://github.com/ReVanced/revanced-integrations/compare/v0.113.0-dev.3...v0.113.0-dev.4) (2023-07-19)
 
 
