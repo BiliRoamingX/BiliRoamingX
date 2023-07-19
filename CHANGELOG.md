@@ -1,3 +1,10 @@
+# [0.113.0-dev.4](https://github.com/ReVanced/revanced-integrations/compare/v0.113.0-dev.3...v0.113.0-dev.4) (2023-07-19)
+
+
+### Bug Fixes
+
+* **Tiktok - Settings:** bump compatibility ([#440](https://github.com/ReVanced/revanced-integrations/issues/440)) ([821a32e](https://github.com/ReVanced/revanced-integrations/commit/821a32ee40d7795cabedc40f24356c1c1069ddec))
+
 # [0.113.0-dev.3](https://github.com/ReVanced/revanced-integrations/compare/v0.113.0-dev.2...v0.113.0-dev.3) (2023-07-16)
 
 
