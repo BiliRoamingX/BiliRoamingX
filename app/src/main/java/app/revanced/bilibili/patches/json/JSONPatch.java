@@ -32,6 +32,7 @@ import app.revanced.bilibili.meta.BottomItem;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Constants;
 import app.revanced.bilibili.utils.Utils;
+import app.revanced.bilibili.utils.Versions;
 import tv.danmaku.bili.ui.main.event.model.EventEntranceModel;
 import tv.danmaku.bili.ui.main2.api.AccountMine;
 import tv.danmaku.bili.ui.main2.resource.MainResourceManager;
@@ -137,9 +138,12 @@ public class JSONPatch {
         } else if (data instanceof DmQoeInfo) {
             if (Settings.BLOCK_DM_FEEDBACK.getBoolean())
                 ((DmQoeInfo) data).setShow(false);
-        } else if (!Utils.isHd() && data instanceof GeminiDmQoeInfo) {
+        } else if (!Utils.isHd() && !Versions.ge7_39_0() && data instanceof GeminiDmQoeInfo) {
             if (Settings.BLOCK_DM_FEEDBACK.getBoolean())
                 ((GeminiDmQoeInfo) data).setShow(false);
+        } else if (!Utils.isHd() && Versions.ge7_39_0() && data instanceof com.bilibili.app.gemini.ugc.feature.endpage.qoe.GeminiDmQoeInfo) {
+            if (Settings.BLOCK_DM_FEEDBACK.getBoolean())
+                ((com.bilibili.app.gemini.ugc.feature.endpage.qoe.GeminiDmQoeInfo) data).setShow(false);
         }
         return obj;
     }
