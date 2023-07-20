@@ -1,3 +1,20 @@
+# [0.113.0](https://github.com/ReVanced/revanced-integrations/compare/v0.112.0...v0.113.0) (2023-07-20)
+
+
+### Bug Fixes
+
+* **Tiktok - Settings:** bump compatibility ([#440](https://github.com/ReVanced/revanced-integrations/issues/440)) ([821a32e](https://github.com/ReVanced/revanced-integrations/commit/821a32ee40d7795cabedc40f24356c1c1069ddec))
+* **YouTube - Hide Shorts Components:** hide sound button ([a2b1630](https://github.com/ReVanced/revanced-integrations/commit/a2b1630df8d330f3c0cbf77e9ea46b9d1c51adde))
+* **YouTube - Spoof client:** show video time and chapters while using seekbar ([#435](https://github.com/ReVanced/revanced-integrations/issues/435)) ([a0f831a](https://github.com/ReVanced/revanced-integrations/commit/a0f831ac3f3773a0b47a0fb532d0bf58f6aa96d7))
+* **youtube/return-youtube-dislike:** fix dislikes not showing in some situations ([#439](https://github.com/ReVanced/revanced-integrations/issues/439)) ([7a28c2f](https://github.com/ReVanced/revanced-integrations/commit/7a28c2fa13438947931b8c41ef73b128a32530eb))
+* **youtube/sponsorblock:** fix some segments skipping slightly too late ([#436](https://github.com/ReVanced/revanced-integrations/issues/436)) ([f694928](https://github.com/ReVanced/revanced-integrations/commit/f69492819e52e0fd99c4e10390fd39f26c3a9c48))
+
+
+### Features
+
+* **YouTube - Hide ads:** hide new type of buttoned ad ([9f21c72](https://github.com/ReVanced/revanced-integrations/commit/9f21c7268e5a08f542f5b090316486aadf4a5acd))
+* **youtube:** rename `video-speed` to `playback-speed` ([#438](https://github.com/ReVanced/revanced-integrations/issues/438)) ([630776f](https://github.com/ReVanced/revanced-integrations/commit/630776fd3514435dd83ef1c765a4f5b007e8e2f2))
+
 # [0.113.0-dev.5](https://github.com/ReVanced/revanced-integrations/compare/v0.113.0-dev.4...v0.113.0-dev.5) (2023-07-19)
 
 
