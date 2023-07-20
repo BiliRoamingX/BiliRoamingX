@@ -1,3 +1,10 @@
+# [0.114.0-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.113.1-dev.1...v0.114.0-dev.1) (2023-07-20)
+
+
+### Features
+
+* **youtube/theme:** add a switch to enable/disable custom seekbar color ([#442](https://github.com/ReVanced/revanced-integrations/issues/442)) ([2a784a4](https://github.com/ReVanced/revanced-integrations/commit/2a784a47d18da90ce23fcd527eef1f6e2d8e166d))
+
 ## [0.113.1-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.113.0...v0.113.1-dev.1) (2023-07-20)
 
 
