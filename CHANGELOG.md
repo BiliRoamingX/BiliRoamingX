@@ -1,3 +1,15 @@
+# [0.114.0](https://github.com/ReVanced/revanced-integrations/compare/v0.113.0...v0.114.0) (2023-07-21)
+
+
+### Bug Fixes
+
+* **Tiktok - Settings:** check for null when opening ads settings ([#443](https://github.com/ReVanced/revanced-integrations/issues/443)) ([8c61561](https://github.com/ReVanced/revanced-integrations/commit/8c61561d6375cfad3571cea98013b549ed6ecd6b))
+
+
+### Features
+
+* **youtube/theme:** add a switch to enable/disable custom seekbar color ([#442](https://github.com/ReVanced/revanced-integrations/issues/442)) ([2a784a4](https://github.com/ReVanced/revanced-integrations/commit/2a784a47d18da90ce23fcd527eef1f6e2d8e166d))
+
 # [0.114.0-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.113.1-dev.1...v0.114.0-dev.1) (2023-07-20)
 
 
