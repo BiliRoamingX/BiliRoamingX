@@ -1,3 +1,10 @@
+# [0.115.0-dev.2](https://github.com/ReVanced/revanced-integrations/compare/v0.115.0-dev.1...v0.115.0-dev.2) (2023-07-26)
+
+
+### Bug Fixes
+
+* **YouTube - SponsorBlock:** Fix skip highlight button showing when set to 'show in seekbar' ([ea7bc57](https://github.com/ReVanced/revanced-integrations/commit/ea7bc5737584ce967becd5b9e5d0d57f5d2fbc49))
+
 # [0.115.0-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.114.0...v0.115.0-dev.1) (2023-07-26)
 
 
