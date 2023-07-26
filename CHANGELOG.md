@@ -1,3 +1,10 @@
+# [0.115.0-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.114.0...v0.115.0-dev.1) (2023-07-26)
+
+
+### Features
+
+* **YouTube - Hide layout components:** Hide `chips shelf` ([#448](https://github.com/ReVanced/revanced-integrations/issues/448)) ([c7d2a9b](https://github.com/ReVanced/revanced-integrations/commit/c7d2a9b3101439b241218c45d0c4b64012adab65))
+
 # [0.114.0](https://github.com/ReVanced/revanced-integrations/compare/v0.113.0...v0.114.0) (2023-07-21)
 
 
