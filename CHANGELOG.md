@@ -1,3 +1,10 @@
+# [0.115.0-dev.3](https://github.com/ReVanced/revanced-integrations/compare/v0.115.0-dev.2...v0.115.0-dev.3) (2023-07-27)
+
+
+### Bug Fixes
+
+* **YouTube - Spoof App Version:** Remove 17.30.35 target ([e906c6d](https://github.com/ReVanced/revanced-integrations/commit/e906c6d3a2195c94c926f9903f1e4e66c3714e3e))
+
 # [0.115.0-dev.2](https://github.com/ReVanced/revanced-integrations/compare/v0.115.0-dev.1...v0.115.0-dev.2) (2023-07-26)
 
 
