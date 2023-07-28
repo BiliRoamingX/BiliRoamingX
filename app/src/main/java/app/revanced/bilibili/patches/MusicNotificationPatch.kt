@@ -110,7 +110,7 @@ object MusicNotificationPatch {
     private val getDurationMethod by lazy {
         try {
             playerCoreServiceV2Class.getDeclaredMethod("getDuration").name
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             "i"
         }
     }
@@ -119,7 +119,7 @@ object MusicNotificationPatch {
     private val getCurrentPositionMethod by lazy {
         try {
             playerCoreServiceV2Class.getDeclaredMethod("getCurrentPosition").name
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             "j"
         }
     }
@@ -257,7 +257,13 @@ object MusicNotificationPatch {
     fun onSeekTo(position: Long) {
         if (!enabled()) return
         this.position = position
-        getCorePlayer(absMusicService)?.callMethod(seekToMethodName, position.toInt())
+        getCorePlayer(absMusicService)?.run {
+            try {
+                callMethod(seekToMethodName, position.toInt())
+            } catch (_: Throwable) {
+                callMethod(seekToMethodName, position.toInt(), false)
+            }
+        }
         absMusicService?.let { s -> setStateMethod?.invoke(s, lastState) }
     }
 
@@ -269,7 +275,7 @@ object MusicNotificationPatch {
             position = callMethodAs<Int>(getCurrentPositionMethod).toLong()
             speed = try {
                 callMethodAs(defaultSpeedMethodName, true)
-            } catch (e: Throwable) {
+            } catch (_: Throwable) {
                 callMethodAs(defaultSpeedMethodName)
             }
         }
