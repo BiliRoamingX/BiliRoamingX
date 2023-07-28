@@ -165,6 +165,8 @@ public enum Settings {
     BLOCK_MODULES("block_modules", BOOLEAN, FALSE),
     BLOCK_MODULES_EXCEPTION("block_modules_exception", STRING_SET, Collections.EMPTY_SET),
     MUSIC_NOTIFICATION("music_notification", BOOLEAN, FALSE, true),
+    PURIFY_SHARE("purify_share", BOOLEAN, FALSE),
+    FUCK_MINI_PROGRAM("mini_program", BOOLEAN, FALSE),
 
     // 去广告杂项
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),
