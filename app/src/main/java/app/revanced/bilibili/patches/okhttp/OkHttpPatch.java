@@ -37,6 +37,7 @@ public class OkHttpPatch {
                 || shouldPurifySeasonRcmd(url, code)
                 || shouldPurifyCards(url, code)
                 || shouldImportSkin(url, code)
+                || shouldAddListenButton(url, code)
                 /* for convenient to add a new line */;
     }
 
@@ -61,6 +62,8 @@ public class OkHttpPatch {
             return RES_CARDS_EMPTY;
         } else if (shouldImportSkin(url, code)) {
             return importSkin(response);
+        } else if (shouldAddListenButton(url, code)) {
+            return addListenButton(response);
         }
         return response;
     }
@@ -96,23 +99,30 @@ public class OkHttpPatch {
                 && code == HttpURLConnection.HTTP_OK;
     }
 
-    public static boolean shouldPurifySeasonRcmd(String url, int code) {
+    private static boolean shouldPurifySeasonRcmd(String url, int code) {
         return Settings.REMOVE_RELATE_PROMOTE.getBoolean()
                 && url.startsWith("https://api.bilibili.com/pgc/season/app/related/recommend")
                 && code == HttpURLConnection.HTTP_OK;
     }
 
-    public static boolean shouldPurifyCards(String url, int code) {
+    private static boolean shouldPurifyCards(String url, int code) {
         return Settings.BLOCK_UP_RCMD_ADS.getBoolean()
                 && (url.startsWith("https://api.bilibili.com/pgc/season/player/cards")
                 || url.startsWith("https://api.bilibili.com/pgc/season/player/ogv/cards"))
                 && code == HttpURLConnection.HTTP_OK;
     }
 
-    public static boolean shouldImportSkin(String url, int code) {
+    private static boolean shouldImportSkin(String url, int code) {
         return Settings.SKIN.getBoolean()
                 && !Settings.SKIN_JSON.getString().isEmpty()
                 && url.startsWith("https://app.bilibili.com/x/resource/show/skin")
+                && code == HttpURLConnection.HTTP_OK;
+    }
+
+    private static boolean shouldAddListenButton(String url, int code) {
+        // from 7.38.0, switched to bson and gson type adapter, so hook response directly
+        return Settings.UNLOCK_PLAY_LIMIT.getBoolean()
+                && url.startsWith("https://api.bilibili.com/x/share/channels")
                 && code == HttpURLConnection.HTTP_OK;
     }
 
@@ -199,5 +209,34 @@ public class OkHttpPatch {
         } catch (JSONException ignored) {
         }
         return jo.toString();
+    }
+
+    static String addListenButton(String response) {
+        var json = Jsons.toJSONObject(response);
+        var data = json.optJSONObject("data");
+        if (data == null) return response;
+        var belowChannels = data.optJSONArray("below_channels");
+        if (belowChannels == null || belowChannels.length() == 0) return response;
+        var alreadyHas = false;
+        var toInsertIdx = -1;
+        for (int i = 0; i < belowChannels.length(); i++) {
+            var channelItem = belowChannels.optJSONObject(i);
+            if (channelItem == null) continue;
+            var shareChannel = channelItem.optString("share_channel");
+            if ("PLAY_BACKGROUND_OFF".equals(shareChannel))
+                toInsertIdx = i;
+            if ("LISTEN".equals(shareChannel))
+                alreadyHas = true;
+        }
+        if (alreadyHas || toInsertIdx == -1) return response;
+        var listenChannel = new JSONObject();
+        try {
+            listenChannel.put("name", "听视频");
+            listenChannel.put("share_channel", "LISTEN");
+            listenChannel.put("picture", "https://i0.hdslb.com/bfs/share/f88d8c420a59ff1ca5975b38722408056e7337b7.png");
+            belowChannels.put(toInsertIdx, listenChannel);
+        } catch (JSONException ignored) {
+        }
+        return json.toString();
     }
 }
