@@ -1,59 +1,91 @@
-name: 🐞 Bug report
-description: Report a very clearly broken issue.
-title: 'bug: <title>'
+name: 🐞 Bug 反馈
+description: 反馈遇到的问题
+title: 'bug: '
 labels: [bug]
 body:
   - type: markdown
     attributes:
       value: |
-        # ReVanced bug report
+        # 反馈须知
 
-        Important to note that your issue may have already been reported before. Please check for existing issues [here](https://github.com/revanced/revanced-integrations/labels/bug).
+        在反馈问题之前，请仔细[检查](https://github.com/zjns/BiliRoamingX-integrations/issues?q=label%3Abug)此问题是否已经反馈过，避免重复反馈。
+
+  - type: input
+    attributes:
+      label: 系统版本
+      placeholder: 例如 MIUI 14
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Android 版本
+      placeholder: 例如 13
+    validations:
+      required: true
 
   - type: dropdown
     attributes:
-      label: Type
+      label: 哔哩哔哩版本
       options:
-        - Cosmetic
-        - Other
+        - 粉版（普通版）
+        - HD 版
+      description: 目前仅支持粉版、HD 版
     validations:
       required: true
-  - type: textarea
+
+  - type: input
     attributes:
-      label: Bug description
-      description: How did you find the bug? Any additional details that might help?
+      label: 哔哩哔哩版本号
+      placeholder: 例如 7.40.0
+      description: 非最新版本可能不受理
     validations:
       required: true
+
   - type: textarea
     attributes:
-      label: Steps to reproduce
-      description: Add the steps to reproduce this bug including your environment.
-      placeholder: Step 1. Download some files. Step 2. ...
+      label: 问题描述
+      description: 发生了什么？有什么现状？
     validations:
       required: true
+
   - type: textarea
     attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: shell
+      label: 复现步骤
+      description: 如何复现
+      placeholder: |
+        1. 打开...
+        2. 点击...
+        3. 出现...状况
     validations:
       required: true
+
   - type: textarea
     attributes:
-      label: Screenshots or videos
-      description: Add screenshots or videos that show the bug here.
-      placeholder: Drag and drop the screenshots/videos into this box.
+      label: 日志
+      description: 请开启哔哩漫游X设置里的调试模式，并用文件管理器（例如MT管理器）将日志上传到此。
+      placeholder: 点击文本框下面小长条可以上传文件
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 截图或录屏
+      description: 问题复现时的截图或录屏
+      placeholder: 点击文本框下面小长条可以上传文件
     validations:
       required: false
+
   - type: textarea
     attributes:
-      label: Solution
-      description: If applicable, add a possible solution.
+      label: 解决办法
+      description: 如果可能，给出一个可行的解决办法。
     validations:
       required: false
+
   - type: textarea
     attributes:
-      label: Additional context
-      description: Add additional context here.
+      label: 补充信息
+      description: 例如视频BV号，番剧名。
     validations:
       required: false
