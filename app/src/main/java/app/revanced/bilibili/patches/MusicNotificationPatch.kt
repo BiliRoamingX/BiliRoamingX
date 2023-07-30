@@ -9,7 +9,10 @@ import android.app.PendingIntent
 import android.app.Service
 import android.graphics.Bitmap
 import android.media.session.MediaSession
+import android.media.session.PlaybackState
 import android.os.Build
+import android.support.v4.media.session.PlaybackStateCompat
+import android.support.v4.media.session.PlaybackStateCompat.CustomAction
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import org.lsposed.hiddenapibypass.HiddenApiBypass
@@ -45,8 +48,51 @@ object MusicNotificationPatch {
     private val liveNotificationStopIconId =
         Utils.getResId("ic_notification_action_delete_gray", "drawable")
 
+    private val rewindIconId =
+        Utils.getResId("ic_notification_action_rewind_10s_ga7", "drawable")
+    private val fastForwardIconId =
+        Utils.getResId("ic_notification_action_fast_forward_10s_ga7", "drawable")
+
+    private const val ACTION_REWIND = "Rewind"
+    private const val ACTION_FAST_FORWARD = "Forward"
+
+    @JvmStatic
+    private val customActionRewind =
+        CustomAction(ACTION_REWIND, ACTION_REWIND, rewindIconId, null)
+
+    @JvmStatic
+    private val customActionForward =
+        CustomAction(ACTION_FAST_FORWARD, ACTION_FAST_FORWARD, fastForwardIconId, null)
+
     @JvmStatic
     inline fun enabled() = Settings.MUSIC_NOTIFICATION.boolean
+
+    @JvmStatic
+    inline fun needAdaptForTiramisu(): Boolean {
+        val tiramisu = Build.VERSION_CODES.TIRAMISU
+        val targetSdkVersion = Utils.getContext().applicationInfo.targetSdkVersion
+        val systemSdkVersion = Build.VERSION.SDK_INT
+        return enabled() && targetSdkVersion >= tiramisu && systemSdkVersion >= tiramisu
+    }
+
+    @JvmStatic
+    fun onBuildPlaybackState(playbackState: PlaybackStateCompat): PlaybackStateCompat {
+        if (!needAdaptForTiramisu()) return playbackState
+        val actions = playbackState.actionsForBiliRoaming
+        if (actions and PlaybackState.ACTION_PLAY_PAUSE != 0L
+            && actions and PlaybackState.ACTION_FAST_FORWARD != 0L
+            && actions and PlaybackState.ACTION_REWIND != 0L
+        ) {
+            // need add custom fast forward and rewind action for tiramisu when target to 33,
+            // response of action will handled by patcher
+            val customActions = playbackState.customActionsForBiliRoaming
+            if (!customActions.contains(customActionRewind))
+                customActions.add(customActionRewind)
+            if (!customActions.contains(customActionForward))
+                customActions.add(customActionForward)
+        }
+        return playbackState
+    }
 
     @JvmStatic
     fun onCreateNotification(self: Any, old: Notification?): Notification? {
@@ -107,8 +153,6 @@ object MusicNotificationPatch {
 
                             liveNotificationUpNameId ->
                                 setSubText(action.getObjectFieldAs<CharSequence>("value"))
-
-                            else -> LogHelper.warn { "Unknown viewId $viewId for setText" }
                         }
                     }
 
@@ -120,8 +164,6 @@ object MusicNotificationPatch {
                                 buttons[stopId]?.icon = liveNotificationStopIconId
                                 buttons[stopId]?.intent = pendingIntent
                             }
-
-                            else -> LogHelper.warn { "Unknown viewId $viewId for onClick" }
                         }
                     }
                 }
