@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 📃 Documentation
+  - name: 📃 文档
     url: https://github.com/revanced/revanced-documentation/
-    about: Don't know how or where to start? Check out our documentation!
-  - name: 🗨 Discussions
-    url: https://github.com/revanced/revanced-suggestions/discussions
-    about: Got something you think should change or be added? Search for or start a new discussion!
+    about: 不知道如何或从哪里开始？查看我们的文档！
+  - name: 🗨 订阅
+    url: https://t.me/bb_show
+    about: 获取最新制作好的示例安装包，订阅更新。
