@@ -1,46 +1,39 @@
-name: ⭐ Feature request
-description: Create a detailed feature request.
-title: 'feat: <title>'
-labels: [feature-request]
+name: ⭐ 功能请求
+description: 描述你想要请求的功能
+title: 'feat: '
+labels: [enhancement]
 body:
   - type: markdown
     attributes:
       value: |
-        # ReVanced feature request
-        
-        Do not submit requests for patches here. Please submit them [here](https://github.com/orgs/revanced/discussions/categories/patches) instead.
-        Important to note that your feature request may have already been made before. Please check for existing feature requests [here](https://github.com/revanced/revanced-integrations/labels/feature-request).
+        # 请求须知
 
-  - type: dropdown
-    attributes:
-      label: Type
-      options:
-        - Functionality
-        - Cosmetic
-        - Other
-    validations:
-      required: true
+        在请求功能之前，请仔细[检查](https://github.com/zjns/BiliRoamingX-integrations/issues?q=feat%3A+in%3Atitle)此功能是否已经请求过，避免重复请求。
+
   - type: textarea
     attributes:
-      label: Issue
-      description: What is the current problem. Why does it require a feature request?
+      label: 原因
+      description: 遇到了什么问题，为什么想要这个功能
     validations:
       required: true
+
   - type: textarea
     attributes:
-      label: Feature
-      description: Describe your feature in detail. How does it solve the issue?
+      label: 功能简述
+      description: 想要个怎样的功能
     validations:
       required: true
+
   - type: textarea
     attributes:
-      label: Motivation
-      description: Why should your feature should be considered?
+      label: 功能逻辑
+      description: 如何互交、如何使用等
     validations:
       required: true
+
   - type: textarea
     attributes:
-      label: Additional context
-      description: Add additional context here.
+      label: 实现参考
+      description: 该功能可能的实现方式，或者其他已经实现该功能的应用等
     validations:
       required: false
