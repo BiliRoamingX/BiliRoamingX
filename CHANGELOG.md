@@ -1,3 +1,10 @@
+# [0.115.0-dev.4](https://github.com/ReVanced/revanced-integrations/compare/v0.115.0-dev.3...v0.115.0-dev.4) (2023-07-30)
+
+
+### Features
+
+* **YouTube:** add `Player Flyout Menu` patch ([#416](https://github.com/ReVanced/revanced-integrations/issues/416)) ([b2085ae](https://github.com/ReVanced/revanced-integrations/commit/b2085aeebf4cfc21d69c0abfe545b382e2c82abe))
+
 # [0.115.0-dev.3](https://github.com/ReVanced/revanced-integrations/compare/v0.115.0-dev.2...v0.115.0-dev.3) (2023-07-27)
 
 
