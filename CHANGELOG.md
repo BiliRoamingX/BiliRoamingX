@@ -1,3 +1,10 @@
+# [0.115.0-dev.5](https://github.com/ReVanced/revanced-integrations/compare/v0.115.0-dev.4...v0.115.0-dev.5) (2023-08-01)
+
+
+### Performance Improvements
+
+* **YouTube:** Filter litho components using prefix tree ([#447](https://github.com/ReVanced/revanced-integrations/issues/447)) ([18f2900](https://github.com/ReVanced/revanced-integrations/commit/18f29004b8d570915a0228e292f1256785ac2cab))
+
 # [0.115.0-dev.4](https://github.com/ReVanced/revanced-integrations/compare/v0.115.0-dev.3...v0.115.0-dev.4) (2023-07-30)
 
 
