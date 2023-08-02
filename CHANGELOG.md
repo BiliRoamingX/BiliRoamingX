@@ -1,3 +1,24 @@
+# [0.115.0](https://github.com/ReVanced/revanced-integrations/compare/v0.114.0...v0.115.0) (2023-08-02)
+
+
+### Bug Fixes
+
+* **YouTube - SponsorBlock:** Fix skip highlight button showing when set to 'show in seekbar' ([ea7bc57](https://github.com/ReVanced/revanced-integrations/commit/ea7bc5737584ce967becd5b9e5d0d57f5d2fbc49))
+* **YouTube - Spoof App Version:** Remove 17.30.35 target ([e906c6d](https://github.com/ReVanced/revanced-integrations/commit/e906c6d3a2195c94c926f9903f1e4e66c3714e3e))
+* **YouTube:** fix potential litho filter thread race ([d3f523f](https://github.com/ReVanced/revanced-integrations/commit/d3f523f9dd5c3638cf9e2ba849b91e446daa99fa))
+
+
+### Features
+
+* **Tiktok - Feed filter:** Add more filters ([#445](https://github.com/ReVanced/revanced-integrations/issues/445)) ([c16c038](https://github.com/ReVanced/revanced-integrations/commit/c16c038396bde365ce1eec7b385eeb1f485efe99))
+* **YouTube - Hide layout components:** Hide `chips shelf` ([#448](https://github.com/ReVanced/revanced-integrations/issues/448)) ([c7d2a9b](https://github.com/ReVanced/revanced-integrations/commit/c7d2a9b3101439b241218c45d0c4b64012adab65))
+* **YouTube:** add `Player Flyout Menu` patch ([#416](https://github.com/ReVanced/revanced-integrations/issues/416)) ([b2085ae](https://github.com/ReVanced/revanced-integrations/commit/b2085aeebf4cfc21d69c0abfe545b382e2c82abe))
+
+
+### Performance Improvements
+
+* **YouTube:** Filter litho components using prefix tree ([#447](https://github.com/ReVanced/revanced-integrations/issues/447)) ([18f2900](https://github.com/ReVanced/revanced-integrations/commit/18f29004b8d570915a0228e292f1256785ac2cab))
+
 # [0.115.0-dev.7](https://github.com/ReVanced/revanced-integrations/compare/v0.115.0-dev.6...v0.115.0-dev.7) (2023-08-02)
 
 
