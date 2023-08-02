@@ -1,3 +1,10 @@
+# [0.115.0-dev.6](https://github.com/ReVanced/revanced-integrations/compare/v0.115.0-dev.5...v0.115.0-dev.6) (2023-08-02)
+
+
+### Bug Fixes
+
+* **YouTube:** fix potential litho filter thread race ([d3f523f](https://github.com/ReVanced/revanced-integrations/commit/d3f523f9dd5c3638cf9e2ba849b91e446daa99fa))
+
 # [0.115.0-dev.5](https://github.com/ReVanced/revanced-integrations/compare/v0.115.0-dev.4...v0.115.0-dev.5) (2023-08-01)
 
 
