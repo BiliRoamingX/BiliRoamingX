@@ -1,3 +1,10 @@
+# [0.115.0-dev.7](https://github.com/ReVanced/revanced-integrations/compare/v0.115.0-dev.6...v0.115.0-dev.7) (2023-08-02)
+
+
+### Features
+
+* **Tiktok - Feed filter:** Add more filters ([#445](https://github.com/ReVanced/revanced-integrations/issues/445)) ([c16c038](https://github.com/ReVanced/revanced-integrations/commit/c16c038396bde365ce1eec7b385eeb1f485efe99))
+
 # [0.115.0-dev.6](https://github.com/ReVanced/revanced-integrations/compare/v0.115.0-dev.5...v0.115.0-dev.6) (2023-08-02)
 
 
