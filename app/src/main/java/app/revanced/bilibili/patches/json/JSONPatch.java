@@ -58,7 +58,7 @@ public class JSONPatch {
                 splashData.strategyList.clear();
             }
         } else if (!Utils.isHd() && data instanceof SplashShowData) {
-            if (Settings.PURIFY_SEARCH.getBoolean())
+            if (Settings.PURIFY_SPLASH.getBoolean())
                 ((SplashShowData) data).strategyList.clear();
         } else if (Utils.isHd() && data instanceof tv.danmaku.bili.ui.splash.SplashData) {
             if (Settings.PURIFY_SPLASH.getBoolean()) {
