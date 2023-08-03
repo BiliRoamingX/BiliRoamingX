@@ -20,16 +20,36 @@ import org.lsposed.hiddenapibypass.HiddenApiBypass
 object MusicNotificationPatch {
 
     @JvmStatic
-    private val bitmapActionClass: Class<*> =
+    private val bitmapActionClass: Class<*> by lazy {
         Class.forName("android.widget.RemoteViews\$BitmapReflectionAction")
+    }
 
     @JvmStatic
-    private val reflectionActionClass: Class<*> =
+    private val reflectionActionClass: Class<*> by lazy {
         Class.forName("android.widget.RemoteViews\$ReflectionAction")
+    }
 
+    /**
+     * not exist on some old platform, eg. Oreo(8.1)
+     */
     @JvmStatic
-    private val onClickActionClass: Class<*> =
-        Class.forName("android.widget.RemoteViews\$SetOnClickResponse")
+    private val onClickActionClass: Class<*>? by lazy {
+        runCatchingOrNull {
+            Class.forName("android.widget.RemoteViews\$SetOnClickResponse")
+        }
+    }
+
+    /**
+     * only exist on some old platform briefly, eg. Oreo(8.1), then replaced by SetOnClickResponse.
+     *
+     * related api: [setOnClickPendingIntent][android.widget.RemoteViews.setOnClickPendingIntent].
+     */
+    @JvmStatic
+    private val onClickPendingIntentActionClass: Class<*>? by lazy {
+        runCatchingOrNull {
+            Class.forName("android.widget.RemoteViews\$SetOnClickPendingIntent")
+        }
+    }
 
     class ActionDesc(
         var icon: Int? = null,
@@ -159,6 +179,16 @@ object MusicNotificationPatch {
                     onClickActionClass -> {
                         val pendingIntent = action.getObjectField("mResponse")
                             ?.getObjectFieldAs<PendingIntent?>("mPendingIntent")
+                        when (viewId) {
+                            liveNotificationStopId -> {
+                                buttons[stopId]?.icon = liveNotificationStopIconId
+                                buttons[stopId]?.intent = pendingIntent
+                            }
+                        }
+                    }
+
+                    onClickPendingIntentActionClass -> {
+                        val pendingIntent = action.getObjectFieldAs<PendingIntent?>("pendingIntent")
                         when (viewId) {
                             liveNotificationStopId -> {
                                 buttons[stopId]?.icon = liveNotificationStopIconId
