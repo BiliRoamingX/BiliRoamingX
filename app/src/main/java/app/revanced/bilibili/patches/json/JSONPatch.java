@@ -146,7 +146,10 @@ public class JSONPatch {
     }
 
     public static void parseArrayHook(Class<?> type, ArrayList<?> list) {
-        if (type == SearchRank.class || type == SearchReferral.Guess.class) {
+        if (type == SearchRank.class
+                || type == SearchReferral.Guess.class
+                || (Versions.ge7_39_0() && type == com.bilibili.search2.api.SearchRank.class)
+                || (Versions.ge7_39_0() && type == com.bilibili.search2.api.SearchReferral.Guess.class)) {
             if (Settings.PURIFY_SEARCH.getBoolean())
                 list.clear();
         }
