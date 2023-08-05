@@ -1,3 +1,10 @@
+## [0.115.1-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.115.0...v0.115.1-dev.1) (2023-08-05)
+
+
+### Bug Fixes
+
+* **YouTube - Hide Shorts components:** Hide new type of shorts in feed ([#453](https://github.com/ReVanced/revanced-integrations/issues/453)) ([6959808](https://github.com/ReVanced/revanced-integrations/commit/6959808f0c24e638a33f671728f7a9668f2de2c2))
+
 # [0.115.0](https://github.com/ReVanced/revanced-integrations/compare/v0.114.0...v0.115.0) (2023-08-02)
 
 
