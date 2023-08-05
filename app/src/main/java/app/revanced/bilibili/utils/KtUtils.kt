@@ -4,6 +4,8 @@
 package app.revanced.bilibili.utils
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -261,4 +263,11 @@ val abPrefs by lazy {
 
 val blkvPrefs by lazy {
     Utils.blkvPrefsByName("instance.bili_preference", true)
+}
+
+@JvmOverloads
+fun setClipboardContent(label: String = "", content: CharSequence) {
+    val clipboardManager = Utils.getContext().getSystemService(ClipboardManager::class.java)
+    val clipData = ClipData.newPlainText(label, content)
+    clipboardManager.setPrimaryClip(clipData)
 }

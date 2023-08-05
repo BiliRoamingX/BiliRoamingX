@@ -52,6 +52,8 @@ import com.bapis.bilibili.community.service.dm.v1.DmViewReplyEx;
 import com.bapis.bilibili.community.service.dm.v1.DmViewReq;
 import com.bapis.bilibili.main.community.reply.v1.MainListReply;
 import com.bapis.bilibili.main.community.reply.v1.MainListReq;
+import com.bapis.bilibili.main.community.reply.v2.SubjectDescriptionReply;
+import com.bapis.bilibili.main.community.reply.v2.SubjectDescriptionReq;
 import com.bapis.bilibili.playershared.PlayArcConfEx;
 import com.bapis.bilibili.polymer.app.search.v1.SearchAllRequest;
 import com.bapis.bilibili.polymer.app.search.v1.SearchAllResponse;
@@ -74,6 +76,7 @@ import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.MossDebugPrinter;
 import app.revanced.bilibili.utils.Utils;
+import app.revanced.bilibili.utils.Versions;
 
 @SuppressWarnings({"unused", "unchecked", "rawtypes"})
 public class MossPatch {
@@ -226,6 +229,9 @@ public class MossPatch {
             ListReq listReq = (ListReq) req;
             ListReply listReply = (ListReply) reply;
             ModuleListReplyHook.hook(listReq, listReply);
+        } else if (Versions.ge7_39_0() && reply instanceof com.bapis.bilibili.app.viewunite.v1.ViewReply) {
+            var viewReply = (com.bapis.bilibili.app.viewunite.v1.ViewReply) reply;
+            return ViewUniteReplyHook.hook(viewReply);
         }
         if (error != null) {
             throw error;
@@ -319,6 +325,12 @@ public class MossPatch {
                     }
                 });
             }
+        } else if (Versions.ge7_39_0() && req instanceof SubjectDescriptionReq) {
+            return MossResponseHandlerProxy.<SubjectDescriptionReply>get(handler, v -> {
+                if (v != null)
+                    SubjectDescriptionHook.hook(v);
+                return v;
+            });
         }
         if (Settings.DEBUG.getBoolean())
             return handler;

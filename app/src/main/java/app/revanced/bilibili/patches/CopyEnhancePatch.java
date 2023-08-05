@@ -2,11 +2,8 @@ package app.revanced.bilibili.patches;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -19,8 +16,12 @@ import org.json.JSONObject;
 
 import java.util.function.Consumer;
 
+import app.revanced.bilibili.patches.main.ApplicationDelegate;
 import app.revanced.bilibili.settings.Settings;
+import app.revanced.bilibili.utils.Jsons;
+import app.revanced.bilibili.utils.KtUtils;
 import app.revanced.bilibili.utils.Reflex;
+import app.revanced.bilibili.utils.Toasts;
 import app.revanced.bilibili.utils.Utils;
 import app.revanced.bilibili.widget.OnLongClickOriginListener;
 
@@ -34,19 +35,20 @@ public class CopyEnhancePatch {
             "dy_opus_paragraph_text"
     };
 
-    public static boolean copyDescProxy(Object self, boolean flag, String desc) {
+    public static boolean onCopyDesc(boolean flag, String desc) {
         if (!Settings.COMMENT_COPY.getBoolean())
             return false;
         if (!Settings.COMMENT_COPY_ENHANCE.getBoolean())
             return true;
-        var allDesc = (CharSequence) Reflex.getFirstFieldByExactType(self, SpannableStringBuilder.class);
-        var view = (TextView) Reflex.getFirstFieldByExactType(self, TextView.class);
-        showCopyDialog(view.getContext(), allDesc, (v) -> copyDescOrigin(self, flag, desc));
+        showCopyDialog(ApplicationDelegate.requireTopActivity(), desc, (v) -> {
+            KtUtils.setClipboardContent("text", v);
+            if (flag) {
+                Toasts.showShortWithId("video_detail_decs_copy_avid");
+            } else {
+                Toasts.showShortWithId("video_detail_decs_copy_decs");
+            }
+        });
         return true;
-    }
-
-    // codes will filled by patcher
-    static void copyDescOrigin(Object self, boolean flag, String desc) {
     }
 
     public static boolean onDynamicLongClick(OnLongClickOriginListener listener, View view) {
@@ -88,12 +90,7 @@ public class CopyEnhancePatch {
     public static boolean onConversationCopy(Activity activity, BaseTypedMessage<?> message, PopupWindow popupWindow) {
         if (!Settings.COMMENT_COPY_ENHANCE.getBoolean())
             return false;
-        JSONObject jo = null;
-        try {
-            jo = new JSONObject(message.getContentString());
-        } catch (Throwable ignored) {
-        }
-        if (jo == null) return false;
+        JSONObject jo = Jsons.toJSONObject(message.getContentString());
         String text = jo.optString("content");
         if (text.isEmpty()) {
             StringBuilder sb = new StringBuilder();
@@ -114,17 +111,12 @@ public class CopyEnhancePatch {
                 sb.deleteCharAt(sb.length() - 1);
             text = sb.toString();
         }
-        Context context = activity.getApplicationContext();
-        showCopyDialog(activity, text, (v) -> {
-            ClipboardManager clipboardManager = context.getSystemService(ClipboardManager.class);
-            ClipData clipData = ClipData.newPlainText("", v);
-            clipboardManager.setPrimaryClip(clipData);
-        });
+        showCopyDialog(activity, text, KtUtils::setClipboardContent);
         popupWindow.dismiss();
         return true;
     }
 
-    private static void showCopyDialog(Context context, CharSequence text, Consumer<CharSequence> onSelectAll) {
+    private static void showCopyDialog(Context context, CharSequence text, Consumer<CharSequence> onCopyAll) {
         var appDialogTheme = Utils.getResId("AppTheme.Dialog.Alert", "style");
         var title = Utils.getString("biliroaming_dialog_title_copy_enhance");
         var posButton = Utils.getString("biliroaming_dialog_btn_share");
@@ -139,7 +131,7 @@ public class CopyEnhancePatch {
                     intent.setType("text/plain");
                     context.startActivity(Intent.createChooser(intent, posButton));
                 })
-                .setNeutralButton(neuButton, (dialog, which) -> onSelectAll.accept(text))
+                .setNeutralButton(neuButton, (dialog, which) -> onCopyAll.accept(text))
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
         ((TextView) alertDialog.findViewById(android.R.id.message))
