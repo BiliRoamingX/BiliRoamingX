@@ -54,7 +54,6 @@ import com.bapis.bilibili.main.community.reply.v1.MainListReply;
 import com.bapis.bilibili.main.community.reply.v1.MainListReq;
 import com.bapis.bilibili.main.community.reply.v2.SubjectDescriptionReply;
 import com.bapis.bilibili.main.community.reply.v2.SubjectDescriptionReq;
-import com.bapis.bilibili.playershared.PlayArcConfEx;
 import com.bapis.bilibili.polymer.app.search.v1.SearchAllRequest;
 import com.bapis.bilibili.polymer.app.search.v1.SearchAllResponse;
 import com.bapis.bilibili.polymer.app.search.v1.SearchByTypeRequest;
@@ -74,6 +73,7 @@ import app.revanced.bilibili.patches.VideoQualityPatch;
 import app.revanced.bilibili.patches.json.PegasusPatch;
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.settings.Settings;
+import app.revanced.bilibili.utils.LogHelper;
 import app.revanced.bilibili.utils.MossDebugPrinter;
 import app.revanced.bilibili.utils.Utils;
 import app.revanced.bilibili.utils.Versions;
@@ -121,27 +121,11 @@ public class MossPatch {
      */
     @Nullable
     public static <ReqT extends GeneratedMessageLite<?, ?>, RespT extends GeneratedMessageLite<?, ?>>
-    GeneratedMessageLite<?, ?> hookBlockingAfter(@NonNull GeneratedMessageLite<?, ?> req, @Nullable GeneratedMessageLite<?, ?> reply, MossException error) throws MossException {
+    GeneratedMessageLite<?, ?> hookBlockingAfter(@NonNull GeneratedMessageLite<?, ?> req, @Nullable GeneratedMessageLite<?, ?> reply, @Nullable MossException error) throws MossException {
         MossDebugPrinter.printBlocking(req, reply);
         if (req instanceof PlayViewUniteReq) {
             PlayViewUniteReq playReq = (PlayViewUniteReq) req;
             PlayViewUniteReply playReply = (PlayViewUniteReply) reply;
-            if (Settings.REMEMBER_LOSSLESS_SETTING.getBoolean() && playReply != null) {
-                playReply.getPlayDeviceConf().getDeviceConfsMap().forEach((key, deviceConf) -> {
-                    if (key == 30/*LOSSLESS*/) {
-                        com.bapis.bilibili.playershared.ConfValue confValue = deviceConf.getConfValue();
-                        com.bapis.bilibili.playershared.ConfValueEx.setSwitchVal(confValue, Settings.LOSSLESS_ENABLED.getBoolean());
-                    }
-                });
-            }
-            if (Settings.UNLOCK_PLAY_LIMIT.getBoolean() && playReply != null) {
-                var supportedConf = com.bapis.bilibili.playershared.ArcConf.newBuilder()
-                        .setIsSupport(true).setDisabled(false).build();
-                var arcConfs = PlayArcConfEx.getMutableArcConfsMap(playReply.getPlayArcConf());
-                // CASTCONF,BACKGROUNDPLAY,SMALLWINDOW,LISTEN
-                for (int key : new int[]{2, 9, 23, 36})
-                    arcConfs.put(key, supportedConf);
-            }
             return BangumiPlayUrlHook.hookPlayViewUniteAfter(playReq, playReply, error);
         } else if (req instanceof com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq) {
             com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq playReq = (com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq) req;
@@ -229,9 +213,9 @@ public class MossPatch {
             ListReq listReq = (ListReq) req;
             ListReply listReply = (ListReply) reply;
             ModuleListReplyHook.hook(listReq, listReply);
-        } else if (Versions.ge7_39_0() && reply instanceof com.bapis.bilibili.app.viewunite.v1.ViewReply) {
+        } else if (Versions.ge7_39_0() && req instanceof com.bapis.bilibili.app.viewunite.v1.ViewReq) {
             var viewReply = (com.bapis.bilibili.app.viewunite.v1.ViewReply) reply;
-            return ViewUniteReplyHook.hook(viewReply);
+            return ViewUniteReplyHook.hook(viewReply, error);
         }
         if (error != null) {
             throw error;
@@ -330,6 +314,22 @@ public class MossPatch {
                 if (v != null)
                     SubjectDescriptionHook.hook(v);
                 return v;
+            });
+        } else if (req instanceof PlayViewUniteReq) {
+            PlayViewUniteReq playReq = (PlayViewUniteReq) req;
+            BangumiPlayUrlHook.hookPlayViewUniteBefore(playReq);
+            return MossResponseHandlerProxy.<PlayViewUniteReply>get(handler, playReply -> {
+                LogHelper.debug(() -> "plyViewUnite.onNext");
+                return BangumiPlayUrlHook.hookPlayViewUniteAfter(playReq, playReply, null);
+            }, (delegate, error) -> {
+                LogHelper.debug(() -> "playViewUnite,onError, error: " + error);
+                try {
+                    var reply = BangumiPlayUrlHook.hookPlayViewUniteAfter(playReq, null, error);
+                    delegate.onNext(reply);
+                    return true;
+                } catch (Throwable ignored) {
+                    return false;
+                }
             });
         }
         if (Settings.DEBUG.getBoolean())

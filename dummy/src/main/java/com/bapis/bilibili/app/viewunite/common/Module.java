@@ -2294,4 +2294,16 @@ public final class Module extends GeneratedMessageLite<Module, Module.Builder> i
      */
     static void access$7600(Module module) {
     }
+
+    /**
+     * clearActivityEntranceModule
+     */
+    static void access$6100(Module module) {
+    }
+
+    /**
+     * setSectionData
+     */
+    static void access$3500(Module module, SectionData sectionData) {
+    }
 }

@@ -880,4 +880,16 @@ public final class ViewReply extends GeneratedMessageLite<ViewReply, ViewReply.B
     public static ViewReply parseFrom(CodedInputStream codedInputStream, ExtensionRegistryLite extensionRegistryLite) throws IOException {
         return (ViewReply) GeneratedMessageLite.parseFrom(DEFAULT_INSTANCE, codedInputStream, extensionRegistryLite);
     }
+
+    /**
+     * setSupplement
+     */
+    static void access$1600(ViewReply viewReply, Any supplement) {
+    }
+
+    /**
+     * setArc
+     */
+    static void access$400(ViewReply viewReply, Arc arc) {
+    }
 }

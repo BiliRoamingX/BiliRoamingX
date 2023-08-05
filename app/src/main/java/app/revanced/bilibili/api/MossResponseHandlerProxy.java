@@ -19,10 +19,13 @@ public class MossResponseHandlerProxy<V> implements MossResponseHandler<V> {
     private final MossResponseHandler<V> delegate;
     @Nullable
     private final MossResponseOnNext<V> onNext;
+    @Nullable
+    private final MossResponseOnError<V> onError;
 
-    public MossResponseHandlerProxy(@NonNull MossResponseHandler<V> delegate, @Nullable MossResponseOnNext<V> onNext) {
+    public MossResponseHandlerProxy(@NonNull MossResponseHandler<V> delegate, @Nullable MossResponseOnNext<V> onNext, @Nullable MossResponseOnError<V> onError) {
         this.delegate = delegate;
         this.onNext = onNext;
+        this.onError = onError;
     }
 
     @Override
@@ -32,7 +35,8 @@ public class MossResponseHandlerProxy<V> implements MossResponseHandler<V> {
 
     @Override
     public void onError(@Nullable MossException error) {
-        delegate.onError(error);
+        if (onError == null || !onError.onError(delegate, error))
+            delegate.onError(error);
     }
 
     @Override
@@ -66,6 +70,10 @@ public class MossResponseHandlerProxy<V> implements MossResponseHandler<V> {
     }
 
     public static <V> MossResponseHandlerProxy<V> get(@NonNull MossResponseHandler<V> delegate, @Nullable MossResponseOnNext<V> onNext) {
-        return new MossResponseHandlerProxy<>(delegate, onNext);
+        return new MossResponseHandlerProxy<>(delegate, onNext, null);
+    }
+
+    public static <V> MossResponseHandlerProxy<V> get(@NonNull MossResponseHandler<V> delegate, @Nullable MossResponseOnNext<V> onNext, @Nullable MossResponseOnError<V> onError) {
+        return new MossResponseHandlerProxy<>(delegate, onNext, onError);
     }
 }

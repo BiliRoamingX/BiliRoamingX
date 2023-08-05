@@ -134,6 +134,7 @@ object BangumiPlayUrlHook {
     ): PlayViewUniteReply? {
         if (error is NetworkException)
             throw error
+        hookPlayViewUniteAfterExtraActions(reply)
         val response = reply ?: PlayViewUniteReply.newBuilder().build()
         val supplementAny = response.supplement
         val typeUrl = supplementAny.typeUrl
@@ -168,6 +169,26 @@ object BangumiPlayUrlHook {
             return purifyViewInfoUnite(response, supplement)
         }
         if (error != null) throw error else return reply
+    }
+
+    private fun hookPlayViewUniteAfterExtraActions(playReply: PlayViewUniteReply?) {
+        if (playReply == null) return
+        if (Settings.REMEMBER_LOSSLESS_SETTING.boolean) {
+            playReply.playDeviceConf.deviceConfsMap.forEach { (key, deviceConf) ->
+                if (key == 30 /*LOSSLESS*/) {
+                    val confValue = deviceConf.confValue
+                    ConfValueEx.setSwitchVal(confValue, Settings.LOSSLESS_ENABLED.boolean)
+                }
+            }
+        }
+        if (Settings.UNLOCK_PLAY_LIMIT.boolean) {
+            val supportedConf = ArcConf.newBuilder()
+                .setIsSupport(true).setDisabled(false).build()
+            val arcConfs = PlayArcConfEx.getMutableArcConfsMap(playReply.playArcConf)
+            // CASTCONF,BACKGROUNDPLAY,SMALLWINDOW,LISTEN
+            for (key in intArrayOf(2, 9, 23, 36))
+                arcConfs[key] = supportedConf
+        }
     }
 
     private fun getThaiSeason(
