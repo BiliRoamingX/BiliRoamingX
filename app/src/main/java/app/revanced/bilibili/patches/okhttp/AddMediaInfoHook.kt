@@ -24,7 +24,9 @@ object AddMediaInfoHook {
                 } ?: (FAIL_CODE to null)
             if (isBangumiWithWatchPermission(newResult, newCode)) {
                 val data = JSONObject().apply {
-                    put("actor", newResult.optJSONObject("actor"))
+                    put("actor", newResult.optJSONObject("actor")?.apply {
+                        put("title", optString("title").ifEmpty { "角色声优" })
+                    })
                     put("alias", newResult.optString("alias"))
                     put("areas", newResult.optJSONArray("areas"))
                     put("cover", newResult.optString("cover"))
@@ -34,7 +36,9 @@ object AddMediaInfoHook {
                     put("origin_name", newResult.optString("origin_name"))
                     put("publish", newResult.optJSONObject("publish"))
                     put("season_id", mediaId)
-                    put("staff", newResult.optJSONObject("staff"))
+                    put("staff", newResult.optJSONObject("staff")?.apply {
+                        put("title", optString("title").ifEmpty { "制作信息" })
+                    })
                     put("type_name", "番剧")
                 }
                 return JSONObject().apply {

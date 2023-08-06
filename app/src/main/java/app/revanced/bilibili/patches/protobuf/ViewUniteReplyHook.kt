@@ -6,7 +6,6 @@ import app.revanced.bilibili.patches.AutoLikePatch
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.FAIL_CODE
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.isBangumiWithWatchPermission
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.setCommentInvalidFragmentContent
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.subtitlesCache
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.LogHelper
@@ -202,7 +201,11 @@ object ViewUniteReplyHook {
         aid = 0
         cover = result.optString("cover")
         horizontalCover169 = result.optString("horizon_cover")
-        hasCanPlayEp = if (result.optJSONArray("episodes").orEmpty().length() > 0) 1 else 0
+        val positiveEpisodes = result.optJSONArray("modules").orEmpty()
+            .asSequence<JSONObject>().find {
+                it.optString("style") == "positive"
+            }?.optJSONObject("data")?.optJSONArray("episodes").orEmpty()
+        hasCanPlayEp = if (positiveEpisodes.length() > 0) 1 else 0
         mediaId = result.optInt("season_id")
         mode = 2
         newEp = NewEp.newBuilder().apply {
@@ -260,11 +263,6 @@ object ViewUniteReplyHook {
                     newAllowDownload = 1
                     onlyVipDownload = 0
                 }
-                if (has("allow_comment") && getInt("allow_comment") == 0) {
-                    areaLimit = 1
-                    lastSeasonInfo["allow_comment"] = "0"
-                    setCommentInvalidFragmentContent()
-                }
             }
         }.build()
         seasonId = result.optLong("season_id")
@@ -286,13 +284,18 @@ object ViewUniteReplyHook {
         if (Settings.CN_SERVER_ACCESS_KEY.string.isNotEmpty())
             if (status == 13) status = 2
         title = result.optString("title")
-        totalEp = result.optJSONArray("modules").orEmpty().asSequence<JSONObject>().find {
-            it.optInt("id") == 1
-        }?.optJSONObject("data")?.optJSONArray("episodes").orEmpty().length()
+        totalEp = positiveEpisodes.length()
         userStatus = UserStatus.newBuilder().apply {
             result.optJSONObject("user_status")?.run {
                 follow = optInt("follow")
                 vip = optInt("vip")
+                (positiveEpisodes.optJSONObject(0))?.let { episode ->
+                    watchProgress = WatchProgress.newBuilder().apply {
+                        lastEpId = episode.optLong("id")
+                        lastEpIndex = episode.optString("index")
+                        lastTime = 0L
+                    }.build()
+                }
             }
         }.build()
     }.build()
@@ -346,12 +349,12 @@ object ViewUniteReplyHook {
             if (style == "positive") {
                 Module.newBuilder().apply {
                     type = ModuleType.POSITIVE
-                    sectionData = reconstructSection(module, seasonId)
+                    sectionData = reconstructSection(module, seasonId, true)
                 }.build().let { addModules(it) }
             } else if (style == "section") {
                 Module.newBuilder().apply {
                     type = ModuleType.SECTION
-                    sectionData = reconstructSection(module, seasonId)
+                    sectionData = reconstructSection(module, seasonId, false)
                 }.build().let { addModules(it) }
             }
         }
@@ -359,7 +362,8 @@ object ViewUniteReplyHook {
 
     private fun reconstructSection(
         module: JSONObject,
-        seasonId: String
+        seasonId: String,
+        positive: Boolean,
     ) = SectionData.newBuilder().apply {
         id = module.optInt("id")
         moduleStyle = Style.newBuilder().apply {
@@ -370,7 +374,7 @@ object ViewUniteReplyHook {
                     ?.forEach { addShowPages(it) }
             }
         }.build()
-        more = module.optString("more")
+        more = if (positive) "由于会串评至正常视频，勿发弹幕" else module.optString("more")
         sectionId = module.optJSONObject("data")?.optInt("id") ?: 0
         title = module.optString("title")
         module.optJSONObject("data")?.optJSONArray("episodes")?.forEach { episode ->
@@ -404,6 +408,8 @@ object ViewUniteReplyHook {
                         allowDownload = optInt("allow_download")
                         areaLimit = optInt("area_limit")
                     }
+                    if (Settings.UNLOCK_AREA_LIMIT.boolean)
+                        areaLimit = 0
                     if (Settings.ALLOW_DOWNLOAD.boolean)
                         allowDownload = 1
                 }.build()
