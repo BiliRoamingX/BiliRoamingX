@@ -275,7 +275,8 @@ object ViewUniteReplyHook {
         showSeasonType = result.optInt("type")
         squareCover = result.optString("square_cover")
         stat = Stat.newBuilder().apply {
-            followers = result.optJSONObject("stat")?.optString("followers")
+            // followers = result.optJSONObject("stat")?.optString("followers")
+            followers = result.optJSONObject("stat_format")?.optString("likes")
             playData = StatInfo.newBuilder().apply {
                 icon = "playdata-square-line@500"
                 pureText = result.optJSONObject("stat_format")?.optString("play")
@@ -320,7 +321,8 @@ object ViewUniteReplyHook {
         Module.newBuilder().apply {
             type = ModuleType.OGV_INTRODUCTION
             ogvIntroduction = OgvIntroduction.newBuilder().apply {
-                followers = result.optJSONObject("stat")?.optString("followers")
+                // followers = result.optJSONObject("stat")?.optString("followers")
+                followers = result.optJSONObject("stat_format")?.optString("likes")
                 playData = StatInfo.newBuilder().apply {
                     icon = "playdata-square-line@500"
                     pureText = result.optJSONObject("stat_format")?.optString("play")
