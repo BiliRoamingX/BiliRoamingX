@@ -17,6 +17,7 @@ import com.bilibili.lib.moss.api.MossResponseHandler
 import com.bilibili.search.ogv.OgvSearchResultFragment
 import com.bilibili.search.result.bangumi.ogv.BangumiSearchResultFragment
 import com.bilibili.search.result.pages.BiliMainSearchResultPage.PageTypes
+import com.bilibili.search2.result.pages.BiliMainSearchResultPage
 import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.ref.WeakReference
@@ -47,6 +48,7 @@ object BangumiSeasonHook {
 
     const val FAIL_CODE = -404
     private val originalPageTypes by lazy { PageTypes.`$VALUES` }
+    private val originalPageTypesV2 by lazy { BiliMainSearchResultPage.PageTypes.`$VALUES` }
 
     private var invalidFragmentRef = WeakReference<Fragment>(null)
 
@@ -65,7 +67,10 @@ object BangumiSeasonHook {
             if (key == Settings.SEARCH_BANGUMI.key || key == Settings.SEARCH_MOVIE.key
                 || key == Settings.CN_SERVER_ACCESS_KEY.key || key == Settings.HK_SERVER_ACCESS_KEY.key
                 || key == Settings.TW_SERVER_ACCESS_KEY.key || key == Settings.TH_SERVER_ACCESS_KEY.key
-            ) injectExtraSearchTypes()
+            ) {
+                injectExtraSearchTypes()
+                injectExtraSearchTypesV2()
+            }
         }
     }
 
@@ -239,6 +244,29 @@ object BangumiSeasonHook {
     }
 
     @JvmStatic
+    fun injectExtraSearchTypesV2() {
+        if (!Versions.ge7_39_0()) return
+        if (!Settings.SEARCH_BANGUMI.boolean && !Settings.SEARCH_MOVIE.boolean) {
+            BiliMainSearchResultPage.PageTypes.`$VALUES` = originalPageTypesV2
+            return
+        }
+        val originalPageType = originalPageTypesV2
+        val extraTypes = searchTypes.mapNotNull { type ->
+            val area = type.value.area
+            val typeStr = type.value.typeStr
+            if (Settings.getServerByArea(area).isNotEmpty()
+                && Settings.getExtraSearchByType(typeStr)
+            ) BiliMainSearchResultPage.PageTypes(
+                "PAGE_" + typeStr.uppercase(Locale.getDefault()), 4,
+                "bilibili://search-result/new-$typeStr?from=$area",
+                type.key, typeStr
+            ) else null
+        }
+        val newPageTypes = originalPageType + extraTypes
+        BiliMainSearchResultPage.PageTypes.`$VALUES` = newPageTypes
+    }
+
+    @JvmStatic
     fun handleExtraSearch(
         request: SearchByTypeRequest,
         handler: MossResponseHandler<Any>
@@ -409,6 +437,17 @@ object BangumiSeasonHook {
 
     @JvmStatic
     fun onSearchResultFragmentVisible(fragment: OgvSearchResultFragment) {
+        val from = fragment.arguments?.getString("from") ?: return
+        for (type in searchTypes) {
+            if (type.value.area.value == from && fragment.typeForBiliRoaming == type.value.type.toInt()) {
+                fragment.typeForBiliRoaming = type.key
+                break
+            }
+        }
+    }
+
+    @JvmStatic
+    fun onSearchResultFragmentVisible(fragment: com.bilibili.search2.ogv.OgvSearchResultFragment) {
         val from = fragment.arguments?.getString("from") ?: return
         for (type in searchTypes) {
             if (type.value.area.value == from && fragment.typeForBiliRoaming == type.value.type.toInt()) {

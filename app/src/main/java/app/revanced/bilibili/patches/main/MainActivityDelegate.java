@@ -33,6 +33,7 @@ public class MainActivityDelegate {
         KtUtils.getCountryTask();
         UposReplacer.getBaseUposList();
         Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypes));
+        Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypesV2));
         Utils.runOnMainThread(1000L, () -> showHintIfNeeded(activity));
     }
 
