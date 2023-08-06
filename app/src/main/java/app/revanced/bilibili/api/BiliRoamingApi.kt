@@ -17,6 +17,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import java.util.zip.GZIPInputStream
 import java.util.zip.InflaterInputStream
@@ -26,9 +27,15 @@ class CustomServerException(private val errors: Map<String, String>) : Throwable
         get() = errors.asSequence().joinToString("\n") { "${it.key}: ${it.value}" }.trim()
 }
 
+class SeasonCache(
+    var seasonId: Int,
+    var seasonJson: AtomicReference<String>,
+    var latch: CountDownLatch,
+    var valid: AtomicBoolean = AtomicBoolean(true)
+)
+
 object BiliRoamingApi {
-    private val seasonCache: AtomicReference<Triple<Int, AtomicReference<String>, CountDownLatch>?> =
-        AtomicReference(null)
+    private val seasonCache = AtomicReference<SeasonCache?>(null)
 
     private const val BILI_HIDDEN_SEASON_URL = "bangumi.bilibili.com/view/web_api/season"
     private const val BILI_SEARCH_URL = "/x/v2/search/type"
@@ -205,12 +212,12 @@ object BiliRoamingApi {
     fun getThaiSeason(info: Map<String, String?>): String? {
         val seasonId = info.getOrDefault("season_id", null)?.toInt()
         val cache = seasonCache.get()
-        val cacheTuple = if (seasonId != null && seasonId != 0) {
-            if (cache?.first == seasonId) {
-                cache.third.await()
-                return cache.second.get()
+        val seasonCache = if (seasonId != null && seasonId != 0) {
+            if (cache?.seasonId == seasonId && cache.valid.get()) {
+                cache.latch.await()
+                return cache.seasonJson.get()
             } else {
-                Triple(seasonId, AtomicReference<String>(), CountDownLatch(1)).also {
+                SeasonCache(seasonId, AtomicReference<String>(), CountDownLatch(1)).also {
                     seasonCache.compareAndSet(cache, it)
                 }
             }
@@ -220,7 +227,8 @@ object BiliRoamingApi {
         info.filterNot { it.value.isNullOrEmpty() }
             .forEach { builder.appendQueryParameter(it.key, it.value) }
         var seasonJson = getContent(builder.toString())?.toJSONObject() ?: run {
-            cacheTuple?.third?.countDown()
+            seasonCache?.valid?.set(false)
+            seasonCache?.latch?.countDown()
             return null
         }
         var fixThailandSeasonFlag = false
@@ -265,9 +273,12 @@ object BiliRoamingApi {
             checkErrorToast(seasonJson)
         }
         return seasonJson.toString().also {
-            if (seasonJson.optInt("code", -1) == 0)
-                cacheTuple?.second?.set(it)
-            cacheTuple?.third?.countDown()
+            if (seasonJson.optInt("code", -1) == 0) {
+                seasonCache?.seasonJson?.set(it)
+            } else {
+                seasonCache?.valid?.set(false)
+            }
+            seasonCache?.latch?.countDown()
         }
     }
 
