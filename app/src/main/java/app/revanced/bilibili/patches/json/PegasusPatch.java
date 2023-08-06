@@ -7,6 +7,13 @@ import com.bapis.bilibili.app.view.v1.RelatesFeedReply;
 import com.bapis.bilibili.app.view.v1.RelatesFeedReplyEx;
 import com.bapis.bilibili.app.view.v1.ViewReply;
 import com.bapis.bilibili.app.view.v1.ViewReplyEx;
+import com.bapis.bilibili.app.viewunite.common.Module;
+import com.bapis.bilibili.app.viewunite.common.ModuleEx;
+import com.bapis.bilibili.app.viewunite.common.RelateCard;
+import com.bapis.bilibili.app.viewunite.common.RelateCardType;
+import com.bapis.bilibili.app.viewunite.common.Relates;
+import com.bapis.bilibili.app.viewunite.common.RelatesEx;
+import com.bapis.bilibili.playershared.BizType;
 import com.bilibili.app.comm.list.common.api.model.PlayerArgs;
 import com.bilibili.app.comm.list.common.data.DislikeReason;
 import com.bilibili.app.comm.list.common.data.ThreePointItem;
@@ -228,7 +235,7 @@ public class PegasusPatch {
                         return true;
             } else if (!TextUtils.isEmpty(reason)) {
                 for (String s : reasonSet)
-                    if (s.contains(reason))
+                    if (reason.contains(s))
                         return true;
             }
         }
@@ -312,7 +319,108 @@ public class PegasusPatch {
                         return true;
             } else if (!TextUtils.isEmpty(reason)) {
                 for (String s : reasonSet)
-                    if (s.contains(reason))
+                    if (reason.contains(s))
+                        return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean isPromoteRelateUnite(RelateCard relate, boolean removeRelatePromote) {
+        RelateCardType cardType = relate.getRelateCardType();
+        return removeRelatePromote && (cardType == RelateCardType.RESOURCE || cardType == RelateCardType.CM || cardType == RelateCardType.GAME || cardType == RelateCardType.LIVE);
+    }
+
+    private static boolean isNotAvRelateUnite(RelateCard relate, boolean removeRelatePromote, boolean removeRelateOnlyAv, BizType bizType) {
+        RelateCardType cardType = relate.getRelateCardType();
+        return removeRelatePromote && removeRelateOnlyAv && (bizType == BizType.BIZ_TYPE_UGC && cardType != RelateCardType.AV);
+    }
+
+    private static boolean isWideAvCard(RelateCard relate) {
+        RelateCardType cardType = relate.getRelateCardType();
+        String aiGoToType = relate.getAiCard().getGotoType();
+        return cardType == RelateCardType.AV || (cardType == RelateCardType.AI_RECOMMEND && "bangumi-av".equals(aiGoToType));
+    }
+
+    private static boolean isLowPlayCountRelateUnite(RelateCard relate, long playCountLimit) {
+        if (playCountLimit == 0L) return false;
+        if (!isWideAvCard(relate)) return false;
+        RelateCardType cardType = relate.getRelateCardType();
+        var text = cardType == RelateCardType.AV ? relate.getAv().getStat().getVt().getText()
+                : relate.getAiCard().getStat().getVt().getText();
+        if (TextUtils.isEmpty(text)) return false;
+        var playCount = toPlayCount(text);
+        if (playCount == -1L) return false;
+        return playCount < playCountLimit;
+    }
+
+    private static boolean isDurationInvalidRelateUnite(RelateCard relate, int shortDuration, int longDuration) {
+        if (shortDuration == 0 && longDuration == 0)
+            return false;
+        if (!isWideAvCard(relate)) return false;
+        RelateCardType cardType = relate.getRelateCardType();
+        long duration = cardType == RelateCardType.AV ? relate.getAv().getDuration()
+                : relate.getAiCard().getDuration();
+        if (longDuration != 0 && duration > longDuration) return true;
+        return shortDuration != 0 && duration < shortDuration;
+    }
+
+    private static boolean isContainsBlockKwdRelateUnite(
+            RelateCard item,
+            boolean titleRegexMode,
+            Set<String> titleSet,
+            List<Pattern> titleRegexes,
+            boolean reasonRegexMode,
+            Set<String> reasonSet,
+            List<Pattern> reasonRegexes,
+            boolean upRegexMode,
+            Set<String> upSet,
+            List<Pattern> upRegexes,
+            long[] uidArray
+    ) {
+        if (!isWideAvCard(item)) return false;
+        RelateCardType cardType = item.getRelateCardType();
+
+        if (!titleSet.isEmpty()) {
+            String title = item.getBasicInfo().getTitle();
+            if (titleRegexMode && !TextUtils.isEmpty(title)) {
+                for (int i = 0; i < titleRegexes.size(); i++)
+                    if (titleRegexes.get(i).matcher(title).find())
+                        return true;
+            } else if (!TextUtils.isEmpty(title))
+                for (String s : titleSet)
+                    if (title.contains(s))
+                        return true;
+        }
+
+        if (uidArray.length > 0) {
+            long upId = item.getBasicInfo().getAuthor().getMid();
+            if (upId != 0L && ArrayUtils.contains(uidArray, upId))
+                return true;
+        }
+
+        if (!upSet.isEmpty()) {
+            String upName = item.getBasicInfo().getAuthor().getTitle();
+            if (upRegexMode && !TextUtils.isEmpty(upName)) {
+                for (int i = 0; i < upRegexes.size(); i++)
+                    if (upRegexes.get(i).matcher(upName).find())
+                        return true;
+            } else if (!TextUtils.isEmpty(upName))
+                for (String s : upSet)
+                    if (upName.contains(s))
+                        return true;
+        }
+
+        if (!reasonSet.isEmpty() && cardType == RelateCardType.AV) {
+            String reason = item.getAv().getRcmdReason().getText();
+            if (reasonRegexMode && !TextUtils.isEmpty(reason)) {
+                for (int i = 0; i < reasonRegexes.size(); i++)
+                    if (reasonRegexes.get(i).matcher(reason).find())
+                        return true;
+            } else if (!TextUtils.isEmpty(reason)) {
+                for (String s : reasonSet)
+                    if (reason.contains(s))
                         return true;
             }
         }
@@ -546,10 +654,29 @@ public class PegasusPatch {
             ViewReplyEx.removeRelates(viewReply, indexes.get(i));
     }
 
+    public static void filterViewUniteRelates(Module module, BizType bizType) {
+        if (Settings.REMOVE_RELATE_PROMOTE.getBoolean()
+                && Settings.REMOVE_RELATE_ONLY_AV.getBoolean()
+                && Settings.REMOVE_RELATE_NOTHING.getBoolean()) {
+            ModuleEx.clearRelates(module);
+            return;
+        }
+        Relates relates = module.getRelates();
+        List<Integer> indexes = getToRemoveRelateCardIndexes(relates.getCardsList(), bizType);
+        for (int i = indexes.size() - 1; i >= 0; i--)
+            RelatesEx.removeCards(relates, indexes.get(i));
+    }
+
     public static void filterRelatesFeed(RelatesFeedReply feedReply) {
         List<Integer> indexes = getToRemoveRelateIndexes(feedReply.getListList());
         for (int i = indexes.size() - 1; i >= 0; i--)
             RelatesFeedReplyEx.removeList(feedReply, indexes.get(i));
+    }
+
+    public static void filterRelatesFeedUnite(com.bapis.bilibili.app.viewunite.v1.RelatesFeedReply feedReply) {
+        List<Integer> indexes = getToRemoveRelateCardIndexes(feedReply.getRelatesList(), null);
+        for (int i = indexes.size() - 1; i >= 0; i--)
+            com.bapis.bilibili.app.viewunite.v1.RelatesFeedReplyEx.removeRelates(feedReply, indexes.get(i));
     }
 
     public static List<Integer> getToRemoveRelateIndexes(List<Relate> relates) {
@@ -605,6 +732,64 @@ public class PegasusPatch {
                     || (applyToVideo && (isLowPlayCountRelate(relate, playCountLimit)
                     || isDurationInvalidRelate(relate, shortDurationLimit, longDurationLimit)
                     || isContainsBlockKwdRelate(relate, titleRegexMode, titleSet, titleRegexes, reasonRegexMode, reasonSet, reasonRegexes, upRegexMode, upSet, upRegexes, uidArray))))
+                idxList.add(i);
+        }
+        return idxList;
+    }
+
+    public static List<Integer> getToRemoveRelateCardIndexes(List<RelateCard> relateCards, BizType bizType) {
+        boolean removeRelatePromote = Settings.REMOVE_RELATE_PROMOTE.getBoolean();
+        boolean removeRelateOnlyAv = Settings.REMOVE_RELATE_ONLY_AV.getBoolean();
+        boolean applyToVideo = Settings.HOME_FILTER_APPLY_TO_VIDEO.getBoolean();
+        long playCountLimit = Settings.LOW_PLAY_COUNT_LIMIT.getLong();
+        var shortDurationLimit = Settings.SHORT_DURATION_LIMIT.getInt();
+        int longDurationLimit = Settings.LONG_DURATION_LIMIT.getInt();
+        Set<String> titleSet = Settings.HOME_RCMD_FILTER_TITLE.getStringSet();
+        boolean titleRegexMode = Settings.HOME_RCMD_FILTER_TITLE_REGEX_MODE.getBoolean();
+        List<Pattern> titleRegexes;
+        if (titleRegexMode && cachedTitileSet.equals(titleSet))
+            titleRegexes = cachedTitleRegexes;
+        else if (titleRegexMode) {
+            cachedTitileSet = new HashSet<>(titleSet);
+            titleRegexes = titleSet.stream().map(Pattern::compile).collect(Collectors.toList());
+            cachedTitleRegexes = titleRegexes;
+        } else {
+            titleRegexes = Collections.emptyList();
+        }
+        Set<String> reasonSet = Settings.HOME_RCMD_FILTER_REASON.getStringSet();
+        boolean reasonRegexMode = Settings.HOME_RCMD_FILTER_REASON_REGEX_MODE.getBoolean();
+        List<Pattern> reasonRegexes;
+        if (reasonRegexMode && cachedReasonSet.equals(reasonSet))
+            reasonRegexes = cachedReasonRegexes;
+        else if (reasonRegexMode) {
+            cachedReasonSet = new HashSet<>(reasonSet);
+            reasonRegexes = reasonSet.stream().map(Pattern::compile).collect(Collectors.toList());
+            cachedReasonRegexes = reasonRegexes;
+        } else {
+            reasonRegexes = Collections.emptyList();
+        }
+        Set<String> upSet = Settings.HOME_RCMD_FILTER_UP.getStringSet();
+        boolean upRegexMode = Settings.HOME_RCMD_FILTER_UP_REGEX_MODE.getBoolean();
+        List<Pattern> upRegexes;
+        if (upRegexMode && cachedUpSet.equals(upSet))
+            upRegexes = cachedUpRegexes;
+        else if (upRegexMode) {
+            cachedUpSet = new HashSet<>(upSet);
+            upRegexes = upSet.stream().map(Pattern::compile).collect(Collectors.toList());
+            cachedUpRegexes = upRegexes;
+        } else {
+            upRegexes = Collections.emptyList();
+        }
+        Set<String> uidSet = Settings.HOME_RCMD_FILTER_UID.getStringSet();
+        long[] uidArray = ArrayUtils.toLongArray(uidSet);
+        List<Integer> idxList = new ArrayList<>();
+        for (int i = 0; i < relateCards.size(); i++) {
+            RelateCard relate = relateCards.get(i);
+            if (isPromoteRelateUnite(relate, removeRelatePromote)
+                    || isNotAvRelateUnite(relate, removeRelatePromote, removeRelateOnlyAv, bizType)
+                    || (applyToVideo && (isLowPlayCountRelateUnite(relate, playCountLimit)
+                    || isDurationInvalidRelateUnite(relate, shortDurationLimit, longDurationLimit)
+                    || isContainsBlockKwdRelateUnite(relate, titleRegexMode, titleSet, titleRegexes, reasonRegexMode, reasonSet, reasonRegexes, upRegexMode, upSet, upRegexes, uidArray))))
                 idxList.add(i);
         }
         return idxList;

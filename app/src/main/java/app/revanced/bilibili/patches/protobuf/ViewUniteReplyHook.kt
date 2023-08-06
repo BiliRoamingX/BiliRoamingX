@@ -3,6 +3,7 @@ package app.revanced.bilibili.patches.protobuf
 import android.util.Pair
 import app.revanced.bilibili.api.BiliRoamingApi.getThaiSeason
 import app.revanced.bilibili.patches.AutoLikePatch
+import app.revanced.bilibili.patches.json.PegasusPatch
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.FAIL_CODE
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.isBangumiWithWatchPermission
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
@@ -109,6 +110,8 @@ object ViewUniteReplyHook {
                             }
                         }.build()
                         ModuleEx.setSectionData(module, newSectionData)
+                    } else if (module.hasRelates()) {
+                        PegasusPatch.filterViewUniteRelates(module, viewReply.viewBase.bizType)
                     }
                 }
             } else if (tabModule.hasReply()) {

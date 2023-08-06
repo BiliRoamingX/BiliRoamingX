@@ -12,4 +12,8 @@ public class ModuleEx {
     public static void setSectionData(Module module, SectionData sectionData) {
         Module.access$3500(module, sectionData);
     }
+
+    public static void clearRelates(Module module) {
+        Module.access$6700(module);
+    }
 }

@@ -2306,4 +2306,10 @@ public final class Module extends GeneratedMessageLite<Module, Module.Builder> i
      */
     static void access$3500(Module module, SectionData sectionData) {
     }
+
+    /**
+     * clearRelates
+     */
+    static void access$6700(Module module) {
+    }
 }

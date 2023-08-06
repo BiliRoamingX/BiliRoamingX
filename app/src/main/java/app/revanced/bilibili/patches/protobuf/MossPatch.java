@@ -217,6 +217,9 @@ public class MossPatch {
             var viewReq = (com.bapis.bilibili.app.viewunite.v1.ViewReq) req;
             var viewReply = (com.bapis.bilibili.app.viewunite.v1.ViewReply) reply;
             return ViewUniteReplyHook.hook(viewReq, viewReply, error);
+        } else if (Versions.ge7_39_0() && reply instanceof com.bapis.bilibili.app.viewunite.v1.RelatesFeedReply) {
+            com.bapis.bilibili.app.viewunite.v1.RelatesFeedReply feedReply = (com.bapis.bilibili.app.viewunite.v1.RelatesFeedReply) reply;
+            PegasusPatch.filterRelatesFeedUnite(feedReply);
         }
         if (error != null) {
             throw error;

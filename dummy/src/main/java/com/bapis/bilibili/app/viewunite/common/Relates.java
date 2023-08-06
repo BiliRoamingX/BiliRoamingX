@@ -379,4 +379,10 @@ public final class Relates extends GeneratedMessageLite<Relates, Relates.Builder
     public static Relates parseFrom(CodedInputStream codedInputStream, ExtensionRegistryLite extensionRegistryLite) throws IOException {
         return (Relates) GeneratedMessageLite.parseFrom(DEFAULT_INSTANCE, codedInputStream, extensionRegistryLite);
     }
+
+    /**
+     * removeCards
+     */
+    static void access$600(Relates relates, int index) {
+    }
 }
