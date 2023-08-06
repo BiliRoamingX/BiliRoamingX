@@ -214,8 +214,9 @@ public class MossPatch {
             ListReply listReply = (ListReply) reply;
             ModuleListReplyHook.hook(listReq, listReply);
         } else if (Versions.ge7_39_0() && req instanceof com.bapis.bilibili.app.viewunite.v1.ViewReq) {
+            var viewReq = (com.bapis.bilibili.app.viewunite.v1.ViewReq) req;
             var viewReply = (com.bapis.bilibili.app.viewunite.v1.ViewReply) reply;
-            return ViewUniteReplyHook.hook(viewReply, error);
+            return ViewUniteReplyHook.hook(viewReq, viewReply, error);
         }
         if (error != null) {
             throw error;
@@ -310,19 +311,21 @@ public class MossPatch {
                 });
             }
         } else if (Versions.ge7_39_0() && req instanceof SubjectDescriptionReq) {
-            return MossResponseHandlerProxy.<SubjectDescriptionReply>get(handler, v -> {
-                if (v != null)
-                    SubjectDescriptionHook.hook(v);
-                return v;
-            });
+            if (Settings.BLOCK_COMMENT_GUIDE.getBoolean())
+                return MossResponseHandlerProxy.<SubjectDescriptionReply>get(handler, v -> {
+                    if (v != null)
+                        SubjectDescriptionHook.blockCommentGuide(v);
+                    return v;
+                });
         } else if (req instanceof PlayViewUniteReq) {
             PlayViewUniteReq playReq = (PlayViewUniteReq) req;
+            VideoQualityPatch.unlockLimit(playReq);
             BangumiPlayUrlHook.hookPlayViewUniteBefore(playReq);
             return MossResponseHandlerProxy.<PlayViewUniteReply>get(handler, playReply -> {
                 LogHelper.debug(() -> "plyViewUnite.onNext");
                 return BangumiPlayUrlHook.hookPlayViewUniteAfter(playReq, playReply, null);
             }, (delegate, error) -> {
-                LogHelper.debug(() -> "playViewUnite,onError, error: " + error);
+                LogHelper.debug(() -> "playViewUnite.onError, error: " + error);
                 try {
                     var reply = BangumiPlayUrlHook.hookPlayViewUniteAfter(playReq, null, error);
                     delegate.onNext(reply);

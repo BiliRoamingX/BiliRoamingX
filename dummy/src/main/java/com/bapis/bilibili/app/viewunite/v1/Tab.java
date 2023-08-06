@@ -420,4 +420,10 @@ public final class Tab extends GeneratedMessageLite<Tab, Tab.Builder> implements
     public static Tab parseFrom(CodedInputStream codedInputStream, ExtensionRegistryLite extensionRegistryLite) throws IOException {
         return (Tab) GeneratedMessageLite.parseFrom(DEFAULT_INSTANCE, codedInputStream, extensionRegistryLite);
     }
+
+    /**
+     * removeTabModule
+     */
+    static void access$600(Tab tab, int index) {
+    }
 }

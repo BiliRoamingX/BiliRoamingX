@@ -1,6 +1,5 @@
 package app.revanced.bilibili.patches.protobuf
 
-import app.revanced.bilibili.settings.Settings
 import com.bapis.bilibili.main.community.reply.v2.EmptyPage
 import com.bapis.bilibili.main.community.reply.v2.EmptyPageEx
 import com.bapis.bilibili.main.community.reply.v2.SubjectDescriptionReply
@@ -9,13 +8,7 @@ import com.bapis.bilibili.main.community.reply.v2.TextStyle
 object SubjectDescriptionHook {
 
     @JvmStatic
-    fun hook(reply: SubjectDescriptionReply) {
-        if (Settings.BLOCK_COMMENT_GUIDE.boolean) {
-            blockCommentGuide(reply)
-        }
-    }
-
-    private fun blockCommentGuide(reply: SubjectDescriptionReply) {
+    fun blockCommentGuide(reply: SubjectDescriptionReply) {
         val emptyPage = reply.emptyPage
         EmptyPageEx.clearLeftButton(emptyPage)
         EmptyPageEx.clearRightButton(emptyPage)

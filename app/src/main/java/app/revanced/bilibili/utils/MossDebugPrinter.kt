@@ -7,7 +7,7 @@ import com.google.protobuf.GeneratedMessageLite
 
 object MossDebugPrinter {
     private val replySkippedMossApis = arrayOf(
-        //"com.bapis.bilibili.main.community.reply.v1.ReplyMoss#mainList",
+        "com.bapis.bilibili.main.community.reply.v1.ReplyMoss#mainList",
         "com.bapis.bilibili.community.service.dm.v1.DMMoss#dmView",
         "com.bapis.bilibili.community.service.dm.v1.DMMoss#dmSegMobile"
     )

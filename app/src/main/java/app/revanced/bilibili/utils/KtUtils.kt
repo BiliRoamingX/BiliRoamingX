@@ -116,6 +116,7 @@ enum class Area(@JvmField val value: String) {
     override fun toString() = value
 
     companion object {
+        @JvmStatic
         fun of(value: String?) = when (value) {
             CN.value -> CN
             HK.value -> HK

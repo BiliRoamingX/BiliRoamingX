@@ -45,7 +45,7 @@ object BangumiSeasonHook {
         }
     }
 
-    private const val FAIL_CODE = -404
+    const val FAIL_CODE = -404
     private val originalPageTypes by lazy { PageTypes.`$VALUES` }
 
     private var invalidFragmentRef = WeakReference<Fragment>(null)
@@ -194,7 +194,7 @@ object BangumiSeasonHook {
     }
 
     @OptIn(ExperimentalContracts::class)
-    private fun isBangumiWithWatchPermission(newResult: JSONObject?, code: Int): Boolean {
+    fun isBangumiWithWatchPermission(newResult: JSONObject?, code: Int): Boolean {
         contract { returns(true) implies (newResult != null) }
         return newResult?.optJSONObject("rights")?.run {
             !optBoolean("area_limit", true) || optInt("area_limit", 1) == 0
