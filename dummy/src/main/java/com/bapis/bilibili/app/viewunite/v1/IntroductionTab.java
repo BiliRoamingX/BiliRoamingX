@@ -11,6 +11,7 @@ import com.google.protobuf.Internal;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.MessageLiteOrBuilder;
 import com.google.protobuf.Parser;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -367,5 +368,11 @@ public final class IntroductionTab extends GeneratedMessageLite<IntroductionTab,
 
     public static IntroductionTab parseFrom(CodedInputStream codedInputStream, ExtensionRegistryLite extensionRegistryLite) throws IOException {
         return (IntroductionTab) GeneratedMessageLite.parseFrom(DEFAULT_INSTANCE, codedInputStream, extensionRegistryLite);
+    }
+
+    /**
+     * removeModule
+     */
+    static void access$900(IntroductionTab tab, int index) {
     }
 }

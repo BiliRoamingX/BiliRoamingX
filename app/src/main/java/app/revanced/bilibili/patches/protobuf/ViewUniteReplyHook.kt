@@ -93,13 +93,14 @@ object ViewUniteReplyHook {
     private fun hookTabModules(viewReply: ViewReply) {
         viewReply.tab.tabModuleList.forEach { tabModule ->
             if (tabModule.hasIntroduction()) {
-                for (module in tabModule.introduction.modulesList) {
+                val toRemoveIndexes = mutableListOf<Int>()
+                tabModule.introduction.modulesList.forEachIndexed { index, module ->
                     if (module.hasLikeComment()) {
                         if (Settings.BLOCK_COMMENT_GUIDE.boolean)
-                            ModuleEx.clearLikeComment(module)
+                            toRemoveIndexes.add(index)
                     } else if (module.hasActivityEntranceModule()) {
                         if (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean)
-                            ModuleEx.clearActivityEntranceModule(module)
+                            toRemoveIndexes.add(index)
                     } else if (module.hasSectionData()) {
                         val newSectionData = module.sectionData.toBuilder().apply {
                             episodesList.map {
@@ -113,6 +114,9 @@ object ViewUniteReplyHook {
                     } else if (module.hasRelates()) {
                         PegasusPatch.filterViewUniteRelates(module, viewReply.viewBase.bizType)
                     }
+                }
+                toRemoveIndexes.asReversed().forEach {
+                    IntroductionTabEx.removeModule(tabModule.introduction, it)
                 }
             } else if (tabModule.hasReply()) {
                 if (Settings.BLOCK_COMMENT_GUIDE.boolean)
