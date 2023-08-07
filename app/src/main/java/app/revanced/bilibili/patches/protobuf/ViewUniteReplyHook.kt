@@ -37,6 +37,8 @@ object ViewUniteReplyHook {
             val aid = viewReply.arc.aid
             val like = viewReply.reqUser.like
             AutoLikePatch.detail = Pair.create(aid, like)
+            if (viewReply.viewBase.bizType == BizType.BIZ_TYPE_UGC)
+                AutoLikePatch.autoLikeUnite()
             hookArc(viewReply)
             hookTabModules(viewReply)
             hookSupplement(viewReply)
