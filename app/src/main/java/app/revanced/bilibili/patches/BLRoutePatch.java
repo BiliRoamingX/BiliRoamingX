@@ -13,6 +13,7 @@ public class BLRoutePatch {
     private static final Pattern playerPreloadRegex = Pattern.compile("&player_preload=[^&]*");
 
     public static Uri intercept(Uri uri) {
+        if (uri == null) return null;
         LogHelper.debug(() -> "Route uri: " + uri);
         String scheme = uri.getScheme();
         if ("bilibili".equals(scheme)) {
