@@ -1,3 +1,10 @@
+# [0.116.0-dev.2](https://github.com/ReVanced/revanced-integrations/compare/v0.116.0-dev.1...v0.116.0-dev.2) (2023-08-07)
+
+
+### Features
+
+* **YouTube - Hide video action buttons:** Hide individual action buttons ([#451](https://github.com/ReVanced/revanced-integrations/issues/451)) ([8e5ca65](https://github.com/ReVanced/revanced-integrations/commit/8e5ca65286b8b62eaeff3bce5fa1d2fb5a198703))
+
 # [0.116.0-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.115.1...v0.116.0-dev.1) (2023-08-07)
 
 
