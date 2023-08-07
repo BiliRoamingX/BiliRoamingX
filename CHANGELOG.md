@@ -1,3 +1,10 @@
+# [0.116.0-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.115.1...v0.116.0-dev.1) (2023-08-07)
+
+
+### Features
+
+* **YouTube - Debug:** Logging of layout proto buffer strings ([#456](https://github.com/ReVanced/revanced-integrations/issues/456)) ([769a200](https://github.com/ReVanced/revanced-integrations/commit/769a2006ce8dc934dd5de0acc59ed6aa6985da4f))
+
 ## [0.115.1](https://github.com/ReVanced/revanced-integrations/compare/v0.115.0...v0.115.1) (2023-08-05)
 
 
