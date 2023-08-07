@@ -47,6 +47,7 @@ public class AutoLikePatch {
     }
 
     public static void autoLikeUnite() {
+        if (!Settings.AUTO_LIKE.getBoolean()) return;
         if (detail == null) return;
         Long aid = detail.first;
         Integer like = detail.second;
