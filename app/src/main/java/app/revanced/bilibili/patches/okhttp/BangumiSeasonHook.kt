@@ -65,8 +65,8 @@ object BangumiSeasonHook {
     init {
         Settings.registerPreferenceChangeListener { _, key ->
             if (key == Settings.SEARCH_BANGUMI.key || key == Settings.SEARCH_MOVIE.key
-                || key == Settings.CN_SERVER_ACCESS_KEY.key || key == Settings.HK_SERVER_ACCESS_KEY.key
-                || key == Settings.TW_SERVER_ACCESS_KEY.key || key == Settings.TH_SERVER_ACCESS_KEY.key
+                || key == Settings.CN_SERVER.key || key == Settings.HK_SERVER.key
+                || key == Settings.TW_SERVER.key || key == Settings.TH_SERVER.key
             ) {
                 injectExtraSearchTypes()
                 injectExtraSearchTypesV2()
