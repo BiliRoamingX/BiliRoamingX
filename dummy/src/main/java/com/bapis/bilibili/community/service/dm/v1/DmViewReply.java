@@ -1844,4 +1844,16 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
      */
     static void access$8000(DmViewReply reply) {
     }
+
+    /**
+     * setClosed
+     */
+    static void access$100(DmViewReply reply, boolean closed) {
+    }
+
+    /**
+     * setInputPlaceholder
+     */
+    static void access$3200(DmViewReply reply, String inputPlaceholder) {
+    }
 }

@@ -146,6 +146,7 @@ object BangumiPlayUrlHook {
         val reqEpId = extraContent.getOrDefault("ep_id", "0").toLong()
         if (seasonId == "0" && reqEpId == 0L)
             if (error != null) throw error else return reply
+        lastSeasonInfo["season_id"] = seasonId
         val supplement = PlayViewReply.parseFrom(supplementAny.value.toByteArray())
         if (Settings.UNLOCK_AREA_LIMIT.boolean && needProxyUnite(response, supplement)) {
             return try {

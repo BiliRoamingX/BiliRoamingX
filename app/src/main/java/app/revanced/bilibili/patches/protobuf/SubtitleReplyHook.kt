@@ -6,10 +6,7 @@ import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.subtitlesCache
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
-import com.bapis.bilibili.community.service.dm.v1.DmViewReply
-import com.bapis.bilibili.community.service.dm.v1.DmViewReq
-import com.bapis.bilibili.community.service.dm.v1.SubtitleItem
-import com.bapis.bilibili.community.service.dm.v1.VideoSubtitleEx
+import com.bapis.bilibili.community.service.dm.v1.*
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -39,6 +36,8 @@ object SubtitleReplyHook {
                     } else JSONArray()
                 }
                 extraSubtitles.addAll(subtitles.toSubtitles())
+                DmViewReplyEx.setClosed(result, true)
+                DmViewReplyEx.setInputPlaceholder(result, "泰区禁止弹幕")
             }
         }
         if (Settings.SUBTITLE_AUTO_GENERATE.boolean) {

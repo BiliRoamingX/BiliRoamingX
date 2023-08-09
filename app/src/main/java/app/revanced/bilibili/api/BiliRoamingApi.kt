@@ -92,8 +92,11 @@ object BiliRoamingApi {
         val epId = queryString.substring(epIdStartIdx + 6, epIdEndIdx)
         if (epId.isEmpty()) return null
 
+        val cacheSeasonId = lastSeasonInfo["season_id"]
         if (lastSeasonInfo["ep_ids"].let { it == null || epId !in it })
             lastSeasonInfo.clear()
+        if (cacheSeasonId.let { it != null && it != "0" })
+            lastSeasonInfo["season_id"] = cacheSeasonId
 
         lastSeasonInfo["title"]?.run {
             if (contains(twRegex) && twUrl.isNotEmpty()) hostList[Area.TW]
@@ -141,7 +144,6 @@ object BiliRoamingApi {
                 LogHelper.debug { "use server $area $host for playurl" }
                 if (it.contains("\"code\":0")) {
                     seasonAreasCache[seasonId] = area
-                    lastSeasonInfo["epid"] = epId
                     if (!cachePrefs.contains(seasonId)
                         || cachePrefs.getString(seasonId, null) != area.value
                     ) {

@@ -55,9 +55,11 @@ object MossDebugPrinter {
         LogHelper.debug { "call async moss method $mossMethod, handler type: ${handler.javaClass.name}" }
         LogHelper.debug { "async moss method $mossMethod req:\n$req" }
         if (skipEnabled && replySkippedMossApis.contains(mossMethod)) return handler
-        return MossResponseHandlerProxy.get(handler) {
-            LogHelper.debug { "async moss method $mossMethod reply:\n${it}" }
-            it
-        }
+        return MossResponseHandlerProxy.get(handler, {
+            LogHelper.debug { "async moss method $mossMethod reply:\n${it}" }; it
+        }, { _, error ->
+            LogHelper.debug { "async moss method $mossMethod error: ${error?.toPrintString()}" }
+            false
+        })
     }
 }

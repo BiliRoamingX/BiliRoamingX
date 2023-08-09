@@ -332,6 +332,8 @@ public class MossPatch {
                 try {
                     var reply = BangumiPlayUrlHook.hookPlayViewUniteAfter(playReq, null, error);
                     delegate.onNext(reply);
+                    delegate.onCompleted();
+                    LogHelper.debug(() -> "playViewUnite.onCompleted");
                     return true;
                 } catch (Throwable ignored) {
                     return false;

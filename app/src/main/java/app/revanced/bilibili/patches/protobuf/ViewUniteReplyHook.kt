@@ -360,12 +360,12 @@ object ViewUniteReplyHook {
             if (style == "positive") {
                 Module.newBuilder().apply {
                     type = ModuleType.POSITIVE
-                    sectionData = reconstructSection(module, seasonId, true)
+                    sectionData = reconstructSection(module, seasonId)
                 }.build().let { addModules(it) }
             } else if (style == "section") {
                 Module.newBuilder().apply {
                     type = ModuleType.SECTION
-                    sectionData = reconstructSection(module, seasonId, false)
+                    sectionData = reconstructSection(module, seasonId)
                 }.build().let { addModules(it) }
             }
         }
@@ -374,7 +374,6 @@ object ViewUniteReplyHook {
     private fun reconstructSection(
         module: JSONObject,
         seasonId: String,
-        positive: Boolean,
     ) = SectionData.newBuilder().apply {
         id = module.optInt("id")
         moduleStyle = Style.newBuilder().apply {
@@ -385,7 +384,7 @@ object ViewUniteReplyHook {
                     ?.forEach { addShowPages(it) }
             }
         }.build()
-        more = if (positive) "由于会串评至正常视频，勿发弹幕" else module.optString("more")
+        more = module.optString("more")
         sectionId = module.optJSONObject("data")?.optInt("id") ?: 0
         title = module.optString("title")
         module.optJSONObject("data")?.optJSONArray("episodes")?.forEach { episode ->
