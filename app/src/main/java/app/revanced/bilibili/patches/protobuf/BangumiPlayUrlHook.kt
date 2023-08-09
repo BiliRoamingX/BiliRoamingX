@@ -17,8 +17,12 @@ import com.bapis.bilibili.pgc.gateway.player.v2.DashItem
 import com.bapis.bilibili.pgc.gateway.player.v2.DashVideo
 import com.bapis.bilibili.pgc.gateway.player.v2.Stream
 import com.bapis.bilibili.pgc.gateway.player.v2.StreamInfo
+import com.bapis.bilibili.pgc.gateway.player.v2.ViewInfo
 import com.bapis.bilibili.playershared.*
 import com.bapis.bilibili.playershared.CodeType
+import com.bapis.bilibili.playershared.Dialog
+import com.bapis.bilibili.playershared.LimitActionType
+import com.bapis.bilibili.playershared.TextInfo
 import com.bilibili.lib.moss.api.MossException
 import com.bilibili.lib.moss.api.NetworkException
 import com.google.protobuf.Any
@@ -116,7 +120,7 @@ object BangumiPlayUrlHook {
                     )
                 }
             } catch (e: CustomServerException) {
-                showPlayerError(response, "请求解析中服务器发生错误(点此查看更多)\n${e.message}")
+                showPlayerError(response, "请求解析服务器发生错误(点此查看更多)\n${e.message}")
             }
         } else if (error == null && allowDownloadPGC) {
             return fixDownloadProto(response)
@@ -161,7 +165,7 @@ object BangumiPlayUrlHook {
                 }
             } catch (e: CustomServerException) {
                 showPlayerErrorUnite(
-                    response, supplement, "请求解析中服务器发生错误(点此查看更多)\n${e.message}"
+                    response, supplement, "请求解析服务器发生错误\n${e.message}"
                 )
             }
         } else if (error == null && allowDownloadUnite) {
@@ -345,8 +349,34 @@ object BangumiPlayUrlHook {
                 value = supplement.toErrorReply(message).toByteString()
             }.build()
             clearVodInfo()
+        }.apply {
+            if (Versions.ge7_39_0()) toErrorReply(message)
         }.build()
     } ?: response
+
+    private fun PlayViewUniteReply.Builder.toErrorReply(message: String) = apply {
+        val errorDialog = Dialog.newBuilder().apply {
+            backgroundInfo = BackgroundInfo.newBuilder().apply {
+                drawableBitmapUrl =
+                    "https://i0.hdslb.com/bfs/album/08d5ce2fef8da8adf91024db4a69919b8d02fd5c.png"
+                effects = Effects.GAUSSIAN_BLUR
+            }.build()
+            styleType = GuideStyle.VERTICAL_TEXT
+            val (titleText, messageText) = message.split('\n', limit = 2)
+            title = TextInfo.newBuilder().apply {
+                text = titleText
+                textColor = "#ffffff"
+            }.build()
+            subtitle = TextInfo.newBuilder().apply {
+                text = messageText
+                textColor = "#ffffff"
+            }.build()
+            limitActionType = LimitActionType.SHOW_LIMIT_DIALOG
+        }.build()
+        viewInfo = com.bapis.bilibili.playershared.ViewInfo.newBuilder().apply {
+            putDialogMap("start_playing", errorDialog)
+        }.build()
+    }
 
     private fun PlayViewReply.toErrorReply(message: String) = toBuilder().apply {
         viewInfo = viewInfo.toBuilder().apply {
