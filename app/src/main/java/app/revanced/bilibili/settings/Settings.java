@@ -347,33 +347,34 @@ public enum Settings {
         return value;
     }
 
+    @SuppressWarnings("unchecked")
     public static void onPreferenceChanged(SharedPreferences preferences, String key) {
         LogHelper.debug(() -> "onPreferenceChanged, key: " + key);
         for (Settings settings : values()) {
             if (settings.key.equals(key)) {
                 switch (settings.valueType) {
                     case BOOLEAN:
-                        boolean newBool = preferences.getBoolean(key, settings.getBoolean());
+                        boolean newBool = preferences.getBoolean(key, (Boolean) settings.defValue);
                         Settings.setValue(settings, newBool);
                         break;
                     case INTEGER:
-                        int newInt = preferences.getInt(key, settings.getInt());
+                        int newInt = preferences.getInt(key, (Integer) settings.defValue);
                         Settings.setValue(settings, newInt);
                         break;
                     case LONG:
-                        long newLong = preferences.getLong(key, settings.getLong());
+                        long newLong = preferences.getLong(key, (Long) settings.defValue);
                         Settings.setValue(settings, newLong);
                         break;
                     case FLOAT:
-                        float newFloat = preferences.getFloat(key, settings.getFloat());
+                        float newFloat = preferences.getFloat(key, (Float) settings.defValue);
                         Settings.setValue(settings, newFloat);
                         break;
                     case STRING:
-                        String newStr = preferences.getString(key, settings.getString());
+                        String newStr = preferences.getString(key, (String) settings.defValue);
                         Settings.setValue(settings, newStr);
                         break;
                     case STRING_SET:
-                        Set<String> newSet = preferences.getStringSet(key, settings.getStringSet());
+                        Set<String> newSet = preferences.getStringSet(key, (Set<String>) settings.defValue);
                         Settings.setValue(settings, newSet);
                         break;
                     default:
