@@ -40,7 +40,8 @@ public class OkHttpPatch {
                 || shouldPurifyCards(url, code)
                 || shouldImportSkin(url, code)
                 || shouldHookShareChannels(url, code)
-                || shouldAddMediaInfo(url, code)
+                || shouldHookMedia(url, code)
+                || shouldHookEps(url, code)
                 /* for convenient to add a new line */;
     }
 
@@ -67,8 +68,10 @@ public class OkHttpPatch {
             return importSkin(response);
         } else if (shouldHookShareChannels(url, code)) {
             return hookShareChannels(response);
-        } else if (shouldAddMediaInfo(url, code)) {
-            return AddMediaInfoHook.hook(url, response);
+        } else if (shouldHookMedia(url, code)) {
+            return MediaApiHook.hook(url, response);
+        } else if (shouldHookEps(url, code)) {
+            return EpsApiHook.hook(url, response);
         }
         return response;
     }
@@ -131,10 +134,17 @@ public class OkHttpPatch {
                 && code == HttpURLConnection.HTTP_OK;
     }
 
-    private static boolean shouldAddMediaInfo(String url, int code) {
+    private static boolean shouldHookMedia(String url, int code) {
         return Settings.UNLOCK_AREA_LIMIT.getBoolean()
                 && Versions.ge7_39_0()
                 && url.startsWith("https://api.bilibili.com/pgc/view/v2/app/media")
+                && code == HttpURLConnection.HTTP_OK;
+    }
+
+    private static boolean shouldHookEps(String url, int code) {
+        return Settings.UNLOCK_AREA_LIMIT.getBoolean()
+                && Versions.ge7_39_0()
+                && url.startsWith("https://api.bilibili.com/pgc/view/v2/app/eps")
                 && code == HttpURLConnection.HTTP_OK;
     }
 

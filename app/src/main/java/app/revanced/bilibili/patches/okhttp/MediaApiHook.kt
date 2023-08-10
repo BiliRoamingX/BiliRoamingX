@@ -10,7 +10,7 @@ import app.revanced.bilibili.utils.cachePrefs
 import app.revanced.bilibili.utils.toJSONObject
 import org.json.JSONObject
 
-object AddMediaInfoHook {
+object MediaApiHook {
     @JvmStatic
     fun hook(url: String, response: String): String {
         val mediaId = Uri.parse(url).getQueryParameter("media_id")

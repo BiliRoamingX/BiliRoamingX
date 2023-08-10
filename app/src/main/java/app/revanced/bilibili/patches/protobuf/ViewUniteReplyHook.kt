@@ -162,13 +162,15 @@ object ViewUniteReplyHook {
 
     private fun unlockThaiBangumi(viewReq: ViewReq): ViewReply? {
         val extraContent = viewReq.extraContentMap
-        if (extraContent.containsKey("ep_id")) {
+        val reqEpId = extraContent.getOrDefault("ep_id", "0")
+        val reqSeasonId = extraContent.getOrDefault("season_id", "0")
+        if (reqEpId != "0") {
             lastSeasonInfo.clear()
-            lastSeasonInfo["ep_id"] = extraContent["ep_id"]
+            lastSeasonInfo["ep_id"] = reqEpId
         }
-        if (extraContent.containsKey("season_id")) {
+        if (reqSeasonId != "0") {
             lastSeasonInfo.clear()
-            lastSeasonInfo["season_id"] = extraContent["season_id"]
+            lastSeasonInfo["season_id"] = reqSeasonId
         }
         LogHelper.info { "Info: $lastSeasonInfo" }
         val (newCode, newResult) = getThaiSeason(lastSeasonInfo)?.toJSONObject()?.let {
