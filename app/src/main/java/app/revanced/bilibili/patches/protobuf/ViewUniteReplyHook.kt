@@ -29,11 +29,14 @@ object ViewUniteReplyHook {
     private const val VIEW_PGC_ANY_TYPE_URL =
         "type.googleapis.com/bilibili.app.viewunite.pgcanymodel.ViewPgcAny"
 
+    var currentView: ViewReply? = null
+
     @JvmStatic
     fun hook(viewReq: ViewReq, viewReply: ViewReply?, error: MossException?): ViewReply? {
         if (error is NetworkException)
             throw error
         if (viewReply != null) {
+            currentView = viewReply
             val aid = viewReply.arc.aid
             val like = viewReply.reqUser.like
             AutoLikePatch.detail = Pair.create(aid, like)

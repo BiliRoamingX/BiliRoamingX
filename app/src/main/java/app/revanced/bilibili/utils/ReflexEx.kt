@@ -10,6 +10,8 @@ inline fun Any.getObjectField(field: String?): Any? = getObjectField(this, field
 
 inline fun <T> Any.getObjectFieldAs(field: String?) = getObjectField(this, field) as T
 
+inline fun <reified T> Any.getFirstFieldByExactType() = getFirstFieldByExactType(this, T::class.java) as T
+
 inline fun Any.callMethod(methodName: String?, vararg args: Any?): Any? =
     callMethod(this, methodName, *args)
 
