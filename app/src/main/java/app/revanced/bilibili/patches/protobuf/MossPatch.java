@@ -339,6 +339,27 @@ public class MossPatch {
                     return false;
                 }
             });
+        } else if (req instanceof DmViewReq) {
+            DmViewReq dmViewReq = (DmViewReq) req;
+            return MossResponseHandlerProxy.<DmViewReply>get(handler, dmViewReply -> {
+                if (Settings.REMOVE_CMD_DMS.getBoolean() && dmViewReply != null) {
+                    DmViewReplyEx.clearActivityMeta(dmViewReply);
+                    try {
+                        DmViewReplyEx.clearCommand(dmViewReply);
+                    } catch (Throwable ignored) {
+                    }
+                    GeneratedMessageLiteEx.setUnknownFields(dmViewReply, UnknownFieldSetLite.getDefaultInstance());
+                }
+                return SubtitleReplyHook.addSubtitles(dmViewReq, dmViewReply);
+            }, (delegate, error) -> {
+                if (!(error instanceof NetworkException)) {
+                    DmViewReply dmViewReply = SubtitleReplyHook.addSubtitles(dmViewReq, null);
+                    delegate.onNext(dmViewReply);
+                    delegate.onCompleted();
+                    return true;
+                }
+                return false;
+            });
         }
         if (Settings.DEBUG.getBoolean())
             return handler;
