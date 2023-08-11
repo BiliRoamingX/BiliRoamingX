@@ -24,24 +24,27 @@ import com.bilibili.lib.moss.api.MossException
 import com.bilibili.lib.moss.api.NetworkException
 import com.google.protobuf.Any
 import org.json.JSONObject
+import java.util.ArrayDeque
 
 object ViewUniteReplyHook {
     private const val VIEW_PGC_ANY_TYPE_URL =
         "type.googleapis.com/bilibili.app.viewunite.pgcanymodel.ViewPgcAny"
 
-    var currentView: ViewReply? = null
+    @JvmStatic
+    val viewStack = ArrayDeque<ViewReply>()
 
     @JvmStatic
     fun hook(viewReq: ViewReq, viewReply: ViewReply?, error: MossException?): ViewReply? {
         if (error is NetworkException)
             throw error
         if (viewReply != null) {
-            currentView = viewReply
             val aid = viewReply.arc.aid
             val like = viewReply.reqUser.like
             AutoLikePatch.detail = Pair.create(aid, like)
-            if (viewReply.viewBase.bizType == BizType.BIZ_TYPE_UGC)
+            if (viewReply.viewBase.bizType == BizType.BIZ_TYPE_UGC) {
                 AutoLikePatch.autoLikeUnite()
+                viewStack.push(viewReply)
+            }
             hookArc(viewReply)
             hookTabModules(viewReply)
             hookSupplement(viewReply)

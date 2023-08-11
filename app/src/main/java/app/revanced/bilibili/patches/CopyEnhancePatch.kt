@@ -29,8 +29,8 @@ object CopyEnhancePatch {
     fun onCopyDesc(isBv: Boolean, desc: String): Boolean {
         if (!Settings.COMMENT_COPY.boolean) return false
         if (!Settings.COMMENT_COPY_ENHANCE.boolean) return true
-        val allDesc = if (!isBv) {
-            val view = ViewUniteReplyHook.currentView
+        val allDesc = if (Versions.ge7_39_0() && !isBv) {
+            val view = ViewUniteReplyHook.viewStack.peek()
             if (view != null) {
                 val introTab = view.tab.tabModuleList.find { it.hasIntroduction() }?.introduction
                 if (introTab != null) {

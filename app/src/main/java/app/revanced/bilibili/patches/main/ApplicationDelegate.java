@@ -3,18 +3,24 @@ package app.revanced.bilibili.patches.main;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.bilibili.ship.theseus.all.UnitedBizDetailsActivity;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayDeque;
 import java.util.Objects;
 
+import app.revanced.bilibili.patches.protobuf.ViewUniteReplyHook;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.KtUtils;
 import app.revanced.bilibili.utils.Utils;
+import app.revanced.bilibili.utils.Versions;
+import tv.danmaku.bili.MainActivityV2;
 
 public class ApplicationDelegate {
     private static final ArrayDeque<WeakReference<Activity>> activityRefs = new ArrayDeque<>();
@@ -66,7 +72,7 @@ public class ApplicationDelegate {
         }
     }
 
-    public static class ActivityLifecycleCallback implements Application.ActivityLifecycleCallbacks {
+    static class ActivityLifecycleCallback implements Application.ActivityLifecycleCallbacks {
         @Override
         public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
             activityRefs.push(new WeakReference<>(activity));
@@ -82,6 +88,17 @@ public class ApplicationDelegate {
                     break;
                 }
             }
+            if (Versions.ge7_39_0() && activity instanceof UnitedBizDetailsActivity) {
+                var aid = activity.getIntent().getStringExtra("aid");
+                if (!TextUtils.isEmpty(aid)) {
+                    var viewStack = ViewUniteReplyHook.getViewStack();
+                    var viewReply = viewStack.peek();
+                    if (viewReply != null
+                            && viewReply.hasArc()
+                            && String.valueOf(viewReply.getArc().getAid()).equals(aid))
+                        viewStack.pop();
+                }
+            }
         }
 
         @Override
@@ -90,6 +107,8 @@ public class ApplicationDelegate {
 
         @Override
         public void onActivityResumed(@NonNull Activity activity) {
+            if (activity instanceof MainActivityV2 && Versions.ge7_39_0())
+                ViewUniteReplyHook.getViewStack().clear();
         }
 
         @Override
