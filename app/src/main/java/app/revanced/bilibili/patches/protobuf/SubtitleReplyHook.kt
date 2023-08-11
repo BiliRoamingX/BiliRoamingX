@@ -1,7 +1,7 @@
 package app.revanced.bilibili.patches.protobuf
 
 import android.net.Uri
-import app.revanced.bilibili.api.BiliRoamingApi
+import app.revanced.bilibili.api.BiliRoamingApi.getThailandSubtitles
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.subtitlesCache
 import app.revanced.bilibili.settings.Settings
@@ -29,7 +29,7 @@ object SubtitleReplyHook {
                     cachePrefs.getString("ep$epId", null)
                 ))) {
                 val subtitles = subtitlesCache[seasonId]?.get(epId) ?: run {
-                    val res = BiliRoamingApi.getThailandSubtitles(epId)?.toJSONObject()
+                    val res = getThailandSubtitles(epId)?.toJSONObject()
                     if (res != null && res.optInt("code") == 0) {
                         res.optJSONObject("data")
                             ?.optJSONArray("subtitles").orEmpty()
@@ -69,8 +69,11 @@ object SubtitleReplyHook {
                 .build()
             extraSubtitles.add(closeSub)
         }
-        if (extraSubtitles.isNotEmpty())
-            VideoSubtitleEx.addAllSubtitles(result.subtitle, extraSubtitles)
+        if (extraSubtitles.isNotEmpty()) {
+            val lanList = result.subtitle.subtitlesList.map { it.lan }
+            val newSubtitles = extraSubtitles.filterNot { it.lan in lanList }
+            VideoSubtitleEx.addAllSubtitles(result.subtitle, newSubtitles)
+        }
         return result
     }
 
