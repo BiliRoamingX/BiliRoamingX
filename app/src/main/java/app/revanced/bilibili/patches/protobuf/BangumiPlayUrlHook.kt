@@ -41,31 +41,31 @@ object BangumiPlayUrlHook {
         CodeType.CODEAV1.ordinal to 13
     )
     private val supportedPlayArcIndices = arrayOf(
-        1, // FILPCONF
-        2, // CASTCONF
-        3, // FEEDBACK
-        4, // SUBTITLE
-        5, // PLAYBACKRATE
-        6, // TIMEUP
-        7, // PLAYBACKMODE
-        8, // SCALEMODE
-        9, // BACKGROUNDPLAY
-        10, // LIKE
-        12, // COIN
-        14, // SHARE
-        15, // SCREENSHOT
-        16, // LOCKSCREEN
-        17, // RECOMMEND
-        18, // PLAYBACKSPEED
-        19, // DEFINITION
-        20, // SELECTIONS
-        21, // NEXT
-        22, // EDITDM
-        23, // SMALLWINDOW
-        25, // OUTERDM
-        26, // INNERDM
-        29, // COLORFILTER
-        34, // RECORDSCREEN
+        ConfType.FLIPCONF.number,
+        ConfType.CASTCONF.number,
+        ConfType.FEEDBACK.number,
+        ConfType.SUBTITLE.number,
+        ConfType.PLAYBACKRATE.number,
+        ConfType.TIMEUP.number,
+        ConfType.PLAYBACKMODE.number,
+        ConfType.SCALEMODE.number,
+        ConfType.BACKGROUNDPLAY.number,
+        ConfType.LIKE.number,
+        ConfType.COIN.number,
+        ConfType.SHARE.number,
+        ConfType.SCREENSHOT.number,
+        ConfType.LOCKSCREEN.number,
+        ConfType.RECOMMEND.number,
+        ConfType.PLAYBACKSPEED.number,
+        ConfType.DEFINITION.number,
+        ConfType.SELECTIONS.number,
+        ConfType.NEXT.number,
+        ConfType.EDITDM.number,
+        ConfType.SMALLWINDOW.number,
+        ConfType.OUTERDM.number,
+        ConfType.INNERDM.number,
+        ConfType.COLORFILTER.number,
+        ConfType.RECORDSCREEN.number,
     )
 
     private var isDownloadPGC = false
@@ -181,7 +181,7 @@ object BangumiPlayUrlHook {
         if (playReply == null) return
         if (Settings.REMEMBER_LOSSLESS_SETTING.boolean) {
             playReply.playDeviceConf.deviceConfsMap.forEach { (key, deviceConf) ->
-                if (key == 30 /*LOSSLESS*/) {
+                if (key == ConfType.LOSSLESS.number) {
                     val confValue = deviceConf.confValue
                     ConfValueEx.setSwitchVal(confValue, Settings.LOSSLESS_ENABLED.boolean)
                 }
@@ -191,9 +191,12 @@ object BangumiPlayUrlHook {
             val supportedConf = ArcConf.newBuilder()
                 .setIsSupport(true).setDisabled(false).build()
             val arcConfs = PlayArcConfEx.getMutableArcConfsMap(playReply.playArcConf)
-            // CASTCONF,BACKGROUNDPLAY,SMALLWINDOW,LISTEN
-            for (key in intArrayOf(2, 9, 23, 36))
-                arcConfs[key] = supportedConf
+            for (key in intArrayOf(
+                ConfType.CASTCONF.number,
+                ConfType.BACKGROUNDPLAY.number,
+                ConfType.SMALLWINDOW.number,
+                ConfType.LISTEN.number
+            )) arcConfs[key] = supportedConf
         }
     }
 

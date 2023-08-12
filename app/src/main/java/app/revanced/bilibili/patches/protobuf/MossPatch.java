@@ -54,6 +54,7 @@ import com.bapis.bilibili.main.community.reply.v1.MainListReply;
 import com.bapis.bilibili.main.community.reply.v1.MainListReq;
 import com.bapis.bilibili.main.community.reply.v2.SubjectDescriptionReply;
 import com.bapis.bilibili.main.community.reply.v2.SubjectDescriptionReq;
+import com.bapis.bilibili.playershared.ConfType;
 import com.bapis.bilibili.polymer.app.search.v1.SearchAllRequest;
 import com.bapis.bilibili.polymer.app.search.v1.SearchAllResponse;
 import com.bapis.bilibili.polymer.app.search.v1.SearchByTypeRequest;
@@ -97,7 +98,7 @@ public class MossPatch {
         } else if (req instanceof PlayConfEditReq) {
             if (Settings.REMEMBER_LOSSLESS_SETTING.getBoolean()) {
                 ((PlayConfEditReq) req).getPlayConfList().stream()
-                        .filter(e -> e.getConfTypeValue() == 30/*LOSSLESS*/).findFirst()
+                        .filter(e -> e.getConfTypeValue() == ConfType.LOSSLESS.getNumber()).findFirst()
                         .ifPresent(e -> Settings.LOSSLESS_ENABLED.saveValue(e.getConfValue().getSwitchVal()));
             }
         } else if (req instanceof com.bapis.bilibili.pgc.gateway.player.v1.PlayViewReq) {
