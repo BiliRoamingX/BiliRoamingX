@@ -13,6 +13,7 @@ import app.revanced.bilibili.utils.Utils
 import app.revanced.bilibili.utils.children
 import app.revanced.bilibili.utils.dp
 import com.bilibili.music.podcast.view.PodcastSpeedSeekBar
+import tv.danmaku.ijk.media.player.IMediaPlayer
 
 object PlaybackSpeedPatch {
     init {
@@ -66,7 +67,9 @@ object PlaybackSpeedPatch {
         }
 
     @JvmStatic
-    fun defaultSpeed(speed: Float): Float {
+    fun defaultSpeed(player: IMediaPlayer, speed: Float): Float {
+        // only apply to video, not apply to podcast
+        if (player.videoSarNum <= 0) return speed
         val customSpeed = Settings.DEFAULT_PLAYBACK_SPEED.float
         return if (customSpeed != 0f) customSpeed else speed
     }
