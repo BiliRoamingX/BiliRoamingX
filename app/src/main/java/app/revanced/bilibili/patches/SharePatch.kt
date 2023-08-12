@@ -4,11 +4,14 @@ import android.net.Uri
 import android.os.Bundle
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.LogHelper
+import app.revanced.bilibili.utils.runCatchingOrNull
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
 object SharePatch {
+
+    private val contentRegex = Regex("(.*)(http\\S*)(.*)")
 
     @JvmStatic
     fun disableAppendTrackingInfo(): Boolean {
@@ -24,25 +27,35 @@ object SharePatch {
         }
         if (Settings.PURIFY_SHARE.boolean) {
             val targetUrl = params.getString("params_target_url").orEmpty()
-            if (targetUrl.startsWith("http")) {
-                val connection = URL(targetUrl).openConnection() as HttpURLConnection
-                connection.requestMethod = "GET"
-                connection.instanceFollowRedirects = false
-                connection.connect()
-                if (connection.responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
-                    val realUrl = connection.getHeaderField("Location")
-                    if (!realUrl.isNullOrEmpty()) {
-                        val newUrl = Uri.parse(realUrl).buildUpon()
-                            .clearQuery().encodedFragment(null)
-                            .build().toString()
-                        params.putString("params_target_url", newUrl)
-                    }
+            if (targetUrl.startsWith("http"))
+                params.putString("params_target_url", getRealUrl(targetUrl))
+            val content = params.getString("params_content")
+            if (!content.isNullOrEmpty())
+                contentRegex.matchEntire(content)?.groupValues?.let {
+                    val (_, prefix, url, postfix) = it
+                    if (url.isNotEmpty())
+                        params.putString("params_content", prefix + getRealUrl(url) + postfix)
                 }
-            }
         }
         if (Settings.FUCK_MINI_PROGRAM.boolean) {
             if (params.getString("params_type") == "type_min_program")
                 params.putString("params_type", "type_web")
         }
     }
+
+    private fun getRealUrl(url: String) = runCatchingOrNull {
+        val connection = URL(url).openConnection() as HttpURLConnection
+        connection.requestMethod = "GET"
+        connection.instanceFollowRedirects = false
+        connection.connect()
+        var newUrl = url
+        if (connection.responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
+            val realUrl = connection.getHeaderField("Location")
+            if (!realUrl.isNullOrEmpty())
+                newUrl = Uri.parse(realUrl).buildUpon()
+                    .clearQuery().encodedFragment(null)
+                    .build().toString()
+        }
+        newUrl
+    } ?: url
 }
