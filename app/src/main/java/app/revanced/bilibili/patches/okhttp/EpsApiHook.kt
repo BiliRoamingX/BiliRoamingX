@@ -8,7 +8,6 @@ import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.asSequence
 import app.revanced.bilibili.utils.orEmpty
 import app.revanced.bilibili.utils.toJSONObject
-import app.revanced.twitter.patches.hook.twifucker.TwiFuckerUtils.forEach
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -36,7 +35,7 @@ object EpsApiHook {
                     .orEmpty().asSequence<JSONObject>()
                     .find { it.optString("style") == "positive" }
                     ?.optJSONObject("data")?.optJSONArray("episodes").orEmpty()
-                episodes.forEach {
+                episodes.asSequence<JSONObject>().forEach {
                     it.optJSONObject("rights")?.run {
                         put("area_limit", 0)
                         if (Settings.ALLOW_DOWNLOAD.boolean)

@@ -13,7 +13,6 @@ import app.revanced.bilibili.utils.LogHelper
 import app.revanced.bilibili.utils.asSequence
 import app.revanced.bilibili.utils.orEmpty
 import app.revanced.bilibili.utils.toJSONObject
-import app.revanced.twitter.patches.hook.twifucker.TwiFuckerUtils.forEach
 import com.bapis.bilibili.app.viewunite.common.*
 import com.bapis.bilibili.app.viewunite.pgcanymodel.*
 import com.bapis.bilibili.app.viewunite.pgcanymodel.Rights
@@ -351,7 +350,7 @@ object ViewUniteReplyHook {
             Module.newBuilder().apply {
                 type = ModuleType.OGV_SEASONS
                 ogvSeasons = OgvSeasons.newBuilder().apply {
-                    forEach { season ->
+                    asSequence<JSONObject>().forEach { season ->
                         SerialSeason.newBuilder().apply {
                             seasonId = season.optInt("season_id")
                             seasonTitle = season.optString("quarter_title")
@@ -362,7 +361,7 @@ object ViewUniteReplyHook {
         }
 
         // episodes
-        result.optJSONArray("modules")?.forEach { module ->
+        result.optJSONArray("modules")?.asSequence<JSONObject>()?.forEach { module ->
             val style = module.optString("style")
             val seasonId = result.optString("season_id")
             if (style == "positive") {
@@ -395,7 +394,8 @@ object ViewUniteReplyHook {
         more = module.optString("more")
         sectionId = module.optJSONObject("data")?.optInt("id") ?: 0
         title = module.optString("title")
-        module.optJSONObject("data")?.optJSONArray("episodes")?.forEach { episode ->
+        val episodes = module.optJSONObject("data")?.optJSONArray("episodes")
+        episodes?.asSequence<JSONObject>()?.forEach { episode ->
             ViewEpisode.newBuilder().apply {
                 aid = episode.optLong("aid")
                 badgeInfo = BadgeInfo.newBuilder().apply {
