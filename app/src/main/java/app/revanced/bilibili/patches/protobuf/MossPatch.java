@@ -122,7 +122,7 @@ public class MossPatch {
     @Nullable
     public static <ReqT extends GeneratedMessageLite<?, ?>, RespT extends GeneratedMessageLite<?, ?>>
     GeneratedMessageLite<?, ?> hookBlockingAfter(@NonNull GeneratedMessageLite<?, ?> req, @Nullable GeneratedMessageLite<?, ?> reply, @Nullable MossException error) throws MossException {
-        MossDebugPrinter.printBlocking(req, reply);
+        MossDebugPrinter.printBlocking(req, reply, error);
         if (req instanceof PlayViewUniteReq) {
             PlayViewUniteReq playReq = (PlayViewUniteReq) req;
             PlayViewUniteReply playReply = (PlayViewUniteReply) reply;

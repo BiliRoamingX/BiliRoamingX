@@ -2,6 +2,7 @@ package app.revanced.bilibili.utils
 
 import app.revanced.bilibili.api.MossResponseHandlerProxy
 import app.revanced.bilibili.settings.Settings
+import com.bilibili.lib.moss.api.MossException
 import com.bilibili.lib.moss.api.MossResponseHandler
 import com.google.protobuf.GeneratedMessageLite
 
@@ -18,7 +19,11 @@ object MossDebugPrinter {
     private var skipEnabled = true
 
     @JvmStatic
-    fun printBlocking(req: GeneratedMessageLite<*, *>, reply: GeneratedMessageLite<*, *>?) {
+    fun printBlocking(
+        req: GeneratedMessageLite<*, *>,
+        reply: GeneratedMessageLite<*, *>?,
+        error: MossException?
+    ) {
         if (!Settings.DEBUG.boolean) return
         var mossMethod = ""
         val stackTrace = Thread.currentThread().stackTrace
@@ -34,6 +39,8 @@ object MossDebugPrinter {
         LogHelper.debug { "blocking moss method $mossMethod req:\n$req" }
         if (skipEnabled && replySkippedMossApis.contains(mossMethod)) return
         LogHelper.debug { "blocking moss method $mossMethod reply:\n$reply" }
+        if (error != null)
+            LogHelper.debug { "blocking moss method $mossMethod error: ${error.toPrintString()}" }
     }
 
     @JvmStatic
