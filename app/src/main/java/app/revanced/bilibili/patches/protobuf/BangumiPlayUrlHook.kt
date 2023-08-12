@@ -21,6 +21,7 @@ import com.bapis.bilibili.pgc.gateway.player.v2.ViewInfo
 import com.bapis.bilibili.playershared.*
 import com.bapis.bilibili.playershared.CodeType
 import com.bapis.bilibili.playershared.Dialog
+import com.bapis.bilibili.playershared.Dimension
 import com.bapis.bilibili.playershared.LimitActionType
 import com.bapis.bilibili.playershared.TextInfo
 import com.bilibili.lib.moss.api.MossException
@@ -452,6 +453,21 @@ object BangumiPlayUrlHook {
             vodInfo = VodInfo.parseFrom(
                 jsonContent.toVideoInfo(req.vod.preferCodecType.ordinal, isDownload).toByteArray()
             )
+            if (!hasPlayArc()) {
+                playArc = PlayArc.newBuilder().apply {
+                    val episode = thaiEp.value
+                    aid = episode.optLong("aid")
+                    cid = episode.optLong("cid")
+                    videoType = BizType.BIZ_TYPE_PGC
+                    episode.optJSONObject("dimension")?.run {
+                        dimension = Dimension.newBuilder().apply {
+                            width = optLong("width")
+                            height = optLong("height")
+                            rotate = optLong("rotate")
+                        }.build()
+                    }
+                }.build()
+            }
             val newSupplement = supplement.toBuilder().apply {
                 fixBusinessProto(thaiSeason, thaiEp, jsonContent)
                 viewInfo = ViewInfo.newBuilder().build()
