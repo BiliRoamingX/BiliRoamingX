@@ -46,7 +46,7 @@ public enum Settings {
     // 播放器
     HALF_SCREEN_QUALITY("half_screen_quality", STRING, "0"),
     FULL_SCREEN_QUALITY("full_screen_quality", STRING, "0"),
-    FORCE_OLD_PLAYER("force_old_player", BOOLEAN, FALSE, true),
+    PLAYER_VERSION("player_version", STRING, "0", true),
     REMEMBER_LOSSLESS_SETTING("remember_lossless_setting", BOOLEAN, FALSE),
     DEFAULT_PLAYBACK_SPEED("default_playback_speed", FLOAT, 0f),
     LONG_PRESS_PLAYBACK_SPEED("long_press_playback_speed", FLOAT, 0f),

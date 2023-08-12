@@ -187,7 +187,7 @@ public class MossPatch {
                 }
             }
             if (playViewReq.getDownload() < 1 && !Utils.isEffectiveVip()
-                    && Settings.FORCE_OLD_PLAYER.getBoolean() && Settings.TRIAL_VIP_QUALITY.getBoolean())
+                    && Settings.PLAYER_VERSION.getString().equals("1") && Settings.TRIAL_VIP_QUALITY.getBoolean())
                 TrialQualityPatch.makeVipFree(playViewReply.getVideoInfo());
         } else if (reply instanceof ViewReply) {
             ViewReply viewReply = (ViewReply) reply;
