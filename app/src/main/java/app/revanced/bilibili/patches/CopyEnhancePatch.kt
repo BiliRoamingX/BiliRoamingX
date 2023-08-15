@@ -12,6 +12,7 @@ import app.revanced.bilibili.patches.protobuf.ViewUniteReplyHook
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import app.revanced.bilibili.widget.OnLongClickOriginListener
+import com.bapis.bilibili.app.viewunite.common.DescType
 import com.bilibili.bplus.followingcard.widget.EllipsizingTextView
 import com.bilibili.bplus.im.business.model.BaseTypedMessage
 import org.json.JSONObject
@@ -29,7 +30,7 @@ object CopyEnhancePatch {
     fun onCopyDesc(isBv: Boolean, desc: String): Boolean {
         if (!Settings.COMMENT_COPY.boolean) return false
         if (!Settings.COMMENT_COPY_ENHANCE.boolean) return true
-        val allDesc = if (Versions.ge7_39_0() && !isBv) {
+        val allDesc = if (Versions.ge7_39_0()) {
             val view = ViewUniteReplyHook.viewStack.peek()
             if (view != null) {
                 val introTab = view.tab.tabModuleList.find { it.hasIntroduction() }?.introduction
@@ -43,7 +44,9 @@ object CopyEnhancePatch {
                             appendLine(headline.content).appendLine()
                             appendLine("BV号：")
                             appendLine(view.arc.bvid).appendLine()
-                            val introDesc = intro.descList.joinToString("\n") { it.text }
+                            val introDesc = intro.descList.joinToString("") {
+                                if (it.type == DescType.DescTypeAt) "@${it.text}" else it.text
+                            }
                             if (introDesc.isNotEmpty()) {
                                 appendLine("简介：")
                                 appendLine(introDesc).appendLine()
@@ -60,11 +63,7 @@ object CopyEnhancePatch {
         } else desc
         showCopyDialog(ApplicationDelegate.requireTopActivity(), allDesc) { v ->
             setClipboardContent(label = "text", v)
-            if (isBv) {
-                Toasts.showShortWithId("video_detail_decs_copy_avid")
-            } else {
-                Toasts.showShortWithId("video_detail_decs_copy_decs")
-            }
+            Toasts.showShortWithId("biliroaming_copy_success")
         }
         return true
     }

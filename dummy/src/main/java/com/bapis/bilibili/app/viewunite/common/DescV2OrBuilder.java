@@ -1,6 +1,5 @@
 package com.bapis.bilibili.app.viewunite.common;
 
-import com.bapis.bilibili.app.view.v1.DescType;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.MessageLiteOrBuilder;
 
