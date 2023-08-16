@@ -1,3 +1,10 @@
+# [0.116.0-dev.4](https://github.com/ReVanced/revanced-integrations/compare/v0.116.0-dev.3...v0.116.0-dev.4) (2023-08-16)
+
+
+### Bug Fixes
+
+* **YouTube - Litho Filter:** Don't remove the buffer until the thread stops ([#461](https://github.com/ReVanced/revanced-integrations/issues/461)) ([2188607](https://github.com/ReVanced/revanced-integrations/commit/218860734021ef89699de110ec2dcf63412761b9))
+
 # [0.116.0-dev.3](https://github.com/ReVanced/revanced-integrations/compare/v0.116.0-dev.2...v0.116.0-dev.3) (2023-08-08)
 
 
