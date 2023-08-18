@@ -51,10 +51,15 @@ object SharePatch {
         var newUrl = url
         if (connection.responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
             val realUrl = connection.getHeaderField("Location")
-            if (!realUrl.isNullOrEmpty())
-                newUrl = Uri.parse(realUrl).buildUpon()
-                    .clearQuery().encodedFragment(null)
-                    .build().toString()
+            if (!realUrl.isNullOrEmpty()) {
+                val uri = Uri.parse(realUrl)
+                val startProgress = uri.getQueryParameter("start_progress")
+                newUrl = uri.buildUpon()
+                    .clearQuery().encodedFragment(null).apply {
+                        if (!startProgress.isNullOrEmpty())
+                            appendQueryParameter("start_progress", startProgress)
+                    }.build().toString()
+            }
         }
         newUrl
     } ?: url
