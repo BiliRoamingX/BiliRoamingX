@@ -1,39 +1,21 @@
 package app.revanced.bilibili.patches.main;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 
 import com.bilibili.app.preferences.BiliPreferencesActivity;
 
-import java.lang.ref.WeakReference;
-
-import app.revanced.bilibili.patches.CustomThemePatch;
-import app.revanced.bilibili.patches.PlaybackSpeedPatch;
 import app.revanced.bilibili.patches.drawer.DrawerPatch;
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.settings.fragments.BiliRoamingSettingsFragment;
-import app.revanced.bilibili.utils.KtUtils;
-import app.revanced.bilibili.utils.SubtitleParamsCache;
-import app.revanced.bilibili.utils.UposReplacer;
 import app.revanced.bilibili.utils.Utils;
 import tv.danmaku.bili.MainActivityV2;
 
 public class MainActivityDelegate {
-    public static WeakReference<Activity> mainActivityRef = new WeakReference<>(null);
 
     public static void onCreate(MainActivityV2 activity) {
-        mainActivityRef = new WeakReference<>(activity);
         DrawerPatch.onMainActivityCreate(activity);
-        CustomThemePatch.refresh();
-        Utils.async(PlaybackSpeedPatch::refreshOverrideSpeedList);
-        SubtitleParamsCache.updateFont();
-        KtUtils.getCountryTask();
-        UposReplacer.getBaseUposList();
-        Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypes));
-        Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypesV2));
         Utils.runOnMainThread(1000L, () -> showHintIfNeeded(activity));
     }
 

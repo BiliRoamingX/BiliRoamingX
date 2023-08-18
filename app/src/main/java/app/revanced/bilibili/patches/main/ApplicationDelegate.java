@@ -15,9 +15,14 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayDeque;
 import java.util.Objects;
 
+import app.revanced.bilibili.patches.CustomThemePatch;
+import app.revanced.bilibili.patches.PlaybackSpeedPatch;
+import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.patches.protobuf.ViewUniteReplyHook;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.KtUtils;
+import app.revanced.bilibili.utils.SubtitleParamsCache;
+import app.revanced.bilibili.utils.UposReplacer;
 import app.revanced.bilibili.utils.Utils;
 import app.revanced.bilibili.utils.Versions;
 import tv.danmaku.bili.MainActivityV2;
@@ -27,8 +32,15 @@ public class ApplicationDelegate {
 
     public static void onCreate(Application app) {
         if (Utils.isInMainProcess()) {
-            Utils.async(ApplicationDelegate::startLog);
             app.registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
+            Utils.async(ApplicationDelegate::startLog);
+            CustomThemePatch.refresh();
+            Utils.async(PlaybackSpeedPatch::refreshOverrideSpeedList);
+            SubtitleParamsCache.updateFont();
+            KtUtils.getCountryTask();
+            UposReplacer.getBaseUposList();
+            Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypes));
+            Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypesV2));
         }
     }
 
@@ -46,7 +58,7 @@ public class ApplicationDelegate {
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void startLog() {
+    static void startLog() {
         if (!Settings.DEBUG.getBoolean())
             return;
         try {
