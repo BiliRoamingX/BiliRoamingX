@@ -9,7 +9,8 @@ import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.LogHelper;
 
 public class BLRoutePatch {
-    private static final String STORY_ROUTER_PARAM = "&-Arouter=story";
+    private static final String STORY_ROUTER_QUERY = "&-Arouter=story";
+    private static final String STORY_TYPE_QUERY = "&-Atype=story";
     private static final Pattern playerPreloadRegex = Pattern.compile("&player_preload=[^&]*");
 
     public static Uri intercept(Uri uri) {
@@ -25,7 +26,7 @@ public class BLRoutePatch {
                 String newQuery = uri.getEncodedQuery();
                 if (!TextUtils.isEmpty(newQuery)) {
                     if (Settings.REPLACE_STORY_VIDEO.getBoolean())
-                        newQuery = newQuery.replace(STORY_ROUTER_PARAM, "");
+                        newQuery = newQuery.replace(STORY_ROUTER_QUERY, "").replace(STORY_TYPE_QUERY, "");
                     boolean needRemovePayload = VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.fullScreenQuality() != 0;
                     if (needRemovePayload)
                         newQuery = playerPreloadRegex.matcher(newQuery).replaceAll("");
