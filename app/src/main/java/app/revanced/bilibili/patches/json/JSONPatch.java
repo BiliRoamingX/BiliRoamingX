@@ -141,6 +141,9 @@ public class JSONPatch {
         } else if (!Utils.isHd() && Versions.ge7_39_0() && data instanceof com.bilibili.app.gemini.ugc.feature.endpage.qoe.GeminiDmQoeInfo) {
             if (Settings.BLOCK_DM_FEEDBACK.getBoolean())
                 ((com.bilibili.app.gemini.ugc.feature.endpage.qoe.GeminiDmQoeInfo) data).setShow(false);
+        } else if (data instanceof SearchReferral || (Versions.ge7_39_0() && data instanceof com.bilibili.search2.api.SearchReferral)) {
+            if (Settings.PURIFY_SEARCH.getBoolean())
+                return null;
         }
         return obj;
     }
