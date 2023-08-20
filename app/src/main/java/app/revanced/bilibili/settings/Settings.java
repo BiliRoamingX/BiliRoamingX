@@ -127,6 +127,7 @@ public enum Settings {
     DISABLE_AUTO_SUBSCRIBE("disable_auto_subscribe", BOOLEAN, FALSE),
     FILTER_STORY("filter_story", STRING_SET, Collections.EMPTY_SET),
     BLOCK_DM_FEEDBACK("block_dm_feedback", BOOLEAN, FALSE),
+    BLOCK_FAN_GUIDE("block_fan_guide", BOOLEAN, FALSE),
 
     // 用户空间页
     FIX_SPACE("fix_space", BOOLEAN, TRUE),

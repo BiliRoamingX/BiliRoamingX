@@ -33,13 +33,17 @@ import java.util.concurrent.Future;
 public class Utils {
     @SuppressLint("StaticFieldLeak")
     public static Context context;
-    private static String mobiApp = "";
     public static Handler mainHandler = new Handler(Looper.getMainLooper());
+
+    private static String mobiApp = "";
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
     private static Boolean isPink = null;
     private static Boolean isBlue = null;
     private static Boolean isPlay = null;
     private static Boolean isHd = null;
+
+    // value will changed by patcher
+    public static boolean newPlayerEnabled = false;
 
     public static Context getContext() {
         if (context == null) {
@@ -199,6 +203,7 @@ public class Utils {
         return executor.submit(task);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static long copyStream(InputStream in, OutputStream out) throws IOException {
         var bytesCopied = 0L;
         var buffer = new byte[8192];

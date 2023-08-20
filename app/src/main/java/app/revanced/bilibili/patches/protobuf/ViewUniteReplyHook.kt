@@ -120,6 +120,9 @@ object ViewUniteReplyHook {
                         ModuleEx.setSectionData(module, newSectionData)
                     } else if (module.hasRelates()) {
                         PegasusPatch.filterViewUniteRelates(module, viewReply.viewBase.bizType)
+                    } else if (module.hasCovenanter()) {
+                        if (Settings.BLOCK_FAN_GUIDE.boolean)
+                            toRemoveIndexes.add(index)
                     }
                 }
                 toRemoveIndexes.asReversed().forEach {

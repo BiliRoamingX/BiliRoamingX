@@ -18,6 +18,8 @@ import app.revanced.bilibili.widget.HdBaseToolbar
 import com.bilibili.lib.ui.BasePreferenceFragment
 import java.lang.reflect.Method
 
+enum class PrefsDisableReason { APP_VERSION, OS_VERSION, NEW_PLAYER }
+
 abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) :
     BasePreferenceFragment(), (Preference) -> Boolean {
 
@@ -77,6 +79,7 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
         return rootView
     }
 
+    @SuppressLint("CommitTransaction")
     override fun invoke(preference: Preference): Boolean {
         preference.fragment?.let {
             val fragmentManager = parentFragmentManager
@@ -139,6 +142,39 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
                     .show()
                 break
             }
+        }
+    }
+
+    protected fun disablePreference(
+        key: String,
+        reasonType: PrefsDisableReason,
+        condition: (Preference) -> Boolean
+    ) {
+        val reason = when (reasonType) {
+            PrefsDisableReason.APP_VERSION -> {
+                { Utils.getString("biliroaming_app_not_support") }
+            }
+
+            PrefsDisableReason.OS_VERSION -> {
+                { Utils.getString("biliroaming_os_not_support") }
+            }
+
+            PrefsDisableReason.NEW_PLAYER -> {
+                { Utils.getString("biliroaming_only_support_new_player") }
+            }
+        }
+        disablePreference(key, reason, condition)
+    }
+
+    protected fun disablePreference(
+        key: String,
+        reason: () -> String,
+        condition: (Preference) -> Boolean
+    ) {
+        val preference = findPreference<Preference>(key) ?: return
+        if (condition(preference)) {
+            preference.isEnabled = false
+            preference.summary = reason()
         }
     }
 
