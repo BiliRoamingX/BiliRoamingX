@@ -39,21 +39,28 @@ object CopyEnhancePatch {
                     val headline = modules.find { it.hasHeadLine() }?.headLine
                     val intro = modules.find { it.hasUgcIntroduction() }?.ugcIntroduction
                     if (headline != null && intro != null) {
-                        buildString {
-                            appendLine("标题：")
+                        buildSpannedString {
+                            bold { appendLine("标题：") }
                             appendLine(headline.content).appendLine()
-                            appendLine("BV号：")
+                            bold { appendLine("BV号：") }
                             appendLine(view.arc.bvid).appendLine()
                             val introDesc = intro.descList.joinToString("") {
                                 if (it.type == DescType.DescTypeAt) "@${it.text}" else it.text
                             }
                             if (introDesc.isNotEmpty()) {
-                                appendLine("简介：")
+                                bold { appendLine("简介：") }
                                 appendLine(introDesc).appendLine()
+                            }
+                            val introBgm = intro.bgmList.joinToString("\n") { m ->
+                                m.author.let { if (it.isEmpty()) m.title else "${m.title} - $it" }
+                            }
+                            if (introBgm.isNotEmpty()) {
+                                bold { appendLine("BGM：") }
+                                appendLine(introBgm).appendLine()
                             }
                             val introTags = intro.tagsList.joinToString(" ") { it.name }
                             if (introTags.isNotEmpty()) {
-                                appendLine("标签：")
+                                bold { appendLine("标签：") }
                                 appendLine(introTags).appendLine()
                             }
                         }.removeSuffix("\n")
