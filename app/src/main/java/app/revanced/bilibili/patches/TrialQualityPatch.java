@@ -3,9 +3,10 @@ package app.revanced.bilibili.patches;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bapis.bilibili.app.playurl.v1.PlayViewReply;
+import com.bapis.bilibili.app.playurl.v1.PlayViewReplyEx;
 import com.bapis.bilibili.app.playurl.v1.Stream;
 import com.bapis.bilibili.app.playurl.v1.StreamInfoEx;
-import com.bapis.bilibili.app.playurl.v1.VideoInfo;
 
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Utils;
@@ -16,8 +17,9 @@ public class TrialQualityPatch {
         return (int) ((dp * Utils.getContext().getResources().getDisplayMetrics().density) + 0.5f);
     }
 
-    public static void makeVipFree(VideoInfo videoInfo) {
-        videoInfo.getStreamListList().stream().filter(Stream::hasDashVideo)
+    public static void makeVipFree(PlayViewReply playViewReply) {
+        PlayViewReplyEx.clearAb(playViewReply);
+        playViewReply.getVideoInfo().getStreamListList().stream().filter(Stream::hasDashVideo)
                 .forEach(e -> {
                     var streamInfo = e.getStreamInfo();
                     if (streamInfo.getNeedVip()) {
