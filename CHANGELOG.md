@@ -1,3 +1,10 @@
+# [0.116.0-dev.5](https://github.com/ReVanced/revanced-integrations/compare/v0.116.0-dev.4...v0.116.0-dev.5) (2023-08-21)
+
+
+### Features
+
+* **YouTube:** Add `Alternative thumbnails` patch ([#462](https://github.com/ReVanced/revanced-integrations/issues/462)) ([d354356](https://github.com/ReVanced/revanced-integrations/commit/d354356b2d9052bc0d388633ed9eb0206f7c2058))
+
 # [0.116.0-dev.4](https://github.com/ReVanced/revanced-integrations/compare/v0.116.0-dev.3...v0.116.0-dev.4) (2023-08-16)
 
 
