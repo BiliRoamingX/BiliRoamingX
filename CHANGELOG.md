@@ -1,3 +1,10 @@
+# [0.116.0-dev.6](https://github.com/ReVanced/revanced-integrations/compare/v0.116.0-dev.5...v0.116.0-dev.6) (2023-08-23)
+
+
+### Bug Fixes
+
+* **YouTube - Hide Shorts components:** Hide `shorts header` ([#455](https://github.com/ReVanced/revanced-integrations/issues/455)) ([13afac9](https://github.com/ReVanced/revanced-integrations/commit/13afac906a0087ea7bc888c80e293f7b05c0a46e))
+
 # [0.116.0-dev.5](https://github.com/ReVanced/revanced-integrations/compare/v0.116.0-dev.4...v0.116.0-dev.5) (2023-08-21)
 
 
