@@ -1,3 +1,10 @@
+# [0.116.0-dev.7](https://github.com/ReVanced/revanced-integrations/compare/v0.116.0-dev.6...v0.116.0-dev.7) (2023-08-24)
+
+
+### Bug Fixes
+
+* use correct logging tags ([420b926](https://github.com/ReVanced/revanced-integrations/commit/420b9263b6e1cbb81aeb4985cf454b51912b51f8))
+
 # [0.116.0-dev.6](https://github.com/ReVanced/revanced-integrations/compare/v0.116.0-dev.5...v0.116.0-dev.6) (2023-08-23)
 
 
