@@ -1,3 +1,10 @@
+# [0.116.0-dev.8](https://github.com/ReVanced/revanced-integrations/compare/v0.116.0-dev.7...v0.116.0-dev.8) (2023-08-26)
+
+
+### Features
+
+* **YouTube:** Add `Custom player overlay opacity` patch ([#449](https://github.com/ReVanced/revanced-integrations/issues/449)) ([44dccb3](https://github.com/ReVanced/revanced-integrations/commit/44dccb3d658852e92aaf8d17e36dc205f1b3eb05))
+
 # [0.116.0-dev.7](https://github.com/ReVanced/revanced-integrations/compare/v0.116.0-dev.6...v0.116.0-dev.7) (2023-08-24)
 
 
