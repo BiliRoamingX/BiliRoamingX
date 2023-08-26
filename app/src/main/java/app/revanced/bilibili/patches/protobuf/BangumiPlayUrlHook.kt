@@ -646,6 +646,8 @@ object BangumiPlayUrlHook {
                         }.build()
                     }.build()
                 }.build()
+                if (Settings.ALLOW_MINI_PLAY.boolean)
+                    inlineType = InlineType.TYPE_WHOLE
             }.build()
         } else {
             // thai
@@ -671,6 +673,8 @@ object BangumiPlayUrlHook {
                         }.build()
                     }.build()
                 }.build()
+                if (Settings.ALLOW_MINI_PLAY.boolean)
+                    inlineType = InlineType.TYPE_WHOLE
             }.build()
         }
     }
