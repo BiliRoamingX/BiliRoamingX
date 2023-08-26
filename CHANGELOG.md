@@ -1,3 +1,10 @@
+# [0.116.0-dev.10](https://github.com/ReVanced/revanced-integrations/compare/v0.116.0-dev.9...v0.116.0-dev.10) (2023-08-26)
+
+
+### Features
+
+* **YouTube:** Add `Enable tablet layout` patch ([d4570de](https://github.com/ReVanced/revanced-integrations/commit/d4570de0a791bd97c70ac46b84cbff75c6d0b274))
+
 # [0.116.0-dev.9](https://github.com/ReVanced/revanced-integrations/compare/v0.116.0-dev.8...v0.116.0-dev.9) (2023-08-26)
 
 
