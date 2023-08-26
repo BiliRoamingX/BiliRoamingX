@@ -42,6 +42,7 @@ object EpsApiHook {
                             put("allow_download", 1)
                     }
                 }
+                val newEp = newResult.optJSONObject("new_ep")
                 val data = JSONObject().apply {
                     put("modules", JSONArray().apply {
                         put(JSONObject().apply {
@@ -50,6 +51,7 @@ object EpsApiHook {
                             })
                         })
                     })
+                    newEp?.let { put("new_ep", it) }
                 }
                 return JSONObject().apply {
                     put("code", 0)
