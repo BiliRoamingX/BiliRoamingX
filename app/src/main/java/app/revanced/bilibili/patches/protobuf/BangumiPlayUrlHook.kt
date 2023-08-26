@@ -456,7 +456,8 @@ object BangumiPlayUrlHook {
             vodInfo = VodInfo.parseFrom(
                 jsonContent.toVideoInfo(req.vod.preferCodecType.ordinal, isDownload).toByteArray()
             )
-            if (!hasPlayArc()) {
+            val thai = !hasPlayArc()
+            if (thai) {
                 playArc = PlayArc.newBuilder().apply {
                     val episode = thaiEp.value
                     aid = episode.optLong("aid")
@@ -483,7 +484,11 @@ object BangumiPlayUrlHook {
                 val supportedConf = ArcConf.newBuilder().apply {
                     isSupport = true
                 }.build()
-                putAllArcConfs(supportedPlayArcIndices.associateWith { supportedConf })
+                putAllArcConfs(supportedPlayArcIndices.filterNot {
+                    if (thai) {
+                        it == ConfType.LIKE.number || it == ConfType.COIN.number || it == ConfType.SHARE.number
+                    } else false
+                }.associateWith { supportedConf })
             }.build()
         }.build()
     }.onFailure { LogHelper.error({ "Failed to reconstruct unite response" }, it) }
