@@ -30,7 +30,10 @@ object ViewUniteReplyHook {
         "type.googleapis.com/bilibili.app.viewunite.pgcanymodel.ViewPgcAny"
 
     @JvmStatic
-    val viewStack = ArrayDeque<ViewReply>()
+    val viewStack = ArrayDeque<com.bapis.bilibili.app.view.v1.ViewReply>()
+
+    @JvmStatic
+    val viewUniteStack = ArrayDeque<ViewReply>()
 
     @JvmStatic
     fun hook(viewReq: ViewReq, viewReply: ViewReply?, error: MossException?): ViewReply? {
@@ -42,7 +45,7 @@ object ViewUniteReplyHook {
             AutoLikePatch.detail = Pair.create(aid, like)
             if (viewReply.viewBase.bizType == BizType.BIZ_TYPE_UGC) {
                 AutoLikePatch.autoLikeUnite()
-                viewStack.push(viewReply)
+                viewUniteStack.push(viewReply)
             }
             hookArc(viewReply)
             hookTabModules(viewReply)

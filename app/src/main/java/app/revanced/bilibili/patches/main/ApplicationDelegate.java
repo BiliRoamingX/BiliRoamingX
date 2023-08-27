@@ -8,7 +8,9 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bilibili.multitypeplayerV2.MultiTypeVideoContentActivity;
 import com.bilibili.ship.theseus.all.UnitedBizDetailsActivity;
+import com.bilibili.video.videodetail.VideoDetailsActivity;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -21,6 +23,7 @@ import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.patches.protobuf.ViewUniteReplyHook;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.KtUtils;
+import app.revanced.bilibili.utils.LogHelper;
 import app.revanced.bilibili.utils.SubtitleParamsCache;
 import app.revanced.bilibili.utils.UposReplacer;
 import app.revanced.bilibili.utils.Utils;
@@ -87,11 +90,13 @@ public class ApplicationDelegate {
     static class ActivityLifecycleCallback implements Application.ActivityLifecycleCallbacks {
         @Override
         public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+            printLifecycle(activity, "onActivityCreated", true);
             activityRefs.push(new WeakReference<>(activity));
         }
 
         @Override
         public void onActivityDestroyed(@NonNull Activity activity) {
+            printLifecycle(activity, "onActivityDestroyed", true);
             var iterator = activityRefs.iterator();
             while (iterator.hasNext()) {
                 var activityRef = iterator.next();
@@ -103,36 +108,69 @@ public class ApplicationDelegate {
             if (Versions.ge7_39_0() && activity instanceof UnitedBizDetailsActivity) {
                 var aid = activity.getIntent().getStringExtra("aid");
                 if (!TextUtils.isEmpty(aid)) {
-                    var viewStack = ViewUniteReplyHook.getViewStack();
+                    var viewStack = ViewUniteReplyHook.getViewUniteStack();
                     var viewReply = viewStack.peek();
                     if (viewReply != null
                             && viewReply.hasArc()
                             && String.valueOf(viewReply.getArc().getAid()).equals(aid))
                         viewStack.pop();
                 }
+            } else if (activity instanceof VideoDetailsActivity || activity instanceof MultiTypeVideoContentActivity) {
+                var intent = activity.getIntent();
+                var aid = activity instanceof VideoDetailsActivity ? intent.getStringExtra("id") : intent.getStringExtra("avid");
+                if (!TextUtils.isEmpty(aid)) {
+                    var viewStack = ViewUniteReplyHook.getViewStack();
+                    var viewReply = viewStack.peek();
+                    if (viewReply != null && viewReply.hasArc()) {
+                        String viewAid = String.valueOf(viewReply.getArc().getAid());
+                        if (aid.equals(viewAid) || aid.equals("av" + viewAid))
+                            viewStack.pop();
+                    }
+                }
             }
         }
 
         @Override
         public void onActivityStarted(@NonNull Activity activity) {
+            printLifecycle(activity, "onActivityStarted", false);
         }
 
         @Override
         public void onActivityResumed(@NonNull Activity activity) {
-            if (activity instanceof MainActivityV2 && Versions.ge7_39_0())
+            printLifecycle(activity, "onActivityResumed", false);
+            if (activity instanceof MainActivityV2) {
                 ViewUniteReplyHook.getViewStack().clear();
+                if (Versions.ge7_39_0())
+                    ViewUniteReplyHook.getViewUniteStack().clear();
+            }
         }
 
         @Override
         public void onActivityPaused(@NonNull Activity activity) {
+            printLifecycle(activity, "onActivityPaused", false);
         }
 
         @Override
         public void onActivityStopped(@NonNull Activity activity) {
+            printLifecycle(activity, "onActivityStopped", false);
         }
 
         @Override
         public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+            printLifecycle(activity, "onActivitySaveInstanceState", false);
+        }
+
+        private void printLifecycle(Activity activity, String name, boolean printIntent) {
+            if (Settings.DEBUG.getBoolean()) {
+                var extras = activity.getIntent().getExtras();
+                LogHelper.debug(() -> name + ", activity: " + activity.getClass().getName());
+                if (printIntent && extras != null) {
+                    for (String key : extras.keySet()) {
+                        var value = extras.get(key);
+                        LogHelper.debug(() -> "intent.extra, " + key + ": " + value + ", type: " + (value != null ? value.getClass().getName() : null));
+                    }
+                }
+            }
         }
     }
 }

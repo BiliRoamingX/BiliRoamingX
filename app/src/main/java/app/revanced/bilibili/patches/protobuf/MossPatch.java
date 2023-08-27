@@ -194,6 +194,7 @@ public class MossPatch {
             long aid = viewReply.getArc().getAid();
             int like = viewReply.getReqUser().getLike();
             AutoLikePatch.detail = Pair.create(aid, like);
+            ViewUniteReplyHook.getViewStack().push(viewReply);
             if (Settings.UNLOCK_PLAY_LIMIT.getBoolean())
                 ConfigEx.setShowListenButton(viewReply.getConfig(), true);
             if (Settings.BLOCK_COMMENT_GUIDE.getBoolean()) {

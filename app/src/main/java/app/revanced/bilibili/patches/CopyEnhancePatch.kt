@@ -17,6 +17,7 @@ import app.revanced.bilibili.widget.OnLongClickOriginListener
 import com.bapis.bilibili.app.viewunite.common.DescType
 import com.bilibili.bplus.followingcard.widget.EllipsizingTextView
 import com.bilibili.bplus.im.business.model.BaseTypedMessage
+import com.bilibili.ship.theseus.all.UnitedBizDetailsActivity
 import org.json.JSONObject
 
 object CopyEnhancePatch {
@@ -32,8 +33,9 @@ object CopyEnhancePatch {
     fun onCopyDesc(isBv: Boolean, desc: String): Boolean {
         if (!Settings.COMMENT_COPY.boolean) return false
         if (!Settings.COMMENT_COPY_ENHANCE.boolean) return true
-        val allDesc = if (Versions.ge7_39_0()) {
-            val view = ViewUniteReplyHook.viewStack.peek()
+        val topActivity = ApplicationDelegate.requireTopActivity()
+        val allDesc = if (Versions.ge7_39_0() && topActivity is UnitedBizDetailsActivity) {
+            val view = ViewUniteReplyHook.viewUniteStack.peek()
             if (view != null) {
                 val introTab = view.tab.tabModuleList.find { it.hasIntroduction() }?.introduction
                 if (introTab != null) {
@@ -74,8 +76,40 @@ object CopyEnhancePatch {
                     } else desc
                 } else desc
             } else desc
-        } else desc
-        showCopyDialog(ApplicationDelegate.requireTopActivity(), allDesc) { v ->
+        } else {
+            val view = ViewUniteReplyHook.viewStack.peek()
+            if (view != null) {
+                buildSpannedString {
+                    bold { appendLine("标题：") }
+                    appendLine(view.arc.title).appendLine()
+                    bold { appendLine("BV号：") }
+                    appendLine(view.bvid).appendLine()
+                    bold { appendLine("封面：") }
+                    clickable(0xFF2196F3.toInt(), onClick = {
+                        Utils.async { Utils.saveImage(view.arc.pic) }
+                    }) { append("点我保存") }
+                    appendLine().appendLine()
+                    val introDesc = view.arc.desc
+                    if (desc.isNotEmpty()) {
+                        bold { appendLine("简介：") }
+                        appendLine(introDesc).appendLine()
+                    }
+                    val introBgm = view.bgmList.joinToString("\n") { m ->
+                        m.author.let { if (it.isEmpty()) m.title else "${m.title} - $it" }
+                    }
+                    if (introBgm.isNotEmpty()) {
+                        bold { appendLine("BGM：") }
+                        appendLine(introBgm).appendLine()
+                    }
+                    val introTags = view.descTagList.joinToString(" ") { it.name }
+                    if (introTags.isNotEmpty()) {
+                        bold { appendLine("标签：") }
+                        appendLine(introTags).appendLine()
+                    }
+                }.removeSuffix("\n")
+            } else desc
+        }
+        showCopyDialog(topActivity, allDesc) { v ->
             setClipboardContent(label = "text", v)
             Toasts.showShortWithId("biliroaming_copy_success")
         }
