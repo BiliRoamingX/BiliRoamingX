@@ -1,3 +1,10 @@
+## [0.116.1](https://github.com/ReVanced/revanced-integrations/compare/v0.116.0...v0.116.1) (2023-08-27)
+
+
+### Bug Fixes
+
+* Revert previous release ([a178a22](https://github.com/ReVanced/revanced-integrations/commit/a178a223c283abe420e197d10863d7fe64534f32))
+
 ## [0.116.1-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.116.0...v0.116.1-dev.1) (2023-08-27)
 
 
