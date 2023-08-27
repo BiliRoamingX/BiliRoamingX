@@ -49,8 +49,8 @@ object CopyEnhancePatch {
                             bold { appendLine("封面：") }
                             clickable(0xFF2196F3.toInt(), onClick = {
                                 Utils.async { Utils.saveImage(view.arc.cover) }
-                            }) { appendLine("点我保存") }
-                            appendLine()
+                            }) { append("点我保存") }
+                            appendLine().appendLine()
                             val introDesc = intro.descList.joinToString("") {
                                 if (it.type == DescType.DescTypeAt) "@${it.text}" else it.text
                             }
