@@ -71,7 +71,7 @@ object CopyEnhancePatch {
                                 bold { appendLine("标签：") }
                                 appendLine(introTags).appendLine()
                             }
-                        }.removeSuffix("\n")
+                        }.removeSuffix("\n\n")
                     } else desc
                 } else desc
             } else desc
@@ -105,7 +105,7 @@ object CopyEnhancePatch {
                         bold { appendLine("标签：") }
                         appendLine(introTags).appendLine()
                     }
-                }.removeSuffix("\n")
+                }.removeSuffix("\n\n")
             } else desc
         }
         showCopyDialog(topActivity, allDesc) { v ->
