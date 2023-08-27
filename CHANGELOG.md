@@ -1,3 +1,10 @@
+## [0.116.2](https://github.com/ReVanced/revanced-integrations/compare/v0.116.1...v0.116.2) (2023-08-27)
+
+
+### Bug Fixes
+
+* Add back missing class ([6e8d13b](https://github.com/ReVanced/revanced-integrations/commit/6e8d13bfbbdadb8c737e7c183e9badc65fc6d719))
+
 ## [0.116.1](https://github.com/ReVanced/revanced-integrations/compare/v0.116.0...v0.116.1) (2023-08-27)
 
 
