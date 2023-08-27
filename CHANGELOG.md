@@ -1,3 +1,10 @@
+# [0.117.0](https://github.com/ReVanced/revanced-integrations/compare/v0.116.2...v0.117.0) (2023-08-27)
+
+
+### Features
+
+* Restore previous release ([dc955d1](https://github.com/ReVanced/revanced-integrations/commit/dc955d1bc2db63efc83d4fd5c7e076ed0867d48b))
+
 # [0.117.0-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.116.2...v0.117.0-dev.1) (2023-08-27)
 
 
