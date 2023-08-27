@@ -342,6 +342,14 @@ object BiliRoamingApi {
             style.put(i.optString("name"))
         result.put("style", style)
         result.optJSONObject("rights")?.put("allow_comment", 0)
+        result.optJSONObject("actor")?.run {
+            put("title", optString("title").ifEmpty { "角色声优" })
+            put("info", optString("info").trimEnd())
+        }
+        result.optJSONObject("staff")?.run {
+            put("title", optString("title").ifEmpty { "制作信息" })
+            put("info", optString("info").trimEnd())
+        }
         result.apply {
             put("actors", result.optJSONObject("actor")?.optString("info"))
             put("is_paster_ads", 0)
