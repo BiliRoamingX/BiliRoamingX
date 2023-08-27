@@ -3,7 +3,6 @@ package app.revanced.bilibili.patches.webview
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import app.revanced.bilibili.patches.CommentImagePatch
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Utils
 
@@ -12,9 +11,7 @@ object WebViewPatch {
         @Suppress("UNUSED")
         @JavascriptInterface
         fun saveImage(url: String) {
-            Utils.async {
-                CommentImagePatch.saveImage(url)
-            }
+            Utils.async { Utils.saveImage(url) }
         }
     }
 

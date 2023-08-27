@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -44,6 +46,11 @@ object CopyEnhancePatch {
                             appendLine(headline.content).appendLine()
                             bold { appendLine("BV号：") }
                             appendLine(view.arc.bvid).appendLine()
+                            bold { appendLine("封面：") }
+                            clickable(0xFF2196F3.toInt(), onClick = {
+                                Utils.async { Utils.saveImage(view.arc.cover) }
+                            }) { appendLine("点我保存") }
+                            appendLine()
                             val introDesc = intro.descList.joinToString("") {
                                 if (it.type == DescType.DescTypeAt) "@${it.text}" else it.text
                             }
@@ -163,7 +170,10 @@ object CopyEnhancePatch {
             .setNeutralButton(neuButton) { _, _ -> onCopyAll(text) }
             .setNegativeButton(android.R.string.cancel, null)
             .show()
-        (alertDialog.findViewById<TextView>(android.R.id.message))
-            .setTextIsSelectable(true)
+        (alertDialog.findViewById<TextView>(android.R.id.message)).run {
+            setTextIsSelectable(true)
+            movementMethod = LinkMovementMethod.getInstance()
+            highlightColor = Color.TRANSPARENT
+        }
     }
 }

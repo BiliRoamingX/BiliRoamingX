@@ -21,8 +21,11 @@ import android.graphics.Typeface.ITALIC
 import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
 import android.text.SpannedString
+import android.text.TextPaint
 import android.text.style.*
+import android.view.View
 import androidx.annotation.ColorInt
+import androidx.core.text.inSpans
 
 /**
  * Builds new string by populating a newly created [SpannableStringBuilder] using the provided
@@ -153,3 +156,16 @@ inline fun SpannableStringBuilder.superscript(
 inline fun SpannableStringBuilder.subscript(
     builderAction: SpannableStringBuilder.() -> Unit
 ): SpannableStringBuilder = inSpans(SubscriptSpan(), builderAction = builderAction)
+
+inline fun SpannableStringBuilder.clickable(
+    @ColorInt color: Int,
+    underline: Boolean = false,
+    crossinline onClick: (View) -> Unit,
+    builderAction: SpannableStringBuilder.() -> Unit
+) = inSpans(object : ClickableSpan() {
+    override fun onClick(widget: View) = onClick(widget)
+    override fun updateDrawState(ds: TextPaint) {
+        ds.color = color
+        ds.isUnderlineText = underline
+    }
+}, builderAction = builderAction)
