@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.PopupWindow
@@ -207,7 +206,6 @@ object CopyEnhancePatch {
         (alertDialog.findViewById<TextView>(android.R.id.message)).run {
             setTextIsSelectable(true)
             movementMethod = LinkMovementMethod.getInstance()
-            highlightColor = Color.TRANSPARENT
         }
     }
 }
