@@ -168,6 +168,7 @@ public enum Settings {
     MUSIC_NOTIFICATION("music_notification", BOOLEAN, FALSE, true),
     PURIFY_SHARE("purify_share", BOOLEAN, FALSE),
     FUCK_MINI_PROGRAM("mini_program", BOOLEAN, FALSE),
+    NUMBER_FORMAT("number_format", BOOLEAN, FALSE),
 
     // 去广告杂项
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),

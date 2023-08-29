@@ -262,6 +262,11 @@ public class Utils {
     }
 
     // codes will filled by patcher
+    public static boolean isLogin() {
+        return false;
+    }
+
+    // codes will filled by patcher
     public static boolean isNightFollowSystem() {
         return false;
     }
