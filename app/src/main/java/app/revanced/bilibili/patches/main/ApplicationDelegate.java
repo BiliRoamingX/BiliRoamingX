@@ -3,7 +3,6 @@ package app.revanced.bilibili.patches.main;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
-import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -106,27 +105,9 @@ public class ApplicationDelegate {
                 }
             }
             if (Versions.ge7_39_0() && activity instanceof UnitedBizDetailsActivity) {
-                var aid = activity.getIntent().getStringExtra("aid");
-                if (!TextUtils.isEmpty(aid)) {
-                    var viewStack = ViewUniteReplyHook.getViewUniteStack();
-                    var viewReply = viewStack.peek();
-                    if (viewReply != null
-                            && viewReply.hasArc()
-                            && String.valueOf(viewReply.getArc().getAid()).equals(aid))
-                        viewStack.pop();
-                }
+                ViewUniteReplyHook.getViewUniteMap().remove(activity.hashCode());
             } else if (activity instanceof VideoDetailsActivity || activity instanceof MultiTypeVideoContentActivity) {
-                var intent = activity.getIntent();
-                var aid = activity instanceof VideoDetailsActivity ? intent.getStringExtra("id") : intent.getStringExtra("avid");
-                if (!TextUtils.isEmpty(aid)) {
-                    var viewStack = ViewUniteReplyHook.getViewStack();
-                    var viewReply = viewStack.peek();
-                    if (viewReply != null && viewReply.hasArc()) {
-                        String viewAid = String.valueOf(viewReply.getArc().getAid());
-                        if (aid.equals(viewAid) || aid.equals("av" + viewAid))
-                            viewStack.pop();
-                    }
-                }
+                ViewUniteReplyHook.getViewMap().remove(activity.hashCode());
             }
         }
 
@@ -139,9 +120,9 @@ public class ApplicationDelegate {
         public void onActivityResumed(@NonNull Activity activity) {
             printLifecycle(activity, "onActivityResumed", false);
             if (activity instanceof MainActivityV2) {
-                ViewUniteReplyHook.getViewStack().clear();
+                ViewUniteReplyHook.getViewMap().clear();
                 if (Versions.ge7_39_0())
-                    ViewUniteReplyHook.getViewUniteStack().clear();
+                    ViewUniteReplyHook.getViewUniteMap().clear();
             }
         }
 

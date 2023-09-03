@@ -4,6 +4,7 @@ import android.util.Pair
 import app.revanced.bilibili.api.BiliRoamingApi.getThaiSeason
 import app.revanced.bilibili.patches.AutoLikePatch
 import app.revanced.bilibili.patches.json.PegasusPatch
+import app.revanced.bilibili.patches.main.ApplicationDelegate
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.FAIL_CODE
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.isBangumiWithWatchPermission
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
@@ -23,17 +24,16 @@ import com.bilibili.lib.moss.api.MossException
 import com.bilibili.lib.moss.api.NetworkException
 import com.google.protobuf.Any
 import org.json.JSONObject
-import java.util.ArrayDeque
 
 object ViewUniteReplyHook {
     private const val VIEW_PGC_ANY_TYPE_URL =
         "type.googleapis.com/bilibili.app.viewunite.pgcanymodel.ViewPgcAny"
 
     @JvmStatic
-    val viewStack = ArrayDeque<com.bapis.bilibili.app.view.v1.ViewReply>()
+    val viewMap = mutableMapOf<Int, com.bapis.bilibili.app.view.v1.ViewReply>()
 
     @JvmStatic
-    val viewUniteStack = ArrayDeque<ViewReply>()
+    val viewUniteMap = mutableMapOf<Int, ViewReply>()
 
     @JvmStatic
     fun hook(viewReq: ViewReq, viewReply: ViewReply?, error: MossException?): ViewReply? {
@@ -45,7 +45,9 @@ object ViewUniteReplyHook {
             AutoLikePatch.detail = Pair.create(aid, like)
             if (viewReply.viewBase.bizType == BizType.BIZ_TYPE_UGC) {
                 AutoLikePatch.autoLikeUnite()
-                viewUniteStack.push(viewReply)
+                val topActivity = ApplicationDelegate.getTopActivity()
+                if (topActivity != null)
+                    viewUniteMap[topActivity.hashCode()] = viewReply
             }
             hookArc(viewReply)
             hookTabModules(viewReply)

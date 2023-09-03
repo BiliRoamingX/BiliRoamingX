@@ -34,7 +34,7 @@ object CopyEnhancePatch {
         if (!Settings.COMMENT_COPY_ENHANCE.boolean) return true
         val topActivity = ApplicationDelegate.requireTopActivity()
         val allDesc = if (Versions.ge7_39_0() && topActivity is UnitedBizDetailsActivity) {
-            val view = ViewUniteReplyHook.viewUniteStack.peek()
+            val view = ViewUniteReplyHook.viewUniteMap[topActivity.hashCode()]
             if (view != null) {
                 val introTab = view.tab.tabModuleList.find { it.hasIntroduction() }?.introduction
                 if (introTab != null) {
@@ -76,7 +76,7 @@ object CopyEnhancePatch {
                 } else desc
             } else desc
         } else {
-            val view = ViewUniteReplyHook.viewStack.peek()
+            val view = ViewUniteReplyHook.viewMap[topActivity.hashCode()]
             if (view != null) {
                 buildSpannedString {
                     bold { appendLine("标题：") }

@@ -72,6 +72,7 @@ import app.revanced.bilibili.patches.AutoLikePatch;
 import app.revanced.bilibili.patches.TrialQualityPatch;
 import app.revanced.bilibili.patches.VideoQualityPatch;
 import app.revanced.bilibili.patches.json.PegasusPatch;
+import app.revanced.bilibili.patches.main.ApplicationDelegate;
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.LogHelper;
@@ -194,7 +195,10 @@ public class MossPatch {
             long aid = viewReply.getArc().getAid();
             int like = viewReply.getReqUser().getLike();
             AutoLikePatch.detail = Pair.create(aid, like);
-            ViewUniteReplyHook.getViewStack().push(viewReply);
+            var viewMap = ViewUniteReplyHook.getViewMap();
+            var topActivity = ApplicationDelegate.getTopActivity();
+            if (topActivity != null)
+                viewMap.put(topActivity.hashCode(), viewReply);
             if (Settings.UNLOCK_PLAY_LIMIT.getBoolean())
                 ConfigEx.setShowListenButton(viewReply.getConfig(), true);
             if (Settings.BLOCK_COMMENT_GUIDE.getBoolean()) {
