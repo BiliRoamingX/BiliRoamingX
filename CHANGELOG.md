@@ -1,3 +1,10 @@
+## [0.117.1](https://github.com/ReVanced/revanced-integrations/compare/v0.117.0...v0.117.1) (2023-09-03)
+
+
+### Bug Fixes
+
+* **YouTube - ExternalDownloads:** Trim whitespace from package name ([#469](https://github.com/ReVanced/revanced-integrations/issues/469)) ([61d997e](https://github.com/ReVanced/revanced-integrations/commit/61d997e1db64730c36674445ff5b516a3acb41fb))
+
 ## [0.117.1-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.117.0...v0.117.1-dev.1) (2023-08-30)
 
 
