@@ -6,6 +6,8 @@ import com.bapis.bilibili.app.dynamic.v2.AdditionalType;
 import com.bapis.bilibili.app.dynamic.v2.CardVideoDynList;
 import com.bapis.bilibili.app.dynamic.v2.CardVideoDynListEx;
 import com.bapis.bilibili.app.dynamic.v2.Description;
+import com.bapis.bilibili.app.dynamic.v2.DynScreenTab;
+import com.bapis.bilibili.app.dynamic.v2.DynScreenTabEx;
 import com.bapis.bilibili.app.dynamic.v2.DynTab;
 import com.bapis.bilibili.app.dynamic.v2.DynTabReply;
 import com.bapis.bilibili.app.dynamic.v2.DynTabReplyEx;
@@ -30,7 +32,7 @@ public class DynamicHook {
     private static Set<String> cachedContentSet = Collections.emptySet();
     private static List<Pattern> cachedContentRegexes = Collections.emptyList();
 
-    public static void purifyDynTabs(DynTabReply dynTabReply) {
+    public static void modifyDynTabs(DynTabReply dynTabReply) {
         List<DynTab> dynTabList = dynTabReply.getDynTabList();
         List<Integer> idxList = new ArrayList<>();
         for (int i = 0; i < dynTabList.size(); i++) {
@@ -42,6 +44,11 @@ public class DynamicHook {
         }
         for (int i = idxList.size() - 1; i >= 0; i--)
             DynTabReplyEx.removeDynTab(dynTabReply, idxList.get(i));
+        if (Settings.DYNAMIC_PREFER_VIDEO_TAB.getBoolean()) {
+            List<DynScreenTab> screenTabList = dynTabReply.getScreenTabList();
+            if (screenTabList.stream().anyMatch(tab -> "video".equals(tab.getName())))
+                screenTabList.forEach(tab -> DynScreenTabEx.setDefaultTab(tab, "video".equals(tab.getName())));
+        }
     }
 
     public static void filterDynamicForAll(DynamicList list) {

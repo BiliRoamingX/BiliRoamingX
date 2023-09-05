@@ -305,7 +305,7 @@ public class MossPatch {
                     || Settings.DYNAMIC_PURIFY_CAMPUS.getBoolean()) {
                 return MossResponseHandlerProxy.<DynTabReply>get(handler, v -> {
                     if (v != null)
-                        DynamicHook.purifyDynTabs(v);
+                        DynamicHook.modifyDynTabs(v);
                     return v;
                 });
             }
