@@ -2,6 +2,7 @@ package app.revanced.bilibili.patches.protobuf;
 
 import android.text.TextUtils;
 
+import com.bapis.bilibili.app.dynamic.v2.AdditionalType;
 import com.bapis.bilibili.app.dynamic.v2.CardVideoDynList;
 import com.bapis.bilibili.app.dynamic.v2.CardVideoDynListEx;
 import com.bapis.bilibili.app.dynamic.v2.Description;
@@ -73,6 +74,7 @@ public class DynamicHook {
         Set<String> uidSet = Settings.DYNAMIC_PURIFY_UID.getStringSet();
         Set<String> topics = Settings.DYNAMIC_PURIFY_TOPIC.getStringSet();
         boolean rmBlocked = Settings.DYNAMIC_RM_BLOCKED.getBoolean();
+        boolean rmAdLink = Settings.DYNAMIC_RM_AD_LINK.getBoolean();
         int[] typeArray = ArrayUtils.toIntArray(typeSet);
         long[] uidArray = ArrayUtils.toLongArray(uidSet);
         List<Integer> idxList = new ArrayList<>();
@@ -87,6 +89,16 @@ public class DynamicHook {
             Extend extend = item.getExtend();
             if (rmBlocked && extend.hasOnlyFansProperty()
                     && !extend.getOnlyFansProperty().getHasPrivilege()) {
+                idxList.add(i);
+                continue;
+            }
+
+            if (rmAdLink && item.getModulesList().stream()
+                    .filter(Module::hasModuleAdditional)
+                    .map(Module::getModuleAdditional).anyMatch(e -> {
+                        var type = e.getType();
+                        return type == AdditionalType.additional_type_goods || type == AdditionalType.additional_type_up_rcmd;
+                    })) {
                 idxList.add(i);
                 continue;
             }

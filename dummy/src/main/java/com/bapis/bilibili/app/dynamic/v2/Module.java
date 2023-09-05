@@ -16,4 +16,12 @@ public class Module {
     public ModuleTopic getModuleTopic() {
         throw new UnsupportedOperationException("Stub");
     }
+
+    public boolean hasModuleAdditional() {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public ModuleAdditional getModuleAdditional() {
+        throw new UnsupportedOperationException("Stub");
+    }
 }

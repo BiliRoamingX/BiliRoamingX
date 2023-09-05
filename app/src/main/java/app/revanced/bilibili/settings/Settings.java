@@ -89,6 +89,7 @@ public enum Settings {
     DYNAMIC_RM_UP_OF_VIDEO("customize_dynamic_video_rm_up", BOOLEAN, FALSE),
     DYNAMIC_FILTER_APPLY_TO_VIDEO("filter_apply_to_video", BOOLEAN, FALSE),
     DYNAMIC_RM_BLOCKED("customize_dynamic_rm_blocked", BOOLEAN, FALSE),
+    DYNAMIC_RM_AD_LINK("customize_dynamic_rm_ad_link", BOOLEAN, FALSE),
     DYNAMIC_PURIFY_TYPE("customize_dynamic_type", STRING_SET, Collections.EMPTY_SET),
     DYNAMIC_PURIFY_CONTENT("customize_dynamic_keyword_content", STRING_SET, Collections.EMPTY_SET),
     DYNAMIC_PURIFY_CONTENT_REGEX_MODE("dynamic_content_regex_mode", BOOLEAN, FALSE),
