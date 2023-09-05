@@ -77,7 +77,7 @@ public class PegasusPatch {
     };
 
     private static final Map<String, List<String>> filterTypesMap = Map.ofEntries(
-            Map.entry("advertisement", List.of("ad")),
+            Map.entry("advertisement", List.of("ad", "cm")),
             Map.entry("article", List.of("article")),
             Map.entry("bangumi", List.of("bangumi", "special", "pgc")),
             Map.entry("game", List.of("game")),
