@@ -1,3 +1,10 @@
+## [0.117.2-dev.2](https://github.com/ReVanced/revanced-integrations/compare/v0.117.2-dev.1...v0.117.2-dev.2) (2023-09-07)
+
+
+### Bug Fixes
+
+* **YouTube - Custom filter:** Use new lines between components instead of commas ([#475](https://github.com/ReVanced/revanced-integrations/issues/475)) ([17ed396](https://github.com/ReVanced/revanced-integrations/commit/17ed39673954a5b571bc1654be20afc235682ca4))
+
 ## [0.117.2-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.117.1...v0.117.2-dev.1) (2023-09-07)
 
 
