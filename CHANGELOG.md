@@ -1,3 +1,10 @@
+## [0.117.2-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.117.1...v0.117.2-dev.1) (2023-09-07)
+
+
+### Bug Fixes
+
+* **YouTube - Hide layout components:** Always hide redundant 'player audio track' button ([#473](https://github.com/ReVanced/revanced-integrations/issues/473)) ([d86851b](https://github.com/ReVanced/revanced-integrations/commit/d86851baf1ef1993f5ba9543a4a3fe8d50c3a199))
+
 ## [0.117.1](https://github.com/ReVanced/revanced-integrations/compare/v0.117.0...v0.117.1) (2023-09-03)
 
 
