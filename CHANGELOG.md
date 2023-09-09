@@ -1,3 +1,10 @@
+## [0.117.2-dev.3](https://github.com/ReVanced/revanced-integrations/compare/v0.117.2-dev.2...v0.117.2-dev.3) (2023-09-09)
+
+
+### Bug Fixes
+
+* **YouTube - ReturnYouTubeDislike:** Add debug logging to litho text ([#476](https://github.com/ReVanced/revanced-integrations/issues/476)) ([e3b8e8b](https://github.com/ReVanced/revanced-integrations/commit/e3b8e8be41796d0300c8421e28e5b8cf43ffb25e))
+
 ## [0.117.2-dev.2](https://github.com/ReVanced/revanced-integrations/compare/v0.117.2-dev.1...v0.117.2-dev.2) (2023-09-07)
 
 
