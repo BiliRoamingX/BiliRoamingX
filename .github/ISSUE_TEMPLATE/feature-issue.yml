@@ -8,7 +8,7 @@ body:
       value: |
         # 请求须知
 
-        在请求功能之前，请仔细[检查](https://github.com/zjns/BiliRoamingX-integrations/issues?q=feat%3A+in%3Atitle)此功能是否已经请求过，避免重复请求。
+        在请求功能之前，请仔细[检查](https://github.com/zjns/BiliRoamingX-integrations/issues?q=label%3Aenhancement)此功能是否已经请求过，避免重复请求。
 
   - type: textarea
     attributes:
