@@ -1,19 +1,27 @@
-package app.revanced.bilibili.patches.okhttp
+package app.revanced.bilibili.patches.okhttp.hooks
 
 import android.net.Uri
 import app.revanced.bilibili.api.BiliRoamingApi.getThaiSeason
+import app.revanced.bilibili.patches.okhttp.ApiHook
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.FAIL_CODE
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.isBangumiWithWatchPermission
 import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.utils.Versions
 import app.revanced.bilibili.utils.asSequence
 import app.revanced.bilibili.utils.orEmpty
 import app.revanced.bilibili.utils.toJSONObject
 import org.json.JSONArray
 import org.json.JSONObject
 
-object EpsApiHook {
-    @JvmStatic
-    fun hook(url: String, response: String): String {
+object Eps : ApiHook() {
+    override fun shouldHook(url: String, code: Int): Boolean {
+        return Settings.UNLOCK_AREA_LIMIT.boolean
+                && Versions.ge7_39_0()
+                && url.startsWith("https://api.bilibili.com/pgc/view/v2/app/eps")
+                && code.isOk
+    }
+
+    override fun hook(url: String, code: Int, response: String): String {
         val json = JSONObject(response)
         if (!Settings.UNLOCK_AREA_LIMIT.boolean)
             return response
