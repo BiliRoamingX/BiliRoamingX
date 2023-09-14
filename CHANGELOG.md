@@ -1,3 +1,10 @@
+# [0.118.0-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.117.2-dev.3...v0.118.0-dev.1) (2023-09-14)
+
+
+### Features
+
+* **TU Dortmund:** Add `Show on lockscreen` patch ([#472](https://github.com/ReVanced/revanced-integrations/issues/472)) ([526d66f](https://github.com/ReVanced/revanced-integrations/commit/526d66f6a91e0ed907db609a4adaa97f3239898b))
+
 ## [0.117.2-dev.3](https://github.com/ReVanced/revanced-integrations/compare/v0.117.2-dev.2...v0.117.2-dev.3) (2023-09-09)
 
 
