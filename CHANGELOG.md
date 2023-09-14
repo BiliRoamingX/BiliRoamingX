@@ -1,3 +1,10 @@
+# [0.118.0-dev.2](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.1...v0.118.0-dev.2) (2023-09-14)
+
+
+### Features
+
+* **Twitch - Block embedded ads:** Switch from `ttv.lol` to `luminous.dev` ([2c34180](https://github.com/ReVanced/revanced-integrations/commit/2c3418041cf19ae4c1c7b67eda8398578384b753))
+
 # [0.118.0-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.117.2-dev.3...v0.118.0-dev.1) (2023-09-14)
 
 
