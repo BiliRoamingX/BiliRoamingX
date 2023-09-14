@@ -7,6 +7,10 @@ import app.revanced.bilibili.utils.LogHelper;
 import app.revanced.bilibili.utils.Reflex;
 
 public class LiveRoomPatch {
+    public static boolean forbidSwitchLiveRoom() {
+        return Settings.FORBID_SWITCH_LIVE_ROOM.getBoolean();
+    }
+
     public static boolean disableLiveRoomDoubleClick() {
         return Settings.DISABLE_LIVE_ROOM_DOUBLE_CLICK.getBoolean();
     }
