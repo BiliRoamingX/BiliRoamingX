@@ -14,7 +14,7 @@ inline fun String?.toJSONObject() = JSONObject(this.orEmpty())
 fun <T> JSONArray.asSequence() = (0 until length()).asSequence().map { get(it) as T }
 
 @OptIn(ExperimentalContracts::class)
-fun JSONArray?.isNullOrEmpty(): Boolean {
+inline fun JSONArray?.isNullOrEmpty(): Boolean {
     contract {
         returns(false) implies (this@isNullOrEmpty != null)
     }
