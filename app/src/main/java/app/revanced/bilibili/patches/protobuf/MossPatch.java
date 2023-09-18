@@ -41,6 +41,7 @@ import com.bapis.bilibili.app.view.v1.ConfigEx;
 import com.bapis.bilibili.app.view.v1.LikeCustomEx;
 import com.bapis.bilibili.app.view.v1.RelatesFeedReply;
 import com.bapis.bilibili.app.view.v1.ReplyStyleEx;
+import com.bapis.bilibili.app.view.v1.ReqUserEx;
 import com.bapis.bilibili.app.view.v1.TFInfoReq;
 import com.bapis.bilibili.app.view.v1.VideoGuide;
 import com.bapis.bilibili.app.view.v1.ViewProgressReply;
@@ -199,6 +200,8 @@ public class MossPatch {
             var topActivity = ApplicationDelegate.getTopActivity();
             if (topActivity != null)
                 viewMap.put(topActivity.hashCode(), viewReply);
+            if (Settings.REMOVE_ELEC_BUTTON.getBoolean())
+                ReqUserEx.clearElecPlusBtn(viewReply.getReqUser());
             if (Settings.UNLOCK_PLAY_LIMIT.getBoolean())
                 ConfigEx.setShowListenButton(viewReply.getConfig(), true);
             if (Settings.BLOCK_COMMENT_GUIDE.getBoolean()) {

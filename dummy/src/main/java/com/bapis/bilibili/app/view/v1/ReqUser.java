@@ -471,4 +471,10 @@ public final class ReqUser extends GeneratedMessageLite<ReqUser, ReqUser.Builder
     public static ReqUser parseFrom(CodedInputStream codedInputStream, ExtensionRegistryLite extensionRegistryLite) throws IOException {
         return (ReqUser) GeneratedMessageLite.parseFrom(DEFAULT_INSTANCE, codedInputStream, extensionRegistryLite);
     }
+
+    /**
+     * clearElecPlusBtn
+     */
+    static void access$1900(ReqUser reqUser) {
+    }
 }

@@ -49,6 +49,8 @@ object ViewUniteReplyHook {
                 if (topActivity != null)
                     viewUniteMap[topActivity.hashCode()] = viewReply
             }
+            if (Settings.REMOVE_ELEC_BUTTON.boolean)
+                ReqUserEx.clearElecPlusBtn(viewReply.reqUser)
             hookArc(viewReply)
             hookTabModules(viewReply)
             hookSupplement(viewReply)
