@@ -1,3 +1,10 @@
+# [0.118.0-dev.3](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.2...v0.118.0-dev.3) (2023-09-19)
+
+
+### Bug Fixes
+
+* **YouTube:** fix old quality and custom speed not working on tablets ([#477](https://github.com/ReVanced/revanced-integrations/issues/477)) ([2352fa5](https://github.com/ReVanced/revanced-integrations/commit/2352fa542658035c5f4400fb5892217887710e4d))
+
 # [0.118.0-dev.2](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.1...v0.118.0-dev.2) (2023-09-14)
 
 
