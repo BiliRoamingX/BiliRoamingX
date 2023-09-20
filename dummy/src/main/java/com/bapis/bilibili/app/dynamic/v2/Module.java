@@ -24,4 +24,12 @@ public class Module {
     public ModuleAdditional getModuleAdditional() {
         throw new UnsupportedOperationException("Stub");
     }
+
+    public boolean hasModuleDynamic() {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public ModuleDynamic getModuleDynamic() {
+        throw new UnsupportedOperationException("Stub");
+    }
 }

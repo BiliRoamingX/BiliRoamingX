@@ -82,6 +82,7 @@ public class DynamicHook {
         Set<String> topics = Settings.DYNAMIC_PURIFY_TOPIC.getStringSet();
         boolean rmBlocked = Settings.DYNAMIC_RM_BLOCKED.getBoolean();
         boolean rmAdLink = Settings.DYNAMIC_RM_AD_LINK.getBoolean();
+        boolean rmUpReservation = Settings.DYNAMIC_RM_UP_RESERVATION.getBoolean();
         int[] typeArray = ArrayUtils.toIntArray(typeSet);
         long[] uidArray = ArrayUtils.toLongArray(uidSet);
         List<Integer> idxList = new ArrayList<>();
@@ -100,14 +101,35 @@ public class DynamicHook {
                 continue;
             }
 
-            if (rmAdLink && item.getModulesList().stream()
+            if ((rmAdLink || rmUpReservation) && item.getModulesList().stream()
                     .filter(Module::hasModuleAdditional)
                     .map(Module::getModuleAdditional).anyMatch(e -> {
                         var type = e.getType();
-                        return type == AdditionalType.additional_type_goods || type == AdditionalType.additional_type_up_rcmd;
+                        return (rmAdLink && (type == AdditionalType.additional_type_goods || type == AdditionalType.additional_type_up_rcmd))
+                                || (rmUpReservation && type == AdditionalType.additional_type_up_reservation);
                     })) {
                 idxList.add(i);
                 continue;
+            }
+
+            if (rmAdLink || rmUpReservation) {
+                var moduleDynamic = item.getModulesList().stream().filter(Module::hasModuleDynamic)
+                        .map(Module::getModuleDynamic)
+                        .findFirst().orElse(null);
+                if (moduleDynamic != null && moduleDynamic.hasDynForward()) {
+                    var dynForward = moduleDynamic.getDynForward();
+                    var forwardItem = dynForward.getItem();
+                    if (forwardItem.getModulesList().stream()
+                            .filter(Module::hasModuleAdditional)
+                            .map(Module::getModuleAdditional).anyMatch(e -> {
+                                var type = e.getType();
+                                return (rmAdLink && (type == AdditionalType.additional_type_goods || type == AdditionalType.additional_type_up_rcmd))
+                                        || (rmUpReservation && type == AdditionalType.additional_type_up_reservation);
+                            })) {
+                        idxList.add(i);
+                        continue;
+                    }
+                }
             }
 
             if (!contentSet.isEmpty()) {
