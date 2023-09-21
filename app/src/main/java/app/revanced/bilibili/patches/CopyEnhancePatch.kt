@@ -33,7 +33,11 @@ object CopyEnhancePatch {
         if (!Settings.COMMENT_COPY.boolean) return false
         if (!Settings.COMMENT_COPY_ENHANCE.boolean) return true
         val topActivity = ApplicationDelegate.requireTopActivity()
-        val allDesc = if (Versions.ge7_39_0() && topActivity is UnitedBizDetailsActivity) {
+        val united = (Versions.ge7_39_0() && !Versions.ge7_47_0()
+                && topActivity is UnitedBizDetailsActivity)
+                || (Versions.ge7_47_0()
+                && topActivity is com.bilibili.ship.theseus.detail.UnitedBizDetailsActivity)
+        val allDesc = if (united) {
             val view = ViewUniteReplyHook.viewUniteMap[topActivity.hashCode()]
             if (view != null) {
                 val introTab = view.tab.tabModuleList.find { it.hasIntroduction() }?.introduction

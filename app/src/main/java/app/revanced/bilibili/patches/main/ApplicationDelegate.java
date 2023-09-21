@@ -104,7 +104,8 @@ public class ApplicationDelegate {
                     break;
                 }
             }
-            if (Versions.ge7_39_0() && activity instanceof UnitedBizDetailsActivity) {
+            if ((Versions.ge7_39_0() && !Versions.ge7_47_0() && activity instanceof UnitedBizDetailsActivity)
+                    || (Versions.ge7_47_0() && activity instanceof com.bilibili.ship.theseus.detail.UnitedBizDetailsActivity)) {
                 ViewUniteReplyHook.getViewUniteMap().remove(activity.hashCode());
             } else if (activity instanceof VideoDetailsActivity || activity instanceof MultiTypeVideoContentActivity) {
                 ViewUniteReplyHook.getViewMap().remove(activity.hashCode());

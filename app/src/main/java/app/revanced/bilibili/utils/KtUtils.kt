@@ -19,6 +19,7 @@ import androidx.preference.PreferenceManager
 import org.json.JSONObject
 import java.io.File
 import java.io.InputStream
+import java.lang.reflect.Field
 import java.lang.reflect.Proxy
 import java.net.URL
 import java.util.TreeMap
@@ -190,8 +191,10 @@ fun Preference.onChange(onChange: (preference: Preference, newValue: Any?) -> Bo
     changeListenerField.set(this, proxy)
 }
 
-private val onPreferenceTreeClickListenerField by lazy {
-    PreferenceManager::class.java.declaredFields.find { f ->
+private val onPreferenceTreeClickListenerField by lazy { retrieveOnPreferenceTreeClickListenerField() }
+
+private fun retrieveOnPreferenceTreeClickListenerField(): Field? {
+    return PreferenceManager::class.java.declaredFields.find { f ->
         f.type.isInterface && f.type.declaredMethods.let {
             it.size == 1 && it[0].returnType == Boolean::class.javaPrimitiveType && it[0].parameterTypes.let { ts ->
                 ts.size == 1 && ts[0] == Preference::class.java
