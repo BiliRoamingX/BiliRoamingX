@@ -1,3 +1,10 @@
+# [0.118.0-dev.4](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.3...v0.118.0-dev.4) (2023-09-23)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** Do not record feed videos to history by default ([#478](https://github.com/ReVanced/revanced-integrations/issues/478)) ([ef1cca0](https://github.com/ReVanced/revanced-integrations/commit/ef1cca02c165d9c24e64b43fae375ae57bf90a52))
+
 # [0.118.0-dev.3](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.2...v0.118.0-dev.3) (2023-09-19)
 
 
