@@ -1,3 +1,11 @@
+# [0.118.0-dev.6](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.5...v0.118.0-dev.6) (2023-09-25)
+
+
+### Performance Improvements
+
+* Only request required fields ([d20b768](https://github.com/ReVanced/revanced-integrations/commit/d20b768bc23d167d9f0d2c651c75b3f92944e731))
+* Remove unnecessary api key parameter ([ba5e7d8](https://github.com/ReVanced/revanced-integrations/commit/ba5e7d870ee88ad45c233d914e1e2795de920cb2))
+
 # [0.118.0-dev.5](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.4...v0.118.0-dev.5) (2023-09-25)
 
 
