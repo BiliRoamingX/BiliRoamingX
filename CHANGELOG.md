@@ -1,3 +1,10 @@
+# [0.118.0-dev.9](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.8...v0.118.0-dev.9) (2023-09-25)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** Removed unused code ([#480](https://github.com/ReVanced/revanced-integrations/issues/480)) ([e6903bf](https://github.com/ReVanced/revanced-integrations/commit/e6903bff95b485d21773537bbcc162411b616618))
+
 # [0.118.0-dev.8](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.7...v0.118.0-dev.8) (2023-09-25)
 
 
