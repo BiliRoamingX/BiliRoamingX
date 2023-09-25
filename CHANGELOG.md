@@ -1,3 +1,11 @@
+# [0.118.0-dev.5](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.4...v0.118.0-dev.5) (2023-09-25)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** Restore clipping videos functionality ([2cd1738](https://github.com/ReVanced/revanced-integrations/commit/2cd1738d2494add13c48b64ccc9aad2432b2d8e3))
+* **YouTube - Client spoof:** Restore seekbar thumbnails ([978f630](https://github.com/ReVanced/revanced-integrations/commit/978f630c0267ec2b0d9bb9b5b0b3cdc9abef65ec))
+
 # [0.118.0-dev.4](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.3...v0.118.0-dev.4) (2023-09-23)
 
 
