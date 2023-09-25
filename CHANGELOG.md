@@ -1,3 +1,10 @@
+# [0.118.0-dev.8](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.7...v0.118.0-dev.8) (2023-09-25)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** Display seekbar thumbnails in high quality ([f71c1a0](https://github.com/ReVanced/revanced-integrations/commit/f71c1a0c156b2320e06dd98b3e5b276560d438aa))
+
 # [0.118.0-dev.7](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.6...v0.118.0-dev.7) (2023-09-25)
 
 
