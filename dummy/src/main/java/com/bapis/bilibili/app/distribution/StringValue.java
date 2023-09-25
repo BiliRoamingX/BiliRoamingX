@@ -6,4 +6,7 @@ public class StringValue {
      */
     static void access$100(StringValue stringValue, String value) {
     }
+
+    public void setValue(String value) {
+    }
 }

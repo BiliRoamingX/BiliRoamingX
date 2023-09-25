@@ -162,7 +162,7 @@ public final class TextInfo extends GeneratedMessageLite<TextInfo, TextInfo.Buil
         GeneratedMessageLite.registerDefaultInstance(TextInfo.class, textInfo);
     }
 
-    private TextInfo() {
+    public TextInfo() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

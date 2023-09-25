@@ -95,7 +95,7 @@ public final class Control extends GeneratedMessageLite<Control, Control.Builder
         GeneratedMessageLite.registerDefaultInstance(Control.class, control);
     }
 
-    private Control() {
+    public Control() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

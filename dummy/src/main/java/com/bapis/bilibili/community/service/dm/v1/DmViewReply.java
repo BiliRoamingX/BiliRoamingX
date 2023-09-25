@@ -954,7 +954,7 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
         GeneratedMessageLite.registerDefaultInstance(DmViewReply.class, dmViewReply);
     }
 
-    private DmViewReply() {
+    public DmViewReply() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

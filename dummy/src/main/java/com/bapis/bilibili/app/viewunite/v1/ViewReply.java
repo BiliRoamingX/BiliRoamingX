@@ -461,7 +461,7 @@ public final class ViewReply extends GeneratedMessageLite<ViewReply, ViewReply.B
         GeneratedMessageLite.registerDefaultInstance(ViewReply.class, viewReply);
     }
 
-    private ViewReply() {
+    public ViewReply() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

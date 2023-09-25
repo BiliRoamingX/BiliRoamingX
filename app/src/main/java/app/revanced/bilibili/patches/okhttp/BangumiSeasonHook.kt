@@ -127,9 +127,6 @@ object BangumiSeasonHook {
             lastSeasonInfo[cid] = epId
             lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
         }
-        Settings.CN_SERVER_ACCESS_KEY.string.ifEmpty { return }
-        if (episode.optInt("status") == 13)
-            episode.put("status", 2)
     }
 
     private fun unlockThaiBangumi(url: String, response: String): String {
@@ -186,9 +183,6 @@ object BangumiSeasonHook {
                     put("only_vip_download", 0)
                 }
             }
-            if (Settings.CN_SERVER_ACCESS_KEY.string.isNotEmpty())
-                if (newResult.optInt("status") == 13)
-                    newResult.put("status", 2)
         }
         return newResult?.let {
             JSONObject().apply {
@@ -210,9 +204,6 @@ object BangumiSeasonHook {
         if (Settings.ALLOW_DOWNLOAD.boolean)
             episode.optJSONObject("rights")
                 ?.put("allow_download", 1)
-        Settings.CN_SERVER_ACCESS_KEY.string.ifEmpty { return }
-        if (episode.optInt("status") == 13)
-            episode.put("status", 2)
     }
 
     @JvmStatic
@@ -308,7 +299,7 @@ object BangumiSeasonHook {
         checkErrorToast(jsonContent, true)
         val newData = jsonContent.optJSONObject("data") ?: return null
 
-        fun ReasonStyle.Builder.reconstructFrom(json: JSONObject) = json.run {
+        fun ReasonStyle.reconstructFrom(json: JSONObject) = json.run {
             text = optString("text")
             textColor = optString("text_color")
             textColorNight = optString("text_color_night")
@@ -319,47 +310,47 @@ object BangumiSeasonHook {
             bgStyle = optInt("bg_style")
         }
 
-        fun Episode.Builder.reconstructFrom(json: JSONObject) = json.run {
+        fun Episode.reconstructFrom(json: JSONObject) = json.run {
             uri = optString("uri")
             param = optString("param")
             index = optString("index")
             for (badge in optJSONArray("badges").orEmpty())
-                addBadges(ReasonStyle.newBuilder().apply { reconstructFrom(badge) }.build())
+                addBadges(ReasonStyle().apply { reconstructFrom(badge) })
             position = optInt("position")
         }
 
-        fun EpisodeNew.Builder.reconstructFrom(json: JSONObject) = json.run {
+        fun EpisodeNew.reconstructFrom(json: JSONObject) = json.run {
             title = optString("title")
             uri = optString("uri")
             param = optString("param")
             isNew = optInt("is_new")
             for (badge in optJSONArray("badges").orEmpty())
-                addBadges(ReasonStyle.newBuilder().apply { reconstructFrom(badge) }.build())
+                addBadges(ReasonStyle().apply { reconstructFrom(badge) })
             this@reconstructFrom.type = optInt("type")
             position = optInt("position")
             cover = optString("cover")
             label = optString("label")
         }
 
-        fun WatchButton.Builder.reconstructFrom(json: JSONObject) = json.run {
+        fun WatchButton.reconstructFrom(json: JSONObject) = json.run {
             title = optString("title")
             link = optString("link")
         }
 
-        fun CheckMore.Builder.reconstructFrom(json: JSONObject) = json.run {
+        fun CheckMore.reconstructFrom(json: JSONObject) = json.run {
             content = optString("content")
             uri = optString("uri")
         }
 
-        fun FollowButton.Builder.reconstructFrom(json: JSONObject) = json.run {
+        fun FollowButton.reconstructFrom(json: JSONObject) = json.run {
             icon = optString("icon")
             optJSONObject("texts")?.let { o ->
                 o.keys().asSequence().associateWith { o.opt(it)?.toString() ?: "" }
-            }?.let { putAllTexts(it) }
+            }?.let { mutableTextsMap.putAll(it) }
             statusReport = optString("status_report")
         }
 
-        fun SearchBangumiCard.Builder.reconstructFrom(json: JSONObject) = json.run {
+        fun SearchBangumiCard.reconstructFrom(json: JSONObject) = json.run {
             title = optString("title")
             cover = optString("cover")
             mediaType = optInt("media_type")
@@ -376,7 +367,7 @@ object BangumiSeasonHook {
             ptime = optLong("ptime")
             seasonTypeName = optString("season_type_name")
             for (episode in optJSONArray("episodes").orEmpty())
-                addEpisodes(Episode.newBuilder().apply { reconstructFrom(episode) }.build())
+                addEpisodes(Episode().apply { reconstructFrom(episode) })
             isSelection = optInt("is_selection")
             isAtten = optInt("is_atten")
             label = optString("label")
@@ -385,53 +376,51 @@ object BangumiSeasonHook {
             outIcon = optString("out_icon")
             outUrl = optString("out_url")
             for (badge in optJSONArray("badges").orEmpty())
-                addBadges(ReasonStyle.newBuilder().apply { reconstructFrom(badge) }.build())
+                addBadges(ReasonStyle().apply { reconstructFrom(badge) })
             isOut = optInt("is_out")
             for (episodeNew in optJSONArray("episodes_new").orEmpty())
-                addEpisodesNew(EpisodeNew.newBuilder().apply { reconstructFrom(episodeNew) }
-                    .build())
+                addEpisodesNew(EpisodeNew().apply { reconstructFrom(episodeNew) })
             optJSONObject("watch_button")?.let {
-                watchButton = WatchButton.newBuilder().apply { reconstructFrom(it) }.build()
+                watchButton = WatchButton().apply { reconstructFrom(it) }
             }
             selectionStyle = optString("selection_style")
             optJSONObject("check_more")?.let {
-                checkMore = CheckMore.newBuilder().apply { reconstructFrom(it) }.build()
+                checkMore = CheckMore().apply { reconstructFrom(it) }
             }
             optJSONObject("follow_button")?.let {
-                followButton = FollowButton.newBuilder().apply { reconstructFrom(it) }.build()
+                followButton = FollowButton().apply { reconstructFrom(it) }
             }
             optJSONObject("style_label")?.let {
-                styleLabel = ReasonStyle.newBuilder().apply { reconstructFrom(it) }.build()
+                styleLabel = ReasonStyle().apply { reconstructFrom(it) }
             }
             for (badgeV2 in optJSONArray("badges_v2").orEmpty())
-                addBadgesV2(ReasonStyle.newBuilder().apply { reconstructFrom(badgeV2) }.build())
+                addBadgesV2(ReasonStyle().apply { reconstructFrom(badgeV2) })
             stylesV2 = optString("styles_v2")
         }
 
-        fun Item.Builder.reconstructFrom(json: JSONObject) = json.run {
+        fun Item.reconstructFrom(json: JSONObject) = json.run {
             uri = optString("uri")
             param = optString("param")
             goto = optString("goto")
             linktype = optString("link_type")
             position = optInt("position")
             trackid = optString("track_id")
-            bangumi = SearchBangumiCard.newBuilder().apply { reconstructFrom(json) }.build()
+            bangumi = SearchBangumiCard().apply { reconstructFrom(json) }
         }
 
         val pages = newData.optInt("pages")
         var page = pn.toIntOrNull() ?: 1
-        val response = SearchByTypeResponse.newBuilder().apply {
+        val response = SearchByTypeResponse().apply {
             this.pages = pages
             this.keyword = keyword
             for (json in newData.optJSONArray("items").orEmpty()) {
                 if (json.optInt("Offset", -1) != -1)
                     json.remove("follow_button")
-                addItems(Item.newBuilder().apply { reconstructFrom(json) }.build())
+                addItems(Item().apply { reconstructFrom(json) })
             }
             if (page < pages)
-                pagination = PaginationReply.newBuilder()
-                    .apply { next = (++page).toString() }.build()
-        }.build()
+                pagination = PaginationReply().apply { next = (++page).toString() }
+        }
         return response
     }
 
@@ -508,11 +497,11 @@ object BangumiSeasonHook {
             if (Settings.getServerByArea(area).isNotEmpty()
                 && Settings.getExtraSearchByType(typeStr)
             ) {
-                val nav = Nav.newBuilder()
-                    .setName(searchType.value.text)
-                    .setType(searchType.key)
-                    .build()
-                SearchAllResponseEx.addNav(reply, 1, nav)
+                val nav = Nav().apply {
+                    name = searchType.value.text
+                    type = searchType.key
+                }
+                reply.addNav(1, nav)
             }
         }
     }
@@ -532,7 +521,7 @@ object BangumiSeasonHook {
                 toRemoveIndexes.add(index)
         }
         toRemoveIndexes.asReversed().forEach {
-            SearchAllResponseEx.removeItem(reply, it)
+            reply.removeItem(it)
         }
     }
 }

@@ -1100,7 +1100,7 @@ public final class SearchBangumiCard extends GeneratedMessageLite<SearchBangumiC
         GeneratedMessageLite.registerDefaultInstance(SearchBangumiCard.class, searchBangumiCard);
     }
 
-    private SearchBangumiCard() {
+    public SearchBangumiCard() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

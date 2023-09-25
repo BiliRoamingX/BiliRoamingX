@@ -1139,7 +1139,7 @@ public final class Module extends GeneratedMessageLite<Module, Module.Builder> i
         GeneratedMessageLite.registerDefaultInstance(Module.class, module);
     }
 
-    private Module() {
+    public Module() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

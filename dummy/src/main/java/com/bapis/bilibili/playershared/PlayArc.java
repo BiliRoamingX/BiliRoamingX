@@ -302,7 +302,7 @@ public final class PlayArc extends GeneratedMessageLite<PlayArc, PlayArc.Builder
         GeneratedMessageLite.registerDefaultInstance(PlayArc.class, playArc);
     }
 
-    private PlayArc() {
+    public PlayArc() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

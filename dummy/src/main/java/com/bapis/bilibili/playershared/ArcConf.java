@@ -218,7 +218,7 @@ public final class ArcConf extends GeneratedMessageLite<ArcConf, ArcConf.Builder
         GeneratedMessageLite.registerDefaultInstance(ArcConf.class, arcConf);
     }
 
-    private ArcConf() {
+    public ArcConf() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

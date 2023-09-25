@@ -483,7 +483,7 @@ public final class Item extends GeneratedMessageLite<Item, Item.Builder> impleme
         GeneratedMessageLite.registerDefaultInstance(Item.class, item);
     }
 
-    private Item() {
+    public Item() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

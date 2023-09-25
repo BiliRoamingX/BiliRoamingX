@@ -8,6 +8,23 @@ public class SubjectControl extends GeneratedMessageLite<SubjectControl, Subject
         return null;
     }
 
+    public EmptyPage getEmptyPage() {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public void setEmptyPage(EmptyPage emptyPage) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public void clearEmptyBackgroundTextPlain() {
+    }
+
+    public void clearEmptyBackgroundTextHighlight() {
+    }
+
+    public void clearEmptyBackgroundUri() {
+    }
+
     public static class Builder extends GeneratedMessageLite.Builder<SubjectControl, Builder> {
         protected Builder(SubjectControl defaultInstance) {
             super(defaultInstance);
@@ -16,10 +33,6 @@ public class SubjectControl extends GeneratedMessageLite<SubjectControl, Subject
         public Builder setEmptyPage(EmptyPage emptyPage) {
             throw new UnsupportedOperationException("Stub");
         }
-    }
-
-    public EmptyPage getEmptyPage() {
-        throw new UnsupportedOperationException("Stub");
     }
 
     /**

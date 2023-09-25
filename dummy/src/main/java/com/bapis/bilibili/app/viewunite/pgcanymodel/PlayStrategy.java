@@ -175,7 +175,7 @@ public final class PlayStrategy extends GeneratedMessageLite<PlayStrategy, PlayS
         GeneratedMessageLite.registerDefaultInstance(PlayStrategy.class, playStrategy);
     }
 
-    private PlayStrategy() {
+    public PlayStrategy() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

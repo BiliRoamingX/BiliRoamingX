@@ -589,7 +589,7 @@ public final class SectionData extends GeneratedMessageLite<SectionData, Section
         GeneratedMessageLite.registerDefaultInstance(SectionData.class, sectionData);
     }
 
-    private SectionData() {
+    public SectionData() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

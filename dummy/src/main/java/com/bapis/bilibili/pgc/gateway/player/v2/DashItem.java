@@ -329,7 +329,7 @@ public final class DashItem extends GeneratedMessageLite<DashItem, DashItem.Buil
         GeneratedMessageLite.registerDefaultInstance(DashItem.class, dashItem);
     }
 
-    private DashItem() {
+    public DashItem() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

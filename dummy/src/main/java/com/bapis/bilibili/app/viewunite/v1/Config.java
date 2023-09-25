@@ -180,7 +180,7 @@ public final class Config extends GeneratedMessageLite<Config, Config.Builder> i
         GeneratedMessageLite.registerDefaultInstance(Config.class, config);
     }
 
-    private Config() {
+    public Config() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

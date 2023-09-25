@@ -134,7 +134,7 @@ public final class CheckMore extends GeneratedMessageLite<CheckMore, CheckMore.B
         GeneratedMessageLite.registerDefaultInstance(CheckMore.class, checkMore);
     }
 
-    private CheckMore() {
+    public CheckMore() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

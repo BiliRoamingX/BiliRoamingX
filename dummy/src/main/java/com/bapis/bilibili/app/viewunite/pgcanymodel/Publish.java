@@ -290,7 +290,7 @@ public final class Publish extends GeneratedMessageLite<Publish, Publish.Builder
         GeneratedMessageLite.registerDefaultInstance(Publish.class, publish);
     }
 
-    private Publish() {
+    public Publish() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

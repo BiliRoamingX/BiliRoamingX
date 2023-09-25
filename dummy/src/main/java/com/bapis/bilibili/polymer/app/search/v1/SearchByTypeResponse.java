@@ -385,7 +385,7 @@ public final class SearchByTypeResponse extends GeneratedMessageLite<SearchByTyp
         GeneratedMessageLite.registerDefaultInstance(SearchByTypeResponse.class, searchByTypeResponse);
     }
 
-    private SearchByTypeResponse() {
+    public SearchByTypeResponse() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

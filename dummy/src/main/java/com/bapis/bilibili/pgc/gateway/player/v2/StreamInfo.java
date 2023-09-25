@@ -469,7 +469,7 @@ public final class StreamInfo extends GeneratedMessageLite<StreamInfo, StreamInf
         GeneratedMessageLite.registerDefaultInstance(StreamInfo.class, streamInfo);
     }
 
-    private StreamInfo() {
+    public StreamInfo() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

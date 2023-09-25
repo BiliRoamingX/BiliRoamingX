@@ -48,15 +48,15 @@ object UposReplacer {
         Utils.submitTask {
             val bCacheRegex = Regex("""cn-.*\.bilivideo""")
             // https://b23.tv/BV1XX4y1k7U2 FOREVER1
-            val playViewReq = PlayViewReq.newBuilder().apply {
-                setAid(354638380L)
-                setCid(1085240781L)
-                setQn(Constants.MAX_QN.toLong())
-                setFnval(Constants.MAX_FNVAL)
-                setFourk(true)
-                setForceHost(2)
-                setPreferCodecType(CodeType.CODE265)
-            }.build()
+            val playViewReq = PlayViewReq().apply {
+                aid = 354638380L
+                cid = 1085240781L
+                qn = Constants.MAX_QN.toLong()
+                fnval = Constants.MAX_FNVAL
+                fourk = true
+                forceHost = 2
+                preferCodecType = CodeType.CODE265
+            }
             val reply = PlayURLMoss().playView(playViewReq)
             val officialList = reply?.videoInfo?.run {
                 buildList {

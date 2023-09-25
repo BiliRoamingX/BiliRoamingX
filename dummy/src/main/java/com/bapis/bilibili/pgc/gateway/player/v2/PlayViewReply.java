@@ -316,7 +316,7 @@ public final class PlayViewReply extends GeneratedMessageLite<PlayViewReply, Pla
         GeneratedMessageLite.registerDefaultInstance(PlayViewReply.class, playViewReply);
     }
 
-    private PlayViewReply() {
+    public PlayViewReply() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

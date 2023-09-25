@@ -811,7 +811,7 @@ public final class PlayViewBusinessInfo extends GeneratedMessageLite<PlayViewBus
         GeneratedMessageLite.registerDefaultInstance(PlayViewBusinessInfo.class, playViewBusinessInfo);
     }
 
-    private PlayViewBusinessInfo() {
+    public PlayViewBusinessInfo() {
     }
 
     public void addAllClipInfo(Iterable<? extends ClipInfo> iterable) {

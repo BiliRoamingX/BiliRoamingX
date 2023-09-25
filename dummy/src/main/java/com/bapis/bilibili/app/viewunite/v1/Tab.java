@@ -212,7 +212,7 @@ public final class Tab extends GeneratedMessageLite<Tab, Tab.Builder> implements
         GeneratedMessageLite.registerDefaultInstance(Tab.class, tab);
     }
 
-    private Tab() {
+    public Tab() {
     }
 
     public void addAllTabModule(Iterable<? extends TabModule> iterable) {

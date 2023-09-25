@@ -4,9 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bapis.bilibili.app.playurl.v1.PlayViewReply;
-import com.bapis.bilibili.app.playurl.v1.PlayViewReplyEx;
 import com.bapis.bilibili.app.playurl.v1.Stream;
-import com.bapis.bilibili.app.playurl.v1.StreamInfoEx;
 
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Utils;
@@ -18,13 +16,13 @@ public class TrialQualityPatch {
     }
 
     public static void makeVipFree(PlayViewReply playViewReply) {
-        PlayViewReplyEx.clearAb(playViewReply);
+        playViewReply.clearAb();
         playViewReply.getVideoInfo().getStreamListList().stream().filter(Stream::hasDashVideo)
                 .forEach(e -> {
                     var streamInfo = e.getStreamInfo();
                     if (streamInfo.getNeedVip()) {
-                        StreamInfoEx.setNeedVip(streamInfo, false);
-                        StreamInfoEx.setVipFree(streamInfo, true);
+                        streamInfo.setNeedVip(false);
+                        streamInfo.setVipFree(true);
                     }
                 });
     }

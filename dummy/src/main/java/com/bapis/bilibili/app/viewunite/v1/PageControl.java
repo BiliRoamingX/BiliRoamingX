@@ -180,7 +180,7 @@ public final class PageControl extends GeneratedMessageLite<PageControl, PageCon
         GeneratedMessageLite.registerDefaultInstance(PageControl.class, pageControl);
     }
 
-    private PageControl() {
+    public PageControl() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

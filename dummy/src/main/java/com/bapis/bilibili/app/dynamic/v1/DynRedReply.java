@@ -9,6 +9,9 @@ public class DynRedReply extends GeneratedMessageLite {
     static void access$700(DynRedReply reply, String defaultTab) {
     }
 
+    public void setDefaultTab(String defaultTab) {
+    }
+
     @Override
     protected Object dynamicMethod(MethodToInvoke methodToInvoke, Object o, Object o1) {
         return null;

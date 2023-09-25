@@ -392,7 +392,7 @@ public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUnite
         GeneratedMessageLite.registerDefaultInstance(PlayViewUniteReply.class, playViewUniteReply);
     }
 
-    private PlayViewUniteReply() {
+    public PlayViewUniteReply() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

@@ -214,7 +214,7 @@ public final class Rights extends GeneratedMessageLite<Rights, Rights.Builder> i
         GeneratedMessageLite.registerDefaultInstance(Rights.class, rights);
     }
 
-    private Rights() {
+    public Rights() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

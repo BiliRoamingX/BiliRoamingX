@@ -236,7 +236,7 @@ public final class ViewBase extends GeneratedMessageLite<ViewBase, ViewBase.Buil
         GeneratedMessageLite.registerDefaultInstance(ViewBase.class, viewBase);
     }
 
-    private ViewBase() {
+    public ViewBase() {
     }
 
     public void clearActivityResource() {

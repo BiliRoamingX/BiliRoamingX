@@ -35,4 +35,10 @@ public class PlayViewReq extends GeneratedMessageLite {
      */
     static void access$1500(PlayViewReq playViewReq, boolean fourk) {
     }
+
+    public void setFnval(int fnval) {
+    }
+
+    public void setFourk(boolean fourk) {
+    }
 }

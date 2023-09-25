@@ -134,7 +134,7 @@ public final class WatchButton extends GeneratedMessageLite<WatchButton, WatchBu
         GeneratedMessageLite.registerDefaultInstance(WatchButton.class, watchButton);
     }
 
-    private WatchButton() {
+    public WatchButton() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

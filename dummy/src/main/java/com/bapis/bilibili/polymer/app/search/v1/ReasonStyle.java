@@ -306,7 +306,7 @@ public final class ReasonStyle extends GeneratedMessageLite<ReasonStyle, ReasonS
         GeneratedMessageLite.registerDefaultInstance(ReasonStyle.class, reasonStyle);
     }
 
-    private ReasonStyle() {
+    public ReasonStyle() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

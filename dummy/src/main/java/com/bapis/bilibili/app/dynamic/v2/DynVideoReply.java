@@ -9,6 +9,9 @@ public class DynVideoReply extends GeneratedMessageLite {
     static void access$600(DynVideoReply reply) {
     }
 
+    public void clearVideoUpList() {
+    }
+
     public CardVideoDynList getDynamicList() {
         throw new UnsupportedOperationException("Stub");
     }

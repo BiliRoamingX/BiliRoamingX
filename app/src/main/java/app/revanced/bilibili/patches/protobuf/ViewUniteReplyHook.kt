@@ -10,10 +10,7 @@ import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.isBangumiWithWatch
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.subtitlesCache
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.LogHelper
-import app.revanced.bilibili.utils.asSequence
-import app.revanced.bilibili.utils.orEmpty
-import app.revanced.bilibili.utils.toJSONObject
+import app.revanced.bilibili.utils.*
 import com.bapis.bilibili.app.viewunite.common.*
 import com.bapis.bilibili.app.viewunite.pgcanymodel.*
 import com.bapis.bilibili.app.viewunite.pgcanymodel.Rights
@@ -22,7 +19,6 @@ import com.bapis.bilibili.app.viewunite.v1.*
 import com.bapis.bilibili.playershared.BizType
 import com.bilibili.lib.moss.api.MossException
 import com.bilibili.lib.moss.api.NetworkException
-import com.google.protobuf.Any
 import org.json.JSONObject
 
 object ViewUniteReplyHook {
@@ -50,7 +46,7 @@ object ViewUniteReplyHook {
                     viewUniteMap[topActivity.hashCode()] = viewReply
             }
             if (Settings.REMOVE_ELEC_BUTTON.boolean)
-                ReqUserEx.clearElecPlusBtn(viewReply.reqUser)
+                viewReply.reqUser.clearElecPlusBtn()
             hookArc(viewReply)
             hookTabModules(viewReply)
             hookSupplement(viewReply)
@@ -61,15 +57,12 @@ object ViewUniteReplyHook {
     }
 
     private fun hookArc(viewReply: ViewReply) {
-        val newArc = viewReply.arc.toBuilder().apply {
-            right = right.toBuilder().apply {
-                if (Settings.ALLOW_DOWNLOAD.boolean) {
-                    download = true
-                    onlyVipDownload = false
-                }
-            }.build()
-        }.build()
-        ViewReplyEx.setArc(viewReply, newArc)
+        if (Settings.ALLOW_DOWNLOAD.boolean) {
+            viewReply.arc.right.run {
+                download = true
+                onlyVipDownload = false
+            }
+        }
     }
 
     private fun hookSupplement(viewReply: ViewReply) {
@@ -79,29 +72,24 @@ object ViewUniteReplyHook {
         lastSeasonInfo.clear()
         val viewPgcAny = ViewPgcAny.parseFrom(supplementAny.value)
         if (!viewPgcAny.hasOgvData()) return
-        val newViewPgcAny = viewPgcAny.toBuilder().apply {
-            ogvData = ogvData.toBuilder().apply {
-                lastSeasonInfo["title"] = title
-                lastSeasonInfo["season_id"] = seasonId.toString()
-                rights = rights.toBuilder().apply {
-                    if (Settings.UNLOCK_AREA_LIMIT.boolean) {
-                        areaLimit = 0
-                        banAreaShow = 1
-                        canWatch = 1
-                    }
-                    if (Settings.ALLOW_DOWNLOAD.boolean) {
-                        allowDownload = 1
-                        newAllowDownload = 1
-                        onlyVipDownload = 0
-                    }
-                }.build()
-            }.build()
-        }.build()
-        val newSupplement = Any.newBuilder().apply {
-            typeUrl = VIEW_PGC_ANY_TYPE_URL
-            value = newViewPgcAny.toByteString()
-        }.build()
-        ViewReplyEx.setSupplement(viewReply, newSupplement)
+        viewPgcAny.ogvData.run {
+            lastSeasonInfo["title"] = title
+            lastSeasonInfo["season_id"] = seasonId.toString()
+            rights.run {
+                if (Settings.UNLOCK_AREA_LIMIT.boolean) {
+                    areaLimit = 0
+                    banAreaShow = 1
+                    canWatch = 1
+                }
+                if (Settings.ALLOW_DOWNLOAD.boolean) {
+                    allowDownload = 1
+                    newAllowDownload = 1
+                    onlyVipDownload = 0
+                }
+            }
+        }
+        val newSupplement = newAny(VIEW_PGC_ANY_TYPE_URL, viewPgcAny)
+        viewReply.supplement = newSupplement
     }
 
     private fun hookTabModules(viewReply: ViewReply) {
@@ -116,15 +104,7 @@ object ViewUniteReplyHook {
                         if (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean)
                             toRemoveIndexes.add(index)
                     } else if (module.hasSectionData()) {
-                        val newSectionData = module.sectionData.toBuilder().apply {
-                            episodesList.map {
-                                it.toBuilder().unlock().build()
-                            }.let {
-                                clearEpisodes()
-                                addAllEpisodes(it)
-                            }
-                        }.build()
-                        ModuleEx.setSectionData(module, newSectionData)
+                        module.sectionData.episodesList.forEach { it.unlock() }
                     } else if (module.hasRelates()) {
                         PegasusPatch.filterViewUniteRelates(module, viewReply.viewBase.bizType)
                     } else if (module.hasCovenanter()) {
@@ -133,29 +113,29 @@ object ViewUniteReplyHook {
                     }
                 }
                 toRemoveIndexes.asReversed().forEach {
-                    IntroductionTabEx.removeModule(tabModule.introduction, it)
+                    tabModule.introduction.removeModules(it)
                 }
             } else if (tabModule.hasReply()) {
                 if (Settings.BLOCK_COMMENT_GUIDE.boolean)
-                    ReplyStyleEx.clearBadgeType(tabModule.reply.replyStyle)
+                    tabModule.reply.replyStyle.clearBadgeType()
             }
         }
         if (Settings.BLOCK_VIDEO_COMMENT.boolean) {
             val replyTabIndex = viewReply.tab.tabModuleList.indexOfFirst { it.hasReply() }
             if (replyTabIndex != -1)
-                TabEx.removeTabModule(viewReply.tab, replyTabIndex)
+                viewReply.tab.removeTabModule(replyTabIndex)
         }
     }
 
-    private fun ViewEpisode.Builder.unlock() = apply {
-        badgeInfo = badgeInfo.toBuilder().apply {
+    private fun ViewEpisode.unlock() = run {
+        badgeInfo.run {
             if (text == "受限") {
                 bgColor = "#FB7299"
                 bgColorNight = "#BB5B76"
                 text = if (status == 13) "会员" else ""
             }
-        }.build()
-        rights = rights.toBuilder().apply {
+        }
+        rights.run {
             if (Settings.UNLOCK_AREA_LIMIT.boolean) {
                 areaLimit = 0
                 canWatch = 1
@@ -164,15 +144,13 @@ object ViewUniteReplyHook {
             if (Settings.ALLOW_DOWNLOAD.boolean) {
                 allowDownload = 1
             }
-        }.build()
+        }
         if (cid != 0L && epId != 0L) {
             val cid = cid.toString()
             val epId = epId.toString()
             lastSeasonInfo[cid] = epId
             lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
         }
-        if (Settings.CN_SERVER_ACCESS_KEY.string.isNotEmpty())
-            if (status == 13) status = 2
     }
 
     private fun unlockThaiBangumi(viewReq: ViewReq): ViewReply? {
@@ -196,34 +174,31 @@ object ViewUniteReplyHook {
             val seasonId = newResult.optString("season_id")
             lastSeasonInfo["title"] = newResult.optString("title")
             lastSeasonInfo["season_id"] = seasonId
-            return ViewReply.newBuilder().apply {
-                supplement = Any.newBuilder().apply {
-                    typeUrl = VIEW_PGC_ANY_TYPE_URL
-                    value = ViewPgcAny.newBuilder().apply {
-                        ogvData = reconstructOgvData(newResult)
-                    }.build().toByteString()
-                }.build()
-                tab = Tab.newBuilder().apply {
-                    TabModule.newBuilder().apply {
+            return ViewReply().apply {
+                supplement = newAny(VIEW_PGC_ANY_TYPE_URL, ViewPgcAny().apply {
+                    ogvData = reconstructOgvData(newResult)
+                })
+                tab = Tab().apply {
+                    TabModule().apply {
                         tabType = TabType.TAB_INTRODUCTION
                         introduction = reconstructIntroduction(newResult)
-                    }.build().let { addTabModule(it) }
-                }.build()
-                viewBase = ViewBase.newBuilder().apply {
+                    }.let { addTabModule(it) }
+                }
+                viewBase = ViewBase().apply {
                     bizType = BizType.BIZ_TYPE_PGC
-                    config = Config.newBuilder().build()
-                    control = PageControl.newBuilder().apply {
-                        materialShow = Control.newBuilder().build()
-                        toastShow = Control.newBuilder().build()
-                        upShow = Control.newBuilder().build()
-                    }.build()
-                }.build()
-            }.build().also { LogHelper.debug { "unlockThaiBangumi, reconstruct view: $it" } }
+                    config = Config()
+                    control = PageControl().apply {
+                        materialShow = Control()
+                        toastShow = Control()
+                        upShow = Control()
+                    }
+                }
+            }.also { LogHelper.debug { "unlockThaiBangumi, reconstruct view: $it" } }
         }
         return null
     }
 
-    private fun reconstructOgvData(result: JSONObject) = OgvData.newBuilder().apply {
+    private fun reconstructOgvData(result: JSONObject) = OgvData().apply {
         aid = 0
         cover = result.optString("cover")
         horizontalCover169 = result.optString("horizon_cover")
@@ -234,17 +209,17 @@ object ViewUniteReplyHook {
         hasCanPlayEp = if (positiveEpisodes.length() > 0) 1 else 0
         mediaId = result.optInt("season_id")
         mode = 2
-        newEp = NewEp.newBuilder().apply {
+        newEp = NewEp().apply {
             result.optJSONObject("new_ep")?.run {
                 desc = optString("new_ep_display")
                 id = optInt("id")
                 title = optString("title")
             }
-        }.build()
-        ogvSwitch = OgvSwitch.newBuilder().apply {
+        }
+        ogvSwitch = OgvSwitch().apply {
             mergePreviewSection = 1
-        }.build()
-        playStrategy = PlayStrategy.newBuilder().apply {
+        }
+        playStrategy = PlayStrategy().apply {
             autoPlayToast = "即将播放："
             recommendShowStrategy = 1
             addStrategies("common_section-formal_first_ep")
@@ -254,8 +229,8 @@ object ViewUniteReplyHook {
             addStrategies("formal-end-other_section")
             addStrategies("formal-end-next_season")
             addStrategies("ord")
-        }.build()
-        publish = Publish.newBuilder().apply {
+        }
+        publish = Publish().apply {
             result.optJSONObject("publish")?.run {
                 isFinish = optInt("is_finish")
                 isStarted = optInt("is_started")
@@ -266,8 +241,8 @@ object ViewUniteReplyHook {
                 unknowPubDate = optInt("unknow_pub_date")
                 weekday = optInt("weekday")
             }
-        }.build()
-        rights = Rights.newBuilder().apply {
+        }
+        rights = Rights().apply {
             result.optJSONObject("rights")?.run {
                 allowBp = optInt("allow_bp")
                 allowBpRank = optInt("allow_bp_rank")
@@ -290,83 +265,81 @@ object ViewUniteReplyHook {
                     onlyVipDownload = 0
                 }
             }
-        }.build()
+        }
         seasonId = result.optLong("season_id")
         seasonType = result.optInt("type")
         shareUrl = result.optString("share_url")
         shortLink = result.optString("short_link")
         showSeasonType = result.optInt("type")
         squareCover = result.optString("square_cover")
-        stat = Stat.newBuilder().apply {
+        stat = Stat().apply {
             // followers = result.optJSONObject("stat")?.optString("followers")
             followers = result.optJSONObject("stat_format")?.optString("likes")
-            playData = StatInfo.newBuilder().apply {
+            playData = StatInfo().apply {
                 icon = "playdata-square-line@500"
                 pureText = result.optJSONObject("stat_format")?.optString("play")
                 text = pureText?.replace("播放", "")
                 value = result.optJSONObject("stat")?.optLong("views") ?: 0
-            }.build()
-        }.build()
+            }
+        }
         status = result.optInt("status")
-        if (Settings.CN_SERVER_ACCESS_KEY.string.isNotEmpty())
-            if (status == 13) status = 2
         title = result.optString("title")
         totalEp = positiveEpisodes.length()
-        userStatus = UserStatus.newBuilder().apply {
+        userStatus = UserStatus().apply {
             result.optJSONObject("user_status")?.run {
                 follow = optInt("follow")
                 vip = optInt("vip")
                 (positiveEpisodes.optJSONObject(0))?.let { episode ->
-                    watchProgress = WatchProgress.newBuilder().apply {
+                    watchProgress = WatchProgress().apply {
                         lastEpId = episode.optLong("id")
                         lastEpIndex = episode.optString("index")
                         lastTime = 0L
-                    }.build()
+                    }
                 }
             }
-        }.build()
-    }.build()
+        }
+    }
 
-    private fun reconstructIntroduction(result: JSONObject) = IntroductionTab.newBuilder().apply {
+    private fun reconstructIntroduction(result: JSONObject) = IntroductionTab().apply {
         title = "简介"
 
         // ogvTitle
-        Module.newBuilder().apply {
+        Module().apply {
             type = ModuleType.OGV_TITLE
-            ogvTitle = OgvTitle.newBuilder().apply {
-                badgeInfo = BadgeInfo.newBuilder().build()
+            ogvTitle = OgvTitle().apply {
+                badgeInfo = BadgeInfo()
                 reserveId = 0
                 title = result.optString("title")
-            }.build()
-        }.build().let { addModules(it) }
+            }
+        }.let { addModules(it) }
 
         // ogvIntroduction
-        Module.newBuilder().apply {
+        Module().apply {
             type = ModuleType.OGV_INTRODUCTION
-            ogvIntroduction = OgvIntroduction.newBuilder().apply {
+            ogvIntroduction = OgvIntroduction().apply {
                 // followers = result.optJSONObject("stat")?.optString("followers")
                 followers = result.optJSONObject("stat_format")?.optString("likes")
-                playData = StatInfo.newBuilder().apply {
+                playData = StatInfo().apply {
                     icon = "playdata-square-line@500"
                     pureText = result.optJSONObject("stat_format")?.optString("play")
                     text = pureText?.replace("播放", "")
                     value = result.optJSONObject("stat")?.optLong("views") ?: 0
-                }.build()
-            }.build()
-        }.build().let { addModules(it) }
+                }
+            }
+        }.let { addModules(it) }
 
         // seasons
         result.optJSONObject("series")?.optJSONArray("seasons")?.takeIf { it.length() > 0 }?.run {
-            Module.newBuilder().apply {
+            Module().apply {
                 type = ModuleType.OGV_SEASONS
-                ogvSeasons = OgvSeasons.newBuilder().apply {
+                ogvSeasons = OgvSeasons().apply {
                     asSequence<JSONObject>().forEach { season ->
-                        SerialSeason.newBuilder().apply {
+                        SerialSeason().apply {
                             seasonId = season.optInt("season_id")
                             seasonTitle = season.optString("quarter_title")
                         }.let { addSerialSeason(it) }
                     }
-                }.build()
+                }
             }.let { addModules(it) }
         }
 
@@ -375,61 +348,61 @@ object ViewUniteReplyHook {
             val style = module.optString("style")
             val seasonId = result.optString("season_id")
             if (style == "positive") {
-                Module.newBuilder().apply {
+                Module().apply {
                     type = ModuleType.POSITIVE
                     sectionData = reconstructSection(module, seasonId)
-                }.build().let { addModules(it) }
+                }.let { addModules(it) }
             } else if (style == "section") {
-                Module.newBuilder().apply {
+                Module().apply {
                     type = ModuleType.SECTION
                     sectionData = reconstructSection(module, seasonId)
-                }.build().let { addModules(it) }
+                }.let { addModules(it) }
             }
         }
-    }.build()
+    }
 
     private fun reconstructSection(
         module: JSONObject,
         seasonId: String,
-    ) = SectionData.newBuilder().apply {
+    ) = SectionData().apply {
         id = module.optInt("id")
-        moduleStyle = Style.newBuilder().apply {
+        moduleStyle = Style().apply {
             module.optJSONObject("module_style")?.run {
                 hidden = optInt("hidden")
                 line = optInt("line")
                 optJSONArray("show_pages")?.asSequence<String>()
                     ?.forEach { addShowPages(it) }
             }
-        }.build()
+        }
         more = module.optString("more")
         sectionId = module.optJSONObject("data")?.optInt("id") ?: 0
         title = module.optString("title")
         val episodes = module.optJSONObject("data")?.optJSONArray("episodes")
         episodes?.asSequence<JSONObject>()?.forEach { episode ->
-            ViewEpisode.newBuilder().apply {
+            ViewEpisode().apply {
                 aid = episode.optLong("aid")
-                badgeInfo = BadgeInfo.newBuilder().apply {
+                badgeInfo = BadgeInfo().apply {
                     episode.optJSONObject("badge_info")?.run {
                         bgColor = optString("bg_color")
                         bgColorNight = optString("bg_color_night")
                         text = optString("text")
                     }
-                }.build()
+                }
                 cid = episode.optLong("cid")
                 cover = episode.optString("cover")
-                dimension = Dimension.newBuilder().apply {
+                dimension = Dimension().apply {
                     episode.optJSONObject("dimension")?.run {
                         width = optLong("width")
                         rotate = optLong("rotate")
                         height = optLong("height")
                     }
-                }.build()
+                }
                 epId = episode.optLong("id")
                 epIndex = episode.optInt("index")
                 from = episode.optString("from")
                 link = episode.optString("link")
                 longTitle = episode.optString("long_title")
-                rights = com.bapis.bilibili.app.viewunite.common.Rights.newBuilder().apply {
+                rights = com.bapis.bilibili.app.viewunite.common.Rights().apply {
                     episode.optJSONObject("rights")?.run {
                         allowDemand = optInt("allow_demand")
                         allowDm = optInt("allow_dm")
@@ -440,15 +413,13 @@ object ViewUniteReplyHook {
                         areaLimit = 0
                     if (Settings.ALLOW_DOWNLOAD.boolean)
                         allowDownload = 1
-                }.build()
+                }
                 sectionIndex = episode.optInt("section_index")
                 shareUrl = episode.optString("share_url")
-                statForUnity = com.bapis.bilibili.app.viewunite.common.Stat.newBuilder().build()
+                statForUnity = com.bapis.bilibili.app.viewunite.common.Stat()
                 status = episode.optInt("status")
                 title = episode.optString("title")
-                if (Settings.CN_SERVER_ACCESS_KEY.string.isNotEmpty())
-                    if (status == 13) status = 2
-            }.build().let { addEpisodes(it) }
+            }.let { addEpisodes(it) }
 
             if (episode.has("cid") && episode.has("id")) {
                 val cid = episode.optInt("cid").toString()
@@ -462,5 +433,5 @@ object ViewUniteReplyHook {
                 }
             }
         }
-    }.build()
+    }
 }

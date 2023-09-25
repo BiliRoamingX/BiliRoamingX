@@ -671,7 +671,7 @@ public final class PlayAbilityConf extends GeneratedMessageLite<PlayAbilityConf,
         GeneratedMessageLite.registerDefaultInstance(PlayAbilityConf.class, playAbilityConf);
     }
 
-    private PlayAbilityConf() {
+    public PlayAbilityConf() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

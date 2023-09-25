@@ -338,7 +338,7 @@ public final class BadgeInfo extends GeneratedMessageLite<BadgeInfo, BadgeInfo.B
         GeneratedMessageLite.registerDefaultInstance(BadgeInfo.class, badgeInfo);
     }
 
-    private BadgeInfo() {
+    public BadgeInfo() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

@@ -8,6 +8,46 @@ public class FormatDescription extends GeneratedMessageLite<FormatDescription, F
         return null;
     }
 
+    public String getDescription() {
+        return "";
+    }
+
+    public void setDescription(String str) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public String getDisplayDesc() {
+        return "";
+    }
+
+    public void setDisplayDesc(String str) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public String getFormat() {
+        return "";
+    }
+
+    public void setFormat(String str) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public int getQuality() {
+        return 0;
+    }
+
+    public void setQuality(int i) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public String getSuperscript() {
+        return "";
+    }
+
+    public void setSuperscript(String str) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
     public static class Builder extends GeneratedMessageLite.Builder<FormatDescription, Builder> {
         protected Builder(FormatDescription defaultInstance) {
             super(defaultInstance);

@@ -254,7 +254,7 @@ public final class NewEp extends GeneratedMessageLite<NewEp, NewEp.Builder> impl
         GeneratedMessageLite.registerDefaultInstance(NewEp.class, newEp);
     }
 
-    private NewEp() {
+    public NewEp() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

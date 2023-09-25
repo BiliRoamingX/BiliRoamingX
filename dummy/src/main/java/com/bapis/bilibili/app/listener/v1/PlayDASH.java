@@ -9,6 +9,26 @@ public class PlayDASH extends GeneratedMessageLite<PlayDASH, PlayDASH.Builder> {
         return null;
     }
 
+    public void addAllAudio(Iterable<? extends DashItem> iterable) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public int getDuration() {
+        return 0;
+    }
+
+    public void setDuration(int i) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public float getMinBufferTime() {
+        return 0f;
+    }
+
+    public void setMinBufferTime(float f) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
     public static class Builder extends GeneratedMessageLite.Builder<PlayDASH, Builder> {
         protected Builder(PlayDASH defaultInstance) {
             super(defaultInstance);

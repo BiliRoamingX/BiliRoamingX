@@ -22,6 +22,10 @@ public class MainListReply extends GeneratedMessageLite<MainListReply, MainListR
         throw new UnsupportedOperationException("Stub");
     }
 
+    public void setSubjectControl(SubjectControl subjectControl) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
     public static Builder newBuilder() {
         throw new UnsupportedOperationException("Stub");
     }

@@ -644,7 +644,7 @@ public final class ViewReq extends GeneratedMessageLite<ViewReq, ViewReq.Builder
         GeneratedMessageLite.registerDefaultInstance(ViewReq.class, viewReq);
     }
 
-    private ViewReq() {
+    public ViewReq() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

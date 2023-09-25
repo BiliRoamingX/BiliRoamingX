@@ -25,4 +25,7 @@ public class VideoGuide extends GeneratedMessageLite<VideoGuide, VideoGuide.Buil
      */
     static void access$1200(VideoGuide videoGuide) {
     }
+
+    public void clearContractCard() {
+    }
 }

@@ -373,7 +373,7 @@ public final class SubtitleItem extends GeneratedMessageLite<SubtitleItem, Subti
         GeneratedMessageLite.registerDefaultInstance(SubtitleItem.class, subtitleItem);
     }
 
-    private SubtitleItem() {
+    public SubtitleItem() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

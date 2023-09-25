@@ -184,7 +184,7 @@ public final class ViewPgcAny extends GeneratedMessageLite<ViewPgcAny, ViewPgcAn
         GeneratedMessageLite.registerDefaultInstance(ViewPgcAny.class, viewPgcAny);
     }
 
-    private ViewPgcAny() {
+    public ViewPgcAny() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

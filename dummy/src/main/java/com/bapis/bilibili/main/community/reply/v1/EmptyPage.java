@@ -11,6 +11,31 @@ public class EmptyPage extends GeneratedMessageLite<EmptyPage, EmptyPage.Builder
         return null;
     }
 
+    public String getImageUrl() {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public void setImageUrl(String str) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public void addTexts(Text text) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public void addAllTexts(Iterable<? extends Text> iterable) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public void clearLeftButton() {
+    }
+
+    public void clearRightButton() {
+    }
+
+    public void clearTexts() {
+    }
+
     public static class Builder extends GeneratedMessageLite.Builder<EmptyPage, Builder> {
         protected Builder(EmptyPage defaultInstance) {
             super(defaultInstance);
@@ -67,16 +92,36 @@ public class EmptyPage extends GeneratedMessageLite<EmptyPage, EmptyPage.Builder
             return null;
         }
 
+        public Action getAction() {
+            throw new UnsupportedOperationException("Stub");
+        }
+
+        public void setAction(Action action) {
+            throw new UnsupportedOperationException("Stub");
+        }
+
+        public String getRaw() {
+            throw new UnsupportedOperationException("Stub");
+        }
+
+        public void setRaw(String str) {
+            throw new UnsupportedOperationException("Stub");
+        }
+
+        public TextStyle getStyle() {
+            throw new UnsupportedOperationException("Stub");
+        }
+
+        public void setStyle(TextStyle textStyle) {
+            throw new UnsupportedOperationException("Stub");
+        }
+
         public static class Builder extends GeneratedMessageLite.Builder<Text, Text.Builder> {
             protected Builder(Text defaultInstance) {
                 super(defaultInstance);
             }
 
             public Builder setAction(Action action) {
-                throw new UnsupportedOperationException("Stub");
-            }
-
-            public Builder setActionValue(int i) {
                 throw new UnsupportedOperationException("Stub");
             }
 

@@ -215,7 +215,7 @@ public final class FollowButton extends GeneratedMessageLite<FollowButton, Follo
         GeneratedMessageLite.registerDefaultInstance(FollowButton.class, followButton);
     }
 
-    private FollowButton() {
+    public FollowButton() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

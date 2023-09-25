@@ -183,7 +183,7 @@ public final class Nav extends GeneratedMessageLite<Nav, Nav.Builder> implements
         GeneratedMessageLite.registerDefaultInstance(Nav.class, nav);
     }
 
-    private Nav() {
+    public Nav() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

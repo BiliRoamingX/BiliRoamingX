@@ -106,7 +106,7 @@ public final class ImageInfo extends GeneratedMessageLite<ImageInfo, ImageInfo.B
         GeneratedMessageLite.registerDefaultInstance(ImageInfo.class, imageInfo);
     }
 
-    private ImageInfo() {
+    public ImageInfo() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

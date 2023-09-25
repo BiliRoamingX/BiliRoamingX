@@ -634,7 +634,7 @@ public final class ViewInfo extends GeneratedMessageLite<ViewInfo, ViewInfo.Buil
         GeneratedMessageLite.registerDefaultInstance(ViewInfo.class, viewInfo);
     }
 
-    private ViewInfo() {
+    public ViewInfo() {
     }
 
     public void addAllDemandNoPayEpids(Iterable<? extends Long> iterable) {

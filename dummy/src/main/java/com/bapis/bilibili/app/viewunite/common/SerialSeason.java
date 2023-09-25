@@ -387,7 +387,7 @@ public final class SerialSeason extends GeneratedMessageLite<SerialSeason, Seria
         GeneratedMessageLite.registerDefaultInstance(SerialSeason.class, serialSeason);
     }
 
-    private SerialSeason() {
+    public SerialSeason() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

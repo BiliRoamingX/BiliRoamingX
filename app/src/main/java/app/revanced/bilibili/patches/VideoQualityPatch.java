@@ -2,7 +2,6 @@ package app.revanced.bilibili.patches;
 
 import com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReq;
 import com.bapis.bilibili.playershared.VideoVod;
-import com.bapis.bilibili.playershared.VideoVodEx;
 
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Constants;
@@ -37,8 +36,8 @@ public class VideoQualityPatch {
         int halfScreenQuality = halfScreenQuality();
         int fulledScreenQuality = fullScreenQuality();
         if (halfScreenQuality != 0 || fulledScreenQuality != 0) {
-            com.bapis.bilibili.pgc.gateway.player.v1.PlayViewReqEx.setFnval(playViewReq, Constants.MAX_FNVAL);
-            com.bapis.bilibili.pgc.gateway.player.v1.PlayViewReqEx.setFourk(playViewReq, true);
+            playViewReq.setFnval(Constants.MAX_FNVAL);
+            playViewReq.setFourk(true);
         }
     }
 
@@ -51,8 +50,8 @@ public class VideoQualityPatch {
         int halfScreenQuality = halfScreenQuality();
         int fulledScreenQuality = fullScreenQuality();
         if (halfScreenQuality != 0 || fulledScreenQuality != 0) {
-            com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReqEx.setFnval(playViewReq, Constants.MAX_FNVAL);
-            com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReqEx.setFourk(playViewReq, true);
+            playViewReq.setFnval(Constants.MAX_FNVAL);
+            playViewReq.setFourk(true);
         }
     }
 
@@ -65,8 +64,8 @@ public class VideoQualityPatch {
         int halfScreenQuality = halfScreenQuality();
         int fulledScreenQuality = fullScreenQuality();
         if (halfScreenQuality != 0 || fulledScreenQuality != 0) {
-            com.bapis.bilibili.app.playurl.v1.PlayViewReqEx.setFnval(playViewReq, Constants.MAX_FNVAL);
-            com.bapis.bilibili.app.playurl.v1.PlayViewReqEx.setFourk(playViewReq, true);
+            playViewReq.setFnval(Constants.MAX_FNVAL);
+            playViewReq.setFourk(true);
         }
     }
 
@@ -80,8 +79,8 @@ public class VideoQualityPatch {
         int halfScreenQuality = halfScreenQuality();
         int fulledScreenQuality = fullScreenQuality();
         if (halfScreenQuality != 0 || fulledScreenQuality != 0) {
-            VideoVodEx.setFnval(videoVod, Constants.MAX_FNVAL);
-            VideoVodEx.setFourk(videoVod, true);
+            videoVod.setFnval(Constants.MAX_FNVAL);
+            videoVod.setFourk(true);
         }
     }
 

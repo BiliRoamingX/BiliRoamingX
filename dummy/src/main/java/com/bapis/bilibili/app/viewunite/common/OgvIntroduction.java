@@ -169,7 +169,7 @@ public final class OgvIntroduction extends GeneratedMessageLite<OgvIntroduction,
         GeneratedMessageLite.registerDefaultInstance(OgvIntroduction.class, ogvIntroduction);
     }
 
-    private OgvIntroduction() {
+    public OgvIntroduction() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

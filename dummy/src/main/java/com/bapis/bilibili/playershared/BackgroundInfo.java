@@ -162,7 +162,7 @@ public final class BackgroundInfo extends GeneratedMessageLite<BackgroundInfo, B
         GeneratedMessageLite.registerDefaultInstance(BackgroundInfo.class, backgroundInfo);
     }
 
-    private BackgroundInfo() {
+    public BackgroundInfo() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

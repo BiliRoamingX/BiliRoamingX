@@ -6,4 +6,7 @@ public class Int64Value {
      */
     static void access$100(Int64Value int64Value, long value) {
     }
+
+    public void setValue(long value) {
+    }
 }

@@ -206,7 +206,7 @@ public final class OgvSeasons extends GeneratedMessageLite<OgvSeasons, OgvSeason
         GeneratedMessageLite.registerDefaultInstance(OgvSeasons.class, ogvSeasons);
     }
 
-    private OgvSeasons() {
+    public OgvSeasons() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

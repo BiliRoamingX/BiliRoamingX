@@ -849,7 +849,7 @@ public final class OgvData extends GeneratedMessageLite<OgvData, OgvData.Builder
         GeneratedMessageLite.registerDefaultInstance(OgvData.class, ogvData);
     }
 
-    private OgvData() {
+    public OgvData() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

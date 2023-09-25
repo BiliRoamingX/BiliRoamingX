@@ -149,7 +149,7 @@ public final class OgvSwitch extends GeneratedMessageLite<OgvSwitch, OgvSwitch.B
         GeneratedMessageLite.registerDefaultInstance(OgvSwitch.class, ogvSwitch);
     }
 
-    private OgvSwitch() {
+    public OgvSwitch() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

@@ -6,13 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bapis.bilibili.app.dynamic.v1.DynRedReply;
-import com.bapis.bilibili.app.dynamic.v1.DynRedReplyEx;
 import com.bapis.bilibili.app.dynamic.v2.DynAllReply;
-import com.bapis.bilibili.app.dynamic.v2.DynAllReplyEx;
 import com.bapis.bilibili.app.dynamic.v2.DynTabReply;
 import com.bapis.bilibili.app.dynamic.v2.DynTabReq;
 import com.bapis.bilibili.app.dynamic.v2.DynVideoReply;
-import com.bapis.bilibili.app.dynamic.v2.DynVideoReplyEx;
 import com.bapis.bilibili.app.interfaces.v1.DefaultWordsReq;
 import com.bapis.bilibili.app.listener.v1.PlayHistoryReq;
 import com.bapis.bilibili.app.listener.v1.PlayHistoryResp;
@@ -25,9 +22,7 @@ import com.bapis.bilibili.app.listener.v1.RcmdPlaylistResp;
 import com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReply;
 import com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReq;
 import com.bapis.bilibili.app.playurl.v1.ArcConf;
-import com.bapis.bilibili.app.playurl.v1.ArcConfEx;
 import com.bapis.bilibili.app.playurl.v1.ConfValue;
-import com.bapis.bilibili.app.playurl.v1.ConfValueEx;
 import com.bapis.bilibili.app.playurl.v1.PlayAbilityConf;
 import com.bapis.bilibili.app.playurl.v1.PlayArcConf;
 import com.bapis.bilibili.app.playurl.v1.PlayConfEditReq;
@@ -37,19 +32,13 @@ import com.bapis.bilibili.app.playurl.v1.PlayViewReply;
 import com.bapis.bilibili.app.playurl.v1.PlayViewReq;
 import com.bapis.bilibili.app.resource.v1.ListReply;
 import com.bapis.bilibili.app.resource.v1.ListReq;
-import com.bapis.bilibili.app.view.v1.ConfigEx;
-import com.bapis.bilibili.app.view.v1.LikeCustomEx;
 import com.bapis.bilibili.app.view.v1.RelatesFeedReply;
-import com.bapis.bilibili.app.view.v1.ReplyStyleEx;
-import com.bapis.bilibili.app.view.v1.ReqUserEx;
 import com.bapis.bilibili.app.view.v1.TFInfoReq;
 import com.bapis.bilibili.app.view.v1.VideoGuide;
 import com.bapis.bilibili.app.view.v1.ViewProgressReply;
 import com.bapis.bilibili.app.view.v1.ViewReply;
-import com.bapis.bilibili.app.viewunite.v1.VideoGuideEx;
 import com.bapis.bilibili.broadcast.message.main.TopActivityReply;
 import com.bapis.bilibili.community.service.dm.v1.DmViewReply;
-import com.bapis.bilibili.community.service.dm.v1.DmViewReplyEx;
 import com.bapis.bilibili.community.service.dm.v1.DmViewReq;
 import com.bapis.bilibili.main.community.reply.v1.MainListReply;
 import com.bapis.bilibili.main.community.reply.v1.MainListReq;
@@ -138,9 +127,9 @@ public class MossPatch {
             DmViewReq dmViewReq = (DmViewReq) req;
             DmViewReply dmViewReply = (DmViewReply) reply;
             if (Settings.REMOVE_CMD_DMS.getBoolean() && dmViewReply != null) {
-                DmViewReplyEx.clearActivityMeta(dmViewReply);
+                dmViewReply.clearActivityMeta();
                 try {
-                    DmViewReplyEx.clearCommand(dmViewReply);
+                    dmViewReply.clearCommand();
                 } catch (Throwable ignored) {
                 }
                 GeneratedMessageLiteEx.setUnknownFields(dmViewReply, UnknownFieldSetLite.getDefaultInstance());
@@ -149,28 +138,28 @@ public class MossPatch {
                 return SubtitleReplyHook.addSubtitles(dmViewReq, dmViewReply);
         } else if (reply instanceof com.bapis.bilibili.app.view.v1.ViewProgressReply) {
             if (Settings.REMOVE_CMD_DMS.getBoolean())
-                com.bapis.bilibili.app.view.v1.ViewProgressReplyEx.setVideoGuide((ViewProgressReply) reply, VideoGuide.newBuilder().build());
+                ((ViewProgressReply) reply).setVideoGuide(new VideoGuide());
         } else if (reply instanceof com.bapis.bilibili.app.viewunite.v1.ViewProgressReply) {
             if (Settings.REMOVE_CMD_DMS.getBoolean()) {
                 com.bapis.bilibili.app.viewunite.v1.VideoGuide videoGuide = ((com.bapis.bilibili.app.viewunite.v1.ViewProgressReply) reply).getVideoGuide();
-                VideoGuideEx.clearContractCard(videoGuide);
+                videoGuide.clearContractCard();
             }
         } else if (reply instanceof DynAllReply) {
             DynAllReply dynAllReply = (DynAllReply) reply;
             if (Settings.DYNAMIC_RM_TOPIC_OF_ALL.getBoolean())
-                DynAllReplyEx.clearTopicList(dynAllReply);
+                dynAllReply.clearTopicList();
             if (Settings.DYNAMIC_RM_UP_OF_ALL.getBoolean())
-                DynAllReplyEx.clearUpList(dynAllReply);
+                dynAllReply.clearUpList();
             DynamicHook.filterDynamicForAll(dynAllReply.getDynamicList());
         } else if (reply instanceof DynVideoReply) {
             DynVideoReply dynVideoReply = (DynVideoReply) reply;
             if (Settings.DYNAMIC_RM_UP_OF_VIDEO.getBoolean())
-                DynVideoReplyEx.clearVideoUpList(dynVideoReply);
+                dynVideoReply.clearVideoUpList();
             if (Settings.DYNAMIC_FILTER_APPLY_TO_VIDEO.getBoolean())
                 DynamicHook.filterDynamicForVideo(dynVideoReply.getDynamicList());
         } else if (reply instanceof DynRedReply) {
             if (Settings.DYNAMIC_PREFER_VIDEO_TAB.getBoolean())
-                DynRedReplyEx.setDefaultTab((DynRedReply) reply, "video");
+                ((DynRedReply) reply).setDefaultTab("video");
         } else if (reply instanceof PlayViewReply) {
             PlayViewReq playViewReq = (PlayViewReq) req;
             PlayViewReply playViewReply = (PlayViewReply) reply;
@@ -178,14 +167,14 @@ public class MossPatch {
                 PlayAbilityConf playConf = playViewReply.getPlayConf();
                 if (playConf.hasLossLessConf()) {
                     ConfValue confValue = playConf.getLossLessConf().getConfValue();
-                    ConfValueEx.setSwitchVal(confValue, Settings.LOSSLESS_ENABLED.getBoolean());
+                    confValue.setSwitchVal(Settings.LOSSLESS_ENABLED.getBoolean());
                 }
             }
             if (Settings.UNLOCK_PLAY_LIMIT.getBoolean()) {
                 PlayArcConf playArc = playViewReply.getPlayArc();
                 for (ArcConf arcConf : new ArcConf[]{playArc.getCastConf(), playArc.getBackgroundPlayConf(), playArc.getSmallWindowConf()}) {
-                    ArcConfEx.setIsSupport(arcConf, true);
-                    ArcConfEx.setDisabled(arcConf, false);
+                    arcConf.setIsSupport(true);
+                    arcConf.setDisabled(false);
                 }
             }
             if (playViewReq.getDownload() < 1 && !Utils.isEffectiveVip()
@@ -201,12 +190,12 @@ public class MossPatch {
             if (topActivity != null)
                 viewMap.put(topActivity.hashCode(), viewReply);
             if (Settings.REMOVE_ELEC_BUTTON.getBoolean())
-                ReqUserEx.clearElecPlusBtn(viewReply.getReqUser());
+                viewReply.getReqUser().clearElecPlusBtn();
             if (Settings.UNLOCK_PLAY_LIMIT.getBoolean())
-                ConfigEx.setShowListenButton(viewReply.getConfig(), true);
+                viewReply.getConfig().setShowListenButton(true);
             if (Settings.BLOCK_COMMENT_GUIDE.getBoolean()) {
-                LikeCustomEx.clearLikeComment(viewReply.getLikeCustom());
-                ReplyStyleEx.clearBadgeType(viewReply.getReplyPreface());
+                viewReply.getLikeCustom().clearLikeComment();
+                viewReply.getReplyPreface().clearBadgeType();
             }
             PegasusPatch.filterViewRelates(viewReply);
         } else if (reply instanceof PlayURLResp) {
@@ -252,7 +241,7 @@ public class MossPatch {
                 return MossResponseHandlerProxy.<PlayConfReply>get(handler, v -> {
                     if (v != null) {
                         ConfValue confValue = v.getPlayConf().getLossLessConf().getConfValue();
-                        ConfValueEx.setSwitchVal(confValue, Settings.LOSSLESS_ENABLED.getBoolean());
+                        confValue.setSwitchVal(Settings.LOSSLESS_ENABLED.getBoolean());
                     }
                     return v;
                 });
@@ -352,9 +341,9 @@ public class MossPatch {
             DmViewReq dmViewReq = (DmViewReq) req;
             return MossResponseHandlerProxy.<DmViewReply>get(handler, dmViewReply -> {
                 if (Settings.REMOVE_CMD_DMS.getBoolean() && dmViewReply != null) {
-                    DmViewReplyEx.clearActivityMeta(dmViewReply);
+                    dmViewReply.clearActivityMeta();
                     try {
-                        DmViewReplyEx.clearCommand(dmViewReply);
+                        dmViewReply.clearCommand();
                     } catch (Throwable ignored) {
                     }
                     GeneratedMessageLiteEx.setUnknownFields(dmViewReply, UnknownFieldSetLite.getDefaultInstance());

@@ -303,7 +303,7 @@ public final class EpisodeInfo extends GeneratedMessageLite<EpisodeInfo, Episode
         GeneratedMessageLite.registerDefaultInstance(EpisodeInfo.class, episodeInfo);
     }
 
-    private EpisodeInfo() {
+    public EpisodeInfo() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

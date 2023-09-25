@@ -1,7 +1,6 @@
 package app.revanced.bilibili.patches.protobuf;
 
 import com.bapis.bilibili.app.resource.v1.ListReply;
-import com.bapis.bilibili.app.resource.v1.ListReplyEx;
 import com.bapis.bilibili.app.resource.v1.ListReq;
 
 import java.util.List;
@@ -27,7 +26,6 @@ public class ModuleListReplyHook {
     public static void hook(ListReq req, ListReply reply) {
         if (!Settings.BLOCK_MODULES.getBoolean()) return;
         var notException = getExceptionModules().noneMatch(e -> req.getModuleName().startsWith(e));
-        if (notException)
-            ListReplyEx.clearPools(reply);
+        if (notException) reply.clearPools();
     }
 }

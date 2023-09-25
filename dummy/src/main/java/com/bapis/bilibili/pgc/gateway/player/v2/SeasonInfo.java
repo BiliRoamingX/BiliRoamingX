@@ -241,7 +241,7 @@ public final class SeasonInfo extends GeneratedMessageLite<SeasonInfo, SeasonInf
         GeneratedMessageLite.registerDefaultInstance(SeasonInfo.class, seasonInfo);
     }
 
-    private SeasonInfo() {
+    public SeasonInfo() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

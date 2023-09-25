@@ -165,7 +165,7 @@ public final class Style extends GeneratedMessageLite<Style, Style.Builder> impl
         GeneratedMessageLite.registerDefaultInstance(Style.class, style);
     }
 
-    private Style() {
+    public Style() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

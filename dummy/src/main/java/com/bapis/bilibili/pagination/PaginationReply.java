@@ -134,7 +134,7 @@ public final class PaginationReply extends GeneratedMessageLite<PaginationReply,
         GeneratedMessageLite.registerDefaultInstance(PaginationReply.class, paginationReply);
     }
 
-    private PaginationReply() {
+    public PaginationReply() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

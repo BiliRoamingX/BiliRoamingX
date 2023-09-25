@@ -655,7 +655,7 @@ public final class EmptyPage extends GeneratedMessageLite<EmptyPage, EmptyPage.B
             GeneratedMessageLite.registerDefaultInstance(Text.class, text);
         }
 
-        private Text() {
+        public Text() {
         }
 
         public void clearAction() {

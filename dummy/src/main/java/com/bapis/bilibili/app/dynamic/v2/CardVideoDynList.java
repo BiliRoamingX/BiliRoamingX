@@ -12,4 +12,7 @@ public class CardVideoDynList {
      */
     static void access$600(CardVideoDynList list, int index) {
     }
+
+    public void removeList(int index) {
+    }
 }

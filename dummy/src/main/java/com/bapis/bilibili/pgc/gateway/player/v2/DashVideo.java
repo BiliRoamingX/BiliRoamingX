@@ -367,7 +367,7 @@ public final class DashVideo extends GeneratedMessageLite<DashVideo, DashVideo.B
         GeneratedMessageLite.registerDefaultInstance(DashVideo.class, dashVideo);
     }
 
-    private DashVideo() {
+    public DashVideo() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

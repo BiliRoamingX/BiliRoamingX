@@ -456,7 +456,7 @@ public final class VideoGuide extends GeneratedMessageLite<VideoGuide, VideoGuid
         GeneratedMessageLite.registerDefaultInstance(VideoGuide.class, videoGuide);
     }
 
-    private VideoGuide() {
+    public VideoGuide() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

@@ -209,7 +209,7 @@ public final class Stream extends GeneratedMessageLite<Stream, Stream.Builder> i
         GeneratedMessageLite.registerDefaultInstance(Stream.class, stream);
     }
 
-    private Stream() {
+    public Stream() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
+import com.google.protobuf.GeneratedMessageLite
 import org.json.JSONObject
 import java.io.File
 import java.io.InputStream
@@ -275,3 +276,9 @@ fun setClipboardContent(label: String = "", content: CharSequence) {
     val clipData = ClipData.newPlainText(label, content)
     clipboardManager.setPrimaryClip(clipData)
 }
+
+fun newAny(typeUrl: String, message: GeneratedMessageLite<*, *>) =
+    com.google.protobuf.Any::class.java.new().apply {
+        callMethod("setTypeUrl", typeUrl)
+        callMethod("setValue", message.toByteString())
+    }

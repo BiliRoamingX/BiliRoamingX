@@ -37,10 +37,6 @@ public enum Settings {
     HK_SERVER("hk_server", STRING, ""),
     CN_SERVER("cn_server", STRING, ""),
     TH_SERVER("th_server", STRING, ""),
-    TW_SERVER_ACCESS_KEY("tw_server_accessKey", STRING, ""),
-    HK_SERVER_ACCESS_KEY("hk_server_accessKey", STRING, ""),
-    CN_SERVER_ACCESS_KEY("cn_server_accessKey", STRING, ""),
-    TH_SERVER_ACCESS_KEY("th_server_accessKey", STRING, ""),
     UPOS_HOST("upos_host", STRING, ""),
 
     // 播放器
@@ -409,20 +405,6 @@ public enum Settings {
             return TW_SERVER.getString();
         } else if (Area.TH == area) {
             return TH_SERVER.getString();
-        } else {
-            return "";
-        }
-    }
-
-    public static String getAccessKeyByArea(Area area) {
-        if (Area.CN == area) {
-            return CN_SERVER_ACCESS_KEY.getString();
-        } else if (Area.HK == area) {
-            return HK_SERVER_ACCESS_KEY.getString();
-        } else if (Area.TW == area) {
-            return TW_SERVER_ACCESS_KEY.getString();
-        } else if (Area.TH == area) {
-            return TH_SERVER_ACCESS_KEY.getString();
         } else {
             return "";
         }

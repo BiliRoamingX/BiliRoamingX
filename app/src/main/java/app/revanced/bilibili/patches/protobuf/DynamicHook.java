@@ -4,16 +4,12 @@ import android.text.TextUtils;
 
 import com.bapis.bilibili.app.dynamic.v2.AdditionalType;
 import com.bapis.bilibili.app.dynamic.v2.CardVideoDynList;
-import com.bapis.bilibili.app.dynamic.v2.CardVideoDynListEx;
 import com.bapis.bilibili.app.dynamic.v2.Description;
 import com.bapis.bilibili.app.dynamic.v2.DynScreenTab;
-import com.bapis.bilibili.app.dynamic.v2.DynScreenTabEx;
 import com.bapis.bilibili.app.dynamic.v2.DynTab;
 import com.bapis.bilibili.app.dynamic.v2.DynTabReply;
-import com.bapis.bilibili.app.dynamic.v2.DynTabReplyEx;
 import com.bapis.bilibili.app.dynamic.v2.DynamicItem;
 import com.bapis.bilibili.app.dynamic.v2.DynamicList;
-import com.bapis.bilibili.app.dynamic.v2.DynamicListEx;
 import com.bapis.bilibili.app.dynamic.v2.Extend;
 import com.bapis.bilibili.app.dynamic.v2.Module;
 
@@ -43,24 +39,24 @@ public class DynamicHook {
                 idxList.add(i);
         }
         for (int i = idxList.size() - 1; i >= 0; i--)
-            DynTabReplyEx.removeDynTab(dynTabReply, idxList.get(i));
+            dynTabReply.removeDynTab(idxList.get(i));
         if (Settings.DYNAMIC_PREFER_VIDEO_TAB.getBoolean()) {
             List<DynScreenTab> screenTabList = dynTabReply.getScreenTabList();
             if (screenTabList.stream().anyMatch(tab -> "video".equals(tab.getName())))
-                screenTabList.forEach(tab -> DynScreenTabEx.setDefaultTab(tab, "video".equals(tab.getName())));
+                screenTabList.forEach(tab -> tab.setDefaultTab("video".equals(tab.getName())));
         }
     }
 
     public static void filterDynamicForAll(DynamicList list) {
         List<Integer> idxList = getToRemoveDynamicIdxList(list.getListList());
         for (int i = idxList.size() - 1; i >= 0; i--)
-            DynamicListEx.removeList(list, idxList.get(i));
+            list.removeList(idxList.get(i));
     }
 
     public static void filterDynamicForVideo(CardVideoDynList list) {
         List<Integer> idxList = getToRemoveDynamicIdxList(list.getListList());
         for (int i = idxList.size() - 1; i >= 0; i--)
-            CardVideoDynListEx.removeList(list, idxList.get(i));
+            list.removeList(idxList.get(i));
     }
 
     private static List<Integer> getToRemoveDynamicIdxList(List<DynamicItem> items) {

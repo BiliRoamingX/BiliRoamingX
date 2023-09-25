@@ -180,7 +180,7 @@ public final class StatInfo extends GeneratedMessageLite<StatInfo, StatInfo.Buil
         GeneratedMessageLite.registerDefaultInstance(StatInfo.class, statInfo);
     }
 
-    private StatInfo() {
+    public StatInfo() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

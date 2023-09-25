@@ -33,7 +33,31 @@ public class PlayURLResp extends GeneratedMessageLite<PlayURLResp, PlayURLResp.B
         }
     }
 
+    public Map<Long, PlayInfo> getMutablePlayerInfoMap() {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public PlayItem getItem() {
+        return null;
+    }
+
+    public void setItem(PlayItem playItem) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public String getMessage() {
+        return "";
+    }
+
+    public void setMessage(String str) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
     public int getPlayable() {
+        return 0;
+    }
+
+    public void setPlayable(int i) {
         throw new UnsupportedOperationException("Stub");
     }
 

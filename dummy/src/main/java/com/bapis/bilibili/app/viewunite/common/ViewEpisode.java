@@ -1372,7 +1372,7 @@ public final class ViewEpisode extends GeneratedMessageLite<ViewEpisode, ViewEpi
         GeneratedMessageLite.registerDefaultInstance(ViewEpisode.class, viewEpisode);
     }
 
-    private ViewEpisode() {
+    public ViewEpisode() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

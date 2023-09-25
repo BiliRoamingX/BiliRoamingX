@@ -148,7 +148,7 @@ public final class PlayArcConf extends GeneratedMessageLite<PlayArcConf, PlayArc
         GeneratedMessageLite.registerDefaultInstance(PlayArcConf.class, playArcConf);
     }
 
-    private PlayArcConf() {
+    public PlayArcConf() {
     }
 
     public static PlayArcConf getDefaultInstance() {

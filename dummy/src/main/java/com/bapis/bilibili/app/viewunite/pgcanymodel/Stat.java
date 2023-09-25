@@ -141,7 +141,7 @@ public final class Stat extends GeneratedMessageLite<Stat, Stat.Builder> impleme
         GeneratedMessageLite.registerDefaultInstance(Stat.class, stat);
     }
 
-    private Stat() {
+    public Stat() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

@@ -334,7 +334,7 @@ public final class VideoInfo extends GeneratedMessageLite<VideoInfo, VideoInfo.B
         GeneratedMessageLite.registerDefaultInstance(VideoInfo.class, videoInfo);
     }
 
-    private VideoInfo() {
+    public VideoInfo() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

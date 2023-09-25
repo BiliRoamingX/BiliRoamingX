@@ -49,4 +49,19 @@ public class TopLeft {
     public Int64Value getGotoV2() {
         throw new UnsupportedOperationException("Stub");
     }
+
+    public void clearBadge() {
+    }
+
+    public void clearListenBackgroundImage() {
+    }
+
+    public void clearListenForegroundImage() {
+    }
+
+    public void clearStoryBackgroundImage() {
+    }
+
+    public void clearStoryForegroundImage() {
+    }
 }

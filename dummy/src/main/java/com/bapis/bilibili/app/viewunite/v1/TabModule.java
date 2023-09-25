@@ -266,7 +266,7 @@ public final class TabModule extends GeneratedMessageLite<TabModule, TabModule.B
         GeneratedMessageLite.registerDefaultInstance(TabModule.class, tabModule);
     }
 
-    private TabModule() {
+    public TabModule() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

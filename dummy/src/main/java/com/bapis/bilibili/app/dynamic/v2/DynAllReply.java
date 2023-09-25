@@ -15,6 +15,12 @@ public class DynAllReply extends GeneratedMessageLite {
     static void access$900(DynAllReply reply) {
     }
 
+    public void clearUpList() {
+    }
+
+    public void clearTopicList() {
+    }
+
     public DynamicList getDynamicList() {
         throw new UnsupportedOperationException("Stub");
     }

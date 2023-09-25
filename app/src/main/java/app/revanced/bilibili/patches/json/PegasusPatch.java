@@ -4,15 +4,11 @@ import android.text.TextUtils;
 
 import com.bapis.bilibili.app.view.v1.Relate;
 import com.bapis.bilibili.app.view.v1.RelatesFeedReply;
-import com.bapis.bilibili.app.view.v1.RelatesFeedReplyEx;
 import com.bapis.bilibili.app.view.v1.ViewReply;
-import com.bapis.bilibili.app.view.v1.ViewReplyEx;
 import com.bapis.bilibili.app.viewunite.common.Module;
-import com.bapis.bilibili.app.viewunite.common.ModuleEx;
 import com.bapis.bilibili.app.viewunite.common.RelateCard;
 import com.bapis.bilibili.app.viewunite.common.RelateCardType;
 import com.bapis.bilibili.app.viewunite.common.Relates;
-import com.bapis.bilibili.app.viewunite.common.RelatesEx;
 import com.bapis.bilibili.playershared.BizType;
 import com.bilibili.app.comm.list.common.api.model.PlayerArgs;
 import com.bilibili.app.comm.list.common.data.DislikeReason;
@@ -645,38 +641,38 @@ public class PegasusPatch {
         if (Settings.REMOVE_RELATE_PROMOTE.getBoolean()
                 && Settings.REMOVE_RELATE_ONLY_AV.getBoolean()
                 && Settings.REMOVE_RELATE_NOTHING.getBoolean()) {
-            ViewReplyEx.clearRelates(viewReply);
-            ViewReplyEx.clearPagination(viewReply);
+            viewReply.clearRelates();
+            viewReply.clearPagination();
             return;
         }
         List<Integer> indexes = getToRemoveRelateIndexes(viewReply.getRelatesList());
         for (int i = indexes.size() - 1; i >= 0; i--)
-            ViewReplyEx.removeRelates(viewReply, indexes.get(i));
+            viewReply.removeRelates(indexes.get(i));
     }
 
     public static void filterViewUniteRelates(Module module, BizType bizType) {
         if (Settings.REMOVE_RELATE_PROMOTE.getBoolean()
                 && Settings.REMOVE_RELATE_ONLY_AV.getBoolean()
                 && Settings.REMOVE_RELATE_NOTHING.getBoolean()) {
-            ModuleEx.clearRelates(module);
+            module.clearRelates();
             return;
         }
         Relates relates = module.getRelates();
         List<Integer> indexes = getToRemoveRelateCardIndexes(relates.getCardsList(), bizType);
         for (int i = indexes.size() - 1; i >= 0; i--)
-            RelatesEx.removeCards(relates, indexes.get(i));
+            relates.removeCards(indexes.get(i));
     }
 
     public static void filterRelatesFeed(RelatesFeedReply feedReply) {
         List<Integer> indexes = getToRemoveRelateIndexes(feedReply.getListList());
         for (int i = indexes.size() - 1; i >= 0; i--)
-            RelatesFeedReplyEx.removeList(feedReply, indexes.get(i));
+            feedReply.removeList(indexes.get(i));
     }
 
     public static void filterRelatesFeedUnite(com.bapis.bilibili.app.viewunite.v1.RelatesFeedReply feedReply) {
         List<Integer> indexes = getToRemoveRelateCardIndexes(feedReply.getRelatesList(), null);
         for (int i = indexes.size() - 1; i >= 0; i--)
-            com.bapis.bilibili.app.viewunite.v1.RelatesFeedReplyEx.removeRelates(feedReply, indexes.get(i));
+            feedReply.removeRelates(indexes.get(i));
     }
 
     public static List<Integer> getToRemoveRelateIndexes(List<Relate> relates) {

@@ -249,7 +249,7 @@ public final class TextStyle extends GeneratedMessageLite<TextStyle, TextStyle.B
         GeneratedMessageLite.registerDefaultInstance(TextStyle.class, textStyle);
     }
 
-    private TextStyle() {
+    public TextStyle() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

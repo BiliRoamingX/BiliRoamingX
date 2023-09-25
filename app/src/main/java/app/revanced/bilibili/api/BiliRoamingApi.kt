@@ -44,7 +44,6 @@ object BiliRoamingApi {
     private const val BILI_MEDIA_URL = "bangumi.bilibili.com/view/web_api/media"
     private const val BILI_SECTION_URL = "api.bilibili.com/pgc/web/season/section"
     private const val BILI_CARD_URL = "https://account.bilibili.com/api/member/getCardByMid"
-    private const val BILI_PAGELIST = "api.bilibili.com/x/player/pagelist"
 
     private const val PATH_PLAYURL = "/pgc/player/api/playurl"
     private const val THAILAND_PATH_PLAYURL = "/intl/gateway/v2/ogv/playurl"
@@ -80,9 +79,7 @@ object BiliRoamingApi {
                 Area.HK to hkUrl,
                 Area.TH to thUrl,
                 Area.CN to cnUrl
-            ).filter { (k, v) ->
-                (Settings.getAccessKeyByArea(k).isNotEmpty() || k != country) && v.isNotEmpty()
-            }.let { hostList.putAll(it) }
+            ).filter { (k, v) -> k != country && v.isNotEmpty() }.let { hostList.putAll(it) }
         if (hostList.isEmpty()) return null
 
         val epIdStartIdx = queryString.indexOf("ep_id=")
@@ -121,8 +118,7 @@ object BiliRoamingApi {
         val errors = mutableMapOf<String, String>()
 
         for ((area, host) in hostList.toList().asReversed()) {
-            val accessKey = Settings.getAccessKeyByArea(area)
-                .ifEmpty { Utils.getAccessKey() }
+            val accessKey = Utils.getAccessKey()
             val extraMap = if (area == Area.TH) mapOf(
                 "area" to area.value,
                 "appkey" to "7d089525d3611b1c",
@@ -155,7 +151,9 @@ object BiliRoamingApi {
                     }
                     return if (area == Area.TH) fixThailandPlayurl(it) else it
                 }
-                errors.put(area.value, JSONObject(it).optString("message"))
+                val message = runCatchingOrNull { JSONObject(it) }?.optString("message")
+                    .orEmpty().ifEmpty { "服务器不可用" }
+                errors.put(area.value, message)
             } ?: errors.putIfAbsent(area.value, "服务器不可用")
         }
         throw CustomServerException(errors)
@@ -258,10 +256,7 @@ object BiliRoamingApi {
         if (thUrl.isNotEmpty() && (seasonJson.optInt("code") == -404 || fixThailandSeasonFlag)) {
             builder.scheme("https").encodedAuthority(thUrl + THAILAND_PATH_SEASON)
                 .appendQueryParameter("s_locale", "zh_SG")
-                .appendQueryParameter(
-                    "access_key",
-                    Settings.getAccessKeyByArea(Area.TH).ifEmpty { Utils.getAccessKey() }
-                )
+                .appendQueryParameter("access_key", Utils.getAccessKey())
                 .appendQueryParameter("mobi_app", "bstar_a")
                 .appendQueryParameter("build", "1080003")
             getContent(builder.toString())?.toJSONObject()?.also {

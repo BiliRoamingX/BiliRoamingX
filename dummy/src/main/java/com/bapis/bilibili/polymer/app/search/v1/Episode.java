@@ -1,6 +1,5 @@
 package com.bapis.bilibili.polymer.app.search.v1;
 
-import com.bapis.bilibili.polymer.app.search.v1.ReasonStyle;
 import com.google.protobuf.AbstractMessageLite;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedInputStream;
@@ -9,6 +8,7 @@ import com.google.protobuf.GeneratedMessageLite;
 import com.google.protobuf.Internal;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Parser;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -261,7 +261,7 @@ public final class Episode extends GeneratedMessageLite<Episode, Episode.Builder
         GeneratedMessageLite.registerDefaultInstance(Episode.class, episode);
     }
 
-    private Episode() {
+    public Episode() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

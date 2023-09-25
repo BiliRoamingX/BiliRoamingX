@@ -9,6 +9,38 @@ public class TextStyle extends GeneratedMessageLite<TextStyle, TextStyle.Builder
         return null;
     }
 
+    public int getFontSize() {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public void setFontSize(int i) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public FontStyle getFontStyle() {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public void setFontStyle(FontStyle fontStyle) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public String getTextDayColor() {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public void setTextDayColor(String str) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public String getTextNightColor() {
+        throw new UnsupportedOperationException("Stub");
+    }
+
+    public void setTextNightColor(String str) {
+        throw new UnsupportedOperationException("Stub");
+    }
+
     public static class Builder extends GeneratedMessageLite.Builder<TextStyle, Builder> {
         protected Builder(TextStyle defaultInstance) {
             super(defaultInstance);

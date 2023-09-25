@@ -180,7 +180,7 @@ public final class IntroductionTab extends GeneratedMessageLite<IntroductionTab,
         GeneratedMessageLite.registerDefaultInstance(IntroductionTab.class, introductionTab);
     }
 
-    private IntroductionTab() {
+    public IntroductionTab() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

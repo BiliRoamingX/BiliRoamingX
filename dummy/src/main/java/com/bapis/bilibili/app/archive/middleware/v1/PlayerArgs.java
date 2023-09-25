@@ -7,6 +7,7 @@ import com.google.protobuf.GeneratedMessageLite;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.MessageLiteOrBuilder;
 import com.google.protobuf.Parser;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -167,7 +168,7 @@ public final class PlayerArgs extends GeneratedMessageLite<PlayerArgs, PlayerArg
         GeneratedMessageLite.registerDefaultInstance(PlayerArgs.class, playerArgs);
     }
 
-    private PlayerArgs() {
+    public PlayerArgs() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

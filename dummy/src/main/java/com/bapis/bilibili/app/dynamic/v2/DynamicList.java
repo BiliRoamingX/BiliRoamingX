@@ -13,4 +13,7 @@ public class DynamicList {
     static void access$600(DynamicList list, int index) {
         throw new UnsupportedOperationException("Stub");
     }
+
+    public void removeList(int index) {
+    }
 }

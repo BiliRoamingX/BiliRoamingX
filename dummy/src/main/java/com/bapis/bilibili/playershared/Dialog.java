@@ -564,7 +564,7 @@ public final class Dialog extends GeneratedMessageLite<Dialog, Dialog.Builder> i
         GeneratedMessageLite.registerDefaultInstance(Dialog.class, dialog);
     }
 
-    private Dialog() {
+    public Dialog() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

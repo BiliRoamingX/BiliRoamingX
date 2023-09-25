@@ -229,7 +229,7 @@ public final class OgvTitle extends GeneratedMessageLite<OgvTitle, OgvTitle.Buil
         GeneratedMessageLite.registerDefaultInstance(OgvTitle.class, ogvTitle);
     }
 
-    private OgvTitle() {
+    public OgvTitle() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
