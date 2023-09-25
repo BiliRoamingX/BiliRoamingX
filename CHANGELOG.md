@@ -1,3 +1,10 @@
+# [0.118.0-dev.7](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.6...v0.118.0-dev.7) (2023-09-25)
+
+
+### Bug Fixes
+
+* Remove parameter from route ([4b0925e](https://github.com/ReVanced/revanced-integrations/commit/4b0925e33762c02e95ef9b1aadcae1038af71a50))
+
 # [0.118.0-dev.6](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.5...v0.118.0-dev.6) (2023-09-25)
 
 
