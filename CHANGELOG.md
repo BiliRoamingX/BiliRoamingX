@@ -1,3 +1,10 @@
+# [0.118.0-dev.11](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.10...v0.118.0-dev.11) (2023-09-26)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** fix toast shown if opening paid or age restricted video ([#482](https://github.com/ReVanced/revanced-integrations/issues/482)) ([e72b65b](https://github.com/ReVanced/revanced-integrations/commit/e72b65b599353715a6467463226abc603bc850f7))
+
 # [0.118.0-dev.10](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.9...v0.118.0-dev.10) (2023-09-26)
 
 
