@@ -219,8 +219,15 @@ public class JSONPatch {
             }
             sectionListV2.removeIf(section -> !TextUtils.isEmpty(section.title) && !shouldShowing(items, section.title));
         }
-        if (Settings.CUSTOM_THEME.getBoolean())
-            mine.garbEntrance = null;
+        if (Settings.CUSTOM_THEME.getBoolean()) {
+            if (Versions.ge7_48_0()) {
+                var garbEntrance = new AccountMine.GarbEntrance();
+                garbEntrance.uri = "activity://navigation/theme/";
+                mine.garbEntrance = garbEntrance;
+            } else {
+                mine.garbEntrance = null;
+            }
+        }
     }
 
     private static void customizeHomeTab(MainResourceManager.TabData data) {
