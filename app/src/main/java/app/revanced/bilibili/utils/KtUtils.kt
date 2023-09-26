@@ -277,8 +277,8 @@ fun setClipboardContent(label: String = "", content: CharSequence) {
     clipboardManager.setPrimaryClip(clipData)
 }
 
-fun newAny(typeUrl: String, message: GeneratedMessageLite<*, *>) =
-    com.google.protobuf.Any::class.java.new().apply {
-        callMethod("setTypeUrl", typeUrl)
-        callMethod("setValue", message.toByteString())
-    }
+fun newAny(typeUrl: String, message: GeneratedMessageLite<*, *>): com.google.protobuf.Any =
+    com.google.protobuf.Any.newBuilder()
+        .setTypeUrl(typeUrl)
+        .setValue(message.toByteString())
+        .build()
