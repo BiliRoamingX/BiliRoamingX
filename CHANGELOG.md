@@ -1,3 +1,10 @@
+# [0.118.0-dev.10](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.9...v0.118.0-dev.10) (2023-09-26)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** fix storyboard fetched out of order ([#481](https://github.com/ReVanced/revanced-integrations/issues/481)) ([8398774](https://github.com/ReVanced/revanced-integrations/commit/83987747e67541cd44221ede8c4020baba36c7b8))
+
 # [0.118.0-dev.9](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.8...v0.118.0-dev.9) (2023-09-25)
 
 
