@@ -1,3 +1,10 @@
+# [0.118.0-dev.12](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.11...v0.118.0-dev.12) (2023-09-26)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** Show seekbar thumbnail for age restricted and paid videos ([01019b0](https://github.com/ReVanced/revanced-integrations/commit/01019b09c1c106ed814b994dd8af558a18873c1d))
+
 # [0.118.0-dev.11](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.10...v0.118.0-dev.11) (2023-09-26)
 
 
