@@ -7,9 +7,11 @@ import androidx.annotation.Nullable;
 
 import com.bapis.bilibili.app.dynamic.v1.DynRedReply;
 import com.bapis.bilibili.app.dynamic.v2.DynAllReply;
+import com.bapis.bilibili.app.dynamic.v2.DynAllReq;
 import com.bapis.bilibili.app.dynamic.v2.DynTabReply;
 import com.bapis.bilibili.app.dynamic.v2.DynTabReq;
 import com.bapis.bilibili.app.dynamic.v2.DynVideoReply;
+import com.bapis.bilibili.app.dynamic.v2.DynVideoReq;
 import com.bapis.bilibili.app.interfaces.v1.DefaultWordsReq;
 import com.bapis.bilibili.app.listener.v1.PlayHistoryReq;
 import com.bapis.bilibili.app.listener.v1.PlayHistoryResp;
@@ -357,6 +359,27 @@ public class MossPatch {
                     return true;
                 }
                 return false;
+            });
+        } else if (req instanceof DynVideoReq) {
+            return MossResponseHandlerProxy.<DynVideoReply>get(handler, dynVideoReply -> {
+                if (dynVideoReply != null) {
+                    if (Settings.DYNAMIC_RM_UP_OF_VIDEO.getBoolean())
+                        dynVideoReply.clearVideoUpList();
+                    if (Settings.DYNAMIC_FILTER_APPLY_TO_VIDEO.getBoolean())
+                        DynamicHook.filterDynamicForVideo(dynVideoReply.getDynamicList());
+                }
+                return dynVideoReply;
+            });
+        } else if (req instanceof DynAllReq) {
+            return MossResponseHandlerProxy.<DynAllReply>get(handler, dynAllReply -> {
+                if (dynAllReply != null) {
+                    if (Settings.DYNAMIC_RM_TOPIC_OF_ALL.getBoolean())
+                        dynAllReply.clearTopicList();
+                    if (Settings.DYNAMIC_RM_UP_OF_ALL.getBoolean())
+                        dynAllReply.clearUpList();
+                    DynamicHook.filterDynamicForAll(dynAllReply.getDynamicList());
+                }
+                return dynAllReply;
             });
         }
         if (Settings.DEBUG.getBoolean())
