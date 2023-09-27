@@ -1,3 +1,10 @@
+# [0.118.0-dev.13](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.12...v0.118.0-dev.13) (2023-09-27)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** fix occasionally frozen video playback ([#486](https://github.com/ReVanced/revanced-integrations/issues/486)) ([b0b6ff6](https://github.com/ReVanced/revanced-integrations/commit/b0b6ff6a82820d4578c5cfc5f69ae7aaaac49c7f))
+
 # [0.118.0-dev.12](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.11...v0.118.0-dev.12) (2023-09-26)
 
 
