@@ -1,3 +1,10 @@
+# [0.118.0-dev.16](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.15...v0.118.0-dev.16) (2023-09-28)
+
+
+### Features
+
+* **YouTube:** Add `Bypass URL redirects` patch ([9109653](https://github.com/ReVanced/revanced-integrations/commit/91096532eedf396920d69932638f667cbf850cbe))
+
 # [0.118.0-dev.15](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.14...v0.118.0-dev.15) (2023-09-27)
 
 
