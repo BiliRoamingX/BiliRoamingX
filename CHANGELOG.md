@@ -1,3 +1,11 @@
+# [0.118.0-dev.17](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.16...v0.118.0-dev.17) (2023-09-28)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** Fix toast shown for live streams ([#489](https://github.com/ReVanced/revanced-integrations/issues/489)) ([27f49df](https://github.com/ReVanced/revanced-integrations/commit/27f49dfd1e8fbfd3e28270da91ad437df8a54761))
+* **YouTube - Video Id:** Fix video id not showing the currently playing video ([#484](https://github.com/ReVanced/revanced-integrations/issues/484)) ([da923a3](https://github.com/ReVanced/revanced-integrations/commit/da923a38a06baf8c30d38211e8354be4edb0ad51))
+
 # [0.118.0-dev.16](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.15...v0.118.0-dev.16) (2023-09-28)
 
 
