@@ -496,6 +496,7 @@ object BangumiSeasonHook {
                 continue
             if (Settings.getServerByArea(area).isNotEmpty()
                 && Settings.getExtraSearchByType(typeStr)
+                && reply.navList.none { it.type == searchType.key }
             ) {
                 val nav = Nav().apply {
                     name = searchType.value.text
