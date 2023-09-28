@@ -1,3 +1,10 @@
+# [0.118.0-dev.18](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.17...v0.118.0-dev.18) (2023-09-28)
+
+
+### Bug Fixes
+
+* **YouTube - ReturnYouTubeDislike:** Revert support for 18.37.36 ([#488](https://github.com/ReVanced/revanced-integrations/issues/488)) ([165b061](https://github.com/ReVanced/revanced-integrations/commit/165b061fa9c5fd48b0dbb9540fd6ea6a9ffaf312))
+
 # [0.118.0-dev.17](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.16...v0.118.0-dev.17) (2023-09-28)
 
 
