@@ -195,6 +195,8 @@ public class MossPatch {
                 viewReply.getReqUser().clearElecPlusBtn();
             if (Settings.UNLOCK_PLAY_LIMIT.getBoolean())
                 viewReply.getConfig().setShowListenButton(true);
+            if (Settings.BLOCK_LIVE_ORDER.getBoolean())
+                viewReply.clearLiveOrderInfo();
             if (Settings.BLOCK_COMMENT_GUIDE.getBoolean()) {
                 viewReply.getLikeCustom().clearLikeComment();
                 viewReply.getReplyPreface().clearBadgeType();

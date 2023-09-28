@@ -110,6 +110,9 @@ object ViewUniteReplyHook {
                     } else if (module.hasCovenanter()) {
                         if (Settings.BLOCK_FAN_GUIDE.boolean)
                             toRemoveIndexes.add(index)
+                    } else if (module.hasLiveOrder()) {
+                        if (Settings.BLOCK_LIVE_ORDER.boolean)
+                            toRemoveIndexes.add(index)
                     }
                 }
                 toRemoveIndexes.asReversed().forEach {
