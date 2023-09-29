@@ -17,6 +17,8 @@ import androidx.annotation.ColorInt
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.google.protobuf.GeneratedMessageLite
+import com.google.protobuf.GeneratedMessageLiteEx
+import com.google.protobuf.UnknownFieldSetLite
 import org.json.JSONObject
 import java.io.File
 import java.io.InputStream
@@ -282,3 +284,7 @@ fun newAny(typeUrl: String, message: GeneratedMessageLite<*, *>): com.google.pro
         .setTypeUrl(typeUrl)
         .setValue(message.toByteString())
         .build()
+
+inline fun GeneratedMessageLite<*, *>.setUnknownFields(unknownFields: UnknownFieldSetLite) {
+    GeneratedMessageLiteEx.setUnknownFields(this, unknownFields)
+}

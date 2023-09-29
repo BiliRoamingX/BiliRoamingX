@@ -13,7 +13,7 @@ import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import com.bapis.bilibili.pagination.PaginationReply
 import com.bapis.bilibili.polymer.app.search.v1.*
-import com.bilibili.lib.moss.api.MossResponseHandler
+import com.bilibili.lib.moss.api.BusinessException
 import com.bilibili.search.ogv.OgvSearchResultFragment
 import com.bilibili.search.result.bangumi.ogv.BangumiSearchResultFragment
 import com.bilibili.search.result.pages.BiliMainSearchResultPage.PageTypes
@@ -257,24 +257,19 @@ object BangumiSeasonHook {
         BiliMainSearchResultPage.PageTypes.`$VALUES` = newPageTypes
     }
 
+    fun extraSearchHandleable(request: SearchByTypeRequest): Boolean {
+        return searchTypes.containsKey(request.type)
+    }
+
     @JvmStatic
     fun handleExtraSearch(
         request: SearchByTypeRequest,
-        handler: MossResponseHandler<Any>
-    ): Boolean {
-        val searchType = searchTypes[request.type] ?: return false
+    ): SearchByTypeResponse {
+        val searchType = searchTypes[request.type]!!
         val area = searchType.area
         val type = searchType.type
-        Utils.async {
-            val result = retrieveExtraSearch(request, area, type)
-            if (result != null) {
-                handler.onNext(result)
-                handler.onCompleted()
-            } else {
-                handler.onError(null)
-            }
-        }
-        return true
+        return retrieveExtraSearch(request, area, type)
+            ?: throw BusinessException(-1, "搜索失败，请重试", null, null, null)
     }
 
     private fun retrieveExtraSearch(

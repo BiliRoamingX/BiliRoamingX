@@ -1,20 +1,43 @@
-package app.revanced.bilibili.patches.protobuf
+package app.revanced.bilibili.patches.protobuf.hooks
 
 import android.net.Uri
 import app.revanced.bilibili.api.BiliRoamingApi.getThailandSubtitles
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.subtitlesCache
+import app.revanced.bilibili.patches.protobuf.MossHook
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import com.bapis.bilibili.community.service.dm.v1.DmViewReply
 import com.bapis.bilibili.community.service.dm.v1.DmViewReq
 import com.bapis.bilibili.community.service.dm.v1.SubtitleItem
+import com.bilibili.lib.moss.api.MossException
+import com.bilibili.lib.moss.api.NetworkException
+import com.google.protobuf.GeneratedMessageLite
+import com.google.protobuf.UnknownFieldSetLite
 import org.json.JSONArray
 import org.json.JSONObject
 
-object SubtitleReplyHook {
-    @JvmStatic
-    fun addSubtitles(dmViewReq: DmViewReq, dmViewReply: DmViewReply?): DmViewReply {
+object DmView : MossHook<DmViewReq, DmViewReply>() {
+    override fun shouldHook(req: GeneratedMessageLite<*, *>): Boolean {
+        return req is DmViewReq
+    }
+
+    override fun hookAfter(
+        req: DmViewReq,
+        reply: DmViewReply?,
+        error: MossException?
+    ): DmViewReply? {
+        if (Settings.REMOVE_CMD_DMS.boolean && reply != null) {
+            reply.clearActivityMeta()
+            runCatchingOrNull { reply.clearCommand() }
+            reply.setUnknownFields(UnknownFieldSetLite.getDefaultInstance())
+        }
+        if (error !is NetworkException)
+            return addSubtitles(req, reply)
+        return super.hookAfter(req, reply, error)
+    }
+
+    private fun addSubtitles(dmViewReq: DmViewReq, dmViewReply: DmViewReply?): DmViewReply {
         val result = dmViewReply ?: DmViewReply()
         val extraSubtitles = ArrayList<SubtitleItem>()
         if (Settings.UNLOCK_AREA_LIMIT.boolean && Settings.TH_SERVER.string.isNotEmpty()) {

@@ -9,6 +9,10 @@ public class DynRedReply extends GeneratedMessageLite {
     static void access$700(DynRedReply reply, String defaultTab) {
     }
 
+    public String getDefaultTab() {
+        return "";
+    }
+
     public void setDefaultTab(String defaultTab) {
     }
 
