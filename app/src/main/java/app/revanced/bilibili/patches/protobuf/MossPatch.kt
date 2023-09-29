@@ -34,6 +34,7 @@ object MossPatch {
         SearchByType,
         SearchDefaultWords,
         View,
+        ViewLike,
         ViewProgress,
         ViewProgressUnite,
         ViewRelatesFeed,
