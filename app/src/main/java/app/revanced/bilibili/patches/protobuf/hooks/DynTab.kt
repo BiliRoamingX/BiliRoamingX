@@ -1,6 +1,5 @@
 package app.revanced.bilibili.patches.protobuf.hooks
 
-import app.revanced.bilibili.patches.protobuf.DynamicHook
 import app.revanced.bilibili.patches.protobuf.MossHook
 import app.revanced.bilibili.settings.Settings
 import com.bapis.bilibili.app.dynamic.v2.DynTabReply
@@ -18,8 +17,24 @@ object DynTab : MossHook<DynTabReq, DynTabReply>() {
         reply: DynTabReply?,
         error: MossException?
     ): DynTabReply? {
-        if (Settings.DYNAMIC_PURIFY_CITY.boolean || Settings.DYNAMIC_PURIFY_CAMPUS.boolean && reply != null)
-            DynamicHook.modifyDynTabs(reply)
+        reply?.let { modifyTabs(it) }
         return super.hookAfter(req, reply, error)
+    }
+
+    private fun modifyTabs(reply: DynTabReply) {
+        if (Settings.DYNAMIC_PURIFY_CITY.boolean || Settings.DYNAMIC_PURIFY_CAMPUS.boolean) {
+            val idxList = mutableListOf<Int>()
+            reply.dynTabList.withIndex().forEach { (index, tab) ->
+                if (Settings.DYNAMIC_PURIFY_CITY.boolean && tab.cityId != 0L
+                    || Settings.DYNAMIC_PURIFY_CAMPUS.boolean && tab.anchor == "campus"
+                ) idxList.add(index)
+            }
+            idxList.asReversed().forEach { reply.removeDynTab(it) }
+        }
+        if (Settings.DYNAMIC_PREFER_VIDEO_TAB.boolean) {
+            val screenTabList = reply.screenTabList
+            if (screenTabList.any { it.name == "video" })
+                screenTabList.forEach { it.defaultTab = it.name == "video" }
+        }
     }
 }

@@ -110,7 +110,7 @@ object MossPatch {
                         false
                     }
                 })
-            return if (before == HookFlags.STOP_EXECUTION) {
+            return if (before === HookFlags.STOP_EXECUTION) {
                 finalHandler.onNext(null)
                 finalHandler.onCompleted()
                 HookFlags.STOP_EXECUTION
