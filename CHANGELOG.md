@@ -1,3 +1,12 @@
+# [0.118.0-dev.19](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.18...v0.118.0-dev.19) (2023-10-01)
+
+
+### Features
+
+* **YouTube - Hide layout components:** Hide "Join" button ([e225468](https://github.com/ReVanced/revanced-integrations/commit/e2254681cd77481376e4c3f8c556db510fdfce6c))
+* **YouTube - Hide layout components:** Hide "Notify me" button ([b87d806](https://github.com/ReVanced/revanced-integrations/commit/b87d8066597a2c989480de47561007844964a0e4))
+* **YouTube - Hide layout components:** Hide timed reactions ([b472aee](https://github.com/ReVanced/revanced-integrations/commit/b472aeeed7904f6b6d537dfbddda1a97c7ddcd5e))
+
 # [0.118.0-dev.18](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.17...v0.118.0-dev.18) (2023-09-28)
 
 
