@@ -1,3 +1,15 @@
+# [0.118.0-dev.22](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.21...v0.118.0-dev.22) (2023-10-02)
+
+
+### Bug Fixes
+
+* Do not always hide the component ([3d0fc1d](https://github.com/ReVanced/revanced-integrations/commit/3d0fc1d610cdf50bb7cc4687d899e0acbf3fb83e))
+
+
+### Features
+
+* **YouTube - Hide layout components:** Disable hiding search result shelf header by default ([b280de3](https://github.com/ReVanced/revanced-integrations/commit/b280de31957631180f07057cc7e466bd26e2f7fb))
+
 # [0.118.0-dev.21](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.20...v0.118.0-dev.21) (2023-10-02)
 
 
