@@ -1,3 +1,10 @@
+# [0.118.0-dev.23](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.22...v0.118.0-dev.23) (2023-10-02)
+
+
+### Bug Fixes
+
+* **YouTube - SponsorBlock:** Adjust import/export UI text ([#491](https://github.com/ReVanced/revanced-integrations/issues/491)) ([4215be4](https://github.com/ReVanced/revanced-integrations/commit/4215be4250d195ecf89b041c96834be56c164f34))
+
 # [0.118.0-dev.22](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.21...v0.118.0-dev.22) (2023-10-02)
 
 
