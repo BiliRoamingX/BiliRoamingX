@@ -1,3 +1,10 @@
+# [0.118.0-dev.21](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.20...v0.118.0-dev.21) (2023-10-02)
+
+
+### Features
+
+* **YouTube - Hide layout components:** Hide search result shelf header ([93a3045](https://github.com/ReVanced/revanced-integrations/commit/93a30453d9693e015b1f58a12f85cf355770a4ca))
+
 # [0.118.0-dev.20](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.19...v0.118.0-dev.20) (2023-10-01)
 
 
