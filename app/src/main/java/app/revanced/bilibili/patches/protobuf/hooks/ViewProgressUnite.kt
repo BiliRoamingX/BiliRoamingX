@@ -17,8 +17,10 @@ object ViewProgressUnite : MossHook<ViewProgressReq, ViewProgressReply>() {
         reply: ViewProgressReply?,
         error: MossException?
     ): ViewProgressReply? {
-        if (Settings.REMOVE_CMD_DMS.boolean)
+        if (Settings.REMOVE_CMD_DMS.boolean) {
+            reply?.clearDm()
             reply?.videoGuide?.clearContractCard()
+        }
         return super.hookAfter(req, reply, error)
     }
 }

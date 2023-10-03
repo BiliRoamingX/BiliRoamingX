@@ -8,13 +8,10 @@ public class ViewProgressReply extends GeneratedMessageLite {
         return null;
     }
 
-    /**
-     * clearDm
-     */
-    static void access$1200(ViewProgressReply reply) {
-    }
-
     public VideoGuide getVideoGuide() {
         throw new UnsupportedOperationException("Stub");
+    }
+
+    public void clearDm() {
     }
 }
