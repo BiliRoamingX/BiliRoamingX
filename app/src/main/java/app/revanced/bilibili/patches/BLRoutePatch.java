@@ -27,7 +27,7 @@ public class BLRoutePatch {
                 if (!TextUtils.isEmpty(newQuery)) {
                     if (Settings.REPLACE_STORY_VIDEO.getBoolean())
                         newQuery = newQuery.replace(STORY_ROUTER_QUERY, "").replace(STORY_TYPE_QUERY, "");
-                    boolean needRemovePayload = VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.fullScreenQuality() != 0;
+                    boolean needRemovePayload = VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.fullScreenQuality() != 0 || Settings.DEFAULT_PLAYBACK_SPEED.getFloat() != 0f;
                     if (needRemovePayload)
                         newQuery = playerPreloadRegex.matcher(newQuery).replaceAll("");
                 }
@@ -36,7 +36,7 @@ public class BLRoutePatch {
             }
         } else if ("https".equals(scheme)) {
             String url;
-            boolean needRemovePayload = VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.fullScreenQuality() != 0;
+            boolean needRemovePayload = VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.fullScreenQuality() != 0 || Settings.DEFAULT_PLAYBACK_SPEED.getFloat() != 0f;
             if (needRemovePayload && (url = uri.toString()).startsWith("https://www.bilibili.com/bangumi/play"))
                 return Uri.parse(playerPreloadRegex.matcher(url).replaceAll(""));
         }
