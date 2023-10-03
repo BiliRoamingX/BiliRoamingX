@@ -1,3 +1,10 @@
+# [0.118.0-dev.24](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.23...v0.118.0-dev.24) (2023-10-03)
+
+
+### Bug Fixes
+
+* **YouTube - Hide layout components:** Do not hide chapters in feed unexpectedly ([bedb02e](https://github.com/ReVanced/revanced-integrations/commit/bedb02e4f6122f3dcdc106648648eec4d6a3cbe5))
+
 # [0.118.0-dev.23](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.22...v0.118.0-dev.23) (2023-10-02)
 
 
