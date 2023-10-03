@@ -2,8 +2,10 @@ package app.revanced.bilibili.patches
 
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.LogHelper
+import app.revanced.bilibili.utils.Toasts
 import app.revanced.bilibili.utils.runCatchingOrNull
 import org.json.JSONObject
 import java.net.HttpURLConnection
@@ -19,11 +21,15 @@ object SharePatch {
     }
 
     @JvmStatic
-    fun onShareTo(platform: String, params: Bundle) {
+    fun onShareTo(platform: String, params: Bundle): Boolean {
         LogHelper.debug {
             "shareTo, platform: $platform, params: ${
                 JSONObject(params.keySet().associateWith { params.get(it) })
             }"
+        }
+        if (platform.startsWith("WEIXIN")) {
+            Toasts.showWithId("biliroaming_can_not_share_to_wx", Toast.LENGTH_LONG)
+            return true
         }
         if (Settings.PURIFY_SHARE.boolean) {
             val targetUrl = params.getString("params_target_url").orEmpty()
@@ -41,6 +47,7 @@ object SharePatch {
             if (params.getString("params_type") == "type_min_program")
                 params.putString("params_type", "type_web")
         }
+        return false
     }
 
     private fun getRealUrl(url: String) = runCatchingOrNull {
