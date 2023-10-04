@@ -17,6 +17,7 @@ import com.bilibili.bililive.videoliveplayer.net.beans.gateway.userinfo.Function
 import com.bilibili.bililive.videoliveplayer.net.beans.giftpendant.LiveGiftPendantInfo;
 import com.bilibili.lib.homepage.mine.MenuGroup;
 import com.bilibili.okretro.GeneralResponse;
+import com.bilibili.search.api.DefaultKeyword;
 import com.bilibili.search.api.SearchRank;
 import com.bilibili.search.api.SearchReferral;
 import com.bilibili.video.story.StoryDetail;
@@ -49,24 +50,15 @@ public class JSONPatch {
 
     public static Object parseObjectHook(Object obj) {
         Object data = obj instanceof GeneralResponse ? ((GeneralResponse<?>) obj).data : obj;
-        if (!Utils.isHd() && data instanceof SplashData) {
+        if (data instanceof SplashData) {
             if (Settings.PURIFY_SPLASH.getBoolean()) {
                 SplashData splashData = (SplashData) data;
                 splashData.splashList.clear();
                 splashData.strategyList.clear();
             }
-        } else if (!Utils.isHd() && data instanceof SplashShowData) {
+        } else if (data instanceof SplashShowData) {
             if (Settings.PURIFY_SPLASH.getBoolean())
                 ((SplashShowData) data).strategyList.clear();
-        } else if (Utils.isHd() && data instanceof tv.danmaku.bili.ui.splash.SplashData) {
-            if (Settings.PURIFY_SPLASH.getBoolean()) {
-                tv.danmaku.bili.ui.splash.SplashData splashData = (tv.danmaku.bili.ui.splash.SplashData) data;
-                splashData.splashList.clear();
-                splashData.strategyList.clear();
-            }
-        } else if (Utils.isHd() && data instanceof tv.danmaku.bili.ui.splash.SplashShowData) {
-            if (Settings.PURIFY_SPLASH.getBoolean())
-                ((tv.danmaku.bili.ui.splash.SplashShowData) data).strategyList.clear();
         } else if (data instanceof EventEntranceModel) {
             if (Settings.PURIFY_GAME.getBoolean()) {
                 // no problem, see com.bilibili.okretro.BiliApiDataCallback
@@ -130,7 +122,7 @@ public class JSONPatch {
             unlockOgvResponseV2((OgvApiResponseV2) data);
         } else if (data instanceof StoryFeedResponse) {
             filterStory((StoryFeedResponse) data);
-        } else if (data instanceof SearchReferral || (Versions.ge7_39_0() && data instanceof com.bilibili.search2.api.SearchReferral)) {
+        } else if (data instanceof SearchReferral || data instanceof DefaultKeyword || (Versions.ge7_39_0() && data instanceof com.bilibili.search2.api.SearchReferral)) {
             if (Settings.PURIFY_SEARCH.getBoolean())
                 return null;
         }

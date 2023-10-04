@@ -22,6 +22,7 @@ import com.google.protobuf.UnknownFieldSetLite
 import org.json.JSONObject
 import java.io.File
 import java.io.InputStream
+import java.io.StringWriter
 import java.lang.reflect.Field
 import java.lang.reflect.Proxy
 import java.net.URL
@@ -102,7 +103,17 @@ inline fun SharedPreferences.edit(
 ) = edit().apply(action).run { if (commit) commit() else apply() }
 
 fun getStreamContent(input: InputStream) = try {
-    input.bufferedReader().use { it.readText() }
+    input.bufferedReader().use {
+        // it.readText()
+        val buffer = StringWriter()
+        val charBuffer = CharArray(DEFAULT_BUFFER_SIZE)
+        var chars = it.read(charBuffer)
+        while (chars >= 0) {
+            buffer.write(charBuffer, 0, chars)
+            chars = it.read(charBuffer)
+        }
+        buffer.toString()
+    }
 } catch (e: Throwable) {
     LogHelper.error({ "get stream content failed" }, e)
     null
