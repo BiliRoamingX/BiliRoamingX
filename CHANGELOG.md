@@ -1,3 +1,202 @@
+# [0.118.0-dev.24](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.23...v0.118.0-dev.24) (2023-10-03)
+
+
+### Bug Fixes
+
+* **YouTube - Hide layout components:** Do not hide chapters in feed unexpectedly ([bedb02e](https://github.com/ReVanced/revanced-integrations/commit/bedb02e4f6122f3dcdc106648648eec4d6a3cbe5))
+
+# [0.118.0-dev.23](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.22...v0.118.0-dev.23) (2023-10-02)
+
+
+### Bug Fixes
+
+* **YouTube - SponsorBlock:** Adjust import/export UI text ([#491](https://github.com/ReVanced/revanced-integrations/issues/491)) ([4215be4](https://github.com/ReVanced/revanced-integrations/commit/4215be4250d195ecf89b041c96834be56c164f34))
+
+# [0.118.0-dev.22](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.21...v0.118.0-dev.22) (2023-10-02)
+
+
+### Bug Fixes
+
+* Do not always hide the component ([3d0fc1d](https://github.com/ReVanced/revanced-integrations/commit/3d0fc1d610cdf50bb7cc4687d899e0acbf3fb83e))
+
+
+### Features
+
+* **YouTube - Hide layout components:** Disable hiding search result shelf header by default ([b280de3](https://github.com/ReVanced/revanced-integrations/commit/b280de31957631180f07057cc7e466bd26e2f7fb))
+
+# [0.118.0-dev.21](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.20...v0.118.0-dev.21) (2023-10-02)
+
+
+### Features
+
+* **YouTube - Hide layout components:** Hide search result shelf header ([93a3045](https://github.com/ReVanced/revanced-integrations/commit/93a30453d9693e015b1f58a12f85cf355770a4ca))
+
+# [0.118.0-dev.20](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.19...v0.118.0-dev.20) (2023-10-01)
+
+
+### Bug Fixes
+
+* **YouTube - Hide shorts components:** Hide subscribe button in paused state ([9685070](https://github.com/ReVanced/revanced-integrations/commit/9685070eda5b448eb33324b4bfabd4c7eae42f9f))
+
+# [0.118.0-dev.19](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.18...v0.118.0-dev.19) (2023-10-01)
+
+
+### Features
+
+* **YouTube - Hide layout components:** Hide "Join" button ([e225468](https://github.com/ReVanced/revanced-integrations/commit/e2254681cd77481376e4c3f8c556db510fdfce6c))
+* **YouTube - Hide layout components:** Hide "Notify me" button ([b87d806](https://github.com/ReVanced/revanced-integrations/commit/b87d8066597a2c989480de47561007844964a0e4))
+* **YouTube - Hide layout components:** Hide timed reactions ([b472aee](https://github.com/ReVanced/revanced-integrations/commit/b472aeeed7904f6b6d537dfbddda1a97c7ddcd5e))
+
+# [0.118.0-dev.18](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.17...v0.118.0-dev.18) (2023-09-28)
+
+
+### Bug Fixes
+
+* **YouTube - ReturnYouTubeDislike:** Revert support for 18.37.36 ([#488](https://github.com/ReVanced/revanced-integrations/issues/488)) ([165b061](https://github.com/ReVanced/revanced-integrations/commit/165b061fa9c5fd48b0dbb9540fd6ea6a9ffaf312))
+
+# [0.118.0-dev.17](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.16...v0.118.0-dev.17) (2023-09-28)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** Fix toast shown for live streams ([#489](https://github.com/ReVanced/revanced-integrations/issues/489)) ([27f49df](https://github.com/ReVanced/revanced-integrations/commit/27f49dfd1e8fbfd3e28270da91ad437df8a54761))
+* **YouTube - Video Id:** Fix video id not showing the currently playing video ([#484](https://github.com/ReVanced/revanced-integrations/issues/484)) ([da923a3](https://github.com/ReVanced/revanced-integrations/commit/da923a38a06baf8c30d38211e8354be4edb0ad51))
+
+# [0.118.0-dev.16](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.15...v0.118.0-dev.16) (2023-09-28)
+
+
+### Features
+
+* **YouTube:** Add `Bypass URL redirects` patch ([9109653](https://github.com/ReVanced/revanced-integrations/commit/91096532eedf396920d69932638f667cbf850cbe))
+
+# [0.118.0-dev.15](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.14...v0.118.0-dev.15) (2023-09-27)
+
+
+### Features
+
+* **YouTube:** Bump compatibility to `18.37.36` ([#483](https://github.com/ReVanced/revanced-integrations/issues/483)) ([5dadb0d](https://github.com/ReVanced/revanced-integrations/commit/5dadb0d523f2b1eb4216d43770af37a156c8a477))
+
+# [0.118.0-dev.14](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.13...v0.118.0-dev.14) (2023-09-27)
+
+
+### Bug Fixes
+
+* **YouTube - Hide info cards:** Fix info cards not hiding for some users ([#487](https://github.com/ReVanced/revanced-integrations/issues/487)) ([00c4c40](https://github.com/ReVanced/revanced-integrations/commit/00c4c4025bc27495e490fdb231ac803881c9887f))
+
+# [0.118.0-dev.13](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.12...v0.118.0-dev.13) (2023-09-27)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** fix occasionally frozen video playback ([#486](https://github.com/ReVanced/revanced-integrations/issues/486)) ([b0b6ff6](https://github.com/ReVanced/revanced-integrations/commit/b0b6ff6a82820d4578c5cfc5f69ae7aaaac49c7f))
+
+# [0.118.0-dev.12](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.11...v0.118.0-dev.12) (2023-09-26)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** Show seekbar thumbnail for age restricted and paid videos ([01019b0](https://github.com/ReVanced/revanced-integrations/commit/01019b09c1c106ed814b994dd8af558a18873c1d))
+
+# [0.118.0-dev.11](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.10...v0.118.0-dev.11) (2023-09-26)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** fix toast shown if opening paid or age restricted video ([#482](https://github.com/ReVanced/revanced-integrations/issues/482)) ([e72b65b](https://github.com/ReVanced/revanced-integrations/commit/e72b65b599353715a6467463226abc603bc850f7))
+
+# [0.118.0-dev.10](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.9...v0.118.0-dev.10) (2023-09-26)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** fix storyboard fetched out of order ([#481](https://github.com/ReVanced/revanced-integrations/issues/481)) ([8398774](https://github.com/ReVanced/revanced-integrations/commit/83987747e67541cd44221ede8c4020baba36c7b8))
+
+# [0.118.0-dev.9](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.8...v0.118.0-dev.9) (2023-09-25)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** Removed unused code ([#480](https://github.com/ReVanced/revanced-integrations/issues/480)) ([e6903bf](https://github.com/ReVanced/revanced-integrations/commit/e6903bff95b485d21773537bbcc162411b616618))
+
+# [0.118.0-dev.8](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.7...v0.118.0-dev.8) (2023-09-25)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** Display seekbar thumbnails in high quality ([f71c1a0](https://github.com/ReVanced/revanced-integrations/commit/f71c1a0c156b2320e06dd98b3e5b276560d438aa))
+
+# [0.118.0-dev.7](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.6...v0.118.0-dev.7) (2023-09-25)
+
+
+### Bug Fixes
+
+* Remove parameter from route ([4b0925e](https://github.com/ReVanced/revanced-integrations/commit/4b0925e33762c02e95ef9b1aadcae1038af71a50))
+
+# [0.118.0-dev.6](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.5...v0.118.0-dev.6) (2023-09-25)
+
+
+### Performance Improvements
+
+* Only request required fields ([d20b768](https://github.com/ReVanced/revanced-integrations/commit/d20b768bc23d167d9f0d2c651c75b3f92944e731))
+* Remove unnecessary api key parameter ([ba5e7d8](https://github.com/ReVanced/revanced-integrations/commit/ba5e7d870ee88ad45c233d914e1e2795de920cb2))
+
+# [0.118.0-dev.5](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.4...v0.118.0-dev.5) (2023-09-25)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** Restore clipping videos functionality ([2cd1738](https://github.com/ReVanced/revanced-integrations/commit/2cd1738d2494add13c48b64ccc9aad2432b2d8e3))
+* **YouTube - Client spoof:** Restore seekbar thumbnails ([978f630](https://github.com/ReVanced/revanced-integrations/commit/978f630c0267ec2b0d9bb9b5b0b3cdc9abef65ec))
+
+# [0.118.0-dev.4](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.3...v0.118.0-dev.4) (2023-09-23)
+
+
+### Bug Fixes
+
+* **YouTube - Client spoof:** Do not record feed videos to history by default ([#478](https://github.com/ReVanced/revanced-integrations/issues/478)) ([ef1cca0](https://github.com/ReVanced/revanced-integrations/commit/ef1cca02c165d9c24e64b43fae375ae57bf90a52))
+
+# [0.118.0-dev.3](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.2...v0.118.0-dev.3) (2023-09-19)
+
+
+### Bug Fixes
+
+* **YouTube:** fix old quality and custom speed not working on tablets ([#477](https://github.com/ReVanced/revanced-integrations/issues/477)) ([2352fa5](https://github.com/ReVanced/revanced-integrations/commit/2352fa542658035c5f4400fb5892217887710e4d))
+
+# [0.118.0-dev.2](https://github.com/ReVanced/revanced-integrations/compare/v0.118.0-dev.1...v0.118.0-dev.2) (2023-09-14)
+
+
+### Features
+
+* **Twitch - Block embedded ads:** Switch from `ttv.lol` to `luminous.dev` ([2c34180](https://github.com/ReVanced/revanced-integrations/commit/2c3418041cf19ae4c1c7b67eda8398578384b753))
+
+# [0.118.0-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.117.2-dev.3...v0.118.0-dev.1) (2023-09-14)
+
+
+### Features
+
+* **TU Dortmund:** Add `Show on lockscreen` patch ([#472](https://github.com/ReVanced/revanced-integrations/issues/472)) ([526d66f](https://github.com/ReVanced/revanced-integrations/commit/526d66f6a91e0ed907db609a4adaa97f3239898b))
+
+## [0.117.2-dev.3](https://github.com/ReVanced/revanced-integrations/compare/v0.117.2-dev.2...v0.117.2-dev.3) (2023-09-09)
+
+
+### Bug Fixes
+
+* **YouTube - ReturnYouTubeDislike:** Add debug logging to litho text ([#476](https://github.com/ReVanced/revanced-integrations/issues/476)) ([e3b8e8b](https://github.com/ReVanced/revanced-integrations/commit/e3b8e8be41796d0300c8421e28e5b8cf43ffb25e))
+
+## [0.117.2-dev.2](https://github.com/ReVanced/revanced-integrations/compare/v0.117.2-dev.1...v0.117.2-dev.2) (2023-09-07)
+
+
+### Bug Fixes
+
+* **YouTube - Custom filter:** Use new lines between components instead of commas ([#475](https://github.com/ReVanced/revanced-integrations/issues/475)) ([17ed396](https://github.com/ReVanced/revanced-integrations/commit/17ed39673954a5b571bc1654be20afc235682ca4))
+
+## [0.117.2-dev.1](https://github.com/ReVanced/revanced-integrations/compare/v0.117.1...v0.117.2-dev.1) (2023-09-07)
+
+
+### Bug Fixes
+
+* **YouTube - Hide layout components:** Always hide redundant 'player audio track' button ([#473](https://github.com/ReVanced/revanced-integrations/issues/473)) ([d86851b](https://github.com/ReVanced/revanced-integrations/commit/d86851baf1ef1993f5ba9543a4a3fe8d50c3a199))
+
 ## [0.117.1](https://github.com/ReVanced/revanced-integrations/compare/v0.117.0...v0.117.1) (2023-09-03)
 
 
