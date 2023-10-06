@@ -2,27 +2,32 @@ package app.revanced.integrations.patches.components;
 
 
 import android.view.View;
+
+import androidx.annotation.Nullable;
+
 import app.revanced.integrations.settings.SettingsEnum;
 import app.revanced.integrations.utils.ReVancedUtils;
+import app.revanced.integrations.utils.StringTrieSearch;
 
 
 public final class AdsFilter extends Filter {
-    private final String[] exceptions;
+    private final StringTrieSearch exceptions = new StringTrieSearch();
 
     public AdsFilter() {
-        exceptions = new String[]{
+        exceptions.addPatterns(
                 "home_video_with_context", // Don't filter anything in the home page video component.
                 "related_video_with_context", // Don't filter anything in the related video component.
                 "comment_thread", // Don't filter anything in the comments.
                 "|comment.", // Don't filter anything in the comments replies.
-                "library_recent_shelf",
-        };
+                "library_recent_shelf"
+        );
 
         final var buttonedAd = new StringFilterGroup(
                 SettingsEnum.HIDE_BUTTONED_ADS,
                 "_buttoned_layout",
                 "full_width_square_image_layout",
                 "_ad_with",
+                "text_image_button_group_layout",
                 "video_display_button_group_layout",
                 "landscape_image_wide_button_layout"
         );
@@ -81,7 +86,7 @@ public final class AdsFilter extends Filter {
                 "cta_shelf_card"
         );
 
-        this.pathFilterGroups.addAll(
+        this.pathFilterGroupList.addAll(
                 generalAds,
                 buttonedAd,
                 merchandise,
@@ -90,15 +95,16 @@ public final class AdsFilter extends Filter {
                 webLinkPanel,
                 movieAds
         );
-        this.identifierFilterGroups.addAll(carouselAd);
+        this.identifierFilterGroupList.addAll(carouselAd);
     }
 
     @Override
-    public boolean isFiltered(final String path, final String identifier, final byte[] _protobufBufferArray) {
-        if (ReVancedUtils.containsAny(path, exceptions))
+    public boolean isFiltered(@Nullable String identifier, String path, byte[] protobufBufferArray,
+                              FilterGroupList matchedList, FilterGroup matchedGroup, int matchedIndex) {
+        if (exceptions.matches(path))
            return false;
 
-        return super.isFiltered(path, identifier, _protobufBufferArray);
+        return super.isFiltered(identifier, path, protobufBufferArray, matchedList, matchedGroup, matchedIndex);
     }
 
     /**

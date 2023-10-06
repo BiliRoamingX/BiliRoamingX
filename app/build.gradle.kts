@@ -9,7 +9,6 @@ plugins {
 
 android {
     compileSdk = 33
-    buildToolsVersion = "33.0.1"
     namespace = "app.revanced.integrations"
 
     defaultConfig {
@@ -51,7 +50,7 @@ dependencies {
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
     compileOnly(project(mapOf("path" to ":dummy")))
     compileOnly("androidx.annotation:annotation:1.6.0")
-    compileOnly("androidx.appcompat:appcompat:1.7.0-alpha02")
+    compileOnly("androidx.appcompat:appcompat:1.7.0-alpha03")
     compileOnly("com.squareup.okhttp3:okhttp:5.0.0-alpha.11")
     compileOnly("com.squareup.retrofit2:retrofit:2.9.0")
     compileOnly("androidx.preference:preference:1.2.0")
