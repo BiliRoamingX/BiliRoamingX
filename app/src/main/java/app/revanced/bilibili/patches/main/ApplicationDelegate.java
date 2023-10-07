@@ -43,6 +43,7 @@ public class ApplicationDelegate {
             UposReplacer.getBaseUposList();
             Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypes));
             Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypesV2));
+            Utils.runOnMainThread(2000L, () -> Utils.async(CouponAutoReceiver::check));
         }
     }
 

@@ -9,6 +9,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.util.Base64
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -16,12 +17,14 @@ import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
+import app.revanced.bilibili.meta.CookieInfo
 import com.google.protobuf.GeneratedMessageLite
 import com.google.protobuf.GeneratedMessageLiteEx
 import com.google.protobuf.UnknownFieldSetLite
 import org.json.JSONObject
 import java.io.File
 import java.io.InputStream
+import java.io.Reader
 import java.io.StringWriter
 import java.lang.reflect.Field
 import java.lang.reflect.Proxy
@@ -102,18 +105,19 @@ inline fun SharedPreferences.edit(
     action: SharedPreferences.Editor.() -> Unit
 ) = edit().apply(action).run { if (commit) commit() else apply() }
 
-fun getStreamContent(input: InputStream) = try {
-    input.bufferedReader().use {
-        // it.readText()
-        val buffer = StringWriter()
-        val charBuffer = CharArray(DEFAULT_BUFFER_SIZE)
-        var chars = it.read(charBuffer)
-        while (chars >= 0) {
-            buffer.write(charBuffer, 0, chars)
-            chars = it.read(charBuffer)
-        }
-        buffer.toString()
+fun Reader.readTextX(): String = use {
+    val buffer = StringWriter()
+    val charBuffer = CharArray(DEFAULT_BUFFER_SIZE)
+    var chars = it.read(charBuffer)
+    while (chars >= 0) {
+        buffer.write(charBuffer, 0, chars)
+        chars = it.read(charBuffer)
     }
+    buffer.toString()
+}
+
+fun getStreamContent(input: InputStream) = try {
+    input.bufferedReader().readTextX()
 } catch (e: Throwable) {
     LogHelper.error({ "get stream content failed" }, e)
     null
@@ -166,6 +170,11 @@ val country: Area?
     } catch (_: Throwable) {
         null
     }
+
+@Suppress("DEPRECATION")
+val versionName: String by lazy {
+    Utils.getContext().packageManager.getPackageInfo(Utils.getContext().packageName, 0).versionName
+}
 
 @Suppress("DEPRECATION")
 val versionCode by lazy {
@@ -299,3 +308,23 @@ fun newAny(typeUrl: String, message: GeneratedMessageLite<*, *>): com.google.pro
 inline fun GeneratedMessageLite<*, *>.setUnknownFields(unknownFields: UnknownFieldSetLite) {
     GeneratedMessageLiteEx.setUnknownFields(this, unknownFields)
 }
+
+val cookieInfo get() = if (Utils.isLogin()) cookieInfoCache else null
+
+val cookieSESSDATA get() = cookieInfo?.cookies?.find { it.name == "SESSDATA" }?.value.orEmpty()
+val cookieBiliJct get() = cookieInfo?.cookies?.find { it.name == "bili_jct" }?.value.orEmpty()
+
+private val cookieInfoCache by lazy {
+    val cookieFile = File(Utils.getContext().filesDir, "bili.account.storage")
+    if (cookieFile.isFile) {
+        cookieFile.runCatchingOrNull {
+            val json = Base64.decode(bufferedReader().readTextX(), Base64.NO_WRAP)
+                .toString(Charsets.UTF_8).toJSONObject()
+            json.optJSONArray("cookies")?.asSequence<JSONObject>().orEmpty()
+                .map { CookieInfo.CookieBean(it.optString("name"), it.optString("value")) }
+                .toList().let { CookieInfo(it) }
+        }
+    } else null
+}
+
+val defaultUA = "Mozilla/5.0 BiliDroid/$versionName (bbcallen@gmail.com)"

@@ -28,7 +28,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
         if (requestCode == 2336) {
             try {
                 requireActivity().contentResolver.openInputStream(uri)?.use {
-                    skinInput?.setText(it.bufferedReader().readText().trim())
+                    skinInput?.setText(it.bufferedReader().readTextX().trim())
                 }
             } catch (e: Exception) {
                 LogHelper.error({ "failed to import skin" }, e)

@@ -169,6 +169,7 @@ public enum Settings {
     PURIFY_SHARE("purify_share", BOOLEAN, FALSE),
     FUCK_MINI_PROGRAM("mini_program", BOOLEAN, FALSE),
     NUMBER_FORMAT("number_format", BOOLEAN, FALSE),
+    AUTO_RECEIVE_COUPON("auto_receive_coupon", BOOLEAN, FALSE),
 
     // 去广告杂项
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),
