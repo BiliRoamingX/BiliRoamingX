@@ -42,6 +42,8 @@ import tv.danmaku.bili.ui.offline.api.OgvApiResponse;
 import tv.danmaku.bili.ui.offline.api.OgvApiResponseV2;
 import tv.danmaku.bili.ui.splash.ad.model.SplashData;
 import tv.danmaku.bili.ui.splash.ad.model.SplashShowData;
+import tv.danmaku.bili.ui.splash.event.EventSplashData;
+import tv.danmaku.bili.ui.splash.event.EventSplashDataList;
 
 @SuppressWarnings("unused")
 public class JSONPatch {
@@ -125,6 +127,13 @@ public class JSONPatch {
         } else if (data instanceof SearchReferral || data instanceof DefaultKeyword || (Versions.ge7_39_0() && data instanceof com.bilibili.search2.api.SearchReferral)) {
             if (Settings.PURIFY_SEARCH.getBoolean())
                 return null;
+        } else if (data instanceof EventSplashDataList) {
+            if (Settings.PURIFY_SPLASH.getBoolean()) {
+                EventSplashDataList splashList = (EventSplashDataList) data;
+                List<EventSplashData> eventList = splashList.getEventList();
+                if (eventList != null && !eventList.isEmpty())
+                    eventList.removeIf(splash -> !splash.isBirthdayData());
+            }
         }
         return obj;
     }
