@@ -8,6 +8,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.util.Base64
 import android.util.TypedValue
@@ -328,3 +329,11 @@ private val cookieInfoCache by lazy {
 }
 
 val defaultUA = "Mozilla/5.0 BiliDroid/$versionName (bbcallen@gmail.com)"
+
+@JvmOverloads
+@Suppress("DEPRECATION")
+fun sigMd5(packageName: String = Utils.getContext().packageName): String {
+    return Utils.getContext().packageManager
+        .getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+        .signatures.first().toByteArray().md5Hex
+}

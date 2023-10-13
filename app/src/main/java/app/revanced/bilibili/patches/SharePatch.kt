@@ -4,9 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.LogHelper
-import app.revanced.bilibili.utils.Toasts
-import app.revanced.bilibili.utils.runCatchingOrNull
+import app.revanced.bilibili.utils.*
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
@@ -27,7 +25,7 @@ object SharePatch {
                 JSONObject(params.keySet().associateWith { params.get(it) })
             }"
         }
-        if (platform.startsWith("WEIXIN")) {
+        if (platform.startsWith("WEIXIN") && sigMd5() != Constants.OFFICIAL_SIG_MD5) {
             Toasts.showWithId("biliroaming_can_not_share_to_wx", Toast.LENGTH_LONG)
             return true
         }

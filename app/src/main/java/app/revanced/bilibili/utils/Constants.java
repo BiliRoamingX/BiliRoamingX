@@ -15,4 +15,5 @@ public class Constants {
     public static final int DEF_COMMENT_MAX_LINES = 6;
     public static final int DEF_DYN_MAX_LINES = 4;
     public static final int DEF_DYN_LINES_TO_ALL = 10;
+    public static final String OFFICIAL_SIG_MD5 = "7194d531cbe7960a22007b9f6bdaa38b";
 }

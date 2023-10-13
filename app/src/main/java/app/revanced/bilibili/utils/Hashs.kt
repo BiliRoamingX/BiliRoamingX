@@ -1,6 +1,9 @@
+@file:JvmName("Hashs")
+
 package app.revanced.bilibili.utils
 
 import java.io.File
+import java.io.InputStream
 import java.security.DigestInputStream
 import java.security.MessageDigest
 
@@ -22,23 +25,24 @@ fun ByteArray.toHexString(): String {
     return String(ret)
 }
 
-private fun hashFile(file: File, algorithm: String): ByteArray? {
+private fun hash(source: InputStream, algorithm: String): ByteArray? {
     return try {
-        file.inputStream().use { fis ->
-            val md = MessageDigest.getInstance(algorithm)
-            val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-            DigestInputStream(fis, md).use {
-                while (true) {
-                    if (it.read(buffer) == -1)
-                        break
-                }
+        val md = MessageDigest.getInstance(algorithm)
+        val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+        DigestInputStream(source, md).use {
+            while (true) {
+                if (it.read(buffer) == -1)
+                    break
             }
-            md.digest()
         }
+        md.digest()
     } catch (_: Exception) {
         null
     }
 }
 
-val File.sha256sum: String
-    get() = hashFile(this, "SHA256")?.toHexString() ?: ""
+val File.sha256Hex: String
+    get() = hash(inputStream(), "SHA256")?.toHexString().orEmpty()
+
+val ByteArray.md5Hex: String
+    get() = hash(inputStream(), "MD5")?.toHexString().orEmpty()

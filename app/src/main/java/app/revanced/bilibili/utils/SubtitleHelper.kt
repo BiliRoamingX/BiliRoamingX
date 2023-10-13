@@ -166,7 +166,7 @@ object SubtitleHelper {
                         .use { it.copyTo(o) }
                 }
             }.onSuccess {
-                if (tmpDictFile.sha256sum == sha256sum
+                if (tmpDictFile.sha256Hex == sha256sum
                     && (dictFile.takeIf { it.exists() }?.delete() != false)
                     && tmpDictFile.renameTo(dictFile)
                 ) {
