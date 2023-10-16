@@ -128,6 +128,11 @@ object ViewUniteReplyHook {
             if (replyTabIndex != -1)
                 viewReply.tab.removeTabModule(replyTabIndex)
         }
+        if (Settings.BLOCK_ACTIVITY_TAB.boolean) {
+            val activityTabIndex = viewReply.tab.tabModuleList.indexOfFirst { it.hasActivityTab() }
+            if (activityTabIndex != -1)
+                viewReply.tab.removeTabModule(activityTabIndex)
+        }
     }
 
     private fun ViewEpisode.unlock() = run {

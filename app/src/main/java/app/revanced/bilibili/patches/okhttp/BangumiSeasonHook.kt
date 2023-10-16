@@ -87,6 +87,8 @@ object BangumiSeasonHook {
         lastSeasonInfo.clear()
         if (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean)
             data.put("activity_entrance", JSONArray())
+        if (Settings.BLOCK_ACTIVITY_TAB.boolean)
+            data.remove("activity_tab")
         if (!Settings.UNLOCK_AREA_LIMIT.boolean)
             return jo.toString()
         lastSeasonInfo["title"] = data.optString("title")

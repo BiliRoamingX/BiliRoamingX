@@ -128,6 +128,7 @@ public enum Settings {
     BLOCK_FAN_GUIDE("block_fan_guide", BOOLEAN, FALSE),
     REMOVE_ELEC_BUTTON("remove_elec_button", BOOLEAN, FALSE),
     BLOCK_LIVE_ORDER("block_live_order", BOOLEAN, FALSE),
+    BLOCK_ACTIVITY_TAB("block_activity_tab", BOOLEAN, FALSE),
 
     // 用户空间页
     FIX_SPACE("fix_space", BOOLEAN, TRUE),
