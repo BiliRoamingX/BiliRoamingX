@@ -89,6 +89,19 @@ public class ApplicationDelegate {
 
     static class ActivityLifecycleCallback implements Application.ActivityLifecycleCallbacks {
         @Override
+        public void onActivityPreCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+            var dm = activity.getResources().getDisplayMetrics();
+            var scale = dm.scaledDensity / dm.density;
+            var newDpi = Settings.CUSTOM_DPI.getInt();
+            if (newDpi != 0) {
+                var newDensity = newDpi / 160f;
+                dm.densityDpi = newDpi;
+                dm.density = newDensity;
+                dm.scaledDensity = scale * newDensity;
+            }
+        }
+
+        @Override
         public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
             printLifecycle(activity, "onActivityCreated", true);
             activityRefs.push(new WeakReference<>(activity));

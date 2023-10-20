@@ -172,6 +172,7 @@ public enum Settings {
     FUCK_MINI_PROGRAM("mini_program", BOOLEAN, FALSE),
     NUMBER_FORMAT("number_format", BOOLEAN, FALSE),
     AUTO_RECEIVE_COUPON("auto_receive_coupon", BOOLEAN, FALSE),
+    CUSTOM_DPI("custom_dpi", INTEGER, 0, true),
 
     // 去广告杂项
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),
