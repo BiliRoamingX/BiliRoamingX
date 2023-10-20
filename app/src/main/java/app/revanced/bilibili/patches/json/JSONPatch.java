@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.bilibili.ad.adview.videodetail.danmakuv2.model.Dm;
 import com.bilibili.ad.adview.videodetail.danmakuv2.model.DmAdvert;
 import com.bilibili.app.authorspace.api.BiliSpace;
+import com.bilibili.app.comm.list.widget.recommend.RecommendModeGuidanceConfig;
 import com.bilibili.bililive.room.biz.reverse.bean.LiveRoomReserveInfo;
 import com.bilibili.bililive.room.biz.shopping.beans.LiveGoodsCardInfo;
 import com.bilibili.bililive.room.biz.shopping.beans.LiveShoppingGotoBuyInfo;
@@ -134,6 +135,9 @@ public class JSONPatch {
                 if (eventList != null && !eventList.isEmpty())
                     eventList.removeIf(splash -> !splash.isBirthdayData());
             }
+        } else if (data instanceof RecommendModeGuidanceConfig) {
+            if (Settings.BLOCK_RECOMMEND_GUIDANCE.getBoolean())
+                return null;
         }
         return obj;
     }
