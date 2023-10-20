@@ -2,6 +2,7 @@ package app.revanced.bilibili.patches.main;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -47,6 +48,23 @@ public class ApplicationDelegate {
         }
     }
 
+    public static void onActivityPreConfigurationChanged(Activity activity, Configuration newConfig) {
+        var newDpi = Settings.CUSTOM_DPI.getInt();
+        if (newDpi != 0) {
+            newConfig.densityDpi = newDpi;
+            updateDpi(activity, newDpi);
+        }
+    }
+
+    static void updateDpi(Activity activity, int newDpi) {
+        var dm = activity.getResources().getDisplayMetrics();
+        var scale = dm.scaledDensity / dm.density;
+        var newDensity = newDpi / 160f;
+        dm.densityDpi = newDpi;
+        dm.density = newDensity;
+        dm.scaledDensity = scale * newDensity;
+    }
+
     @Nullable
     public static Activity getTopActivity() {
         var ref = activityRefs.peek();
@@ -90,15 +108,9 @@ public class ApplicationDelegate {
     static class ActivityLifecycleCallback implements Application.ActivityLifecycleCallbacks {
         @Override
         public void onActivityPreCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-            var dm = activity.getResources().getDisplayMetrics();
-            var scale = dm.scaledDensity / dm.density;
             var newDpi = Settings.CUSTOM_DPI.getInt();
-            if (newDpi != 0) {
-                var newDensity = newDpi / 160f;
-                dm.densityDpi = newDpi;
-                dm.density = newDensity;
-                dm.scaledDensity = scale * newDensity;
-            }
+            if (newDpi != 0)
+                updateDpi(activity, newDpi);
         }
 
         @Override
