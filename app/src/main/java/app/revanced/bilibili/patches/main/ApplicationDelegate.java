@@ -2,7 +2,9 @@ package app.revanced.bilibili.patches.main;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -34,8 +36,8 @@ public class ApplicationDelegate {
     private static final ArrayDeque<WeakReference<Activity>> activityRefs = new ArrayDeque<>();
 
     public static void onCreate(Application app) {
+        app.registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
         if (Utils.isInMainProcess()) {
-            app.registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
             Utils.async(ApplicationDelegate::startLog);
             CustomThemePatch.refresh();
             Utils.async(PlaybackSpeedPatch::refreshOverrideSpeedList);
@@ -49,6 +51,7 @@ public class ApplicationDelegate {
     }
 
     public static void onActivityPreConfigurationChanged(Activity activity, Configuration newConfig) {
+        ActivityLifecycleCallback.printLifecycle(activity, "onActivityPreConfigurationChanged", false);
         var newDpi = Settings.CUSTOM_DPI.getInt();
         if (newDpi != 0) {
             newConfig.densityDpi = newDpi;
@@ -56,9 +59,19 @@ public class ApplicationDelegate {
         }
     }
 
+    public static Context onActivityPreAttachBaseContext(Activity activity, Context base) {
+        ActivityLifecycleCallback.printLifecycle(activity, "onActivityPreAttachBaseContext", false);
+        var newDpi = Settings.CUSTOM_DPI.getInt();
+        if (newDpi == 0) return base;
+        var configuration = base.getResources().getConfiguration();
+        configuration.densityDpi = newDpi;
+        return base.createConfigurationContext(configuration);
+    }
+
     static void updateDpi(Activity activity, int newDpi) {
+        var systemDm = Resources.getSystem().getDisplayMetrics();
+        var scale = systemDm.scaledDensity / systemDm.density;
         var dm = activity.getResources().getDisplayMetrics();
-        var scale = dm.scaledDensity / dm.density;
         var newDensity = newDpi / 160f;
         dm.densityDpi = newDpi;
         dm.density = newDensity;
@@ -107,16 +120,12 @@ public class ApplicationDelegate {
 
     static class ActivityLifecycleCallback implements Application.ActivityLifecycleCallbacks {
         @Override
-        public void onActivityPreCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-            var newDpi = Settings.CUSTOM_DPI.getInt();
-            if (newDpi != 0)
-                updateDpi(activity, newDpi);
-        }
-
-        @Override
         public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
             printLifecycle(activity, "onActivityCreated", true);
             activityRefs.push(new WeakReference<>(activity));
+            var newDpi = Settings.CUSTOM_DPI.getInt();
+            if (newDpi != 0)
+                updateDpi(activity, newDpi);
         }
 
         @Override
@@ -168,16 +177,15 @@ public class ApplicationDelegate {
             printLifecycle(activity, "onActivitySaveInstanceState", false);
         }
 
-        private void printLifecycle(Activity activity, String name, boolean printIntent) {
-            if (Settings.DEBUG.getBoolean()) {
-                var extras = activity.getIntent().getExtras();
-                LogHelper.debug(() -> name + ", activity: " + activity.getClass().getName());
-                if (printIntent && extras != null) {
-                    for (String key : extras.keySet()) {
-                        var value = extras.get(key);
-                        LogHelper.debug(() -> "intent.extra, " + key + ": " + value + ", type: " + (value != null ? value.getClass().getName() : null));
-                    }
-                }
+        static void printLifecycle(Activity activity, String name, boolean printIntent) {
+            if (!Settings.DEBUG.getBoolean()) return;
+            LogHelper.debug(() -> name + ", activity: " + activity.getClass().getName());
+            if (!printIntent) return;
+            var extras = activity.getIntent().getExtras();
+            if (extras == null) return;
+            for (String key : extras.keySet()) {
+                var value = extras.get(key);
+                LogHelper.debug(() -> "intent.extra, " + key + ": " + value + ", type: " + (value != null ? value.getClass().getName() : null));
             }
         }
     }
