@@ -50,9 +50,17 @@ public class ApplicationDelegate {
         }
     }
 
+    static int getCustomDpi() {
+        float scale = Float.parseFloat(Settings.DISPLAY_SIZE.getString());
+        if (scale == 0f) return 0;
+        float sysDensity = Resources.getSystem().getDisplayMetrics().density;
+        float newDensity = sysDensity + scale;
+        return (int) (160 * newDensity);
+    }
+
     public static void onActivityPreConfigurationChanged(Activity activity, Configuration newConfig) {
         ActivityLifecycleCallback.printLifecycle(activity, "onActivityPreConfigurationChanged", false);
-        var newDpi = Settings.CUSTOM_DPI.getInt();
+        var newDpi = getCustomDpi();
         if (newDpi != 0) {
             newConfig.densityDpi = newDpi;
             updateDpi(activity, newDpi);
@@ -61,7 +69,7 @@ public class ApplicationDelegate {
 
     public static Context onActivityPreAttachBaseContext(Activity activity, Context base) {
         ActivityLifecycleCallback.printLifecycle(activity, "onActivityPreAttachBaseContext", false);
-        var newDpi = Settings.CUSTOM_DPI.getInt();
+        var newDpi = getCustomDpi();
         if (newDpi == 0) return base;
         var configuration = base.getResources().getConfiguration();
         configuration.densityDpi = newDpi;
@@ -123,7 +131,7 @@ public class ApplicationDelegate {
         public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
             printLifecycle(activity, "onActivityCreated", true);
             activityRefs.push(new WeakReference<>(activity));
-            var newDpi = Settings.CUSTOM_DPI.getInt();
+            var newDpi = getCustomDpi();
             if (newDpi != 0)
                 updateDpi(activity, newDpi);
         }

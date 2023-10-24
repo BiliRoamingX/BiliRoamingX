@@ -5,10 +5,8 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
-import android.text.InputType
 import android.widget.EditText
 import androidx.preference.Preference
 import app.revanced.bilibili.settings.Settings
@@ -19,11 +17,6 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
         super.onCreatePreferences(savedInstanceState, rootKey)
         findPreference<Preference>("skin")?.onChange { _, newValue ->
             if (newValue == true) onSkinClick() else true
-        }
-        findPreference<Preference>("custom_dpi")?.run {
-            val dpi = Resources.getSystem().displayMetrics.densityDpi
-            summary = Utils.getString("biliroaming_custom_dpi_summary", dpi)
-            onClick { onCustomDpi() }
         }
     }
 
@@ -84,32 +77,6 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
                         val uri = Uri.parse("https://github.com/Rovniced/bilibili-skin")
                         val intent = Intent(Intent.ACTION_VIEW, uri)
                         startActivity(intent)
-                    }
-                }
-            }.show()
-        return true
-    }
-
-    private fun onCustomDpi(): Boolean {
-        val editText = EditText(activity)
-        editText.hint = Utils.getString("biliroaming_custom_dpi_hint")
-        editText.setText(Settings.CUSTOM_DPI.int.toString().takeIf { it != "0" }.orEmpty())
-        editText.inputType = InputType.TYPE_CLASS_NUMBER
-        AlertDialog.Builder(activity)
-            .setTitle(Utils.getString("biliroaming_custom_dpi_title"))
-            .setView(editText)
-            .setPositiveButton(android.R.string.ok, null)
-            .setNegativeButton(android.R.string.cancel, null)
-            .create().apply {
-                setOnShowListener {
-                    getButton(Dialog.BUTTON_POSITIVE)?.setOnClickListener {
-                        val text = editText.text.toString().trim()
-                        if (text.isEmpty()) {
-                            Settings.CUSTOM_DPI.saveValue(0)
-                        } else {
-                            Settings.CUSTOM_DPI.saveValue(text.toInt())
-                        }
-                        dismiss()
                     }
                 }
             }.show()
