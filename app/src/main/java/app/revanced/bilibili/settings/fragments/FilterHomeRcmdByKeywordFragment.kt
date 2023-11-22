@@ -24,6 +24,9 @@ class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
         val applyToRelateSwitch = switchPrefsItem(string("biliroaming_apply_to_relate_title"))
             .let { content.addView(it.first); it.second }
         applyToRelateSwitch.isChecked = Settings.HOME_FILTER_APPLY_TO_VIDEO.boolean
+        val applyToPopularSwitch = switchPrefsItem(string("biliroaming_apply_to_popular_title"))
+            .let { content.addView(it.first); it.second }
+        applyToPopularSwitch.isChecked = Settings.HOME_FILTER_APPLY_TO_POPULAR.boolean
 
         content.addView(textInputTitle(string("biliroaming_low_play_count_summary")))
         val lowPlayCountInput = textInputItem(string("biliroaming_low_play_count_title"))
@@ -118,9 +121,12 @@ class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
             Settings.HOME_RCMD_FILTER_REASON_REGEX_MODE.saveValue(reasonRegexMode)
             Settings.HOME_RCMD_FILTER_UP_REGEX_MODE.saveValue(upRegexMode)
             Settings.HOME_FILTER_APPLY_TO_VIDEO.saveValue(applyToRelateSwitch.isChecked)
+            Settings.HOME_FILTER_APPLY_TO_POPULAR.saveValue(applyToPopularSwitch.isChecked)
 
             if (from == "home")
                 Toasts.showShortWithId("biliroaming_save_success_and_refresh_home")
+            else if (from == "popular")
+                Toasts.showShortWithId("biliroaming_save_success_and_refresh_popular")
             parentFragmentManager.popBackStack()
         }
 

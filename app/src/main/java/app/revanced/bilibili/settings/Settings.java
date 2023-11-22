@@ -54,6 +54,7 @@ public enum Settings {
     HIDED_HOME_TAB("customize_home_tab", STRING_SET, Collections.EMPTY_SET),
     FILTER_HOME_RECOMMEND("customize_home_recommend", STRING_SET, Collections.EMPTY_SET),
     HOME_FILTER_APPLY_TO_VIDEO("home_filter_apply_to_relate", BOOLEAN, FALSE),
+    HOME_FILTER_APPLY_TO_POPULAR("home_filter_apply_to_popular", BOOLEAN, FALSE),
     LOW_PLAY_COUNT_LIMIT("hide_low_play_count_recommend_limit", LONG, 0L),
     SHORT_DURATION_LIMIT("hide_short_duration_recommend_limit", INTEGER, 0),
     LONG_DURATION_LIMIT("hide_long_duration_recommend_limit", INTEGER, 0),
@@ -76,6 +77,9 @@ public enum Settings {
     ADD_CHANNEL("add_channel", BOOLEAN, FALSE, true),
     BLOCK_TOP_ACTIVITY("block_top_activity", BOOLEAN, FALSE, true),
     BLOCK_RECOMMEND_GUIDANCE("block_recommend_guidance", BOOLEAN, FALSE, true),
+    BLOCK_POPULAR_TOP_ENTRANCE("block_popular_top_entrance", BOOLEAN, FALSE),
+    BLOCK_POPULAR_TOPIC_LIST("block_popular_topic_list", BOOLEAN, FALSE),
+    BLOCK_POPULAR_RCMD_UP("block_popular_rcmd_up", BOOLEAN, FALSE),
 
     // 动态页
     DYNAMIC_PREFER_VIDEO_TAB("prefer_video_tab", BOOLEAN, FALSE),

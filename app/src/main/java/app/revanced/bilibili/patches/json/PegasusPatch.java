@@ -2,6 +2,9 @@ package app.revanced.bilibili.patches.json;
 
 import android.text.TextUtils;
 
+import com.bapis.bilibili.app.card.v1.Card;
+import com.bapis.bilibili.app.card.v1.SmallCoverV5;
+import com.bapis.bilibili.app.show.popular.v1.PopularReply;
 import com.bapis.bilibili.app.view.v1.Relate;
 import com.bapis.bilibili.app.view.v1.RelatesFeedReply;
 import com.bapis.bilibili.app.view.v1.ViewReply;
@@ -37,6 +40,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -56,6 +60,9 @@ public class PegasusPatch {
     private static List<Pattern> cachedReasonRegexes = Collections.emptyList();
     private static Set<String> cachedUpSet = Collections.emptySet();
     private static List<Pattern> cachedUpRegexes = Collections.emptyList();
+
+    private static final Pattern playCountRegex = Pattern.compile(".*?([\\d.]+)([万亿])?观看.*");
+    private static final Pattern durationRegex = Pattern.compile("^((\\d{1,2}):)?(\\d{1,2}):(\\d{1,2})$");
 
     private static final long REASON_ID_TITLE = 1145140L;
     private static final long REASON_ID_RCMD_REASON = 1145141L;
@@ -111,6 +118,30 @@ public class PegasusPatch {
         } catch (Throwable ignored) {
         }
         return -1L;
+    }
+
+    private static long toPlayCount2(String str) {
+        var matcher = playCountRegex.matcher(str);
+        if (matcher.matches()) {
+            var value = Double.parseDouble(Objects.requireNonNull(matcher.group(1)));
+            var unit = matcher.group(2);
+            return (long) value * ("万".equals(unit) ? 10_000 : ("亿".equals(unit) ? 100_000_000 : 1));
+        }
+        return -1L;
+    }
+
+    private static int toDuration(String str) {
+        var matcher = durationRegex.matcher(str);
+        if (matcher.matches()) {
+            String hour = matcher.group(2);
+            String minute = matcher.group(3);
+            String second = matcher.group(4);
+            var h = hour != null ? Integer.parseInt(hour) : 0;
+            var m = minute != null ? Integer.parseInt(minute) : 0;
+            var s = second != null ? Integer.parseInt(second) : 0;
+            return h * 60 * 60 + m * 60 + s;
+        }
+        return -1;
     }
 
     private static String getCoverLeftText(BasicIndexItem item) {
@@ -675,6 +706,12 @@ public class PegasusPatch {
             feedReply.removeRelates(indexes.get(i));
     }
 
+    public static void filterPopular(PopularReply reply) {
+        List<Integer> indexes = getToRemovePopularIndexes(reply.getItemsList());
+        for (int i = indexes.size() - 1; i >= 0; i--)
+            reply.removeItems(indexes.get(i));
+    }
+
     public static List<Integer> getToRemoveRelateIndexes(List<Relate> relates) {
         boolean removeRelatePromote = Settings.REMOVE_RELATE_PROMOTE.getBoolean();
         boolean removeRelateOnlyAv = Settings.REMOVE_RELATE_ONLY_AV.getBoolean();
@@ -789,6 +826,156 @@ public class PegasusPatch {
                 idxList.add(i);
         }
         return idxList;
+    }
+
+    public static List<Integer> getToRemovePopularIndexes(List<Card> cards) {
+        boolean blockTopEntrance = Settings.BLOCK_POPULAR_TOP_ENTRANCE.getBoolean();
+        boolean blockTopicList = Settings.BLOCK_POPULAR_TOPIC_LIST.getBoolean();
+        boolean blockRcmdUp = Settings.BLOCK_POPULAR_RCMD_UP.getBoolean();
+        boolean filterApplyToPopular = Settings.HOME_FILTER_APPLY_TO_POPULAR.getBoolean();
+        long playCountLimit = Settings.LOW_PLAY_COUNT_LIMIT.getLong();
+        var shortDurationLimit = Settings.SHORT_DURATION_LIMIT.getInt();
+        int longDurationLimit = Settings.LONG_DURATION_LIMIT.getInt();
+        Set<String> titleSet = Settings.HOME_RCMD_FILTER_TITLE.getStringSet();
+        boolean titleRegexMode = Settings.HOME_RCMD_FILTER_TITLE_REGEX_MODE.getBoolean();
+        List<Pattern> titleRegexes;
+        if (titleRegexMode && cachedTitileSet.equals(titleSet))
+            titleRegexes = cachedTitleRegexes;
+        else if (titleRegexMode) {
+            cachedTitileSet = new HashSet<>(titleSet);
+            titleRegexes = titleSet.stream().map(Pattern::compile).collect(Collectors.toList());
+            cachedTitleRegexes = titleRegexes;
+        } else {
+            titleRegexes = Collections.emptyList();
+        }
+        Set<String> reasonSet = Settings.HOME_RCMD_FILTER_REASON.getStringSet();
+        boolean reasonRegexMode = Settings.HOME_RCMD_FILTER_REASON_REGEX_MODE.getBoolean();
+        List<Pattern> reasonRegexes;
+        if (reasonRegexMode && cachedReasonSet.equals(reasonSet))
+            reasonRegexes = cachedReasonRegexes;
+        else if (reasonRegexMode) {
+            cachedReasonSet = new HashSet<>(reasonSet);
+            reasonRegexes = reasonSet.stream().map(Pattern::compile).collect(Collectors.toList());
+            cachedReasonRegexes = reasonRegexes;
+        } else {
+            reasonRegexes = Collections.emptyList();
+        }
+        Set<String> upSet = Settings.HOME_RCMD_FILTER_UP.getStringSet();
+        boolean upRegexMode = Settings.HOME_RCMD_FILTER_UP_REGEX_MODE.getBoolean();
+        List<Pattern> upRegexes;
+        if (upRegexMode && cachedUpSet.equals(upSet))
+            upRegexes = cachedUpRegexes;
+        else if (upRegexMode) {
+            cachedUpSet = new HashSet<>(upSet);
+            upRegexes = upSet.stream().map(Pattern::compile).collect(Collectors.toList());
+            cachedUpRegexes = upRegexes;
+        } else {
+            upRegexes = Collections.emptyList();
+        }
+        Set<String> uidSet = Settings.HOME_RCMD_FILTER_UID.getStringSet();
+        long[] uidArray = ArrayUtils.toLongArray(uidSet);
+        List<Integer> idxList = new ArrayList<>();
+        for (int i = 0; i < cards.size(); i++) {
+            Card card = cards.get(i);
+            if (blockTopEntrance && card.hasPopularTopEntrance()) {
+                idxList.add(i);
+                continue;
+            }
+            if (blockTopicList && card.hasTopicList()) {
+                idxList.add(i);
+                continue;
+            }
+            if (blockRcmdUp && card.hasRcmdOneItem() && card.getRcmdOneItem().getBase().getCardGoto().startsWith("up_rcmd")) {
+                idxList.add(i);
+                continue;
+            }
+            if (!filterApplyToPopular) continue;
+            if (card.hasSmallCoverV5()) {
+                SmallCoverV5 cover = card.getSmallCoverV5();
+                if (isLowPlayCountPopular(cover, playCountLimit)
+                        || isDurationInvalidPopular(cover, shortDurationLimit, longDurationLimit)
+                        || isContainsBlockKwdPopular(cover, titleRegexMode, titleSet, titleRegexes, reasonRegexMode, reasonSet, reasonRegexes, upRegexMode, upSet, upRegexes, uidArray))
+                    idxList.add(i);
+            }
+        }
+        return idxList;
+    }
+
+    public static boolean isLowPlayCountPopular(SmallCoverV5 cover, long playCountLimit) {
+        if (playCountLimit == 0) return false;
+        String rightDesc2 = cover.getRightDesc2();
+        if (TextUtils.isEmpty(rightDesc2)) return false;
+        long playCount = toPlayCount2(rightDesc2);
+        if (playCount == -1L) return false;
+        return playCount < playCountLimit;
+    }
+
+    public static boolean isDurationInvalidPopular(SmallCoverV5 cover, long shortDuration, long longDuration) {
+        if (shortDuration == 0 && longDuration == 0)
+            return false;
+        String coverRightText1 = cover.getCoverRightText1();
+        int duration = toDuration(coverRightText1);
+        if (duration == -1L) return false;
+        if (longDuration != 0 && duration > longDuration) return true;
+        return shortDuration != 0 && duration < shortDuration;
+    }
+
+    public static boolean isContainsBlockKwdPopular(
+            SmallCoverV5 cover,
+            boolean titleRegexMode,
+            Set<String> titleSet,
+            List<Pattern> titleRegexes,
+            boolean reasonRegexMode,
+            Set<String> reasonSet,
+            List<Pattern> reasonRegexes,
+            boolean upRegexMode,
+            Set<String> upSet,
+            List<Pattern> upRegexes,
+            long[] uidArray) {
+        if (!titleSet.isEmpty()) {
+            String title = cover.getBase().getTitle();
+            if (titleRegexMode && !TextUtils.isEmpty(title)) {
+                for (int i = 0; i < titleRegexes.size(); i++)
+                    if (titleRegexes.get(i).matcher(title).find())
+                        return true;
+            } else if (!TextUtils.isEmpty(title))
+                for (String s : titleSet)
+                    if (title.contains(s))
+                        return true;
+        }
+
+        if (uidArray.length > 0) {
+            long upId = cover.getBase().getThreePointV4().getSharePlane().getAuthorId();
+            if (upId != 0L && ArrayUtils.contains(uidArray, upId))
+                return true;
+        }
+
+        if (!upSet.isEmpty()) {
+            String upName = cover.getBase().getThreePointV4().getSharePlane().getAuthor();
+            if (upRegexMode && !TextUtils.isEmpty(upName)) {
+                for (int i = 0; i < upRegexes.size(); i++)
+                    if (upRegexes.get(i).matcher(upName).find())
+                        return true;
+            } else if (!TextUtils.isEmpty(upName))
+                for (String s : upSet)
+                    if (upName.contains(s))
+                        return true;
+        }
+
+        if (!reasonSet.isEmpty()) {
+            String reason = cover.getRcmdReasonStyle().getText();
+            if (reasonRegexMode && !TextUtils.isEmpty(reason)) {
+                for (int i = 0; i < reasonRegexes.size(); i++)
+                    if (reasonRegexes.get(i).matcher(reason).find())
+                        return true;
+            } else if (!TextUtils.isEmpty(reason)) {
+                for (String s : reasonSet)
+                    if (reason.contains(s))
+                        return true;
+            }
+        }
+
+        return false;
     }
 
     public static boolean onFeedClick(DislikeReason reason) {
