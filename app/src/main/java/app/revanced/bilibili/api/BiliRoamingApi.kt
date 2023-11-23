@@ -651,8 +651,10 @@ object BiliRoamingApi {
     @SuppressLint("SetJavaScriptEnabled")
     fun getContent(url: String): String? = try {
         val timeout = 10000
-        // Work around for android 7
         val mobiApp = Utils.getMobiApp()
+        val verName = "1.7.0"
+        val verCode = "1344"
+        // Work around for android 7
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N
             && url.startsWith("https")
             && !url.contains("bilibili.com")
@@ -680,9 +682,9 @@ object BiliRoamingApi {
                 }
                 webView.loadUrl(
                     url, mapOf(
-                        "x-from-biliroaming" to "1.6.12",
+                        "x-from-biliroaming" to verName,
                         "platform-from-biliroaming" to mobiApp,
-                        "Build" to "1344"
+                        "Build" to verCode
                     )
                 )
             }
@@ -700,9 +702,9 @@ object BiliRoamingApi {
             connection.requestMethod = "GET"
             connection.connectTimeout = timeout
             connection.readTimeout = timeout
-            connection.setRequestProperty("x-from-biliroaming", "1.6.12")
+            connection.setRequestProperty("x-from-biliroaming", verName)
             connection.setRequestProperty("platform-from-biliroaming", mobiApp)
-            connection.setRequestProperty("Build", "1344")
+            connection.setRequestProperty("Build", verCode)
             connection.setRequestProperty("Accept-Encoding", "br,gzip,deflate")
             connection.connect()
             if (connection.responseCode == HttpURLConnection.HTTP_OK) {
