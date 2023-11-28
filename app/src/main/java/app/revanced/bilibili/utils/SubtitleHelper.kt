@@ -159,7 +159,7 @@ object SubtitleHelper {
             var dictUrl = json.optJSONArray("assets")
                 ?.optJSONObject(0)?.optString("browser_download_url")
                 .takeUnless { it.isNullOrEmpty() } ?: return false
-            dictUrl = "https://ghproxy.com/$dictUrl"
+            dictUrl = "https://mirror.ghproxy.com/$dictUrl"
             runCatching {
                 tmpDictFile.outputStream().use { o ->
                     GZIPInputStream(URL(dictUrl).openStream())
