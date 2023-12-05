@@ -12,16 +12,25 @@ object CouponAutoReceiver {
 
     @JvmStatic
     fun check() = if (Settings.AUTO_RECEIVE_COUPON.boolean) Utils.async {
-        val successCount = getCouponInfo()?.list?.count { item ->
-            if (item.type != 8 && item.state != 1 && item.nextReceiveDays != 0L)
+        val couponInfo = getCouponInfo()
+        val couponSuccessCount = couponInfo?.list?.count { item ->
+            if (item.type <= 7 && item.state != 1 && item.nextReceiveDays != 0L)
                 receiveCoupon(item.type)
             else false
         } ?: 0
-        LogHelper.debug { "CouponAutoReceiver.successCount: $successCount" }
-        if (successCount > 0) Toasts.show(
-            Utils.getString("biliroaming_coupon_receive_success", successCount),
+        LogHelper.debug { "CouponAutoReceiver.couponSuccessCount: $couponSuccessCount" }
+        if (couponSuccessCount > 0) Toasts.show(
+            Utils.getString("biliroaming_coupon_receive_success", couponSuccessCount),
             Toast.LENGTH_LONG
         )
+        val experienceSuccessCount = couponInfo?.list?.count { item ->
+            if (item.type == 9 && item.state == 0 && item.vipType > 0)
+                receiveExperience()
+            else false
+        } ?: 0
+        LogHelper.debug { "CouponAutoReceiver.experienceSuccessCount: $experienceSuccessCount" }
+        if (experienceSuccessCount > 0)
+            Toasts.showShortWithId("biliroaming_experience_receive_success")
     } else Unit
 
     private fun getCouponInfo() = runCatchingOrNull {
@@ -41,7 +50,8 @@ object CouponAutoReceiver {
                         CouponInfo.Item(
                             it.optInt("type"),
                             it.optInt("state"),
-                            it.optLong("next_receive_days")
+                            it.optLong("next_receive_days"),
+                            it.optInt("vip_type"),
                         )
                     }
                     .toList().let { CouponInfo(it) }
@@ -57,11 +67,25 @@ object CouponAutoReceiver {
         connection.setRequestProperty("Cookie", "SESSDATA=$cookieSESSDATA")
         connection.setRequestProperty("User-Agent", defaultUA)
         connection.setDoOutput(true)
-        val output = connection.outputStream
-        output.write("type=$type&csrf=$cookieBiliJct".toByteArray(Charsets.UTF_8))
+        connection.outputStream.write("type=$type&csrf=$cookieBiliJct".toByteArray(Charsets.UTF_8))
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
             val json = getStreamContent(connection.inputStream).toJSONObject()
             LogHelper.debug { "CouponAutoReceiver.receiveCoupon, type: $type, response: $json" }
+            json.optInt("code", -1) == 0
+        } else false
+    } ?: false
+
+    private fun receiveExperience() = runCatchingOrNull {
+        val connection = URL("https://api.bilibili.com/x/vip/experience/add")
+            .openConnection() as HttpURLConnection
+        connection.setRequestMethod("POST")
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+        connection.setRequestProperty("Cookie", "SESSDATA=$cookieSESSDATA")
+        connection.setRequestProperty("User-Agent", defaultUA)
+        connection.outputStream.write("csrf=$cookieBiliJct".toByteArray(Charsets.UTF_8))
+        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            val json = getStreamContent(connection.inputStream).toJSONObject()
+            LogHelper.debug { "CouponAutoReceiver.receiveExperience, response: $json" }
             json.optInt("code", -1) == 0
         } else false
     } ?: false

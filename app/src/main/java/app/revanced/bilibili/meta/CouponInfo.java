@@ -20,11 +20,14 @@ public class CouponInfo {
         public int state;
         @JSONField(name = "next_receive_days")
         public long nextReceiveDays;
+        @JSONField(name = "vip_type")
+        public int vipType;
 
-        public Item(int type, int state, long nextReceiveDays) {
+        public Item(int type, int state, long nextReceiveDays, int vipType) {
             this.type = type;
             this.state = state;
             this.nextReceiveDays = nextReceiveDays;
+            this.vipType = vipType;
         }
     }
 }
