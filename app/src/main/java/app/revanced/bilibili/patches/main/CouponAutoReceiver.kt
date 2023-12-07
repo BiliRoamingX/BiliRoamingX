@@ -19,18 +19,22 @@ object CouponAutoReceiver {
             else false
         } ?: 0
         LogHelper.debug { "CouponAutoReceiver.couponSuccessCount: $couponSuccessCount" }
-        if (couponSuccessCount > 0) Toasts.show(
-            Utils.getString("biliroaming_coupon_receive_success", couponSuccessCount),
-            Toast.LENGTH_LONG
-        )
         val experienceSuccessCount = couponInfo?.list?.count { item ->
             if (item.type == 9 && item.state == 0 && item.vipType > 0)
                 receiveExperience()
             else false
         } ?: 0
         LogHelper.debug { "CouponAutoReceiver.experienceSuccessCount: $experienceSuccessCount" }
-        if (experienceSuccessCount > 0)
-            Toasts.showShortWithId("biliroaming_experience_receive_success")
+        if (couponSuccessCount > 0 && experienceSuccessCount > 0) Toasts.show(
+            Utils.getString("biliroaming_all_receive_success", couponSuccessCount),
+            Toast.LENGTH_LONG
+        ) else if (couponSuccessCount > 0) Toasts.show(
+            Utils.getString("biliroaming_coupon_receive_success", couponSuccessCount),
+            Toast.LENGTH_LONG
+        ) else if (experienceSuccessCount > 0) Toasts.showWithId(
+            "biliroaming_experience_receive_success",
+            Toast.LENGTH_LONG
+        )
     } else Unit
 
     private fun getCouponInfo() = runCatchingOrNull {
