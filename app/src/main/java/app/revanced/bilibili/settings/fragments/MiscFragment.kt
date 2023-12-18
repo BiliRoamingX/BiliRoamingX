@@ -9,14 +9,30 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.EditText
 import androidx.preference.Preference
+import app.revanced.bilibili.patches.SplashPatch
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
+import java.io.File
 
 class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") {
+    companion object {
+        private const val SELECTION_SPLASH = 222
+        private const val SELECTION_LOGO = 223
+    }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
         findPreference<Preference>("skin")?.onChange { _, newValue ->
-            if (newValue == true) onSkinClick() else true
+            if (newValue == true) onSkinClick()
+            true
+        }
+        findPreference<Preference>("custom_splash")?.onChange { _, newValue ->
+            if (newValue == true) selectImage(SELECTION_SPLASH)
+            true
+        }
+        findPreference<Preference>("custom_splash_logo")?.onChange { _, newValue ->
+            if (newValue == true) selectImage(SELECTION_LOGO)
+            true
         }
     }
 
@@ -24,10 +40,25 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val uri = data?.data
+        if (requestCode == SELECTION_SPLASH || requestCode == SELECTION_LOGO) {
+            val destFile = File(
+                Utils.getContext().filesDir,
+                if (requestCode == SELECTION_SPLASH) SplashPatch.SPLASH_IMAGE else SplashPatch.LOGO_IMAGE
+            )
+            if (resultCode == Activity.RESULT_CANCELED || uri == null) {
+                destFile.delete()
+            } else try {
+                Utils.getContext().contentResolver.openInputStream(uri)?.use { input ->
+                    destFile.outputStream().use { output -> input.copyTo(output) }
+                }
+            } catch (e: Exception) {
+                LogHelper.error({ "failed to apply splash image" }, e)
+            }
+        }
         if (resultCode != Activity.RESULT_OK || uri == null) return
         if (requestCode == 2336) {
             try {
-                requireActivity().contentResolver.openInputStream(uri)?.use {
+                Utils.getContext().contentResolver.openInputStream(uri)?.use {
                     skinInput?.setText(it.bufferedReader().readTextX().trim())
                 }
             } catch (e: Exception) {
@@ -37,7 +68,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
     }
 
     private var skinInput: EditText? = null
-    private fun onSkinClick(): Boolean {
+    private fun onSkinClick() {
         val view = EditText(activity)
         skinInput = view
         view.setText(Settings.SKIN_JSON.string)
@@ -80,6 +111,15 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
                     }
                 }
             }.show()
-        return true
+    }
+
+    private fun selectImage(request: Int) = try {
+        startActivityForResult(Intent.createChooser(Intent().apply {
+            action = Intent.ACTION_GET_CONTENT
+            type = "image/*"
+            addCategory(Intent.CATEGORY_OPENABLE)
+        }, Utils.getString("biliroaming_choose_image")), request)
+    } catch (ex: ActivityNotFoundException) {
+        Toasts.showShortWithId("biliroaming_pls_install_file_manager")
     }
 }

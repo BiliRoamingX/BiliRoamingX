@@ -177,6 +177,9 @@ public enum Settings {
     NUMBER_FORMAT("number_format", BOOLEAN, FALSE),
     AUTO_RECEIVE_COUPON("auto_receive_coupon", BOOLEAN, FALSE),
     DISPLAY_SIZE("display_size", STRING, "0", true),
+    CUSTOM_SPLASH("custom_splash", BOOLEAN, FALSE),
+    CUSTOM_SPLASH_LOGO("custom_splash_logo", BOOLEAN, FALSE),
+    FULL_SPLASH("full_splash", BOOLEAN, FALSE),
 
     // 去广告杂项
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),
