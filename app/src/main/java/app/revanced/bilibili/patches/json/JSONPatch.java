@@ -43,6 +43,7 @@ import tv.danmaku.bili.ui.offline.api.OgvApiResponse;
 import tv.danmaku.bili.ui.offline.api.OgvApiResponseV2;
 import tv.danmaku.bili.ui.splash.ad.model.SplashData;
 import tv.danmaku.bili.ui.splash.ad.model.SplashShowData;
+import tv.danmaku.bili.ui.splash.brand.model.BrandSplashData;
 import tv.danmaku.bili.ui.splash.event.EventSplashData;
 import tv.danmaku.bili.ui.splash.event.EventSplashDataList;
 
@@ -138,6 +139,14 @@ public class JSONPatch {
         } else if (data instanceof RecommendModeGuidanceConfig) {
             if (Settings.BLOCK_RECOMMEND_GUIDANCE.getBoolean())
                 return null;
+        } else if (data instanceof BrandSplashData) {
+            if (Settings.PURIFY_SPLASH.getBoolean()) {
+                BrandSplashData brandSplashData = (BrandSplashData) data;
+                brandSplashData.setBrandList(null);
+                brandSplashData.setPreloadList(null);
+                brandSplashData.setQueryList(null);
+                brandSplashData.setShowList(null);
+            }
         }
         return obj;
     }
