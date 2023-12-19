@@ -34,6 +34,10 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
             if (newValue == true) selectImage(SELECTION_LOGO)
             true
         }
+        findPreference<Preference>("purify_splash")?.onChange { _, newValue ->
+            if (newValue == true) Utils.clearSplashConfigCache()
+            true
+        }
     }
 
     @Deprecated("Deprecated in Java")

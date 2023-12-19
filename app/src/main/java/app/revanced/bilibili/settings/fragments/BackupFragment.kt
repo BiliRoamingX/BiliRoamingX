@@ -120,5 +120,8 @@ class BackupFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_backu
                 putString("PREF_KEY_ENTRANCE_CACHE", "")
             }
         }
+        if (Settings.PURIFY_SPLASH.boolean) {
+            Utils.clearSplashConfigCache()
+        }
     }
 }

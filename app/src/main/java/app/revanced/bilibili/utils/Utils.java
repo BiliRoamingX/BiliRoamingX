@@ -329,4 +329,16 @@ public class Utils {
             Toasts.showShortWithId("biliroaming_toast_image_get_failed");
         }
     }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void clearSplashConfigCache() {
+        // ad
+        new File(getContext().getFilesDir(), "splash2/splash.json").delete();
+        // event
+        Utils.blkvPrefsByName("splash.event.splash.name", true)
+                .edit().remove("splash.event.list.data.list").apply();
+        // brand
+        Utils.blkvPrefsByName("brand_splash_data", true)
+                .edit().remove("splash.brand_data").apply();
+    }
 }
