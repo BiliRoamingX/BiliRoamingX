@@ -1,5 +1,6 @@
 package app.revanced.bilibili.utils
 
+import app.revanced.bilibili.patches.SplashPatch
 import app.revanced.bilibili.settings.Settings
 import org.json.JSONArray
 import org.json.JSONObject
@@ -35,26 +36,35 @@ object BackupHelper {
         val items = JSONArray()
         metaInfo.put("items", items)
 
-        val prefsName = Settings.PREFS_NAME
-        val prefsItem = JSONObject().apply {
-            put("type", TYPE_PREFS)
-            put("name", prefsName)
-        }
-        items.put(prefsItem)
-        zipOut.putNextEntry(ZipEntry("$TYPE_PREFS/$prefsName.xml"))
-        prefsPath(prefsName).inputStream().use { it.copyTo(zipOut) }
-
-        val fontFile = SubtitleParamsCache.FONT_FILE
-        if (fontFile.isFile) {
-            val fontItem = JSONObject().apply {
-                put("type", TYPE_FILE)
-                put("location", fontFile.name)
-                put("restore_path", fontFile.toPathDescriptor())
+        val backupPrefsIfExist = { name: String ->
+            val prefsFile = prefsPath(name)
+            if (prefsFile.isFile) {
+                val prefsItem = JSONObject().apply {
+                    put("type", TYPE_PREFS)
+                    put("name", name)
+                }
+                items.put(prefsItem)
+                zipOut.putNextEntry(ZipEntry("$TYPE_PREFS/$name.xml"))
+                prefsFile.inputStream().use { it.copyTo(zipOut) }
             }
-            items.put(fontItem)
-            zipOut.putNextEntry(ZipEntry("$TYPE_FILE/${fontFile.name}"))
-            fontFile.inputStream().use { it.copyTo(zipOut) }
         }
+        val backupFileIfExist = { file: File ->
+            if (file.isFile) {
+                val fileItem = JSONObject().apply {
+                    put("type", TYPE_FILE)
+                    put("location", file.name)
+                    put("restore_path", file.toPathDescriptor())
+                }
+                items.put(fileItem)
+                zipOut.putNextEntry(ZipEntry("$TYPE_FILE/${file.name}"))
+                file.inputStream().use { it.copyTo(zipOut) }
+            }
+        }
+
+        backupPrefsIfExist(Settings.PREFS_NAME)
+        backupFileIfExist(SubtitleParamsCache.FONT_FILE)
+        backupFileIfExist(File(Utils.getContext().filesDir, SplashPatch.SPLASH_IMAGE))
+        backupFileIfExist(File(Utils.getContext().filesDir, SplashPatch.LOGO_IMAGE))
 
         zipOut.putNextEntry(ZipEntry("backup.json"))
         zipOut.write(metaInfo.toString().toByteArray())
