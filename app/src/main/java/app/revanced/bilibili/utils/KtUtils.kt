@@ -271,7 +271,7 @@ val logFile by lazy { File(Utils.getContext().externalCacheDir, "log.txt") }
 val oldLogFile by lazy { File(Utils.getContext().externalCacheDir, "old_log.txt") }
 
 fun checkErrorToast(json: JSONObject, isCustomServer: Boolean = false) {
-    if (json.optInt("code", 0) != 0) {
+    if (json.optInt("code", -1) != 0) {
         Toasts.showShort(
             (if (isCustomServer) "请求解析服务器发生错误: " else "请求发生错误: ")
                     + json.optString("message", "未知错误")
