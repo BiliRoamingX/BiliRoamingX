@@ -105,12 +105,14 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
     private fun JSONArray.toSubtitles(): List<SubtitleItem> {
         val subList = mutableListOf<SubtitleItem>()
         val lanCodes = asSequence<JSONObject>().map { it.optString("key") }
-        // prefer select furry cn subtitle if official not exist, then consider kktv
+        // prefer select furry cn subtitle if official not exist, then consider kktv, iqiyi, mewatch
         val replaceable = "zh-Hans" !in lanCodes
         val replaceToFurry = replaceable && "cn" in lanCodes
         val replaceToKKTV = replaceable && !replaceToFurry && "cn.kktv" in lanCodes
         val replaceToIqiyi =
             replaceable && !replaceToFurry && !replaceToKKTV && "cn.iqiyi" in lanCodes
+        val replaceToMeWatch =
+            replaceable && !replaceToFurry && !replaceToKKTV && !replaceToIqiyi && "cn.mewatch" in lanCodes
         for (subtitle in this) {
             SubtitleItem().apply {
                 id = subtitle.optLong("id")
@@ -120,6 +122,7 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
                     if ((it == "cn" && replaceToFurry)
                         || (it == "cn.kktv" && replaceToKKTV)
                         || (it == "cn.iqiyi" && replaceToIqiyi)
+                        || (it == "cn.mewatch" && replaceToMeWatch)
                     ) "zh-Hans" else it
                 }
                 lanDoc = subtitle.optString("title")
