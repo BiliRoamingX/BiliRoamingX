@@ -343,7 +343,7 @@ public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUnite
             return this;
         }
 
-        public Builder setPlayArc(PlayArc.Builder builder) {
+        public Builder setPlayArc(PlayArc.C13342b builder) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).setPlayArc(builder.build());
             return this;

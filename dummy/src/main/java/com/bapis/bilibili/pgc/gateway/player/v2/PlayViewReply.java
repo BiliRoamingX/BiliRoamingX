@@ -267,7 +267,7 @@ public final class PlayViewReply extends GeneratedMessageLite<PlayViewReply, Pla
             super(PlayViewReply.DEFAULT_INSTANCE);
         }
 
-        public Builder setBusiness(PlayViewBusinessInfo.Builder builder) {
+        public Builder setBusiness(PlayViewBusinessInfo.C13158b builder) {
             copyOnWrite();
             ((PlayViewReply) this.instance).setBusiness(builder.build());
             return this;

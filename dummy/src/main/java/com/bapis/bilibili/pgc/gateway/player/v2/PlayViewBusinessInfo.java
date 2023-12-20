@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 /* compiled from: BL */
-/* loaded from: classes14.dex */
-public final class PlayViewBusinessInfo extends GeneratedMessageLite<PlayViewBusinessInfo, PlayViewBusinessInfo.Builder> implements MessageLiteOrBuilder {
+/* loaded from: classes21.dex */
+public final class PlayViewBusinessInfo extends GeneratedMessageLite<PlayViewBusinessInfo, PlayViewBusinessInfo.C13158b> implements MessageLiteOrBuilder {
     public static final int BP_FIELD_NUMBER = 2;
     public static final int CLIP_INFO_FIELD_NUMBER = 6;
     public static final int CONTINUE_PLAY_INFO_FIELD_NUMBER = 5;
@@ -47,6 +47,7 @@ public final class PlayViewBusinessInfo extends GeneratedMessageLite<PlayViewBus
     public static final int RECORD_INFO_FIELD_NUMBER = 15;
     public static final int USER_STATUS_FIELD_NUMBER = 20;
     public static final int VIP_STATUS_FIELD_NUMBER = 16;
+    public static final int WATCH_TIME_LENGTH_FIELD_NUMBER = 22;
     private boolean bp_;
     private ContinuePlayInfo continuePlayInfo_;
     private Dimension dimension_;
@@ -62,6 +63,7 @@ public final class PlayViewBusinessInfo extends GeneratedMessageLite<PlayViewBus
     private RecordInfo recordInfo_;
     private UserStatus userStatus_;
     private int vipStatus_;
+    private long watchTimeLength_;
     private MapFieldLite<Integer, QualityExtInfo> qualityExtMap_ = MapFieldLite.emptyMapField();
     private MapFieldLite<String, Integer> expMap_ = MapFieldLite.emptyMapField();
     private String marlinToken_ = "";
@@ -70,201 +72,208 @@ public final class PlayViewBusinessInfo extends GeneratedMessageLite<PlayViewBus
     private Internal.ProtobufList<EpPublicityVideo> epPublicityVideoList_ = GeneratedMessageLite.emptyProtobufList();
 
     /* compiled from: BL */
-    /* renamed from: com.bapis.bilibili.pgc.gateway.player.v2.PlayViewBusinessInfo$1 */
-    /* loaded from: classes14.dex */
-    static /* synthetic */ class C78671 {
+    /* renamed from: com.bapis.bilibili.pgc.gateway.player.v2.PlayViewBusinessInfo$a */
+    /* loaded from: classes21.dex */
+    static /* synthetic */ class C13157a {
 
         /* renamed from: $SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke */
-        static final /* synthetic */ int[] f17582xa1df5c61;
+        static final /* synthetic */ int[] f19355xa1df5c61;
 
         static {
             int[] iArr = new int[GeneratedMessageLite.MethodToInvoke.values().length];
-            f17582xa1df5c61 = iArr;
+            f19355xa1df5c61 = iArr;
             try {
                 iArr[GeneratedMessageLite.MethodToInvoke.NEW_MUTABLE_INSTANCE.ordinal()] = 1;
             } catch (NoSuchFieldError unused) {
             }
             try {
-                f17582xa1df5c61[GeneratedMessageLite.MethodToInvoke.NEW_BUILDER.ordinal()] = 2;
+                f19355xa1df5c61[GeneratedMessageLite.MethodToInvoke.NEW_BUILDER.ordinal()] = 2;
             } catch (NoSuchFieldError unused2) {
             }
             try {
-                f17582xa1df5c61[GeneratedMessageLite.MethodToInvoke.BUILD_MESSAGE_INFO.ordinal()] = 3;
+                f19355xa1df5c61[GeneratedMessageLite.MethodToInvoke.BUILD_MESSAGE_INFO.ordinal()] = 3;
             } catch (NoSuchFieldError unused3) {
             }
             try {
-                f17582xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_DEFAULT_INSTANCE.ordinal()] = 4;
+                f19355xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_DEFAULT_INSTANCE.ordinal()] = 4;
             } catch (NoSuchFieldError unused4) {
             }
             try {
-                f17582xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_PARSER.ordinal()] = 5;
+                f19355xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_PARSER.ordinal()] = 5;
             } catch (NoSuchFieldError unused5) {
             }
             try {
-                f17582xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_MEMOIZED_IS_INITIALIZED.ordinal()] = 6;
+                f19355xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_MEMOIZED_IS_INITIALIZED.ordinal()] = 6;
             } catch (NoSuchFieldError unused6) {
             }
             try {
-                f17582xa1df5c61[GeneratedMessageLite.MethodToInvoke.SET_MEMOIZED_IS_INITIALIZED.ordinal()] = 7;
+                f19355xa1df5c61[GeneratedMessageLite.MethodToInvoke.SET_MEMOIZED_IS_INITIALIZED.ordinal()] = 7;
             } catch (NoSuchFieldError unused7) {
             }
         }
     }
 
     /* compiled from: BL */
-    /* loaded from: classes14.dex */
-    public static final class Builder extends GeneratedMessageLite.Builder<PlayViewBusinessInfo, Builder> implements MessageLiteOrBuilder {
-        /* synthetic */ Builder(C78671 c78671) {
+    /* renamed from: com.bapis.bilibili.pgc.gateway.player.v2.PlayViewBusinessInfo$b */
+    /* loaded from: classes21.dex */
+    public static final class C13158b extends GeneratedMessageLite.Builder<PlayViewBusinessInfo, C13158b> implements MessageLiteOrBuilder {
+        /* synthetic */ C13158b(C13157a c13157a) {
             this();
         }
 
-        public Builder addAllClipInfo(Iterable<? extends ClipInfo> iterable) {
+        public C13158b addAllClipInfo(Iterable<? extends ClipInfo> iterable) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).addAllClipInfo(iterable);
             return this;
         }
 
-        public Builder addAllEpPublicityVideoList(Iterable<? extends EpPublicityVideo> iterable) {
+        public C13158b addAllEpPublicityVideoList(Iterable<? extends EpPublicityVideo> iterable) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).addAllEpPublicityVideoList(iterable);
             return this;
         }
 
-        public Builder addClipInfo(ClipInfo clipInfo) {
+        public C13158b addClipInfo(ClipInfo clipInfo) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).addClipInfo(clipInfo);
             return this;
         }
 
-        public Builder addEpPublicityVideoList(EpPublicityVideo epPublicityVideo) {
+        public C13158b addEpPublicityVideoList(EpPublicityVideo epPublicityVideo) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).addEpPublicityVideoList(epPublicityVideo);
             return this;
         }
 
-        public Builder clearBp() {
+        public C13158b clearBp() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearBp();
             return this;
         }
 
-        public Builder clearClipInfo() {
+        public C13158b clearClipInfo() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearClipInfo();
             return this;
         }
 
-        public Builder clearContinuePlayInfo() {
+        public C13158b clearContinuePlayInfo() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearContinuePlayInfo();
             return this;
         }
 
-        public Builder clearDimension() {
+        public C13158b clearDimension() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearDimension();
             return this;
         }
 
-        public Builder clearDrmTechType() {
+        public C13158b clearDrmTechType() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearDrmTechType();
             return this;
         }
 
-        public Builder clearEpPublicityVideoList() {
+        public C13158b clearEpPublicityVideoList() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearEpPublicityVideoList();
             return this;
         }
 
-        public Builder clearEpWholeDuration() {
+        public C13158b clearEpWholeDuration() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearEpWholeDuration();
             return this;
         }
 
-        public Builder clearEpisodeAdvertisementInfo() {
+        public C13158b clearEpisodeAdvertisementInfo() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearEpisodeAdvertisementInfo();
             return this;
         }
 
-        public Builder clearEpisodeInfo() {
+        public C13158b clearEpisodeInfo() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearEpisodeInfo();
             return this;
         }
 
-        public Builder clearExpMap() {
+        public C13158b clearExpMap() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).getMutableExpMapMap().clear();
             return this;
         }
 
-        public Builder clearInlineType() {
+        public C13158b clearInlineType() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearInlineType();
             return this;
         }
 
-        public Builder clearIsDrm() {
+        public C13158b clearIsDrm() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearIsDrm();
             return this;
         }
 
-        public Builder clearIsLivePre() {
+        public C13158b clearIsLivePre() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearIsLivePre();
             return this;
         }
 
-        public Builder clearIsPreview() {
+        public C13158b clearIsPreview() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearIsPreview();
             return this;
         }
 
-        public Builder clearLimitActionType() {
+        public C13158b clearLimitActionType() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearLimitActionType();
             return this;
         }
 
-        public Builder clearMarlinToken() {
+        public C13158b clearMarlinToken() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearMarlinToken();
             return this;
         }
 
-        public Builder clearPlaybackSpeedColor() {
+        public C13158b clearPlaybackSpeedColor() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearPlaybackSpeedColor();
             return this;
         }
 
-        public Builder clearQualityExtMap() {
+        public C13158b clearQualityExtMap() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).getMutableQualityExtMapMap().clear();
             return this;
         }
 
-        public Builder clearRecordInfo() {
+        public C13158b clearRecordInfo() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearRecordInfo();
             return this;
         }
 
-        public Builder clearUserStatus() {
+        public C13158b clearUserStatus() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearUserStatus();
             return this;
         }
 
-        public Builder clearVipStatus() {
+        public C13158b clearVipStatus() {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).clearVipStatus();
+            return this;
+        }
+
+        public C13158b clearWatchTimeLength() {
+            copyOnWrite();
+            ((PlayViewBusinessInfo) this.instance).clearWatchTimeLength();
             return this;
         }
 
@@ -443,6 +452,10 @@ public final class PlayViewBusinessInfo extends GeneratedMessageLite<PlayViewBus
             return ((PlayViewBusinessInfo) this.instance).getVipStatus();
         }
 
+        public long getWatchTimeLength() {
+            return ((PlayViewBusinessInfo) this.instance).getWatchTimeLength();
+        }
+
         public boolean hasContinuePlayInfo() {
             return ((PlayViewBusinessInfo) this.instance).hasContinuePlayInfo();
         }
@@ -467,341 +480,349 @@ public final class PlayViewBusinessInfo extends GeneratedMessageLite<PlayViewBus
             return ((PlayViewBusinessInfo) this.instance).hasUserStatus();
         }
 
-        public Builder mergeContinuePlayInfo(ContinuePlayInfo continuePlayInfo) {
+        public C13158b mergeContinuePlayInfo(ContinuePlayInfo continuePlayInfo) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).mergeContinuePlayInfo(continuePlayInfo);
             return this;
         }
 
-        public Builder mergeDimension(Dimension dimension) {
+        public C13158b mergeDimension(Dimension dimension) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).mergeDimension(dimension);
             return this;
         }
 
-        public Builder mergeEpisodeAdvertisementInfo(EpisodeAdvertisementInfo episodeAdvertisementInfo) {
+        public C13158b mergeEpisodeAdvertisementInfo(EpisodeAdvertisementInfo episodeAdvertisementInfo) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).mergeEpisodeAdvertisementInfo(episodeAdvertisementInfo);
             return this;
         }
 
-        public Builder mergeEpisodeInfo(EpisodeInfo episodeInfo) {
+        public C13158b mergeEpisodeInfo(EpisodeInfo episodeInfo) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).mergeEpisodeInfo(episodeInfo);
             return this;
         }
 
-        public Builder mergeRecordInfo(RecordInfo recordInfo) {
+        public C13158b mergeRecordInfo(RecordInfo recordInfo) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).mergeRecordInfo(recordInfo);
             return this;
         }
 
-        public Builder mergeUserStatus(UserStatus userStatus) {
+        public C13158b mergeUserStatus(UserStatus userStatus) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).mergeUserStatus(userStatus);
             return this;
         }
 
-        public Builder putAllExpMap(Map<String, Integer> map) {
+        public C13158b putAllExpMap(Map<String, Integer> map) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).getMutableExpMapMap().putAll(map);
             return this;
         }
 
-        public Builder putAllQualityExtMap(Map<Integer, QualityExtInfo> map) {
+        public C13158b putAllQualityExtMap(Map<Integer, QualityExtInfo> map) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).getMutableQualityExtMapMap().putAll(map);
             return this;
         }
 
-        public Builder putExpMap(String str, int i) {
+        public C13158b putExpMap(String str, int i) {
             str.getClass();
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).getMutableExpMapMap().put(str, Integer.valueOf(i));
             return this;
         }
 
-        public Builder putQualityExtMap(int i, QualityExtInfo qualityExtInfo) {
+        public C13158b putQualityExtMap(int i, QualityExtInfo qualityExtInfo) {
             qualityExtInfo.getClass();
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).getMutableQualityExtMapMap().put(Integer.valueOf(i), qualityExtInfo);
             return this;
         }
 
-        public Builder removeClipInfo(int i) {
+        public C13158b removeClipInfo(int i) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).removeClipInfo(i);
             return this;
         }
 
-        public Builder removeEpPublicityVideoList(int i) {
+        public C13158b removeEpPublicityVideoList(int i) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).removeEpPublicityVideoList(i);
             return this;
         }
 
-        public Builder removeExpMap(String str) {
+        public C13158b removeExpMap(String str) {
             str.getClass();
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).getMutableExpMapMap().remove(str);
             return this;
         }
 
-        public Builder removeQualityExtMap(int i) {
+        public C13158b removeQualityExtMap(int i) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).getMutableQualityExtMapMap().remove(Integer.valueOf(i));
             return this;
         }
 
-        public Builder setBp(boolean z) {
+        public C13158b setBp(boolean z) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setBp(z);
             return this;
         }
 
-        public Builder setClipInfo(int i, ClipInfo clipInfo) {
+        public C13158b setClipInfo(int i, ClipInfo clipInfo) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setClipInfo(i, clipInfo);
             return this;
         }
 
-        public Builder setContinuePlayInfo(ContinuePlayInfo continuePlayInfo) {
+        public C13158b setContinuePlayInfo(ContinuePlayInfo continuePlayInfo) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setContinuePlayInfo(continuePlayInfo);
             return this;
         }
 
-        public Builder setDimension(Dimension dimension) {
+        public C13158b setDimension(Dimension dimension) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setDimension(dimension);
             return this;
         }
 
-        public Builder setDrmTechType(DrmTechType drmTechType) {
+        public C13158b setDrmTechType(DrmTechType drmTechType) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setDrmTechType(drmTechType);
             return this;
         }
 
-        public Builder setDrmTechTypeValue(int i) {
+        public C13158b setDrmTechTypeValue(int i) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setDrmTechTypeValue(i);
             return this;
         }
 
-        public Builder setEpPublicityVideoList(int i, EpPublicityVideo epPublicityVideo) {
+        public C13158b setEpPublicityVideoList(int i, EpPublicityVideo epPublicityVideo) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setEpPublicityVideoList(i, epPublicityVideo);
             return this;
         }
 
-        public Builder setEpWholeDuration(int i) {
+        public C13158b setEpWholeDuration(int i) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setEpWholeDuration(i);
             return this;
         }
 
-        public Builder setEpisodeAdvertisementInfo(EpisodeAdvertisementInfo episodeAdvertisementInfo) {
+        public C13158b setEpisodeAdvertisementInfo(EpisodeAdvertisementInfo episodeAdvertisementInfo) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setEpisodeAdvertisementInfo(episodeAdvertisementInfo);
             return this;
         }
 
-        public Builder setEpisodeInfo(EpisodeInfo episodeInfo) {
+        public C13158b setEpisodeInfo(EpisodeInfo episodeInfo) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setEpisodeInfo(episodeInfo);
             return this;
         }
 
-        public Builder setInlineType(InlineType inlineType) {
+        public C13158b setInlineType(InlineType inlineType) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setInlineType(inlineType);
             return this;
         }
 
-        public Builder setInlineTypeValue(int i) {
+        public C13158b setInlineTypeValue(int i) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setInlineTypeValue(i);
             return this;
         }
 
-        public Builder setIsDrm(boolean z) {
+        public C13158b setIsDrm(boolean z) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setIsDrm(z);
             return this;
         }
 
-        public Builder setIsLivePre(boolean z) {
+        public C13158b setIsLivePre(boolean z) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setIsLivePre(z);
             return this;
         }
 
-        public Builder setIsPreview(boolean z) {
+        public C13158b setIsPreview(boolean z) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setIsPreview(z);
             return this;
         }
 
-        public Builder setLimitActionType(LimitActionType limitActionType) {
+        public C13158b setLimitActionType(LimitActionType limitActionType) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setLimitActionType(limitActionType);
             return this;
         }
 
-        public Builder setLimitActionTypeValue(int i) {
+        public C13158b setLimitActionTypeValue(int i) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setLimitActionTypeValue(i);
             return this;
         }
 
-        public Builder setMarlinToken(String str) {
+        public C13158b setMarlinToken(String str) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setMarlinToken(str);
             return this;
         }
 
-        public Builder setMarlinTokenBytes(ByteString byteString) {
+        public C13158b setMarlinTokenBytes(ByteString byteString) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setMarlinTokenBytes(byteString);
             return this;
         }
 
-        public Builder setPlaybackSpeedColor(String str) {
+        public C13158b setPlaybackSpeedColor(String str) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setPlaybackSpeedColor(str);
             return this;
         }
 
-        public Builder setPlaybackSpeedColorBytes(ByteString byteString) {
+        public C13158b setPlaybackSpeedColorBytes(ByteString byteString) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setPlaybackSpeedColorBytes(byteString);
             return this;
         }
 
-        public Builder setRecordInfo(RecordInfo recordInfo) {
+        public C13158b setRecordInfo(RecordInfo recordInfo) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setRecordInfo(recordInfo);
             return this;
         }
 
-        public Builder setUserStatus(UserStatus userStatus) {
+        public C13158b setUserStatus(UserStatus userStatus) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setUserStatus(userStatus);
             return this;
         }
 
-        public Builder setVipStatus(int i) {
+        public C13158b setVipStatus(int i) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).setVipStatus(i);
             return this;
         }
 
-        private Builder() {
+        public C13158b setWatchTimeLength(long j) {
+            copyOnWrite();
+            ((PlayViewBusinessInfo) this.instance).setWatchTimeLength(j);
+            return this;
+        }
+
+        private C13158b() {
             super(PlayViewBusinessInfo.DEFAULT_INSTANCE);
         }
 
-        public Builder addClipInfo(int i, ClipInfo clipInfo) {
+        public C13158b addClipInfo(int i, ClipInfo clipInfo) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).addClipInfo(i, clipInfo);
             return this;
         }
 
-        public Builder addEpPublicityVideoList(int i, EpPublicityVideo epPublicityVideo) {
+        public C13158b addEpPublicityVideoList(int i, EpPublicityVideo epPublicityVideo) {
             copyOnWrite();
             ((PlayViewBusinessInfo) this.instance).addEpPublicityVideoList(i, epPublicityVideo);
             return this;
         }
 
-        public Builder setClipInfo(int i, ClipInfo.Builder builder) {
+        public C13158b setClipInfo(int i, ClipInfo.Builder c13071b) {
             copyOnWrite();
-            ((PlayViewBusinessInfo) this.instance).setClipInfo(i, builder.build());
+            ((PlayViewBusinessInfo) this.instance).setClipInfo(i, c13071b.build());
             return this;
         }
 
-        public Builder setContinuePlayInfo(ContinuePlayInfo.Builder builder) {
+        public C13158b setContinuePlayInfo(ContinuePlayInfo.Builder c13077b) {
             copyOnWrite();
-            ((PlayViewBusinessInfo) this.instance).setContinuePlayInfo(builder.build());
+            ((PlayViewBusinessInfo) this.instance).setContinuePlayInfo(c13077b.build());
             return this;
         }
 
-        public Builder setDimension(Dimension.Builder builder) {
+        public C13158b setDimension(Dimension.Builder c13097b) {
             copyOnWrite();
-            ((PlayViewBusinessInfo) this.instance).setDimension(builder.build());
+            ((PlayViewBusinessInfo) this.instance).setDimension(c13097b.build());
             return this;
         }
 
-        public Builder setEpPublicityVideoList(int i, EpPublicityVideo.Builder builder) {
+        public C13158b setEpPublicityVideoList(int i, EpPublicityVideo.Builder c13111b) {
             copyOnWrite();
-            ((PlayViewBusinessInfo) this.instance).setEpPublicityVideoList(i, builder.build());
+            ((PlayViewBusinessInfo) this.instance).setEpPublicityVideoList(i, c13111b.build());
             return this;
         }
 
-        public Builder setEpisodeAdvertisementInfo(EpisodeAdvertisementInfo.Builder builder) {
+        public C13158b setEpisodeAdvertisementInfo(EpisodeAdvertisementInfo.Builder c13115b) {
             copyOnWrite();
-            ((PlayViewBusinessInfo) this.instance).setEpisodeAdvertisementInfo(builder.build());
+            ((PlayViewBusinessInfo) this.instance).setEpisodeAdvertisementInfo(c13115b.build());
             return this;
         }
 
-        public Builder setEpisodeInfo(EpisodeInfo.Builder builder) {
+        public C13158b setEpisodeInfo(EpisodeInfo.Builder c13117b) {
             copyOnWrite();
-            ((PlayViewBusinessInfo) this.instance).setEpisodeInfo(builder.build());
+            ((PlayViewBusinessInfo) this.instance).setEpisodeInfo(c13117b.build());
             return this;
         }
 
-        public Builder setRecordInfo(RecordInfo.Builder builder) {
+        public C13158b setRecordInfo(RecordInfo.Builder c13176b) {
             copyOnWrite();
-            ((PlayViewBusinessInfo) this.instance).setRecordInfo(builder.build());
+            ((PlayViewBusinessInfo) this.instance).setRecordInfo(c13176b.build());
             return this;
         }
 
-        public Builder setUserStatus(UserStatus.Builder builder) {
+        public C13158b setUserStatus(UserStatus.Builder c13213b) {
             copyOnWrite();
-            ((PlayViewBusinessInfo) this.instance).setUserStatus(builder.build());
+            ((PlayViewBusinessInfo) this.instance).setUserStatus(c13213b.build());
             return this;
         }
 
-        public Builder addClipInfo(ClipInfo.Builder builder) {
+        public C13158b addClipInfo(ClipInfo.Builder c13071b) {
             copyOnWrite();
-            ((PlayViewBusinessInfo) this.instance).addClipInfo(builder.build());
+            ((PlayViewBusinessInfo) this.instance).addClipInfo(c13071b.build());
             return this;
         }
 
-        public Builder addEpPublicityVideoList(EpPublicityVideo.Builder builder) {
+        public C13158b addEpPublicityVideoList(EpPublicityVideo.Builder c13111b) {
             copyOnWrite();
-            ((PlayViewBusinessInfo) this.instance).addEpPublicityVideoList(builder.build());
+            ((PlayViewBusinessInfo) this.instance).addEpPublicityVideoList(c13111b.build());
             return this;
         }
 
-        public Builder addClipInfo(int i, ClipInfo.Builder builder) {
+        public C13158b addClipInfo(int i, ClipInfo.Builder c13071b) {
             copyOnWrite();
-            ((PlayViewBusinessInfo) this.instance).addClipInfo(i, builder.build());
+            ((PlayViewBusinessInfo) this.instance).addClipInfo(i, c13071b.build());
             return this;
         }
 
-        public Builder addEpPublicityVideoList(int i, EpPublicityVideo.Builder builder) {
+        public C13158b addEpPublicityVideoList(int i, EpPublicityVideo.Builder c13111b) {
             copyOnWrite();
-            ((PlayViewBusinessInfo) this.instance).addEpPublicityVideoList(i, builder.build());
+            ((PlayViewBusinessInfo) this.instance).addEpPublicityVideoList(i, c13111b.build());
             return this;
         }
     }
 
     /* compiled from: BL */
-    /* loaded from: classes14.dex */
-    private static final class ExpMapDefaultEntryHolder {
+    /* renamed from: com.bapis.bilibili.pgc.gateway.player.v2.PlayViewBusinessInfo$c */
+    /* loaded from: classes21.dex */
+    private static final class C13159c {
         static final MapEntryLite<String, Integer> defaultEntry = MapEntryLite.newDefaultInstance(WireFormat.FieldType.STRING, "", WireFormat.FieldType.INT32, 0);
 
-        private ExpMapDefaultEntryHolder() {
+        private C13159c() {
         }
     }
 
     /* compiled from: BL */
-    /* loaded from: classes14.dex */
-    private static final class QualityExtMapDefaultEntryHolder {
+    /* renamed from: com.bapis.bilibili.pgc.gateway.player.v2.PlayViewBusinessInfo$d */
+    /* loaded from: classes21.dex */
+    private static final class C13160d {
         static final MapEntryLite<Integer, QualityExtInfo> defaultEntry = MapEntryLite.newDefaultInstance(WireFormat.FieldType.INT32, 0, WireFormat.FieldType.MESSAGE, QualityExtInfo.getDefaultInstance());
 
-        private QualityExtMapDefaultEntryHolder() {
+        private C13160d() {
         }
     }
 
@@ -814,102 +835,130 @@ public final class PlayViewBusinessInfo extends GeneratedMessageLite<PlayViewBus
     public PlayViewBusinessInfo() {
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void addAllClipInfo(Iterable<? extends ClipInfo> iterable) {
         ensureClipInfoIsMutable();
         AbstractMessageLite.addAll((Iterable) iterable, (List) this.clipInfo_);
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void addAllEpPublicityVideoList(Iterable<? extends EpPublicityVideo> iterable) {
         ensureEpPublicityVideoListIsMutable();
         AbstractMessageLite.addAll((Iterable) iterable, (List) this.epPublicityVideoList_);
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void addClipInfo(ClipInfo clipInfo) {
         clipInfo.getClass();
         ensureClipInfoIsMutable();
         this.clipInfo_.add(clipInfo);
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void addEpPublicityVideoList(EpPublicityVideo epPublicityVideo) {
         epPublicityVideo.getClass();
         ensureEpPublicityVideoListIsMutable();
         this.epPublicityVideoList_.add(epPublicityVideo);
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearBp() {
         this.bp_ = false;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearClipInfo() {
         this.clipInfo_ = GeneratedMessageLite.emptyProtobufList();
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearContinuePlayInfo() {
         this.continuePlayInfo_ = null;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearDimension() {
         this.dimension_ = null;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearDrmTechType() {
         this.drmTechType_ = 0;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearEpPublicityVideoList() {
         this.epPublicityVideoList_ = GeneratedMessageLite.emptyProtobufList();
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearEpWholeDuration() {
         this.epWholeDuration_ = 0;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearEpisodeAdvertisementInfo() {
         this.episodeAdvertisementInfo_ = null;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearEpisodeInfo() {
         this.episodeInfo_ = null;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearInlineType() {
         this.inlineType_ = 0;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearIsDrm() {
         this.isDrm_ = false;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearIsLivePre() {
         this.isLivePre_ = false;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearIsPreview() {
         this.isPreview_ = false;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearLimitActionType() {
         this.limitActionType_ = 0;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearMarlinToken() {
         this.marlinToken_ = getDefaultInstance().getMarlinToken();
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearPlaybackSpeedColor() {
         this.playbackSpeedColor_ = getDefaultInstance().getPlaybackSpeedColor();
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearRecordInfo() {
         this.recordInfo_ = null;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearUserStatus() {
         this.userStatus_ = null;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearVipStatus() {
         this.vipStatus_ = 0;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void clearWatchTimeLength() {
+        this.watchTimeLength_ = 0L;
     }
 
     private void ensureClipInfoIsMutable() {
@@ -932,10 +981,12 @@ public final class PlayViewBusinessInfo extends GeneratedMessageLite<PlayViewBus
         return DEFAULT_INSTANCE;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public Map<String, Integer> getMutableExpMapMap() {
         return internalGetMutableExpMap();
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public Map<Integer, QualityExtInfo> getMutableQualityExtMapMap() {
         return internalGetMutableQualityExtMap();
     }
@@ -962,25 +1013,73 @@ public final class PlayViewBusinessInfo extends GeneratedMessageLite<PlayViewBus
         return this.qualityExtMap_;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void mergeContinuePlayInfo(ContinuePlayInfo continuePlayInfo) {
+        continuePlayInfo.getClass();
+        ContinuePlayInfo continuePlayInfo2 = this.continuePlayInfo_;
+        if (continuePlayInfo2 != null && continuePlayInfo2 != ContinuePlayInfo.getDefaultInstance()) {
+            this.continuePlayInfo_ = ContinuePlayInfo.newBuilder(this.continuePlayInfo_).mergeFrom((ContinuePlayInfo) continuePlayInfo).buildPartial();
+        } else {
+            this.continuePlayInfo_ = continuePlayInfo;
+        }
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void mergeDimension(Dimension dimension) {
+        dimension.getClass();
+        Dimension dimension2 = this.dimension_;
+        if (dimension2 != null && dimension2 != Dimension.getDefaultInstance()) {
+            this.dimension_ = Dimension.newBuilder(this.dimension_).mergeFrom((Dimension) dimension).buildPartial();
+        } else {
+            this.dimension_ = dimension;
+        }
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void mergeEpisodeAdvertisementInfo(EpisodeAdvertisementInfo episodeAdvertisementInfo) {
+        episodeAdvertisementInfo.getClass();
+        EpisodeAdvertisementInfo episodeAdvertisementInfo2 = this.episodeAdvertisementInfo_;
+        if (episodeAdvertisementInfo2 != null && episodeAdvertisementInfo2 != EpisodeAdvertisementInfo.getDefaultInstance()) {
+            this.episodeAdvertisementInfo_ = EpisodeAdvertisementInfo.newBuilder(this.episodeAdvertisementInfo_).mergeFrom((EpisodeAdvertisementInfo) episodeAdvertisementInfo).buildPartial();
+        } else {
+            this.episodeAdvertisementInfo_ = episodeAdvertisementInfo;
+        }
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void mergeEpisodeInfo(EpisodeInfo episodeInfo) {
+        episodeInfo.getClass();
+        EpisodeInfo episodeInfo2 = this.episodeInfo_;
+        if (episodeInfo2 != null && episodeInfo2 != EpisodeInfo.getDefaultInstance()) {
+            this.episodeInfo_ = EpisodeInfo.newBuilder(this.episodeInfo_).mergeFrom((EpisodeInfo) episodeInfo).buildPartial();
+        } else {
+            this.episodeInfo_ = episodeInfo;
+        }
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void mergeRecordInfo(RecordInfo recordInfo) {
+        recordInfo.getClass();
+        RecordInfo recordInfo2 = this.recordInfo_;
+        if (recordInfo2 != null && recordInfo2 != RecordInfo.getDefaultInstance()) {
+            this.recordInfo_ = RecordInfo.newBuilder(this.recordInfo_).mergeFrom((RecordInfo) recordInfo).buildPartial();
+        } else {
+            this.recordInfo_ = recordInfo;
+        }
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void mergeUserStatus(UserStatus userStatus) {
+        userStatus.getClass();
+        UserStatus userStatus2 = this.userStatus_;
+        if (userStatus2 != null && userStatus2 != UserStatus.getDefaultInstance()) {
+            this.userStatus_ = UserStatus.newBuilder(this.userStatus_).mergeFrom((UserStatus) userStatus).buildPartial();
+        } else {
+            this.userStatus_ = userStatus;
+        }
     }
 
-    public static Builder newBuilder() {
+    public static C13158b newBuilder() {
         return DEFAULT_INSTANCE.createBuilder();
     }
 
@@ -996,124 +1095,155 @@ public final class PlayViewBusinessInfo extends GeneratedMessageLite<PlayViewBus
         return DEFAULT_INSTANCE.getParserForType();
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void removeClipInfo(int i) {
         ensureClipInfoIsMutable();
         this.clipInfo_.remove(i);
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void removeEpPublicityVideoList(int i) {
         ensureEpPublicityVideoListIsMutable();
         this.epPublicityVideoList_.remove(i);
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setBp(boolean z) {
         this.bp_ = z;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setClipInfo(int i, ClipInfo clipInfo) {
         clipInfo.getClass();
         ensureClipInfoIsMutable();
         this.clipInfo_.set(i, clipInfo);
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setContinuePlayInfo(ContinuePlayInfo continuePlayInfo) {
         continuePlayInfo.getClass();
         this.continuePlayInfo_ = continuePlayInfo;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setDimension(Dimension dimension) {
         dimension.getClass();
         this.dimension_ = dimension;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setDrmTechType(DrmTechType drmTechType) {
         this.drmTechType_ = drmTechType.getNumber();
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setDrmTechTypeValue(int i) {
         this.drmTechType_ = i;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setEpPublicityVideoList(int i, EpPublicityVideo epPublicityVideo) {
         epPublicityVideo.getClass();
         ensureEpPublicityVideoListIsMutable();
         this.epPublicityVideoList_.set(i, epPublicityVideo);
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setEpWholeDuration(int i) {
         this.epWholeDuration_ = i;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setEpisodeAdvertisementInfo(EpisodeAdvertisementInfo episodeAdvertisementInfo) {
         episodeAdvertisementInfo.getClass();
         this.episodeAdvertisementInfo_ = episodeAdvertisementInfo;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setEpisodeInfo(EpisodeInfo episodeInfo) {
         episodeInfo.getClass();
         this.episodeInfo_ = episodeInfo;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setInlineType(InlineType inlineType) {
         this.inlineType_ = inlineType.getNumber();
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setInlineTypeValue(int i) {
         this.inlineType_ = i;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setIsDrm(boolean z) {
         this.isDrm_ = z;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setIsLivePre(boolean z) {
         this.isLivePre_ = z;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setIsPreview(boolean z) {
         this.isPreview_ = z;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setLimitActionType(LimitActionType limitActionType) {
         this.limitActionType_ = limitActionType.getNumber();
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setLimitActionTypeValue(int i) {
         this.limitActionType_ = i;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setMarlinToken(String str) {
         str.getClass();
         this.marlinToken_ = str;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setMarlinTokenBytes(ByteString byteString) {
         AbstractMessageLite.checkByteStringIsUtf8(byteString);
         this.marlinToken_ = byteString.toStringUtf8();
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setPlaybackSpeedColor(String str) {
         str.getClass();
         this.playbackSpeedColor_ = str;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setPlaybackSpeedColorBytes(ByteString byteString) {
         AbstractMessageLite.checkByteStringIsUtf8(byteString);
         this.playbackSpeedColor_ = byteString.toStringUtf8();
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setRecordInfo(RecordInfo recordInfo) {
         recordInfo.getClass();
         this.recordInfo_ = recordInfo;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setUserStatus(UserStatus userStatus) {
         userStatus.getClass();
         this.userStatus_ = userStatus;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void setVipStatus(int i) {
         this.vipStatus_ = i;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void setWatchTimeLength(long j) {
+        this.watchTimeLength_ = j;
     }
 
     public boolean containsExpMap(String str) {
@@ -1127,13 +1257,13 @@ public final class PlayViewBusinessInfo extends GeneratedMessageLite<PlayViewBus
 
     @Override // com.google.protobuf.GeneratedMessageLite
     protected final Object dynamicMethod(GeneratedMessageLite.MethodToInvoke methodToInvoke, Object obj, Object obj2) {
-        switch (C78671.f17582xa1df5c61[methodToInvoke.ordinal()]) {
+        switch (C13157a.f19355xa1df5c61[methodToInvoke.ordinal()]) {
             case 1:
                 return new PlayViewBusinessInfo();
             case 2:
-                return new Builder(null);
+                return new C13158b(null);
             case 3:
-                return GeneratedMessageLite.newMessageInfo(DEFAULT_INSTANCE, "\u0000\u0015\u0000\u0000\u0001\u0015\u0015\u0002\u0002\u0000\u0001\u0007\u0002\u0007\u0003\u0208\u0004\u0208\u0005\t\u0006\u001b\u0007\f\b\u0004\t\t\n2\u000b2\f\f\r\f\u000e\u0007\u000f\t\u0010\u0004\u0011\u0007\u0012\t\u0013\t\u0014\t\u0015\u001b", new Object[]{"isPreview_", "bp_", "marlinToken_", "playbackSpeedColor_", "continuePlayInfo_", "clipInfo_", ClipInfo.class, "inlineType_", "epWholeDuration_", "dimension_", "qualityExtMap_", QualityExtMapDefaultEntryHolder.defaultEntry, "expMap_", ExpMapDefaultEntryHolder.defaultEntry, "drmTechType_", "limitActionType_", "isDrm_", "recordInfo_", "vipStatus_", "isLivePre_", "episodeInfo_", "episodeAdvertisementInfo_", "userStatus_", "epPublicityVideoList_", EpPublicityVideo.class});
+                return GeneratedMessageLite.newMessageInfo(DEFAULT_INSTANCE, "\u0000\u0016\u0000\u0000\u0001\u0016\u0016\u0002\u0002\u0000\u0001\u0007\u0002\u0007\u0003\u0208\u0004\u0208\u0005\t\u0006\u001b\u0007\f\b\u0004\t\t\n2\u000b2\f\f\r\f\u000e\u0007\u000f\t\u0010\u0004\u0011\u0007\u0012\t\u0013\t\u0014\t\u0015\u001b\u0016\u0003", new Object[]{"isPreview_", "bp_", "marlinToken_", "playbackSpeedColor_", "continuePlayInfo_", "clipInfo_", ClipInfo.class, "inlineType_", "epWholeDuration_", "dimension_", "qualityExtMap_", C13160d.defaultEntry, "expMap_", C13159c.defaultEntry, "drmTechType_", "limitActionType_", "isDrm_", "recordInfo_", "vipStatus_", "isLivePre_", "episodeInfo_", "episodeAdvertisementInfo_", "userStatus_", "epPublicityVideoList_", EpPublicityVideo.class, "watchTimeLength_"});
             case 4:
                 return DEFAULT_INSTANCE;
             case 5:
@@ -1348,6 +1478,10 @@ public final class PlayViewBusinessInfo extends GeneratedMessageLite<PlayViewBus
         return this.vipStatus_;
     }
 
+    public long getWatchTimeLength() {
+        return this.watchTimeLength_;
+    }
+
     public boolean hasContinuePlayInfo() {
         return this.continuePlayInfo_ != null;
     }
@@ -1372,7 +1506,7 @@ public final class PlayViewBusinessInfo extends GeneratedMessageLite<PlayViewBus
         return this.userStatus_ != null;
     }
 
-    public static Builder newBuilder(PlayViewBusinessInfo playViewBusinessInfo) {
+    public static C13158b newBuilder(PlayViewBusinessInfo playViewBusinessInfo) {
         return DEFAULT_INSTANCE.createBuilder(playViewBusinessInfo);
     }
 
@@ -1388,12 +1522,14 @@ public final class PlayViewBusinessInfo extends GeneratedMessageLite<PlayViewBus
         return (PlayViewBusinessInfo) GeneratedMessageLite.parseFrom(DEFAULT_INSTANCE, byteString);
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void addClipInfo(int i, ClipInfo clipInfo) {
         clipInfo.getClass();
         ensureClipInfoIsMutable();
         this.clipInfo_.add(i, clipInfo);
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     public void addEpPublicityVideoList(int i, EpPublicityVideo epPublicityVideo) {
         epPublicityVideo.getClass();
         ensureEpPublicityVideoListIsMutable();

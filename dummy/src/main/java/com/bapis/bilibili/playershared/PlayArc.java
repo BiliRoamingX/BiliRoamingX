@@ -13,8 +13,8 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 /* compiled from: BL */
-/* loaded from: classes18.dex */
-public final class PlayArc extends GeneratedMessageLite<PlayArc, PlayArc.Builder> implements MessageLiteOrBuilder {
+/* loaded from: classes21.dex */
+public final class PlayArc extends GeneratedMessageLite<PlayArc, PlayArc.C13342b> implements MessageLiteOrBuilder {
     public static final int AID_FIELD_NUMBER = 2;
     public static final int ARC_TYPE_FIELD_NUMBER = 5;
     public static final int CID_FIELD_NUMBER = 3;
@@ -22,120 +22,137 @@ public final class PlayArc extends GeneratedMessageLite<PlayArc, PlayArc.Builder
     public static final int DIMENSION_FIELD_NUMBER = 7;
     public static final int DRM_TECH_TYPE_FIELD_NUMBER = 4;
     public static final int DURATION_FIELD_NUMBER = 8;
+    public static final int DURATION_MS_FIELD_NUMBER = 11;
     public static final int INTERACTION_FIELD_NUMBER = 6;
     public static final int IS_PREVIEW_FIELD_NUMBER = 9;
     private static volatile Parser<PlayArc> PARSER = null;
     public static final int VIDEO_TYPE_FIELD_NUMBER = 1;
+    public static final int WATCH_TIME_LENGTH_FIELD_NUMBER = 10;
     private long aid_;
     private int arcType_;
     private long cid_;
     private Dimension dimension_;
     private int drmTechType_;
+    private long durationMs_;
     private long duration_;
     private Interaction interaction_;
     private boolean isPreview_;
     private int videoType_;
+    private long watchTimeLength_;
 
     /* compiled from: BL */
-    /* renamed from: com.bapis.bilibili.playershared.PlayArc$1 */
-    /* loaded from: classes18.dex */
-    static /* synthetic */ class C82101 {
+    /* renamed from: com.bapis.bilibili.playershared.PlayArc$a */
+    /* loaded from: classes21.dex */
+    static /* synthetic */ class C13341a {
 
         /* renamed from: $SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke */
-        static final /* synthetic */ int[] f17940xa1df5c61;
+        static final /* synthetic */ int[] f19416xa1df5c61;
 
         static {
             int[] iArr = new int[GeneratedMessageLite.MethodToInvoke.values().length];
-            f17940xa1df5c61 = iArr;
+            f19416xa1df5c61 = iArr;
             try {
                 iArr[GeneratedMessageLite.MethodToInvoke.NEW_MUTABLE_INSTANCE.ordinal()] = 1;
             } catch (NoSuchFieldError unused) {
             }
             try {
-                f17940xa1df5c61[GeneratedMessageLite.MethodToInvoke.NEW_BUILDER.ordinal()] = 2;
+                f19416xa1df5c61[GeneratedMessageLite.MethodToInvoke.NEW_BUILDER.ordinal()] = 2;
             } catch (NoSuchFieldError unused2) {
             }
             try {
-                f17940xa1df5c61[GeneratedMessageLite.MethodToInvoke.BUILD_MESSAGE_INFO.ordinal()] = 3;
+                f19416xa1df5c61[GeneratedMessageLite.MethodToInvoke.BUILD_MESSAGE_INFO.ordinal()] = 3;
             } catch (NoSuchFieldError unused3) {
             }
             try {
-                f17940xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_DEFAULT_INSTANCE.ordinal()] = 4;
+                f19416xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_DEFAULT_INSTANCE.ordinal()] = 4;
             } catch (NoSuchFieldError unused4) {
             }
             try {
-                f17940xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_PARSER.ordinal()] = 5;
+                f19416xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_PARSER.ordinal()] = 5;
             } catch (NoSuchFieldError unused5) {
             }
             try {
-                f17940xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_MEMOIZED_IS_INITIALIZED.ordinal()] = 6;
+                f19416xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_MEMOIZED_IS_INITIALIZED.ordinal()] = 6;
             } catch (NoSuchFieldError unused6) {
             }
             try {
-                f17940xa1df5c61[GeneratedMessageLite.MethodToInvoke.SET_MEMOIZED_IS_INITIALIZED.ordinal()] = 7;
+                f19416xa1df5c61[GeneratedMessageLite.MethodToInvoke.SET_MEMOIZED_IS_INITIALIZED.ordinal()] = 7;
             } catch (NoSuchFieldError unused7) {
             }
         }
     }
 
     /* compiled from: BL */
-    /* loaded from: classes18.dex */
-    public static final class Builder extends GeneratedMessageLite.Builder<PlayArc, Builder> implements MessageLiteOrBuilder {
-        /* synthetic */ Builder(C82101 c82101) {
+    /* renamed from: com.bapis.bilibili.playershared.PlayArc$b */
+    /* loaded from: classes21.dex */
+    public static final class C13342b extends GeneratedMessageLite.Builder<PlayArc, C13342b> implements MessageLiteOrBuilder {
+        /* synthetic */ C13342b(C13341a c13341a) {
             this();
         }
 
-        public Builder clearAid() {
+        public C13342b clearAid() {
             copyOnWrite();
             ((PlayArc) this.instance).clearAid();
             return this;
         }
 
-        public Builder clearArcType() {
+        public C13342b clearArcType() {
             copyOnWrite();
             ((PlayArc) this.instance).clearArcType();
             return this;
         }
 
-        public Builder clearCid() {
+        public C13342b clearCid() {
             copyOnWrite();
             ((PlayArc) this.instance).clearCid();
             return this;
         }
 
-        public Builder clearDimension() {
+        public C13342b clearDimension() {
             copyOnWrite();
             ((PlayArc) this.instance).clearDimension();
             return this;
         }
 
-        public Builder clearDrmTechType() {
+        public C13342b clearDrmTechType() {
             copyOnWrite();
             ((PlayArc) this.instance).clearDrmTechType();
             return this;
         }
 
-        public Builder clearDuration() {
+        public C13342b clearDuration() {
             copyOnWrite();
             ((PlayArc) this.instance).clearDuration();
             return this;
         }
 
-        public Builder clearInteraction() {
+        public C13342b clearDurationMs() {
+            copyOnWrite();
+            ((PlayArc) this.instance).clearDurationMs();
+            return this;
+        }
+
+        public C13342b clearInteraction() {
             copyOnWrite();
             ((PlayArc) this.instance).clearInteraction();
             return this;
         }
 
-        public Builder clearIsPreview() {
+        public C13342b clearIsPreview() {
             copyOnWrite();
             ((PlayArc) this.instance).clearIsPreview();
             return this;
         }
 
-        public Builder clearVideoType() {
+        public C13342b clearVideoType() {
             copyOnWrite();
             ((PlayArc) this.instance).clearVideoType();
+            return this;
+        }
+
+        public C13342b clearWatchTimeLength() {
+            copyOnWrite();
+            ((PlayArc) this.instance).clearWatchTimeLength();
             return this;
         }
 
@@ -171,6 +188,10 @@ public final class PlayArc extends GeneratedMessageLite<PlayArc, PlayArc.Builder
             return ((PlayArc) this.instance).getDuration();
         }
 
+        public long getDurationMs() {
+            return ((PlayArc) this.instance).getDurationMs();
+        }
+
         public Interaction getInteraction() {
             return ((PlayArc) this.instance).getInteraction();
         }
@@ -187,6 +208,10 @@ public final class PlayArc extends GeneratedMessageLite<PlayArc, PlayArc.Builder
             return ((PlayArc) this.instance).getVideoTypeValue();
         }
 
+        public long getWatchTimeLength() {
+            return ((PlayArc) this.instance).getWatchTimeLength();
+        }
+
         public boolean hasDimension() {
             return ((PlayArc) this.instance).hasDimension();
         }
@@ -195,103 +220,115 @@ public final class PlayArc extends GeneratedMessageLite<PlayArc, PlayArc.Builder
             return ((PlayArc) this.instance).hasInteraction();
         }
 
-        public Builder mergeDimension(Dimension dimension) {
+        public C13342b mergeDimension(Dimension dimension) {
             copyOnWrite();
             ((PlayArc) this.instance).mergeDimension(dimension);
             return this;
         }
 
-        public Builder mergeInteraction(Interaction interaction) {
+        public C13342b mergeInteraction(Interaction interaction) {
             copyOnWrite();
             ((PlayArc) this.instance).mergeInteraction(interaction);
             return this;
         }
 
-        public Builder setAid(long j) {
+        public C13342b setAid(long j) {
             copyOnWrite();
             ((PlayArc) this.instance).setAid(j);
             return this;
         }
 
-        public Builder setArcType(ArcType arcType) {
+        public C13342b setArcType(ArcType arcType) {
             copyOnWrite();
             ((PlayArc) this.instance).setArcType(arcType);
             return this;
         }
 
-        public Builder setArcTypeValue(int i) {
+        public C13342b setArcTypeValue(int i) {
             copyOnWrite();
             ((PlayArc) this.instance).setArcTypeValue(i);
             return this;
         }
 
-        public Builder setCid(long j) {
+        public C13342b setCid(long j) {
             copyOnWrite();
             ((PlayArc) this.instance).setCid(j);
             return this;
         }
 
-        public Builder setDimension(Dimension dimension) {
+        public C13342b setDimension(Dimension dimension) {
             copyOnWrite();
             ((PlayArc) this.instance).setDimension(dimension);
             return this;
         }
 
-        public Builder setDrmTechType(DrmTechType drmTechType) {
+        public C13342b setDrmTechType(DrmTechType drmTechType) {
             copyOnWrite();
             ((PlayArc) this.instance).setDrmTechType(drmTechType);
             return this;
         }
 
-        public Builder setDrmTechTypeValue(int i) {
+        public C13342b setDrmTechTypeValue(int i) {
             copyOnWrite();
             ((PlayArc) this.instance).setDrmTechTypeValue(i);
             return this;
         }
 
-        public Builder setDuration(long j) {
+        public C13342b setDuration(long j) {
             copyOnWrite();
             ((PlayArc) this.instance).setDuration(j);
             return this;
         }
 
-        public Builder setInteraction(Interaction interaction) {
+        public C13342b setDurationMs(long j) {
+            copyOnWrite();
+            ((PlayArc) this.instance).setDurationMs(j);
+            return this;
+        }
+
+        public C13342b setInteraction(Interaction interaction) {
             copyOnWrite();
             ((PlayArc) this.instance).setInteraction(interaction);
             return this;
         }
 
-        public Builder setIsPreview(boolean z) {
+        public C13342b setIsPreview(boolean z) {
             copyOnWrite();
             ((PlayArc) this.instance).setIsPreview(z);
             return this;
         }
 
-        public Builder setVideoType(BizType bizType) {
+        public C13342b setVideoType(BizType bizType) {
             copyOnWrite();
             ((PlayArc) this.instance).setVideoType(bizType);
             return this;
         }
 
-        public Builder setVideoTypeValue(int i) {
+        public C13342b setVideoTypeValue(int i) {
             copyOnWrite();
             ((PlayArc) this.instance).setVideoTypeValue(i);
             return this;
         }
 
-        private Builder() {
-            super(PlayArc.DEFAULT_INSTANCE);
-        }
-
-        public Builder setDimension(Dimension.Builder builder) {
+        public C13342b setWatchTimeLength(long j) {
             copyOnWrite();
-            ((PlayArc) this.instance).setDimension(builder.build());
+            ((PlayArc) this.instance).setWatchTimeLength(j);
             return this;
         }
 
-        public Builder setInteraction(Interaction.Builder builder) {
+        private C13342b() {
+            super(PlayArc.DEFAULT_INSTANCE);
+        }
+
+        public C13342b setDimension(Dimension.Builder c13285b) {
             copyOnWrite();
-            ((PlayArc) this.instance).setInteraction(builder.build());
+            ((PlayArc) this.instance).setDimension(c13285b.build());
+            return this;
+        }
+
+        public C13342b setInteraction(Interaction.Builder c13331b) {
+            copyOnWrite();
+            ((PlayArc) this.instance).setInteraction(c13331b.build());
             return this;
         }
     }
@@ -336,6 +373,11 @@ public final class PlayArc extends GeneratedMessageLite<PlayArc, PlayArc.Builder
     }
 
     /* JADX INFO: Access modifiers changed from: private */
+    public void clearDurationMs() {
+        this.durationMs_ = 0L;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearInteraction() {
         this.interaction_ = null;
     }
@@ -348,6 +390,11 @@ public final class PlayArc extends GeneratedMessageLite<PlayArc, PlayArc.Builder
     /* JADX INFO: Access modifiers changed from: private */
     public void clearVideoType() {
         this.videoType_ = 0;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void clearWatchTimeLength() {
+        this.watchTimeLength_ = 0L;
     }
 
     public static PlayArc getDefaultInstance() {
@@ -376,7 +423,7 @@ public final class PlayArc extends GeneratedMessageLite<PlayArc, PlayArc.Builder
         }
     }
 
-    public static Builder newBuilder() {
+    public static C13342b newBuilder() {
         return DEFAULT_INSTANCE.createBuilder();
     }
 
@@ -434,6 +481,11 @@ public final class PlayArc extends GeneratedMessageLite<PlayArc, PlayArc.Builder
     }
 
     /* JADX INFO: Access modifiers changed from: private */
+    public void setDurationMs(long j) {
+        this.durationMs_ = j;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
     public void setInteraction(Interaction interaction) {
         interaction.getClass();
         this.interaction_ = interaction;
@@ -454,15 +506,20 @@ public final class PlayArc extends GeneratedMessageLite<PlayArc, PlayArc.Builder
         this.videoType_ = i;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
+    public void setWatchTimeLength(long j) {
+        this.watchTimeLength_ = j;
+    }
+
     @Override // com.google.protobuf.GeneratedMessageLite
     protected final Object dynamicMethod(GeneratedMessageLite.MethodToInvoke methodToInvoke, Object obj, Object obj2) {
-        switch (C82101.f17940xa1df5c61[methodToInvoke.ordinal()]) {
+        switch (C13341a.f19416xa1df5c61[methodToInvoke.ordinal()]) {
             case 1:
                 return new PlayArc();
             case 2:
-                return new Builder(null);
+                return new C13342b(null);
             case 3:
-                return GeneratedMessageLite.newMessageInfo(DEFAULT_INSTANCE, "\u0000\t\u0000\u0000\u0001\t\t\u0000\u0000\u0000\u0001\f\u0002\u0002\u0003\u0002\u0004\f\u0005\f\u0006\t\u0007\t\b\u0002\t\u0007", new Object[]{"videoType_", "aid_", "cid_", "drmTechType_", "arcType_", "interaction_", "dimension_", "duration_", "isPreview_"});
+                return GeneratedMessageLite.newMessageInfo(DEFAULT_INSTANCE, "\u0000\u000b\u0000\u0000\u0001\u000b\u000b\u0000\u0000\u0000\u0001\f\u0002\u0002\u0003\u0002\u0004\f\u0005\f\u0006\t\u0007\t\b\u0002\t\u0007\n\u0003\u000b\u0003", new Object[]{"videoType_", "aid_", "cid_", "drmTechType_", "arcType_", "interaction_", "dimension_", "duration_", "isPreview_", "watchTimeLength_", "durationMs_"});
             case 4:
                 return DEFAULT_INSTANCE;
             case 5:
@@ -521,6 +578,10 @@ public final class PlayArc extends GeneratedMessageLite<PlayArc, PlayArc.Builder
         return this.duration_;
     }
 
+    public long getDurationMs() {
+        return this.durationMs_;
+    }
+
     public Interaction getInteraction() {
         Interaction interaction = this.interaction_;
         return interaction == null ? Interaction.getDefaultInstance() : interaction;
@@ -539,6 +600,10 @@ public final class PlayArc extends GeneratedMessageLite<PlayArc, PlayArc.Builder
         return this.videoType_;
     }
 
+    public long getWatchTimeLength() {
+        return this.watchTimeLength_;
+    }
+
     public boolean hasDimension() {
         return this.dimension_ != null;
     }
@@ -547,7 +612,7 @@ public final class PlayArc extends GeneratedMessageLite<PlayArc, PlayArc.Builder
         return this.interaction_ != null;
     }
 
-    public static Builder newBuilder(PlayArc playArc) {
+    public static C13342b newBuilder(PlayArc playArc) {
         return DEFAULT_INSTANCE.createBuilder(playArc);
     }
 

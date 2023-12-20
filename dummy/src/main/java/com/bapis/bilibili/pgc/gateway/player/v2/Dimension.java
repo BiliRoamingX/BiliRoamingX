@@ -131,7 +131,7 @@ public final class Dimension extends GeneratedMessageLite<Dimension, Dimension.B
         GeneratedMessageLite.registerDefaultInstance(Dimension.class, dimension);
     }
 
-    private Dimension() {
+    public Dimension() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

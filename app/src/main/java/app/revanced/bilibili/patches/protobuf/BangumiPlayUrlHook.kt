@@ -451,6 +451,10 @@ object BangumiPlayUrlHook {
                             rotate = optLong("rotate")
                         }
                     }
+                    val timeLength = jsonContent.optLong("timelength")
+                    watchTimeLength = timeLength
+                    duration = timeLength / 1000
+                    durationMs = timeLength % 1000
                 }
             }
             val newSupplement = supplement.apply {
@@ -637,6 +641,16 @@ object BangumiPlayUrlHook {
                         rights = Rights().apply { canWatch = 1 }
                     }
                 }
+                episode.optJSONObject("dimension")?.run {
+                    dimension = com.bapis.bilibili.pgc.gateway.player.v2.Dimension().apply {
+                        width = optInt("width")
+                        height = optInt("height")
+                        rotate = optInt("rotate")
+                    }
+                }
+                val timeLength = jsonContent.optInt("timelength")
+                epWholeDuration = timeLength
+                watchTimeLength = timeLength.toLong()
                 if (Settings.ALLOW_MINI_PLAY.boolean)
                     inlineType = InlineType.TYPE_WHOLE
             }

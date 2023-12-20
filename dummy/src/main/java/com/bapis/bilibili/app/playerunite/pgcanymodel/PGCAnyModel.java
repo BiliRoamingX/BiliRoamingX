@@ -216,7 +216,7 @@ public final class PGCAnyModel extends GeneratedMessageLite<PGCAnyModel, PGCAnyM
             super(PGCAnyModel.DEFAULT_INSTANCE);
         }
 
-        public Builder setBusiness(PlayViewBusinessInfo.Builder builder) {
+        public Builder setBusiness(PlayViewBusinessInfo.C13158b builder) {
             copyOnWrite();
             ((PGCAnyModel) this.instance).setBusiness(builder.build());
             return this;
