@@ -180,6 +180,7 @@ public enum Settings {
     CUSTOM_SPLASH("custom_splash", BOOLEAN, FALSE),
     CUSTOM_SPLASH_LOGO("custom_splash_logo", BOOLEAN, FALSE),
     FULL_SPLASH("full_splash", BOOLEAN, FALSE),
+    FORCE_HW_CODEC("force_hw_codec", BOOLEAN, FALSE),
 
     // 去广告杂项
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),
