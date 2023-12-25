@@ -134,6 +134,7 @@ public enum Settings {
     REMOVE_ELEC_BUTTON("remove_elec_button", BOOLEAN, FALSE),
     BLOCK_LIVE_ORDER("block_live_order", BOOLEAN, FALSE),
     BLOCK_ACTIVITY_TAB("block_activity_tab", BOOLEAN, FALSE),
+    OLD_FAV("old_fav", BOOLEAN, FALSE),
 
     // 用户空间页
     FIX_SPACE("fix_space", BOOLEAN, TRUE),
