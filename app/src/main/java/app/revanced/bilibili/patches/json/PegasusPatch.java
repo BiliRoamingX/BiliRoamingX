@@ -35,6 +35,10 @@ import com.bilibili.pegasus.api.modelv2.SmallCoverV2Item;
 import com.bilibili.pegasus.api.modelv2.SmallCoverV9Item;
 import com.bilibili.pegasus.api.modelv2.Tag;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -49,8 +53,10 @@ import java.util.stream.Stream;
 import app.revanced.bilibili.meta.pegasus.BannersItem;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.ArrayUtils;
+import app.revanced.bilibili.utils.Jsons;
 import app.revanced.bilibili.utils.Toasts;
 import app.revanced.bilibili.utils.Utils;
+import kotlin.Unit;
 
 public class PegasusPatch {
 
@@ -181,11 +187,29 @@ public class PegasusPatch {
         return playCount < playCountLimit;
     }
 
+    private static boolean isLowPlayCountVideo(JSONObject item, long playCountLimit) {
+        if (playCountLimit == 0L) return false;
+        var coverLeftText = item.optString("cover_left_text_1");
+        if (TextUtils.isEmpty(coverLeftText)) return false;
+        var playCount = toPlayCount(coverLeftText);
+        if (playCount == -1L) return false;
+        return playCount < playCountLimit;
+    }
+
     private static boolean isDurationInvalidVideo(BasicIndexItem item, int shortDuration, int longDuration) {
         if (shortDuration == 0 && longDuration == 0)
             return false;
         PlayerArgs playerArgs = item.playerArgs;
         long duration = playerArgs != null ? playerArgs.fakeDuration : 0;
+        if (longDuration != 0 && duration > longDuration) return true;
+        return shortDuration != 0 && duration < shortDuration;
+    }
+
+    private static boolean isDurationInvalidVideo(JSONObject item, int shortDuration, int longDuration) {
+        if (shortDuration == 0 && longDuration == 0)
+            return false;
+        JSONObject playerArgs = item.optJSONObject("player_args");
+        long duration = playerArgs != null ? playerArgs.optLong("duration") : 0;
         if (longDuration != 0 && duration > longDuration) return true;
         return shortDuration != 0 && duration < shortDuration;
     }
@@ -256,6 +280,84 @@ public class PegasusPatch {
 
         if (!reasonSet.isEmpty()) {
             String reason = getRcmdReason(item);
+            if (reasonRegexMode && !TextUtils.isEmpty(reason)) {
+                for (int i = 0; i < reasonRegexes.size(); i++)
+                    if (reasonRegexes.get(i).matcher(reason).find())
+                        return true;
+            } else if (!TextUtils.isEmpty(reason)) {
+                for (String s : reasonSet)
+                    if (reason.contains(s))
+                        return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean isContainsBlockKwdVideo(
+            JSONObject item,
+            boolean titleRegexMode,
+            Set<String> titleSet,
+            List<Pattern> titleRegexes,
+            boolean reasonRegexMode,
+            Set<String> reasonSet,
+            List<Pattern> reasonRegexes,
+            boolean upRegexMode,
+            Set<String> upSet,
+            List<Pattern> upRegexes,
+            long[] uidArray,
+            Set<String> categorySet,
+            Set<String> channelSet
+    ) {
+        if (!titleSet.isEmpty()) {
+            String title = item.optString("title");
+            if (titleRegexMode && !TextUtils.isEmpty(title)) {
+                for (int i = 0; i < titleRegexes.size(); i++)
+                    if (titleRegexes.get(i).matcher(title).find())
+                        return true;
+            } else if (!TextUtils.isEmpty(title))
+                for (String s : titleSet)
+                    if (title.contains(s))
+                        return true;
+        }
+
+        var args = item.optJSONObject("args");
+        if (uidArray.length > 0) {
+            long upId = args != null ? args.optLong("up_id") : 0L;
+            if (upId != 0L && ArrayUtils.contains(uidArray, upId))
+                return true;
+        }
+
+        if (!upSet.isEmpty()) {
+            String upName = args != null ? args.optString("up_name") : null;
+            if (upRegexMode && !TextUtils.isEmpty(upName)) {
+                for (int i = 0; i < upRegexes.size(); i++)
+                    if (upRegexes.get(i).matcher(upName).find())
+                        return true;
+            } else if (!TextUtils.isEmpty(upName))
+                for (String s : upSet)
+                    if (upName.contains(s))
+                        return true;
+        }
+
+        if (!categorySet.isEmpty()) {
+            String category = args != null ? args.optString("rname") : null;
+            if (!TextUtils.isEmpty(category))
+                for (String s : categorySet)
+                    if (category.contains(s))
+                        return true;
+        }
+
+        if (!channelSet.isEmpty()) {
+            String channel = args != null ? args.optString("tname") : null;
+            if (!TextUtils.isEmpty(channel))
+                for (String s : channelSet)
+                    if (channel.contains(s))
+                        return true;
+        }
+
+        if (!reasonSet.isEmpty()) {
+            String reason = item.optString("rcmd_reason");
             if (reasonRegexMode && !TextUtils.isEmpty(reason)) {
                 for (int i = 0; i < reasonRegexes.size(); i++)
                     if (reasonRegexes.get(i).matcher(reason).find())
@@ -571,6 +673,67 @@ public class PegasusPatch {
         }
     }
 
+    /**
+     * @noinspection SameReturnValue
+     */
+    private static Unit appendReasons(JSONObject item) {
+        String title = item.optString("title");
+        String rcmdReason = item.optString("rcmd_reason");
+        JSONObject args = item.optJSONObject("args");
+        long upId = args != null ? args.optLong("up_id") : 0L;
+        String upName = args != null ? args.optString("up_name") : null;
+        String categoryName = args != null ? args.optString("rname") : null;
+        String channelName = args != null ? args.optString("tname") : null;
+        var reasons = new JSONArray();
+        if (!TextUtils.isEmpty(title)) {
+            var reason = new JSONObject();
+            Jsons.putX(reason, "id", REASON_ID_TITLE);
+            Jsons.putX(reason, "name", "标题:" + title);
+            reasons.put(reason);
+        }
+        if (!TextUtils.isEmpty(rcmdReason)) {
+            var reason = new JSONObject();
+            Jsons.putX(reason, "id", REASON_ID_RCMD_REASON);
+            Jsons.putX(reason, "name", "推荐原因:" + rcmdReason);
+            reasons.put(reason);
+        }
+        if (upId != 0L) {
+            var reason = new JSONObject();
+            Jsons.putX(reason, "id", REASON_ID_UP_ID);
+            Jsons.putX(reason, "name", "UID:" + upId);
+            reasons.put(reason);
+        }
+        if (!TextUtils.isEmpty(upName)) {
+            var reason = new JSONObject();
+            Jsons.putX(reason, "id", REASON_ID_UP_NAME);
+            Jsons.putX(reason, "name", "UP主:" + upName);
+            reasons.put(reason);
+        }
+        if (!TextUtils.isEmpty(categoryName)) {
+            var reason = new JSONObject();
+            Jsons.putX(reason, "id", REASON_ID_CATEGORY_NAME);
+            Jsons.putX(reason, "name", "分区:" + categoryName);
+            reasons.put(reason);
+        }
+        if (!TextUtils.isEmpty(channelName)) {
+            var reason = new JSONObject();
+            Jsons.putX(reason, "id", REASON_ID_CHANNEL_NAME);
+            Jsons.putX(reason, "name", "频道:" + channelName);
+            reasons.put(reason);
+        }
+        if (reasons.length() > 0) {
+            var threePoint = item.optJSONArray("three_point_v2");
+            if (threePoint == null) return Unit.INSTANCE;
+            var threePointItem = new JSONObject();
+            Jsons.putX(threePointItem, "title", "漫游屏蔽");
+            Jsons.putX(threePointItem, "subtitle", "(本地屏蔽，刷新生效，可前往自定义首页查看)");
+            Jsons.putX(threePointItem, "type", "dislike");
+            Jsons.putX(threePointItem, "reasons", reasons);
+            threePoint.put(threePointItem);
+        }
+        return Unit.INSTANCE;
+    }
+
     private static void disableAutoRefresh(Config config) {
         if (config == null || !Settings.HOME_DISABLE_AUTO_REFRESH.getBoolean())
             return;
@@ -666,6 +829,92 @@ public class PegasusPatch {
             );
         });
         items.forEach(PegasusPatch::appendReasons);
+    }
+
+    public static void pegasusHook(JSONObject data) throws JSONException {
+        JSONObject config = data.optJSONObject("config");
+        if (config != null && Settings.HOME_DISABLE_AUTO_REFRESH.getBoolean()) {
+            config.put("auto_refresh_time", 0);
+            config.put("auto_refresh_time_by_appear", -1L);
+            config.put("auto_refresh_time_by_active", -1L);
+            config.put("auto_refresh_time_by_behavior", -1);
+            config.put("auto_refresh_by_behavior", -1);
+        }
+        JSONArray items = data.optJSONArray("items");
+        if (items == null || items.length() == 0) return;
+        long playCountLimit = Settings.LOW_PLAY_COUNT_LIMIT.getLong();
+        var shortDurationLimit = Settings.SHORT_DURATION_LIMIT.getInt();
+        int longDurationLimit = Settings.LONG_DURATION_LIMIT.getInt();
+        Set<String> titleSet = Settings.HOME_RCMD_FILTER_TITLE.getStringSet();
+        boolean titleRegexMode = Settings.HOME_RCMD_FILTER_TITLE_REGEX_MODE.getBoolean();
+        List<Pattern> titleRegexes;
+        if (titleRegexMode && cachedTitileSet.equals(titleSet))
+            titleRegexes = cachedTitleRegexes;
+        else if (titleRegexMode) {
+            cachedTitileSet = new HashSet<>(titleSet);
+            titleRegexes = titleSet.stream().map(Pattern::compile).collect(Collectors.toList());
+            cachedTitleRegexes = titleRegexes;
+        } else {
+            titleRegexes = Collections.emptyList();
+        }
+        Set<String> reasonSet = Settings.HOME_RCMD_FILTER_REASON.getStringSet();
+        boolean reasonRegexMode = Settings.HOME_RCMD_FILTER_REASON_REGEX_MODE.getBoolean();
+        List<Pattern> reasonRegexes;
+        if (reasonRegexMode && cachedReasonSet.equals(reasonSet))
+            reasonRegexes = cachedReasonRegexes;
+        else if (reasonRegexMode) {
+            cachedReasonSet = new HashSet<>(reasonSet);
+            reasonRegexes = reasonSet.stream().map(Pattern::compile).collect(Collectors.toList());
+            cachedReasonRegexes = reasonRegexes;
+        } else {
+            reasonRegexes = Collections.emptyList();
+        }
+        Set<String> upSet = Settings.HOME_RCMD_FILTER_UP.getStringSet();
+        boolean upRegexMode = Settings.HOME_RCMD_FILTER_UP_REGEX_MODE.getBoolean();
+        List<Pattern> upRegexes;
+        if (upRegexMode && cachedUpSet.equals(upSet))
+            upRegexes = cachedUpRegexes;
+        else if (upRegexMode) {
+            cachedUpSet = new HashSet<>(upSet);
+            upRegexes = upSet.stream().map(Pattern::compile).collect(Collectors.toList());
+            cachedUpRegexes = upRegexes;
+        } else {
+            upRegexes = Collections.emptyList();
+        }
+        Set<String> uidSet = Settings.HOME_RCMD_FILTER_UID.getStringSet();
+        long[] uidArray = ArrayUtils.toLongArray(uidSet);
+        Set<String> categorySet = Settings.HOME_RCMD_FILTER_CATEGORY.getStringSet();
+        Set<String> channelSet = Settings.HOME_RCMD_FILTER_CHANNEL.getStringSet();
+        Jsons.removeIf(items, (item) -> {
+            var cardType = item.optString("card_type");
+            var cardGoto = item.optString("card_goto");
+            var goTo = item.optString("goto");
+            var filterTypes = getFilterTypes();
+            if ("banner".equals(cardGoto) && filterTypes.contains("ad")) {
+                JSONArray bannerItems = item.optJSONArray("banner_item");
+                if (bannerItems != null && bannerItems.length() > 0)
+                    Jsons.removeIf(bannerItems, (b) -> "ad".equals(b.optString("type")));
+            }
+            var typeMatched = false;
+            for (var i = 0; i < filterTypes.size(); i++) {
+                String type = filterTypes.get(i);
+                if ((!TextUtils.isEmpty(cardGoto) && cardGoto.contains(type))
+                        || (!TextUtils.isEmpty(cardType) && cardType.contains(type))
+                        || (!TextUtils.isEmpty(goTo) && goTo.contains(type))) {
+                    typeMatched = true;
+                    break;
+                }
+            }
+            return typeMatched || isLowPlayCountVideo(item, playCountLimit)
+                    || isDurationInvalidVideo(item, shortDurationLimit, longDurationLimit)
+                    || isContainsBlockKwdVideo(item,
+                    titleRegexMode, titleSet, titleRegexes,
+                    reasonRegexMode, reasonSet, reasonRegexes,
+                    upRegexMode, upSet, upRegexes,
+                    uidArray, categorySet, channelSet
+            );
+        });
+        Jsons.forEach(items, PegasusPatch::appendReasons);
     }
 
     public static void filterViewRelates(ViewReply viewReply) {
