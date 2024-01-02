@@ -135,6 +135,13 @@ public enum Settings {
     BLOCK_LIVE_ORDER("block_live_order", BOOLEAN, FALSE),
     BLOCK_ACTIVITY_TAB("block_activity_tab", BOOLEAN, FALSE),
     OLD_FAV("old_fav", BOOLEAN, FALSE),
+    BLOCK_ONLY_AT_COMMENT("block_comment_only_at", BOOLEAN, FALSE),
+    BLOCK_COMMENT_GOODS("block_comment_goods", BOOLEAN, FALSE),
+    BLOCK_COMMENT_UID("block_comment_uid", STRING_SET, Collections.EMPTY_SET),
+    BLOCK_COMMENT_UP("block_comment_up", STRING_SET, Collections.EMPTY_SET),
+    BLOCK_COMMENT_UP_REGEX_MODE("block_comment_up_regex_mode", BOOLEAN, FALSE),
+    BLOCK_COMMENT_CONTENT("block_comment_content", STRING_SET, Collections.EMPTY_SET),
+    BLOCK_COMMENT_CONTENT_REGEX_MODE("block_comment_content_regex_mode", BOOLEAN, FALSE),
 
     // 用户空间页
     FIX_SPACE("fix_space", BOOLEAN, TRUE),
