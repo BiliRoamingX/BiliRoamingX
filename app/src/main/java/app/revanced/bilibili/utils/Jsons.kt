@@ -46,5 +46,10 @@ inline fun JSONArray.removeIf(condition: (JSONObject) -> Boolean) {
 
 inline fun JSONArray.forEach(operation: (JSONObject) -> Unit) = iterator().forEach(operation)
 
-inline fun JSONObject.putX(name: String, value: Long): JSONObject = put(name, value)
-inline fun JSONObject.putX(name: String, value: Any?): JSONObject = put(name, value)
+inline fun JSONObject.putX(name: String, value: Any?): JSONObject = when (value) {
+    is Boolean -> put(name, value)
+    is Int -> put(name, value)
+    is Long -> put(name, value)
+    is Double -> put(name, value)
+    else -> put(name, value)
+}
