@@ -56,6 +56,7 @@ import app.revanced.bilibili.utils.ArrayUtils;
 import app.revanced.bilibili.utils.Jsons;
 import app.revanced.bilibili.utils.Toasts;
 import app.revanced.bilibili.utils.Utils;
+import app.revanced.bilibili.utils.Versions;
 import kotlin.Unit;
 
 public class PegasusPatch {
@@ -756,6 +757,7 @@ public class PegasusPatch {
     public static void pegasusHook(GeneralResponse<PegasusFeedResponse> response) {
         var data = response.data;
         if (data == null) return;
+        if (Versions.ge7_63_0()) return;
         disableAutoRefresh(data.config);
         var items = data.items;
         if (items == null || items.isEmpty()) return;
