@@ -33,6 +33,8 @@ public class BLRoutePatch {
                 }
                 newUri.encodedQuery(newQuery);
                 return newUri.build();
+            } else if ("1".equals(Settings.PLAYER_VERSION.getString()) && uri.toString().startsWith("bilibili://music/playlist/playpage")) {
+                return uri.buildUpon().appendQueryParameter("force_old_playlist", "1").build();
             }
         } else if ("https".equals(scheme)) {
             String url;
