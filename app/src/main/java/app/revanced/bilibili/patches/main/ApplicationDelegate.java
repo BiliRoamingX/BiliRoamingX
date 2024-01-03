@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.bilibili.multitypeplayerV2.MultiTypeVideoContentActivity;
 import com.bilibili.ship.theseus.all.UnitedBizDetailsActivity;
+import com.bilibili.ship.theseus.playlist.UnitedPlaylistActivity;
 import com.bilibili.video.videodetail.VideoDetailsActivity;
 
 import java.io.File;
@@ -148,7 +149,8 @@ public class ApplicationDelegate {
                 }
             }
             if ((Versions.ge7_39_0() && !Versions.ge7_47_0() && activity instanceof UnitedBizDetailsActivity)
-                    || (Versions.ge7_47_0() && activity instanceof com.bilibili.ship.theseus.detail.UnitedBizDetailsActivity)) {
+                    || (Versions.ge7_47_0() && activity instanceof com.bilibili.ship.theseus.detail.UnitedBizDetailsActivity)
+                    || activity instanceof UnitedPlaylistActivity) {
                 ViewUniteReplyHook.getViewUniteMap().remove(activity.hashCode());
             } else if (activity instanceof VideoDetailsActivity || activity instanceof MultiTypeVideoContentActivity) {
                 ViewUniteReplyHook.getViewMap().remove(activity.hashCode());

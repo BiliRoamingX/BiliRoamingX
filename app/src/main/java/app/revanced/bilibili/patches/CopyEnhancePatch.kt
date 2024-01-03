@@ -17,6 +17,7 @@ import com.bapis.bilibili.app.viewunite.common.DescType
 import com.bilibili.bplus.followingcard.widget.EllipsizingTextView
 import com.bilibili.bplus.im.business.model.BaseTypedMessage
 import com.bilibili.ship.theseus.all.UnitedBizDetailsActivity
+import com.bilibili.ship.theseus.playlist.UnitedPlaylistActivity
 import org.json.JSONObject
 
 object CopyEnhancePatch {
@@ -37,6 +38,7 @@ object CopyEnhancePatch {
                 && topActivity is UnitedBizDetailsActivity)
                 || (Versions.ge7_47_0()
                 && topActivity is com.bilibili.ship.theseus.detail.UnitedBizDetailsActivity)
+                || topActivity is UnitedPlaylistActivity
         val allDesc = if (united) {
             val view = ViewUniteReplyHook.viewUniteMap[topActivity.hashCode()]
             if (view != null) {
