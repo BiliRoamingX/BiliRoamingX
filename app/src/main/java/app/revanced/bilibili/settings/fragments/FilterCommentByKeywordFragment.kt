@@ -17,6 +17,17 @@ class FilterCommentByKeywordFragment : BaseWidgetSettingFragment() {
         savedInstanceState: Bundle?
     ): View {
         val (root, content, saveButton) = rootViewTemplate()
+        val upLevel = Settings.BLOCK_COMMENT_UP_LEVEL.int
+        val upLevelTitle = string("biliroaming_block_comment_up_level_title")
+        val upLevelIndicator = string("biliroaming_up_level")
+        val upLevelIndicatorZero = string("biliroaming_disabled")
+        val upLevelItem = seekBarItem(
+            name = upLevelTitle,
+            current = upLevel,
+            indicator = upLevelIndicator,
+            zeroIndicator = upLevelIndicatorZero,
+            max = 6
+        ).let { content.addView(it.first); it.second }
         val (contentGroup, contentRegexSwitch) = content.addKeywordGroup(
             string("biliroaming_keyword_group_name_content"), 40.dp, true
         )
@@ -53,6 +64,7 @@ class FilterCommentByKeywordFragment : BaseWidgetSettingFragment() {
                 return@setOnClickListener
             }
 
+            Settings.BLOCK_COMMENT_UP_LEVEL.saveValue(upLevelItem.progress)
             Settings.BLOCK_COMMENT_CONTENT.saveValue(contents)
             Settings.BLOCK_COMMENT_CONTENT_REGEX_MODE.saveValue(contentRegexMode)
             Settings.BLOCK_COMMENT_UP.saveValue(upNames)

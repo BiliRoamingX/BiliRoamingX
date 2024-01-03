@@ -142,6 +142,7 @@ public enum Settings {
     BLOCK_COMMENT_UP_REGEX_MODE("block_comment_up_regex_mode", BOOLEAN, FALSE),
     BLOCK_COMMENT_CONTENT("block_comment_content", STRING_SET, Collections.EMPTY_SET),
     BLOCK_COMMENT_CONTENT_REGEX_MODE("block_comment_content_regex_mode", BOOLEAN, FALSE),
+    BLOCK_COMMENT_UP_LEVEL("block_comment_up_level", INTEGER, 0),
 
     // 用户空间页
     FIX_SPACE("fix_space", BOOLEAN, TRUE),

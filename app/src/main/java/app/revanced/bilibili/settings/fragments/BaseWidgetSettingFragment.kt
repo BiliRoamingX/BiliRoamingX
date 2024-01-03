@@ -335,6 +335,7 @@ open class BaseWidgetSettingFragment : BaseFragment() {
         name: String,
         current: Int,
         indicator: String = string("biliroaming_text_fold_line"),
+        zeroIndicator: String = "",
         max: Int = 100,
     ): Pair<LinearLayout, SeekBar> {
         val layout = LinearLayout(activity).apply {
@@ -356,7 +357,8 @@ open class BaseWidgetSettingFragment : BaseFragment() {
             )
         }
         val progressView = TextView(activity).apply {
-            text = indicator.format(current)
+            text = if (current == 0 && zeroIndicator.isNotEmpty()) zeroIndicator
+            else indicator.format(current)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 14F)
             TypedValue().apply {
                 context.theme.resolveAttribute(android.R.attr.textColorSecondary, this, true)
@@ -380,7 +382,10 @@ open class BaseWidgetSettingFragment : BaseFragment() {
                 override fun onProgressChanged(
                     seekBar: SeekBar?, progress: Int, fromUser: Boolean
                 ) {
-                    progressView.text = indicator.format(progress)
+                    if (progress == 0 && zeroIndicator.isNotEmpty())
+                        progressView.text = zeroIndicator
+                    else
+                        progressView.text = indicator.format(progress)
                 }
             })
         }

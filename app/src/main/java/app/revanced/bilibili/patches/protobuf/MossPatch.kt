@@ -28,6 +28,7 @@ object MossPatch {
         PlayURLPlayViewUGC,
         PlayURLPlayViewUnite,
         Popular,
+        ReplyDetailList,
         ReplyMainList,
         ReplySubjectDescription,
         ResourceTopActivity,
