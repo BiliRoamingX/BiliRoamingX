@@ -15,6 +15,12 @@ object ReplyMainList : MossHook<MainListReq, MainListReply>() {
     private var cachedContentSet = emptySet<String>()
     private var cachedContentRegexes = emptyList<Regex>()
 
+    private val mallPackageNames = arrayOf(
+        "com.taobao.taobao",
+        "com.jingdong.app.mall",
+        "com.xunmeng.pinduoduo",
+    )
+
     override fun shouldHook(req: GeneratedMessageLite<*, *>): Boolean {
         return req is MainListReq
     }
@@ -180,7 +186,9 @@ object ReplyMainList : MossHook<MainListReq, MainListReply>() {
         val upName = member.name
         if (uids.isNotEmpty() && uids.contains(uid))
             return true
-        if (goods && content.urlsMap.values.map { it.extra.goodsCmControl }.any { it != 0L })
+        val urls = content.urlsMap.values
+        if (goods && (urls.map { it.extra.goodsCmControl }.any { it != 0L }
+                    || urls.map { it.appPackageName }.any { it in mallPackageNames }))
             return true
         if (ups.isNotEmpty() && upName.isNotEmpty())
             if (!upRegexMode && ups.any { upName.contains(it) })
