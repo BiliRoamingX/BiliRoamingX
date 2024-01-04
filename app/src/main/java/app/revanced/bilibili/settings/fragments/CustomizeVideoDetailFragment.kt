@@ -13,7 +13,7 @@ class CustomizeVideoDetailFragment :
             !Utils.newPlayerEnabled
         }
         disablePreference(Settings.DISABLE_AUTO_SELECT.key, PrefsDisableReason.APP_VERSION) {
-            Versions.ge7_63_0()
+            Versions.ge7_62_0()
         }
     }
 }
