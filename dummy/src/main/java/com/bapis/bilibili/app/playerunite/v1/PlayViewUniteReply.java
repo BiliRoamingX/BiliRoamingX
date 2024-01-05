@@ -1,6 +1,7 @@
 package com.bapis.bilibili.app.playerunite.v1;
 
 import com.bapis.bilibili.playershared.Event;
+import com.bapis.bilibili.playershared.FragmentVideo;
 import com.bapis.bilibili.playershared.History;
 import com.bapis.bilibili.playershared.PlayArc;
 import com.bapis.bilibili.playershared.PlayArcConf;
@@ -16,15 +17,17 @@ import com.google.protobuf.GeneratedMessageLite;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.MessageLiteOrBuilder;
 import com.google.protobuf.Parser;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 /* compiled from: BL */
 /* loaded from: classes13.dex */
-public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUniteReply, PlayViewUniteReply.Builder> implements MessageLiteOrBuilder {
+public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUniteReply, PlayViewUniteReply.C10684b> implements MessageLiteOrBuilder {
     private static final PlayViewUniteReply DEFAULT_INSTANCE;
     public static final int EVENT_FIELD_NUMBER = 4;
+    public static final int FRAGMENT_VIDEO_FIELD_NUMBER = 10;
     public static final int HISTORY_FIELD_NUMBER = 8;
     private static volatile Parser<PlayViewUniteReply> PARSER = null;
     public static final int PLAY_ARC_CONF_FIELD_NUMBER = 2;
@@ -35,6 +38,7 @@ public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUnite
     public static final int VIEW_INFO_FIELD_NUMBER = 9;
     public static final int VOD_INFO_FIELD_NUMBER = 1;
     private Event event_;
+    private FragmentVideo fragmentVideo_;
     private History history_;
     private PlayArcConf playArcConf_;
     private PlayArc playArc_;
@@ -45,103 +49,110 @@ public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUnite
     private VodInfo vodInfo_;
 
     /* compiled from: BL */
-    /* renamed from: com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReply$1 */
+    /* renamed from: com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReply$a */
     /* loaded from: classes13.dex */
-    static /* synthetic */ class C65191 {
+    static /* synthetic */ class C10683a {
 
         /* renamed from: $SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke */
-        static final /* synthetic */ int[] f16596xa1df5c61;
+        static final /* synthetic */ int[] f20667xa1df5c61;
 
         static {
             int[] iArr = new int[GeneratedMessageLite.MethodToInvoke.values().length];
-            f16596xa1df5c61 = iArr;
+            f20667xa1df5c61 = iArr;
             try {
                 iArr[GeneratedMessageLite.MethodToInvoke.NEW_MUTABLE_INSTANCE.ordinal()] = 1;
             } catch (NoSuchFieldError unused) {
             }
             try {
-                f16596xa1df5c61[GeneratedMessageLite.MethodToInvoke.NEW_BUILDER.ordinal()] = 2;
+                f20667xa1df5c61[GeneratedMessageLite.MethodToInvoke.NEW_BUILDER.ordinal()] = 2;
             } catch (NoSuchFieldError unused2) {
             }
             try {
-                f16596xa1df5c61[GeneratedMessageLite.MethodToInvoke.BUILD_MESSAGE_INFO.ordinal()] = 3;
+                f20667xa1df5c61[GeneratedMessageLite.MethodToInvoke.BUILD_MESSAGE_INFO.ordinal()] = 3;
             } catch (NoSuchFieldError unused3) {
             }
             try {
-                f16596xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_DEFAULT_INSTANCE.ordinal()] = 4;
+                f20667xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_DEFAULT_INSTANCE.ordinal()] = 4;
             } catch (NoSuchFieldError unused4) {
             }
             try {
-                f16596xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_PARSER.ordinal()] = 5;
+                f20667xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_PARSER.ordinal()] = 5;
             } catch (NoSuchFieldError unused5) {
             }
             try {
-                f16596xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_MEMOIZED_IS_INITIALIZED.ordinal()] = 6;
+                f20667xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_MEMOIZED_IS_INITIALIZED.ordinal()] = 6;
             } catch (NoSuchFieldError unused6) {
             }
             try {
-                f16596xa1df5c61[GeneratedMessageLite.MethodToInvoke.SET_MEMOIZED_IS_INITIALIZED.ordinal()] = 7;
+                f20667xa1df5c61[GeneratedMessageLite.MethodToInvoke.SET_MEMOIZED_IS_INITIALIZED.ordinal()] = 7;
             } catch (NoSuchFieldError unused7) {
             }
         }
     }
 
     /* compiled from: BL */
+    /* renamed from: com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReply$b */
     /* loaded from: classes13.dex */
-    public static final class Builder extends GeneratedMessageLite.Builder<PlayViewUniteReply, Builder> implements MessageLiteOrBuilder {
-        /* synthetic */ Builder(C65191 c65191) {
+    public static final class C10684b extends GeneratedMessageLite.Builder<PlayViewUniteReply, C10684b> implements MessageLiteOrBuilder {
+        /* synthetic */ C10684b(C10683a c10683a) {
             this();
         }
 
-        public Builder clearEvent() {
+        public C10684b clearEvent() {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).clearEvent();
             return this;
         }
 
-        public Builder clearHistory() {
+        public C10684b clearFragmentVideo() {
+            copyOnWrite();
+            ((PlayViewUniteReply) this.instance).clearFragmentVideo();
+            return this;
+        }
+
+        public C10684b clearHistory() {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).clearHistory();
             return this;
         }
 
-        public Builder clearPlayArc() {
+        public C10684b clearPlayArc() {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).clearPlayArc();
             return this;
         }
 
-        public Builder clearPlayArcConf() {
+        public C10684b clearPlayArcConf() {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).clearPlayArcConf();
             return this;
         }
 
-        public Builder clearPlayDeviceConf() {
+        public C10684b clearPlayDeviceConf() {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).clearPlayDeviceConf();
             return this;
         }
 
-        public Builder clearQnTrialInfo() {
+        public C10684b clearQnTrialInfo() {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).clearQnTrialInfo();
             return this;
         }
 
-        public Builder clearSupplement() {
+        public C10684b clearSupplement() {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).clearSupplement();
             return this;
         }
 
-        public Builder clearViewInfo() {
+        public C10684b clearViewInfo() {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).clearViewInfo();
             return this;
         }
 
-        public Builder clearVodInfo() {
+        public C10684b clearVodInfo() {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).clearVodInfo();
             return this;
@@ -149,6 +160,10 @@ public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUnite
 
         public Event getEvent() {
             return ((PlayViewUniteReply) this.instance).getEvent();
+        }
+
+        public FragmentVideo getFragmentVideo() {
+            return ((PlayViewUniteReply) this.instance).getFragmentVideo();
         }
 
         public History getHistory() {
@@ -187,6 +202,10 @@ public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUnite
             return ((PlayViewUniteReply) this.instance).hasEvent();
         }
 
+        public boolean hasFragmentVideo() {
+            return ((PlayViewUniteReply) this.instance).hasFragmentVideo();
+        }
+
         public boolean hasHistory() {
             return ((PlayViewUniteReply) this.instance).hasHistory();
         }
@@ -219,169 +238,151 @@ public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUnite
             return ((PlayViewUniteReply) this.instance).hasVodInfo();
         }
 
-        public Builder mergeEvent(Event event) {
+        public C10684b mergeEvent(Event event) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).mergeEvent(event);
             return this;
         }
 
-        public Builder mergeHistory(History history) {
+        public C10684b mergeFragmentVideo(FragmentVideo fragmentVideo) {
+            copyOnWrite();
+            ((PlayViewUniteReply) this.instance).mergeFragmentVideo(fragmentVideo);
+            return this;
+        }
+
+        public C10684b mergeHistory(History history) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).mergeHistory(history);
             return this;
         }
 
-        public Builder mergePlayArc(PlayArc playArc) {
+        public C10684b mergePlayArc(PlayArc playArc) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).mergePlayArc(playArc);
             return this;
         }
 
-        public Builder mergePlayArcConf(PlayArcConf playArcConf) {
+        public C10684b mergePlayArcConf(PlayArcConf playArcConf) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).mergePlayArcConf(playArcConf);
             return this;
         }
 
-        public Builder mergePlayDeviceConf(PlayDeviceConf playDeviceConf) {
+        public C10684b mergePlayDeviceConf(PlayDeviceConf playDeviceConf) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).mergePlayDeviceConf(playDeviceConf);
             return this;
         }
 
-        public Builder mergeQnTrialInfo(QnTrialInfo qnTrialInfo) {
+        public C10684b mergeQnTrialInfo(QnTrialInfo qnTrialInfo) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).mergeQnTrialInfo(qnTrialInfo);
             return this;
         }
 
-        public Builder mergeSupplement(Any any) {
+        public C10684b mergeSupplement(Any any) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).mergeSupplement(any);
             return this;
         }
 
-        public Builder mergeViewInfo(ViewInfo viewInfo) {
+        public C10684b mergeViewInfo(ViewInfo viewInfo) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).mergeViewInfo(viewInfo);
             return this;
         }
 
-        public Builder mergeVodInfo(VodInfo vodInfo) {
+        public C10684b mergeVodInfo(VodInfo vodInfo) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).mergeVodInfo(vodInfo);
             return this;
         }
 
-        public Builder setEvent(Event event) {
+        public C10684b setEvent(Event event) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).setEvent(event);
             return this;
         }
 
-        public Builder setHistory(History history) {
+        public C10684b setFragmentVideo(FragmentVideo fragmentVideo) {
+            copyOnWrite();
+            ((PlayViewUniteReply) this.instance).setFragmentVideo(fragmentVideo);
+            return this;
+        }
+
+        public C10684b setHistory(History history) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).setHistory(history);
             return this;
         }
 
-        public Builder setPlayArc(PlayArc playArc) {
+        public C10684b setPlayArc(PlayArc playArc) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).setPlayArc(playArc);
             return this;
         }
 
-        public Builder setPlayArcConf(PlayArcConf playArcConf) {
+        public C10684b setPlayArcConf(PlayArcConf playArcConf) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).setPlayArcConf(playArcConf);
             return this;
         }
 
-        public Builder setPlayDeviceConf(PlayDeviceConf playDeviceConf) {
+        public C10684b setPlayDeviceConf(PlayDeviceConf playDeviceConf) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).setPlayDeviceConf(playDeviceConf);
             return this;
         }
 
-        public Builder setQnTrialInfo(QnTrialInfo qnTrialInfo) {
+        public C10684b setQnTrialInfo(QnTrialInfo qnTrialInfo) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).setQnTrialInfo(qnTrialInfo);
             return this;
         }
 
-        public Builder setSupplement(Any any) {
+        public C10684b setSupplement(Any any) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).setSupplement(any);
             return this;
         }
 
-        public Builder setViewInfo(ViewInfo viewInfo) {
+        public C10684b setViewInfo(ViewInfo viewInfo) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).setViewInfo(viewInfo);
             return this;
         }
 
-        public Builder setVodInfo(VodInfo vodInfo) {
+        public C10684b setVodInfo(VodInfo vodInfo) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).setVodInfo(vodInfo);
             return this;
         }
 
-        private Builder() {
+        private C10684b() {
             super(PlayViewUniteReply.DEFAULT_INSTANCE);
         }
 
-        public Builder setEvent(Event.Builder builder) {
+        public C10684b setEvent(Event.Builder c15992b) {
             copyOnWrite();
-            ((PlayViewUniteReply) this.instance).setEvent(builder.build());
+            ((PlayViewUniteReply) this.instance).setEvent(c15992b.build());
             return this;
         }
 
-        public Builder setHistory(History.Builder builder) {
+        public C10684b setFragmentVideo(FragmentVideo.C16010b c16010b) {
             copyOnWrite();
-            ((PlayViewUniteReply) this.instance).setHistory(builder.build());
+            ((PlayViewUniteReply) this.instance).setFragmentVideo(c16010b.build());
             return this;
         }
 
-        public Builder setPlayArc(PlayArc.C13342b builder) {
+        public C10684b setHistory(History.Builder c16018b) {
             copyOnWrite();
-            ((PlayViewUniteReply) this.instance).setPlayArc(builder.build());
+            ((PlayViewUniteReply) this.instance).setHistory(c16018b.build());
             return this;
         }
 
-        public Builder setPlayArcConf(PlayArcConf.Builder builder) {
-            copyOnWrite();
-            ((PlayViewUniteReply) this.instance).setPlayArcConf(builder.build());
-            return this;
-        }
-
-        public Builder setPlayDeviceConf(PlayDeviceConf.Builder builder) {
-            copyOnWrite();
-            ((PlayViewUniteReply) this.instance).setPlayDeviceConf(builder.build());
-            return this;
-        }
-
-        public Builder setQnTrialInfo(QnTrialInfo.Builder builder) {
-            copyOnWrite();
-            ((PlayViewUniteReply) this.instance).setQnTrialInfo(builder.build());
-            return this;
-        }
-
-        public Builder setSupplement(Any.Builder builder) {
+        public C10684b setSupplement(Any.Builder builder) {
             copyOnWrite();
             ((PlayViewUniteReply) this.instance).setSupplement(builder.build());
-            return this;
-        }
-
-        public Builder setViewInfo(ViewInfo.Builder builder) {
-            copyOnWrite();
-            ((PlayViewUniteReply) this.instance).setViewInfo(builder.build());
-            return this;
-        }
-
-        public Builder setVodInfo(VodInfo.Builder builder) {
-            copyOnWrite();
-            ((PlayViewUniteReply) this.instance).setVodInfo(builder.build());
             return this;
         }
     }
@@ -398,6 +399,11 @@ public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUnite
     /* JADX INFO: Access modifiers changed from: private */
     public void clearEvent() {
         this.event_ = null;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void clearFragmentVideo() {
+        this.fragmentVideo_ = null;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -452,6 +458,17 @@ public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUnite
             this.event_ = Event.newBuilder(this.event_).mergeFrom((Event) event).buildPartial();
         } else {
             this.event_ = event;
+        }
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void mergeFragmentVideo(FragmentVideo fragmentVideo) {
+        fragmentVideo.getClass();
+        FragmentVideo fragmentVideo2 = this.fragmentVideo_;
+        if (fragmentVideo2 != null && fragmentVideo2 != FragmentVideo.getDefaultInstance()) {
+            this.fragmentVideo_ = FragmentVideo.newBuilder(this.fragmentVideo_).mergeFrom((FragmentVideo) fragmentVideo).buildPartial();
+        } else {
+            this.fragmentVideo_ = fragmentVideo;
         }
     }
 
@@ -543,7 +560,7 @@ public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUnite
         }
     }
 
-    public static Builder newBuilder() {
+    public static C10684b newBuilder() {
         return DEFAULT_INSTANCE.createBuilder();
     }
 
@@ -563,6 +580,12 @@ public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUnite
     public void setEvent(Event event) {
         event.getClass();
         this.event_ = event;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void setFragmentVideo(FragmentVideo fragmentVideo) {
+        fragmentVideo.getClass();
+        this.fragmentVideo_ = fragmentVideo;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -615,13 +638,13 @@ public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUnite
 
     @Override // com.google.protobuf.GeneratedMessageLite
     protected final Object dynamicMethod(GeneratedMessageLite.MethodToInvoke methodToInvoke, Object obj, Object obj2) {
-        switch (C65191.f16596xa1df5c61[methodToInvoke.ordinal()]) {
+        switch (C10683a.f20667xa1df5c61[methodToInvoke.ordinal()]) {
             case 1:
                 return new PlayViewUniteReply();
             case 2:
-                return new Builder(null);
+                return new C10684b(null);
             case 3:
-                return GeneratedMessageLite.newMessageInfo(DEFAULT_INSTANCE, "\u0000\t\u0000\u0000\u0001\t\t\u0000\u0000\u0000\u0001\t\u0002\t\u0003\t\u0004\t\u0005\t\u0006\t\u0007\t\b\t\t\t", new Object[]{"vodInfo_", "playArcConf_", "playDeviceConf_", "event_", "supplement_", "playArc_", "qnTrialInfo_", "history_", "viewInfo_"});
+                return GeneratedMessageLite.newMessageInfo(DEFAULT_INSTANCE, "\u0000\n\u0000\u0000\u0001\n\n\u0000\u0000\u0000\u0001\t\u0002\t\u0003\t\u0004\t\u0005\t\u0006\t\u0007\t\b\t\t\t\n\t", new Object[]{"vodInfo_", "playArcConf_", "playDeviceConf_", "event_", "supplement_", "playArc_", "qnTrialInfo_", "history_", "viewInfo_", "fragmentVideo_"});
             case 4:
                 return DEFAULT_INSTANCE;
             case 5:
@@ -648,6 +671,11 @@ public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUnite
     public Event getEvent() {
         Event event = this.event_;
         return event == null ? Event.getDefaultInstance() : event;
+    }
+
+    public FragmentVideo getFragmentVideo() {
+        FragmentVideo fragmentVideo = this.fragmentVideo_;
+        return fragmentVideo == null ? FragmentVideo.getDefaultInstance() : fragmentVideo;
     }
 
     public History getHistory() {
@@ -694,6 +722,10 @@ public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUnite
         return this.event_ != null;
     }
 
+    public boolean hasFragmentVideo() {
+        return this.fragmentVideo_ != null;
+    }
+
     public boolean hasHistory() {
         return this.history_ != null;
     }
@@ -726,7 +758,7 @@ public final class PlayViewUniteReply extends GeneratedMessageLite<PlayViewUnite
         return this.vodInfo_ != null;
     }
 
-    public static Builder newBuilder(PlayViewUniteReply playViewUniteReply) {
+    public static C10684b newBuilder(PlayViewUniteReply playViewUniteReply) {
         return DEFAULT_INSTANCE.createBuilder(playViewUniteReply);
     }
 

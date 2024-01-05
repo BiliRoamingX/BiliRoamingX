@@ -8,10 +8,7 @@ import android.text.InputType
 import android.widget.EditText
 import androidx.preference.Preference
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.Toasts
-import app.revanced.bilibili.utils.Utils
-import app.revanced.bilibili.utils.onClick
-import app.revanced.bilibili.utils.runCatchingOrNull
+import app.revanced.bilibili.utils.*
 
 class CustomizePlayerFragment :
     BiliRoamingBaseSettingFragment("biliroaming_setting_customize_player") {
@@ -24,7 +21,7 @@ class CustomizePlayerFragment :
 
     override fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         super.onPreferenceChanged(sharedPreferences, key)
-        if (key == Settings.TRIAL_VIP_QUALITY.key && Settings.TRIAL_VIP_QUALITY.boolean && Settings.PLAYER_VERSION.string != "1") {
+        if (key == Settings.TRIAL_VIP_QUALITY.key && Settings.TRIAL_VIP_QUALITY.boolean && !Versions.ge7_62_0() && Settings.PLAYER_VERSION.string != "1") {
             AlertDialog.Builder(requireContext())
                 .setMessage(Utils.getString("biliroaming_need_old_player_message"))
                 .setNegativeButton(Utils.getString("biliroaming_n")) { _, _ -> }

@@ -4,6 +4,7 @@ import android.net.Uri
 import app.revanced.bilibili.api.BiliRoamingApi.getPlayUrl
 import app.revanced.bilibili.api.BiliRoamingApi.getThaiSeason
 import app.revanced.bilibili.api.CustomServerException
+import app.revanced.bilibili.patches.TrialQualityPatch
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
@@ -200,6 +201,10 @@ object BangumiPlayUrlHook {
                 ConfType.LISTEN.number
             )) arcConfs[key] = supportedConf
         }
+        if (!isDownloadUnite && !Utils.isEffectiveVip()
+            && Versions.ge7_62_0()
+            && Settings.TRIAL_VIP_QUALITY.boolean
+        ) TrialQualityPatch.makeVipFree(playReply)
     }
 
     private fun getThaiSeason(

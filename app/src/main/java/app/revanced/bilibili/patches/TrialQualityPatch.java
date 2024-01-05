@@ -3,11 +3,13 @@ package app.revanced.bilibili.patches;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReply;
 import com.bapis.bilibili.app.playurl.v1.PlayViewReply;
 import com.bapis.bilibili.app.playurl.v1.Stream;
 
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Utils;
+import app.revanced.bilibili.utils.Versions;
 
 public class TrialQualityPatch {
 
@@ -27,9 +29,22 @@ public class TrialQualityPatch {
                 });
     }
 
+    public static void makeVipFree(PlayViewUniteReply playViewUniteReply) {
+        playViewUniteReply.clearQnTrialInfo();
+        playViewUniteReply.getVodInfo().getStreamListList().stream().filter(com.bapis.bilibili.playershared.Stream::hasDashVideo)
+                .forEach(e -> {
+                    var streamInfo = e.getStreamInfo();
+                    if (streamInfo.getNeedVip()) {
+                        streamInfo.setNeedVip(false);
+                        streamInfo.setVipFree(true);
+                    }
+                });
+    }
+
     public static void onBindOnline(boolean selected, TextView strokeBadge, TextView solidBadge) {
-        if (Settings.PLAYER_VERSION.getString().equals("1") && Settings.TRIAL_VIP_QUALITY.getBoolean()
-                && !Utils.isEffectiveVip() && Utils.getString("try_listening_tips") // 限免中
+        if ((Settings.PLAYER_VERSION.getString().equals("1") || Versions.ge7_62_0())
+                && Settings.TRIAL_VIP_QUALITY.getBoolean() && !Utils.isEffectiveVip()
+                && Utils.getString("try_listening_tips") // 限免中
                 .equals(solidBadge.getText().toString())) {
             solidBadge.setVisibility(View.GONE);
             var strokeText = selected ? Utils.getString("player_try_watching") // 试看中
