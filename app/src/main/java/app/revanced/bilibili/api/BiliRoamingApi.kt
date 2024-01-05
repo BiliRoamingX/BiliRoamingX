@@ -293,6 +293,10 @@ object BiliRoamingApi {
                     put("allow_dm", 0)
                     put("area_limit", 1)
                 }
+                // We need duration to make sure "GetWorkInfo" works as expected,
+                // and make subtitle showing too, but we can't get it from season api,
+                // so we fake it.
+                ep.put("duration", 1436000)
                 episodes.put(ep)
             }
             data.put("id", sid)
