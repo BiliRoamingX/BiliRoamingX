@@ -30,6 +30,23 @@
 
 package com.google.protobuf;
 
+import com.bapis.bilibili.app.distribution.setting.download.DownloadSettingsConfig;
+import com.bapis.bilibili.app.distribution.setting.dynamic.DynamicDeviceConfig;
+import com.bapis.bilibili.app.distribution.setting.experimental.ExperimentalConfig;
+import com.bapis.bilibili.app.distribution.setting.experimental.MultipleTusConfig;
+import com.bapis.bilibili.app.distribution.setting.night.NightSettingsConfig;
+import com.bapis.bilibili.app.distribution.setting.other.OtherSettingsConfig;
+import com.bapis.bilibili.app.distribution.setting.pegasus.PegasusDeviceConfig;
+import com.bapis.bilibili.app.distribution.setting.pegasus.PegasusMidConfig;
+import com.bapis.bilibili.app.distribution.setting.play.CloudPlayConfig;
+import com.bapis.bilibili.app.distribution.setting.play.PlayConfig;
+import com.bapis.bilibili.app.distribution.setting.play.SpecificPlayConfig;
+import com.bapis.bilibili.app.distribution.setting.privacy.MidPrivacySettingsConfig;
+import com.bapis.bilibili.app.distribution.setting.privacy.PrivacySettingsConfig;
+import com.bapis.bilibili.app.distribution.setting.search.SearchDeviceConfig;
+import com.bapis.bilibili.app.distribution.setting.story.MidStoryConfig;
+import com.bapis.bilibili.app.distribution.setting.story.StoryConfig;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -54,10 +71,26 @@ final class MessageLiteToStringEx {
     private static final String BYTES_SUFFIX = "Bytes";
     private static final char[] INDENT_BUFFER = new char[80];
 
-    private static final Map<String, Class<? extends GeneratedMessageLite<?, ?>>> typeMap = Map.of();
+    private static final Map<String, Class<? extends GeneratedMessageLite<?, ?>>> typeMap = new HashMap<>();
 
     static {
         Arrays.fill(INDENT_BUFFER, ' ');
+        typeMap.put("type.googleapis.com/bilibili.app.distribution.download.v1.DownloadSettingsConfig", DownloadSettingsConfig.class);
+        typeMap.put("type.googleapis.com/bilibili.app.distribution.dynamic.v1.DynamicDeviceConfig", DynamicDeviceConfig.class);
+        typeMap.put("type.googleapis.com/bilibili.app.distribution.experimental.v1.ExperimentalConfig", ExperimentalConfig.class);
+        typeMap.put("type.googleapis.com/bilibili.app.distribution.experimental.v1.MultipleTusConfig", MultipleTusConfig.class);
+        typeMap.put("type.googleapis.com/bilibili.app.distribution.night.v1.NightSettingsConfig", NightSettingsConfig.class);
+        typeMap.put("type.googleapis.com/bilibili.app.distribution.other.v1.MidPrivacySettingsConfig", MidPrivacySettingsConfig.class);
+        typeMap.put("type.googleapis.com/bilibili.app.distribution.other.v1.OtherSettingsConfig", OtherSettingsConfig.class);
+        typeMap.put("type.googleapis.com/bilibili.app.distribution.other.v1.PrivacySettingsConfig", PrivacySettingsConfig.class);
+        typeMap.put("type.googleapis.com/bilibili.app.distribution.pegasus.v1.PegasusDeviceConfig", PegasusDeviceConfig.class);
+        typeMap.put("type.googleapis.com/bilibili.app.distribution.pegasus.v1.PegasusMidConfig", PegasusMidConfig.class);
+        typeMap.put("type.googleapis.com/bilibili.app.distribution.play.v1.CloudPlayConfig", CloudPlayConfig.class);
+        typeMap.put("type.googleapis.com/bilibili.app.distribution.play.v1.PlayConfig", PlayConfig.class);
+        typeMap.put("type.googleapis.com/bilibili.app.distribution.play.v1.SpecificPlayConfig", SpecificPlayConfig.class);
+        typeMap.put("type.googleapis.com/bilibili.app.distribution.search.v1.SearchDeviceConfig", SearchDeviceConfig.class);
+        typeMap.put("type.googleapis.com/bilibili.app.distribution.story.v1.MidStoryConfig", MidStoryConfig.class);
+        typeMap.put("type.googleapis.com/bilibili.app.distribution.story.v1.StoryConfig", StoryConfig.class);
     }
 
     private MessageLiteToStringEx() {
@@ -259,8 +292,16 @@ final class MessageLiteToStringEx {
         }
 
         buffer.append('\n');
+        String prettyName = pascalCaseToSnakeCase(name);
+        if (object instanceof Any) {
+            indent(indent, buffer);
+            buffer.append(prettyName);
+            buffer.append(".typeUrl: ");
+            buffer.append(((Any) object).getTypeUrl());
+            buffer.append('\n');
+        }
         indent(indent, buffer);
-        buffer.append(pascalCaseToSnakeCase(name));
+        buffer.append(prettyName);
 
         if (object instanceof String) {
             String string = (String) object;
@@ -283,6 +324,7 @@ final class MessageLiteToStringEx {
                 Any any = (Any) object;
                 String typeUrl = any.getTypeUrl();
                 String type = typeUrl.substring(typeUrl.indexOf('/') + 1);
+
                 Class<? extends GeneratedMessageLite<?, ?>> realClass = null;
                 try {
                     String guessType = "com.bapis." + type;
