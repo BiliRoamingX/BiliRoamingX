@@ -48,6 +48,7 @@ public enum Settings {
     LONG_PRESS_PLAYBACK_SPEED("long_press_playback_speed", FLOAT, 0f),
     OVERRIDE_PLAYBACK_SPEED("playback_speed_override", STRING, ""),
     TRIAL_VIP_QUALITY("trial_vip_quality", BOOLEAN, FALSE),
+    GLOBAL_SEGMENTED_SECTION("global_segmented_section", BOOLEAN, FALSE),
 
     // 首页
     SHOWING_BOTTOM_ITEMS("showing_bottom_items", STRING_SET, Set.of(Constants.ALL_VALUE)),
@@ -197,7 +198,8 @@ public enum Settings {
     // 非配置项
     LOSSLESS_ENABLED("lossless_enabled", BOOLEAN, FALSE),
     CUSTOM_COLOR("biliroaming_custom_color", INTEGER, -0xe6b7d),
-    SKIN_JSON("skin_json", STRING, "");
+    SKIN_JSON("skin_json", STRING, ""),
+    ENABLE_SEGMENTED_SECTION("enable_segmented_section", BOOLEAN, TRUE);
 
     public static final String PREFS_NAME = "biliroaming";
 
