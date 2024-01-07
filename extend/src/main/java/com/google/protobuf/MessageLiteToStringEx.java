@@ -115,7 +115,7 @@ final class MessageLiteToStringEx {
 
             if (method.getName().startsWith("has")) {
                 hazzers.put(method.getName(), method);
-            } else if (method.getName().startsWith("get")) {
+            } else if (method.getName().startsWith("get") && !method.getName().startsWith("getMutable")) {
                 getters.put(method.getName(), method);
             }
         }
