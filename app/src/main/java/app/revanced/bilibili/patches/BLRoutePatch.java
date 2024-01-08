@@ -17,6 +17,7 @@ public class BLRoutePatch {
         if (uri == null) return null;
         LogHelper.debug(() -> "Route uri: " + uri);
         String scheme = uri.getScheme();
+        String url = uri.toString();
         if ("bilibili".equals(scheme)) {
             String authority = uri.getEncodedAuthority();
             if ("story".equals(authority) || "video".equals(authority)) {
@@ -33,14 +34,16 @@ public class BLRoutePatch {
                 }
                 newUri.encodedQuery(newQuery);
                 return newUri.build();
-            } else if ("1".equals(Settings.PLAYER_VERSION.getString()) && uri.toString().startsWith("bilibili://music/playlist/playpage")) {
+            } else if ("1".equals(Settings.PLAYER_VERSION.getString()) && url.startsWith("bilibili://music/playlist/playpage")) {
                 return uri.buildUpon().appendQueryParameter("force_old_playlist", "1").build();
             }
         } else if ("https".equals(scheme)) {
-            String url;
             boolean needRemovePayload = VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.fullScreenQuality() != 0 || Settings.DEFAULT_PLAYBACK_SPEED.getFloat() != 0f;
-            if (needRemovePayload && (url = uri.toString()).startsWith("https://www.bilibili.com/bangumi/play"))
+            if (needRemovePayload && url.startsWith("https://www.bilibili.com/bangumi/play"))
                 return Uri.parse(playerPreloadRegex.matcher(url).replaceAll(""));
+            if (Settings.REPLACE_STORY_VIDEO.getBoolean() && url.startsWith("https://www.bilibili.com/video")) {
+                return Uri.parse(url.replace(STORY_ROUTER_QUERY, "").replace(STORY_TYPE_QUERY, ""));
+            }
         }
         return uri;
     }
