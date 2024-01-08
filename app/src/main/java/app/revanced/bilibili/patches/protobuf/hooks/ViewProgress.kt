@@ -18,8 +18,12 @@ object ViewProgress : MossHook<ViewProgressReq, ViewProgressReply>() {
         reply: ViewProgressReply?,
         error: MossException?
     ): ViewProgressReply? {
-        if (Settings.REMOVE_CMD_DMS.boolean)
-            reply?.videoGuide = VideoGuide()
+        if (reply != null) {
+            if (Settings.REMOVE_CMD_DMS.boolean)
+                reply.videoGuide = VideoGuide()
+            if (Settings.DISABLE_SEGMENTED_SECTION.boolean)
+                reply.pointPermanent = false
+        }
         return super.hookAfter(req, reply, error)
     }
 }
