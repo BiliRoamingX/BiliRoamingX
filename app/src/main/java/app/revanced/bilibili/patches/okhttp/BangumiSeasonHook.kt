@@ -513,6 +513,8 @@ object BangumiSeasonHook {
             filterTypes.add("ogv_pgc")
             filterTypes.add("bgm_media")
         }
+        if (filterTypes.contains("ad"))
+            filterTypes.add("product")
         val toRemoveIndexes = mutableListOf<Int>()
         reply.itemList.forEachIndexed { index, item ->
             if (filterTypes.any { item.linktype.contains(it) })
