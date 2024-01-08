@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
+import androidx.preference.TwoStatePreference
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Reflex
 import app.revanced.bilibili.utils.Utils
@@ -175,6 +176,8 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
         if (condition(preference)) {
             preference.isEnabled = false
             preference.summary = reason()
+            if (preference is TwoStatePreference)
+                preference.isChecked = false
         }
     }
 
