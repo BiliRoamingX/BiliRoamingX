@@ -150,16 +150,10 @@ enum class Area(@JvmField val value: String) {
 
 val countryTask: Future<Area> by lazy {
     Utils.submitTask {
-        fun JSONObject.optStringFix(name: String, fallback: String = "") =
-            if (isNull(name)) fallback else optString(name, fallback)
-
-        when (arrayOf(Constants.ZONE_URL, Constants.INFO_URL).firstNotNullOfOrNull { url ->
-            fetchJson(url)?.optJSONObject("data")?.optStringFix("country")
-                .let { if (it.isNullOrEmpty()) null else it }
-        }) {
-            "中国" -> Area.CN
-            "香港", "澳门" -> Area.HK
-            "台湾" -> Area.TW
+        when (fetchJson(Constants.ZONE_URL)?.optJSONObject("data")?.optInt("country_code") ?: 0) {
+            86 -> Area.CN
+            852, 853 -> Area.HK
+            886 -> Area.TW
             else -> Area.GLOBAL
         }.also { LogHelper.debug { "当前地区: $it" } }
     }

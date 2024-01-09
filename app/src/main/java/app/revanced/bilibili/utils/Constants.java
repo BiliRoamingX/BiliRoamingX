@@ -8,7 +8,6 @@ public class Constants {
     public static final String HD_PACKAGE_NAME = "tv.danmaku.bilibilihd";
     public static final String ALL_VALUE = "_all";
     public static final String NON_UPOS_VALUE = "$1";
-    public static final String INFO_URL = "https://api.bilibili.com/client_info";
     public static final String ZONE_URL = "https://api.bilibili.com/x/web-interface/zone";
     public static final int MAX_FNVAL = 16 | 64 | 128 | 256 | 512 | 1024 | 2048;
     public static final int MAX_QN = 127;
