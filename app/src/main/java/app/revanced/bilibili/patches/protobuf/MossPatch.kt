@@ -12,6 +12,7 @@ import com.google.protobuf.GeneratedMessageLite
 
 object MossPatch {
     private val hooks = arrayOf(
+        DmSegMobile,
         DmView,
         DynAll,
         DynRed,
