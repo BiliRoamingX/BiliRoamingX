@@ -287,6 +287,11 @@ val blkvPrefs by lazy {
     Utils.blkvPrefsByName("instance.bili_preference", true)
 }
 
+val accountPrefs by lazy {
+    val accountDir = Utils.getContext().getDir("account", Context.MODE_PRIVATE)
+    Utils.blkvPrefsByFile(File(accountDir, "controller.blkv"), true)
+}
+
 @JvmOverloads
 fun setClipboardContent(label: String = "", content: CharSequence) {
     val clipboardManager = Utils.getContext().getSystemService(ClipboardManager::class.java)
@@ -311,15 +316,20 @@ val cookieBiliJct get() = cookieInfo?.cookies?.find { it.name == "bili_jct" }?.v
 
 private val cookieInfoCache by lazy {
     val cookieFile = File(Utils.getContext().filesDir, "bili.account.storage")
-    if (cookieFile.isFile) {
-        cookieFile.runCatchingOrNull {
-            val json = Base64.decode(bufferedReader().readTextX(), Base64.NO_WRAP)
-                .toString(Charsets.UTF_8).toJSONObject()
-            json.optJSONArray("cookies")?.asSequence<JSONObject>().orEmpty()
+    val currentAccount = accountPrefs.getString("current_account", "").orEmpty()
+    runCatching {
+        val cookie = if (currentAccount.isNotEmpty()) {
+            currentAccount.toJSONObject().optString("cookie")
+        } else if (cookieFile.isFile) {
+            cookieFile.bufferedReader().readTextX()
+        } else null
+        if (cookie != null) {
+            Base64.decode(cookie, Base64.NO_WRAP).toString(Charsets.UTF_8).toJSONObject()
+                .optJSONArray("cookies")?.asSequence<JSONObject>().orEmpty()
                 .map { CookieInfo.CookieBean(it.optString("name"), it.optString("value")) }
                 .toList().let { CookieInfo(it) }
-        }
-    } else null
+        } else null
+    }.getOrNull()
 }
 
 val defaultUA = "Mozilla/5.0 BiliDroid/$versionName (bbcallen@gmail.com)"
