@@ -104,15 +104,36 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
 
     private fun JSONArray.toSubtitles(): List<SubtitleItem> {
         val subList = mutableListOf<SubtitleItem>()
-        val lanCodes = asSequence<JSONObject>().map { it.optString("key") }
-        // prefer select furry cn subtitle if official not exist, then consider kktv, iqiyi, mewatch
-        val replaceable = "zh-Hans" !in lanCodes
-        val replaceToFurry = replaceable && "cn" in lanCodes
-        val replaceToKKTV = replaceable && !replaceToFurry && "cn.kktv" in lanCodes
-        val replaceToIqiyi =
-            replaceable && !replaceToFurry && !replaceToKKTV && "cn.iqiyi" in lanCodes
+        val lanCodes = asSequence<JSONObject>().map { it.optString("key") }.toList()
+        // prefer select furry cn subtitle if official hans subtitle not exist,
+        // then consider kktv, iqiyi, mewatch, catchplay
+        var replaceable = true
+        var hasCnFurry = false
+        var hasCnKKTV = false
+        var hasCnIqiyi = false
+        var hasCnMeWatch = false
+        var hasCnCatchPlay = false
+        for (lanCode in lanCodes) {
+            if (lanCode == "zh-Hans")
+                replaceable = false
+            if (lanCode == "cn")
+                hasCnFurry = true
+            if (lanCode == "cn.kktv")
+                hasCnKKTV = true
+            if (lanCode == "cn.iqiyi")
+                hasCnIqiyi = true
+            if (lanCode == "cn.mewatch")
+                hasCnMeWatch = true
+            if (lanCode == "cn.catchplay")
+                hasCnCatchPlay = true
+        }
+        val replaceToFurry = replaceable && hasCnFurry
+        val replaceToKKTV = replaceable && !replaceToFurry && hasCnKKTV
+        val replaceToIqiyi = replaceable && !replaceToFurry && !replaceToKKTV && hasCnIqiyi
         val replaceToMeWatch =
-            replaceable && !replaceToFurry && !replaceToKKTV && !replaceToIqiyi && "cn.mewatch" in lanCodes
+            replaceable && !replaceToFurry && !replaceToKKTV && !replaceToIqiyi && hasCnMeWatch
+        val replaceToCatchPlay =
+            replaceable && !replaceToFurry && !replaceToKKTV && !replaceToIqiyi && !replaceToMeWatch && hasCnCatchPlay
         for (subtitle in this) {
             SubtitleItem().apply {
                 id = subtitle.optLong("id")
@@ -123,6 +144,7 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
                         || (it == "cn.kktv" && replaceToKKTV)
                         || (it == "cn.iqiyi" && replaceToIqiyi)
                         || (it == "cn.mewatch" && replaceToMeWatch)
+                        || (it == "cn.catchplay" && replaceToCatchPlay)
                     ) "zh-Hans" else it
                 }
                 lanDoc = subtitle.optString("title")
