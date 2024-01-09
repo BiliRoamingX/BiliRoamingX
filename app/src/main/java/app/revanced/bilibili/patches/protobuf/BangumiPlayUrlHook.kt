@@ -213,6 +213,13 @@ object BangumiPlayUrlHook {
             && Versions.ge7_62_0()
             && Settings.TRIAL_VIP_QUALITY.boolean
         ) TrialQualityPatch.makeVipFree(playReply)
+        if (Settings.REMOVE_CMD_DMS.boolean) {
+            playReply.viewInfo.toastsList.withIndex().filter { (_, toast) ->
+                toast.type == ToastType.VIP_DEFINITION_REMIND
+            }.map { it.index }.asReversed().forEach {
+                playReply.viewInfo.removeToasts(it)
+            }
+        }
     }
 
     private fun getThaiSeason(
