@@ -25,6 +25,7 @@ import android.text.TextPaint
 import android.text.style.*
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.annotation.FloatRange
 import androidx.core.text.inSpans
 
 /**
@@ -169,3 +170,14 @@ inline fun SpannableStringBuilder.clickable(
         ds.isUnderlineText = underline
     }
 }, builderAction = builderAction)
+
+inline fun SpannableStringBuilder.relativeSize(
+    @FloatRange(from = 0.0) proportion: Float,
+    builderAction: SpannableStringBuilder.() -> Unit
+): SpannableStringBuilder = inSpans(RelativeSizeSpan(proportion), builderAction = builderAction)
+
+inline fun SpannableStringBuilder.absoluteSize(
+    size: Int,
+    dp: Boolean = false,
+    builderAction: SpannableStringBuilder.() -> Unit
+): SpannableStringBuilder = inSpans(AbsoluteSizeSpan(size, dp), builderAction = builderAction)

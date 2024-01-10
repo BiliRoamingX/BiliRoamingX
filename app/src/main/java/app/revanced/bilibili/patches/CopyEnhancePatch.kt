@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.PopupWindow
@@ -39,6 +40,10 @@ object CopyEnhancePatch {
                 || (Versions.ge7_47_0()
                 && topActivity is com.bilibili.ship.theseus.detail.UnitedBizDetailsActivity)
                 || topActivity is UnitedPlaylistActivity
+
+        fun SpannableStringBuilder.appendTitle(title: CharSequence) =
+            relativeSize(proportion = 1.1f) { bold { appendLine(title) } }
+
         val allDesc = if (united) {
             val view = ViewUniteReplyHook.viewUniteMap[topActivity.hashCode()]
             if (view != null) {
@@ -49,11 +54,11 @@ object CopyEnhancePatch {
                     val intro = modules.find { it.hasUgcIntroduction() }?.ugcIntroduction
                     if (headline != null && intro != null) {
                         buildSpannedString {
-                            bold { appendLine("标题：") }
+                            appendTitle("标题：")
                             appendLine(headline.content).appendLine()
-                            bold { appendLine("BV号：") }
+                            appendTitle("BV号：")
                             appendLine(view.arc.bvid).appendLine()
-                            bold { appendLine("封面：") }
+                            appendTitle("封面：")
                             clickable(0xFF2196F3.toInt(), onClick = {
                                 Utils.async { Utils.saveImage(view.arc.cover) }
                             }) { append("点我保存") }
@@ -62,19 +67,19 @@ object CopyEnhancePatch {
                                 if (it.type == DescType.DescTypeAt) "@${it.text}" else it.text
                             }
                             if (introDesc.isNotEmpty()) {
-                                bold { appendLine("简介：") }
+                                appendTitle("简介：")
                                 appendLine(introDesc).appendLine()
                             }
                             val introBgm = intro.bgmList.joinToString("\n") { m ->
                                 m.author.let { if (it.isEmpty()) m.title else "${m.title} - $it" }
                             }
                             if (introBgm.isNotEmpty()) {
-                                bold { appendLine("BGM：") }
+                                appendTitle("BGM：")
                                 appendLine(introBgm).appendLine()
                             }
                             val introTags = intro.tagsList.joinToString(" ") { it.name }
                             if (introTags.isNotEmpty()) {
-                                bold { appendLine("标签：") }
+                                appendTitle("标签：")
                                 appendLine(introTags).appendLine()
                             }
                         }.removeSuffix("\n\n")
@@ -85,30 +90,30 @@ object CopyEnhancePatch {
             val view = ViewUniteReplyHook.viewMap[topActivity.hashCode()]
             if (view != null) {
                 buildSpannedString {
-                    bold { appendLine("标题：") }
+                    appendTitle("标题：")
                     appendLine(view.arc.title).appendLine()
-                    bold { appendLine("BV号：") }
+                    appendTitle("BV号：")
                     appendLine(view.bvid).appendLine()
-                    bold { appendLine("封面：") }
+                    appendTitle("封面：")
                     clickable(0xFF2196F3.toInt(), onClick = {
                         Utils.async { Utils.saveImage(view.arc.pic) }
                     }) { append("点我保存") }
                     appendLine().appendLine()
                     val introDesc = view.arc.desc
                     if (desc.isNotEmpty()) {
-                        bold { appendLine("简介：") }
+                        appendTitle("简介：")
                         appendLine(introDesc).appendLine()
                     }
                     val introBgm = view.bgmList.joinToString("\n") { m ->
                         m.author.let { if (it.isEmpty()) m.title else "${m.title} - $it" }
                     }
                     if (introBgm.isNotEmpty()) {
-                        bold { appendLine("BGM：") }
+                        appendTitle("BGM：")
                         appendLine(introBgm).appendLine()
                     }
                     val introTags = view.descTagList.joinToString(" ") { it.name }
                     if (introTags.isNotEmpty()) {
-                        bold { appendLine("标签：") }
+                        appendTitle("标签：")
                         appendLine(introTags).appendLine()
                     }
                 }.removeSuffix("\n\n")
