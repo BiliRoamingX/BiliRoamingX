@@ -135,7 +135,7 @@ public enum Settings {
     REMOVE_ELEC_BUTTON("remove_elec_button", BOOLEAN, FALSE),
     BLOCK_LIVE_ORDER("block_live_order", BOOLEAN, FALSE),
     BLOCK_ACTIVITY_TAB("block_activity_tab", BOOLEAN, FALSE),
-    OLD_FAV("old_fav", BOOLEAN, FALSE),
+    OLD_FAV("old_fav", BOOLEAN, FALSE, true),
     BLOCK_ONLY_AT_COMMENT("block_comment_only_at", BOOLEAN, FALSE),
     BLOCK_COMMENT_GOODS("block_comment_goods", BOOLEAN, FALSE),
     BLOCK_COMMENT_UID("block_comment_uid", STRING_SET, Collections.EMPTY_SET),
