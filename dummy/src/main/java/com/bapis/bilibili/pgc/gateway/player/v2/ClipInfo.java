@@ -231,7 +231,7 @@ public final class ClipInfo extends GeneratedMessageLite<ClipInfo, ClipInfo.Buil
         GeneratedMessageLite.registerDefaultInstance(ClipInfo.class, clipInfo);
     }
 
-    private ClipInfo() {
+    public ClipInfo() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

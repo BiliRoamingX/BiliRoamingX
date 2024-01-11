@@ -297,6 +297,7 @@ object BiliRoamingApi {
                 // and make subtitle showing too, but we can't get it from season api,
                 // so we fake it.
                 ep.put("duration", 1436000)
+                ep.optJSONObject("jump")?.let { ep.put("skip", it) }
                 episodes.put(ep)
             }
             data.put("id", sid)

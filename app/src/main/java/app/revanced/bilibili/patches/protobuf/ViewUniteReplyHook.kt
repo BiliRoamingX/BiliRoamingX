@@ -6,6 +6,7 @@ import app.revanced.bilibili.patches.AutoLikePatch
 import app.revanced.bilibili.patches.json.PegasusPatch
 import app.revanced.bilibili.patches.main.ApplicationDelegate
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.FAIL_CODE
+import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.clipInfoCache
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.isBangumiWithWatchPermission
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.subtitlesCache
@@ -154,10 +155,8 @@ object ViewUniteReplyHook {
                 allowDownload = 1
             }
         }
-        if (cid != 0L && epId != 0L) {
-            val cid = cid.toString()
+        if (epId != 0L) {
             val epId = epId.toString()
-            lastSeasonInfo[cid] = epId
             lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
         }
     }
@@ -431,14 +430,17 @@ object ViewUniteReplyHook {
                 title = episode.optString("title")
             }.let { addEpisodes(it) }
 
-            if (episode.has("cid") && episode.has("id")) {
-                val cid = episode.optInt("cid").toString()
-                val epId = episode.optInt("id").toString()
-                lastSeasonInfo[cid] = epId
+            if (episode.has("id")) {
+                val epId = episode.optString("id")
                 lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
                 episode.optJSONArray("subtitles")?.takeIf { it.length() > 0 }?.let {
                     subtitlesCache.compute(seasonId) { _, v ->
-                        (v ?: hashMapOf()).apply { this[cid] = it }
+                        (v ?: hashMapOf()).apply { this[epId] = it }
+                    }
+                }
+                episode.optJSONObject("jump")?.let {
+                    clipInfoCache.compute(seasonId) { _, v ->
+                        (v ?: hashMapOf()).apply { this[epId] = it }
                     }
                 }
             }

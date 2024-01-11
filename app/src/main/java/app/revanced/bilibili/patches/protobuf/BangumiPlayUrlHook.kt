@@ -5,6 +5,7 @@ import app.revanced.bilibili.api.BiliRoamingApi.getPlayUrl
 import app.revanced.bilibili.api.BiliRoamingApi.getThaiSeason
 import app.revanced.bilibili.api.CustomServerException
 import app.revanced.bilibili.patches.TrialQualityPatch
+import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.clipInfoCache
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
@@ -66,6 +67,7 @@ object BangumiPlayUrlHook {
         ConfType.OUTERDM.number,
         ConfType.INNERDM.number,
         ConfType.COLORFILTER.number,
+        ConfType.SKIPOPED.number,
         ConfType.RECORDSCREEN.number,
     )
 
@@ -214,7 +216,7 @@ object BangumiPlayUrlHook {
         ) TrialQualityPatch.makeVipFree(playReply)
         if (Settings.REMOVE_CMD_DMS.boolean) {
             playReply.viewInfo.toastsList.withIndex().filter { (_, toast) ->
-                toast.type == ToastType.VIP_DEFINITION_REMIND
+                toast.type == ToastType.VIP_DEFINITION_REMIND || toast.type == ToastType.VIP_CONTENT_REMIND
             }.map { it.index }.asReversed().forEach {
                 playReply.viewInfo.removeToasts(it)
             }
@@ -672,6 +674,26 @@ object BangumiPlayUrlHook {
                 watchTimeLength = timeLength.toLong()
                 if (Settings.ALLOW_MINI_PLAY.boolean)
                     inlineType = InlineType.TYPE_WHOLE
+                val clipInfo = clipInfoCache[season.optString("season_id")]
+                    ?.get(episode.optString("id"))
+                if (clipInfo != null) {
+                    clipInfo.optJSONObject("op")?.let { op ->
+                        addClipInfo(ClipInfo().apply {
+                            clipType = ClipType.CLIP_TYPE_OP
+                            start = op.optInt("start")
+                            end = op.optInt("end")
+                            toastText = "即将跳过片头"
+                        })
+                    }
+                    clipInfo.optJSONObject("ed")?.let { ed ->
+                        addClipInfo(ClipInfo().apply {
+                            clipType = ClipType.CLIP_TYPE_ED
+                            start = ed.optInt("start")
+                            end = ed.optInt("end")
+                            toastText = "即将跳过片尾"
+                        })
+                    }
+                }
             }
         }
     }

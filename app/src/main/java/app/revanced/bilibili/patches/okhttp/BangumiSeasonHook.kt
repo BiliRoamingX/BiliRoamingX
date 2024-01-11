@@ -46,6 +46,13 @@ object BangumiSeasonHook {
         }
     }
 
+    @JvmStatic
+    val clipInfoCache = object : LinkedHashMap<String, HashMap<String, JSONObject>>(8, 1.0F, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, HashMap<String, JSONObject>>): Boolean {
+            return size > 6
+        }
+    }
+
     const val FAIL_CODE = -404
     private val originalPageTypes by lazy { PageTypes.`$VALUES` }
     private val originalPageTypesV2 by lazy { BiliMainSearchResultPage.PageTypes.`$VALUES` }
@@ -123,10 +130,8 @@ object BangumiSeasonHook {
             if (Settings.ALLOW_DOWNLOAD.boolean)
                 put("allow_download", 1)
         }
-        if (episode.has("cid") && episode.has("id")) {
-            val cid = episode.optInt("cid").toString()
-            val epId = episode.optInt("id").toString()
-            lastSeasonInfo[cid] = epId
+        if (episode.has("id")) {
+            val epId = episode.optString("id")
             lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
         }
     }
@@ -160,14 +165,17 @@ object BangumiSeasonHook {
             }
             for (episode in newResult.optJSONArray("episodes").orEmpty()) {
                 onEachThaiEpisode(episode)
-                if (episode.has("cid") && episode.has("id")) {
-                    val cid = episode.optInt("cid").toString()
-                    val epId = episode.optInt("id").toString()
-                    lastSeasonInfo[cid] = epId
+                if (episode.has("id")) {
+                    val epId = episode.optString("id")
                     lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
                     episode.optJSONArray("subtitles")?.takeIf { it.length() > 0 }?.let {
                         subtitlesCache.compute(seasonId) { _, v ->
-                            (v ?: hashMapOf()).apply { this[cid] = it }
+                            (v ?: hashMapOf()).apply { this[epId] = it }
+                        }
+                    }
+                    episode.optJSONObject("jump")?.let {
+                        clipInfoCache.compute(seasonId) { _, v ->
+                            (v ?: hashMapOf()).apply { this[epId] = it }
                         }
                     }
                 }
