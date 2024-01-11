@@ -11,7 +11,8 @@ object WebViewPatch {
         @Suppress("UNUSED")
         @JavascriptInterface
         fun saveImage(url: String) {
-            Utils.async { Utils.saveImage(url) }
+            val originUrl = url.substringBeforeLast('@')
+            Utils.async { Utils.saveImage(originUrl) }
         }
     }
 
@@ -23,7 +24,7 @@ object WebViewPatch {
                 if (!Settings.SAVE_COMMENT_IMAGE.boolean) return
                 if (url.startsWith("https://www.bilibili.com/h5/note-app/view")) {
                     view.evaluateJavascript(
-                        """(function(){for(var i=0;i<document.images.length;++i){if(document.images[i].className==='img-preview'){document.images[i].addEventListener("contextmenu",(e)=>{hooker.saveImage(e.target.currentSrc);})}}})()""",
+                        """(function(){for(var i=0;i<document.images.length;++i){var image=document.images[i];if(image.className==='img-preview'||image.parentElement.className==='img-preview'){image.addEventListener("contextmenu",(e)=>{hooker.saveImage(e.target.currentSrc)})}}})()""",
                         null
                     )
                 }
