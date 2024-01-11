@@ -37,6 +37,7 @@ object MossPatch {
         SearchAll,
         SearchByType,
         SearchDefaultWords,
+        TeenagersModeStatus,
         View,
         ViewLike,
         ViewProgress,
