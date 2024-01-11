@@ -39,7 +39,6 @@ object PlayURLPlayViewUGC : MossHook<PlayViewReq, PlayViewReply>() {
             }
         if (req.download < 1 && reply != null
             && !Utils.isEffectiveVip()
-            && Settings.PLAYER_VERSION.string == "1"
             && Settings.TRIAL_VIP_QUALITY.boolean
         ) TrialQualityPatch.makeVipFree(reply)
         return super.hookAfter(req, reply, error)

@@ -42,8 +42,7 @@ public class TrialQualityPatch {
     }
 
     public static void onBindOnline(boolean selected, TextView strokeBadge, TextView solidBadge) {
-        if ((Settings.PLAYER_VERSION.getString().equals("1") || Versions.ge7_62_0())
-                && Settings.TRIAL_VIP_QUALITY.getBoolean() && !Utils.isEffectiveVip()
+        if (Settings.TRIAL_VIP_QUALITY.getBoolean() && !Utils.isEffectiveVip()
                 && Utils.getString("try_listening_tips") // 限免中
                 .equals(solidBadge.getText().toString())) {
             solidBadge.setVisibility(View.GONE);

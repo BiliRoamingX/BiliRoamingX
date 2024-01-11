@@ -2,13 +2,15 @@ package app.revanced.bilibili.settings.fragments
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputType
 import android.widget.EditText
 import androidx.preference.Preference
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.*
+import app.revanced.bilibili.utils.Toasts
+import app.revanced.bilibili.utils.Utils
+import app.revanced.bilibili.utils.onClick
+import app.revanced.bilibili.utils.runCatchingOrNull
 
 class CustomizePlayerFragment :
     BiliRoamingBaseSettingFragment("biliroaming_setting_customize_player") {
@@ -17,18 +19,6 @@ class CustomizePlayerFragment :
         findPreference<Preference>("default_speed")?.onClick { onPlaybackSpeedClick(false) }
         findPreference<Preference>("long_press_speed")?.onClick { onPlaybackSpeedClick(true) }
         findPreference<Preference>("override_speed")?.onClick { onPlaybackSpeedOverrideClick() }
-    }
-
-    override fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        super.onPreferenceChanged(sharedPreferences, key)
-        if (key == Settings.TRIAL_VIP_QUALITY.key && Settings.TRIAL_VIP_QUALITY.boolean && !Versions.ge7_62_0() && Settings.PLAYER_VERSION.string != "1") {
-            AlertDialog.Builder(requireContext())
-                .setMessage(Utils.getString("biliroaming_need_old_player_message"))
-                .setNegativeButton(Utils.getString("biliroaming_n")) { _, _ -> }
-                .setPositiveButton(Utils.getString("biliroaming_y")) { _, _ ->
-                    Settings.PLAYER_VERSION.saveValue("1")
-                }.show()
-        }
     }
 
     private fun onPlaybackSpeedClick(longPress: Boolean): Boolean {

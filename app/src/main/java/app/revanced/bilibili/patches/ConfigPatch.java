@@ -4,13 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import app.revanced.bilibili.settings.Settings;
-import app.revanced.bilibili.utils.LogHelper;
 import app.revanced.bilibili.utils.Utils;
 
 public class ConfigPatch {
     @Nullable
     public static Boolean getAb(String key, @NonNull Boolean defValue, @Nullable Boolean origin) {
-        LogHelper.debug(() -> String.format("ConfigPatch, ab of %s: %s, default: %s", key, origin, defValue));
+        //LogHelper.debug(() -> String.format("ConfigPatch, ab of %s: %s, default: %s", key, origin, defValue));
         if ("ff_switch_account_enable".equals(key))
             return Boolean.TRUE;
         else if ("ff_player_fav_new".equals(key) && Settings.OLD_FAV.getBoolean())

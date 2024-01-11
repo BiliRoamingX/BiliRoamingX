@@ -210,7 +210,6 @@ object BangumiPlayUrlHook {
             )) arcConfs[key] = supportedConf
         }
         if (!isDownloadUnite && !Utils.isEffectiveVip()
-            && Versions.ge7_62_0()
             && Settings.TRIAL_VIP_QUALITY.boolean
         ) TrialQualityPatch.makeVipFree(playReply)
         if (Settings.REMOVE_CMD_DMS.boolean) {
