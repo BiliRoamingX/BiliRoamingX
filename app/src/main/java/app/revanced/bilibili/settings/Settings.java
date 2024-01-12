@@ -169,7 +169,7 @@ public enum Settings {
     SUBTITLE_OFFSET("subtitle_offset", INTEGER, 0),
 
     // 杂项
-    TEENAGER_MODE_DIALOG("teenagers_mode_dialog", BOOLEAN, FALSE, true),
+    TEENAGER_MODE_DIALOG("teenagers_mode_dialog", BOOLEAN, FALSE),
     COMMENT_COPY("comment_copy", BOOLEAN, FALSE),
     COMMENT_COPY_ENHANCE("comment_copy_enhance", BOOLEAN, FALSE),
     BLOCK_UPDATE("block_update", BOOLEAN, FALSE),

@@ -29,8 +29,6 @@ public class ConfigPatch {
     @Nullable
     public static String getConfig(String key, @Nullable String defValue, @Nullable String origin) {
         //LogHelper.debug(() -> String.format("ConfigPatch, config of %s: %s, default: %s", key, origin, defValue));
-        if ("restrictedmode.teenagers_alert_api_config".equals(key) && Settings.TEENAGER_MODE_DIALOG.getBoolean())
-            return "1";
         return origin;
     }
 }
