@@ -42,7 +42,7 @@ object CopyEnhancePatch {
                 || topActivity is UnitedPlaylistActivity
 
         fun SpannableStringBuilder.appendTitle(title: CharSequence) =
-            relativeSize(proportion = 1.1f) { bold { appendLine(title) } }
+            relativeSize(proportion = 1.05f) { bold { appendLine(title) } }
 
         val allDesc = if (united) {
             val view = ViewUniteReplyHook.viewUniteMap[topActivity.hashCode()]
