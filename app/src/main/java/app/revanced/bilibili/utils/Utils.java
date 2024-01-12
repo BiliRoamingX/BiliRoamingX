@@ -21,6 +21,7 @@ import android.view.Surface;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,9 +47,6 @@ public class Utils {
     private static Boolean isBlue = null;
     private static Boolean isPlay = null;
     private static Boolean isHd = null;
-
-    // value will changed by patcher
-    public static boolean newPlayerEnabled = false;
 
     public static Context getContext() {
         if (context == null) {
@@ -271,6 +269,17 @@ public class Utils {
         return false;
     }
 
+    // codes will filled by patcher
+    public static boolean getAb(String key, boolean defValue) {
+        return false;
+    }
+
+    // codes will filled by patcher
+    @Nullable
+    public static String getConfig(String key, @Nullable String defValue) {
+        throw new UnsupportedOperationException();
+    }
+
     public static String getCurrentProcessName() {
         String name = "";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -340,5 +349,11 @@ public class Utils {
         // brand
         Utils.blkvPrefsByName("brand_splash_data", true)
                 .edit().remove("splash.brand_data").apply();
+    }
+
+    public static boolean newPlayerEnabled() {
+        if (Versions.ge7_39_0())
+            return getAb("ff_unite_detail2", false);
+        return getAb("ff_unite_player", false);
     }
 }

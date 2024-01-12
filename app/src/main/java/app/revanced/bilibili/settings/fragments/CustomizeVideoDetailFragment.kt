@@ -10,7 +10,7 @@ class CustomizeVideoDetailFragment :
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
         disablePreference(Settings.BLOCK_FAN_GUIDE.key, PrefsDisableReason.NEW_PLAYER) {
-            !Utils.newPlayerEnabled
+            !Utils.newPlayerEnabled()
         }
         disablePreference(Settings.DISABLE_AUTO_SELECT.key, PrefsDisableReason.APP_VERSION) {
             Versions.ge7_62_0()

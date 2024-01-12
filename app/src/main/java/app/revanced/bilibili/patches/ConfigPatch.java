@@ -3,7 +3,6 @@ package app.revanced.bilibili.patches;
 import androidx.annotation.Nullable;
 
 import app.revanced.bilibili.settings.Settings;
-import app.revanced.bilibili.utils.Utils;
 
 public class ConfigPatch {
     @Nullable
@@ -20,7 +19,6 @@ public class ConfigPatch {
                 result = Boolean.FALSE;
             else if (playerVersion == 2)
                 result = Boolean.TRUE;
-            Utils.newPlayerEnabled = result;
             return result;
         }
         return origin;
