@@ -38,7 +38,7 @@ object Media : ApiHook() {
                     put("areas", newResult.optJSONArray("areas"))
                     put("cover", newResult.optString("cover"))
                     put("evaluate", newResult.optString("evaluate"))
-                    put("mediaId", mediaId)
+                    put("media_id", mediaId)
                     put("media_title", newResult.optString("title"))
                     put("origin_name", newResult.optString("origin_name"))
                     put("publish", newResult.optJSONObject("publish"))
