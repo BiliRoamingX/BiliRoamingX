@@ -14,12 +14,6 @@ abstract class ReplyListBase<out Req : GeneratedMessageLite<*, *>, out Resp : Ge
         private var cachedContentRegexes = emptyList<Regex>()
 
         private val onlyAtRegex = Regex("^(@\\S+\\s?)+$")
-
-        private val mallPackageNames = arrayOf(
-            "com.taobao.taobao",
-            "com.jingdong.app.mall",
-            "com.xunmeng.pinduoduo",
-        )
     }
 
     protected fun upRegexes(): List<Regex> {
@@ -65,9 +59,11 @@ abstract class ReplyListBase<out Req : GeneratedMessageLite<*, *>, out Resp : Ge
         if (upLevel != 0 && level <= upLevel)
             return true
         val urls = content.urlsMap.values
-        if (goods && (urls.map { it.extra.goodsCmControl }.any { it != 0L }
-                    || urls.map { it.appPackageName }.any { it in mallPackageNames }))
-            return true
+        val goodsUrlPrefix = "https://gaoneng.bilibili.com/tetris"
+        if (goods && (message.contains(goodsUrlPrefix) || urls.any {
+                it.extra.goodsCmControl != 0L || it.appUrlSchema.startsWith(goodsUrlPrefix)
+            })
+        ) return true
         if (ups.isNotEmpty() && upName.isNotEmpty())
             if (!upRegexMode && ups.any { upName.contains(it) })
                 return true
