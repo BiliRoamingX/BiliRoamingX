@@ -218,7 +218,7 @@ public final class KingPosition extends GeneratedMessageLite<KingPosition, KingP
         GeneratedMessageLite.registerDefaultInstance(KingPosition.class, kingPosition);
     }
 
-    private KingPosition() {
+    public KingPosition() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

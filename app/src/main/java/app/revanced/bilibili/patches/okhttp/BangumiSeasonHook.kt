@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import app.revanced.bilibili.api.BiliRoamingApi.getAreaSearchBangumi
-import app.revanced.bilibili.api.BiliRoamingApi.getThaiSeason
+import app.revanced.bilibili.api.BiliRoamingApi.getSeason
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import com.bapis.bilibili.pagination.PaginationReply
@@ -148,7 +148,7 @@ object BangumiSeasonHook {
             }
         }
         LogHelper.info { "Info: $lastSeasonInfo" }
-        val (newCode, newResult) = getThaiSeason(lastSeasonInfo)?.toJSONObject()?.let {
+        val (newCode, newResult) = getSeason(lastSeasonInfo)?.toJSONObject()?.let {
             it.optInt("code", FAIL_CODE) to it.optJSONObject("result")
         } ?: (FAIL_CODE to null)
         if (isBangumiWithWatchPermission(newResult, newCode)) {
@@ -163,30 +163,10 @@ object BangumiSeasonHook {
                     setCommentInvalidFragmentContent()
                 }
             }
-            for (episode in newResult.optJSONArray("episodes").orEmpty()) {
-                onEachThaiEpisode(episode)
-                if (episode.has("id")) {
-                    val epId = episode.optString("id")
-                    lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
-                    episode.optJSONArray("subtitles")?.takeIf { it.length() > 0 }?.let {
-                        subtitlesCache.compute(seasonId) { _, v ->
-                            (v ?: hashMapOf()).apply { this[epId] = it }
-                        }
-                    }
-                    episode.optJSONObject("jump")?.let {
-                        clipInfoCache.compute(seasonId) { _, v ->
-                            (v ?: hashMapOf()).apply { this[epId] = it }
-                        }
-                    }
-                }
-            }
             newResult.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
                 it.optJSONObject("data")?.optJSONArray("episodes").orEmpty()
                     .asSequence<JSONObject>()
-            }.forEach(::onEachThaiEpisode)
-            newResult.optJSONArray("prevueSection").orEmpty().asSequence<JSONObject>().flatMap {
-                it.optJSONArray("episodes").orEmpty().asSequence<JSONObject>()
-            }.forEach(::onEachThaiEpisode)
+            }.forEach { onEachThaiEpisode(it, seasonId) }
             if (Settings.ALLOW_DOWNLOAD.boolean) {
                 newResult.optJSONObject("rights")?.run {
                     put("allow_download", 1)
@@ -210,10 +190,24 @@ object BangumiSeasonHook {
         } ?: run { code != FAIL_CODE && newResult != null }
     }
 
-    private fun onEachThaiEpisode(episode: JSONObject) {
+    private fun onEachThaiEpisode(episode: JSONObject, seasonId: String) {
         if (Settings.ALLOW_DOWNLOAD.boolean)
             episode.optJSONObject("rights")
                 ?.put("allow_download", 1)
+        if (episode.has("id")) {
+            val epId = episode.optString("id")
+            lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
+            episode.optJSONArray("subtitles")?.takeIf { it.length() > 0 }?.let {
+                subtitlesCache.compute(seasonId) { _, v ->
+                    (v ?: hashMapOf()).apply { this[epId] = it }
+                }
+            }
+            episode.optJSONObject("jump")?.let {
+                clipInfoCache.compute(seasonId) { _, v ->
+                    (v ?: hashMapOf()).apply { this[epId] = it }
+                }
+            }
+        }
     }
 
     @JvmStatic

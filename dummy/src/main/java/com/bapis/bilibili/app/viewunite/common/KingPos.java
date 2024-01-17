@@ -336,7 +336,7 @@ public final class KingPos extends GeneratedMessageLite<KingPos, KingPos.Builder
         GeneratedMessageLite.registerDefaultInstance(KingPos.class, kingPos);
     }
 
-    private KingPos() {
+    public KingPos() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

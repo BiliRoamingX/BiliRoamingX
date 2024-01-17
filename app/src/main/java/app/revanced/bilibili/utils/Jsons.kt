@@ -46,6 +46,9 @@ inline fun JSONArray.removeIf(condition: (JSONObject) -> Boolean) {
 
 inline fun JSONArray.forEach(operation: (JSONObject) -> Unit) = iterator().forEach(operation)
 
+inline fun JSONArray.forEachIndexed(action: (index: Int, JSONObject) -> Unit) =
+    iterator().withIndex().forEach { (index, e) -> action(index, e) }
+
 inline fun JSONObject.putX(name: String, value: Any?): JSONObject = when (value) {
     is Boolean -> put(name, value)
     is Int -> put(name, value)

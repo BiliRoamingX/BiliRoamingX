@@ -2,7 +2,7 @@ package app.revanced.bilibili.patches.protobuf
 
 import android.net.Uri
 import app.revanced.bilibili.api.BiliRoamingApi.getPlayUrl
-import app.revanced.bilibili.api.BiliRoamingApi.getThaiSeason
+import app.revanced.bilibili.api.BiliRoamingApi.getSeason
 import app.revanced.bilibili.api.CustomServerException
 import app.revanced.bilibili.patches.TrialQualityPatch
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.clipInfoCache
@@ -227,7 +227,7 @@ object BangumiPlayUrlHook {
         seasonId: String, reqEpId: Long
     ): Pair<Lazy<JSONObject>, Lazy<JSONObject>> {
         val season = lazy {
-            getThaiSeason(mapOf("season_id" to seasonId, "ep_id" to reqEpId.toString()))
+            getSeason(mapOf("season_id" to seasonId, "ep_id" to reqEpId.toString()))
                 ?.toJSONObject()?.optJSONObject("result")
                 ?: throw CustomServerException(mapOf("解析服务器错误" to "无法获取剧集信息"))
         }

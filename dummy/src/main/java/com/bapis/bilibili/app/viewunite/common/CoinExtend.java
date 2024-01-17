@@ -218,7 +218,7 @@ public final class CoinExtend extends GeneratedMessageLite<CoinExtend, CoinExten
         GeneratedMessageLite.registerDefaultInstance(CoinExtend.class, coinExtend);
     }
 
-    private CoinExtend() {
+    public CoinExtend() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

@@ -2,8 +2,8 @@ package app.revanced.bilibili.patches.okhttp.hooks
 
 import app.revanced.bilibili.patches.okhttp.ApiHook
 import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.utils.forEachIndexed
 import app.revanced.bilibili.utils.isNullOrEmpty
-import app.revanced.bilibili.utils.iterator
 import app.revanced.bilibili.utils.toJSONObject
 import org.json.JSONObject
 
@@ -29,7 +29,7 @@ object ShareChannels : ApiHook() {
         if (belowChannels.isNullOrEmpty()) return response
         var alreadyHas = false
         var toInsertIdx = -1
-        belowChannels.iterator().withIndex().forEach { (index, item) ->
+        belowChannels.forEachIndexed { index, item ->
             val shareChannel = item.optString("share_channel")
             if ("PLAY_BACKGROUND_OFF" == shareChannel)
                 toInsertIdx = index

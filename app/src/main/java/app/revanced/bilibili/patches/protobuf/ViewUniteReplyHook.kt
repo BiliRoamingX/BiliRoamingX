@@ -1,7 +1,7 @@
 package app.revanced.bilibili.patches.protobuf
 
 import android.util.Pair
-import app.revanced.bilibili.api.BiliRoamingApi.getThaiSeason
+import app.revanced.bilibili.api.BiliRoamingApi.getSeason
 import app.revanced.bilibili.patches.AutoLikePatch
 import app.revanced.bilibili.patches.json.PegasusPatch
 import app.revanced.bilibili.patches.main.ApplicationDelegate
@@ -174,7 +174,7 @@ object ViewUniteReplyHook {
             lastSeasonInfo["season_id"] = reqSeasonId
         }
         LogHelper.info { "Info: $lastSeasonInfo" }
-        val (newCode, newResult) = getThaiSeason(lastSeasonInfo)?.toJSONObject()?.let {
+        val (newCode, newResult) = getSeason(lastSeasonInfo)?.toJSONObject()?.let {
             it.optInt("code", FAIL_CODE) to it.optJSONObject("result")
         } ?: (FAIL_CODE to null)
         LogHelper.debug { "unlockThaiBangumi, newCode: $newCode, newResult: $newResult" }
@@ -182,26 +182,39 @@ object ViewUniteReplyHook {
             val seasonId = newResult.optString("season_id")
             lastSeasonInfo["title"] = newResult.optString("title")
             lastSeasonInfo["season_id"] = seasonId
-            return ViewReply().apply {
-                supplement = newAny(VIEW_PGC_ANY_TYPE_URL, ViewPgcAny().apply {
-                    ogvData = reconstructOgvData(newResult)
-                })
-                tab = Tab().apply {
-                    TabModule().apply {
-                        tabType = TabType.TAB_INTRODUCTION
-                        introduction = reconstructIntroduction(newResult)
-                    }.let { addTabModule(it) }
-                }
-                viewBase = ViewBase().apply {
-                    bizType = BizType.BIZ_TYPE_PGC
-                    config = Config()
-                    control = PageControl().apply {
-                        materialShow = Control()
-                        toastShow = Control()
-                        upShow = Control()
+            return runCatching {
+                val th = newResult.optString("link").startsWith("https://www.bilibili.tv")
+                ViewReply().apply {
+                    supplement = newAny(VIEW_PGC_ANY_TYPE_URL, ViewPgcAny().apply {
+                        ogvData = reconstructOgvData(newResult)
+                    })
+                    tab = Tab().apply {
+                        TabModule().apply {
+                            tabType = TabType.TAB_INTRODUCTION
+                            introduction = reconstructIntroduction(newResult, th)
+                        }.let { addTabModule(it) }
+                        if (!th && !Settings.BLOCK_VIDEO_COMMENT.boolean) {
+                            TabModule().apply {
+                                tabType = TabType.TAB_REPLY
+                                reply = ReplyTab().apply { title = "评论" }
+                            }.let { addTabModule(it) }
+                        }
+                    }
+                    viewBase = ViewBase().apply {
+                        bizType = BizType.BIZ_TYPE_PGC
+                        config = Config()
+                        control = PageControl().apply {
+                            materialShow = Control()
+                            toastShow = Control()
+                            upShow = Control()
+                        }
                     }
                 }
-            }.also { LogHelper.debug { "unlockThaiBangumi, reconstruct view: $it" } }
+            }.onFailure {
+                LogHelper.error({ "unlockThaiBangumi, failed to reconstruct unite view" }, it)
+            }.onSuccess {
+                LogHelper.debug { "unlockThaiBangumi, reconstruct view: $it" }
+            }.getOrNull()
         }
         return null
     }
@@ -215,13 +228,16 @@ object ViewUniteReplyHook {
                 it.optString("style") == "positive"
             }?.optJSONObject("data")?.optJSONArray("episodes").orEmpty()
         hasCanPlayEp = if (positiveEpisodes.length() > 0) 1 else 0
-        mediaId = result.optInt("season_id")
-        mode = 2
+        mediaId = result.optInt("media_id")
+        mode = result.optInt("mode")
         newEp = NewEp().apply {
             result.optJSONObject("new_ep")?.run {
-                desc = optString("new_ep_display")
+                desc = optString("desc")
                 id = optInt("id")
                 title = optString("title")
+                indexShow = optString("index_show")
+                more = optString("more")
+                isNew = optInt("is_new")
             }
         }
         ogvSwitch = OgvSwitch().apply {
@@ -247,6 +263,7 @@ object ViewUniteReplyHook {
                 releaseDateShow = optString("release_date_show")
                 timeLengthShow = optString("time_length_show")
                 unknowPubDate = optInt("unknow_pub_date")
+                updateInfoDesc = optString("update_info_desc")
                 weekday = optInt("weekday")
             }
         }
@@ -259,9 +276,9 @@ object ViewUniteReplyHook {
                 banAreaShow = optInt("ban_area_show")
                 canWatch = optInt("can_watch")
                 copyright = optString("copyright")
-                forbidPre = optInt("forbidPre")
+                forbidPre = optInt("forbid_pre")
                 isPreview = optInt("is_preview")
-                onlyVipDownload = optInt("onlyVipDownload")
+                onlyVipDownload = optInt("only_vip_download")
                 if (Settings.UNLOCK_AREA_LIMIT.boolean) {
                     areaLimit = 0
                     banAreaShow = 1
@@ -278,29 +295,39 @@ object ViewUniteReplyHook {
         seasonType = result.optInt("type")
         shareUrl = result.optString("share_url")
         shortLink = result.optString("short_link")
-        showSeasonType = result.optInt("type")
+        showSeasonType = result.optInt("show_season_type")
         squareCover = result.optString("square_cover")
         stat = Stat().apply {
-            // followers = result.optJSONObject("stat")?.optString("followers")
-            followers = result.optJSONObject("stat_format")?.optString("likes")
+            followers = result.optJSONObject("stat")?.optString("followers")
             playData = StatInfo().apply {
-                icon = "playdata-square-line@500"
-                pureText = result.optJSONObject("stat_format")?.optString("play")
-                text = pureText?.replace("播放", "")
+                icon = result.optJSONObject("icon_font")?.optString("name").orEmpty()
+                val text = result.optJSONObject("icon_font")?.optString("text").orEmpty()
+                pureText = "${text}播放"
+                this.text = text
                 value = result.optJSONObject("stat")?.optLong("views") ?: 0
             }
         }
         status = result.optInt("status")
         title = result.optString("title")
-        totalEp = positiveEpisodes.length()
+        totalEp = result.optInt("total")
         userStatus = UserStatus().apply {
             result.optJSONObject("user_status")?.run {
                 follow = optInt("follow")
+                followStatus = optInt("follow_status")
+                pay = optInt("pay")
                 vip = optInt("vip")
-                (positiveEpisodes.optJSONObject(0))?.let { episode ->
+                vipFrozen = optInt("vip_frozen")
+                sponsor = optInt("sponsor")
+                optJSONObject("progress")?.run {
                     watchProgress = WatchProgress().apply {
-                        lastEpId = episode.optLong("id")
-                        lastEpIndex = episode.optString("index")
+                        lastEpId = optLong("last_ep_id")
+                        lastEpIndex = optString("last_ep_index")
+                        lastTime = optLong("last_time")
+                    }
+                } ?: (positiveEpisodes.optJSONObject(0))?.run {
+                    watchProgress = WatchProgress().apply {
+                        lastEpId = optLong("id")
+                        lastEpIndex = optString("index")
                         lastTime = 0L
                     }
                 }
@@ -308,7 +335,7 @@ object ViewUniteReplyHook {
         }
     }
 
-    private fun reconstructIntroduction(result: JSONObject) = IntroductionTab().apply {
+    private fun reconstructIntroduction(result: JSONObject, th: Boolean) = IntroductionTab().apply {
         title = "简介"
 
         // ogvTitle
@@ -325,14 +352,45 @@ object ViewUniteReplyHook {
         Module().apply {
             type = ModuleType.OGV_INTRODUCTION
             ogvIntroduction = OgvIntroduction().apply {
-                // followers = result.optJSONObject("stat")?.optString("followers")
-                followers = result.optJSONObject("stat_format")?.optString("likes")
+                followers = result.optJSONObject("stat")?.optString("followers")
                 playData = StatInfo().apply {
-                    icon = "playdata-square-line@500"
-                    pureText = result.optJSONObject("stat_format")?.optString("play")
-                    text = pureText?.replace("播放", "")
+                    icon = result.optJSONObject("icon_font")?.optString("name").orEmpty()
+                    val text = result.optJSONObject("icon_font")?.optString("text").orEmpty()
+                    pureText = "${text}播放"
+                    this.text = text
                     value = result.optJSONObject("stat")?.optLong("views") ?: 0
                 }
+            }
+        }.let { addModules(it) }
+
+        // kingPosition
+        if (!th) Module().apply {
+            type = ModuleType.KING_POSITION
+            kingPosition = KingPosition().apply {
+                addKingPos(KingPos().apply {
+                    type = KingPositionType.LIKE
+                    like = LikeExtend().apply {
+                        likeAnimation =
+                            "https://i0.hdslb.com/bfs/like_animation/2c5f646c8e9d13213336828e7a6112764e1ec2e4.svga"
+                        playerAnimation = PlayerAnimation()
+                        tripleLike = UpLikeImg().apply {
+                            type = 1
+                        }
+                    }
+                })
+                addKingPos(KingPos().apply {
+                    type = KingPositionType.COIN
+                    coin = CoinExtend()
+                })
+                addKingPos(KingPos().apply {
+                    type = KingPositionType.FAV
+                })
+                addKingPos(KingPos().apply {
+                    type = KingPositionType.CACHE
+                })
+                addKingPos(KingPos().apply {
+                    type = KingPositionType.SHARE
+                })
             }
         }.let { addModules(it) }
 
@@ -341,7 +399,7 @@ object ViewUniteReplyHook {
             Module().apply {
                 type = ModuleType.OGV_SEASONS
                 ogvSeasons = OgvSeasons().apply {
-                    asSequence<JSONObject>().forEach { season ->
+                    forEach { season ->
                         SerialSeason().apply {
                             seasonId = season.optInt("season_id")
                             seasonTitle = season.optString("quarter_title")
@@ -352,7 +410,7 @@ object ViewUniteReplyHook {
         }
 
         // episodes
-        result.optJSONArray("modules")?.asSequence<JSONObject>()?.forEach { module ->
+        result.optJSONArray("modules")?.forEach { module ->
             val style = module.optString("style")
             val seasonId = result.optString("season_id")
             if (style == "positive") {
@@ -385,10 +443,10 @@ object ViewUniteReplyHook {
         more = module.optString("more")
         sectionId = module.optJSONObject("data")?.optInt("id") ?: 0
         title = module.optString("title")
-        val episodes = module.optJSONObject("data")?.optJSONArray("episodes")
-        episodes?.asSequence<JSONObject>()?.forEach { episode ->
+        module.optJSONObject("data")?.optJSONArray("episodes")?.forEach { episode ->
             ViewEpisode().apply {
                 aid = episode.optLong("aid")
+                badge = episode.optString("badge")
                 badgeInfo = BadgeInfo().apply {
                     episode.optJSONObject("badge_info")?.run {
                         bgColor = optString("bg_color")
@@ -396,6 +454,8 @@ object ViewUniteReplyHook {
                         text = optString("text")
                     }
                 }
+                badgeType = episode.optInt("badge_type")
+                bvid = episode.optString("bvid")
                 cid = episode.optLong("cid")
                 cover = episode.optString("cover")
                 dimension = Dimension().apply {
@@ -406,11 +466,14 @@ object ViewUniteReplyHook {
                     }
                 }
                 duration = episode.optInt("duration")
-                epId = episode.optLong("id")
-                epIndex = episode.optInt("index")
+                epId = episode.optLong("ep_id")
+                epIndex = episode.optInt("ep_index")
                 from = episode.optString("from")
                 link = episode.optString("link")
                 longTitle = episode.optString("long_title")
+                pubTime = episode.optLong("pub_time")
+                pv = episode.optInt("pv")
+                releaseDate = episode.optString("release_date")
                 rights = com.bapis.bilibili.app.viewunite.common.Rights().apply {
                     episode.optJSONObject("rights")?.run {
                         allowDemand = optInt("allow_demand")
@@ -424,10 +487,36 @@ object ViewUniteReplyHook {
                         allowDownload = 1
                 }
                 sectionIndex = episode.optInt("section_index")
+                shareCopy = episode.optString("share_copy")
                 shareUrl = episode.optString("share_url")
-                statForUnity = com.bapis.bilibili.app.viewunite.common.Stat()
+                shortLink = episode.optString("short_link")
+                statForUnity = episode.optJSONObject("stat_for_unity")?.run {
+                    com.bapis.bilibili.app.viewunite.common.Stat().apply {
+                        coin = optLong("coin")
+                        optJSONObject("danmaku")?.run {
+                            danmaku = StatInfo().apply {
+                                icon = optString("icon")
+                                pureText = optString("pure_text")
+                                text = optString("text")
+                                value = optLong("value")
+                            }
+                        }
+                        like = optLong("likes")
+                        reply = optLong("reply")
+                        optJSONObject("vt")?.run {
+                            vt = StatInfo().apply {
+                                icon = optString("icon")
+                                pureText = optString("pure_text")
+                                text = optString("text")
+                                value = optLong("value")
+                            }
+                        }
+                    }
+                } ?: com.bapis.bilibili.app.viewunite.common.Stat()
                 status = episode.optInt("status")
+                subtitle = episode.optString("subtitle")
                 title = episode.optString("title")
+                vid = episode.optString("vid")
             }.let { addEpisodes(it) }
 
             if (episode.has("id")) {

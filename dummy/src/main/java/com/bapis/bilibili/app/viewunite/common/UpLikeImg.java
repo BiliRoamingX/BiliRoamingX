@@ -180,7 +180,7 @@ public final class UpLikeImg extends GeneratedMessageLite<UpLikeImg, UpLikeImg.B
         GeneratedMessageLite.registerDefaultInstance(UpLikeImg.class, upLikeImg);
     }
 
-    private UpLikeImg() {
+    public UpLikeImg() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

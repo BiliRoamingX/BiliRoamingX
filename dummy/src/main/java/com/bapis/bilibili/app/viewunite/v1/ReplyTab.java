@@ -175,7 +175,7 @@ public final class ReplyTab extends GeneratedMessageLite<ReplyTab, ReplyTab.Buil
         GeneratedMessageLite.registerDefaultInstance(ReplyTab.class, replyTab);
     }
 
-    private ReplyTab() {
+    public ReplyTab() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

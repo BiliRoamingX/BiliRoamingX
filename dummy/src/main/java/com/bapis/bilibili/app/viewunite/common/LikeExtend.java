@@ -209,7 +209,7 @@ public final class LikeExtend extends GeneratedMessageLite<LikeExtend, LikeExten
         GeneratedMessageLite.registerDefaultInstance(LikeExtend.class, likeExtend);
     }
 
-    private LikeExtend() {
+    public LikeExtend() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

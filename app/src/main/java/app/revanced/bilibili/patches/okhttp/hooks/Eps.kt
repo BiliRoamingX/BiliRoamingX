@@ -1,7 +1,7 @@
 package app.revanced.bilibili.patches.okhttp.hooks
 
 import android.net.Uri
-import app.revanced.bilibili.api.BiliRoamingApi.getThaiSeason
+import app.revanced.bilibili.api.BiliRoamingApi.getSeason
 import app.revanced.bilibili.patches.okhttp.ApiHook
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.FAIL_CODE
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.isBangumiWithWatchPermission
@@ -34,7 +34,7 @@ object Eps : ApiHook() {
             return json.toString()
         } else {
             val seasonId = Uri.parse(url).getQueryParameter("season_id")
-            val (newCode, newResult) = getThaiSeason(mapOf("season_id" to seasonId))
+            val (newCode, newResult) = getSeason(mapOf("season_id" to seasonId))
                 ?.toJSONObject()?.let {
                     it.optInt("code", FAIL_CODE) to it.optJSONObject("result")
                 } ?: (FAIL_CODE to null)

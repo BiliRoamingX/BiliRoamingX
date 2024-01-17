@@ -134,7 +134,7 @@ public final class PlayerAnimation extends GeneratedMessageLite<PlayerAnimation,
         GeneratedMessageLite.registerDefaultInstance(PlayerAnimation.class, playerAnimation);
     }
 
-    private PlayerAnimation() {
+    public PlayerAnimation() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

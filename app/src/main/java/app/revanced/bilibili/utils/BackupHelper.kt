@@ -98,7 +98,7 @@ object BackupHelper {
         val items = metaInfo.optJSONArray("items")
         LogHelper.debug { "backup items: ${items?.toString(2)}" }
 
-        items?.asSequence<JSONObject>()?.forEach { item ->
+        items?.forEach { item ->
             when (val type = item.optString("type")) {
                 TYPE_PREFS -> {
                     val name = item.optString("name")

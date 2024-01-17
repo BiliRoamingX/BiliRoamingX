@@ -8,6 +8,7 @@ import com.google.protobuf.GeneratedMessageLite;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.MessageLiteOrBuilder;
 import com.google.protobuf.Parser;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -142,7 +143,7 @@ public final class TabControl extends GeneratedMessageLite<TabControl, TabContro
         GeneratedMessageLite.registerDefaultInstance(TabControl.class, tabControl);
     }
 
-    private TabControl() {
+    public TabControl() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

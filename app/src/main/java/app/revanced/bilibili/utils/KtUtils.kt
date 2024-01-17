@@ -341,3 +341,25 @@ fun sigMd5(packageName: String = Utils.getContext().packageName): String {
         .getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
         .signatures.first().toByteArray().md5Hex
 }
+
+fun Long.cnCountFormat(invalid: String = "-"): String {
+    if (this >= 100000000) {
+        val count = toFloat() / 100000000
+        val oneMod = count % 1
+        if (oneMod < 0.95 && oneMod > 0.049)
+            return "%.1f亿".format(count)
+        return "%.0f亿".format(count)
+    } else if (this >= 99999500) {
+        return "1亿"
+    } else if (this < 10000) {
+        return if (this > 0) toString() else invalid
+    } else {
+        val count = toFloat() / 10000
+        val oneMod = count % 1
+        if (count > 1000)
+            return "%d万".format(count.toInt())
+        if (oneMod < 0.95 && oneMod > 0.049)
+            return "%.1f万".format(count)
+        return "%.0f万".format(count)
+    }
+}
