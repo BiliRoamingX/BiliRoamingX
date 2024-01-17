@@ -309,8 +309,9 @@ object BangumiSeasonHook {
             bgStyle = optInt("bg_style")
         }
 
-        fun Episode.reconstructFrom(json: JSONObject) = json.run {
-            uri = optString("uri")
+        fun Episode.reconstructFrom(json: JSONObject, seasonId: Long) = json.run {
+            uri = Uri.parse(optString("uri")).buildUpon()
+                .appendQueryParameter("season_id", seasonId.toString()).toString()
             param = optString("param")
             index = optString("index")
             for (badge in optJSONArray("badges").orEmpty())
@@ -318,9 +319,10 @@ object BangumiSeasonHook {
             position = optInt("position")
         }
 
-        fun EpisodeNew.reconstructFrom(json: JSONObject) = json.run {
+        fun EpisodeNew.reconstructFrom(json: JSONObject, seasonId: Long) = json.run {
             title = optString("title")
-            uri = optString("uri")
+            uri = Uri.parse(optString("uri")).buildUpon()
+                .appendQueryParameter("season_id", seasonId.toString()).toString()
             param = optString("param")
             isNew = optInt("is_new")
             for (badge in optJSONArray("badges").orEmpty())
@@ -364,13 +366,14 @@ object BangumiSeasonHook {
             staff = optString("staff")
             prompt = optString("prompt")
             ptime = optLong("ptime")
+            val seasonId = optLong("season_id")
             seasonTypeName = optString("season_type_name")
             for (episode in optJSONArray("episodes").orEmpty())
-                addEpisodes(Episode().apply { reconstructFrom(episode) })
+                addEpisodes(Episode().apply { reconstructFrom(episode, seasonId) })
             isSelection = optInt("is_selection")
             isAtten = optInt("is_atten")
             label = optString("label")
-            seasonId = optLong("season_id")
+            this@reconstructFrom.seasonId = seasonId
             outName = optString("out_name")
             outIcon = optString("out_icon")
             outUrl = optString("out_url")
@@ -378,7 +381,7 @@ object BangumiSeasonHook {
                 addBadges(ReasonStyle().apply { reconstructFrom(badge) })
             isOut = optInt("is_out")
             for (episodeNew in optJSONArray("episodes_new").orEmpty())
-                addEpisodesNew(EpisodeNew().apply { reconstructFrom(episodeNew) })
+                addEpisodesNew(EpisodeNew().apply { reconstructFrom(episodeNew, seasonId) })
             optJSONObject("watch_button")?.let {
                 watchButton = WatchButton().apply { reconstructFrom(it) }
             }
