@@ -231,13 +231,14 @@ object BiliRoamingApi {
         info.filterNot { it.value.isNullOrEmpty() }
             .forEach { builder.appendQueryParameter(it.key, it.value) }
         var thSeason: JSONObject? = null
+        var hidden = false
         val seasonJson = getContent(builder.toString())?.toJSONObject()?.also {
             thSeason = it
             it.optJSONObject("result")?.run {
                 fixThailandSeason(this)
             }
         }?.takeIf { it.optInt("code", -1) == 0 }
-            ?: getHiddenSeason(seasonId)?.toJSONObject() ?: run {
+            ?: getHiddenSeason(seasonId)?.toJSONObject()?.also { hidden = true } ?: run {
                 thSeason?.let { checkErrorToast(it, true) }
                 seasonCache?.valid?.set(false)
                 seasonCache?.latch?.countDown()
@@ -245,6 +246,10 @@ object BiliRoamingApi {
             }
         return seasonJson.toString().also {
             if (seasonJson.optInt("code", -1) == 0) {
+                if (hidden) {
+                    // not cache hidden cn bangumi to make sure follow status is synced
+                    seasonCache?.valid?.set(false)
+                }
                 seasonCache?.seasonJson?.set(it)
             } else {
                 seasonCache?.valid?.set(false)

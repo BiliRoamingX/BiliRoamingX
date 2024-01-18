@@ -416,7 +416,9 @@ object ViewUniteReplyHook {
             if (style == "positive") {
                 Module().apply {
                     type = ModuleType.POSITIVE
-                    sectionData = reconstructSection(module, seasonId)
+                    val more = result.optJSONObject("publish")
+                        ?.optString("update_info_desc").orEmpty()
+                    sectionData = reconstructSection(module, seasonId, more = more)
                 }.let { addModules(it) }
             } else if (style == "section") {
                 Module().apply {
@@ -430,6 +432,7 @@ object ViewUniteReplyHook {
     private fun reconstructSection(
         module: JSONObject,
         seasonId: String,
+        more: String = module.optString("more"),
     ) = SectionData().apply {
         id = module.optInt("id")
         moduleStyle = Style().apply {
@@ -440,7 +443,7 @@ object ViewUniteReplyHook {
                     ?.forEach { addShowPages(it) }
             }
         }
-        more = module.optString("more")
+        this.more = more
         sectionId = module.optJSONObject("data")?.optInt("id") ?: 0
         title = module.optString("title")
         module.optJSONObject("data")?.optJSONArray("episodes")?.forEach { episode ->
