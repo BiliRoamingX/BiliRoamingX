@@ -346,7 +346,14 @@ object ViewUniteReplyHook {
         Module().apply {
             type = ModuleType.OGV_TITLE
             ogvTitle = OgvTitle().apply {
-                badgeInfo = BadgeInfo()
+                result.optJSONObject("badge_info")?.run {
+                    badgeInfo = BadgeInfo().apply {
+                        bgColor = optString("bg_color")
+                        bgColorNight = optString("bg_color_night")
+                        img = optString("img")
+                        text = optString("text")
+                    }
+                }
                 reserveId = 0
                 title = result.optString("title")
             }
@@ -400,38 +407,59 @@ object ViewUniteReplyHook {
             }
         }.let { addModules(it) }
 
-        // seasons
-        result.optJSONObject("series")?.optJSONArray("seasons")?.takeIf { it.length() > 0 }?.run {
-            Module().apply {
-                type = ModuleType.OGV_SEASONS
-                ogvSeasons = OgvSeasons().apply {
-                    forEach { season ->
-                        SerialSeason().apply {
-                            seasonId = season.optInt("season_id")
-                            seasonTitle = season.optString("quarter_title")
-                        }.let { addSerialSeason(it) }
-                    }
-                }
-            }.let { addModules(it) }
-        }
-
-        // episodes
+        // seasons & episodes & sections
         result.optJSONArray("modules")?.forEach { module ->
             val style = module.optString("style")
             val seasonId = result.optString("season_id")
-            if (style == "positive") {
-                Module().apply {
+            when (style) {
+                "season" -> Module().apply {
+                    type = ModuleType.OGV_SEASONS
+                    ogvSeasons = reconstructSeasons(module)
+                }.let { addModules(it) }
+
+                "positive" -> Module().apply {
                     type = ModuleType.POSITIVE
                     val more = result.optJSONObject("publish")
                         ?.optString("update_info_desc").orEmpty()
                     sectionData = reconstructSection(module, seasonId, more = more)
                 }.let { addModules(it) }
-            } else if (style == "section") {
-                Module().apply {
+
+                "section" -> Module().apply {
                     type = ModuleType.SECTION
                     sectionData = reconstructSection(module, seasonId)
                 }.let { addModules(it) }
             }
+        }
+    }
+
+    private fun reconstructSeasons(module: JSONObject) = OgvSeasons().apply {
+        module.optJSONObject("data")?.optJSONArray("seasons")?.forEach { season ->
+            SerialSeason().apply {
+                badge = season.optString("badge")
+                season.optJSONObject("badge_info")?.run {
+                    badgeInfo = BadgeInfo().apply {
+                        bgColor = optString("bg_color")
+                        bgColorNight = optString("bg_color_night")
+                        text = optString("text")
+                    }
+                }
+                badgeType = season.optInt("badge_type")
+                cover = season.optString("cover")
+                isNew = season.optInt("is_new")
+                link = season.optString("link")
+                season.optJSONObject("new_ep")?.run {
+                    newEp = NewEp().apply {
+                        cover = optString("cover")
+                        id = optInt("id")
+                        isNew = optInt("is_new")
+                        title = optString("title")
+                    }
+                }
+                resource = season.optString("resource")
+                seasonId = season.optInt("season_id")
+                seasonTitle = season.optString("season_title")
+                title = season.optString("title")
+            }.let { addSerialSeason(it) }
         }
     }
 

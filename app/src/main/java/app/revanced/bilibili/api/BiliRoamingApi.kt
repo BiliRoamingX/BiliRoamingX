@@ -301,12 +301,13 @@ object BiliRoamingApi {
         }) else result.remove("staff")
         val mediaId = result.optString("media_id")
         val seasonTitle = result.optString("title")
+        val status = result.optInt("season_status")
         result.put("link", "http://www.bilibili.com/bangumi/media/md$mediaId")
         result.put("season_title", seasonTitle)
         result.put("share_copy", seasonTitle)
         result.put("share_url", "https://www.bilibili.com/bangumi/play/ss$seasonId")
         result.put("short_link", "https://b23.tv/ss$seasonId")
-        result.put("status", result.optInt("season_status"))
+        result.put("status", status)
         result.put("new_ep", result.optJSONObject("episode_index")?.apply {
             put("desc", result.optJSONObject("publish")?.optString("time_length_show").orEmpty())
         })
@@ -381,6 +382,27 @@ object BiliRoamingApi {
             optString("update_info_desc").ifEmpty {
                 put("update_info_desc", optString("time_length_show"))
             }
+        }
+        if (status == 13) {
+            result.put("badge", "会员专享")
+            result.put("badge_info", JSONObject().apply {
+                put("bg_color", "#FB7299")
+                put("bg_color_night", "#BB5B76")
+                val img =
+                    "https://i0.hdslb.com/bfs/bangumi/image/620a40f8e7004eb881916846e760981b7509d22f.png"
+                put("img", img)
+                put("text", "会员专享")
+            })
+        } else if (result.optJSONObject("rights")?.optString("copyright") == "dujia") {
+            result.put("badge", "独家")
+            result.put("badge_info", JSONObject().apply {
+                put("bg_color", "#00C0FF")
+                put("bg_color_night", "#0B91BE")
+                val img =
+                    "https://i0.hdslb.com/bfs/bangumi/image/f8812eb31c22db41fb4608353b83a3fc49d2da3c.png"
+                put("img", img)
+                put("text", "独家")
+            })
         }
         return JSONObject().apply {
             put("code", 0)
@@ -457,11 +479,12 @@ object BiliRoamingApi {
         result.optJSONObject("user_status")?.put("follow", 1)
         var total = 0
 
+        val seasons = result.optJSONObject("series")?.optJSONArray("seasons")
         val seasonId = result.optInt("season_id")
         for ((mid, module) in result.optJSONArray("modules").orEmpty().iterator().withIndex()) {
             val positive = module.optString("style") == "positive"
             val data = module.optJSONObject("data") ?: continue
-            val sid = module.optInt("id", mid + 1)
+            val sid = if (seasons.isNullOrEmpty()) mid + 1 else mid + 2
             for ((eid, ep) in data.optJSONArray("episodes").orEmpty().iterator().withIndex()) {
                 if (positive) total++
                 val epId = ep.optInt("id")
@@ -494,7 +517,25 @@ object BiliRoamingApi {
                     put("area_limit", 1)
                 })
             }
-            data.put("id", sid)
+            module.put("id", sid)
+        }
+        if (!seasons.isNullOrEmpty()) {
+            val newModules = JSONArray()
+            JSONObject().apply {
+                put("data", JSONObject().apply {
+                    put("seasons", seasons.apply {
+                        forEach { it.put("season_title", it.optString("quarter_title")) }
+                    })
+                })
+                put("id", 1)
+                put("style", "season")
+                put("module_style", JSONObject().apply {
+                    put("hidden", 0)
+                    put("line", 1)
+                })
+            }.let { newModules.put(it) }
+            result.optJSONArray("modules")?.forEach { newModules.put(it) }
+            result.put("modules", newModules)
         }
         result.optJSONObject("rights")?.run {
             put("allow_comment", 0)

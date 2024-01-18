@@ -151,6 +151,7 @@ object BangumiSeasonHook {
         val (newCode, newResult) = getSeason(lastSeasonInfo)?.toJSONObject()?.let {
             it.optInt("code", FAIL_CODE) to it.optJSONObject("result")
         } ?: (FAIL_CODE to null)
+        LogHelper.debug { "unlockThaiBangumi, old, newCode: $newCode, newResult: $newResult" }
         if (isBangumiWithWatchPermission(newResult, newCode)) {
             val seasonId = newResult.optString("season_id")
             lastSeasonInfo["title"] = newResult.optString("title")
@@ -462,8 +463,10 @@ object BangumiSeasonHook {
 
     @JvmStatic
     fun setCommentInvalidFragmentContent() {
-        invalidFragmentRef.get()?.let {
-            onCommentInvalidFragmentViewCreated(it)
+        Utils.runOnMainThread {
+            invalidFragmentRef.get()?.let {
+                onCommentInvalidFragmentViewCreated(it)
+            }
         }
     }
 

@@ -788,7 +788,7 @@ public final class OgvData extends GeneratedMessageLite<OgvData, OgvData.Builder
             return this;
         }
 
-        public Builder setOgvSwitch(OgvSwitch.Builder builder) {
+        public Builder setOgvSwitch(OgvSwitch.C8065b builder) {
             copyOnWrite();
             ((OgvData) this.instance).setOgvSwitch(builder.build());
             return this;
