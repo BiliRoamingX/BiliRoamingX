@@ -218,6 +218,7 @@ object BangumiSeasonHook {
 
     @JvmStatic
     fun injectExtraSearchTypes() {
+        if (Versions.ge7_64_0()) return
         if (!Settings.SEARCH_BANGUMI.boolean && !Settings.SEARCH_MOVIE.boolean) {
             PageTypes.`$VALUES` = originalPageTypes
             return

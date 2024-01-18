@@ -126,7 +126,7 @@ public class JSONPatch {
             unlockOgvResponseV2((OgvApiResponseV2) data);
         } else if (data instanceof StoryFeedResponse) {
             filterStory((StoryFeedResponse) data);
-        } else if (data instanceof SearchReferral || data instanceof DefaultKeyword || (Versions.ge7_39_0() && data instanceof com.bilibili.search2.api.SearchReferral)) {
+        } else if ((!Versions.ge7_64_0() && (data instanceof SearchReferral || data instanceof DefaultKeyword)) || (Versions.ge7_39_0() && data instanceof com.bilibili.search2.api.SearchReferral)) {
             if (Settings.PURIFY_SEARCH.getBoolean())
                 return null;
         } else if (data instanceof EventSplashDataList) {
@@ -152,10 +152,8 @@ public class JSONPatch {
     }
 
     public static void parseArrayHook(Class<?> type, ArrayList<?> list) {
-        if (type == SearchRank.class
-                || type == SearchReferral.Guess.class
-                || (Versions.ge7_39_0() && type == com.bilibili.search2.api.SearchRank.class)
-                || (Versions.ge7_39_0() && type == com.bilibili.search2.api.SearchReferral.Guess.class)) {
+        if ((!Versions.ge7_64_0() && (type == SearchRank.class || type == SearchReferral.Guess.class))
+                || (Versions.ge7_39_0() && (type == com.bilibili.search2.api.SearchRank.class || type == com.bilibili.search2.api.SearchReferral.Guess.class))) {
             if (Settings.PURIFY_SEARCH.getBoolean())
                 list.clear();
         }
