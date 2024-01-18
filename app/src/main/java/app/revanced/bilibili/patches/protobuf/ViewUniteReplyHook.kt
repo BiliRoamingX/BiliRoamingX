@@ -202,7 +202,11 @@ object ViewUniteReplyHook {
                     }
                     viewBase = ViewBase().apply {
                         bizType = BizType.BIZ_TYPE_PGC
-                        config = Config()
+                        config = Config().apply {
+                            if (!th) online = Online().apply {
+                                onlineShow = true
+                            }
+                        }
                         control = PageControl().apply {
                             materialShow = Control()
                             toastShow = Control()
@@ -360,6 +364,8 @@ object ViewUniteReplyHook {
                     this.text = text
                     value = result.optJSONObject("stat")?.optLong("views") ?: 0
                 }
+                val score = result.optJSONObject("rating")?.optString("score").orEmpty()
+                this.score = if (score.isNotEmpty()) "${score}分" else ""
             }
         }.let { addModules(it) }
 

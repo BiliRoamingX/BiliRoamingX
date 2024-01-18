@@ -95,7 +95,7 @@ public final class Online extends GeneratedMessageLite<Online, Online.Builder> i
         GeneratedMessageLite.registerDefaultInstance(Online.class, online);
     }
 
-    private Online() {
+    public Online() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
