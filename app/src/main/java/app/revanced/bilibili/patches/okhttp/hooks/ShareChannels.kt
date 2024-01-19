@@ -19,7 +19,7 @@ object ShareChannels : ApiHook() {
                 && code.isOk
     }
 
-    override fun hook(url: String, code: Int, response: String): String {
+    override fun hook(url: String, code: Int, request: String, response: String): String {
         val json = response.toJSONObject()
         if (json.optInt("code") != 0)
             return RES_FOR_TH_BANGUMI

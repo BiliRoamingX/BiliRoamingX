@@ -21,7 +21,7 @@ object Media : ApiHook() {
                 && code.isOk
     }
 
-    override fun hook(url: String, code: Int, response: String): String {
+    override fun hook(url: String, code: Int, request: String, response: String): String {
         val mediaId = Uri.parse(url).getQueryParameter("media_id")
         if (JSONObject(response).optInt("code") != 0
             && (Area.TH == seasonAreasCache[mediaId] || (cachePrefs.contains(mediaId)

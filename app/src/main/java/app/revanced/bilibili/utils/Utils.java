@@ -29,6 +29,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -355,5 +357,21 @@ public class Utils {
         if (Versions.ge7_39_0())
             return getAb("ff_unite_detail2", false);
         return getAb("ff_unite_player", false);
+    }
+
+    // used by patcher
+    public static String[] removeHeader(String[] namesAndValues, String name) {
+        ArrayList<String> list = new ArrayList<>();
+        Collections.addAll(list, namesAndValues);
+        int i = 0;
+        while (i < list.size()) {
+            if (name.equalsIgnoreCase(list.get(i))) {
+                list.remove(i);
+                list.remove(i);
+                i -= 2;
+            }
+            i += 2;
+        }
+        return list.toArray(new String[0]);
     }
 }

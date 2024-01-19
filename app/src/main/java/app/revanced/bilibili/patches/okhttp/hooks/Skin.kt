@@ -15,7 +15,7 @@ object Skin : ApiHook() {
                 && code.isOk
     }
 
-    override fun hook(url: String, code: Int, response: String): String {
+    override fun hook(url: String, code: Int, request: String, response: String): String {
         val skin = try {
             JSONObject(Settings.SKIN_JSON.string)
         } catch (_: JSONException) {

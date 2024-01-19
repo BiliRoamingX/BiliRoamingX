@@ -10,7 +10,7 @@ object Upgrade : ApiHook() {
                 && code.isOk
     }
 
-    override fun hook(url: String, code: Int, response: String): String {
+    override fun hook(url: String, code: Int, request: String, response: String): String {
         return """{"code":-1,"message":"哼，休想要我更新！<(￣︶￣)>"}"""
     }
 }

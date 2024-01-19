@@ -456,8 +456,7 @@ object BiliRoamingApi {
             .encodedAuthority(BILI_APP_MEDIA_URL)
             .encodedQuery(signQuery(query))
             .toString()
-        // compress to false to make ApiHook works on this api
-        return getContent(url, compress = false)
+        return getContent(url)
     }
 
     @JvmStatic
@@ -670,7 +669,7 @@ object BiliRoamingApi {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    fun getContent(url: String, compress: Boolean = true): String? = try {
+    fun getContent(url: String): String? = try {
         val timeout = 10000
         val mobiApp = Utils.getMobiApp()
         val verName = "1.7.0"
@@ -728,8 +727,7 @@ object BiliRoamingApi {
             connection.setRequestProperty("platform-from-biliroaming", mobiApp)
             connection.setRequestProperty("Build", verCode)
             connection.setRequestProperty("User-Agent", defaultUA)
-            val acceptEncoding = if (compress) "br,gzip,deflate" else "identity"
-            connection.setRequestProperty("Accept-Encoding", acceptEncoding)
+            connection.setRequestProperty("Accept-Encoding", "br,gzip,deflate")
             connection.connect()
             if (connection.responseCode == HttpURLConnection.HTTP_OK) {
                 val inputStream = connection.inputStream

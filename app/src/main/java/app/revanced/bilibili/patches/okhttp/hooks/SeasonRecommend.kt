@@ -13,7 +13,7 @@ object SeasonRecommend : ApiHook() {
                 && code.isOk
     }
 
-    override fun hook(url: String, code: Int, response: String): String {
+    override fun hook(url: String, code: Int, request: String, response: String): String {
         val json = response.toJSONObject()
         val result = json.optJSONObject("result")
             ?: return response

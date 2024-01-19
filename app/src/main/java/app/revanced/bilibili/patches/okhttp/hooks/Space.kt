@@ -12,7 +12,7 @@ object Space : ApiHook() {
                 && code.isOk
     }
 
-    override fun hook(url: String, code: Int, response: String): String {
+    override fun hook(url: String, code: Int, request: String, response: String): String {
         if (response.contains("\"code\":0")) return response
         val vmid = Uri.parse(url).getQueryParameter("vmid")
         if (vmid.isNullOrEmpty()) return response

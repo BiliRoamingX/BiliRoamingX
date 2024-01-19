@@ -11,7 +11,7 @@ object BangumiCards : ApiHook() {
                 && code.isOk
     }
 
-    override fun hook(url: String, code: Int, response: String): String {
+    override fun hook(url: String, code: Int, request: String, response: String): String {
         return """{"code":0,"data":[]}"""
     }
 }

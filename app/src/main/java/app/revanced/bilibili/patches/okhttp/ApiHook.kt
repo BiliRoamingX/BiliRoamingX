@@ -8,5 +8,5 @@ abstract class ApiHook {
 
     abstract fun shouldHook(url: String, code: Int): Boolean
 
-    abstract fun hook(url: String, code: Int, response: String): String
+    abstract fun hook(url: String, code: Int, request: String, response: String): String
 }

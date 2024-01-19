@@ -11,7 +11,7 @@ object FeedIndex : ApiHook() {
                 && url.startsWith("https://app.bilibili.com/x/v2/feed/index?")
     }
 
-    override fun hook(url: String, code: Int, response: String): String {
+    override fun hook(url: String, code: Int, request: String, response: String): String {
         val resp = response.toJSONObject()
         if (resp.optInt("code", -1) == 0) {
             val data = resp.optJSONObject("data")

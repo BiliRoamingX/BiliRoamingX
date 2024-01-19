@@ -21,7 +21,7 @@ object Eps : ApiHook() {
                 && code.isOk
     }
 
-    override fun hook(url: String, code: Int, response: String): String {
+    override fun hook(url: String, code: Int, request: String, response: String): String {
         val json = JSONObject(response)
         if (!Settings.UNLOCK_AREA_LIMIT.boolean)
             return response

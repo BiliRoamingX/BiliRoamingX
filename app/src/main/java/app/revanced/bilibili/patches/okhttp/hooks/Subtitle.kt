@@ -12,7 +12,7 @@ object Subtitle : ApiHook() {
                 || url.contains("zh_converter%3Dt2cn")) // free flow, url starts with https://proxy-tf-all-ws.bilivideo.com
     }
 
-    override fun hook(url: String, code: Int, response: String): String {
+    override fun hook(url: String, code: Int, request: String, response: String): String {
         val dictReady = if (!SubtitleHelper.dictExist) {
             runCatchingOrNull {
                 Utils.submitTask {
