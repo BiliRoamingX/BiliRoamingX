@@ -24,9 +24,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -208,19 +205,6 @@ public class Utils {
         return executor.submit(task);
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public static long copyStream(InputStream in, OutputStream out) throws IOException {
-        var bytesCopied = 0L;
-        var buffer = new byte[8192];
-        var bytes = in.read(buffer);
-        while (bytes >= 0) {
-            out.write(buffer, 0, bytes);
-            bytesCopied += bytes;
-            bytes = in.read(buffer);
-        }
-        return bytesCopied;
-    }
-
     @SuppressWarnings("deprecation")
     public static boolean currentIsLandscape() {
         WindowManager windowManager = context.getSystemService(WindowManager.class);
@@ -329,7 +313,7 @@ public class Utils {
                     var uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
                     if (uri == null) return;
                     try (var output = resolver.openOutputStream(uri)) {
-                        Utils.copyStream(input, output);
+                        IOUtils.copyToX(input, output);
                     }
                     Toasts.showShortWithId("biliroaming_toast_image_save_success", relativePath + File.separator + fullFilename);
                 } catch (Throwable th2) {

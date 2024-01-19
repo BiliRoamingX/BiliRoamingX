@@ -84,13 +84,16 @@ final class MessageLiteToStringEx {
         typeMap.put("type.googleapis.com/bilibili.app.distribution.other.v1.OtherSettingsConfig", OtherSettingsConfig.class);
         typeMap.put("type.googleapis.com/bilibili.app.distribution.other.v1.PrivacySettingsConfig", PrivacySettingsConfig.class);
         typeMap.put("type.googleapis.com/bilibili.app.distribution.pegasus.v1.PegasusDeviceConfig", PegasusDeviceConfig.class);
-        typeMap.put("type.googleapis.com/bilibili.app.distribution.pegasus.v1.PegasusMidConfig", PegasusMidConfig.class);
         typeMap.put("type.googleapis.com/bilibili.app.distribution.play.v1.CloudPlayConfig", CloudPlayConfig.class);
         typeMap.put("type.googleapis.com/bilibili.app.distribution.play.v1.PlayConfig", PlayConfig.class);
         typeMap.put("type.googleapis.com/bilibili.app.distribution.play.v1.SpecificPlayConfig", SpecificPlayConfig.class);
         typeMap.put("type.googleapis.com/bilibili.app.distribution.search.v1.SearchDeviceConfig", SearchDeviceConfig.class);
-        typeMap.put("type.googleapis.com/bilibili.app.distribution.story.v1.MidStoryConfig", MidStoryConfig.class);
-        typeMap.put("type.googleapis.com/bilibili.app.distribution.story.v1.StoryConfig", StoryConfig.class);
+        try {
+            typeMap.put("type.googleapis.com/bilibili.app.distribution.pegasus.v1.PegasusMidConfig", PegasusMidConfig.class);
+            typeMap.put("type.googleapis.com/bilibili.app.distribution.story.v1.MidStoryConfig", MidStoryConfig.class);
+            typeMap.put("type.googleapis.com/bilibili.app.distribution.story.v1.StoryConfig", StoryConfig.class);
+        } catch (Throwable ignored) {
+        }
     }
 
     private MessageLiteToStringEx() {

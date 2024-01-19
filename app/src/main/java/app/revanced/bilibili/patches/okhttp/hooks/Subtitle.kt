@@ -1,6 +1,7 @@
 package app.revanced.bilibili.patches.okhttp.hooks
 
 import app.revanced.bilibili.patches.okhttp.ApiHook
+import app.revanced.bilibili.utils.LogHelper
 import app.revanced.bilibili.utils.SubtitleHelper
 import app.revanced.bilibili.utils.Utils
 import app.revanced.bilibili.utils.runCatchingOrNull
@@ -23,9 +24,11 @@ object Subtitle : ApiHook() {
         val newResponse = if (!dictReady) {
             SubtitleHelper.errorResponse("转换字典下载失败，请重试")
         } else {
-            runCatchingOrNull {
+            runCatching {
                 SubtitleHelper.convert(response)
-            } ?: SubtitleHelper.errorResponse("字幕转换失败，请重试")
+            }.onFailure {
+                LogHelper.error({ "subtitle convert failed" }, it)
+            }.getOrNull() ?: SubtitleHelper.errorResponse("字幕转换失败，请重试")
         }
         Utils.async {
             runCatchingOrNull {

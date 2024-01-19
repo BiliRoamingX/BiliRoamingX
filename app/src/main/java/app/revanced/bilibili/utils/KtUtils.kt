@@ -25,8 +25,6 @@ import com.google.protobuf.UnknownFieldSetLite
 import org.json.JSONObject
 import java.io.File
 import java.io.InputStream
-import java.io.Reader
-import java.io.StringWriter
 import java.lang.reflect.Field
 import java.lang.reflect.Proxy
 import java.net.URL
@@ -106,26 +104,15 @@ inline fun SharedPreferences.edit(
     action: SharedPreferences.Editor.() -> Unit
 ) = edit().apply(action).run { if (commit) commit() else apply() }
 
-fun Reader.readTextX(): String = use {
-    val buffer = StringWriter()
-    val charBuffer = CharArray(DEFAULT_BUFFER_SIZE)
-    var chars = it.read(charBuffer)
-    while (chars >= 0) {
-        buffer.write(charBuffer, 0, chars)
-        chars = it.read(charBuffer)
-    }
-    buffer.toString()
-}
-
 fun getStreamContent(input: InputStream) = try {
-    input.bufferedReader().readTextX()
+    input.bufferedReader().use { it.readTextX() }
 } catch (e: Throwable) {
     LogHelper.error({ "get stream content failed" }, e)
     null
 }
 
 fun fetchJson(url: String) = try {
-    JSONObject(URL(url).readText())
+    JSONObject(URL(url).readTextX())
 } catch (_: Throwable) {
     null
 }
@@ -321,7 +308,7 @@ private val cookieInfoCache by lazy {
         val cookie = if (currentAccount.isNotEmpty()) {
             currentAccount.toJSONObject().optString("cookie")
         } else if (cookieFile.isFile) {
-            cookieFile.bufferedReader().readTextX()
+            cookieFile.bufferedReader().use { it.readTextX() }
         } else null
         if (cookie != null) {
             Base64.decode(cookie, Base64.NO_WRAP).toString(Charsets.UTF_8).toJSONObject()

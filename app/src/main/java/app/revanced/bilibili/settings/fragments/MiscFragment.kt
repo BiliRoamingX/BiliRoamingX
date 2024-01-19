@@ -53,7 +53,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
                 destFile.delete()
             } else try {
                 Utils.getContext().contentResolver.openInputStream(uri)?.use { input ->
-                    destFile.outputStream().use { output -> input.copyTo(output) }
+                    destFile.outputStream().use { output -> input.copyToX(output) }
                 }
             } catch (e: Exception) {
                 LogHelper.error({ "failed to apply splash image" }, e)

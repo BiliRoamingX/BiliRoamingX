@@ -54,13 +54,13 @@ object OkHttpPatch {
             "deflate" -> DeflaterInputStream(reqStream)
             "br" -> BrotliInputStream(reqStream)
             else -> reqStream
-        }).bufferedReader().readTextX()
+        }).bufferedReader().use { it.readTextX() }
         val response = (when (respEncoding) {
             "gzip" -> GZIPInputStream(respStream)
             "deflate" -> DeflaterInputStream(respStream)
             "br" -> BrotliInputStream(respStream)
             else -> respStream
-        }).bufferedReader().readTextX()
+        }).bufferedReader().use { it.readTextX() }
         LogHelper.debug { "OkHttpPatch.hook, code: %d, url: %s".format(code, url) }
         LogHelper.debug { "OkHttpPatch.hook, request, encoding: $reqEncoding, content: $request" }
         LogHelper.debug { "OkHttpPatch.hook, response, encoding: $respEncoding, content: $response" }
