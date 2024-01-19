@@ -552,10 +552,11 @@ object BiliRoamingApi {
         result.optJSONObject("new_ep")?.run {
             put("desc", optString("new_ep_display"))
         }
-        val play = result.optJSONObject("stat_format")
-            ?.optString("play").orEmpty().replace("播放", "")
+        val views = result.optJSONObject("stat")?.optLong("views") ?: 0
+        val play = views.cnCountFormat()
         // fake likes to followers
-        val followers = result.optJSONObject("stat_format")?.optString("likes").orEmpty()
+        val likes = result.optJSONObject("stat")?.optLong("likes") ?: 0
+        val followers = likes.cnCountFormat()
         result.put("icon_font", JSONObject().apply {
             put("name", "playdata-square-line@500")
             put("text", play)
@@ -570,6 +571,8 @@ object BiliRoamingApi {
             }
         }
         result.apply {
+            remove("stat_format")
+            remove("series")
             put("season_title", result.optString("title"))
             put("show_season_type", result.optInt("type"))
             put("link", "https://www.bilibili.tv/en/play$seasonId")
