@@ -61,7 +61,7 @@ abstract class ReplyListBase<out Req : GeneratedMessageLite<*, *>, out Resp : Ge
         val urls = content.urlsMap.values
         val goodsUrlPrefix = "https://gaoneng.bilibili.com/tetris"
         if (goods && (message.contains(goodsUrlPrefix) || urls.any {
-                it.extra.goodsCmControl != 0L || it.appUrlSchema.startsWith(goodsUrlPrefix)
+                it.extra.goodsItemId != 0L || it.appUrlSchema.startsWith(goodsUrlPrefix)
             })
         ) return true
         if (ups.isNotEmpty() && upName.isNotEmpty())
