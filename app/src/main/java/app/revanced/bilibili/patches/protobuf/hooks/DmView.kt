@@ -94,11 +94,8 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
             }
             extraSubtitles.add(closeSub)
         }
-        if (extraSubtitles.isNotEmpty()) {
-            val lanList = result.subtitle.subtitlesList.map { it.lan }
-            val newSubtitles = extraSubtitles.filterNot { it.lan in lanList }
-            result.subtitle.addAllSubtitles(newSubtitles)
-        }
+        if (extraSubtitles.isNotEmpty())
+            result.subtitle.addAllSubtitles(extraSubtitles)
         return result
     }
 
