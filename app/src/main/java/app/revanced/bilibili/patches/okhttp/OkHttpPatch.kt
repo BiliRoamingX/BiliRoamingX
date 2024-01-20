@@ -2,6 +2,7 @@ package app.revanced.bilibili.patches.okhttp
 
 import app.revanced.bilibili.api.BrotliInputStream
 import app.revanced.bilibili.patches.okhttp.hooks.*
+import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.LogHelper
 import app.revanced.bilibili.utils.readTextX
 import java.io.InputStream
@@ -29,7 +30,7 @@ object OkHttpPatch {
     @JvmStatic
     fun shouldHook(url: String, code: Int): Boolean {
         LogHelper.debug { "OkHttpPatch.shouldHook, code: %d, url: %s".format(code, url) }
-        return hooks.any { it.shouldHook(url, code) }
+        return Settings.DEBUG.boolean || hooks.any { it.shouldHook(url, code) }
     }
 
     @JvmStatic
