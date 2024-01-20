@@ -38,6 +38,7 @@ object MossPatch {
         SearchByType,
         SearchDefaultWords,
         View,
+        ViewContinuousPlay,
         ViewLike,
         ViewProgress,
         ViewProgressUnite,

@@ -49,6 +49,7 @@ public enum Settings {
     OVERRIDE_PLAYBACK_SPEED("playback_speed_override", STRING, ""),
     TRIAL_VIP_QUALITY("trial_vip_quality", BOOLEAN, FALSE),
     DISABLE_SEGMENTED_SECTION("disable_segmented_section", BOOLEAN, FALSE),
+    DISABLE_AUTO_NEXT_PLAY("disable_auto_next_play", BOOLEAN, FALSE),
 
     // 首页
     SHOWING_BOTTOM_ITEMS("showing_bottom_items", STRING_SET, Set.of(Constants.ALL_VALUE)),
