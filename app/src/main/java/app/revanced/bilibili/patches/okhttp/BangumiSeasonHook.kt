@@ -130,8 +130,8 @@ object BangumiSeasonHook {
             if (Settings.ALLOW_DOWNLOAD.boolean)
                 put("allow_download", 1)
         }
-        if (episode.has("id")) {
-            val epId = episode.optString("id")
+        if (episode.has("ep_id")) {
+            val epId = episode.optString("ep_id")
             lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
         }
     }
@@ -195,8 +195,8 @@ object BangumiSeasonHook {
         if (Settings.ALLOW_DOWNLOAD.boolean)
             episode.optJSONObject("rights")
                 ?.put("allow_download", 1)
-        if (episode.has("id")) {
-            val epId = episode.optString("id")
+        if (episode.has("ep_id")) {
+            val epId = episode.optString("ep_id")
             lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
             episode.optJSONArray("subtitles")?.takeIf { it.length() > 0 }?.let {
                 subtitlesCache.compute(seasonId) { _, v ->

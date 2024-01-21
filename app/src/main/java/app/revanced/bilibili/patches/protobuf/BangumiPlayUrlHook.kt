@@ -237,8 +237,8 @@ object BangumiPlayUrlHook {
                     it.optJSONObject("data")?.optJSONArray("episodes")
                         .orEmpty().asSequence<JSONObject>()
                 }.let { es ->
-                    es.firstOrNull { if (reqEpId != 0L) it.optLong("id") == reqEpId else true }
-                } ?: s.optJSONObject("new_ep")?.apply { put("status", 2L) }
+                    es.firstOrNull { if (reqEpId != 0L) it.optLong("ep_id") == reqEpId else true }
+                }/* ?: s.optJSONObject("new_ep")?.apply { put("status", 2L) }*/
             } ?: throw CustomServerException(mapOf("解析服务器错误" to "无法获取剧集信息"))
         }
         return season to ep
@@ -307,12 +307,12 @@ object BangumiPlayUrlHook {
             appendQueryParameter("ep_id", req.epId.let {
                 if (it != 0L) it else episodeInfo.epId.toLong()
             }.let {
-                if (it != 0L) it else thaiEp.value.optLong("id")
+                if (it != 0L) it else thaiEp.value.optLong("ep_id")
             }.toString())
             appendQueryParameter("cid", req.cid.let {
                 if (it != 0L) it else episodeInfo.cid
             }.let {
-                if (it != 0L) it else thaiEp.value.optLong("id")
+                if (it != 0L) it else thaiEp.value.optLong("cid")
             }.toString())
             appendQueryParameter("qn", req.qn.toString())
             appendQueryParameter("fnver", req.fnver.toString())
@@ -333,12 +333,12 @@ object BangumiPlayUrlHook {
             appendQueryParameter("ep_id", req.extraContentMap["ep_id"].let {
                 if (!it.isNullOrEmpty() && it != "0") it.toLong() else episodeInfo.epId.toLong()
             }.let {
-                if (it != 0L) it else thaiEp.value.optLong("id")
+                if (it != 0L) it else thaiEp.value.optLong("ep_id")
             }.toString())
             appendQueryParameter("cid", req.vod.cid.let {
                 if (it != 0L) it else episodeInfo.cid
             }.let {
-                if (it != 0L) it else thaiEp.value.optLong("id")
+                if (it != 0L) it else thaiEp.value.optLong("cid")
             }.toString())
             appendQueryParameter("qn", req.vod.qn.toString())
             appendQueryParameter("fnver", req.vod.fnver.toString())
@@ -647,9 +647,9 @@ object BangumiPlayUrlHook {
                 val episode = thaiEp.value
                 isPreview = jsonContent.optInt("is_preview", 0) == 1
                 episodeInfo = EpisodeInfo().apply {
-                    epId = episode.optInt("id")
-                    cid = episode.optLong("id")
-                    aid = season.optLong("season_id")
+                    epId = episode.optInt("ep_id")
+                    cid = episode.optLong("cid")
+                    aid = episode.optLong("aid")
                     epStatus = episode.optInt("status")
                     cover = episode.optString("cover")
                     title = episode.optString("title")
@@ -675,7 +675,7 @@ object BangumiPlayUrlHook {
                 if (Settings.ALLOW_MINI_PLAY.boolean)
                     inlineType = InlineType.TYPE_WHOLE
                 val clipInfo = clipInfoCache[season.optString("season_id")]
-                    ?.get(episode.optString("id"))
+                    ?.get(episode.optString("ep_id"))
                 if (clipInfo != null) {
                     clipInfo.optJSONObject("op")?.let { op ->
                         addClipInfo(ClipInfo().apply {

@@ -330,9 +330,9 @@ object ViewUniteReplyHook {
                     }
                 } ?: (positiveEpisodes.optJSONObject(0))?.run {
                     watchProgress = WatchProgress().apply {
-                        lastEpId = optLong("id")
-                        lastEpIndex = optString("index")
-                        lastTime = 0L
+                        lastEpId = optLong("ep_id")
+                        lastEpIndex = optString("ep_index")
+                        lastTime = -1
                     }
                 }
             }
@@ -556,8 +556,8 @@ object ViewUniteReplyHook {
                 vid = episode.optString("vid")
             }.let { addEpisodes(it) }
 
-            if (episode.has("id")) {
-                val epId = episode.optString("id")
+            if (episode.has("ep_id")) {
+                val epId = episode.optString("ep_id")
                 lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
                 episode.optJSONArray("subtitles")?.takeIf { it.length() > 0 }?.let {
                     subtitlesCache.compute(seasonId) { _, v ->
