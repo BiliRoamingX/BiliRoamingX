@@ -26,6 +26,7 @@ import com.bilibili.video.story.api.StoryFeedResponse;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -521,14 +522,23 @@ public class JSONPatch {
         Set<String> filters = Settings.FILTER_STORY.getStringSet();
         List<StoryDetail> items;
         if (!filters.isEmpty() && (items = storyFeedResponse.getItems()) != null) {
-            items.removeIf(e -> {
-                String aGoto = e.getGoto();
+            Iterator<StoryDetail> it = items.iterator();
+            while (it.hasNext()) {
+                StoryDetail story = it.next();
+                if (Settings.REMOVE_ELEC_BUTTON.getBoolean()) {
+                    StoryDetail.Owner owner = story.getOwner();
+                    if (owner != null) {
+                        StoryDetail.Charge charge = owner.getCharge();
+                        if (charge != null)
+                            charge.setShow(false);
+                    }
+                }
+                String aGoto = story.getGoto();
                 if (!TextUtils.isEmpty(aGoto))
                     for (String filter : filters)
                         if (aGoto.contains(filter))
-                            return true;
-                return false;
-            });
+                            it.remove();
+            }
         }
     }
 }
