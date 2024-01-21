@@ -30,7 +30,7 @@ object OkHttpPatch {
     @JvmStatic
     fun shouldHook(url: String, code: Int): Boolean {
         LogHelper.debug { "OkHttpPatch.shouldHook, code: %d, url: %s".format(code, url) }
-        return Settings.DEBUG.boolean || hooks.any { it.shouldHook(url, code) }
+        return (code == 200 && Settings.DEBUG.boolean) || hooks.any { it.shouldHook(url, code) }
     }
 
     @JvmStatic
