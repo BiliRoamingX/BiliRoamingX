@@ -476,11 +476,11 @@ object BangumiSeasonHook {
         invalidFragmentRef = WeakReference(fragment)
         val view = fragment.view ?: return false
         if (lastSeasonInfo["allow_comment"] != "0") return false
-        view.findViewByIdName<TextView>("info").run {
+        view.findView<TextView>("info").run {
             gravity = Gravity.CENTER
             text = "由于泰区番剧评论会串到其他正常视频中\n因而禁止泰区评论"
         }
-        val forbidIcon = view.findViewByIdName<ImageView>("forbid_icon")
+        val forbidIcon = view.findView<ImageView>("forbid_icon")
         Utils.async {
             runCatchingOrNull {
                 URL("https://i0.hdslb.com/bfs/app-res/android/img_holder_forbid_style1.webp")

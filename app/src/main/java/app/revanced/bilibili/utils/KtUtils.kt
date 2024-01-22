@@ -84,7 +84,7 @@ inline fun Context.inflateLayout(
     return LayoutInflater.from(this).inflate(resource, root, attachToRoot)
 }
 
-inline fun <T : View> View.findViewByIdName(idName: String): T =
+inline fun <T : View> View.findView(idName: String): T =
     findViewById(Utils.getResId(idName, "id"))
 
 @JvmOverloads

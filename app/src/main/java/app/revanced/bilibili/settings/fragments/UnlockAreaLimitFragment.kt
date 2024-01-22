@@ -17,10 +17,10 @@ class UnlockAreaLimitFragment :
             AlertDialog.Builder(activity).run {
                 val view = context.inflateLayout("biliroaming_dialog_customize_backup")
                 val editTexts = arrayOf<EditText>(
-                    view.findViewByIdName("cn_server"),
-                    view.findViewByIdName("hk_server"),
-                    view.findViewByIdName("tw_server"),
-                    view.findViewByIdName("th_server")
+                    view.findView("cn_server"),
+                    view.findView("hk_server"),
+                    view.findView("tw_server"),
+                    view.findView("th_server")
                 )
                 editTexts.forEach { it.setText(prefs.getString(it.tag.toString(), "")) }
                 setTitle(Utils.getString("biliroaming_custom_server_title"))

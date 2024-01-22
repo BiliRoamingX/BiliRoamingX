@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Utils
-import app.revanced.bilibili.utils.findViewByIdName
+import app.revanced.bilibili.utils.findView
 import java.io.File
 
 object SplashPatch {
@@ -20,8 +20,8 @@ object SplashPatch {
     @JvmStatic
     fun onBrandSplashFragmentViewCreated(view: View) {
         if (Settings.CUSTOM_SPLASH.boolean) {
-            val splash = view.findViewByIdName<ImageView>("brand_splash")
-            val fullSplash = view.findViewByIdName<ImageView>("full_brand_splash")
+            val splash = view.findView<ImageView>("brand_splash")
+            val fullSplash = view.findView<ImageView>("full_brand_splash")
             val splashImage = File(Utils.getContext().filesDir, SPLASH_IMAGE)
             if (splashImage.isFile) {
                 val uri = Uri.fromFile(splashImage)
@@ -33,7 +33,7 @@ object SplashPatch {
             }
         }
         if (Settings.CUSTOM_SPLASH_LOGO.boolean) {
-            val logo = view.findViewByIdName<ImageView>("brand_logo")
+            val logo = view.findView<ImageView>("brand_logo")
             val logoImage = File(Utils.getContext().filesDir, LOGO_IMAGE)
             if (logoImage.isFile) {
                 logo.setImageURI(Uri.fromFile(logoImage))

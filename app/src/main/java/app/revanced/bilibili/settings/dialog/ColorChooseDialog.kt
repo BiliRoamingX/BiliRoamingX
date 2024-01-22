@@ -22,14 +22,14 @@ class ColorChooseDialog(
     private val onConfirm: (color: Int) -> Unit
 ) : AlertDialog.Builder(context) {
     private val view = context.inflateLayout("biliroaming_dialog_color_choose")
-    private val sampleView: View = view.findViewByIdName("biliroaming_view_sample")
-    private val etColor: EditText = view.findViewByIdName("biliroaming_et_color")
-    private val sbColorR: SeekBar = view.findViewByIdName("biliroaming_sb_colorR")
-    private val sbColorG: SeekBar = view.findViewByIdName("biliroaming_sb_colorG")
-    private val sbColorB: SeekBar = view.findViewByIdName("biliroaming_sb_colorB")
-    private val tvColorR: TextView = view.findViewByIdName("biliroaming_tv_colorR")
-    private val tvColorG: TextView = view.findViewByIdName("biliroaming_tv_colorG")
-    private val tvColorB: TextView = view.findViewByIdName("biliroaming_tv_colorB")
+    private val sampleView: View = view.findView("biliroaming_view_sample")
+    private val etColor: EditText = view.findView("biliroaming_et_color")
+    private val sbColorR: SeekBar = view.findView("biliroaming_sb_colorR")
+    private val sbColorG: SeekBar = view.findView("biliroaming_sb_colorG")
+    private val sbColorB: SeekBar = view.findView("biliroaming_sb_colorB")
+    private val tvColorR: TextView = view.findView("biliroaming_tv_colorR")
+    private val tvColorG: TextView = view.findView("biliroaming_tv_colorG")
+    private val tvColorB: TextView = view.findView("biliroaming_tv_colorB")
 
     val color: Int
         get() = Color.rgb(sbColorR.progress, sbColorG.progress, sbColorB.progress)
