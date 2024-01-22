@@ -146,7 +146,7 @@ public final class History extends GeneratedMessageLite<History, History.Builder
         GeneratedMessageLite.registerDefaultInstance(History.class, history);
     }
 
-    private History() {
+    public History() {
     }
 
     public void clearCurrentVideo() {

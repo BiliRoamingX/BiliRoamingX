@@ -182,7 +182,7 @@ public final class UserStatus extends GeneratedMessageLite<UserStatus, UserStatu
         GeneratedMessageLite.registerDefaultInstance(UserStatus.class, userStatus);
     }
 
-    private UserStatus() {
+    public UserStatus() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

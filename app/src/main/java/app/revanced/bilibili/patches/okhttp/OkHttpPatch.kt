@@ -16,6 +16,7 @@ object OkHttpPatch {
         BangumiCards,
         BangumiMaterial,
         Eps,
+        HistoryReport,
         Media,
         QoeShow,
         Season,

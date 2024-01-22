@@ -62,6 +62,7 @@ object BackupHelper {
         }
 
         backupPrefsIfExist(Settings.PREFS_NAME)
+        backupPrefsIfExist(Constants.PREFS_VH)
         backupFileIfExist(SubtitleParamsCache.FONT_FILE)
         backupFileIfExist(File(Utils.getContext().filesDir, SplashPatch.SPLASH_IMAGE))
         backupFileIfExist(File(Utils.getContext().filesDir, SplashPatch.LOGO_IMAGE))

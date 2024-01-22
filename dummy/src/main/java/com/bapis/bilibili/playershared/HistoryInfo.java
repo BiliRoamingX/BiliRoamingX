@@ -200,7 +200,7 @@ public final class HistoryInfo extends GeneratedMessageLite<HistoryInfo, History
         GeneratedMessageLite.registerDefaultInstance(HistoryInfo.class, historyInfo);
     }
 
-    private HistoryInfo() {
+    public HistoryInfo() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

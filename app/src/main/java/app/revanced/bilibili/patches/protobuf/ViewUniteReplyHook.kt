@@ -328,12 +328,6 @@ object ViewUniteReplyHook {
                         lastEpIndex = optString("last_ep_index")
                         lastTime = optLong("last_time")
                     }
-                } ?: (positiveEpisodes.optJSONObject(0))?.run {
-                    watchProgress = WatchProgress().apply {
-                        lastEpId = optLong("ep_id")
-                        lastEpIndex = optString("ep_index")
-                        lastTime = -1
-                    }
                 }
             }
         }

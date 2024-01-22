@@ -38,6 +38,7 @@ public enum Settings {
     CN_SERVER("cn_server", STRING, ""),
     TH_SERVER("th_server", STRING, ""),
     UPOS_HOST("upos_host", STRING, ""),
+    SAVE_TH_HISTORY("save_th_history", BOOLEAN, TRUE),
 
     // 播放器
     HALF_SCREEN_QUALITY("half_screen_quality", STRING, "0"),

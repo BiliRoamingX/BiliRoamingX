@@ -15,6 +15,7 @@ import app.revanced.bilibili.utils.UposReplacer.uposBackups
 import com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReply
 import com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReq
 import com.bapis.bilibili.pgc.gateway.player.v2.*
+import com.bapis.bilibili.pgc.gateway.player.v2.ButtonInfo
 import com.bapis.bilibili.pgc.gateway.player.v2.DashItem
 import com.bapis.bilibili.pgc.gateway.player.v2.DashVideo
 import com.bapis.bilibili.pgc.gateway.player.v2.ImageInfo
@@ -27,6 +28,7 @@ import com.bapis.bilibili.playershared.Dialog
 import com.bapis.bilibili.playershared.Dimension
 import com.bapis.bilibili.playershared.LimitActionType
 import com.bapis.bilibili.playershared.TextInfo
+import com.bapis.bilibili.playershared.Toast
 import com.bilibili.lib.moss.api.MossException
 import com.bilibili.lib.moss.api.NetworkException
 import org.json.JSONObject
@@ -232,14 +234,39 @@ object BangumiPlayUrlHook {
                 ?: throw CustomServerException(mapOf("解析服务器错误" to "无法获取剧集信息"))
         }
         val ep = lazy {
-            season.value.let { s ->
-                s.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
-                    it.optJSONObject("data")?.optJSONArray("episodes")
-                        .orEmpty().asSequence<JSONObject>()
-                }.let { es ->
-                    es.firstOrNull { if (reqEpId != 0L) it.optLong("ep_id") == reqEpId else true }
-                }/* ?: s.optJSONObject("new_ep")?.apply { put("status", 2L) }*/
-            } ?: throw CustomServerException(mapOf("解析服务器错误" to "无法获取剧集信息"))
+            val s = season.value
+            val allEps = s.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
+                it.optJSONObject("data")?.optJSONArray("episodes")
+                    .orEmpty().asSequence<JSONObject>()
+            }.toList()
+            var episode: JSONObject? = null
+            if (reqEpId != 0L) {
+                // located to the request episode
+                episode = allEps.firstOrNull { it.optLong("ep_id") == reqEpId }
+            } else {
+                val histories = getVideoHistory(s.optInt("season_id"))
+                val last = histories.maxByOrNull { it.time }
+                if (Settings.SAVE_TH_HISTORY.boolean && last != null && last.progress == -1L) {
+                    val lastEpIdx = allEps.indexOfFirst {
+                        it.optInt("ep_id") == last.epId
+                    }
+                    if (lastEpIdx != -1 && lastEpIdx + 1 < allEps.size) {
+                        val nextEp = allEps[lastEpIdx + 1]
+                        val nextEpId = nextEp.optInt("ep_id")
+                        // if last episode is watched over and next episode never watched,
+                        // located to the next episode
+                        if (histories.none { it.epId == nextEpId })
+                            episode = nextEp
+                    }
+                }
+                // try located to the last watching episode
+                if (Settings.SAVE_TH_HISTORY.boolean && episode == null && last != null)
+                    episode = allEps.firstOrNull { it.optInt("ep_id") == last.epId }
+                // fallback located to the first episode
+                if (episode == null)
+                    episode = allEps.firstOrNull()
+            }
+            episode ?: throw CustomServerException(mapOf("解析服务器错误" to "无法获取剧集信息"))
         }
         return season to ep
     }
@@ -495,6 +522,19 @@ object BangumiPlayUrlHook {
                     mutableArcConfsMap.putAll(it)
                 }
             }
+            if (thai) {
+                history = History().apply {
+                    if (Settings.SAVE_TH_HISTORY.boolean) {
+                        val season = thaiSeason.value
+                        val episode = thaiEp.value
+                        val seasonId = season.optInt("season_id")
+                        val currentEp = episode.optInt("ep_id")
+                        val (current, last) = getHistory(season, seasonId, currentEp)
+                        current?.let { currentVideo = it }
+                        last?.let { relatedVideo = it }
+                    }
+                }
+            }
         }
     }.onFailure { LogHelper.error({ "Failed to reconstruct unite response" }, it) }
         .getOrDefault(response)
@@ -628,6 +668,131 @@ object BangumiPlayUrlHook {
         addDashAudio(audio)
     }
 
+    private fun getHistory(
+        season: JSONObject,
+        seasonId: Int,
+        currentEp: Int
+    ): Pair<HistoryInfo?, HistoryInfo?> {
+        val histories = getVideoHistory(seasonId)
+        val current = histories.find { it.epId == currentEp }
+        val last = histories.maxByOrNull { it.time }
+        if (current == null && last == null)
+            return null to null
+        val allEps = season.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
+            it.optJSONObject("data")?.optJSONArray("episodes")
+                .orEmpty().asSequence<JSONObject>()
+        }.toList()
+        val toastWithoutTime = Toast().apply {
+            button = Button().apply { text = "跳转播放" }
+            text = "你有最近观看的进度 "
+        }
+        val currentHistory = current?.run {
+            HistoryInfo().apply {
+                val episode = allEps.first { it.optInt("ep_id") == epId }
+                lastPlayCid = episode.optLong("cid")
+                lastPlayAid = episode.optLong("aid")
+                progress = this@run.progress
+                if (progress != -1L) {
+                    this.toastWithoutTime = toastWithoutTime
+                    toast = Toast().apply {
+                        button = Button()
+                        text = "已为您定位至上次观看位置"
+                    }
+                }
+            }
+        }
+        val lastHistory = last?.run {
+            HistoryInfo().apply {
+                val episode = allEps.first { it.optInt("ep_id") == epId }
+                val title = episode.optString("title")
+                lastPlayCid = episode.optLong("cid")
+                lastPlayAid = episode.optLong("aid")
+                progress = this@run.progress
+                if (progress != -1L) {
+                    this.toastWithoutTime = toastWithoutTime
+                    toast = Toast().apply {
+                        button = Button().apply { text = "跳转播放" }
+                        val lastTitle = if (title.toIntOrNull() != null) "第${title}话" else title
+                        text = "上次看到$lastTitle ${progress.secondFormat()} "
+                    }
+                }
+            }
+        }
+        return currentHistory to lastHistory
+    }
+
+    private fun getWatchProgress(
+        season: JSONObject,
+        seasonId: Int,
+        currentEp: Int
+    ): Pair<WatchProgress?, WatchProgress?> {
+        val histories = getVideoHistory(seasonId)
+        val current = histories.find { it.epId == currentEp }
+        val last = histories.maxByOrNull { it.time }
+        if (current == null && last == null)
+            return null to null
+        val allEps = season.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
+            it.optJSONObject("data")?.optJSONArray("episodes")
+                .orEmpty().asSequence<JSONObject>()
+        }.toList()
+        val toastWithoutTime = com.bapis.bilibili.pgc.gateway.player.v2.Toast().apply {
+            button = ButtonInfo().apply {
+                text = "跳转播放"
+                textColor = "#FF6699"
+            }
+            toastText = com.bapis.bilibili.pgc.gateway.player.v2.TextInfo().apply {
+                text = "你有最近观看的进度 "
+                textColor = "#FFFFFF"
+            }
+        }
+        val currentProgress = current?.run {
+            WatchProgress().apply {
+                val episode = allEps.first { it.optInt("ep_id") == epId }
+                val title = episode.optString("title")
+                lastEpId = epId
+                lastEpIndex = title
+                lastPlayCid = episode.optLong("cid")
+                lastPlayAid = episode.optLong("aid")
+                progress = this@run.progress
+                if (progress != -1L) {
+                    this.toastWithoutTime = toastWithoutTime
+                    toast = com.bapis.bilibili.pgc.gateway.player.v2.Toast().apply {
+                        toastText = com.bapis.bilibili.pgc.gateway.player.v2.TextInfo().apply {
+                            text = "已为您定位至上次观看位置"
+                            textColor = "#FFFFFF"
+                        }
+                    }
+                }
+            }
+        }
+        val lastProgress = last?.run {
+            WatchProgress().apply {
+                val episode = allEps.first { it.optInt("ep_id") == epId }
+                val title = episode.optString("title")
+                lastEpId = epId
+                lastEpIndex = title
+                lastPlayCid = episode.optLong("cid")
+                lastPlayAid = episode.optLong("aid")
+                progress = this@run.progress
+                if (progress != -1L) {
+                    this.toastWithoutTime = toastWithoutTime
+                    toast = com.bapis.bilibili.pgc.gateway.player.v2.Toast().apply {
+                        button = ButtonInfo().apply {
+                            text = "跳转播放"
+                            textColor = "#FF6699"
+                        }
+                        val lastTitle = if (title.toIntOrNull() != null) "第${title}话" else title
+                        toastText = com.bapis.bilibili.pgc.gateway.player.v2.TextInfo().apply {
+                            text = "上次看到$lastTitle ${progress.secondFormat()} "
+                            textColor = "#FFFFFF"
+                        }
+                    }
+                }
+            }
+        }
+        return currentProgress to lastProgress
+    }
+
     private fun PlayViewReply.fixBusinessProto(
         thaiSeason: Lazy<JSONObject>,
         thaiEp: Lazy<JSONObject>,
@@ -645,16 +810,18 @@ object BangumiPlayUrlHook {
             business = PlayViewBusinessInfo().apply {
                 val season = thaiSeason.value
                 val episode = thaiEp.value
+                val epId = episode.optInt("ep_id")
+                val seasonId = season.optInt("season_id")
                 isPreview = jsonContent.optInt("is_preview", 0) == 1
                 episodeInfo = EpisodeInfo().apply {
-                    epId = episode.optInt("ep_id")
+                    this.epId = epId
                     cid = episode.optLong("cid")
                     aid = episode.optLong("aid")
                     epStatus = episode.optInt("status")
                     cover = episode.optString("cover")
                     title = episode.optString("title")
                     seasonInfo = SeasonInfo().apply {
-                        seasonId = season.optInt("season_id")
+                        this.seasonId = seasonId
                         seasonType = season.optInt("type")
                         seasonStatus = season.optInt("status")
                         cover = season.optString("cover")
@@ -674,8 +841,8 @@ object BangumiPlayUrlHook {
                 watchTimeLength = timeLength.toLong()
                 if (Settings.ALLOW_MINI_PLAY.boolean)
                     inlineType = InlineType.TYPE_WHOLE
-                val clipInfo = clipInfoCache[season.optString("season_id")]
-                    ?.get(episode.optString("ep_id"))
+                val clipInfo = clipInfoCache[seasonId.toString()]
+                    ?.get(epId.toString())
                 if (clipInfo != null) {
                     clipInfo.optJSONObject("op")?.let { op ->
                         addClipInfo(ClipInfo().apply {
@@ -692,6 +859,13 @@ object BangumiPlayUrlHook {
                             end = ed.optInt("end")
                             toastText = "即将跳过片尾"
                         })
+                    }
+                }
+                userStatus = UserStatus().apply {
+                    if (Settings.SAVE_TH_HISTORY.boolean) {
+                        val (current, last) = getWatchProgress(season, seasonId, epId)
+                        current?.let { aidWatchProgress = it }
+                        last?.let { watchProgress = it }
                     }
                 }
             }

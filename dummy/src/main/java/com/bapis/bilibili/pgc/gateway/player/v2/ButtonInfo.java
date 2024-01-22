@@ -694,7 +694,7 @@ public final class ButtonInfo extends GeneratedMessageLite<ButtonInfo, ButtonInf
         GeneratedMessageLite.registerDefaultInstance(ButtonInfo.class, buttonInfo);
     }
 
-    private ButtonInfo() {
+    public ButtonInfo() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

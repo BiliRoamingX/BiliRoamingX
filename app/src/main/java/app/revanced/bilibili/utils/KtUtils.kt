@@ -19,6 +19,7 @@ import androidx.annotation.ColorInt
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import app.revanced.bilibili.meta.CookieInfo
+import app.revanced.bilibili.meta.VideoHistory
 import com.google.protobuf.GeneratedMessageLite
 import com.google.protobuf.GeneratedMessageLiteEx
 import com.google.protobuf.UnknownFieldSetLite
@@ -28,6 +29,7 @@ import java.io.InputStream
 import java.lang.reflect.Field
 import java.lang.reflect.Proxy
 import java.net.URL
+import java.net.URLDecoder
 import java.util.TreeMap
 import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
@@ -279,6 +281,36 @@ val accountPrefs by lazy {
     Utils.blkvPrefsByFile(File(accountDir, "controller.blkv"), true)
 }
 
+private val vhPrefs: SharedPreferences by lazy {
+    Utils.getContext().getSharedPreferences(Constants.PREFS_VH, Context.MODE_PRIVATE)
+}
+
+fun getVideoHistory(sid: Int): List<VideoHistory> {
+    val sh = vhPrefs.getString(sid.toString(), "").orEmpty()
+    val result = arrayListOf<VideoHistory>()
+    if (sh.isNotEmpty()) sh.split(',').mapTo(result) {
+        val (epid, time, progress) = it.split('|', limit = 3)
+        VideoHistory(epid.toInt(), time.toLong(), progress.toLong())
+    }
+    return result
+}
+
+fun saveVideoHistory(sid: Int, epId: Int, progress: Long) {
+    val time = System.currentTimeMillis()
+    val histories = getVideoHistory(sid) as ArrayList<VideoHistory>
+    if (histories.isEmpty()) {
+        histories.add(VideoHistory(epId, time, progress))
+    } else {
+        histories.find { it.epId == epId }?.run {
+            this.time = time
+            this.progress = progress
+        } ?: histories.add(VideoHistory(epId, time, progress))
+    }
+    histories.joinToString(separator = ",") {
+        "${it.epId}|${it.time}|${it.progress}"
+    }.let { vhPrefs.edit { putString(sid.toString(), it) } }
+}
+
 @JvmOverloads
 fun setClipboardContent(label: String = "", content: CharSequence) {
     val clipboardManager = Utils.getContext().getSystemService(ClipboardManager::class.java)
@@ -349,4 +381,22 @@ fun Long.cnCountFormat(invalid: String = "-"): String {
             return "%.1f万".format(count)
         return "%.0f万".format(count)
     }
+}
+
+fun Long.secondFormat(): String {
+    val seconds = this % 60
+    val minute = this / 60 % 60
+    val hour = this / 60 / 60
+    return if (hour > 0)
+        "%d:%02d:%02d".format(hour, minute, seconds)
+    else
+        "%02d:%02d".format(minute, seconds)
+}
+
+fun decodeFormBody(body: String): Map<String, String> {
+    if (body.isEmpty()) return mapOf()
+    return body.split('&')
+        .map { it.split('=', limit = 2) }
+        .filter { it.size == 2 }
+        .associate { (k, v) -> k to URLDecoder.decode(v, "UTF-8") }
 }

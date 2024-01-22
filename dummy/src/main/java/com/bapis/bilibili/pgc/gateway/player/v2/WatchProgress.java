@@ -239,7 +239,7 @@ public final class WatchProgress extends GeneratedMessageLite<WatchProgress, Wat
         GeneratedMessageLite.registerDefaultInstance(WatchProgress.class, watchProgress);
     }
 
-    private WatchProgress() {
+    public WatchProgress() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

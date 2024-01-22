@@ -141,7 +141,7 @@ public final class Toast extends GeneratedMessageLite<Toast, Toast.Builder> impl
         GeneratedMessageLite.registerDefaultInstance(Toast.class, toast);
     }
 
-    private Toast() {
+    public Toast() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

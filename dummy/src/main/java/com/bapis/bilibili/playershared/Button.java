@@ -215,7 +215,7 @@ public final class Button extends GeneratedMessageLite<Button, Button.Builder> i
         GeneratedMessageLite.registerDefaultInstance(Button.class, button);
     }
 
-    private Button() {
+    public Button() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

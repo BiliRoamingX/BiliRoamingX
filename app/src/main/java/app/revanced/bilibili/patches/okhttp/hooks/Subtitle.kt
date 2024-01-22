@@ -28,7 +28,7 @@ object Subtitle : ApiHook() {
                 SubtitleHelper.convert(response)
             }.onFailure {
                 LogHelper.error({ "subtitle convert failed" }, it)
-            }.getOrNull() ?: SubtitleHelper.errorResponse("字幕转换失败，请重试")
+            }.getOrDefault(SubtitleHelper.errorResponse("字幕转换失败，请重试"))
         }
         Utils.async {
             runCatchingOrNull {
