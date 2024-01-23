@@ -18,11 +18,11 @@
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
-#-renamesourcefileattribute SourceFile
--dontobfuscate
+-renamesourcefileattribute ""
+#-dontobfuscate
 #-dontoptimize
 #-keepattributes *  # https://www.guardsquare.com/manual/configuration/attributes
--keepattributes RuntimeVisible*Annotations
+-keepattributes RuntimeVisible*Annotations,SourceFile
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
     public static void check*(...);
     public static void throw*(...);
@@ -33,7 +33,4 @@
 -keep class app.revanced.all.** { *; }
 -keep class app.revanced.bilibili.** { *; }
 -keep class com.google.protobuf.**Ex { *; }
--keep class kotlin.jvm.internal.ArrayIterator { *; }
--keep class kotlin.jvm.internal.FunctionReferenceImpl { *; }
--keep class kotlin.jvm.internal.Ref$ObjectRef { *; }
 -repackageclasses kofua
