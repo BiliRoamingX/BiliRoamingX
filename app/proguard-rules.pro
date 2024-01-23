@@ -20,7 +20,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -dontobfuscate
--dontoptimize
+#-dontoptimize
 #-keepattributes *  # https://www.guardsquare.com/manual/configuration/attributes
 -keepattributes RuntimeVisible*Annotations
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
@@ -32,4 +32,8 @@
 }
 -keep class app.revanced.all.** { *; }
 -keep class app.revanced.bilibili.** { *; }
--keep class **Ex { *; }
+-keep class com.google.protobuf.**Ex { *; }
+-keep class kotlin.jvm.internal.ArrayIterator { *; }
+-keep class kotlin.jvm.internal.FunctionReferenceImpl { *; }
+-keep class kotlin.jvm.internal.Ref$ObjectRef { *; }
+-repackageclasses kofua
