@@ -4,7 +4,6 @@ import app.revanced.bilibili.api.BrotliInputStream
 import app.revanced.bilibili.patches.okhttp.hooks.*
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.LogHelper
-import app.revanced.bilibili.utils.readTextX
 import java.io.InputStream
 import java.util.zip.DeflaterInputStream
 import java.util.zip.GZIPInputStream
@@ -56,13 +55,13 @@ object OkHttpPatch {
             "deflate" -> DeflaterInputStream(reqStream)
             "br" -> BrotliInputStream(reqStream)
             else -> reqStream
-        }).bufferedReader().use { it.readTextX() }
+        }).bufferedReader().use { it.readText() }
         val response = (when (respEncoding) {
             "gzip" -> GZIPInputStream(respStream)
             "deflate" -> DeflaterInputStream(respStream)
             "br" -> BrotliInputStream(respStream)
             else -> respStream
-        }).bufferedReader().use { it.readTextX() }
+        }).bufferedReader().use { it.readText() }
         LogHelper.debug { "OkHttpPatch.hook, code: %d, url: %s".format(code, url) }
         LogHelper.debug { "OkHttpPatch.hook, request, encoding: $reqEncoding, content: $request" }
         LogHelper.debug { "OkHttpPatch.hook, response, encoding: $respEncoding, content: $response" }

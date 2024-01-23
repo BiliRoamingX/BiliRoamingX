@@ -107,14 +107,14 @@ inline fun SharedPreferences.edit(
 ) = edit().apply(action).run { if (commit) commit() else apply() }
 
 fun getStreamContent(input: InputStream) = try {
-    input.bufferedReader().use { it.readTextX() }
+    input.bufferedReader().use { it.readText() }
 } catch (e: Throwable) {
     LogHelper.error({ "get stream content failed" }, e)
     null
 }
 
 fun fetchJson(url: String) = try {
-    JSONObject(URL(url).readTextX())
+    JSONObject(URL(url).readText())
 } catch (_: Throwable) {
     null
 }
@@ -340,7 +340,7 @@ private val cookieInfoCache by lazy {
         val cookie = if (currentAccount.isNotEmpty()) {
             currentAccount.toJSONObject().optString("cookie")
         } else if (cookieFile.isFile) {
-            cookieFile.bufferedReader().use { it.readTextX() }
+            cookieFile.bufferedReader().use { it.readText() }
         } else null
         if (cookie != null) {
             Base64.decode(cookie, Base64.NO_WRAP).toString(Charsets.UTF_8).toJSONObject()

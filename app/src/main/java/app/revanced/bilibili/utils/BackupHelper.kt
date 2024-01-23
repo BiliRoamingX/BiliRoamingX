@@ -45,7 +45,7 @@ object BackupHelper {
                 }
                 items.put(prefsItem)
                 zipOut.putNextEntry(ZipEntry("$TYPE_PREFS/$name.xml"))
-                prefsFile.inputStream().use { it.copyToX(zipOut) }
+                prefsFile.inputStream().use { it.copyTo(zipOut) }
             }
         }
         val backupFileIfExist = { file: File ->
@@ -57,7 +57,7 @@ object BackupHelper {
                 }
                 items.put(fileItem)
                 zipOut.putNextEntry(ZipEntry("$TYPE_FILE/${file.name}"))
-                file.inputStream().use { it.copyToX(zipOut) }
+                file.inputStream().use { it.copyTo(zipOut) }
             }
         }
 
@@ -70,17 +70,17 @@ object BackupHelper {
         zipOut.putNextEntry(ZipEntry("backup.json"))
         zipOut.write(metaInfo.toString().toByteArray())
         zipOut.finish()
-        bytesOut.toByteArray().inputStream().copyToX(output)
+        bytesOut.toByteArray().inputStream().copyTo(output)
     }
 
     fun restore(input: InputStream) {
-        val bytesInput = input.readBytesX().inputStream()
+        val bytesInput = input.readBytes().inputStream()
         var zipInput = ZipInputStream(bytesInput)
         var metaInfo = JSONObject()
         while (true) {
             val entry = zipInput.nextEntry ?: break
             if (entry.name == "backup.json") {
-                metaInfo = JSONObject(zipInput.readBytesX().toString(Charsets.UTF_8))
+                metaInfo = JSONObject(zipInput.readBytes().toString(Charsets.UTF_8))
                 break
             }
         }
@@ -108,9 +108,9 @@ object BackupHelper {
                     while (true) {
                         val entry = zipInput.nextEntry ?: break
                         if (entry.name == "$type/$name.xml") {
-                            zipInput.readBytesX().inputStream().use { input ->
+                            zipInput.readBytes().inputStream().use { input ->
                                 prefsPath(name).outputStream().use { output ->
-                                    input.copyToX(output)
+                                    input.copyTo(output)
                                 }
                             }
                             break
@@ -126,9 +126,9 @@ object BackupHelper {
                     while (true) {
                         val entry = zipInput.nextEntry ?: break
                         if (entry.name == "$type/$location") {
-                            zipInput.readBytesX().inputStream().use { input ->
+                            zipInput.readBytes().inputStream().use { input ->
                                 restorePath.fromPathDescriptor().outputStream().use { output ->
-                                    input.copyToX(output)
+                                    input.copyTo(output)
                                 }
                             }
                             break

@@ -34,6 +34,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import kotlin.io.ByteStreamsKt;
+import kotlin.io.ConstantsKt;
+
 @SuppressWarnings("unused")
 public class Utils {
     @SuppressLint("StaticFieldLeak")
@@ -313,7 +316,7 @@ public class Utils {
                     var uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
                     if (uri == null) return;
                     try (var output = resolver.openOutputStream(uri)) {
-                        IOUtils.copyToX(input, output);
+                        ByteStreamsKt.copyTo(input, output, ConstantsKt.DEFAULT_BUFFER_SIZE);
                     }
                     Toasts.showShortWithId("biliroaming_toast_image_save_success", relativePath + File.separator + fullFilename);
                 } catch (Throwable th2) {

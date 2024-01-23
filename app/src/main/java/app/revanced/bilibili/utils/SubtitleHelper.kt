@@ -81,7 +81,7 @@ class Dictionary(
             val charMap = HashMap<Char, Char>(4096)
             val dict = Trie<String>()
             var maxLen = 2
-            mappingFile.bufferedReader().useLinesX { lines ->
+            mappingFile.bufferedReader().useLines { lines ->
                 lines.filterNot { it.isBlank() || it.trimStart().startsWith(SHARP) }
                     .map { it.split(EQUAL, limit = 2) }.filter { it.size == 2 }.forEach { (k, v) ->
                         if (k.length == 1 && v.length == 1) {
@@ -127,7 +127,7 @@ object SubtitleHelper {
             }
             val bytes = ByteArray(buffer.int).also { buffer.get(it) }
             dictFile.outputStream().use { o ->
-                GZIPInputStream(bytes.inputStream()).use { it.copyToX(o) }
+                GZIPInputStream(bytes.inputStream()).use { it.copyTo(o) }
             }
         }.onSuccess {
             return true
@@ -148,7 +148,7 @@ object SubtitleHelper {
         }
         val url = "https://api.github.com/repos/BBSub/ZhConvertDict/releases/latest"
         val json = runCatching {
-            JSONObject(URL(url).readTextX())
+            JSONObject(URL(url).readText())
         }.onFailure { LogHelper.error({ "failed to get dict api response" }, it) }
             .getOrNull() ?: return if (!dictExist) downloadDictFromCdn() else false
         val tagName = json.optString("tag_name")
@@ -163,7 +163,7 @@ object SubtitleHelper {
             runCatching {
                 tmpDictFile.outputStream().use { o ->
                     GZIPInputStream(URL(dictUrl).openStream())
-                        .use { it.copyToX(o) }
+                        .use { it.copyTo(o) }
                 }
             }.onSuccess {
                 if (tmpDictFile.sha256Hex == sha256sum

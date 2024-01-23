@@ -53,7 +53,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
                 destFile.delete()
             } else try {
                 Utils.getContext().contentResolver.openInputStream(uri)?.use { input ->
-                    destFile.outputStream().use { output -> input.copyToX(output) }
+                    destFile.outputStream().use { output -> input.copyTo(output) }
                 }
             } catch (e: Exception) {
                 LogHelper.error({ "failed to apply splash image" }, e)
@@ -63,7 +63,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
         if (requestCode == 2336) {
             try {
                 Utils.getContext().contentResolver.openInputStream(uri)?.use {
-                    skinInput?.setText(it.bufferedReader().readTextX().trim())
+                    skinInput?.setText(it.bufferedReader().readText().trim())
                 }
             } catch (e: Exception) {
                 LogHelper.error({ "failed to import skin" }, e)

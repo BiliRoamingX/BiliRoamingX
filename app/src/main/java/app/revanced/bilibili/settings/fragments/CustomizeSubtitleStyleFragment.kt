@@ -140,7 +140,7 @@ class CustomizeSubtitleStyleFragment : BaseWidgetSettingFragment() {
         if (requestCode != 2338 || resultCode != Activity.RESULT_OK || uri == null) return
         context?.contentResolver?.openInputStream(uri)?.use { input ->
             val fontFile = SubtitleParamsCache.FONT_FILE.apply { delete() }
-            fontFile.outputStream().use { output -> input.copyToX(output) }
+            fontFile.outputStream().use { output -> input.copyTo(output) }
             SubtitleParamsCache.updateFont()
             refreshFontStatus()
         }
