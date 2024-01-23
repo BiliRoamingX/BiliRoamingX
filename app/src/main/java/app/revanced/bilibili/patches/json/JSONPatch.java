@@ -38,7 +38,6 @@ import app.revanced.bilibili.utils.Versions;
 import tv.danmaku.bili.ui.main.event.model.EventEntranceModel;
 import tv.danmaku.bili.ui.main2.api.AccountMine;
 import tv.danmaku.bili.ui.main2.resource.MainResourceManager;
-import tv.danmaku.bili.ui.main2.resource.MainResourceManagerEx;
 import tv.danmaku.bili.ui.offline.api.EpPlayable;
 import tv.danmaku.bili.ui.offline.api.OgvApiResponse;
 import tv.danmaku.bili.ui.offline.api.OgvApiResponseV2;
@@ -284,7 +283,7 @@ public class JSONPatch {
             }
         }
         if (hasChannel) return;
-        var newTab = MainResourceManagerEx.newTab();
+        var newTab = new MainResourceManager.Tab();
         newTab.tabId = "123";
         newTab.reportId = "频道Bottom";
         newTab.name = "频道";
@@ -337,7 +336,7 @@ public class JSONPatch {
         }
         if (Settings.ADD_BANGUMI.getBoolean()) {
             if (!hasBangumiCN) {
-                var tab = MainResourceManagerEx.newTab();
+                var tab = new MainResourceManager.Tab();
                 tab.tabId = "50";
                 tab.name = "追番（大陸）";
                 tab.uri = "bilibili://pgc/home";
@@ -346,7 +345,7 @@ public class JSONPatch {
                 tabs.add(tab);
             }
             if (!hasBangumiTW) {
-                var tab = MainResourceManagerEx.newTab();
+                var tab = new MainResourceManager.Tab();
                 tab.tabId = "60";
                 tab.name = "追番（港澳台）";
                 tab.uri = "bilibili://following/home_activity_tab/6544";
@@ -357,7 +356,7 @@ public class JSONPatch {
         }
         if (Settings.ADD_MOVIE.getBoolean()) {
             if (!hasMovieCN) {
-                var tab = MainResourceManagerEx.newTab();
+                var tab = new MainResourceManager.Tab();
                 tab.tabId = "70";
                 tab.name = "影視（大陸）";
                 tab.uri = "bilibili://pgc/home?home_flow_type=2";
@@ -366,7 +365,7 @@ public class JSONPatch {
                 tabs.add(tab);
             }
             if (!hasMovieTW) {
-                var tab = MainResourceManagerEx.newTab();
+                var tab = new MainResourceManager.Tab();
                 tab.tabId = "80";
                 tab.name = "戏剧（港澳台）";
                 tab.uri = "bilibili://following/home_activity_tab/168644";
@@ -377,7 +376,7 @@ public class JSONPatch {
         }
         if (Settings.ADD_KOREA.getBoolean()) {
             if (!hasKoreaHK) {
-                var tab = MainResourceManagerEx.newTab();
+                var tab = new MainResourceManager.Tab();
                 tab.tabId = "803";
                 tab.name = "韩综（港澳）";
                 tab.uri = "bilibili://following/home_activity_tab/163541";
@@ -386,7 +385,7 @@ public class JSONPatch {
                 tabs.add(tab);
             }
             if (!hasKoreaTW) {
-                var tab = MainResourceManagerEx.newTab();
+                var tab = new MainResourceManager.Tab();
                 tab.tabId = "804";
                 tab.name = "韩综（台湾）";
                 tab.uri = "bilibili://following/home_activity_tab/95636";

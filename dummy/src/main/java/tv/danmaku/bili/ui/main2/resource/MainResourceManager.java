@@ -25,7 +25,7 @@ public class MainResourceManager {
         public int type;
         public String uri;
 
-        Tab() {
+        public Tab() {
         }
     }
 }
