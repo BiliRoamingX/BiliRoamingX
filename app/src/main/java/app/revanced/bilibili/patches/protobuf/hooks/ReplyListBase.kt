@@ -58,11 +58,12 @@ abstract class ReplyListBase<out Req : GeneratedMessageLite<*, *>, out Resp : Ge
             return true
         if (upLevel != 0 && level <= upLevel)
             return true
-        val urls = content.urlsMap.values
         val goodsUrlPrefix = "https://gaoneng.bilibili.com/tetris"
-        if (goods && (message.contains(goodsUrlPrefix) || urls.any {
-                it.extra.goodsItemId != 0L || it.appUrlSchema.startsWith(goodsUrlPrefix)
-            })
+        if (goods && (message.contains(goodsUrlPrefix) || (content.urlsMap.isNotEmpty() && content.urlsMap.values.any { url ->
+                (url.hasExtra() && url.extra.let {
+                    it.goodsCmControl == 1L || it.goodsItemId != 0L || it.goodsPrefetchedCache.isNotEmpty()
+                }) || url.appUrlSchema.startsWith(goodsUrlPrefix)
+            }))
         ) return true
         if (ups.isNotEmpty() && upName.isNotEmpty())
             if (!upRegexMode && ups.any { upName.contains(it) })
