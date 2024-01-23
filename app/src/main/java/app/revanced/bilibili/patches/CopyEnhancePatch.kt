@@ -39,7 +39,7 @@ object CopyEnhancePatch {
                 && topActivity is UnitedBizDetailsActivity)
                 || (Versions.ge7_47_0()
                 && topActivity is com.bilibili.ship.theseus.detail.UnitedBizDetailsActivity)
-                || (!Utils.isHd() && topActivity is UnitedPlaylistActivity)
+                || (Utils.isPink() && topActivity is UnitedPlaylistActivity)
 
         fun SpannableStringBuilder.appendTitle(title: CharSequence) =
             relativeSize(proportion = 1.05f) { bold { appendLine(title) } }
