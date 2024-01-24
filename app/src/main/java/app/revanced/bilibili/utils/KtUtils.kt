@@ -168,7 +168,7 @@ val versionCode by lazy {
 
 inline fun <T, R> T.runCatchingOrNull(block: T.() -> R?) = try {
     block()
-} catch (e: Throwable) {
+} catch (_: Throwable) {
     null
 }
 

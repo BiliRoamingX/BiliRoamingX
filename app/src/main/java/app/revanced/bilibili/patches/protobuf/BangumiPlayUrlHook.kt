@@ -838,7 +838,9 @@ object BangumiPlayUrlHook {
                 }
                 val timeLength = jsonContent.optInt("timelength")
                 epWholeDuration = timeLength
-                watchTimeLength = timeLength.toLong()
+                runCatchingOrNull {
+                    watchTimeLength = timeLength.toLong()
+                }
                 if (Settings.ALLOW_MINI_PLAY.boolean)
                     inlineType = InlineType.TYPE_WHOLE
                 val clipInfo = clipInfoCache[seasonId.toString()]
