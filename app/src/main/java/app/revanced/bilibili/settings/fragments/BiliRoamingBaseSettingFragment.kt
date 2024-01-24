@@ -131,9 +131,9 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
     } catch (_: Throwable) {
     }
 
-    protected open fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+    protected open fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
         if (!resumed) return
-        for (item in Settings.values()) {
+        for (item in Settings.entries) {
             if (item.key == key && item.needReboot) {
                 val message = Utils.getString("biliroaming_need_reboot_dialog_message")
                 val confirm = Utils.getString("biliroaming_need_reboot_dialog_confirm")

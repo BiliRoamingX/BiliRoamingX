@@ -12,7 +12,7 @@ class CustomizeDrawerFragment : BaseDynamicItemsFragment(
     Settings.SHOWING_DRAWER_ITEMS,
     JSONPatch.drawerItems
 ) {
-    override fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+    override fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
         super.onPreferenceChanged(sharedPreferences, key)
         if (key == Settings.SHOWING_DRAWER_ITEMS.key
             && Settings.SHOWING_DRAWER_ITEMS.stringSet.let {
