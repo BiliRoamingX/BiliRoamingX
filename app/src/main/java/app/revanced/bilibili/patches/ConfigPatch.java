@@ -1,9 +1,11 @@
 package app.revanced.bilibili.patches;
 
+import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
 import app.revanced.bilibili.settings.Settings;
 
+@Keep
 public class ConfigPatch {
     @Nullable
     public static Boolean getAb(String key, @Nullable Boolean defValue, @Nullable Boolean origin) {

@@ -1,11 +1,14 @@
 package app.revanced.bilibili.patches;
 
+import androidx.annotation.Keep;
+
 import com.bilibili.bililive.room.ui.roomv3.player.container.LiveRoomPlayerContainerView;
 
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.LogHelper;
 import app.revanced.bilibili.utils.Reflex;
 
+@Keep
 public class LiveRoomPatch {
     public static boolean forbidSwitchLiveRoom() {
         return Settings.FORBID_SWITCH_LIVE_ROOM.getBoolean();

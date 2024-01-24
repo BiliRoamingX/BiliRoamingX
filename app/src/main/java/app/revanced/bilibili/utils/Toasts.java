@@ -3,6 +3,8 @@ package app.revanced.bilibili.utils;
 import android.content.Context;
 import android.widget.Toast;
 
+import androidx.annotation.Keep;
+
 public class Toasts {
 
     private Toasts() {
@@ -42,11 +44,13 @@ public class Toasts {
         });
     }
 
+    @Keep
     // codes will filled by patcher
     static void cancel() {
         // nop
     }
 
+    @Keep
     // codes will filled by patcher
     static void show(Context context, String message, int duration) {
         // nop

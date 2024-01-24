@@ -4,9 +4,11 @@ import android.content.Context;
 import android.view.View;
 
 import androidx.annotation.GravityInt;
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+@Keep
 public class DrawerLayoutEx extends DrawerLayout {
     public DrawerLayoutEx(Context context) {
         super(context);
@@ -26,6 +28,7 @@ public class DrawerLayoutEx extends DrawerLayout {
     }
 
     // superclass will replaced with obfuscated class by patcher
+    @Keep
     public static class LayoutParamsEx extends DrawerLayout.LayoutParams {
 
         public LayoutParamsEx(int width, int height) {

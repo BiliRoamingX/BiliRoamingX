@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.util.Pair;
 import android.view.View;
 
+import androidx.annotation.Keep;
+
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +24,7 @@ public class AutoLikePatch {
     private static final int like2Id = Utils.getResId("frame1", "id");
     private static final int uniteLikeId = Utils.getResId("frame_like", "id");
 
+    @Keep
     public static void autoLike(Object viewHolder) {
         if (!Settings.AUTO_LIKE.getBoolean()) return;
         if (detail == null) return;

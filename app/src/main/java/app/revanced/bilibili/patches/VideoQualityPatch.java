@@ -1,5 +1,7 @@
 package app.revanced.bilibili.patches;
 
+import androidx.annotation.Keep;
+
 import com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReq;
 import com.bapis.bilibili.playershared.VideoVod;
 
@@ -8,11 +10,13 @@ import app.revanced.bilibili.utils.Constants;
 
 public class VideoQualityPatch {
 
+    @Keep
     public static int halfScreenQuality() {
         String qualityStr = Settings.HALF_SCREEN_QUALITY.getString();
         return Integer.parseInt(qualityStr);
     }
 
+    @Keep
     public static int fullScreenQuality() {
         String qualityStr = Settings.FULL_SCREEN_QUALITY.getString();
         return Integer.parseInt(qualityStr);
@@ -23,6 +27,7 @@ public class VideoQualityPatch {
      * <p>
      * codes will filled by patcher
      */
+    @Keep
     public static int defaultQn() {
         return 0;
     }
@@ -87,6 +92,7 @@ public class VideoQualityPatch {
     /**
      * another better way to hook default half screen quality.
      */
+    @Keep
     public static int getMatchedHalfScreenQuality() {
         int halfScreenQuality = halfScreenQuality();
         if (halfScreenQuality != 1) // not follow fullscreen quality

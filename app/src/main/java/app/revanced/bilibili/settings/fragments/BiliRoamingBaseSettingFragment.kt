@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.Keep
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import androidx.preference.TwoStatePreference
@@ -21,6 +22,7 @@ import java.lang.reflect.Method
 
 enum class PrefsDisableReason { APP_VERSION, OS_VERSION, NEW_PLAYER }
 
+@Keep
 abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) :
     BasePreferenceFragment(), (Preference) -> Boolean {
 

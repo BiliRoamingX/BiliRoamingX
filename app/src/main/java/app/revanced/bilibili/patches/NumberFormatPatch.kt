@@ -1,6 +1,7 @@
 package app.revanced.bilibili.patches
 
 import android.widget.TextView
+import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Utils
@@ -8,6 +9,7 @@ import app.revanced.bilibili.utils.findView
 import com.bilibili.app.authorspace.api.BiliMemberCard
 import tv.danmaku.bili.ui.main2.api.AccountMine
 
+@Keep
 object NumberFormatPatch {
     @JvmStatic
     fun onMineBindAccountState(fragment: Fragment, accountMine: AccountMine?) {

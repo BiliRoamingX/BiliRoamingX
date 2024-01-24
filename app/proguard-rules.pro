@@ -18,11 +18,12 @@
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
--renamesourcefileattribute ""
 #-dontobfuscate
 #-dontoptimize
 #-keepattributes *  # https://www.guardsquare.com/manual/configuration/attributes
 -keepattributes RuntimeVisible*Annotations,SourceFile
+-renamesourcefileattribute ""
+
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
     public static void check*(...);
     public static void throw*(...);
@@ -30,7 +31,28 @@
 -assumenosideeffects class java.util.Objects {
     public static ** requireNonNull(...);
 }
+
 -keep class app.revanced.all.** { *; }
--keep class app.revanced.bilibili.** { *; }
--keep class com.google.protobuf.**Ex { *; }
+
+-keep !abstract class app.revanced.bilibili.settings.fragments.* extends androidx.fragment.app.Fragment {
+    public <init>(...);
+}
+
+-keep class app.revanced.bilibili.widget.* extends androidx.preference.Preference {
+    public <init>(...);
+}
+
+-keep interface app.revanced.bilibili.widget.OnClickOriginListener { *; }
+-keep interface app.revanced.bilibili.widget.OnLongClickOriginListener { *; }
+
+#-keep class app.revanced.bilibili.** { *; }
+-keep class com.google.protobuf.*Ex { *; }
+
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
+
 -repackageclasses kofua
+
+-overloadaggressively
+-allowaccessmodification

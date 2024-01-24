@@ -1,8 +1,11 @@
 package app.revanced.bilibili.patches;
 
+import androidx.annotation.Keep;
+
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Constants;
 
+@Keep
 public class TextFoldPatch {
     public static long getCommentMaxLines(long original) {
         var maxLines = Settings.TEXT_FOLD_COMMENT_MAX_LINES.getInt();

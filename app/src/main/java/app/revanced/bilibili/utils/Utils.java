@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.view.Surface;
 import android.view.WindowManager;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -39,6 +40,7 @@ import kotlin.io.ConstantsKt;
 
 @SuppressWarnings("unused")
 public class Utils {
+    @Keep
     @SuppressLint("StaticFieldLeak")
     public static Context context;
     public static Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -50,6 +52,7 @@ public class Utils {
     private static Boolean isPlay = null;
     private static Boolean isHd = null;
 
+    @Keep
     public static Context getContext() {
         if (context == null) {
             LogHelper.error(() -> "Context is null");
@@ -113,6 +116,7 @@ public class Utils {
         System.exit(0);
     }
 
+    @Keep
     public static String getMobiApp() {
         if (TextUtils.isEmpty(mobiApp)) {
             String mobiApp = null;
@@ -215,54 +219,64 @@ public class Utils {
         return orientation == Surface.ROTATION_90 || orientation == Surface.ROTATION_270;
     }
 
+    @Keep
     // codes will filled by patcher
     public static String signQuery(Map<String, String> params) {
         return "";
     }
 
+    @Keep
     // codes will filled by patcher
     public static String getAppKey() {
         return "";
     }
 
+    @Keep
     // codes will filled by patcher
     public static String getAccessKey() {
         return "";
     }
 
+    @Keep
     // codes will filled by patcher
     @NonNull
     public static SharedPreferences blkvPrefsByName(String name, boolean multiProcess) {
         throw new UnsupportedOperationException();
     }
 
+    @Keep
     // codes will filled by patcher
     @NonNull
     public static SharedPreferences blkvPrefsByFile(File file, boolean multiProcess) {
         throw new UnsupportedOperationException();
     }
 
+    @Keep
     // codes will filled by patcher
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isEffectiveVip() {
         return false;
     }
 
+    @Keep
     // codes will filled by patcher
     public static boolean isLogin() {
         return false;
     }
 
+    @Keep
     // codes will filled by patcher
     public static boolean isNightFollowSystem() {
         return false;
     }
 
+    @Keep
     // codes will filled by patcher
     public static boolean getAb(String key, boolean defValue) {
         return false;
     }
 
+    @Keep
     // codes will filled by patcher
     @Nullable
     public static String getConfig(String key, @Nullable String defValue) {
@@ -346,6 +360,7 @@ public class Utils {
         return getAb("ff_unite_player", false);
     }
 
+    @Keep
     // used by patcher
     public static String[] removeHeader(String[] namesAndValues, String name) {
         ArrayList<String> list = new ArrayList<>();

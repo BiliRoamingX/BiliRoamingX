@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -36,6 +37,7 @@ import tv.danmaku.bili.MainActivityV2;
 public class ApplicationDelegate {
     private static final ArrayDeque<WeakReference<Activity>> activityRefs = new ArrayDeque<>();
 
+    @Keep
     public static void onCreate(Application app) {
         app.registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
         if (Utils.isInMainProcess()) {
@@ -59,6 +61,7 @@ public class ApplicationDelegate {
         return (int) (160 * newDensity);
     }
 
+    @Keep
     public static void onActivityPreConfigurationChanged(Activity activity, Configuration newConfig) {
         ActivityLifecycleCallback.printLifecycle(activity, "onActivityPreConfigurationChanged", false);
         var newDpi = getCustomDpi();
@@ -68,6 +71,7 @@ public class ApplicationDelegate {
         }
     }
 
+    @Keep
     public static Context onActivityPreAttachBaseContext(Activity activity, Context base) {
         ActivityLifecycleCallback.printLifecycle(activity, "onActivityPreAttachBaseContext", false);
         var newDpi = getCustomDpi();

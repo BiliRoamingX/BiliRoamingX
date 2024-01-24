@@ -3,6 +3,7 @@ package app.revanced.bilibili.patches
 import android.net.Uri
 import android.view.View
 import android.widget.ImageView
+import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Utils
 import app.revanced.bilibili.utils.findView
@@ -12,11 +13,13 @@ object SplashPatch {
     const val SPLASH_IMAGE = "biliroaming_splash"
     const val LOGO_IMAGE = "biliroaming_logo"
 
+    @Keep
     @JvmStatic
     fun getMode(origin: String): String {
         return if (Settings.FULL_SPLASH.boolean) "full" else origin
     }
 
+    @Keep
     @JvmStatic
     fun onBrandSplashFragmentViewCreated(view: View) {
         if (Settings.CUSTOM_SPLASH.boolean) {

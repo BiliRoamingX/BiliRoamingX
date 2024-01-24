@@ -4,12 +4,15 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.text.StaticLayout;
 
+import androidx.annotation.Keep;
+
 import com.bilibili.cron.Canvas;
 
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.SubtitleParamsCache;
 import app.revanced.bilibili.utils.Utils;
 
+@Keep
 @SuppressWarnings("unused")
 public class SubtitlePatch {
     public static void setPaint(Canvas canvas) {

@@ -159,6 +159,7 @@ public class CheckBoxGroupPreference extends PreferenceCategory implements Check
         }
     }
 
+    @Override
     public void notifyChanged() {
         onAttachedToHierarchy(getPreferenceManager());
     }

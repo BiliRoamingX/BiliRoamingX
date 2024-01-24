@@ -3,6 +3,7 @@ package app.revanced.bilibili.patches.webview
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Utils
 
@@ -16,6 +17,7 @@ object WebViewPatch {
         }
     }
 
+    @Keep
     @JvmStatic
     fun setWebViewClient(webView: WebView, client: WebViewClient) {
         webView.addJavascriptInterface(jsHooker, "hooker")

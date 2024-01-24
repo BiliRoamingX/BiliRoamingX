@@ -9,6 +9,7 @@ import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.annotation.Keep
 import app.revanced.bilibili.patches.main.ApplicationDelegate
 import app.revanced.bilibili.patches.protobuf.ViewUniteReplyHook
 import app.revanced.bilibili.settings.Settings
@@ -30,6 +31,7 @@ object CopyEnhancePatch {
         "dy_opus_paragraph_text"
     )
 
+    @Keep
     @JvmStatic
     fun onCopyDesc(isBv: Boolean, desc: String): Boolean {
         if (!Settings.COMMENT_COPY.boolean) return false
@@ -126,6 +128,7 @@ object CopyEnhancePatch {
         return true
     }
 
+    @Keep
     @JvmStatic
     fun onDynamicLongClick(listener: OnLongClickOriginListener, view: View): Boolean {
         if (!Settings.COMMENT_COPY.boolean) return false
@@ -145,6 +148,7 @@ object CopyEnhancePatch {
         return false
     }
 
+    @Keep
     @JvmStatic
     fun onCommentLongClick(
         listener: OnLongClickOriginListener,
@@ -162,6 +166,7 @@ object CopyEnhancePatch {
         return true
     }
 
+    @Keep
     @JvmStatic
     fun onConversationCopy(
         activity: Activity,

@@ -6,6 +6,7 @@ import android.net.Uri
 import android.view.Gravity
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
 import app.revanced.bilibili.api.BiliRoamingApi.getAreaSearchBangumi
 import app.revanced.bilibili.api.BiliRoamingApi.getSeason
@@ -428,6 +429,7 @@ object BangumiSeasonHook {
         return response
     }
 
+    @Keep
     @JvmStatic
     fun onSearchResultFragmentVisible(fragment: OgvSearchResultFragment) {
         val from = fragment.arguments?.getString("from") ?: return
@@ -439,6 +441,7 @@ object BangumiSeasonHook {
         }
     }
 
+    @Keep
     @JvmStatic
     fun onSearchResultFragmentVisible(fragment: com.bilibili.search2.ogv.OgvSearchResultFragment) {
         val from = fragment.arguments?.getString("from") ?: return
@@ -450,6 +453,7 @@ object BangumiSeasonHook {
         }
     }
 
+    @Keep
     @JvmStatic
     fun onSearchResultFragmentVisible(fragment: BangumiSearchResultFragment) {
         val from = fragment.arguments?.getString("from") ?: return

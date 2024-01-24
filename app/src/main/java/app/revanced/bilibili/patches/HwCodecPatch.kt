@@ -1,9 +1,11 @@
 package app.revanced.bilibili.patches
 
 import android.os.Bundle
+import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.LogHelper
 
+@Keep
 object HwCodecPatch {
     @JvmStatic
     fun printOptionBundle(bundle: Bundle) {

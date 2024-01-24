@@ -1,5 +1,6 @@
 package app.revanced.bilibili.patches.protobuf
 
+import androidx.annotation.Keep
 import app.revanced.bilibili.api.MossResponseHandlerProxy
 import app.revanced.bilibili.meta.HookFlags
 import app.revanced.bilibili.patches.protobuf.hooks.*
@@ -54,6 +55,7 @@ object MossPatch {
      * or custom response,
      * or throw [MossException].
      */
+    @Keep
     @JvmStatic
     fun hookBlockingBefore(req: GeneratedMessageLite<*, *>): Any? {
         return hooks.firstOrNull { it.shouldHook(req) }?.hookBefore(req)
@@ -64,6 +66,7 @@ object MossPatch {
      *
      * **should never throw a custom exception**.
      */
+    @Keep
     @JvmStatic
     fun hookBlockingAfter(
         req: GeneratedMessageLite<*, *>,
@@ -80,6 +83,7 @@ object MossPatch {
      * or null to not intercept method execution,
      * or [handler], or a proxy handler like [MossResponseHandlerProxy].
      */
+    @Keep
     @JvmStatic
     fun hookAsyncBefore(
         req: GeneratedMessageLite<*, *>,

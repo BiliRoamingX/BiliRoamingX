@@ -3,6 +3,8 @@ package app.revanced.bilibili.patches;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import androidx.annotation.Keep;
+
 import java.util.regex.Pattern;
 
 import app.revanced.bilibili.settings.Settings;
@@ -13,6 +15,7 @@ public class BLRoutePatch {
     private static final String STORY_TYPE_QUERY = "&-Atype=story";
     private static final Pattern playerPreloadRegex = Pattern.compile("&player_preload=[^&]*");
 
+    @Keep
     public static Uri intercept(Uri uri) {
         if (uri == null) return null;
         LogHelper.debug(() -> "Route uri: " + uri);

@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
+import androidx.annotation.Keep
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import app.revanced.bilibili.meta.CookieInfo
@@ -200,6 +201,7 @@ fun Preference.onChange(onChange: (preference: Preference, newValue: Any?) -> Bo
 
 private val onPreferenceTreeClickListenerField by lazy { retrieveOnPreferenceTreeClickListenerField() }
 
+@Keep
 private fun retrieveOnPreferenceTreeClickListenerField(): Field? {
     return PreferenceManager::class.java.declaredFields.find { f ->
         f.type.isInterface && f.type.declaredMethods.let {
@@ -210,6 +212,7 @@ private fun retrieveOnPreferenceTreeClickListenerField(): Field? {
     }.also { it?.isAccessible = true }
 }
 
+@Keep
 fun PreferenceManager.onPreferenceTreeClick(action: ((Preference) -> Boolean)?) {
     val field = onPreferenceTreeClickListenerField ?: return
     if (action == null) {

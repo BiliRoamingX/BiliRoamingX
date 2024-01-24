@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Reflex
 import app.revanced.bilibili.utils.Utils
@@ -66,6 +67,7 @@ object PlaybackSpeedPatch {
             cacheReverseSpeedArray
         }
 
+    @Keep
     @JvmStatic
     fun defaultSpeed(player: IMediaPlayer, speed: Float): Float {
         // only apply to video, not apply to podcast
@@ -74,6 +76,7 @@ object PlaybackSpeedPatch {
         return if (customSpeed != 0f) customSpeed else speed
     }
 
+    @Keep
     @JvmStatic
     fun longPressSpeed(speed: Float): Float {
         if (speed == 2.0f || speed == 3.0f) {
@@ -83,11 +86,13 @@ object PlaybackSpeedPatch {
         return speed
     }
 
+    @Keep
     @JvmStatic
     fun getOverrideSpeedArray(original: FloatArray): FloatArray {
         return newSpeedArray.let { if (it.isNotEmpty()) it else original }
     }
 
+    @Keep
     @JvmStatic
     fun getOverrideReverseSpeedArray(original: FloatArray): FloatArray {
         return newSpeedReversedArray.let { if (it.isNotEmpty()) it else original }
@@ -101,16 +106,19 @@ object PlaybackSpeedPatch {
         }
     }
 
+    @Keep
     // codes will filled by patcher
     @JvmStatic
     private fun refreshMenuFuncSegmentSpeedArray(array: FloatArray) {
     }
 
+    @Keep
     // codes will filled by patcher
     @JvmStatic
     private fun refreshNewShareServiceSpeedArray(array: FloatArray) {
     }
 
+    @Keep
     @JvmStatic
     fun onNewPlaybackSpeedSetting(setting: Any) {
         val newSpeedReversedArray = newSpeedReversedArray.takeIf { it.isNotEmpty() }
@@ -177,6 +185,7 @@ object PlaybackSpeedPatch {
             ?.set(null, newSpeedReversedArray)
     }
 
+    @Keep
     @JvmStatic
     fun onNewPodcastSpeedSeekBar(seekBar: PodcastSpeedSeekBar) {
         val newSpeedReversedArray = newSpeedReversedArray.takeIf { it.isNotEmpty() }

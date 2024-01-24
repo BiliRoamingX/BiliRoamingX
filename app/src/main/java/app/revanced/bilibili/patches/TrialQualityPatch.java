@@ -3,13 +3,14 @@ package app.revanced.bilibili.patches;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Keep;
+
 import com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReply;
 import com.bapis.bilibili.app.playurl.v1.PlayViewReply;
 import com.bapis.bilibili.app.playurl.v1.Stream;
 
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Utils;
-import app.revanced.bilibili.utils.Versions;
 
 public class TrialQualityPatch {
 
@@ -41,6 +42,7 @@ public class TrialQualityPatch {
                 });
     }
 
+    @Keep
     public static void onBindOnline(boolean selected, TextView strokeBadge, TextView solidBadge) {
         if (Settings.TRIAL_VIP_QUALITY.getBoolean() && !Utils.isEffectiveVip()
                 && Utils.getString("try_listening_tips") // 限免中

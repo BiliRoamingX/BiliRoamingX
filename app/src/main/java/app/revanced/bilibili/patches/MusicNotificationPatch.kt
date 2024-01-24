@@ -13,6 +13,7 @@ import android.media.session.PlaybackState
 import android.os.Build
 import android.support.v4.media.session.PlaybackStateCompat
 import android.support.v4.media.session.PlaybackStateCompat.CustomAction
+import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import org.lsposed.hiddenapibypass.HiddenApiBypass
@@ -84,6 +85,7 @@ object MusicNotificationPatch {
     private val customActionForward =
         CustomAction(ACTION_FAST_FORWARD, ACTION_FAST_FORWARD, fastForwardIconId, null)
 
+    @Keep
     @JvmStatic
     inline fun enabled() = Settings.MUSIC_NOTIFICATION.boolean
 
@@ -95,6 +97,7 @@ object MusicNotificationPatch {
         return enabled() && targetSdkVersion >= tiramisu && systemSdkVersion >= tiramisu
     }
 
+    @Keep
     @JvmStatic
     fun onBuildPlaybackState(playbackState: PlaybackStateCompat): PlaybackStateCompat {
         if (!needAdaptForTiramisu()) return playbackState
@@ -114,6 +117,7 @@ object MusicNotificationPatch {
         return playbackState
     }
 
+    @Keep
     @JvmStatic
     fun onCreateNotification(self: Any, old: Notification?): Notification? {
         if (old == null || !enabled()) return old

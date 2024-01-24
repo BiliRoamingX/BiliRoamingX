@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.util.SparseArray
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.settings.dialog.ColorChooseDialog
 import app.revanced.bilibili.utils.blkvPrefs
@@ -60,30 +61,35 @@ object CustomThemePatch {
     }
 
     // codes will filled by patcher
+    @Keep
     @JvmStatic
     fun getThemeNames(): MutableMap<String, Int> {
         return mutableMapOf()
     }
 
     // codes will filled by patcher
+    @Keep
     @JvmStatic
     fun getColorArray(): SparseArray<IntArray> {
         return SparseArray()
     }
 
     // codes will filled by patcher
+    @Keep
     @JvmStatic
     fun getAllThemes(): MutableMap<Long, Any> {
         return mutableMapOf()
     }
 
     // codes will filled by patcher
+    @Keep
     @JvmStatic
     fun getColorIds(): SparseArray<Int> {
         return SparseArray()
     }
 
     // codes will filled by patcher
+    @Keep
     @JvmStatic
     fun newTheme(
         garb: Garb,
@@ -98,6 +104,7 @@ object CustomThemePatch {
         isPure: Boolean
     ) = Any()
 
+    @Keep
     @JvmStatic
     fun onSetSkinList(skinList: BiliSkinList) {
         val biliSkins = skinList.mList
@@ -111,6 +118,7 @@ object CustomThemePatch {
         }
     }
 
+    @Keep
     @JvmStatic
     fun onThemeClick(listener: OnClickOriginListener, view: View): Boolean {
         if (view.resources.getResourceEntryName(view.id) != "list_item")
@@ -131,6 +139,7 @@ object CustomThemePatch {
         return false
     }
 
+    @Keep
     @JvmStatic
     fun onThemeReset(): Boolean {
         return Thread.currentThread().stackTrace.any { s ->

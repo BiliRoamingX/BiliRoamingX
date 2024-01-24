@@ -3,6 +3,7 @@ package app.revanced.bilibili.patches;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Keep;
 import androidx.fragment.app.Fragment;
 
 import app.revanced.bilibili.settings.Settings;
@@ -10,6 +11,7 @@ import app.revanced.bilibili.utils.KtUtils;
 import tv.danmaku.bili.MainActivityV2;
 
 public class ChannelTabUIPatch {
+    @Keep
     public static void onHomeCategoryFragmentViewCreated(Fragment fragment) {
         if (!Settings.ADD_CHANNEL.getBoolean()) return;
         var view = (ViewGroup) fragment.getView();

@@ -1,5 +1,6 @@
 package app.revanced.bilibili.patches.okhttp
 
+import androidx.annotation.Keep
 import app.revanced.bilibili.api.BrotliInputStream
 import app.revanced.bilibili.patches.okhttp.hooks.*
 import app.revanced.bilibili.settings.Settings
@@ -27,6 +28,7 @@ object OkHttpPatch {
         Upgrade
     )
 
+    @Keep
     @JvmStatic
     fun shouldHook(url: String, code: Int): Boolean {
         LogHelper.debug { "OkHttpPatch.shouldHook, code: %d, url: %s".format(code, url) }
@@ -39,6 +41,7 @@ object OkHttpPatch {
             ?.hook(url, code, request, response) ?: response
     }
 
+    @Keep
     @JvmStatic
     fun hook(
         url: String,

@@ -2,6 +2,8 @@ package app.revanced.bilibili.patches.json;
 
 import android.text.TextUtils;
 
+import androidx.annotation.Keep;
+
 import com.bapis.bilibili.app.card.v1.Card;
 import com.bapis.bilibili.app.card.v1.SmallCoverV5;
 import com.bapis.bilibili.app.show.popular.v1.PopularReply;
@@ -753,6 +755,7 @@ public class PegasusPatch {
         }
     }
 
+    @Keep
     public static void pegasusHook(GeneralResponse<PegasusFeedResponse> response) {
         var data = response.data;
         if (data == null) return;
@@ -1227,6 +1230,7 @@ public class PegasusPatch {
         return false;
     }
 
+    @Keep
     public static boolean onFeedClick(DislikeReason reason) {
         if (reason == null || !ArrayUtils.contains(blockReasonIds, reason.id))
             return false;

@@ -2,6 +2,8 @@ package app.revanced.bilibili.patches.json;
 
 import android.text.TextUtils;
 
+import androidx.annotation.Keep;
+
 import com.bilibili.ad.adview.videodetail.danmakuv2.model.Dm;
 import com.bilibili.ad.adview.videodetail.danmakuv2.model.DmAdvert;
 import com.bilibili.app.authorspace.api.BiliSpace;
@@ -47,11 +49,11 @@ import tv.danmaku.bili.ui.splash.brand.model.BrandSplashData;
 import tv.danmaku.bili.ui.splash.event.EventSplashData;
 import tv.danmaku.bili.ui.splash.event.EventSplashDataList;
 
-@SuppressWarnings("unused")
 public class JSONPatch {
     public static List<BottomItem> drawerItems = new ArrayList<>();
     public static List<BottomItem> bottomItems = new ArrayList<>();
 
+    @Keep
     public static Object parseObjectHook(Object obj) {
         Object data = obj instanceof GeneralResponse ? ((GeneralResponse<?>) obj).data : obj;
         if (data instanceof SplashData) {
@@ -151,6 +153,7 @@ public class JSONPatch {
         return obj;
     }
 
+    @Keep
     public static void parseArrayHook(Class<?> type, ArrayList<?> list) {
         if ((!Versions.ge7_64_0() && (type == SearchRank.class || type == SearchReferral.Guess.class))
                 || (Versions.ge7_39_0() && (type == com.bilibili.search2.api.SearchRank.class || type == com.bilibili.search2.api.SearchReferral.Guess.class))) {

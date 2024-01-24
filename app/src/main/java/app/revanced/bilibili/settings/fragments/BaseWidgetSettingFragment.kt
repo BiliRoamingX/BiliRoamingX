@@ -18,7 +18,7 @@ import app.revanced.bilibili.utils.*
 import app.revanced.bilibili.widget.HdBaseToolbar
 import com.bilibili.lib.ui.BaseFragment
 
-open class BaseWidgetSettingFragment : BaseFragment() {
+abstract class BaseWidgetSettingFragment : BaseFragment() {
     protected fun string(idName: String): String = Utils.getString(idName)
 
     protected fun categoryTitle(title: String) = TextView(context).apply {

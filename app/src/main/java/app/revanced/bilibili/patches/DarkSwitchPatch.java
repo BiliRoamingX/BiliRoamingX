@@ -2,11 +2,14 @@ package app.revanced.bilibili.patches;
 
 import android.app.AlertDialog;
 
+import androidx.annotation.Keep;
+
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Utils;
 import tv.danmaku.bili.ui.main2.mine.HomeUserCenterFragment;
 import tv.danmaku.bilibilihd.ui.main.mine.HdHomeUserCenterFragment;
 
+@Keep
 public class DarkSwitchPatch {
     public static void switchDarkMode(HomeUserCenterFragment fragment, boolean report) {
         if (!Settings.SWITCH_DARK_DIALOG.getBoolean()) {

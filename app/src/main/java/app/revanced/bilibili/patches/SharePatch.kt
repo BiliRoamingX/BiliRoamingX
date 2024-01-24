@@ -2,6 +2,7 @@ package app.revanced.bilibili.patches
 
 import android.net.Uri
 import android.os.Bundle
+import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.LogHelper
 import app.revanced.bilibili.utils.runCatchingOrNull
@@ -13,11 +14,13 @@ object SharePatch {
 
     private val contentRegex = Regex("(.*)(http\\S*)(.*)")
 
+    @Keep
     @JvmStatic
     fun disableAppendTrackingInfo(): Boolean {
         return Settings.PURIFY_SHARE.boolean
     }
 
+    @Keep
     @JvmStatic
     fun onShareTo(platform: String, params: Bundle): Boolean {
         LogHelper.debug {

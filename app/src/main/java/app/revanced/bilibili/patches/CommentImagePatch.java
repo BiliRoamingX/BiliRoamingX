@@ -3,6 +3,8 @@ package app.revanced.bilibili.patches;
 import android.text.TextUtils;
 import android.view.HapticFeedbackConstants;
 
+import androidx.annotation.Keep;
+
 import com.bilibili.lib.imageviewer.fragment.ImageFragment;
 
 import app.revanced.bilibili.settings.Settings;
@@ -13,6 +15,7 @@ public class CommentImagePatch {
 
     private static final int imageViewId = Utils.getResId("image_view", "id");
 
+    @Keep
     public static void bindClickListener(ImageFragment fragment) {
         if (!Settings.SAVE_COMMENT_IMAGE.getBoolean()) return;
         var arguments = fragment.getArguments();

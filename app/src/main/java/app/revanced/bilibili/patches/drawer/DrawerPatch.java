@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
+import androidx.annotation.Keep;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -63,6 +64,7 @@ public class DrawerPatch {
         return false;
     }
 
+    @Keep
     public static void onMainFrameFragmentViewCreated(View view) {
         if (!Settings.DRAWER.getBoolean()) return;
         int id = Utils.getResId("avatar_layout", "id");
