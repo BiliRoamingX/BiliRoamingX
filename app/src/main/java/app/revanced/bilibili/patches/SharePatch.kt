@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.LogHelper
+import app.revanced.bilibili.utils.bv2av
+import app.revanced.bilibili.utils.bvPattern
 import app.revanced.bilibili.utils.runCatchingOrNull
 import org.json.JSONObject
 import java.net.HttpURLConnection
@@ -31,14 +33,13 @@ object SharePatch {
         if (Settings.PURIFY_SHARE.boolean) {
             val targetUrl = params.getString("params_target_url").orEmpty()
             if (targetUrl.startsWith("http"))
-                params.putString("params_target_url", getRealUrl(targetUrl))
+                params.putString("params_target_url", purifyUrl(targetUrl))
             val content = params.getString("params_content")
             if (!content.isNullOrEmpty())
-                contentRegex.matchEntire(content)?.groupValues?.let {
-                    val (_, prefix, url, postfix) = it
-                    if (url.isNotEmpty())
-                        params.putString("params_content", prefix + getRealUrl(url) + postfix)
-                }
+                params.putString("params_content", content.replace(contentRegex) {
+                    val (_, prefix, url, postfix) = it.groupValues
+                    prefix + purifyUrl(url) + postfix
+                })
         }
         if (Settings.FUCK_MINI_PROGRAM.boolean) {
             if (params.getString("params_type") == "type_min_program")
@@ -47,7 +48,17 @@ object SharePatch {
         return false
     }
 
-    private fun getRealUrl(url: String) = runCatchingOrNull {
+    private fun purifyUrl(url: String) = replaceBv2Av(resolveUrl(url))
+
+    private fun replaceBv2Av(url: String): String {
+        if (!Settings.ENABLE_AV.boolean) return url
+        return url.replace("(.*)($bvPattern)(.*)".toRegex()) {
+            val (_, prefix, bv, postfix) = it.groupValues
+            "${prefix}av${bv2av(bv)}$postfix"
+        }
+    }
+
+    private fun resolveUrl(url: String) = runCatchingOrNull {
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
         connection.instanceFollowRedirects = false

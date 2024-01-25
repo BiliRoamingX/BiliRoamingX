@@ -4,6 +4,7 @@ import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
 import app.revanced.bilibili.settings.Settings;
+import app.revanced.bilibili.utils.BVUtils;
 
 @Keep
 public class ConfigPatch {
@@ -29,6 +30,11 @@ public class ConfigPatch {
     @Nullable
     public static String getConfig(String key, @Nullable String defValue, @Nullable String origin) {
         //LogHelper.debug(() -> String.format("ConfigPatch, config of %s: %s, default: %s", key, origin, defValue));
+        if (Settings.ENABLE_AV.getBoolean() && "bv.enable_bv".equals(key))
+            return "0";
+        else if (Settings.ENABLE_AV.getBoolean() && "bv.pattern_rule_av_only".equals(key)) {
+            return BVUtils.avOrBvPattern;
+        }
         return origin;
     }
 }

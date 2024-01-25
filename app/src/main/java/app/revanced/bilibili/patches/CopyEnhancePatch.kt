@@ -58,6 +58,8 @@ object CopyEnhancePatch {
                         buildSpannedString {
                             appendTitle("标题：")
                             appendLine(headline.content).appendLine()
+                            appendTitle("AV号：")
+                            appendLine("AV${view.arc.aid}").appendLine()
                             appendTitle("BV号：")
                             appendLine(view.arc.bvid).appendLine()
                             appendTitle("封面：")
@@ -94,6 +96,8 @@ object CopyEnhancePatch {
                 buildSpannedString {
                     appendTitle("标题：")
                     appendLine(view.arc.title).appendLine()
+                    appendTitle("AV号：")
+                    appendLine("AV${view.arc.aid}").appendLine()
                     appendTitle("BV号：")
                     appendLine(view.bvid).appendLine()
                     appendTitle("封面：")
