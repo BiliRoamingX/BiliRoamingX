@@ -19,40 +19,13 @@ public class LogHelper {
     public interface LogMessage {
         @NonNull
         String buildMessageString();
-
-        /**
-         * @return For outer classes, this returns {@link Class#getSimpleName()}.
-         * For inner, static, or anonymous classes, this returns the simple name of the enclosing class.<br>
-         * <br>
-         * For example, each of these classes return 'SomethingView':
-         * <code>
-         * com.company.SomethingView
-         * com.company.SomethingView$StaticClass
-         * com.company.SomethingView$1
-         * </code>
-         */
-        default String findOuterClassSimpleName() {
-            var selfClass = getClass();
-
-            var fullClassName = selfClass.getName();
-            var dollarSignIndex = fullClassName.indexOf('$');
-            if (dollarSignIndex == -1)
-                return selfClass.getSimpleName(); // already an outer class
-
-            // class is inner, static, or anonymous
-            // parse the simple name full name
-            // a class with no package returns index of -1, but incrementing gives index zero which is correct
-            var simpleClassNameStartIndex = fullClassName.lastIndexOf('.') + 1;
-            return fullClassName.substring(simpleClassNameStartIndex, dollarSignIndex);
-        }
     }
 
     private static final int MAX_LENGTH = 3000;
-    private static final String REVANCED_LOG_PREFIX = "revanced: ";
+    private static final String LOG_TAG = "BiliRoamingX";
 
     public static void debug(@NonNull LogMessage message, boolean trace) {
         if (Settings.DEBUG.getBoolean()) {
-            var logTag = REVANCED_LOG_PREFIX + message.findOuterClassSimpleName();
             var logMessage = message.buildMessageString();
             if (trace) {
                 var builder = new StringBuilder(logMessage);
@@ -61,7 +34,7 @@ public class LogHelper {
                 builder.append('\n').append(sw);
                 logMessage = builder.toString();
             }
-            log(logMessage, (m) -> Log.d(logTag, m));
+            log(logMessage, (m) -> Log.d(LOG_TAG, m));
         }
     }
 
@@ -81,10 +54,9 @@ public class LogHelper {
      */
     public static void warn(@NonNull LogMessage message, @Nullable Exception ex) {
         var logMessage = message.buildMessageString();
-        var logTag = REVANCED_LOG_PREFIX + message.findOuterClassSimpleName();
         if (ex != null)
             logMessage = logMessage + '\n' + Log.getStackTraceString(ex);
-        log(logMessage, (m) -> Log.w(logTag, m));
+        log(logMessage, (m) -> Log.w(LOG_TAG, m));
     }
 
     /**
@@ -99,10 +71,9 @@ public class LogHelper {
      */
     public static void info(@NonNull LogMessage message, @Nullable Exception ex) {
         var logMessage = message.buildMessageString();
-        var logTag = REVANCED_LOG_PREFIX + message.findOuterClassSimpleName();
         if (ex != null)
             logMessage = logMessage + '\n' + Log.getStackTraceString(ex);
-        log(logMessage, (m) -> Log.i(logTag, m));
+        log(logMessage, (m) -> Log.i(LOG_TAG, m));
     }
 
     /**
@@ -117,16 +88,15 @@ public class LogHelper {
      */
     public static void error(@NonNull LogMessage message, @Nullable Throwable ex) {
         String logMessage = message.buildMessageString();
-        String logTag = REVANCED_LOG_PREFIX + message.findOuterClassSimpleName();
         if (ex != null)
             logMessage = logMessage + '\n' + Log.getStackTraceString(ex);
-        log(logMessage, (m) -> Log.e(logTag, m));
+        log(logMessage, (m) -> Log.e(LOG_TAG, m));
     }
 
     public static void trace() {
         var sw = new StringWriter();
         new Throwable().printStackTrace(new PrintWriter(sw));
-        Log.e(REVANCED_LOG_PREFIX + "LogHelper", sw.toString());
+        Log.e(LOG_TAG + ".LogHelper", sw.toString());
     }
 
     private static void log(String message, Consumer<String> logger) {
