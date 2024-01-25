@@ -466,7 +466,7 @@ public final class DynTab extends GeneratedMessageLite<DynTab, DynTab.Builder> i
         GeneratedMessageLite.registerDefaultInstance(DynTab.class, dynTab);
     }
 
-    private DynTab() {
+    public DynTab() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

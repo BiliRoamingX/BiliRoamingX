@@ -22,6 +22,17 @@ object DynTab : MossHook<DynTabReq, DynTabReply>() {
     }
 
     private fun modifyTabs(reply: DynTabReply) {
+        if (Settings.DYNAMIC_FORCE_OLD_TAB.boolean
+            && reply.dynTabList.none { it.anchor == "video" }
+            && reply.screenTabList.map { it.name }.containsAll(listOf("all", "video"))
+        ) {
+            reply.clearScreenTab()
+            reply.addDynTab(0, com.bapis.bilibili.app.dynamic.v2.DynTab().apply {
+                anchor = "video"
+                title = "视频"
+                uri = "bilibili://following/index/8"
+            })
+        }
         if (Settings.DYNAMIC_PURIFY_CITY.boolean || Settings.DYNAMIC_PURIFY_CAMPUS.boolean) {
             val idxList = mutableListOf<Int>()
             reply.dynTabList.withIndex().forEach { (index, tab) ->

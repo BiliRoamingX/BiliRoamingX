@@ -101,6 +101,7 @@ public enum Settings {
     DYNAMIC_PURIFY_UP("customize_dynamic_keyword_upname", STRING_SET, Collections.EMPTY_SET),
     DYNAMIC_PURIFY_UID("customize_dynamic_keyword_uid", STRING_SET, Collections.EMPTY_SET),
     DYNAMIC_PURIFY_TOPIC("customize_dynamic_keyword_topic", STRING_SET, Collections.EMPTY_SET),
+    DYNAMIC_FORCE_OLD_TAB("dynamic_force_old_tab", BOOLEAN, FALSE, true),
 
     // 我的页面
     DRAWER_STYLE("drawer_style_value", STRING, "0"),
