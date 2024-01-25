@@ -5,6 +5,7 @@ import app.revanced.bilibili.api.BiliRoamingApi.getPlayUrl
 import app.revanced.bilibili.api.BiliRoamingApi.getSeason
 import app.revanced.bilibili.api.CustomServerException
 import app.revanced.bilibili.patches.TrialQualityPatch
+import app.revanced.bilibili.patches.VideoQualityPatch
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.clipInfoCache
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
 import app.revanced.bilibili.settings.Settings
@@ -221,6 +222,23 @@ object BangumiPlayUrlHook {
                 toast.type == ToastType.VIP_DEFINITION_REMIND || toast.type == ToastType.VIP_CONTENT_REMIND
             }.map { it.index }.asReversed().forEach {
                 playReply.viewInfo.removeToasts(it)
+            }
+        }
+        if (Versions.ge7_64_0() && playReply.hasVideoCtrl() && playReply.videoCtrl.hasAutoQnCtl()) {
+            playReply.videoCtrl.autoQnCtl.run {
+                val halfScreenQuality = VideoQualityPatch.halfScreenQuality()
+                val fullScreenQuality = VideoQualityPatch.fullScreenQuality()
+                if (fullScreenQuality != 0) {
+                    loginFull = fullScreenQuality.toLong()
+                    nologinFull = fullScreenQuality.toLong()
+                }
+                if (halfScreenQuality == 1) {
+                    loginHalf = loginFull
+                    nologinHalf = nologinFull
+                } else if (halfScreenQuality != 0) {
+                    loginHalf = halfScreenQuality.toLong()
+                    nologinHalf = halfScreenQuality.toLong()
+                }
             }
         }
     }
