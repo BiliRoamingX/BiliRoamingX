@@ -70,6 +70,11 @@ object BangumiSeasonHook {
         810 to SearchType(Area.TW, "台", "7", "bangumi")
     )
 
+    const val overseaTestParams =
+        "cid=120453316&ep_id=285145&otype=json&fnval=16&module=pgc&platform=android&test=true"
+    const val mainlandTestParams =
+        "cid=13073143&ep_id=100615&otype=json&fnval=16&module=pgc&platform=android&test=true"
+
     init {
         Settings.registerPreferenceChangeListener { _, key ->
             if (key == Settings.SEARCH_BANGUMI.key || key == Settings.SEARCH_MOVIE.key

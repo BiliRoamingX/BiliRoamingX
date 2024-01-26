@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.EditText
 import androidx.preference.Preference
 import app.revanced.bilibili.settings.Settings.prefs
+import app.revanced.bilibili.settings.dialog.SpeedTestDialog
 import app.revanced.bilibili.utils.*
 
 class UnlockAreaLimitFragment :
@@ -45,6 +46,15 @@ class UnlockAreaLimitFragment :
                 }
                 show()
             }
+            true
+        }
+        findPreference<Preference>("test_upos")?.onClick {
+            SpeedTestDialog(requireContext()) {
+                if (!it) return@SpeedTestDialog
+                findPreference<Preference>("upos_host")?.runCatchingOrNull {
+                    callMethod("notifyChanged")
+                }
+            }.show()
             true
         }
     }

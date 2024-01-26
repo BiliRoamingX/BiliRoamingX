@@ -1,0 +1,199 @@
+package app.revanced.bilibili.settings.dialog
+
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
+import android.net.Uri
+import android.util.TypedValue
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.ListView
+import android.widget.TextView
+import app.revanced.bilibili.api.BiliRoamingApi.getPlayUrl
+import app.revanced.bilibili.api.CustomServerException
+import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
+import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.mainlandTestParams
+import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.overseaTestParams
+import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.utils.*
+import org.json.JSONObject
+import java.net.URL
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+
+data class SpeedTestResult(val name: String, val value: String, var speed: String)
+
+@SuppressLint("ViewConstructor")
+class SpeedTestItemView(context: Context, name: String = "", speed: String = "") :
+    LinearLayout(context) {
+    private val nameView: TextView
+    private val speedView: TextView
+
+    var name: String
+        get() = nameView.text.toString()
+        set(value) {
+            nameView.text = value
+        }
+
+    var speed: String
+        get() = speedView.text.toString()
+        set(value) {
+            speedView.text = value
+        }
+
+    init {
+        orientation = HORIZONTAL
+        layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        nameView = TextView(context).apply {
+            setPadding(5.dp, 5.dp, 5.dp, 5.dp)
+            setSingleLine()
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+            layoutParams = LayoutParams(
+                0, ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply { weight = 3f }
+        }.also { addView(it) }
+        speedView = TextView(context).apply {
+            setPadding(5.dp, 5.dp, 5.dp, 5.dp)
+            setSingleLine()
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+            layoutParams = LayoutParams(
+                0, ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply { weight = 2f }
+        }.also { addView(it) }
+        this.name = name
+        this.speed = speed
+    }
+}
+
+class SpeedTestAdapter(private val context: Context) : ArrayAdapter<SpeedTestResult>(context, 0) {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        return (convertView as? SpeedTestItemView ?: SpeedTestItemView(context)).apply {
+            getItem(position)?.let {
+                name = it.name
+                speed = Utils.getString("biliroaming_speed_formatter", it.speed)
+            }
+        }
+    }
+
+    fun sort() = sort { a, b ->
+        val aSpeed = a.speed.toLongOrNull()
+        val bSpeed = b.speed.toLongOrNull()
+        if (aSpeed == null && bSpeed == null) 0
+        else if (aSpeed == null) 1
+        else if (bSpeed == null) -1
+        else (bSpeed - aSpeed).toInt()
+    }
+}
+
+class SpeedTestDialog(context: Context, onDismiss: (Boolean) -> Unit) :
+    AlertDialog.Builder(context) {
+    private val speedTestExecutor = Executors.newFixedThreadPool(2)
+
+    private val view = ListView(context)
+    private val adapter = SpeedTestAdapter(context)
+    private var changed = false
+
+    init {
+        view.adapter = adapter
+        view.addHeaderView(
+            SpeedTestItemView(
+                context,
+                name = "UPOS",
+                speed = Utils.getString("biliroaming_speed")
+            ), null, false
+        )
+        view.setPadding(16.dp, 10.dp, 16.dp, 10.dp)
+        setView(view)
+        setPositiveButton(Utils.getString("biliroaming_close"), null)
+        setOnDismissListener {
+            speedTestExecutor.shutdown()
+            onDismiss(changed)
+        }
+        view.setOnItemClickListener { _, _, pos, _ ->
+            val (name, value, _) = adapter.getItem(pos - 1/*headerView*/)
+                ?: return@setOnItemClickListener
+            Settings.UPOS_HOST.saveValue(value)
+            changed = true
+            Toasts.showShortWithId("biliroaming_upos_enabled", name)
+        }
+
+        setTitle(Utils.getString("biliroaming_test_upos_title"))
+    }
+
+    override fun show(): AlertDialog {
+        val dialog = super.show()
+        dialog.setTitle(Utils.getString("biliroaming_speed_testing"))
+        val results = Utils.getStringArray("biliroaming_upos_entries")
+            .zip(Utils.getStringArray("biliroaming_upos_values"))
+            .map { (name, value) -> SpeedTestResult(name, value, "...") }
+            .also { adapter.addAll(it) }
+        speedTestExecutor.execute {
+            val url = getTestUrl() ?: run {
+                Utils.runOnMainThread {
+                    dialog.setTitle(Utils.getString("biliroaming_speed_test_failed"))
+                }
+                return@execute
+            }
+            results.forEach {
+                it.speed = speedTest(it.value, url).toString()
+                Utils.runOnMainThread {
+                    adapter.sort()
+                }
+            }
+            Utils.runOnMainThread {
+                dialog.setTitle(Utils.getString("biliroaming_speed_test_ok"))
+            }
+        }
+        return dialog
+    }
+
+    private fun speedTest(upos: String, rawUrl: String) = try {
+        speedTestExecutor.submit<Long?> {
+            val url = if (upos == Constants.NON_UPOS_VALUE) URL(rawUrl) else {
+                URL(Uri.parse(rawUrl).buildUpon().authority(upos).toString())
+            }
+            val connection = url.openConnection()
+            connection.connectTimeout = 5000
+            connection.readTimeout = 5000
+            connection.setRequestProperty("User-Agent", "Bilibili Freedoooooom/MarkII")
+            connection.connect()
+            val buffer = ByteArray(8192)
+            var size = 0
+            val start = System.currentTimeMillis()
+            connection.getInputStream().use { stream ->
+                while (!Thread.currentThread().isInterrupted) {
+                    val read = stream.read(buffer)
+                    if (read <= 0) break
+                    size += read
+                }
+            }
+            size / (System.currentTimeMillis() - start) // KB/s
+        }.get(5, TimeUnit.SECONDS)
+    } catch (e: Throwable) {
+        0L
+    }
+
+    private fun getTestUrl() = try {
+        speedTestExecutor.submit<String?> {
+            lastSeasonInfo.clear()
+            val json = if (country == Area.CN) {
+                getPlayUrl(overseaTestParams, arrayOf(Area.HK, Area.TW))
+            } else getPlayUrl(mainlandTestParams, arrayOf(Area.CN))
+            json?.toJSONObject()?.optJSONObject("dash")?.getJSONArray("audio")
+                ?.asSequence<JSONObject>()
+                ?.minWithOrNull { a, b -> a.optInt("bandwidth") - b.optInt("bandwidth") }
+                ?.optString("base_url")?.replace("https", "http")
+        }.get(5, TimeUnit.SECONDS)
+    } catch (e: CustomServerException) {
+        LogHelper.error({ "UPOS 测速失败, ${e.message}" }, e)
+        null
+    } catch (e: Throwable) {
+        LogHelper.error({ "UPOS 测速失败, message: ${e.message}" }, e)
+        null
+    }
+}
