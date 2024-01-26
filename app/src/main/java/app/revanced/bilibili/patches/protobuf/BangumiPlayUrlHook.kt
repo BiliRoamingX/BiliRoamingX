@@ -120,6 +120,8 @@ object BangumiPlayUrlHook {
                 val seasonId = req.seasonId.toString().takeIf { it != "0" }
                     ?: lastSeasonInfo["season_id"] ?: "0"
                 val (thaiSeason, thaiEp) = getThaiSeason(seasonId, req.epId)
+                lastSeasonInfo["season_id"] = seasonId
+                lastSeasonInfo["title"] = response.business.episodeInfo.seasonInfo.title
                 val content = getPlayUrl(reconstructQuery(req, response, thaiEp))
                 if (content == null) {
                     throw CustomServerException(mapOf("未知错误" to "请检查哔哩漫游设置中解析服务器设置。"))
@@ -159,11 +161,12 @@ object BangumiPlayUrlHook {
         val reqEpId = extraContent.getOrDefault("ep_id", "0").toLong()
         if (seasonId == "0" && reqEpId == 0L)
             if (error != null) throw error else return reply
-        lastSeasonInfo["season_id"] = seasonId
         val supplement = PlayViewReply.parseFrom(supplementAny.value.toByteArray())
         if (Settings.UNLOCK_AREA_LIMIT.boolean && needProxyUnite(response, supplement)) {
             return try {
                 val (thaiSeason, thaiEp) = getThaiSeason(seasonId, reqEpId)
+                lastSeasonInfo["season_id"] = seasonId
+                lastSeasonInfo["title"] = supplement.business.episodeInfo.seasonInfo.title
                 val content = getPlayUrl(reconstructQueryUnite(req, supplement, thaiEp))
                 if (content == null) {
                     throw CustomServerException(mapOf("未知错误" to "请检查哔哩漫游设置中解析服务器设置。"))

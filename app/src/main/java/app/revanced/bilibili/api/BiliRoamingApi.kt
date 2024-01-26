@@ -67,14 +67,13 @@ object BiliRoamingApi {
 
         val hostList = LinkedHashMap<Area, String>(4, 1f, true)
 
-        if (hostList.isEmpty())
         // reversely
-            mapOf(
-                Area.TW to twUrl,
-                Area.HK to hkUrl,
-                Area.TH to thUrl,
-                Area.CN to cnUrl
-            ).filter { (k, v) -> k != country && v.isNotEmpty() }.let { hostList.putAll(it) }
+        mapOf(
+            Area.TW to twUrl,
+            Area.HK to hkUrl,
+            Area.TH to thUrl,
+            Area.CN to cnUrl
+        ).filter { (k, v) -> k != country && v.isNotEmpty() }.let { hostList.putAll(it) }
         if (hostList.isEmpty()) return null
 
         val epIdStartIdx = queryString.indexOf("ep_id=")
@@ -85,14 +84,19 @@ object BiliRoamingApi {
         if (epId.isEmpty()) return null
 
         val cacheSeasonId = lastSeasonInfo["season_id"]
+        val cacheTitle = lastSeasonInfo["title"]
         if (lastSeasonInfo["ep_ids"].let { it == null || epId !in it })
             lastSeasonInfo.clear()
         if (cacheSeasonId.let { it != null && it != "0" })
             lastSeasonInfo["season_id"] = cacheSeasonId
+        else lastSeasonInfo.remove("season_id")
+        if (!cacheTitle.isNullOrEmpty())
+            lastSeasonInfo["title"] = cacheTitle
+        else lastSeasonInfo.remove("title")
 
         lastSeasonInfo["title"]?.run {
-            if (contains(twRegex) && twUrl.isNotEmpty()) hostList[Area.TW]
             if (contains(hkRegex) && hkUrl.isNotEmpty()) hostList[Area.HK]
+            if (contains(twRegex) && twUrl.isNotEmpty()) hostList[Area.TW]
             if (contains(thRegex) && thUrl.isNotEmpty()) hostList[Area.TH]
         }
 
