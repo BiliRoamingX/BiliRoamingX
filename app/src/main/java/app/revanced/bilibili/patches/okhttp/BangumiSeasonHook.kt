@@ -479,6 +479,7 @@ object BangumiSeasonHook {
         }
     }
 
+    @Keep
     @SuppressLint("SetTextI18n")
     @JvmStatic
     fun onCommentInvalidFragmentViewCreated(fragment: Fragment): Boolean {
