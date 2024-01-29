@@ -288,30 +288,34 @@ private val vhPrefs: SharedPreferences by lazy {
     Utils.getContext().getSharedPreferences(Constants.PREFS_VH, Context.MODE_PRIVATE)
 }
 
-fun getVideoHistory(sid: Int): List<VideoHistory> {
+fun getVideoHistory(sid: Int): VideoHistory {
     val sh = vhPrefs.getString(sid.toString(), "").orEmpty()
-    val result = arrayListOf<VideoHistory>()
-    if (sh.isNotEmpty()) sh.split(',').mapTo(result) {
-        val (epid, time, progress) = it.split('|', limit = 3)
-        VideoHistory(epid.toInt(), time.toLong(), progress.toLong())
+    val result = VideoHistory()
+    if (sh.isNotEmpty()) sh.split(',').forEachIndexed { index, item ->
+        if (index == 0) {
+            result.lastEpId = item.toInt()
+        } else {
+            val (epId, progress) = item.split('|', limit = 2)
+            result.histories.add(VideoHistory.Item(epId.toInt(), progress.toLong()))
+        }
     }
     return result
 }
 
 fun saveVideoHistory(sid: Int, epId: Int, progress: Long) {
-    val time = System.currentTimeMillis()
-    val histories = getVideoHistory(sid) as ArrayList<VideoHistory>
+    val histories = getVideoHistory(sid).histories
     if (histories.isEmpty()) {
-        histories.add(VideoHistory(epId, time, progress))
+        histories.add(VideoHistory.Item(epId, progress))
     } else {
         histories.find { it.epId == epId }?.run {
-            this.time = time
             this.progress = progress
-        } ?: histories.add(VideoHistory(epId, time, progress))
+        } ?: histories.add(VideoHistory.Item(epId, progress))
     }
     histories.joinToString(separator = ",") {
-        "${it.epId}|${it.time}|${it.progress}"
-    }.let { vhPrefs.edit { putString(sid.toString(), it) } }
+        "${it.epId}|${it.progress}"
+    }.let {
+        vhPrefs.edit { putString(sid.toString(), "$epId,$it") }
+    }
 }
 
 @JvmOverloads

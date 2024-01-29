@@ -265,8 +265,8 @@ object BangumiPlayUrlHook {
                 // located to the request episode
                 episode = allEps.firstOrNull { it.optLong("ep_id") == reqEpId }
             } else {
-                val histories = getVideoHistory(s.optInt("season_id"))
-                val last = histories.maxByOrNull { it.time }
+                val (lastEpId, histories) = getVideoHistory(s.optInt("season_id"))
+                val last = histories.find { it.epId == lastEpId }
                 if (Settings.SAVE_TH_HISTORY.boolean && last != null && last.progress == -1L) {
                     val lastEpIdx = allEps.indexOfFirst {
                         it.optInt("ep_id") == last.epId
@@ -694,9 +694,9 @@ object BangumiPlayUrlHook {
         seasonId: Int,
         currentEp: Int
     ): Pair<HistoryInfo?, HistoryInfo?> {
-        val histories = getVideoHistory(seasonId)
+        val (lastEpId, histories) = getVideoHistory(seasonId)
         val current = histories.find { it.epId == currentEp }
-        val last = histories.maxByOrNull { it.time }
+        val last = histories.find { it.epId == lastEpId }
         if (current == null && last == null)
             return null to null
         val allEps = season.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
@@ -747,9 +747,9 @@ object BangumiPlayUrlHook {
         seasonId: Int,
         currentEp: Int
     ): Pair<WatchProgress?, WatchProgress?> {
-        val histories = getVideoHistory(seasonId)
+        val (lastEpId, histories) = getVideoHistory(seasonId)
         val current = histories.find { it.epId == currentEp }
-        val last = histories.maxByOrNull { it.time }
+        val last = histories.find { it.epId == lastEpId }
         if (current == null && last == null)
             return null to null
         val allEps = season.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
@@ -770,7 +770,7 @@ object BangumiPlayUrlHook {
             WatchProgress().apply {
                 val episode = allEps.first { it.optInt("ep_id") == epId }
                 val title = episode.optString("title")
-                lastEpId = epId
+                this.lastEpId = epId
                 lastEpIndex = title
                 lastPlayCid = episode.optLong("cid")
                 lastPlayAid = episode.optLong("aid")
@@ -790,7 +790,7 @@ object BangumiPlayUrlHook {
             WatchProgress().apply {
                 val episode = allEps.first { it.optInt("ep_id") == epId }
                 val title = episode.optString("title")
-                lastEpId = epId
+                this.lastEpId = epId
                 lastEpIndex = title
                 lastPlayCid = episode.optLong("cid")
                 lastPlayAid = episode.optLong("aid")
