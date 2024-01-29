@@ -135,7 +135,7 @@ object BangumiPlayUrlHook {
             }
         } else if (error == null && allowDownloadPGC) {
             return fixDownloadProto(response)
-        } else if (error == null && Settings.BLOCK_BANGUMI_PAGE_ADS.boolean) {
+        } else if (error == null && (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean || Settings.REMOVE_CMD_DMS.boolean)) {
             return purifyViewInfo(response)
         }
         if (error != null) throw error else return reply
@@ -182,7 +182,7 @@ object BangumiPlayUrlHook {
             }
         } else if (error == null && allowDownloadUnite) {
             return fixDownloadProtoUnite(response)
-        } else if (error == null && Settings.BLOCK_BANGUMI_PAGE_ADS.boolean) {
+        } else if (error == null && (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean || Settings.REMOVE_CMD_DMS.boolean)) {
             return purifyViewInfoUnite(response, supplement)
         }
         if (error != null) throw error else return reply
@@ -302,22 +302,26 @@ object BangumiPlayUrlHook {
     }
 
     private fun purifyViewInfo(response: PlayViewReply) = response.apply {
-        playExtConf.clearFreyaConfig()
-        viewInfo.run {
-            clearAnimation()
-            clearCouponInfo()
-            if (endPage.dialog.type != "pay")
-                clearEndPage()
-            clearHighDefinitionTrialInfo()
-            clearPayTip()
-            if (popWin.buttonList.all { it.actionType != "pay" })
-                clearPopWin()
-            if (toast.button.actionType != "pay")
-                clearToast()
-            if (tryWatchPromptBar.buttonList.all { it.actionType != "pay" })
-                clearTryWatchPromptBar()
-            mutableExtToastMap.clear()
+        if (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean) {
+            playExtConf.clearFreyaConfig()
+            viewInfo.run {
+                clearAnimation()
+                clearCouponInfo()
+                if (endPage.dialog.type != "pay")
+                    clearEndPage()
+                clearHighDefinitionTrialInfo()
+                clearPayTip()
+                if (popWin.buttonList.all { it.actionType != "pay" })
+                    clearPopWin()
+                if (toast.button.actionType != "pay")
+                    clearToast()
+                if (tryWatchPromptBar.buttonList.all { it.actionType != "pay" })
+                    clearTryWatchPromptBar()
+                mutableExtToastMap.clear()
+            }
         }
+        if (Settings.REMOVE_CMD_DMS.boolean)
+            business.clearRecordInfo()
     }
 
     private fun purifyViewInfoUnite(

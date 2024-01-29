@@ -29,7 +29,10 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
     ): DmViewReply? {
         if (Settings.REMOVE_CMD_DMS.boolean && reply != null) {
             reply.clearActivityMeta()
-            runCatchingOrNull { reply.clearCommand() }
+            runCatchingOrNull {
+                reply.clearCommand()
+                reply.clearQoe()
+            }
             reply.setUnknownFields(UnknownFieldSetLite.getDefaultInstance())
         }
         if (error !is NetworkException)

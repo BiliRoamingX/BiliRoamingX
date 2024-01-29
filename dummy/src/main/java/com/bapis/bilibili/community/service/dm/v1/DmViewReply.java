@@ -17,8 +17,8 @@ import java.util.Collections;
 import java.util.List;
 
 /* compiled from: BL */
-/* loaded from: classes14.dex */
-public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewReply.Builder> implements MessageLiteOrBuilder {
+/* loaded from: classes20.dex */
+public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewReply.C9025b> implements MessageLiteOrBuilder {
     public static final int ACTIVITY_META_FIELD_NUMBER = 18;
     public static final int AI_FLAG_FIELD_NUMBER = 5;
     public static final int ALLOW_FIELD_NUMBER = 8;
@@ -39,10 +39,12 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
     public static final int PLAYER_CONFIG_FIELD_NUMBER = 6;
     public static final int POST_PANEL_2_FIELD_NUMBER = 19;
     public static final int POST_PANEL_FIELD_NUMBER = 17;
+    public static final int QOE_FIELD_NUMBER = 25;
     public static final int REPORT_FILTER_CONTENT_FIELD_NUMBER = 13;
     public static final int SEND_BOX_STYLE_FIELD_NUMBER = 7;
     public static final int SPECIAL_DMS_FIELD_NUMBER = 4;
     public static final int SUBTITLE_FIELD_NUMBER = 3;
+    public static final int SUB_VIEWS_FIELD_NUMBER = 24;
     public static final int TEXT_PLACEHOLDER_FIELD_NUMBER = 11;
     private DanmakuFlagConfig aiFlag_;
     private boolean allow_;
@@ -54,6 +56,7 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
     private ExpoReport expoReport_;
     private VideoMask mask_;
     private DanmuPlayerViewConfig playerConfig_;
+    private QoeInfo qoe_;
     private int sendBoxStyle_;
     private VideoSubtitle subtitle_;
     private Internal.ProtobufList<String> specialDms_ = GeneratedMessageLite.emptyProtobufList();
@@ -67,302 +70,328 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
     private Internal.ProtobufList<PostPanelV2> postPanel2_ = GeneratedMessageLite.emptyProtobufList();
     private Internal.ProtobufList<DmMaskWall> dmMaskWall_ = GeneratedMessageLite.emptyProtobufList();
     private String kv_ = "";
+    private Internal.ProtobufList<DmSubView> subViews_ = GeneratedMessageLite.emptyProtobufList();
 
     /* compiled from: BL */
-    /* renamed from: com.bapis.bilibili.community.service.dm.v1.DmViewReply$1 */
-    /* loaded from: classes14.dex */
-    static /* synthetic */ class C72251 {
+    /* renamed from: com.bapis.bilibili.community.service.dm.v1.DmViewReply$a */
+    /* loaded from: classes20.dex */
+    static /* synthetic */ class C9024a {
 
         /* renamed from: $SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke */
-        static final /* synthetic */ int[] f17066xa1df5c61;
+        static final /* synthetic */ int[] f18608xa1df5c61;
 
         static {
             int[] iArr = new int[GeneratedMessageLite.MethodToInvoke.values().length];
-            f17066xa1df5c61 = iArr;
+            f18608xa1df5c61 = iArr;
             try {
                 iArr[GeneratedMessageLite.MethodToInvoke.NEW_MUTABLE_INSTANCE.ordinal()] = 1;
             } catch (NoSuchFieldError unused) {
             }
             try {
-                f17066xa1df5c61[GeneratedMessageLite.MethodToInvoke.NEW_BUILDER.ordinal()] = 2;
+                f18608xa1df5c61[GeneratedMessageLite.MethodToInvoke.NEW_BUILDER.ordinal()] = 2;
             } catch (NoSuchFieldError unused2) {
             }
             try {
-                f17066xa1df5c61[GeneratedMessageLite.MethodToInvoke.BUILD_MESSAGE_INFO.ordinal()] = 3;
+                f18608xa1df5c61[GeneratedMessageLite.MethodToInvoke.BUILD_MESSAGE_INFO.ordinal()] = 3;
             } catch (NoSuchFieldError unused3) {
             }
             try {
-                f17066xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_DEFAULT_INSTANCE.ordinal()] = 4;
+                f18608xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_DEFAULT_INSTANCE.ordinal()] = 4;
             } catch (NoSuchFieldError unused4) {
             }
             try {
-                f17066xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_PARSER.ordinal()] = 5;
+                f18608xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_PARSER.ordinal()] = 5;
             } catch (NoSuchFieldError unused5) {
             }
             try {
-                f17066xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_MEMOIZED_IS_INITIALIZED.ordinal()] = 6;
+                f18608xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_MEMOIZED_IS_INITIALIZED.ordinal()] = 6;
             } catch (NoSuchFieldError unused6) {
             }
             try {
-                f17066xa1df5c61[GeneratedMessageLite.MethodToInvoke.SET_MEMOIZED_IS_INITIALIZED.ordinal()] = 7;
+                f18608xa1df5c61[GeneratedMessageLite.MethodToInvoke.SET_MEMOIZED_IS_INITIALIZED.ordinal()] = 7;
             } catch (NoSuchFieldError unused7) {
             }
         }
     }
 
     /* compiled from: BL */
-    /* loaded from: classes14.dex */
-    public static final class Builder extends GeneratedMessageLite.Builder<DmViewReply, Builder> implements MessageLiteOrBuilder {
-        /* synthetic */ Builder(C72251 c72251) {
+    /* renamed from: com.bapis.bilibili.community.service.dm.v1.DmViewReply$b */
+    /* loaded from: classes20.dex */
+    public static final class C9025b extends GeneratedMessageLite.Builder<DmViewReply, C9025b> implements MessageLiteOrBuilder {
+        /* synthetic */ C9025b(C9024a c9024a) {
             this();
         }
 
-        public Builder addActivityMeta(String str) {
+        public C9025b addActivityMeta(String str) {
             copyOnWrite();
             ((DmViewReply) this.instance).addActivityMeta(str);
             return this;
         }
 
-        public Builder addActivityMetaBytes(ByteString byteString) {
+        public C9025b addActivityMetaBytes(ByteString byteString) {
             copyOnWrite();
             ((DmViewReply) this.instance).addActivityMetaBytes(byteString);
             return this;
         }
 
-        public Builder addAllActivityMeta(Iterable<String> iterable) {
+        public C9025b addAllActivityMeta(Iterable<String> iterable) {
             copyOnWrite();
             ((DmViewReply) this.instance).addAllActivityMeta(iterable);
             return this;
         }
 
-        public Builder addAllDmMaskWall(Iterable<? extends DmMaskWall> iterable) {
+        public C9025b addAllDmMaskWall(Iterable<? extends DmMaskWall> iterable) {
             copyOnWrite();
             ((DmViewReply) this.instance).addAllDmMaskWall(iterable);
             return this;
         }
 
-        public Builder addAllExpressions(Iterable<? extends Expressions> iterable) {
+        public C9025b addAllExpressions(Iterable<? extends Expressions> iterable) {
             copyOnWrite();
             ((DmViewReply) this.instance).addAllExpressions(iterable);
             return this;
         }
 
-        public Builder addAllPostPanel(Iterable<? extends PostPanel> iterable) {
+        public C9025b addAllPostPanel(Iterable<? extends PostPanel> iterable) {
             copyOnWrite();
             ((DmViewReply) this.instance).addAllPostPanel(iterable);
             return this;
         }
 
-        public Builder addAllPostPanel2(Iterable<? extends PostPanelV2> iterable) {
+        public C9025b addAllPostPanel2(Iterable<? extends PostPanelV2> iterable) {
             copyOnWrite();
             ((DmViewReply) this.instance).addAllPostPanel2(iterable);
             return this;
         }
 
-        public Builder addAllReportFilterContent(Iterable<String> iterable) {
+        public C9025b addAllReportFilterContent(Iterable<String> iterable) {
             copyOnWrite();
             ((DmViewReply) this.instance).addAllReportFilterContent(iterable);
             return this;
         }
 
-        public Builder addAllSpecialDms(Iterable<String> iterable) {
+        public C9025b addAllSpecialDms(Iterable<String> iterable) {
             copyOnWrite();
             ((DmViewReply) this.instance).addAllSpecialDms(iterable);
             return this;
         }
 
-        public Builder addDmMaskWall(DmMaskWall dmMaskWall) {
+        public C9025b addAllSubViews(Iterable<? extends DmSubView> iterable) {
+            copyOnWrite();
+            ((DmViewReply) this.instance).addAllSubViews(iterable);
+            return this;
+        }
+
+        public C9025b addDmMaskWall(DmMaskWall dmMaskWall) {
             copyOnWrite();
             ((DmViewReply) this.instance).addDmMaskWall(dmMaskWall);
             return this;
         }
 
-        public Builder addExpressions(Expressions expressions) {
+        public C9025b addExpressions(Expressions expressions) {
             copyOnWrite();
             ((DmViewReply) this.instance).addExpressions(expressions);
             return this;
         }
 
-        public Builder addPostPanel(PostPanel postPanel) {
+        public C9025b addPostPanel(PostPanel postPanel) {
             copyOnWrite();
             ((DmViewReply) this.instance).addPostPanel(postPanel);
             return this;
         }
 
-        public Builder addPostPanel2(PostPanelV2 postPanelV2) {
+        public C9025b addPostPanel2(PostPanelV2 postPanelV2) {
             copyOnWrite();
             ((DmViewReply) this.instance).addPostPanel2(postPanelV2);
             return this;
         }
 
-        public Builder addReportFilterContent(String str) {
+        public C9025b addReportFilterContent(String str) {
             copyOnWrite();
             ((DmViewReply) this.instance).addReportFilterContent(str);
             return this;
         }
 
-        public Builder addReportFilterContentBytes(ByteString byteString) {
+        public C9025b addReportFilterContentBytes(ByteString byteString) {
             copyOnWrite();
             ((DmViewReply) this.instance).addReportFilterContentBytes(byteString);
             return this;
         }
 
-        public Builder addSpecialDms(String str) {
+        public C9025b addSpecialDms(String str) {
             copyOnWrite();
             ((DmViewReply) this.instance).addSpecialDms(str);
             return this;
         }
 
-        public Builder addSpecialDmsBytes(ByteString byteString) {
+        public C9025b addSpecialDmsBytes(ByteString byteString) {
             copyOnWrite();
             ((DmViewReply) this.instance).addSpecialDmsBytes(byteString);
             return this;
         }
 
-        public Builder clearActivityMeta() {
+        public C9025b addSubViews(DmSubView dmSubView) {
+            copyOnWrite();
+            ((DmViewReply) this.instance).addSubViews(dmSubView);
+            return this;
+        }
+
+        public C9025b clearActivityMeta() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearActivityMeta();
             return this;
         }
 
-        public Builder clearAiFlag() {
+        public C9025b clearAiFlag() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearAiFlag();
             return this;
         }
 
-        public Builder clearAllow() {
+        public C9025b clearAllow() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearAllow();
             return this;
         }
 
-        public Builder clearBuzzwordConfig() {
+        public C9025b clearBuzzwordConfig() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearBuzzwordConfig();
             return this;
         }
 
-        public Builder clearCheckBox() {
+        public C9025b clearCheckBox() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearCheckBox();
             return this;
         }
 
-        public Builder clearCheckBoxShowMsg() {
+        public C9025b clearCheckBoxShowMsg() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearCheckBoxShowMsg();
             return this;
         }
 
-        public Builder clearClosed() {
+        public C9025b clearClosed() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearClosed();
             return this;
         }
 
-        public Builder clearCommand() {
+        public C9025b clearCommand() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearCommand();
             return this;
         }
 
-        public Builder clearDmHerd() {
+        public C9025b clearDmHerd() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearDmHerd();
             return this;
         }
 
-        public Builder clearDmMaskWall() {
+        public C9025b clearDmMaskWall() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearDmMaskWall();
             return this;
         }
 
-        public Builder clearExpoReport() {
+        public C9025b clearExpoReport() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearExpoReport();
             return this;
         }
 
-        public Builder clearExpressions() {
+        public C9025b clearExpressions() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearExpressions();
             return this;
         }
 
-        public Builder clearInputPlaceholder() {
+        public C9025b clearInputPlaceholder() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearInputPlaceholder();
             return this;
         }
 
-        public Builder clearKv() {
+        public C9025b clearKv() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearKv();
             return this;
         }
 
-        public Builder clearMask() {
+        public C9025b clearMask() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearMask();
             return this;
         }
 
-        public Builder clearPlayerConfig() {
+        public C9025b clearPlayerConfig() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearPlayerConfig();
             return this;
         }
 
-        public Builder clearPostPanel() {
+        public C9025b clearPostPanel() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearPostPanel();
             return this;
         }
 
-        public Builder clearPostPanel2() {
+        public C9025b clearPostPanel2() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearPostPanel2();
             return this;
         }
 
-        public Builder clearReportFilterContent() {
+        public C9025b clearQoe() {
+            copyOnWrite();
+            ((DmViewReply) this.instance).clearQoe();
+            return this;
+        }
+
+        public C9025b clearReportFilterContent() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearReportFilterContent();
             return this;
         }
 
-        public Builder clearSendBoxStyle() {
+        public C9025b clearSendBoxStyle() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearSendBoxStyle();
             return this;
         }
 
-        public Builder clearSpecialDms() {
+        public C9025b clearSpecialDms() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearSpecialDms();
             return this;
         }
 
-        public Builder clearSubtitle() {
+        public C9025b clearSubViews() {
+            copyOnWrite();
+            ((DmViewReply) this.instance).clearSubViews();
+            return this;
+        }
+
+        public C9025b clearSubtitle() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearSubtitle();
             return this;
         }
 
-        public Builder clearTextPlaceholder() {
+        public C9025b clearTextPlaceholder() {
             copyOnWrite();
             ((DmViewReply) this.instance).clearTextPlaceholder();
             return this;
         }
 
-        public String getActivityMeta(int i) {
-            return ((DmViewReply) this.instance).getActivityMeta(i);
+        public String getActivityMeta(int i2) {
+            return ((DmViewReply) this.instance).getActivityMeta(i2);
         }
 
-        public ByteString getActivityMetaBytes(int i) {
-            return ((DmViewReply) this.instance).getActivityMetaBytes(i);
+        public ByteString getActivityMetaBytes(int i2) {
+            return ((DmViewReply) this.instance).getActivityMetaBytes(i2);
         }
 
         public int getActivityMetaCount() {
@@ -409,8 +438,8 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
             return ((DmViewReply) this.instance).getDmHerd();
         }
 
-        public DmMaskWall getDmMaskWall(int i) {
-            return ((DmViewReply) this.instance).getDmMaskWall(i);
+        public DmMaskWall getDmMaskWall(int i2) {
+            return ((DmViewReply) this.instance).getDmMaskWall(i2);
         }
 
         public int getDmMaskWallCount() {
@@ -425,8 +454,8 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
             return ((DmViewReply) this.instance).getExpoReport();
         }
 
-        public Expressions getExpressions(int i) {
-            return ((DmViewReply) this.instance).getExpressions(i);
+        public Expressions getExpressions(int i2) {
+            return ((DmViewReply) this.instance).getExpressions(i2);
         }
 
         public int getExpressionsCount() {
@@ -461,12 +490,12 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
             return ((DmViewReply) this.instance).getPlayerConfig();
         }
 
-        public PostPanel getPostPanel(int i) {
-            return ((DmViewReply) this.instance).getPostPanel(i);
+        public PostPanel getPostPanel(int i2) {
+            return ((DmViewReply) this.instance).getPostPanel(i2);
         }
 
-        public PostPanelV2 getPostPanel2(int i) {
-            return ((DmViewReply) this.instance).getPostPanel2(i);
+        public PostPanelV2 getPostPanel2(int i2) {
+            return ((DmViewReply) this.instance).getPostPanel2(i2);
         }
 
         public int getPostPanel2Count() {
@@ -485,12 +514,16 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
             return Collections.unmodifiableList(((DmViewReply) this.instance).getPostPanelList());
         }
 
-        public String getReportFilterContent(int i) {
-            return ((DmViewReply) this.instance).getReportFilterContent(i);
+        public QoeInfo getQoe() {
+            return ((DmViewReply) this.instance).getQoe();
         }
 
-        public ByteString getReportFilterContentBytes(int i) {
-            return ((DmViewReply) this.instance).getReportFilterContentBytes(i);
+        public String getReportFilterContent(int i2) {
+            return ((DmViewReply) this.instance).getReportFilterContent(i2);
+        }
+
+        public ByteString getReportFilterContentBytes(int i2) {
+            return ((DmViewReply) this.instance).getReportFilterContentBytes(i2);
         }
 
         public int getReportFilterContentCount() {
@@ -505,12 +538,12 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
             return ((DmViewReply) this.instance).getSendBoxStyle();
         }
 
-        public String getSpecialDms(int i) {
-            return ((DmViewReply) this.instance).getSpecialDms(i);
+        public String getSpecialDms(int i2) {
+            return ((DmViewReply) this.instance).getSpecialDms(i2);
         }
 
-        public ByteString getSpecialDmsBytes(int i) {
-            return ((DmViewReply) this.instance).getSpecialDmsBytes(i);
+        public ByteString getSpecialDmsBytes(int i2) {
+            return ((DmViewReply) this.instance).getSpecialDmsBytes(i2);
         }
 
         public int getSpecialDmsCount() {
@@ -519,6 +552,18 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
 
         public List<String> getSpecialDmsList() {
             return Collections.unmodifiableList(((DmViewReply) this.instance).getSpecialDmsList());
+        }
+
+        public DmSubView getSubViews(int i2) {
+            return ((DmViewReply) this.instance).getSubViews(i2);
+        }
+
+        public int getSubViewsCount() {
+            return ((DmViewReply) this.instance).getSubViewsCount();
+        }
+
+        public List<DmSubView> getSubViewsList() {
+            return Collections.unmodifiableList(((DmViewReply) this.instance).getSubViewsList());
         }
 
         public VideoSubtitle getSubtitle() {
@@ -561,389 +606,447 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
             return ((DmViewReply) this.instance).hasPlayerConfig();
         }
 
+        public boolean hasQoe() {
+            return ((DmViewReply) this.instance).hasQoe();
+        }
+
         public boolean hasSubtitle() {
             return ((DmViewReply) this.instance).hasSubtitle();
         }
 
-        public Builder mergeAiFlag(DanmakuFlagConfig danmakuFlagConfig) {
+        public C9025b mergeAiFlag(DanmakuFlagConfig danmakuFlagConfig) {
             copyOnWrite();
             ((DmViewReply) this.instance).mergeAiFlag(danmakuFlagConfig);
             return this;
         }
 
-        public Builder mergeBuzzwordConfig(BuzzwordConfig buzzwordConfig) {
+        public C9025b mergeBuzzwordConfig(BuzzwordConfig buzzwordConfig) {
             copyOnWrite();
             ((DmViewReply) this.instance).mergeBuzzwordConfig(buzzwordConfig);
             return this;
         }
 
-        public Builder mergeCommand(Command command) {
+        public C9025b mergeCommand(Command command) {
             copyOnWrite();
             ((DmViewReply) this.instance).mergeCommand(command);
             return this;
         }
 
-        public Builder mergeDmHerd(DmHerdView dmHerdView) {
+        public C9025b mergeDmHerd(DmHerdView dmHerdView) {
             copyOnWrite();
             ((DmViewReply) this.instance).mergeDmHerd(dmHerdView);
             return this;
         }
 
-        public Builder mergeExpoReport(ExpoReport expoReport) {
+        public C9025b mergeExpoReport(ExpoReport expoReport) {
             copyOnWrite();
             ((DmViewReply) this.instance).mergeExpoReport(expoReport);
             return this;
         }
 
-        public Builder mergeMask(VideoMask videoMask) {
+        public C9025b mergeMask(VideoMask videoMask) {
             copyOnWrite();
             ((DmViewReply) this.instance).mergeMask(videoMask);
             return this;
         }
 
-        public Builder mergePlayerConfig(DanmuPlayerViewConfig danmuPlayerViewConfig) {
+        public C9025b mergePlayerConfig(DanmuPlayerViewConfig danmuPlayerViewConfig) {
             copyOnWrite();
             ((DmViewReply) this.instance).mergePlayerConfig(danmuPlayerViewConfig);
             return this;
         }
 
-        public Builder mergeSubtitle(VideoSubtitle videoSubtitle) {
+        public C9025b mergeQoe(QoeInfo qoeInfo) {
+            copyOnWrite();
+            ((DmViewReply) this.instance).mergeQoe(qoeInfo);
+            return this;
+        }
+
+        public C9025b mergeSubtitle(VideoSubtitle videoSubtitle) {
             copyOnWrite();
             ((DmViewReply) this.instance).mergeSubtitle(videoSubtitle);
             return this;
         }
 
-        public Builder removeDmMaskWall(int i) {
+        public C9025b removeDmMaskWall(int i2) {
             copyOnWrite();
-            ((DmViewReply) this.instance).removeDmMaskWall(i);
+            ((DmViewReply) this.instance).removeDmMaskWall(i2);
             return this;
         }
 
-        public Builder removeExpressions(int i) {
+        public C9025b removeExpressions(int i2) {
             copyOnWrite();
-            ((DmViewReply) this.instance).removeExpressions(i);
+            ((DmViewReply) this.instance).removeExpressions(i2);
             return this;
         }
 
-        public Builder removePostPanel(int i) {
+        public C9025b removePostPanel(int i2) {
             copyOnWrite();
-            ((DmViewReply) this.instance).removePostPanel(i);
+            ((DmViewReply) this.instance).removePostPanel(i2);
             return this;
         }
 
-        public Builder removePostPanel2(int i) {
+        public C9025b removePostPanel2(int i2) {
             copyOnWrite();
-            ((DmViewReply) this.instance).removePostPanel2(i);
+            ((DmViewReply) this.instance).removePostPanel2(i2);
             return this;
         }
 
-        public Builder setActivityMeta(int i, String str) {
+        public C9025b removeSubViews(int i2) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setActivityMeta(i, str);
+            ((DmViewReply) this.instance).removeSubViews(i2);
             return this;
         }
 
-        public Builder setAiFlag(DanmakuFlagConfig danmakuFlagConfig) {
+        public C9025b setActivityMeta(int i2, String str) {
+            copyOnWrite();
+            ((DmViewReply) this.instance).setActivityMeta(i2, str);
+            return this;
+        }
+
+        public C9025b setAiFlag(DanmakuFlagConfig danmakuFlagConfig) {
             copyOnWrite();
             ((DmViewReply) this.instance).setAiFlag(danmakuFlagConfig);
             return this;
         }
 
-        public Builder setAllow(boolean z) {
+        public C9025b setAllow(boolean z) {
             copyOnWrite();
             ((DmViewReply) this.instance).setAllow(z);
             return this;
         }
 
-        public Builder setBuzzwordConfig(BuzzwordConfig buzzwordConfig) {
+        public C9025b setBuzzwordConfig(BuzzwordConfig buzzwordConfig) {
             copyOnWrite();
             ((DmViewReply) this.instance).setBuzzwordConfig(buzzwordConfig);
             return this;
         }
 
-        public Builder setCheckBox(boolean z) {
+        public C9025b setCheckBox(boolean z) {
             copyOnWrite();
             ((DmViewReply) this.instance).setCheckBox(z);
             return this;
         }
 
-        public Builder setCheckBoxShowMsg(String str) {
+        public C9025b setCheckBoxShowMsg(String str) {
             copyOnWrite();
             ((DmViewReply) this.instance).setCheckBoxShowMsg(str);
             return this;
         }
 
-        public Builder setCheckBoxShowMsgBytes(ByteString byteString) {
+        public C9025b setCheckBoxShowMsgBytes(ByteString byteString) {
             copyOnWrite();
             ((DmViewReply) this.instance).setCheckBoxShowMsgBytes(byteString);
             return this;
         }
 
-        public Builder setClosed(boolean z) {
+        public C9025b setClosed(boolean z) {
             copyOnWrite();
             ((DmViewReply) this.instance).setClosed(z);
             return this;
         }
 
-        public Builder setCommand(Command command) {
+        public C9025b setCommand(Command command) {
             copyOnWrite();
             ((DmViewReply) this.instance).setCommand(command);
             return this;
         }
 
-        public Builder setDmHerd(DmHerdView dmHerdView) {
+        public C9025b setDmHerd(DmHerdView dmHerdView) {
             copyOnWrite();
             ((DmViewReply) this.instance).setDmHerd(dmHerdView);
             return this;
         }
 
-        public Builder setDmMaskWall(int i, DmMaskWall dmMaskWall) {
+        public C9025b setDmMaskWall(int i2, DmMaskWall dmMaskWall) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setDmMaskWall(i, dmMaskWall);
+            ((DmViewReply) this.instance).setDmMaskWall(i2, dmMaskWall);
             return this;
         }
 
-        public Builder setExpoReport(ExpoReport expoReport) {
+        public C9025b setExpoReport(ExpoReport expoReport) {
             copyOnWrite();
             ((DmViewReply) this.instance).setExpoReport(expoReport);
             return this;
         }
 
-        public Builder setExpressions(int i, Expressions expressions) {
+        public C9025b setExpressions(int i2, Expressions expressions) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setExpressions(i, expressions);
+            ((DmViewReply) this.instance).setExpressions(i2, expressions);
             return this;
         }
 
-        public Builder setInputPlaceholder(String str) {
+        public C9025b setInputPlaceholder(String str) {
             copyOnWrite();
             ((DmViewReply) this.instance).setInputPlaceholder(str);
             return this;
         }
 
-        public Builder setInputPlaceholderBytes(ByteString byteString) {
+        public C9025b setInputPlaceholderBytes(ByteString byteString) {
             copyOnWrite();
             ((DmViewReply) this.instance).setInputPlaceholderBytes(byteString);
             return this;
         }
 
-        public Builder setKv(String str) {
+        public C9025b setKv(String str) {
             copyOnWrite();
             ((DmViewReply) this.instance).setKv(str);
             return this;
         }
 
-        public Builder setKvBytes(ByteString byteString) {
+        public C9025b setKvBytes(ByteString byteString) {
             copyOnWrite();
             ((DmViewReply) this.instance).setKvBytes(byteString);
             return this;
         }
 
-        public Builder setMask(VideoMask videoMask) {
+        public C9025b setMask(VideoMask videoMask) {
             copyOnWrite();
             ((DmViewReply) this.instance).setMask(videoMask);
             return this;
         }
 
-        public Builder setPlayerConfig(DanmuPlayerViewConfig danmuPlayerViewConfig) {
+        public C9025b setPlayerConfig(DanmuPlayerViewConfig danmuPlayerViewConfig) {
             copyOnWrite();
             ((DmViewReply) this.instance).setPlayerConfig(danmuPlayerViewConfig);
             return this;
         }
 
-        public Builder setPostPanel(int i, PostPanel postPanel) {
+        public C9025b setPostPanel(int i2, PostPanel postPanel) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setPostPanel(i, postPanel);
+            ((DmViewReply) this.instance).setPostPanel(i2, postPanel);
             return this;
         }
 
-        public Builder setPostPanel2(int i, PostPanelV2 postPanelV2) {
+        public C9025b setPostPanel2(int i2, PostPanelV2 postPanelV2) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setPostPanel2(i, postPanelV2);
+            ((DmViewReply) this.instance).setPostPanel2(i2, postPanelV2);
             return this;
         }
 
-        public Builder setReportFilterContent(int i, String str) {
+        public C9025b setQoe(QoeInfo qoeInfo) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setReportFilterContent(i, str);
+            ((DmViewReply) this.instance).setQoe(qoeInfo);
             return this;
         }
 
-        public Builder setSendBoxStyle(int i) {
+        public C9025b setReportFilterContent(int i2, String str) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setSendBoxStyle(i);
+            ((DmViewReply) this.instance).setReportFilterContent(i2, str);
             return this;
         }
 
-        public Builder setSpecialDms(int i, String str) {
+        public C9025b setSendBoxStyle(int i2) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setSpecialDms(i, str);
+            ((DmViewReply) this.instance).setSendBoxStyle(i2);
             return this;
         }
 
-        public Builder setSubtitle(VideoSubtitle videoSubtitle) {
+        public C9025b setSpecialDms(int i2, String str) {
+            copyOnWrite();
+            ((DmViewReply) this.instance).setSpecialDms(i2, str);
+            return this;
+        }
+
+        public C9025b setSubViews(int i2, DmSubView dmSubView) {
+            copyOnWrite();
+            ((DmViewReply) this.instance).setSubViews(i2, dmSubView);
+            return this;
+        }
+
+        public C9025b setSubtitle(VideoSubtitle videoSubtitle) {
             copyOnWrite();
             ((DmViewReply) this.instance).setSubtitle(videoSubtitle);
             return this;
         }
 
-        public Builder setTextPlaceholder(String str) {
+        public C9025b setTextPlaceholder(String str) {
             copyOnWrite();
             ((DmViewReply) this.instance).setTextPlaceholder(str);
             return this;
         }
 
-        public Builder setTextPlaceholderBytes(ByteString byteString) {
+        public C9025b setTextPlaceholderBytes(ByteString byteString) {
             copyOnWrite();
             ((DmViewReply) this.instance).setTextPlaceholderBytes(byteString);
             return this;
         }
 
-        private Builder() {
+        private C9025b() {
             super(DmViewReply.DEFAULT_INSTANCE);
         }
 
-        public Builder addDmMaskWall(int i, DmMaskWall dmMaskWall) {
+        public C9025b addDmMaskWall(int i2, DmMaskWall dmMaskWall) {
             copyOnWrite();
-            ((DmViewReply) this.instance).addDmMaskWall(i, dmMaskWall);
+            ((DmViewReply) this.instance).addDmMaskWall(i2, dmMaskWall);
             return this;
         }
 
-        public Builder addExpressions(int i, Expressions expressions) {
+        public C9025b addExpressions(int i2, Expressions expressions) {
             copyOnWrite();
-            ((DmViewReply) this.instance).addExpressions(i, expressions);
+            ((DmViewReply) this.instance).addExpressions(i2, expressions);
             return this;
         }
 
-        public Builder addPostPanel(int i, PostPanel postPanel) {
+        public C9025b addPostPanel(int i2, PostPanel postPanel) {
             copyOnWrite();
-            ((DmViewReply) this.instance).addPostPanel(i, postPanel);
+            ((DmViewReply) this.instance).addPostPanel(i2, postPanel);
             return this;
         }
 
-        public Builder addPostPanel2(int i, PostPanelV2 postPanelV2) {
+        public C9025b addPostPanel2(int i2, PostPanelV2 postPanelV2) {
             copyOnWrite();
-            ((DmViewReply) this.instance).addPostPanel2(i, postPanelV2);
+            ((DmViewReply) this.instance).addPostPanel2(i2, postPanelV2);
             return this;
         }
 
-        public Builder setAiFlag(DanmakuFlagConfig.Builder builder) {
+        public C9025b addSubViews(int i2, DmSubView dmSubView) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setAiFlag(builder.build());
+            ((DmViewReply) this.instance).addSubViews(i2, dmSubView);
             return this;
         }
 
-        public Builder setBuzzwordConfig(BuzzwordConfig.Builder builder) {
+        public C9025b setAiFlag(DanmakuFlagConfig.Builder c8976b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setBuzzwordConfig(builder.build());
+            ((DmViewReply) this.instance).setAiFlag(c8976b.build());
             return this;
         }
 
-        public Builder setCommand(Command.Builder builder) {
+        public C9025b setBuzzwordConfig(BuzzwordConfig.Builder c8952b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setCommand(builder.build());
+            ((DmViewReply) this.instance).setBuzzwordConfig(c8952b.build());
             return this;
         }
 
-        public Builder setDmHerd(DmHerdView.Builder builder) {
+        public C9025b setCommand(Command.Builder c8966b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setDmHerd(builder.build());
+            ((DmViewReply) this.instance).setCommand(c8966b.build());
             return this;
         }
 
-        public Builder setDmMaskWall(int i, DmMaskWall.Builder builder) {
+        public C9025b setDmHerd(DmHerdView.Builder c9001b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setDmMaskWall(i, builder.build());
+            ((DmViewReply) this.instance).setDmHerd(c9001b.build());
             return this;
         }
 
-        public Builder setExpoReport(ExpoReport.Builder builder) {
+        public C9025b setDmMaskWall(int i2, DmMaskWall.Builder c9003b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setExpoReport(builder.build());
+            ((DmViewReply) this.instance).setDmMaskWall(i2, c9003b.build());
             return this;
         }
 
-        public Builder setExpressions(int i, Expressions.Builder builder) {
+        public C9025b setExpoReport(ExpoReport.Builder c9031b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setExpressions(i, builder.build());
+            ((DmViewReply) this.instance).setExpoReport(c9031b.build());
             return this;
         }
 
-        public Builder setMask(VideoMask.Builder builder) {
+        public C9025b setExpressions(int i2, Expressions.Builder c9037b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setMask(builder.build());
+            ((DmViewReply) this.instance).setExpressions(i2, c9037b.build());
             return this;
         }
 
-        public Builder setPlayerConfig(DanmuPlayerViewConfig.Builder builder) {
+        public C9025b setMask(VideoMask.Builder c9121b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setPlayerConfig(builder.build());
+            ((DmViewReply) this.instance).setMask(c9121b.build());
             return this;
         }
 
-        public Builder setPostPanel(int i, PostPanel.Builder builder) {
+        public C9025b setPlayerConfig(DanmuPlayerViewConfig.Builder c8988b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setPostPanel(i, builder.build());
+            ((DmViewReply) this.instance).setPlayerConfig(c8988b.build());
             return this;
         }
 
-        public Builder setPostPanel2(int i, PostPanelV2.Builder builder) {
+        public C9025b setPostPanel(int i2, PostPanel.Builder c9085b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setPostPanel2(i, builder.build());
+            ((DmViewReply) this.instance).setPostPanel(i2, c9085b.build());
             return this;
         }
 
-        public Builder setSubtitle(VideoSubtitle.Builder builder) {
+        public C9025b setPostPanel2(int i2, PostPanelV2.Builder c9089b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).setSubtitle(builder.build());
+            ((DmViewReply) this.instance).setPostPanel2(i2, c9089b.build());
             return this;
         }
 
-        public Builder addDmMaskWall(DmMaskWall.Builder builder) {
+        public C9025b setQoe(QoeInfo.C9093b c9093b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).addDmMaskWall(builder.build());
+            ((DmViewReply) this.instance).setQoe(c9093b.build());
             return this;
         }
 
-        public Builder addExpressions(Expressions.Builder builder) {
+        public C9025b setSubViews(int i2, DmSubView.C9023b c9023b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).addExpressions(builder.build());
+            ((DmViewReply) this.instance).setSubViews(i2, c9023b.build());
             return this;
         }
 
-        public Builder addPostPanel(PostPanel.Builder builder) {
+        public C9025b setSubtitle(VideoSubtitle.Builder c9123b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).addPostPanel(builder.build());
+            ((DmViewReply) this.instance).setSubtitle(c9123b.build());
             return this;
         }
 
-        public Builder addPostPanel2(PostPanelV2.Builder builder) {
+        public C9025b addDmMaskWall(DmMaskWall.Builder c9003b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).addPostPanel2(builder.build());
+            ((DmViewReply) this.instance).addDmMaskWall(c9003b.build());
             return this;
         }
 
-        public Builder addDmMaskWall(int i, DmMaskWall.Builder builder) {
+        public C9025b addExpressions(Expressions.Builder c9037b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).addDmMaskWall(i, builder.build());
+            ((DmViewReply) this.instance).addExpressions(c9037b.build());
             return this;
         }
 
-        public Builder addExpressions(int i, Expressions.Builder builder) {
+        public C9025b addPostPanel(PostPanel.Builder c9085b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).addExpressions(i, builder.build());
+            ((DmViewReply) this.instance).addPostPanel(c9085b.build());
             return this;
         }
 
-        public Builder addPostPanel(int i, PostPanel.Builder builder) {
+        public C9025b addPostPanel2(PostPanelV2.Builder c9089b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).addPostPanel(i, builder.build());
+            ((DmViewReply) this.instance).addPostPanel2(c9089b.build());
             return this;
         }
 
-        public Builder addPostPanel2(int i, PostPanelV2.Builder builder) {
+        public C9025b addSubViews(DmSubView.C9023b c9023b) {
             copyOnWrite();
-            ((DmViewReply) this.instance).addPostPanel2(i, builder.build());
+            ((DmViewReply) this.instance).addSubViews(c9023b.build());
+            return this;
+        }
+
+        public C9025b addDmMaskWall(int i2, DmMaskWall.Builder c9003b) {
+            copyOnWrite();
+            ((DmViewReply) this.instance).addDmMaskWall(i2, c9003b.build());
+            return this;
+        }
+
+        public C9025b addExpressions(int i2, Expressions.Builder c9037b) {
+            copyOnWrite();
+            ((DmViewReply) this.instance).addExpressions(i2, c9037b.build());
+            return this;
+        }
+
+        public C9025b addPostPanel(int i2, PostPanel.Builder c9085b) {
+            copyOnWrite();
+            ((DmViewReply) this.instance).addPostPanel(i2, c9085b.build());
+            return this;
+        }
+
+        public C9025b addPostPanel2(int i2, PostPanelV2.Builder c9089b) {
+            copyOnWrite();
+            ((DmViewReply) this.instance).addPostPanel2(i2, c9089b.build());
+            return this;
+        }
+
+        public C9025b addSubViews(int i2, DmSubView.C9023b c9023b) {
+            copyOnWrite();
+            ((DmViewReply) this.instance).addSubViews(i2, c9023b.build());
             return this;
         }
     }
@@ -1014,6 +1117,12 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
     }
 
     /* JADX INFO: Access modifiers changed from: private */
+    public void addAllSubViews(Iterable<? extends DmSubView> iterable) {
+        ensureSubViewsIsMutable();
+        AbstractMessageLite.addAll((Iterable) iterable, (List) this.subViews_);
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
     public void addDmMaskWall(DmMaskWall dmMaskWall) {
         dmMaskWall.getClass();
         ensureDmMaskWallIsMutable();
@@ -1067,6 +1176,13 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
         AbstractMessageLite.checkByteStringIsUtf8(byteString);
         ensureSpecialDmsIsMutable();
         this.specialDms_.add(byteString.toStringUtf8());
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void addSubViews(DmSubView dmSubView) {
+        dmSubView.getClass();
+        ensureSubViewsIsMutable();
+        this.subViews_.add(dmSubView);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -1160,6 +1276,11 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
     }
 
     /* JADX INFO: Access modifiers changed from: private */
+    public void clearQoe() {
+        this.qoe_ = null;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearReportFilterContent() {
         this.reportFilterContent_ = GeneratedMessageLite.emptyProtobufList();
     }
@@ -1172,6 +1293,11 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
     /* JADX INFO: Access modifiers changed from: private */
     public void clearSpecialDms() {
         this.specialDms_ = GeneratedMessageLite.emptyProtobufList();
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void clearSubViews() {
+        this.subViews_ = GeneratedMessageLite.emptyProtobufList();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -1240,43 +1366,118 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
         this.specialDms_ = GeneratedMessageLite.mutableCopy(protobufList);
     }
 
+    private void ensureSubViewsIsMutable() {
+        Internal.ProtobufList<DmSubView> protobufList = this.subViews_;
+        if (protobufList.isModifiable()) {
+            return;
+        }
+        this.subViews_ = GeneratedMessageLite.mutableCopy(protobufList);
+    }
+
     public static DmViewReply getDefaultInstance() {
         return DEFAULT_INSTANCE;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     public void mergeAiFlag(DanmakuFlagConfig danmakuFlagConfig) {
+        danmakuFlagConfig.getClass();
+        DanmakuFlagConfig danmakuFlagConfig2 = this.aiFlag_;
+        if (danmakuFlagConfig2 != null && danmakuFlagConfig2 != DanmakuFlagConfig.getDefaultInstance()) {
+            this.aiFlag_ = DanmakuFlagConfig.newBuilder(this.aiFlag_).mergeFrom((DanmakuFlagConfig) danmakuFlagConfig).buildPartial();
+        } else {
+            this.aiFlag_ = danmakuFlagConfig;
+        }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     public void mergeBuzzwordConfig(BuzzwordConfig buzzwordConfig) {
+        buzzwordConfig.getClass();
+        BuzzwordConfig buzzwordConfig2 = this.buzzwordConfig_;
+        if (buzzwordConfig2 != null && buzzwordConfig2 != BuzzwordConfig.getDefaultInstance()) {
+            this.buzzwordConfig_ = BuzzwordConfig.newBuilder(this.buzzwordConfig_).mergeFrom((BuzzwordConfig) buzzwordConfig).buildPartial();
+        } else {
+            this.buzzwordConfig_ = buzzwordConfig;
+        }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     public void mergeCommand(Command command) {
+        command.getClass();
+        Command command2 = this.command_;
+        if (command2 != null && command2 != Command.getDefaultInstance()) {
+            this.command_ = Command.newBuilder(this.command_).mergeFrom((Command) command).buildPartial();
+        } else {
+            this.command_ = command;
+        }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     public void mergeDmHerd(DmHerdView dmHerdView) {
+        dmHerdView.getClass();
+        DmHerdView dmHerdView2 = this.dmHerd_;
+        if (dmHerdView2 != null && dmHerdView2 != DmHerdView.getDefaultInstance()) {
+            this.dmHerd_ = DmHerdView.newBuilder(this.dmHerd_).mergeFrom((DmHerdView) dmHerdView).buildPartial();
+        } else {
+            this.dmHerd_ = dmHerdView;
+        }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     public void mergeExpoReport(ExpoReport expoReport) {
+        expoReport.getClass();
+        ExpoReport expoReport2 = this.expoReport_;
+        if (expoReport2 != null && expoReport2 != ExpoReport.getDefaultInstance()) {
+            this.expoReport_ = ExpoReport.newBuilder(this.expoReport_).mergeFrom((ExpoReport) expoReport).buildPartial();
+        } else {
+            this.expoReport_ = expoReport;
+        }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     public void mergeMask(VideoMask videoMask) {
+        videoMask.getClass();
+        VideoMask videoMask2 = this.mask_;
+        if (videoMask2 != null && videoMask2 != VideoMask.getDefaultInstance()) {
+            this.mask_ = VideoMask.newBuilder(this.mask_).mergeFrom((VideoMask) videoMask).buildPartial();
+        } else {
+            this.mask_ = videoMask;
+        }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     public void mergePlayerConfig(DanmuPlayerViewConfig danmuPlayerViewConfig) {
+        danmuPlayerViewConfig.getClass();
+        DanmuPlayerViewConfig danmuPlayerViewConfig2 = this.playerConfig_;
+        if (danmuPlayerViewConfig2 != null && danmuPlayerViewConfig2 != DanmuPlayerViewConfig.getDefaultInstance()) {
+            this.playerConfig_ = DanmuPlayerViewConfig.newBuilder(this.playerConfig_).mergeFrom((DanmuPlayerViewConfig) danmuPlayerViewConfig).buildPartial();
+        } else {
+            this.playerConfig_ = danmuPlayerViewConfig;
+        }
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void mergeQoe(QoeInfo qoeInfo) {
+        qoeInfo.getClass();
+        QoeInfo qoeInfo2 = this.qoe_;
+        if (qoeInfo2 != null && qoeInfo2 != QoeInfo.getDefaultInstance()) {
+            this.qoe_ = QoeInfo.newBuilder(this.qoe_).mergeFrom((QoeInfo) qoeInfo).buildPartial();
+        } else {
+            this.qoe_ = qoeInfo;
+        }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     public void mergeSubtitle(VideoSubtitle videoSubtitle) {
+        videoSubtitle.getClass();
+        VideoSubtitle videoSubtitle2 = this.subtitle_;
+        if (videoSubtitle2 != null && videoSubtitle2 != VideoSubtitle.getDefaultInstance()) {
+            this.subtitle_ = VideoSubtitle.newBuilder(this.subtitle_).mergeFrom((VideoSubtitle) videoSubtitle).buildPartial();
+        } else {
+            this.subtitle_ = videoSubtitle;
+        }
     }
 
-    public static Builder newBuilder() {
+    public static C9025b newBuilder() {
         return DEFAULT_INSTANCE.createBuilder();
     }
 
@@ -1293,34 +1494,40 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void removeDmMaskWall(int i) {
+    public void removeDmMaskWall(int i2) {
         ensureDmMaskWallIsMutable();
-        this.dmMaskWall_.remove(i);
+        this.dmMaskWall_.remove(i2);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void removeExpressions(int i) {
+    public void removeExpressions(int i2) {
         ensureExpressionsIsMutable();
-        this.expressions_.remove(i);
+        this.expressions_.remove(i2);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void removePostPanel(int i) {
+    public void removePostPanel(int i2) {
         ensurePostPanelIsMutable();
-        this.postPanel_.remove(i);
+        this.postPanel_.remove(i2);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void removePostPanel2(int i) {
+    public void removePostPanel2(int i2) {
         ensurePostPanel2IsMutable();
-        this.postPanel2_.remove(i);
+        this.postPanel2_.remove(i2);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setActivityMeta(int i, String str) {
+    public void removeSubViews(int i2) {
+        ensureSubViewsIsMutable();
+        this.subViews_.remove(i2);
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void setActivityMeta(int i2, String str) {
         str.getClass();
         ensureActivityMetaIsMutable();
-        this.activityMeta_.set(i, str);
+        this.activityMeta_.set(i2, str);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -1375,10 +1582,10 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setDmMaskWall(int i, DmMaskWall dmMaskWall) {
+    public void setDmMaskWall(int i2, DmMaskWall dmMaskWall) {
         dmMaskWall.getClass();
         ensureDmMaskWallIsMutable();
-        this.dmMaskWall_.set(i, dmMaskWall);
+        this.dmMaskWall_.set(i2, dmMaskWall);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -1388,10 +1595,10 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setExpressions(int i, Expressions expressions) {
+    public void setExpressions(int i2, Expressions expressions) {
         expressions.getClass();
         ensureExpressionsIsMutable();
-        this.expressions_.set(i, expressions);
+        this.expressions_.set(i2, expressions);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -1431,36 +1638,49 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setPostPanel(int i, PostPanel postPanel) {
+    public void setPostPanel(int i2, PostPanel postPanel) {
         postPanel.getClass();
         ensurePostPanelIsMutable();
-        this.postPanel_.set(i, postPanel);
+        this.postPanel_.set(i2, postPanel);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setPostPanel2(int i, PostPanelV2 postPanelV2) {
+    public void setPostPanel2(int i2, PostPanelV2 postPanelV2) {
         postPanelV2.getClass();
         ensurePostPanel2IsMutable();
-        this.postPanel2_.set(i, postPanelV2);
+        this.postPanel2_.set(i2, postPanelV2);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setReportFilterContent(int i, String str) {
+    public void setQoe(QoeInfo qoeInfo) {
+        qoeInfo.getClass();
+        this.qoe_ = qoeInfo;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void setReportFilterContent(int i2, String str) {
         str.getClass();
         ensureReportFilterContentIsMutable();
-        this.reportFilterContent_.set(i, str);
+        this.reportFilterContent_.set(i2, str);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setSendBoxStyle(int i) {
-        this.sendBoxStyle_ = i;
+    public void setSendBoxStyle(int i2) {
+        this.sendBoxStyle_ = i2;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setSpecialDms(int i, String str) {
+    public void setSpecialDms(int i2, String str) {
         str.getClass();
         ensureSpecialDmsIsMutable();
-        this.specialDms_.set(i, str);
+        this.specialDms_.set(i2, str);
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void setSubViews(int i2, DmSubView dmSubView) {
+        dmSubView.getClass();
+        ensureSubViewsIsMutable();
+        this.subViews_.set(i2, dmSubView);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -1483,13 +1703,14 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
 
     @Override // com.google.protobuf.GeneratedMessageLite
     protected final Object dynamicMethod(GeneratedMessageLite.MethodToInvoke methodToInvoke, Object obj, Object obj2) {
-        switch (C72251.f17066xa1df5c61[methodToInvoke.ordinal()]) {
+        C9024a c9024a = null;
+        switch (C9024a.f18608xa1df5c61[methodToInvoke.ordinal()]) {
             case 1:
                 return new DmViewReply();
             case 2:
-                return new Builder(null);
+                return new C9025b(c9024a);
             case 3:
-                return GeneratedMessageLite.newMessageInfo(DEFAULT_INSTANCE, "\u0000\u0017\u0000\u0000\u0001\u0017\u0017\u0000\u0007\u0000\u0001\u0007\u0002\t\u0003\t\u0004\u021a\u0005\t\u0006\t\u0007\u0004\b\u0007\t\u0007\n\u0208\u000b\u0208\f\u0208\r\u021a\u000e\t\u000f\t\u0010\u001b\u0011\u001b\u0012\u021a\u0013\u001b\u0014\u001b\u0015\t\u0016\t\u0017\u0208", new Object[]{"closed_", "mask_", "subtitle_", "specialDms_", "aiFlag_", "playerConfig_", "sendBoxStyle_", "allow_", "checkBox_", "checkBoxShowMsg_", "textPlaceholder_", "inputPlaceholder_", "reportFilterContent_", "expoReport_", "buzzwordConfig_", "expressions_", Expressions.class, "postPanel_", PostPanel.class, "activityMeta_", "postPanel2_", PostPanelV2.class, "dmMaskWall_", DmMaskWall.class, "dmHerd_", "command_", "kv_"});
+                return GeneratedMessageLite.newMessageInfo(DEFAULT_INSTANCE, "\u0000\u0019\u0000\u0000\u0001\u0019\u0019\u0000\b\u0000\u0001\u0007\u0002\t\u0003\t\u0004\u021a\u0005\t\u0006\t\u0007\u0004\b\u0007\t\u0007\n\u0208\u000b\u0208\f\u0208\r\u021a\u000e\t\u000f\t\u0010\u001b\u0011\u001b\u0012\u021a\u0013\u001b\u0014\u001b\u0015\t\u0016\t\u0017\u0208\u0018\u001b\u0019\t", new Object[]{"closed_", "mask_", "subtitle_", "specialDms_", "aiFlag_", "playerConfig_", "sendBoxStyle_", "allow_", "checkBox_", "checkBoxShowMsg_", "textPlaceholder_", "inputPlaceholder_", "reportFilterContent_", "expoReport_", "buzzwordConfig_", "expressions_", Expressions.class, "postPanel_", PostPanel.class, "activityMeta_", "postPanel2_", PostPanelV2.class, "dmMaskWall_", DmMaskWall.class, "dmHerd_", "command_", "kv_", "subViews_", DmSubView.class, "qoe_"});
             case 4:
                 return DEFAULT_INSTANCE;
             case 5:
@@ -1513,12 +1734,12 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
         }
     }
 
-    public String getActivityMeta(int i) {
-        return this.activityMeta_.get(i);
+    public String getActivityMeta(int i2) {
+        return this.activityMeta_.get(i2);
     }
 
-    public ByteString getActivityMetaBytes(int i) {
-        return ByteString.copyFromUtf8(this.activityMeta_.get(i));
+    public ByteString getActivityMetaBytes(int i2) {
+        return ByteString.copyFromUtf8(this.activityMeta_.get(i2));
     }
 
     public int getActivityMetaCount() {
@@ -1569,8 +1790,8 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
         return dmHerdView == null ? DmHerdView.getDefaultInstance() : dmHerdView;
     }
 
-    public DmMaskWall getDmMaskWall(int i) {
-        return this.dmMaskWall_.get(i);
+    public DmMaskWall getDmMaskWall(int i2) {
+        return this.dmMaskWall_.get(i2);
     }
 
     public int getDmMaskWallCount() {
@@ -1581,8 +1802,8 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
         return this.dmMaskWall_;
     }
 
-    public DmMaskWallOrBuilder getDmMaskWallOrBuilder(int i) {
-        return this.dmMaskWall_.get(i);
+    public DmMaskWallOrBuilder getDmMaskWallOrBuilder(int i2) {
+        return this.dmMaskWall_.get(i2);
     }
 
     public List<? extends DmMaskWallOrBuilder> getDmMaskWallOrBuilderList() {
@@ -1594,8 +1815,8 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
         return expoReport == null ? ExpoReport.getDefaultInstance() : expoReport;
     }
 
-    public Expressions getExpressions(int i) {
-        return this.expressions_.get(i);
+    public Expressions getExpressions(int i2) {
+        return this.expressions_.get(i2);
     }
 
     public int getExpressionsCount() {
@@ -1606,8 +1827,8 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
         return this.expressions_;
     }
 
-    public ExpressionsOrBuilder getExpressionsOrBuilder(int i) {
-        return this.expressions_.get(i);
+    public ExpressionsOrBuilder getExpressionsOrBuilder(int i2) {
+        return this.expressions_.get(i2);
     }
 
     public List<? extends ExpressionsOrBuilder> getExpressionsOrBuilderList() {
@@ -1640,12 +1861,12 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
         return danmuPlayerViewConfig == null ? DanmuPlayerViewConfig.getDefaultInstance() : danmuPlayerViewConfig;
     }
 
-    public PostPanel getPostPanel(int i) {
-        return this.postPanel_.get(i);
+    public PostPanel getPostPanel(int i2) {
+        return this.postPanel_.get(i2);
     }
 
-    public PostPanelV2 getPostPanel2(int i) {
-        return this.postPanel2_.get(i);
+    public PostPanelV2 getPostPanel2(int i2) {
+        return this.postPanel2_.get(i2);
     }
 
     public int getPostPanel2Count() {
@@ -1656,8 +1877,8 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
         return this.postPanel2_;
     }
 
-    public PostPanelV2OrBuilder getPostPanel2OrBuilder(int i) {
-        return this.postPanel2_.get(i);
+    public PostPanelV2OrBuilder getPostPanel2OrBuilder(int i2) {
+        return this.postPanel2_.get(i2);
     }
 
     public List<? extends PostPanelV2OrBuilder> getPostPanel2OrBuilderList() {
@@ -1672,20 +1893,25 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
         return this.postPanel_;
     }
 
-    public PostPanelOrBuilder getPostPanelOrBuilder(int i) {
-        return this.postPanel_.get(i);
+    public PostPanelOrBuilder getPostPanelOrBuilder(int i2) {
+        return this.postPanel_.get(i2);
     }
 
     public List<? extends PostPanelOrBuilder> getPostPanelOrBuilderList() {
         return this.postPanel_;
     }
 
-    public String getReportFilterContent(int i) {
-        return this.reportFilterContent_.get(i);
+    public QoeInfo getQoe() {
+        QoeInfo qoeInfo = this.qoe_;
+        return qoeInfo == null ? QoeInfo.getDefaultInstance() : qoeInfo;
     }
 
-    public ByteString getReportFilterContentBytes(int i) {
-        return ByteString.copyFromUtf8(this.reportFilterContent_.get(i));
+    public String getReportFilterContent(int i2) {
+        return this.reportFilterContent_.get(i2);
+    }
+
+    public ByteString getReportFilterContentBytes(int i2) {
+        return ByteString.copyFromUtf8(this.reportFilterContent_.get(i2));
     }
 
     public int getReportFilterContentCount() {
@@ -1700,12 +1926,12 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
         return this.sendBoxStyle_;
     }
 
-    public String getSpecialDms(int i) {
-        return this.specialDms_.get(i);
+    public String getSpecialDms(int i2) {
+        return this.specialDms_.get(i2);
     }
 
-    public ByteString getSpecialDmsBytes(int i) {
-        return ByteString.copyFromUtf8(this.specialDms_.get(i));
+    public ByteString getSpecialDmsBytes(int i2) {
+        return ByteString.copyFromUtf8(this.specialDms_.get(i2));
     }
 
     public int getSpecialDmsCount() {
@@ -1714,6 +1940,26 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
 
     public List<String> getSpecialDmsList() {
         return this.specialDms_;
+    }
+
+    public DmSubView getSubViews(int i2) {
+        return this.subViews_.get(i2);
+    }
+
+    public int getSubViewsCount() {
+        return this.subViews_.size();
+    }
+
+    public List<DmSubView> getSubViewsList() {
+        return this.subViews_;
+    }
+
+    public InterfaceC9135j getSubViewsOrBuilder(int i2) {
+        return this.subViews_.get(i2);
+    }
+
+    public List<? extends InterfaceC9135j> getSubViewsOrBuilderList() {
+        return this.subViews_;
     }
 
     public VideoSubtitle getSubtitle() {
@@ -1757,11 +2003,15 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
         return this.playerConfig_ != null;
     }
 
+    public boolean hasQoe() {
+        return this.qoe_ != null;
+    }
+
     public boolean hasSubtitle() {
         return this.subtitle_ != null;
     }
 
-    public static Builder newBuilder(DmViewReply dmViewReply) {
+    public static C9025b newBuilder(DmViewReply dmViewReply) {
         return DEFAULT_INSTANCE.createBuilder(dmViewReply);
     }
 
@@ -1778,31 +2028,38 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void addDmMaskWall(int i, DmMaskWall dmMaskWall) {
+    public void addDmMaskWall(int i2, DmMaskWall dmMaskWall) {
         dmMaskWall.getClass();
         ensureDmMaskWallIsMutable();
-        this.dmMaskWall_.add(i, dmMaskWall);
+        this.dmMaskWall_.add(i2, dmMaskWall);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void addExpressions(int i, Expressions expressions) {
+    public void addExpressions(int i2, Expressions expressions) {
         expressions.getClass();
         ensureExpressionsIsMutable();
-        this.expressions_.add(i, expressions);
+        this.expressions_.add(i2, expressions);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void addPostPanel(int i, PostPanel postPanel) {
+    public void addPostPanel(int i2, PostPanel postPanel) {
         postPanel.getClass();
         ensurePostPanelIsMutable();
-        this.postPanel_.add(i, postPanel);
+        this.postPanel_.add(i2, postPanel);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void addPostPanel2(int i, PostPanelV2 postPanelV2) {
+    public void addPostPanel2(int i2, PostPanelV2 postPanelV2) {
         postPanelV2.getClass();
         ensurePostPanel2IsMutable();
-        this.postPanel2_.add(i, postPanelV2);
+        this.postPanel2_.add(i2, postPanelV2);
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void addSubViews(int i2, DmSubView dmSubView) {
+        dmSubView.getClass();
+        ensureSubViewsIsMutable();
+        this.subViews_.add(i2, dmSubView);
     }
 
     public static DmViewReply parseFrom(ByteString byteString, ExtensionRegistryLite extensionRegistryLite) throws InvalidProtocolBufferException {
@@ -1831,29 +2088,5 @@ public final class DmViewReply extends GeneratedMessageLite<DmViewReply, DmViewR
 
     public static DmViewReply parseFrom(CodedInputStream codedInputStream, ExtensionRegistryLite extensionRegistryLite) throws IOException {
         return (DmViewReply) GeneratedMessageLite.parseFrom(DEFAULT_INSTANCE, codedInputStream, extensionRegistryLite);
-    }
-
-    /**
-     * clearActivityMeta
-     */
-    static void access$6100(DmViewReply reply) {
-    }
-
-    /**
-     * clearCommand
-     */
-    static void access$8000(DmViewReply reply) {
-    }
-
-    /**
-     * setClosed
-     */
-    static void access$100(DmViewReply reply, boolean closed) {
-    }
-
-    /**
-     * setInputPlaceholder
-     */
-    static void access$3200(DmViewReply reply, String inputPlaceholder) {
     }
 }

@@ -37,20 +37,6 @@ public class VideoQualityPatch {
      * <p>
      * for old player PGC
      */
-    public static void unlockLimit(com.bapis.bilibili.pgc.gateway.player.v1.PlayViewReq playViewReq) {
-        int halfScreenQuality = halfScreenQuality();
-        int fulledScreenQuality = fullScreenQuality();
-        if (halfScreenQuality != 0 || fulledScreenQuality != 0) {
-            playViewReq.setFnval(Constants.MAX_FNVAL);
-            playViewReq.setFourk(true);
-        }
-    }
-
-    /**
-     * unlock 8k limit
-     * <p>
-     * for old player PGC
-     */
     public static void unlockLimit(com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq playViewReq) {
         int halfScreenQuality = halfScreenQuality();
         int fulledScreenQuality = fullScreenQuality();
