@@ -5,12 +5,10 @@ import android.app.AlertDialog
 import android.content.Context
 import android.net.Uri
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import app.revanced.bilibili.api.BiliRoamingApi.getPlayUrl
 import app.revanced.bilibili.api.CustomServerException
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
@@ -23,13 +21,23 @@ import java.net.URL
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
-data class SpeedTestResult(val name: String, val value: String, var speed: String)
+data class SpeedTestResult(
+    val name: String,
+    val value: String,
+    var speed: String,
+    var selected: Boolean
+)
 
 @SuppressLint("ViewConstructor")
-class SpeedTestItemView(context: Context, name: String = "", speed: String = "") :
-    LinearLayout(context) {
+class SpeedTestItemView(
+    context: Context,
+    name: String = "",
+    speed: String = "",
+    selected: Boolean = false
+) : LinearLayout(context) {
     private val nameView: TextView
     private val speedView: TextView
+    private val checkedView: RadioButton
 
     var name: String
         get() = nameView.text.toString()
@@ -41,6 +49,15 @@ class SpeedTestItemView(context: Context, name: String = "", speed: String = "")
         get() = speedView.text.toString()
         set(value) {
             speedView.text = value
+        }
+
+    @get:JvmName("selected")
+    @set:JvmName("selected")
+    var selected: Boolean
+        get() = checkedView.isChecked
+        set(value) {
+            checkedView.isChecked = value
+            checkedView.visibility = if (value) View.VISIBLE else View.INVISIBLE
         }
 
     init {
@@ -65,8 +82,17 @@ class SpeedTestItemView(context: Context, name: String = "", speed: String = "")
                 0, ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply { weight = 2f }
         }.also { addView(it) }
+        checkedView = RadioButton(context).apply {
+            layoutParams = LayoutParams(
+                0, ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                weight = 0.7f
+                gravity = Gravity.CENTER_VERTICAL
+            }
+        }.also { addView(it) }
         this.name = name
         this.speed = speed
+        this.selected = selected
     }
 }
 
@@ -76,6 +102,7 @@ class SpeedTestAdapter(private val context: Context) : ArrayAdapter<SpeedTestRes
             getItem(position)?.let {
                 name = it.name
                 speed = Utils.getString("biliroaming_speed_formatter", it.speed)
+                selected = it.selected
             }
         }
     }
@@ -118,6 +145,11 @@ class SpeedTestDialog(context: Context, onDismiss: (Boolean) -> Unit) :
             val (name, value, _) = adapter.getItem(pos - 1/*headerView*/)
                 ?: return@setOnItemClickListener
             Settings.UPOS_HOST.saveValue(value)
+            for (i in 0 until adapter.count) {
+                val item = adapter.getItem(i) ?: continue
+                item.selected = item.value == value
+            }
+            adapter.notifyDataSetChanged()
             changed = true
             Toasts.showShortWithId("biliroaming_upos_enabled", name)
         }
@@ -130,8 +162,9 @@ class SpeedTestDialog(context: Context, onDismiss: (Boolean) -> Unit) :
         dialog.setTitle(Utils.getString("biliroaming_speed_testing"))
         val results = Utils.getStringArray("biliroaming_upos_entries")
             .zip(Utils.getStringArray("biliroaming_upos_values"))
-            .map { (name, value) -> SpeedTestResult(name, value, "...") }
-            .also { adapter.addAll(it) }
+            .map { (name, value) ->
+                SpeedTestResult(name, value, "...", value == Settings.UPOS_HOST.string)
+            }.also { adapter.addAll(it) }
         speedTestExecutor.execute {
             val url = getTestUrl() ?: run {
                 Utils.runOnMainThread {
