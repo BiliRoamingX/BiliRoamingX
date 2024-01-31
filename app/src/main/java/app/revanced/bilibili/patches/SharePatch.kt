@@ -27,7 +27,7 @@ object SharePatch {
     fun onShareTo(platform: String, params: Bundle): Boolean {
         LogHelper.debug {
             "shareTo, platform: $platform, params: ${
-                JSONObject(params.keySet().associateWith { params.get(it) })
+                JSONObject(params.keySet().associateWith { params.get(it)?.toString() })
             }"
         }
         if (Settings.PURIFY_SHARE.boolean) {

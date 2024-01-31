@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.EditText
 import androidx.preference.Preference
+import app.revanced.bilibili.content.BiliDocumentsProvider
 import app.revanced.bilibili.patches.SplashPatch
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
@@ -22,20 +23,24 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
-        findPreference<Preference>("skin")?.onChange { _, newValue ->
+        findPreference<Preference>(Settings.SKIN.key)?.onChange { _, newValue ->
             if (newValue == true) onSkinClick()
             true
         }
-        findPreference<Preference>("custom_splash")?.onChange { _, newValue ->
+        findPreference<Preference>(Settings.CUSTOM_SPLASH.key)?.onChange { _, newValue ->
             if (newValue == true) selectImage(SELECTION_SPLASH)
             true
         }
-        findPreference<Preference>("custom_splash_logo")?.onChange { _, newValue ->
+        findPreference<Preference>(Settings.CUSTOM_SPLASH_LOGO.key)?.onChange { _, newValue ->
             if (newValue == true) selectImage(SELECTION_LOGO)
             true
         }
-        findPreference<Preference>("purify_splash")?.onChange { _, newValue ->
+        findPreference<Preference>(Settings.PURIFY_SPLASH.key)?.onChange { _, newValue ->
             if (newValue == true) Utils.clearSplashConfigCache()
+            true
+        }
+        findPreference<Preference>(Settings.ENABLE_DOC_PROVIDER.key)?.onChange { _, newValue ->
+            changeComponentState(BiliDocumentsProvider::class.java, newValue == true)
             true
         }
     }

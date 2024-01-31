@@ -32,7 +32,7 @@
     public static ** requireNonNull(...);
 }
 
--keep class app.revanced.all.** { *; }
+#-keep class app.revanced.all.** { *; }
 
 -keep !abstract class app.revanced.bilibili.settings.fragments.* extends androidx.fragment.app.Fragment {
     public <init>(...);
@@ -47,6 +47,8 @@
 
 #-keep class app.revanced.bilibili.** { *; }
 -keep class com.google.protobuf.*Ex { *; }
+
+-keep !abstract class * extends android.content.ContentProvider
 
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;

@@ -195,6 +195,7 @@ public enum Settings {
     FULL_SPLASH("full_splash", BOOLEAN, FALSE),
     FORCE_HW_CODEC("force_hw_codec", BOOLEAN, FALSE),
     ENABLE_AV("enable_av", BOOLEAN, FALSE, true),
+    ENABLE_DOC_PROVIDER("enable_doc_provider", BOOLEAN, FALSE),
 
     // 去广告杂项
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),

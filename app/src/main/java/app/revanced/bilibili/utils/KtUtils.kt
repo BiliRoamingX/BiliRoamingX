@@ -4,12 +4,12 @@
 package app.revanced.bilibili.utils
 
 import android.annotation.SuppressLint
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.SharedPreferences
+import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
+import android.os.Bundle
+import android.os.Parcelable
 import android.util.Base64
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -406,4 +406,23 @@ fun decodeFormBody(body: String): Map<String, String> {
         .map { it.split('=', limit = 2) }
         .filter { it.size == 2 }
         .associate { (k, v) -> k to URLDecoder.decode(v, "UTF-8") }
+}
+
+@Suppress("DEPRECATION")
+inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+        getParcelable(key, T::class.java)
+    else getParcelable(key)
+}
+
+fun changeComponentState(
+    component: Class<*>,
+    enabled: Boolean,
+    flags: Int = PackageManager.DONT_KILL_APP
+) {
+    val context = Utils.getContext()
+    val componentName = ComponentName(context, component)
+    val state = if (enabled) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+    else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+    context.packageManager.setComponentEnabledSetting(componentName, state, flags)
 }
