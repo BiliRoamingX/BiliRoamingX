@@ -22,7 +22,7 @@ public class LogHelper {
     }
 
     private static final int MAX_LENGTH = 3000;
-    private static final String LOG_TAG = "BiliRoamingX";
+    public static final String LOG_TAG = "BiliRoamingX";
 
     public static void debug(@NonNull LogMessage message, boolean trace) {
         if (Settings.DEBUG.getBoolean()) {
@@ -55,7 +55,7 @@ public class LogHelper {
     public static void warn(@NonNull LogMessage message, @Nullable Exception ex) {
         var logMessage = message.buildMessageString();
         if (ex != null)
-            logMessage = logMessage + '\n' + Log.getStackTraceString(ex);
+            logMessage = logMessage + '\n' + KtUtils.fullStackTraceString(ex);
         log(logMessage, (m) -> Log.w(LOG_TAG, m));
     }
 
@@ -72,7 +72,7 @@ public class LogHelper {
     public static void info(@NonNull LogMessage message, @Nullable Exception ex) {
         var logMessage = message.buildMessageString();
         if (ex != null)
-            logMessage = logMessage + '\n' + Log.getStackTraceString(ex);
+            logMessage = logMessage + '\n' + KtUtils.fullStackTraceString(ex);
         log(logMessage, (m) -> Log.i(LOG_TAG, m));
     }
 
@@ -89,7 +89,7 @@ public class LogHelper {
     public static void error(@NonNull LogMessage message, @Nullable Throwable ex) {
         String logMessage = message.buildMessageString();
         if (ex != null)
-            logMessage = logMessage + '\n' + Log.getStackTraceString(ex);
+            logMessage = logMessage + '\n' + KtUtils.fullStackTraceString(ex);
         log(logMessage, (m) -> Log.e(LOG_TAG, m));
     }
 

@@ -27,6 +27,8 @@ import com.google.protobuf.UnknownFieldSetLite
 import org.json.JSONObject
 import java.io.File
 import java.io.InputStream
+import java.io.PrintWriter
+import java.io.StringWriter
 import java.lang.reflect.Field
 import java.lang.reflect.Proxy
 import java.net.URL
@@ -425,4 +427,22 @@ fun changeComponentState(
     val state = if (enabled) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
     else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
     context.packageManager.setComponentEnabledSetting(componentName, state, flags)
+}
+
+fun Throwable.fullStackTraceString(): String {
+    val writer = StringWriter()
+    val printer = PrintWriter(writer)
+    print(printer)
+    return writer.toString()
+}
+
+private fun Throwable.print(printer: PrintWriter) {
+    printer.println(this)
+    for (ste in stackTrace)
+        printer.println("\tat $ste")
+    val cause = cause
+    if (cause != null) {
+        printer.print("Caused by: ")
+        cause.print(printer)
+    }
 }

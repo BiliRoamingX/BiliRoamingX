@@ -124,7 +124,9 @@ public class ApplicationDelegate {
                             "-T",
                             "100",
                             "-f",
-                            logFile.getAbsolutePath()
+                            logFile.getAbsolutePath(),
+                            LogHelper.LOG_TAG,
+                            "*:S"
                     }
             );
         } catch (Throwable ignored) {
