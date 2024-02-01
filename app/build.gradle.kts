@@ -49,12 +49,10 @@ dependencies {
     implementation(project(mapOf("path" to ":extend")))
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
     compileOnly(project(mapOf("path" to ":dummy")))
-    compileOnly("androidx.annotation:annotation:1.6.0")
+    compileOnly("androidx.annotation:annotation:1.7.1")
     compileOnly("androidx.appcompat:appcompat:1.7.0-alpha03")
-    compileOnly("com.squareup.okhttp3:okhttp:5.0.0-alpha.11")
-    compileOnly("com.squareup.retrofit2:retrofit:2.9.0")
-    compileOnly("androidx.preference:preference:1.2.0")
-    compileOnly("com.google.protobuf:protobuf-javalite:3.23.2")
+    compileOnly("androidx.preference:preference:1.2.1")
+    compileOnly("com.google.protobuf:protobuf-javalite:3.25.2")
 }
 
 tasks.register("publish") { dependsOn("build") }

@@ -4,12 +4,11 @@ plugins {
 
 android {
     namespace = "app.revanced.dummy"
-    compileSdk = 33
-    buildToolsVersion = "33.0.1"
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 23
-        targetSdk = 33
+        targetSdk = 34
     }
 
     buildTypes {
@@ -28,6 +27,6 @@ android {
 }
 
 dependencies {
-    compileOnly("androidx.preference:preference:1.2.0")
-    compileOnly("com.google.protobuf:protobuf-javalite:3.23.2")
+    compileOnly("androidx.preference:preference:1.2.1")
+    compileOnly("com.google.protobuf:protobuf-javalite:3.25.2")
 }
