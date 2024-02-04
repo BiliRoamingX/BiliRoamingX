@@ -25,16 +25,16 @@ object CouponAutoReceiver {
             else false
         } ?: 0
         LogHelper.debug { "CouponAutoReceiver.experienceSuccessCount: $experienceSuccessCount" }
-        if (couponSuccessCount > 0 && experienceSuccessCount > 0) Toasts.show(
-            Utils.getString("biliroaming_all_receive_success", couponSuccessCount),
-            Toast.LENGTH_LONG
-        ) else if (couponSuccessCount > 0) Toasts.show(
-            Utils.getString("biliroaming_coupon_receive_success", couponSuccessCount),
-            Toast.LENGTH_LONG
-        ) else if (experienceSuccessCount > 0) Toasts.showWithId(
-            "biliroaming_experience_receive_success",
-            Toast.LENGTH_LONG
-        )
+        val coupon = if (couponSuccessCount > 0) "${couponSuccessCount}张卡券" else null
+        val vipExp = if (experienceSuccessCount > 0) "大会员每日经验" else null
+        val shareExp = if (receiveShareExperience()) "每日视频分享经验" else null
+        arrayOf(coupon, vipExp, shareExp).filterNotNull().joinToString("、")
+            .takeIf { it.isNotEmpty() }?.let {
+                Toasts.show(
+                    Utils.getString("biliroaming_coupon_receive_success", it),
+                    Toast.LENGTH_LONG
+                )
+            }
     } else Unit
 
     private fun getCouponInfo() = runCatchingOrNull {
@@ -71,7 +71,7 @@ object CouponAutoReceiver {
         connection.setRequestProperty("Cookie", "SESSDATA=$cookieSESSDATA")
         connection.setRequestProperty("User-Agent", defaultUA)
         connection.setDoOutput(true)
-        connection.outputStream.write("type=$type&csrf=$cookieBiliJct".toByteArray(Charsets.UTF_8))
+        connection.outputStream.write("type=$type&csrf=$cookieBiliJct".toByteArray())
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
             val json = getStreamContent(connection.inputStream).toJSONObject()
             LogHelper.debug { "CouponAutoReceiver.receiveCoupon, type: $type, response: $json" }
@@ -86,11 +86,51 @@ object CouponAutoReceiver {
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
         connection.setRequestProperty("Cookie", "SESSDATA=$cookieSESSDATA")
         connection.setRequestProperty("User-Agent", defaultUA)
-        connection.outputStream.write("csrf=$cookieBiliJct".toByteArray(Charsets.UTF_8))
+        connection.outputStream.write("csrf=$cookieBiliJct".toByteArray())
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
             val json = getStreamContent(connection.inputStream).toJSONObject()
             LogHelper.debug { "CouponAutoReceiver.receiveExperience, response: $json" }
             json.optInt("code", -1) == 0
+        } else false
+    } ?: false
+
+    private fun receiveShareExperience() = runCatchingOrNull {
+        val connection = URL("https://api.bilibili.com/x/share/finish")
+            .openConnection() as HttpURLConnection
+        connection.setRequestMethod("POST")
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+        connection.setRequestProperty("User-Agent", defaultUA)
+        val oid = "170001" // aid
+        val sid = arrayOf(
+            "279786",
+            "275431",
+            "279787",
+            "280467",
+            "280468",
+            "280469",
+            "274491",
+            "267410",
+            "267714",
+            "270380",
+        ).random() // cid
+        val body = signQuery(
+            mapOf(
+                "access_key" to Utils.getAccessKey(),
+                "oid" to oid,
+                "panel_type" to "1",
+                "share_channel" to "QQ",
+                "share_id" to "main.ugc-video-detail.0.0.pv",
+                "share_origin" to "vinfo_player",
+                "sid" to sid,
+                "success" to "true",
+            )
+        )
+        connection.outputStream.write(body.toByteArray())
+        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            val json = getStreamContent(connection.inputStream).toJSONObject()
+            LogHelper.debug { "CouponAutoReceiver.receiveShareExperience, response: $json" }
+            json.optInt("code", -1) == 0
+                    && !json.optJSONObject("data")?.optString("toast").isNullOrEmpty()
         } else false
     } ?: false
 }
