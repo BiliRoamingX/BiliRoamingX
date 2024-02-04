@@ -479,7 +479,10 @@ object BiliRoamingApi {
     @JvmStatic
     fun fixThailandSeason(result: JSONObject) {
         // 强制已追番
-        result.optJSONObject("user_status")?.put("follow", 1)
+        result.optJSONObject("user_status")?.run {
+            put("follow", 1)
+            put("pay", 1)
+        }
         var total = 0
 
         val seasons = result.optJSONObject("series")?.optJSONArray("seasons")
