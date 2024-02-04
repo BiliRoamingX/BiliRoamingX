@@ -362,7 +362,9 @@ object BiliRoamingApi {
         }
         result.put("modules", modules)
         result.put("user_status", statusResult.apply {
-            if (statusResult.optJSONObject("vip_info")?.optInt("status") == 1)
+            if (status == 13 && Utils.isEffectiveVip())
+                put("pay", 1)
+            if (optJSONObject("vip_info")?.optInt("status") == 1)
                 put("vip", 1)
             put("review", reviewResult.optJSONObject("review")?.apply {
                 put(
