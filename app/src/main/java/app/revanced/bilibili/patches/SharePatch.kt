@@ -69,10 +69,13 @@ object SharePatch {
             if (!realUrl.isNullOrEmpty()) {
                 val uri = Uri.parse(realUrl)
                 val startProgress = uri.getQueryParameter("start_progress")
+                val p = uri.getQueryParameter("p")
                 newUrl = uri.buildUpon()
                     .clearQuery().encodedFragment(null).apply {
                         if (!startProgress.isNullOrEmpty())
                             appendQueryParameter("start_progress", startProgress)
+                        if (!p.isNullOrEmpty())
+                            appendQueryParameter("p", p)
                     }.build().toString()
             }
         }
