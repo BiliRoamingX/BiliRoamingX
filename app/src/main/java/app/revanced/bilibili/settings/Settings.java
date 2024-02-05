@@ -52,6 +52,7 @@ public enum Settings {
     DISABLE_SEGMENTED_SECTION("disable_segmented_section", BOOLEAN, FALSE),
     DISABLE_AUTO_NEXT_PLAY("disable_auto_next_play", BOOLEAN, FALSE),
     DISABLE_PLAYER_LONG_PRESS("disable_player_long_press", BOOLEAN, FALSE),
+    SCALE_TO_SWITCH_RATIO("scale_to_switch_ratio", BOOLEAN, FALSE),
 
     // 首页
     SHOWING_BOTTOM_ITEMS("showing_bottom_items", STRING_SET, Set.of(Constants.ALL_VALUE)),

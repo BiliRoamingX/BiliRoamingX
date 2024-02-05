@@ -22,14 +22,14 @@ public class PlayerToast implements Cloneable {
     private int level;
     private int location;
     @NonNull
-    private Bundle mToastExtra;
+    public Bundle mToastExtra;
     private int queueType;
     private long refreshDuration;
     private int toastType;
     @Nullable
     private View toastView;
 
-    private PlayerToast(@NonNull Bundle bundle) {
+    public PlayerToast(@NonNull Bundle bundle) {
         this.mToastExtra = bundle;
     }
 

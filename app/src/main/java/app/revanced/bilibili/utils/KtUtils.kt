@@ -7,9 +7,7 @@ import android.annotation.SuppressLint
 import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.os.Build
-import android.os.Bundle
-import android.os.Parcelable
+import android.os.*
 import android.util.Base64
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -444,5 +442,17 @@ private fun Throwable.print(printer: PrintWriter) {
     if (cause != null) {
         printer.print("Caused by: ")
         cause.print(printer)
+    }
+}
+
+@Suppress("DEPRECATION")
+@SuppressLint("MissingPermission")
+fun vibrate(milliseconds: Long) {
+    val vibrator = Utils.getContext().getSystemService(Vibrator::class.java)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val effect = VibrationEffect.createOneShot(milliseconds, VibrationEffect.DEFAULT_AMPLITUDE)
+        vibrator.vibrate(effect)
+    } else {
+        vibrator.vibrate(milliseconds)
     }
 }
