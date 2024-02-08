@@ -8,8 +8,7 @@ import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.*
-import android.util.Base64
-import android.util.TypedValue
+import android.util.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +33,8 @@ import java.net.URLDecoder
 import java.util.TreeMap
 import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
+import kotlin.Boolean
+import kotlin.Pair
 import kotlin.math.roundToInt
 
 @get:JvmName("sp2px")
@@ -454,5 +455,29 @@ fun vibrate(milliseconds: Long) {
         vibrator.vibrate(effect)
     } else {
         vibrator.vibrate(milliseconds)
+    }
+}
+
+@Suppress("DEPRECATION")
+fun Bundle.toJson(pretty: Boolean = false): String {
+    return keySet().associateWith { key ->
+        val value = get(key)
+        if (value is Size) {
+            JSONObject(mapOf("width" to value.width, "height" to value.height))
+        } else if (value is SizeF) {
+            JSONObject(mapOf("width" to value.width, "height" to value.height))
+        } else if (value is Array<*> && value.isArrayOf<Parcelable>()) {
+            value.map { it.toString() }
+        } else if (value is SparseArray<*>) {
+            (0 until value.size()).associate { value.keyAt(it) to value.valueAt(it) }
+        } else if (value is Bundle) {
+            toJson(pretty)
+        } else if (value is Parcelable) {
+            value.toString()
+        } else value
+    }.let {
+        if (pretty) {
+            JSONObject(it).toString(2)
+        } else JSONObject(it).toString()
     }
 }

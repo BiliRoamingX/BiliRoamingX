@@ -4,11 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.LogHelper
-import app.revanced.bilibili.utils.bv2av
-import app.revanced.bilibili.utils.bvPattern
-import app.revanced.bilibili.utils.runCatchingOrNull
-import org.json.JSONObject
+import app.revanced.bilibili.utils.*
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -25,11 +21,7 @@ object SharePatch {
     @Keep
     @JvmStatic
     fun onShareTo(platform: String, params: Bundle): Boolean {
-        LogHelper.debug {
-            "shareTo, platform: $platform, params: ${
-                JSONObject(params.keySet().associateWith { params.get(it)?.toString() })
-            }"
-        }
+        LogHelper.debug { "shareTo, platform: $platform, params: ${params.toJson()}" }
         if (Settings.PURIFY_SHARE.boolean) {
             val targetUrl = params.getString("params_target_url").orEmpty()
             if (targetUrl.startsWith("http"))

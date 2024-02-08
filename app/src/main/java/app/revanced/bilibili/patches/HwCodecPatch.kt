@@ -4,17 +4,14 @@ import android.os.Bundle
 import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.LogHelper
+import app.revanced.bilibili.utils.toJson
 
 @Keep
 object HwCodecPatch {
     @JvmStatic
     fun printOptionBundle(bundle: Bundle) {
         if (!Settings.DEBUG.boolean) return
-        LogHelper.debug { "###Player options start###" }
-        bundle.keySet().associateWith { bundle.get(it) }.forEach { (k, v) ->
-            LogHelper.debug { "Player option, %50s=%s".format(k, v) }
-        }
-        LogHelper.debug { "###Player options end###" }
+        LogHelper.debug { "Player options, ${bundle.toJson()}" }
     }
 
     @JvmStatic
