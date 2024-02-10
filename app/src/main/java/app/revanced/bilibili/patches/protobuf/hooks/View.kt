@@ -33,6 +33,8 @@ object View : MossHook<ViewReq, ViewReply>() {
                 reply.likeCustom.clearLikeComment()
                 reply.replyPreface.clearBadgeType()
             }
+            if (Settings.BLOCK_VIDEO_COMMENT.boolean)
+                reply.arc.stat.reply = 0
             PegasusPatch.filterViewRelates(reply)
         }
         return super.hookAfter(req, reply, error)

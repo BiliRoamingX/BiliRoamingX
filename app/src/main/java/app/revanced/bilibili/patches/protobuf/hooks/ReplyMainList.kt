@@ -3,6 +3,7 @@ package app.revanced.bilibili.patches.protobuf.hooks
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.ArrayUtils
 import com.bapis.bilibili.main.community.reply.v1.*
+import com.bilibili.lib.moss.api.BusinessException
 import com.bilibili.lib.moss.api.MossException
 import com.google.protobuf.GeneratedMessageLite
 
@@ -13,25 +14,8 @@ object ReplyMainList : ReplyListBase<MainListReq, MainListReply>() {
     }
 
     override fun hookBefore(req: MainListReq): Any? {
-        if (Settings.BLOCK_VIDEO_COMMENT.boolean && req.type == 1L) {
-            val text = EmptyPage.Text().apply {
-                raw = "评论区已由漫游屏蔽"
-                style = TextStyle().apply {
-                    fontSize = 14
-                    textDayColor = "#FF61666D"
-                    textNightColor = "#FFA2A7AE"
-                }
-            }
-            return MainListReply().apply {
-                subjectControl = SubjectControl().apply {
-                    emptyPage = EmptyPage().apply {
-                        imageUrl =
-                            "https://i0.hdslb.com/bfs/app-res/android/img_holder_forbid_style1.webp"
-                        addTexts(text)
-                    }
-                }
-            }
-        }
+        if (Settings.BLOCK_VIDEO_COMMENT.boolean && req.type == 1L)
+            throw BusinessException(12061, "评论区已由漫游屏蔽", null, null, null)
         return null
     }
 

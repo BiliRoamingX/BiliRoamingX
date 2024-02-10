@@ -7,12 +7,19 @@ import com.bapis.bilibili.main.community.reply.v2.EmptyPage
 import com.bapis.bilibili.main.community.reply.v2.SubjectDescriptionReply
 import com.bapis.bilibili.main.community.reply.v2.SubjectDescriptionReq
 import com.bapis.bilibili.main.community.reply.v2.TextStyle
+import com.bilibili.lib.moss.api.BusinessException
 import com.bilibili.lib.moss.api.MossException
 import com.google.protobuf.GeneratedMessageLite
 
 object ReplySubjectDescription : MossHook<SubjectDescriptionReq, SubjectDescriptionReply>() {
     override fun shouldHook(req: GeneratedMessageLite<*, *>): Boolean {
         return Versions.ge7_39_0() && req is SubjectDescriptionReq
+    }
+
+    override fun hookBefore(req: SubjectDescriptionReq): Any? {
+        if (Settings.BLOCK_VIDEO_COMMENT.boolean && req.subjectId.type == 1L)
+            throw BusinessException(12061, "评论区已由漫游屏蔽", null, null, null)
+        return null
     }
 
     override fun hookAfter(
