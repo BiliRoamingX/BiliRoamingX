@@ -14,7 +14,6 @@ import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import com.bapis.bilibili.pagination.PaginationReply
 import com.bapis.bilibili.polymer.app.search.v1.*
-import com.bilibili.lib.moss.api.BusinessException
 import com.bilibili.search.ogv.OgvSearchResultFragment
 import com.bilibili.search.result.bangumi.ogv.BangumiSearchResultFragment
 import com.bilibili.search.result.pages.BiliMainSearchResultPage.PageTypes
@@ -281,7 +280,7 @@ object BangumiSeasonHook {
         val area = searchType.area
         val type = searchType.type
         return retrieveExtraSearch(request, area, type)
-            ?: throw BusinessException(-1, "搜索失败，请重试", null, null, null)
+            ?: throw BusinessException(-1, "搜索失败，请重试")
     }
 
     private fun retrieveExtraSearch(

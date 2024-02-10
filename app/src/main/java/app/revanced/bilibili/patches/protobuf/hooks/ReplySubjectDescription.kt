@@ -2,12 +2,12 @@ package app.revanced.bilibili.patches.protobuf.hooks
 
 import app.revanced.bilibili.patches.protobuf.MossHook
 import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.utils.BusinessException
 import app.revanced.bilibili.utils.Versions
 import com.bapis.bilibili.main.community.reply.v2.EmptyPage
 import com.bapis.bilibili.main.community.reply.v2.SubjectDescriptionReply
 import com.bapis.bilibili.main.community.reply.v2.SubjectDescriptionReq
 import com.bapis.bilibili.main.community.reply.v2.TextStyle
-import com.bilibili.lib.moss.api.BusinessException
 import com.bilibili.lib.moss.api.MossException
 import com.google.protobuf.GeneratedMessageLite
 
@@ -18,7 +18,7 @@ object ReplySubjectDescription : MossHook<SubjectDescriptionReq, SubjectDescript
 
     override fun hookBefore(req: SubjectDescriptionReq): Any? {
         if (Settings.BLOCK_VIDEO_COMMENT.boolean && req.subjectId.type == 1L)
-            throw BusinessException(12061, "评论区已由漫游屏蔽", null, null, null)
+            throw BusinessException(12061, "评论区已由漫游屏蔽")
         return null
     }
 

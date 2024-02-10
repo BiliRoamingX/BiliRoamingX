@@ -2,8 +2,8 @@ package app.revanced.bilibili.patches.protobuf.hooks
 
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.ArrayUtils
+import app.revanced.bilibili.utils.BusinessException
 import com.bapis.bilibili.main.community.reply.v1.*
-import com.bilibili.lib.moss.api.BusinessException
 import com.bilibili.lib.moss.api.MossException
 import com.google.protobuf.GeneratedMessageLite
 
@@ -15,7 +15,7 @@ object ReplyMainList : ReplyListBase<MainListReq, MainListReply>() {
 
     override fun hookBefore(req: MainListReq): Any? {
         if (Settings.BLOCK_VIDEO_COMMENT.boolean && req.type == 1L)
-            throw BusinessException(12061, "评论区已由漫游屏蔽", null, null, null)
+            throw BusinessException(12061, "评论区已由漫游屏蔽")
         return null
     }
 

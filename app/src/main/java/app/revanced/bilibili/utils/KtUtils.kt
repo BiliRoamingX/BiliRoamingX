@@ -18,6 +18,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import app.revanced.bilibili.meta.CookieInfo
 import app.revanced.bilibili.meta.VideoHistory
+import com.bilibili.lib.moss.api.BusinessException
 import com.google.protobuf.GeneratedMessageLite
 import com.google.protobuf.GeneratedMessageLiteEx
 import com.google.protobuf.UnknownFieldSetLite
@@ -481,3 +482,11 @@ fun Bundle.toJson(pretty: Boolean = false): String {
         } else JSONObject(it).toString()
     }
 }
+
+inline fun BusinessException(
+    code: Int,
+    message: String?,
+    cause: Throwable? = null,
+    reason: String? = null,
+    details: List<com.google.protobuf.Any>? = null
+) = BusinessException(code, message, cause, reason, details)
