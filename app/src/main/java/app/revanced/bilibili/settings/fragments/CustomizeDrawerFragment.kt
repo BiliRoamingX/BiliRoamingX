@@ -6,6 +6,7 @@ import app.revanced.bilibili.patches.json.JSONPatch
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Constants
 import app.revanced.bilibili.utils.Toasts
+import app.revanced.bilibili.utils.Utils
 
 class CustomizeDrawerFragment : BaseDynamicItemsFragment(
     "biliroaming_setting_customize_drawer",
@@ -14,7 +15,7 @@ class CustomizeDrawerFragment : BaseDynamicItemsFragment(
 ) {
     override fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
         super.onPreferenceChanged(sharedPreferences, key)
-        if (key == Settings.SHOWING_DRAWER_ITEMS.key
+        if (!Utils.isHd() && key == Settings.SHOWING_DRAWER_ITEMS.key
             && Settings.SHOWING_DRAWER_ITEMS.stringSet.let {
                 !it.contains(Constants.ALL_VALUE) && !it.contains("更多服务")
             }
