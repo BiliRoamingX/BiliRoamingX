@@ -4,6 +4,7 @@ import app.revanced.bilibili.patches.protobuf.MossHook
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.ArrayUtils
 import com.bapis.bilibili.app.dynamic.v2.AdditionalType
+import com.bapis.bilibili.app.dynamic.v2.DescType
 import com.bapis.bilibili.app.dynamic.v2.DynamicItem
 import com.google.protobuf.GeneratedMessageLite
 
@@ -76,6 +77,11 @@ abstract class DynListBase<out Req : GeneratedMessageLite<*, *>, out Resp : Gene
                         idxList.add(idx)
                         continue
                     }
+                }
+                if (rmAdLink && (extend.origDescList.any { it.type == DescType.desc_type_goods }
+                            || extend.descList.any { it.type == DescType.desc_type_goods })) {
+                    idxList.add(idx)
+                    continue
                 }
             }
             if (contentSet.isNotEmpty()) {
