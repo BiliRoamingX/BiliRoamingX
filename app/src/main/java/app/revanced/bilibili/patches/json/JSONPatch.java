@@ -99,6 +99,8 @@ public class JSONPatch {
                 if (pendantInfo != null)
                     pendantInfo.liveGiftStarPendantInfo = null;
             }
+            if (Settings.REMOVE_LIVE_MASK.getBoolean())
+                roomInfo.areaMaskInfo = null;
         } else if (data instanceof LiveRoomRecommendCard) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("follow"))
                 return null;

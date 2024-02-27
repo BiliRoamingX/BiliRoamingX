@@ -116,6 +116,7 @@ public enum Settings {
     FORBID_SWITCH_LIVE_ROOM("forbid_switch_live_room", BOOLEAN, FALSE),
     DISABLE_LIVE_ROOM_DOUBLE_CLICK("disable_live_room_double_click", BOOLEAN, FALSE),
     PURIFY_LIVE_POPUPS("purify_live_popups", STRING_SET, Collections.EMPTY_SET),
+    REMOVE_LIVE_MASK("remove_live_mask", BOOLEAN, FALSE),
 
     // 视频详情页
     AUTO_LIKE("auto_like", BOOLEAN, FALSE),
