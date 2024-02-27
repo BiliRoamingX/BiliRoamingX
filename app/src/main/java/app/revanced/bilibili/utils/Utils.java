@@ -127,21 +127,12 @@ public class Utils {
             } catch (PackageManager.NameNotFoundException ignored) {
             }
             if (TextUtils.isEmpty(mobiApp)) {
-                switch (context.getPackageName()) {
-                    case Constants.BLUE_PACKAGE_NAME:
-                        mobiApp = "android_b";
-                        break;
-                    case Constants.PLAY_PACKAGE_NAME:
-                        mobiApp = "android_i";
-                        break;
-                    case Constants.HD_PACKAGE_NAME:
-                        mobiApp = "android_hd";
-                        break;
-                    case Constants.PINK_PACKAGE_NAME:
-                    default:
-                        mobiApp = "android";
-                        break;
-                }
+                mobiApp = switch (context.getPackageName()) {
+                    case Constants.BLUE_PACKAGE_NAME -> "android_b";
+                    case Constants.PLAY_PACKAGE_NAME -> "android_i";
+                    case Constants.HD_PACKAGE_NAME -> "android_hd";
+                    default -> "android";
+                };
             }
             Utils.mobiApp = mobiApp;
         }

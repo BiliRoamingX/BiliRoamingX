@@ -55,38 +55,35 @@ public class JSONPatch {
 
     @Keep
     public static Object parseObjectHook(Object obj) {
-        Object data = obj instanceof GeneralResponse ? ((GeneralResponse<?>) obj).data : obj;
-        if (data instanceof SplashData) {
+        Object data = (obj instanceof GeneralResponse<?> resp) ? resp.data : obj;
+        if (data instanceof SplashData splashData) {
             if (Settings.PURIFY_SPLASH.getBoolean()) {
-                SplashData splashData = (SplashData) data;
                 splashData.splashList.clear();
                 splashData.strategyList.clear();
             }
-        } else if (data instanceof SplashShowData) {
+        } else if (data instanceof SplashShowData showData) {
             if (Settings.PURIFY_SPLASH.getBoolean())
-                ((SplashShowData) data).strategyList.clear();
+                showData.strategyList.clear();
         } else if (data instanceof EventEntranceModel) {
             if (Settings.PURIFY_GAME.getBoolean()) {
                 // no problem, see com.bilibili.okretro.BiliApiDataCallback
                 return null;
             }
-        } else if (data instanceof DmAdvert) {
+        } else if (data instanceof DmAdvert dmAdvert) {
             if (Settings.BLOCK_UP_RCMD_ADS.getBoolean()) {
-                List<Dm> ads = ((DmAdvert) data).getAds();
+                List<Dm> ads = dmAdvert.getAds();
                 if (ads != null)
                     ads.clear();
             }
-        } else if (data instanceof LiveShoppingInfo) {
+        } else if (data instanceof LiveShoppingInfo info) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("shoppingCard")) {
-                LiveShoppingInfo info = (LiveShoppingInfo) data;
                 info.shoppingCardDetail = null;
                 info.recommendCardDetail = null;
             }
         } else if (data instanceof LiveGoodsCardInfo || (!Utils.isHd() && data instanceof LiveShoppingRecommendCardGoodsDetail)) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("shoppingCard"))
                 return null;
-        } else if (data instanceof BiliLiveRoomInfo) {
-            BiliLiveRoomInfo roomInfo = (BiliLiveRoomInfo) data;
+        } else if (data instanceof BiliLiveRoomInfo roomInfo) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("follow")) {
                 BiliLiveRoomInfo.FunctionCard card = roomInfo.functionCard;
                 if (card != null)
@@ -104,38 +101,37 @@ public class JSONPatch {
         } else if (data instanceof LiveRoomRecommendCard) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("follow"))
                 return null;
-        } else if (!Utils.isHd() && data instanceof LiveRoomReserveInfo) {
+        } else if (!Utils.isHd() && data instanceof LiveRoomReserveInfo info) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("reserve"))
-                ((LiveRoomReserveInfo) data).showReserveDetail = false;
-        } else if (data instanceof BiliLiveRoomUserInfo) {
+                info.showReserveDetail = false;
+        } else if (data instanceof BiliLiveRoomUserInfo info) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("gift")) {
-                FunctionCard card = ((BiliLiveRoomUserInfo) data).functionCard;
+                FunctionCard card = info.functionCard;
                 if (card != null)
                     card.sengGiftCard = null;
             }
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("task"))
-                ((BiliLiveRoomUserInfo) data).taskInfo = null;
+                info.taskInfo = null;
         } else if (data instanceof LiveShoppingGotoBuyInfo) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("gotoBuy"))
                 return null;
-        } else if (data instanceof AccountMine) {
-            customizeMine((AccountMine) data);
-        } else if (data instanceof MainResourceManager.TabResponse) {
-            customizeHomeTab(((MainResourceManager.TabResponse) data).tabData);
-        } else if (data instanceof BiliSpace) {
-            customizeSpace(((BiliSpace) data));
-        } else if (data instanceof OgvApiResponse) {
-            unlockOgvResponse((OgvApiResponse<?>) data);
-        } else if (!Utils.isHd() && data instanceof OgvApiResponseV2) {
-            unlockOgvResponseV2((OgvApiResponseV2) data);
-        } else if (data instanceof StoryFeedResponse) {
-            filterStory((StoryFeedResponse) data);
+        } else if (data instanceof AccountMine accountMine) {
+            customizeMine(accountMine);
+        } else if (data instanceof MainResourceManager.TabResponse tabResponse) {
+            customizeHomeTab(tabResponse.tabData);
+        } else if (data instanceof BiliSpace biliSpace) {
+            customizeSpace(biliSpace);
+        } else if (data instanceof OgvApiResponse<?> ogvApiResponse) {
+            unlockOgvResponse(ogvApiResponse);
+        } else if (!Utils.isHd() && data instanceof OgvApiResponseV2 ogvApiResponseV2) {
+            unlockOgvResponseV2(ogvApiResponseV2);
+        } else if (data instanceof StoryFeedResponse feedResponse) {
+            filterStory(feedResponse);
         } else if ((!Versions.ge7_64_0() && (data instanceof SearchReferral || data instanceof DefaultKeyword)) || (Versions.ge7_39_0() && data instanceof com.bilibili.search2.api.SearchReferral)) {
             if (Settings.PURIFY_SEARCH.getBoolean())
                 return null;
-        } else if (data instanceof EventSplashDataList) {
+        } else if (data instanceof EventSplashDataList splashList) {
             if (Settings.PURIFY_SPLASH.getBoolean()) {
-                EventSplashDataList splashList = (EventSplashDataList) data;
                 List<EventSplashData> eventList = splashList.getEventList();
                 if (eventList != null && !eventList.isEmpty())
                     eventList.removeIf(splash -> !splash.isBirthdayData());
@@ -143,9 +139,8 @@ public class JSONPatch {
         } else if (data instanceof RecommendModeGuidanceConfig) {
             if (Settings.BLOCK_RECOMMEND_GUIDANCE.getBoolean())
                 return null;
-        } else if (data instanceof BrandSplashData) {
+        } else if (data instanceof BrandSplashData brandSplashData) {
             if (Settings.PURIFY_SPLASH.getBoolean()) {
-                BrandSplashData brandSplashData = (BrandSplashData) data;
                 brandSplashData.setBrandList(null);
                 brandSplashData.setPreloadList(null);
                 brandSplashData.setQueryList(null);
@@ -317,26 +312,13 @@ public class JSONPatch {
         for (int i = 0; i < tabs.size(); i++) {
             var tab = tabs.get(i);
             switch (tab.uri) {
-                case "bilibili://pgc/home":
-                    hasBangumiCN = true;
-                    break;
-                case "bilibili://following/home_activity_tab/6544":
-                    hasBangumiTW = true;
-                    break;
-                case "bilibili://pgc/home?home_flow_type=2":
-                    hasMovieCN = true;
-                    break;
-                case "bilibili://following/home_activity_tab/168644":
-                    hasMovieTW = true;
-                    break;
-                case "bilibili://following/home_activity_tab/163541":
-                    hasKoreaHK = true;
-                    break;
-                case "bilibili://following/home_activity_tab/95636":
-                    hasKoreaTW = true;
-                    break;
-                default:
-                    break;
+                case "bilibili://pgc/home" -> hasBangumiCN = true;
+                case "bilibili://following/home_activity_tab/6544" -> hasBangumiTW = true;
+                case "bilibili://pgc/home?home_flow_type=2", "bilibili://pgc/cinema-tab" ->
+                        hasMovieCN = true;
+                case "bilibili://following/home_activity_tab/168644" -> hasMovieTW = true;
+                case "bilibili://following/home_activity_tab/163541" -> hasKoreaHK = true;
+                case "bilibili://following/home_activity_tab/95636" -> hasKoreaTW = true;
             }
         }
         if (Settings.ADD_BANGUMI.getBoolean()) {
@@ -401,26 +383,17 @@ public class JSONPatch {
         }
         Set<String> tabSet = Settings.HIDED_HOME_TAB.getStringSet();
         if (tabSet.isEmpty()) return;
-        tabs.removeIf(tab -> {
-            switch (tab.uri) {
-                case "bilibili://live/home":
-                    return tabSet.contains("live");
-                case "bilibili://pegasus/promo":
-                    return tabSet.contains("promo");
-                case "bilibili://pegasus/hottopic":
-                    return tabSet.contains("hottopic");
-                case "bilibili://pgc/home":
-                case "bilibili://following/home_activity_tab/6544":
-                    return tabSet.contains("bangumi");
-                case "bilibili://pgc/home?home_flow_type=2":
-                case "bilibili://following/home_activity_tab/168644":
-                    return tabSet.contains("movie");
-                case "bilibili://following/home_activity_tab/95636":
-                case "bilibili://following/home_activity_tab/163541":
-                    return tabSet.contains("korea");
-                default:
-                    return tabSet.contains("other_tabs");
-            }
+        tabs.removeIf(tab -> switch (tab.uri) {
+            case "bilibili://live/home" -> tabSet.contains("live");
+            case "bilibili://pegasus/promo" -> tabSet.contains("promo");
+            case "bilibili://pegasus/hottopic" -> tabSet.contains("hottopic");
+            case "bilibili://pgc/home", "bilibili://following/home_activity_tab/6544" ->
+                    tabSet.contains("bangumi");
+            case "bilibili://pgc/home?home_flow_type=2", "bilibili://pgc/cinema-tab", "bilibili://following/home_activity_tab/168644" ->
+                    tabSet.contains("movie");
+            case "bilibili://following/home_activity_tab/95636", "bilibili://following/home_activity_tab/163541" ->
+                    tabSet.contains("korea");
+            default -> tabSet.contains("other_tabs");
         });
     }
 
@@ -437,78 +410,39 @@ public class JSONPatch {
             });
         for (String value : values) {
             switch (value) {
-                case "liveEntry":
-                    space.liveEntry = null;
-                    break;
-                case "chargeResult":
-                    space.chargeResult = null;
-                    break;
-                case "guard":
-                    space.guard = null;
-                    break;
-                case "adV2":
+                case "liveEntry" -> space.liveEntry = null;
+                case "chargeResult" -> space.chargeResult = null;
+                case "guard" -> space.guard = null;
+                case "adV2" -> {
                     space.ad = null;
                     space.adV2 = null;
-                    break;
-                case "archiveVideo":
-                    space.archiveVideo = null;
-                    break;
-                case "article":
-                    space.article = null;
-                    break;
-                case "audio":
-                    space.audio = null;
-                    break;
-                case "season":
-                    space.season = null;
-                    break;
-                case "coinVideo":
-                    space.coinVideo = null;
-                    break;
-                case "recommendVideo":
-                    space.recommendVideo = null;
-                    break;
-                case "followComicList":
-                    space.followComicList = null;
-                    break;
-                case "spaceGame":
-                    space.spaceGame = null;
-                    break;
-                case "cheeseVideo":
-                    space.cheeseVideo = null;
-                    break;
-                case "fansDress":
-                    space.fansDress = null;
-                    break;
-                case "favoriteBox":
-                    space.favoriteBox = null;
-                    break;
-                case "comicList":
-                    space.comicList = null;
-                    break;
-                case "ugcSeasonList":
-                    space.ugcSeasonList = null;
-                    break;
-                case "contractResource":
-                    space.contractResource = null;
-                    break;
-                case "nftShowModule":
-                    space.nftShowModule = null;
-                    break;
-                default:
-                    break;
+                }
+                case "archiveVideo" -> space.archiveVideo = null;
+                case "article" -> space.article = null;
+                case "audio" -> space.audio = null;
+                case "season" -> space.season = null;
+                case "coinVideo" -> space.coinVideo = null;
+                case "recommendVideo" -> space.recommendVideo = null;
+                case "followComicList" -> space.followComicList = null;
+                case "spaceGame" -> space.spaceGame = null;
+                case "cheeseVideo" -> space.cheeseVideo = null;
+                case "fansDress" -> space.fansDress = null;
+                case "favoriteBox" -> space.favoriteBox = null;
+                case "comicList" -> space.comicList = null;
+                case "ugcSeasonList" -> space.ugcSeasonList = null;
+                case "contractResource" -> space.contractResource = null;
+                case "nftShowModule" -> space.nftShowModule = null;
             }
         }
     }
 
     private static void unlockOgvResponse(OgvApiResponse<?> response) {
         if (!Settings.ALLOW_DOWNLOAD.getBoolean()) return;
-        if (!(response.result instanceof List)) return;
-        List<?> items = (List<?>) response.result;
+        if (!(response.result instanceof List<?> items)) return;
         for (int i = 0; i < items.size(); i++) {
             Object item = items.get(i);
-            if (item instanceof EpPlayable)
-                ((EpPlayable) item).isPlayable = 1;
+            if (item instanceof EpPlayable epPlayable)
+                epPlayable.isPlayable = 1;
         }
     }
 

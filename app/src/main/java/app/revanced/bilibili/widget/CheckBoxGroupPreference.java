@@ -110,8 +110,7 @@ public class CheckBoxGroupPreference extends PreferenceCategory implements Check
     public CheckBoxButtonPreference findPreferenceByCheckBoxValue(String value) {
         for (int i = 0; i < getPreferenceCount(); i++) {
             Preference preference = getPreference(i);
-            if (preference instanceof CheckBoxButtonPreference) {
-                CheckBoxButtonPreference buttonPreference = (CheckBoxButtonPreference) preference;
+            if (preference instanceof CheckBoxButtonPreference buttonPreference) {
                 String prefValue = (buttonPreference).getValue();
                 if (value.equals(prefValue))
                     return buttonPreference;
@@ -151,8 +150,7 @@ public class CheckBoxGroupPreference extends PreferenceCategory implements Check
     private void checkPreferenceState() {
         for (int i = 0; i < getPreferenceCount(); i++) {
             Preference preference = getPreference(i);
-            if (preference instanceof CheckBoxButtonPreference) {
-                CheckBoxButtonPreference buttonPreference = (CheckBoxButtonPreference) preference;
+            if (preference instanceof CheckBoxButtonPreference buttonPreference) {
                 String value = buttonPreference.getValue();
                 buttonPreference.setChecked(mValues.contains(value));
             }
@@ -166,8 +164,7 @@ public class CheckBoxGroupPreference extends PreferenceCategory implements Check
 
     @Override
     protected boolean onPrepareAddPreference(@NonNull Preference preference) {
-        if (preference instanceof CheckBoxButtonPreference && super.onPrepareAddPreference(preference)) {
-            CheckBoxButtonPreference buttonPreference = (CheckBoxButtonPreference) preference;
+        if (preference instanceof CheckBoxButtonPreference buttonPreference && super.onPrepareAddPreference(preference)) {
             buttonPreference.setPreferenceClickListener(this);
             return true;
         }

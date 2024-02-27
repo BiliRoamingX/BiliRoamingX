@@ -261,26 +261,13 @@ public enum Settings {
     private void load(SharedPreferences prefs) {
         try {
             switch (valueType) {
-                case BOOLEAN:
-                    setValue(prefs.getBoolean(key, (Boolean) defValue));
-                    break;
-                case INTEGER:
-                    setValue(prefs.getInt(key, (Integer) defValue));
-                    break;
-                case LONG:
-                    setValue(prefs.getLong(key, (Long) defValue));
-                    break;
-                case FLOAT:
-                    setValue(prefs.getFloat(key, (Float) defValue));
-                    break;
-                case STRING:
-                    setValue(prefs.getString(key, (String) defValue));
-                    break;
-                case STRING_SET:
-                    setValue(prefs.getStringSet(key, (Set<String>) defValue));
-                    break;
-                default:
-                    throw new IllegalStateException(name());
+                case BOOLEAN -> setValue(prefs.getBoolean(key, (Boolean) defValue));
+                case INTEGER -> setValue(prefs.getInt(key, (Integer) defValue));
+                case LONG -> setValue(prefs.getLong(key, (Long) defValue));
+                case FLOAT -> setValue(prefs.getFloat(key, (Float) defValue));
+                case STRING -> setValue(prefs.getString(key, (String) defValue));
+                case STRING_SET -> setValue(prefs.getStringSet(key, (Set<String>) defValue));
+                default -> throw new IllegalStateException(name());
             }
             LogHelper.debug(() -> String.format("Loaded setting '%s' with value %s", name(), value));
         } catch (ClassCastException ex) {
@@ -300,16 +287,8 @@ public enum Settings {
 
     private void setValue(Object newValue) {
         switch (valueType) {
-            case FLOAT:
-            case LONG:
-            case INTEGER:
-            case BOOLEAN:
-            case STRING:
-            case STRING_SET:
-                value = newValue;
-                break;
-            default:
-                throw new IllegalStateException(name());
+            case FLOAT, LONG, INTEGER, BOOLEAN, STRING, STRING_SET -> value = newValue;
+            default -> throw new IllegalStateException(name());
         }
     }
 
@@ -318,26 +297,13 @@ public enum Settings {
         setValue(newValue);
         SharedPreferences.Editor editor = prefs.edit();
         switch (valueType) {
-            case BOOLEAN:
-                editor.putBoolean(key, (Boolean) newValue);
-                break;
-            case INTEGER:
-                editor.putInt(key, (Integer) newValue);
-                break;
-            case LONG:
-                editor.putLong(key, (Long) newValue);
-                break;
-            case FLOAT:
-                editor.putFloat(key, (Float) newValue);
-                break;
-            case STRING:
-                editor.putString(key, (String) newValue);
-                break;
-            case STRING_SET:
-                editor.putStringSet(key, (Set<String>) newValue);
-                break;
-            default:
-                throw new IllegalStateException(name());
+            case BOOLEAN -> editor.putBoolean(key, (Boolean) newValue);
+            case INTEGER -> editor.putInt(key, (Integer) newValue);
+            case LONG -> editor.putLong(key, (Long) newValue);
+            case FLOAT -> editor.putFloat(key, (Float) newValue);
+            case STRING -> editor.putString(key, (String) newValue);
+            case STRING_SET -> editor.putStringSet(key, (Set<String>) newValue);
+            default -> throw new IllegalStateException(name());
         }
         editor.apply();
     }
@@ -428,17 +394,13 @@ public enum Settings {
     }
 
     public static String getServerByArea(Area area) {
-        if (Area.CN == area) {
-            return CN_SERVER.getString();
-        } else if (Area.HK == area) {
-            return HK_SERVER.getString();
-        } else if (Area.TW == area) {
-            return TW_SERVER.getString();
-        } else if (Area.TH == area) {
-            return TH_SERVER.getString();
-        } else {
-            return "";
-        }
+        return switch (area) {
+            case CN -> CN_SERVER.getString();
+            case HK -> HK_SERVER.getString();
+            case TW -> TW_SERVER.getString();
+            case TH -> TH_SERVER.getString();
+            default -> "";
+        };
     }
 
     public static boolean getExtraSearchByType(String type) {

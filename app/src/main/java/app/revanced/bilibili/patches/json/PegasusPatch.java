@@ -154,28 +154,28 @@ public class PegasusPatch {
 
     private static String getCoverLeftText(BasicIndexItem item) {
         String coverLeftText = null;
-        if (item instanceof SmallCoverItem) {
-            coverLeftText = ((SmallCoverItem) item).coverLeftText1;
-        } else if (item instanceof SmallCoverV2Item) {
-            coverLeftText = ((SmallCoverV2Item) item).coverLeftText1;
-        } else if (item instanceof SmallCoverV9Item) {
-            coverLeftText = ((SmallCoverV9Item) item).coverLeftText1;
-        } else if (item instanceof SmallCoverV10Item) {
-            coverLeftText = ((SmallCoverV10Item) item).coverLeftText1;
-        } else if (item instanceof LargeCoverV1Item) {
-            coverLeftText = ((LargeCoverV1Item) item).coverLeftText1;
-        } else if (item instanceof LargeCoverV7Item) {
-            coverLeftText = ((LargeCoverV7Item) item).coverLeftText1;
-        } else if (item instanceof LargeCoverV8Item) {
-            coverLeftText = ((LargeCoverV8Item) item).coverLeftText1;
-        } else if (item instanceof LargeCoverV9Item) {
-            coverLeftText = ((LargeCoverV9Item) item).coverLeftText1;
-        } else if (item instanceof LargeCoverSingleV7Item) {
-            coverLeftText = ((LargeCoverSingleV7Item) item).coverLeftText1;
-        } else if (item instanceof LargeCoverSingleV8Item) {
-            coverLeftText = ((LargeCoverSingleV8Item) item).coverLeftText1;
-        } else if (item instanceof LargeCoverSingleV9Item) {
-            coverLeftText = ((LargeCoverSingleV9Item) item).coverLeftText1;
+        if (item instanceof SmallCoverItem coverItem) {
+            coverLeftText = coverItem.coverLeftText1;
+        } else if (item instanceof SmallCoverV2Item coverItem) {
+            coverLeftText = coverItem.coverLeftText1;
+        } else if (item instanceof SmallCoverV9Item coverItem) {
+            coverLeftText = coverItem.coverLeftText1;
+        } else if (item instanceof SmallCoverV10Item coverItem) {
+            coverLeftText = coverItem.coverLeftText1;
+        } else if (item instanceof LargeCoverV1Item coverItem) {
+            coverLeftText = coverItem.coverLeftText1;
+        } else if (item instanceof LargeCoverV7Item coverItem) {
+            coverLeftText = coverItem.coverLeftText1;
+        } else if (item instanceof LargeCoverV8Item coverItem) {
+            coverLeftText = coverItem.coverLeftText1;
+        } else if (item instanceof LargeCoverV9Item coverItem) {
+            coverLeftText = coverItem.coverLeftText1;
+        } else if (item instanceof LargeCoverSingleV7Item coverItem) {
+            coverLeftText = coverItem.coverLeftText1;
+        } else if (item instanceof LargeCoverSingleV8Item coverItem) {
+            coverLeftText = coverItem.coverLeftText1;
+        } else if (item instanceof LargeCoverSingleV9Item coverItem) {
+            coverLeftText = coverItem.coverLeftText1;
         }
         return coverLeftText;
     }
@@ -560,20 +560,19 @@ public class PegasusPatch {
     }
 
     private static void removeAdBanner(BasicIndexItem item) {
-        if (!(item instanceof BannersItem)) return;
-        List<BannerItemV2> banners = ((BannersItem) item).getBanners();
+        if (!(item instanceof BannersItem bannersItem)) return;
+        List<BannerItemV2> banners = bannersItem.getBanners();
         if (banners == null || banners.isEmpty()) return;
         banners.removeIf(banner -> "ad".equals(banner.type));
     }
 
     private static String getRcmdReason(BasicIndexItem item) {
         Tag reason = null;
-        if (item instanceof SmallCoverItem) {
-            reason = ((SmallCoverItem) item).rcmdReason;
-        } else if (item instanceof SmallCoverV10Item) {
-            reason = ((SmallCoverV10Item) item).rcmdReason;
-        } else if (item instanceof SmallCoverV2Item) {
-            SmallCoverV2Item coverItem = (SmallCoverV2Item) item;
+        if (item instanceof SmallCoverItem coverItem) {
+            reason = coverItem.rcmdReason;
+        } else if (item instanceof SmallCoverV10Item coverItem) {
+            reason = coverItem.rcmdReason;
+        } else if (item instanceof SmallCoverV2Item coverItem) {
             try {
                 if (coverItem.rcmdReasonV2 != null) {
                     reason = coverItem.rcmdReasonV2;
@@ -583,8 +582,8 @@ public class PegasusPatch {
             } catch (NoSuchFieldError ignored) {
                 reason = coverItem.rcmdReason;
             }
-        } else if (item instanceof SmallCoverV9Item) {
-            reason = ((SmallCoverV9Item) item).rcmdReason;
+        } else if (item instanceof SmallCoverV9Item coverItem) {
+            reason = coverItem.rcmdReason;
         }
         if (reason != null)
             return reason.text;
@@ -598,20 +597,20 @@ public class PegasusPatch {
         if (!"picture".equals(item.goTo))
             return null;
         String desc = null;
-        if (item instanceof SmallCoverItem) {
-            desc = ((SmallCoverItem) item).desc;
-        } else if (item instanceof SmallCoverV2Item) {
-            desc = ((SmallCoverV2Item) item).desc;
-        } else if (item instanceof SmallCoverV9Item) {
-            desc = ((SmallCoverV9Item) item).desc;
-        } else if (item instanceof LargeCoverV1Item) {
-            desc = ((LargeCoverV1Item) item).desc;
-        } else if (item instanceof LargeCoverSingleV7Item) {
-            desc = ((LargeCoverSingleV7Item) item).desc;
-        } else if (item instanceof LargeCoverSingleV8Item) {
-            desc = ((LargeCoverSingleV8Item) item).desc;
-        } else if (item instanceof LargeCoverSingleV9Item) {
-            desc = ((LargeCoverSingleV9Item) item).desc;
+        if (item instanceof SmallCoverItem coverItem) {
+            desc = coverItem.desc;
+        } else if (item instanceof SmallCoverV2Item coverItem) {
+            desc = coverItem.desc;
+        } else if (item instanceof SmallCoverV9Item coverItem) {
+            desc = coverItem.desc;
+        } else if (item instanceof LargeCoverV1Item coverItem) {
+            desc = coverItem.desc;
+        } else if (item instanceof LargeCoverSingleV7Item coverItem) {
+            desc = coverItem.desc;
+        } else if (item instanceof LargeCoverSingleV8Item coverItem) {
+            desc = coverItem.desc;
+        } else if (item instanceof LargeCoverSingleV9Item coverItem) {
+            desc = coverItem.desc;
         }
         return desc;
     }
