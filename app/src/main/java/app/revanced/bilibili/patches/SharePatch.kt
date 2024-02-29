@@ -66,7 +66,7 @@ object SharePatch {
                     .clearQuery().encodedFragment(null).apply {
                         if (!startProgress.isNullOrEmpty())
                             appendQueryParameter("start_progress", startProgress)
-                        if (!p.isNullOrEmpty())
+                        if (!p.isNullOrEmpty() && p != "1")
                             appendQueryParameter("p", p)
                     }.build().toString()
             }
