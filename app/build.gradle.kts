@@ -48,6 +48,7 @@ android {
 dependencies {
     implementation(project(mapOf("path" to ":extend")))
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
+    implementation("io.github.yubyf:truetypeparser-light:2.1.4")
     compileOnly(project(mapOf("path" to ":dummy")))
     compileOnly("androidx.annotation:annotation:1.7.1")
     compileOnly("androidx.appcompat:appcompat:1.7.0-alpha03")

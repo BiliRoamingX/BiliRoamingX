@@ -19,6 +19,9 @@ import android.widget.TextView
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.settings.dialog.ARGBColorChooseDialog
 import app.revanced.bilibili.utils.*
+import com.yubyf.truetypeparser.TTFFile
+import com.yubyf.truetypeparser.get
+import java.util.Locale
 
 class CustomizeSubtitleStyleFragment : BaseWidgetSettingFragment() {
     private var fontStatus: TextView? = null
@@ -165,10 +168,15 @@ class CustomizeSubtitleStyleFragment : BaseWidgetSettingFragment() {
     }
 
     private fun refreshFontStatus() {
-        fontStatus?.text = if (SubtitleParamsCache.FONT_FILE.isFile)
-            string("biliroaming_custom_subtitle_status_custom")
-        else
+        fontStatus?.text = if (SubtitleParamsCache.FONT_FILE.isFile) {
+            runCatching {
+                TTFFile.open(SubtitleParamsCache.FONT_FILE).fullNames[Locale.SIMPLIFIED_CHINESE]
+            }.onFailure {
+                LogHelper.error({ "Font parse filed" }, it)
+            }.getOrNull() ?: string("biliroaming_custom_subtitle_status_custom")
+        } else {
             string("biliroaming_custom_subtitle_status_default")
+        }
     }
 
     private fun fontItem(
