@@ -170,7 +170,12 @@ class CustomizeSubtitleStyleFragment : BaseWidgetSettingFragment() {
     private fun refreshFontStatus() {
         fontStatus?.text = if (SubtitleParamsCache.FONT_FILE.isFile) {
             runCatching {
-                TTFFile.open(SubtitleParamsCache.FONT_FILE).fullNames[Locale.SIMPLIFIED_CHINESE]
+                TTFFile.open(SubtitleParamsCache.FONT_FILE).let {
+                    // val fullName = it.fullNames[Locale.SIMPLIFIED_CHINESE]
+                    val family = it.families[Locale.SIMPLIFIED_CHINESE]
+                    val subfamily = it.subfamilies[Locale.SIMPLIFIED_CHINESE]
+                    if (subfamily != "Regular") "$family $subfamily" else family
+                }
             }.onFailure {
                 LogHelper.error({ "Font parse filed" }, it)
             }.getOrNull() ?: string("biliroaming_custom_subtitle_status_custom")
