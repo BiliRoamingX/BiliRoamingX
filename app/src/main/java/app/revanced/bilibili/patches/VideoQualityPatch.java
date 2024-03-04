@@ -75,10 +75,6 @@ public class VideoQualityPatch {
         }
     }
 
-    /**
-     * another better way to hook default half screen quality.
-     */
-    @Keep
     public static int getMatchedHalfScreenQuality() {
         int halfScreenQuality = halfScreenQuality();
         if (halfScreenQuality != 1) // not follow fullscreen quality

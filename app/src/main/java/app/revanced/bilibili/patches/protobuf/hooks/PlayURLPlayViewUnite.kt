@@ -1,6 +1,5 @@
 package app.revanced.bilibili.patches.protobuf.hooks
 
-import app.revanced.bilibili.patches.VideoQualityPatch
 import app.revanced.bilibili.patches.protobuf.BangumiPlayUrlHook
 import app.revanced.bilibili.patches.protobuf.MossHook
 import com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReply
@@ -14,7 +13,6 @@ object PlayURLPlayViewUnite : MossHook<PlayViewUniteReq, PlayViewUniteReply>() {
     }
 
     override fun hookBefore(req: PlayViewUniteReq): Any? {
-        VideoQualityPatch.unlockLimit(req)
         BangumiPlayUrlHook.hookPlayViewUniteBefore(req)
         return null
     }

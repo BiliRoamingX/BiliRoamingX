@@ -33,6 +33,11 @@ public class ConfigPatch {
             return "0";
         else if (Settings.ENABLE_AV.getBoolean() && "bv.pattern_rule_av_only".equals(key))
             return BVUtils.avOrBvPattern;
+        else if ("player.unite_login_qn".equals(key) || "player.unite_unlogin_qn".equals(key)) {
+            int halfScreenQuality = VideoQualityPatch.getMatchedHalfScreenQuality();
+            if (halfScreenQuality != 0)
+                return String.valueOf(halfScreenQuality);
+        }
         return origin;
     }
 }

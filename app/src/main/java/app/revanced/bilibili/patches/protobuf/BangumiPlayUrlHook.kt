@@ -82,6 +82,7 @@ object BangumiPlayUrlHook {
 
     @JvmStatic
     fun hookPlayViewPGCBefore(req: PlayViewReq) {
+        VideoQualityPatch.unlockLimit(req)
         isDownloadPGC = req.download >= 1
         if (!Settings.UNLOCK_AREA_LIMIT.boolean) return
         allowDownloadPGC = Settings.ALLOW_DOWNLOAD.boolean && isDownloadPGC
@@ -94,6 +95,7 @@ object BangumiPlayUrlHook {
 
     @JvmStatic
     fun hookPlayViewUniteBefore(req: PlayViewUniteReq) {
+        VideoQualityPatch.unlockLimit(req)
         isDownloadUnite = req.vod.download >= 1
         if (!Settings.UNLOCK_AREA_LIMIT.boolean) return
         allowDownloadUnite = Settings.ALLOW_DOWNLOAD.boolean && isDownloadUnite
