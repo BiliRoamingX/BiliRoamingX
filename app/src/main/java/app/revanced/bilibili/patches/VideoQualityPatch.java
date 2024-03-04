@@ -7,18 +7,23 @@ import com.bapis.bilibili.playershared.VideoVod;
 
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Constants;
+import app.revanced.bilibili.utils.KtUtils;
+import app.revanced.bilibili.utils.Versions;
 
 public class VideoQualityPatch {
 
-    @Keep
     public static int halfScreenQuality() {
         String qualityStr = Settings.HALF_SCREEN_QUALITY.getString();
         return Integer.parseInt(qualityStr);
     }
 
-    @Keep
     public static int fullScreenQuality() {
         String qualityStr = Settings.FULL_SCREEN_QUALITY.getString();
+        return Integer.parseInt(qualityStr);
+    }
+
+    public static int mobileFullScreenQuality() {
+        String qualityStr = Settings.MOBILE_FULL_SCREEN_QUALITY.getString();
         return Integer.parseInt(qualityStr);
     }
 
@@ -80,5 +85,14 @@ public class VideoQualityPatch {
         if (halfScreenQuality != 1) // not follow fullscreen quality
             return halfScreenQuality;
         return defaultQn();
+    }
+
+    @Keep
+    public static int getMatchedFullScreenQuality() {
+        if (Versions.ge7_68_0()) {
+            return KtUtils.isWifiConnected() ? fullScreenQuality() : mobileFullScreenQuality();
+        } else {
+            return fullScreenQuality();
+        }
     }
 }

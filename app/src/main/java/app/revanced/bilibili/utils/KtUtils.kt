@@ -7,6 +7,7 @@ import android.annotation.SuppressLint
 import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.ConnectivityManager
 import android.os.*
 import android.util.*
 import android.view.LayoutInflater
@@ -490,3 +491,11 @@ inline fun BusinessException(
     reason: String? = null,
     details: List<com.google.protobuf.Any>? = null
 ) = BusinessException(code, message, cause, reason, details)
+
+@Suppress("DEPRECATION")
+fun isWifiConnected(): Boolean {
+    val manager = Utils.getContext().getSystemService(Context.CONNECTIVITY_SERVICE)
+            as ConnectivityManager
+    val networkInfo = manager.activeNetworkInfo ?: return false
+    return networkInfo.isConnected && networkInfo.type == ConnectivityManager.TYPE_WIFI
+}

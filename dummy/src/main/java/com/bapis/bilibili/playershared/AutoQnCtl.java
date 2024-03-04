@@ -14,55 +14,59 @@ import java.nio.ByteBuffer;
 
 /* compiled from: BL */
 /* loaded from: classes22.dex */
-public final class AutoQnCtl extends GeneratedMessageLite<AutoQnCtl, AutoQnCtl.C11577b> implements MessageLiteOrBuilder {
+public final class AutoQnCtl extends GeneratedMessageLite<AutoQnCtl, AutoQnCtl.C11656b> implements MessageLiteOrBuilder {
     private static final AutoQnCtl DEFAULT_INSTANCE;
     public static final int LOGIN_FULL_FIELD_NUMBER = 3;
     public static final int LOGIN_HALF_FIELD_NUMBER = 1;
+    public static final int MOBILE_LOGIN_FULL_FIELD_NUMBER = 5;
+    public static final int MOBILE_NOLOGIN_FULL_FIELD_NUMBER = 6;
     public static final int NOLOGIN_FULL_FIELD_NUMBER = 4;
     public static final int NOLOGIN_HALF_FIELD_NUMBER = 2;
     private static volatile Parser<AutoQnCtl> PARSER;
     private long loginFull_;
     private long loginHalf_;
+    private long mobileLoginFull_;
+    private long mobileNologinFull_;
     private long nologinFull_;
     private long nologinHalf_;
 
     /* compiled from: BL */
     /* renamed from: com.bapis.bilibili.playershared.AutoQnCtl$a */
     /* loaded from: classes22.dex */
-    static /* synthetic */ class C11576a {
+    static /* synthetic */ class C11655a {
 
         /* renamed from: $SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke */
-        static final /* synthetic */ int[] f19481xa1df5c61;
+        static final /* synthetic */ int[] f19609xa1df5c61;
 
         static {
             int[] iArr = new int[GeneratedMessageLite.MethodToInvoke.values().length];
-            f19481xa1df5c61 = iArr;
+            f19609xa1df5c61 = iArr;
             try {
                 iArr[GeneratedMessageLite.MethodToInvoke.NEW_MUTABLE_INSTANCE.ordinal()] = 1;
             } catch (NoSuchFieldError unused) {
             }
             try {
-                f19481xa1df5c61[GeneratedMessageLite.MethodToInvoke.NEW_BUILDER.ordinal()] = 2;
+                f19609xa1df5c61[GeneratedMessageLite.MethodToInvoke.NEW_BUILDER.ordinal()] = 2;
             } catch (NoSuchFieldError unused2) {
             }
             try {
-                f19481xa1df5c61[GeneratedMessageLite.MethodToInvoke.BUILD_MESSAGE_INFO.ordinal()] = 3;
+                f19609xa1df5c61[GeneratedMessageLite.MethodToInvoke.BUILD_MESSAGE_INFO.ordinal()] = 3;
             } catch (NoSuchFieldError unused3) {
             }
             try {
-                f19481xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_DEFAULT_INSTANCE.ordinal()] = 4;
+                f19609xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_DEFAULT_INSTANCE.ordinal()] = 4;
             } catch (NoSuchFieldError unused4) {
             }
             try {
-                f19481xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_PARSER.ordinal()] = 5;
+                f19609xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_PARSER.ordinal()] = 5;
             } catch (NoSuchFieldError unused5) {
             }
             try {
-                f19481xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_MEMOIZED_IS_INITIALIZED.ordinal()] = 6;
+                f19609xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_MEMOIZED_IS_INITIALIZED.ordinal()] = 6;
             } catch (NoSuchFieldError unused6) {
             }
             try {
-                f19481xa1df5c61[GeneratedMessageLite.MethodToInvoke.SET_MEMOIZED_IS_INITIALIZED.ordinal()] = 7;
+                f19609xa1df5c61[GeneratedMessageLite.MethodToInvoke.SET_MEMOIZED_IS_INITIALIZED.ordinal()] = 7;
             } catch (NoSuchFieldError unused7) {
             }
         }
@@ -71,30 +75,42 @@ public final class AutoQnCtl extends GeneratedMessageLite<AutoQnCtl, AutoQnCtl.C
     /* compiled from: BL */
     /* renamed from: com.bapis.bilibili.playershared.AutoQnCtl$b */
     /* loaded from: classes22.dex */
-    public static final class C11577b extends GeneratedMessageLite.Builder<AutoQnCtl, C11577b> implements MessageLiteOrBuilder {
-        /* synthetic */ C11577b(C11576a c11576a) {
+    public static final class C11656b extends GeneratedMessageLite.Builder<AutoQnCtl, C11656b> implements MessageLiteOrBuilder {
+        /* synthetic */ C11656b(C11655a c11655a) {
             this();
         }
 
-        public C11577b clearLoginFull() {
+        public C11656b clearLoginFull() {
             copyOnWrite();
             ((AutoQnCtl) this.instance).clearLoginFull();
             return this;
         }
 
-        public C11577b clearLoginHalf() {
+        public C11656b clearLoginHalf() {
             copyOnWrite();
             ((AutoQnCtl) this.instance).clearLoginHalf();
             return this;
         }
 
-        public C11577b clearNologinFull() {
+        public C11656b clearMobileLoginFull() {
+            copyOnWrite();
+            ((AutoQnCtl) this.instance).clearMobileLoginFull();
+            return this;
+        }
+
+        public C11656b clearMobileNologinFull() {
+            copyOnWrite();
+            ((AutoQnCtl) this.instance).clearMobileNologinFull();
+            return this;
+        }
+
+        public C11656b clearNologinFull() {
             copyOnWrite();
             ((AutoQnCtl) this.instance).clearNologinFull();
             return this;
         }
 
-        public C11577b clearNologinHalf() {
+        public C11656b clearNologinHalf() {
             copyOnWrite();
             ((AutoQnCtl) this.instance).clearNologinHalf();
             return this;
@@ -108,6 +124,14 @@ public final class AutoQnCtl extends GeneratedMessageLite<AutoQnCtl, AutoQnCtl.C
             return ((AutoQnCtl) this.instance).getLoginHalf();
         }
 
+        public long getMobileLoginFull() {
+            return ((AutoQnCtl) this.instance).getMobileLoginFull();
+        }
+
+        public long getMobileNologinFull() {
+            return ((AutoQnCtl) this.instance).getMobileNologinFull();
+        }
+
         public long getNologinFull() {
             return ((AutoQnCtl) this.instance).getNologinFull();
         }
@@ -116,31 +140,43 @@ public final class AutoQnCtl extends GeneratedMessageLite<AutoQnCtl, AutoQnCtl.C
             return ((AutoQnCtl) this.instance).getNologinHalf();
         }
 
-        public C11577b setLoginFull(long j2) {
+        public C11656b setLoginFull(long j2) {
             copyOnWrite();
             ((AutoQnCtl) this.instance).setLoginFull(j2);
             return this;
         }
 
-        public C11577b setLoginHalf(long j2) {
+        public C11656b setLoginHalf(long j2) {
             copyOnWrite();
             ((AutoQnCtl) this.instance).setLoginHalf(j2);
             return this;
         }
 
-        public C11577b setNologinFull(long j2) {
+        public C11656b setMobileLoginFull(long j2) {
+            copyOnWrite();
+            ((AutoQnCtl) this.instance).setMobileLoginFull(j2);
+            return this;
+        }
+
+        public C11656b setMobileNologinFull(long j2) {
+            copyOnWrite();
+            ((AutoQnCtl) this.instance).setMobileNologinFull(j2);
+            return this;
+        }
+
+        public C11656b setNologinFull(long j2) {
             copyOnWrite();
             ((AutoQnCtl) this.instance).setNologinFull(j2);
             return this;
         }
 
-        public C11577b setNologinHalf(long j2) {
+        public C11656b setNologinHalf(long j2) {
             copyOnWrite();
             ((AutoQnCtl) this.instance).setNologinHalf(j2);
             return this;
         }
 
-        private C11577b() {
+        private C11656b() {
             super(AutoQnCtl.DEFAULT_INSTANCE);
         }
     }
@@ -165,6 +201,16 @@ public final class AutoQnCtl extends GeneratedMessageLite<AutoQnCtl, AutoQnCtl.C
     }
 
     /* JADX INFO: Access modifiers changed from: private */
+    public void clearMobileLoginFull() {
+        this.mobileLoginFull_ = 0L;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void clearMobileNologinFull() {
+        this.mobileNologinFull_ = 0L;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearNologinFull() {
         this.nologinFull_ = 0L;
     }
@@ -178,7 +224,7 @@ public final class AutoQnCtl extends GeneratedMessageLite<AutoQnCtl, AutoQnCtl.C
         return DEFAULT_INSTANCE;
     }
 
-    public static C11577b newBuilder() {
+    public static C11656b newBuilder() {
         return DEFAULT_INSTANCE.createBuilder();
     }
 
@@ -205,6 +251,16 @@ public final class AutoQnCtl extends GeneratedMessageLite<AutoQnCtl, AutoQnCtl.C
     }
 
     /* JADX INFO: Access modifiers changed from: private */
+    public void setMobileLoginFull(long j2) {
+        this.mobileLoginFull_ = j2;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void setMobileNologinFull(long j2) {
+        this.mobileNologinFull_ = j2;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
     public void setNologinFull(long j2) {
         this.nologinFull_ = j2;
     }
@@ -216,14 +272,14 @@ public final class AutoQnCtl extends GeneratedMessageLite<AutoQnCtl, AutoQnCtl.C
 
     @Override // com.google.protobuf.GeneratedMessageLite
     protected final Object dynamicMethod(GeneratedMessageLite.MethodToInvoke methodToInvoke, Object obj, Object obj2) {
-        C11576a c11576a = null;
-        switch (C11576a.f19481xa1df5c61[methodToInvoke.ordinal()]) {
+        C11655a c11655a = null;
+        switch (C11655a.f19609xa1df5c61[methodToInvoke.ordinal()]) {
             case 1:
                 return new AutoQnCtl();
             case 2:
-                return new C11577b(c11576a);
+                return new C11656b(c11655a);
             case 3:
-                return GeneratedMessageLite.newMessageInfo(DEFAULT_INSTANCE, "\u0000\u0004\u0000\u0000\u0001\u0004\u0004\u0000\u0000\u0000\u0001\u0002\u0002\u0002\u0003\u0002\u0004\u0002", new Object[]{"loginHalf_", "nologinHalf_", "loginFull_", "nologinFull_"});
+                return GeneratedMessageLite.newMessageInfo(DEFAULT_INSTANCE, "\u0000\u0006\u0000\u0000\u0001\u0006\u0006\u0000\u0000\u0000\u0001\u0002\u0002\u0002\u0003\u0002\u0004\u0002\u0005\u0002\u0006\u0002", new Object[]{"loginHalf_", "nologinHalf_", "loginFull_", "nologinFull_", "mobileLoginFull_", "mobileNologinFull_"});
             case 4:
                 return DEFAULT_INSTANCE;
             case 5:
@@ -255,6 +311,14 @@ public final class AutoQnCtl extends GeneratedMessageLite<AutoQnCtl, AutoQnCtl.C
         return this.loginHalf_;
     }
 
+    public long getMobileLoginFull() {
+        return this.mobileLoginFull_;
+    }
+
+    public long getMobileNologinFull() {
+        return this.mobileNologinFull_;
+    }
+
     public long getNologinFull() {
         return this.nologinFull_;
     }
@@ -263,7 +327,7 @@ public final class AutoQnCtl extends GeneratedMessageLite<AutoQnCtl, AutoQnCtl.C
         return this.nologinHalf_;
     }
 
-    public static C11577b newBuilder(AutoQnCtl autoQnCtl) {
+    public static C11656b newBuilder(AutoQnCtl autoQnCtl) {
         return DEFAULT_INSTANCE.createBuilder(autoQnCtl);
     }
 

@@ -100,7 +100,7 @@ public final class VideoCtrl extends GeneratedMessageLite<VideoCtrl, VideoCtrl.C
             super(VideoCtrl.DEFAULT_INSTANCE);
         }
 
-        public C11731b setAutoQnCtl(AutoQnCtl.C11577b c11577b) {
+        public C11731b setAutoQnCtl(AutoQnCtl.C11656b c11577b) {
             copyOnWrite();
             ((VideoCtrl) this.instance).setAutoQnCtl(c11577b.build());
             return this;

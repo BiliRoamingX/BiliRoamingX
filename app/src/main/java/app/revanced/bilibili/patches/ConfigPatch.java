@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.BVUtils;
+import app.revanced.bilibili.utils.Versions;
 
 @Keep
 public class ConfigPatch {
@@ -22,7 +23,8 @@ public class ConfigPatch {
             else if ("2".equals(playerVersion))
                 return Boolean.TRUE;
             return origin;
-        }
+        } else if ("ff_player_use_remote_auto_threshold_qn".equals(key) && Versions.ge7_68_0())
+            return Boolean.TRUE;
         return origin;
     }
 

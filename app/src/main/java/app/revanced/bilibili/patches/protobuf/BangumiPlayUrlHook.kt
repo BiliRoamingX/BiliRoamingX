@@ -233,13 +233,25 @@ object BangumiPlayUrlHook {
             playReply.videoCtrl.autoQnCtl.run {
                 val halfScreenQuality = VideoQualityPatch.halfScreenQuality()
                 val fullScreenQuality = VideoQualityPatch.fullScreenQuality()
+                val mobileFullScreenQuality = VideoQualityPatch.mobileFullScreenQuality()
                 if (fullScreenQuality != 0) {
                     loginFull = fullScreenQuality.toLong()
                     nologinFull = fullScreenQuality.toLong()
                 }
+                if (Versions.ge7_68_0() && mobileFullScreenQuality != 0) {
+                    mobileLoginFull = mobileFullScreenQuality.toLong()
+                    mobileNologinFull = mobileFullScreenQuality.toLong()
+                }
                 if (halfScreenQuality == 1) {
-                    loginHalf = loginFull
-                    nologinHalf = nologinFull
+                    // follow fullscreen quality
+                    if (Versions.ge7_68_0()) {
+                        val wifiConnected = isWifiConnected()
+                        loginHalf = if (wifiConnected) loginFull else mobileLoginFull
+                        nologinHalf = if (wifiConnected) nologinFull else mobileNologinFull
+                    } else {
+                        loginHalf = loginFull
+                        nologinHalf = nologinFull
+                    }
                 } else if (halfScreenQuality != 0) {
                     loginHalf = halfScreenQuality.toLong()
                     nologinHalf = halfScreenQuality.toLong()

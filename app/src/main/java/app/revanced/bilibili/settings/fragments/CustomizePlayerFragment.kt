@@ -7,10 +7,7 @@ import android.text.InputType
 import android.widget.EditText
 import androidx.preference.Preference
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.Toasts
-import app.revanced.bilibili.utils.Utils
-import app.revanced.bilibili.utils.onClick
-import app.revanced.bilibili.utils.runCatchingOrNull
+import app.revanced.bilibili.utils.*
 
 class CustomizePlayerFragment :
     BiliRoamingBaseSettingFragment("biliroaming_setting_customize_player") {
@@ -19,6 +16,11 @@ class CustomizePlayerFragment :
         findPreference<Preference>("default_speed")?.onClick { onPlaybackSpeedClick(false) }
         findPreference<Preference>("long_press_speed")?.onClick { onPlaybackSpeedClick(true) }
         findPreference<Preference>("override_speed")?.onClick { onPlaybackSpeedOverrideClick() }
+        if (!Versions.ge7_68_0()) {
+            findPreference<Preference>("full_screen_quality")?.summary =
+                Utils.getString("biliroaming_full_screen_quality_title")
+            preferenceScreen.removePreferenceRecursively("full_screen_quality_mobile")
+        }
     }
 
     private fun onPlaybackSpeedClick(longPress: Boolean): Boolean {

@@ -43,6 +43,7 @@ public enum Settings {
     // 播放器
     HALF_SCREEN_QUALITY("half_screen_quality", STRING, "0"),
     FULL_SCREEN_QUALITY("full_screen_quality", STRING, "0"),
+    MOBILE_FULL_SCREEN_QUALITY("full_screen_quality_mobile", STRING, "0"),
     PLAYER_VERSION("player_version", STRING, "0", true),
     REMEMBER_LOSSLESS_SETTING("remember_lossless_setting", BOOLEAN, FALSE),
     DEFAULT_PLAYBACK_SPEED("default_playback_speed", FLOAT, 0f),
