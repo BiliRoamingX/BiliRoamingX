@@ -96,8 +96,10 @@ public class JSONPatch {
                 if (pendantInfo != null)
                     pendantInfo.liveGiftStarPendantInfo = null;
             }
-            if (Settings.REMOVE_LIVE_MASK.getBoolean())
+            if (Settings.REMOVE_LIVE_MASK.getBoolean()) try {
                 roomInfo.areaMaskInfo = null;
+            } catch (Throwable ignored) {
+            }
         } else if (data instanceof LiveRoomRecommendCard) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("follow"))
                 return null;
@@ -208,12 +210,13 @@ public class JSONPatch {
                     String uri = item.uri;
                     String id = String.valueOf(item.id);
                     boolean showing = shouldShowing(items, id);
-                    drawerItems.add(new BottomItem(itemTitle, uri, id));
+                    if (!"设置".equals(itemTitle))
+                        drawerItems.add(new BottomItem(itemTitle, uri, id));
                     if (purifyRedDot) {
                         item.redDot = 0;
                         item.redDotRorNew = false;
                     }
-                    return !showing;
+                    return !"设置".equals(itemTitle) && !showing;
                 });
                 MenuGroup.MineButton button = section.button;
                 if (button != null) {

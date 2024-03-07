@@ -8,7 +8,6 @@ import com.bapis.bilibili.playershared.VideoVod;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Constants;
 import app.revanced.bilibili.utils.KtUtils;
-import app.revanced.bilibili.utils.Versions;
 
 public class VideoQualityPatch {
 
@@ -89,10 +88,6 @@ public class VideoQualityPatch {
 
     @Keep
     public static int getMatchedFullScreenQuality() {
-        if (Versions.ge7_68_0()) {
-            return KtUtils.isWifiConnected() ? fullScreenQuality() : mobileFullScreenQuality();
-        } else {
-            return fullScreenQuality();
-        }
+        return KtUtils.isWifiConnected() ? fullScreenQuality() : mobileFullScreenQuality();
     }
 }
