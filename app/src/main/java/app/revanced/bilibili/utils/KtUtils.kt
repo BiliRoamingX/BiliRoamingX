@@ -19,6 +19,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import app.revanced.bilibili.meta.CookieInfo
 import app.revanced.bilibili.meta.VideoHistory
+import app.revanced.bilibili.patches.main.ApplicationDelegate
 import com.bilibili.lib.moss.api.BusinessException
 import com.google.protobuf.GeneratedMessageLite
 import com.google.protobuf.GeneratedMessageLiteEx
@@ -41,7 +42,7 @@ import kotlin.math.roundToInt
 
 @get:JvmName("sp2px")
 val Int.sp: Int
-    inline get() = TypedValue.applyDimension(
+    get() = TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_SP,
         toFloat(),
         Utils.getContext().resources.displayMetrics
@@ -49,11 +50,15 @@ val Int.sp: Int
 
 @get:JvmName("dp2px")
 val Int.dp: Int
-    inline get() = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        toFloat(),
-        Utils.getContext().resources.displayMetrics
-    ).roundToInt()
+    get() {
+        val context = ApplicationDelegate.getTopActivity()
+            ?: Utils.getContext()
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            toFloat(),
+            context.resources.displayMetrics
+        ).roundToInt()
+    }
 
 operator fun ViewGroup.iterator(): MutableIterator<View> = object : MutableIterator<View> {
     private var index = 0
