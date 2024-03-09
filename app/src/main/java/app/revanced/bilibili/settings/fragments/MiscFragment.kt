@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.EditText
 import androidx.preference.Preference
@@ -43,6 +44,11 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
             changeComponentState(BiliDocumentsProvider::class.java, newValue == true)
             true
         }
+        disablePreference(
+            key = Settings.CUSTOM_UPDATE.key,
+            { Utils.getString("biliroaming_custom_update_only_64") } to { Build.SUPPORTED_64_BIT_ABIS.isEmpty() },
+            { Utils.getString("biliroaming_custom_update_invalid_sig") } to { sigMd5() != Constants.PRE_BUILD_SIG_MD5 }
+        )
     }
 
     @Deprecated("Deprecated in Java")

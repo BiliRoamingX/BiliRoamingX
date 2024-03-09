@@ -102,9 +102,9 @@ object SubtitleHelper {
     private val dictFile by lazy { File(Utils.getContext().filesDir, "t2cn.txt") }
     private val tmpDictFile by lazy { File(Utils.getContext().filesDir, "t2cn.txt.tmp") }
     private val dictionary by lazy { Dictionary.loadDictionary(dictFile) }
-    private const val dictUrl =
+    private const val DICT_URL =
         "https://archive.biliimg.com/bfs/archive/566adec17e127bf92aed21832db0206ccecc8caa.png"
-    private const val checkInterval = 60 * 1000
+    private const val CHECK_INTERVAL = 60 * 1000
 
     // !!! Do not remove symbol '\' for "\}", Android need it
     @Suppress("RegExpRedundantEscape")
@@ -117,7 +117,7 @@ object SubtitleHelper {
     private fun downloadDictFromCdn(): Boolean {
         if (dictExist) return true
         runCatching {
-            val buffer = URL(dictUrl).openStream().buffered().use {
+            val buffer = URL(DICT_URL).openStream().buffered().use {
                 val options = Options().apply { inPreferredConfig = Bitmap.Config.RGB_565 }
                 val bitmap = BitmapFactory.decodeStream(it, null, options)
                 ByteBuffer.allocate(bitmap!!.byteCount).apply {
@@ -141,7 +141,7 @@ object SubtitleHelper {
     @JvmStatic
     fun checkDictUpdate(): Boolean {
         val lastCheckTime = cachePrefs.getLong("subtitle_dict_last_check_time", 0)
-        if (System.currentTimeMillis() - lastCheckTime < checkInterval && dictExist)
+        if (System.currentTimeMillis() - lastCheckTime < CHECK_INTERVAL && dictExist)
             return false
         cachePrefs.edit {
             putLong("subtitle_dict_last_check_time", System.currentTimeMillis())
@@ -159,7 +159,7 @@ object SubtitleHelper {
             var dictUrl = json.optJSONArray("assets")
                 ?.optJSONObject(0)?.optString("browser_download_url")
                 .takeUnless { it.isNullOrEmpty() } ?: return false
-            dictUrl = "https://mirror.ghproxy.com/$dictUrl"
+            dictUrl = speedupGhUrl(dictUrl)
             runCatching {
                 tmpDictFile.outputStream().use { o ->
                     GZIPInputStream(URL(dictUrl).openStream())

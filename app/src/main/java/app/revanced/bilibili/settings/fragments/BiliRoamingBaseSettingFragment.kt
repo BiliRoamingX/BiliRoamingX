@@ -166,20 +166,22 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
                 { Utils.getString("biliroaming_only_support_new_player") }
             }
         }
-        disablePreference(key, reason, condition)
+        disablePreference(key, reason to condition)
     }
 
     protected fun disablePreference(
         key: String,
-        reason: () -> String,
-        condition: (Preference) -> Boolean
+        vararg reasons: Pair<() -> String, (Preference) -> Boolean>,
     ) {
         val preference = findPreference<Preference>(key) ?: return
-        if (condition(preference)) {
-            preference.isEnabled = false
-            preference.summary = reason()
-            if (preference is TwoStatePreference)
-                preference.isChecked = false
+        for ((reason, condition) in reasons) {
+            if (condition(preference)) {
+                preference.isEnabled = false
+                preference.summary = reason()
+                if (preference is TwoStatePreference)
+                    preference.isChecked = false
+                break
+            }
         }
     }
 

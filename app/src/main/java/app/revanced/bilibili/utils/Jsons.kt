@@ -10,6 +10,8 @@ import kotlin.contracts.contract
 
 inline fun String?.toJSONObject() = JSONObject(orEmpty())
 
+inline fun Map<String, Any>.toJsonObject() = JSONObject(this)
+
 @Suppress("UNCHECKED_CAST")
 fun <T> JSONArray.asSequence() = (0 until length()).asSequence().map { get(it) as T }
 

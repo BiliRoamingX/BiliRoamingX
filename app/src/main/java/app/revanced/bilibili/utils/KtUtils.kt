@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.annotation.Keep
+import androidx.annotation.WorkerThread
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import app.revanced.bilibili.meta.CookieInfo
@@ -157,6 +158,7 @@ val countryTask: Future<Area> by lazy {
     }
 }
 
+@get:WorkerThread
 val country: Area?
     get() = try {
         countryTask.get(5L, TimeUnit.SECONDS)
@@ -503,4 +505,9 @@ fun isWifiConnected(): Boolean {
             as ConnectivityManager
     val networkInfo = manager.activeNetworkInfo ?: return false
     return networkInfo.isConnected && networkInfo.type == ConnectivityManager.TYPE_WIFI
+}
+
+@WorkerThread
+fun speedupGhUrl(url: String): String {
+    return if (country == Area.CN) "${Constants.GITHUB_SPEEDUP_URL}/$url" else url
 }

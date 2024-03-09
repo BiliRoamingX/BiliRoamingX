@@ -180,6 +180,7 @@ public enum Settings {
     COMMENT_COPY("comment_copy", BOOLEAN, FALSE),
     COMMENT_COPY_ENHANCE("comment_copy_enhance", BOOLEAN, FALSE),
     BLOCK_UPDATE("block_update", BOOLEAN, FALSE),
+    CUSTOM_UPDATE("custom_update", BOOLEAN, TRUE),
     BLOCK_FOLLOW_BUTTON("block_follow_button", STRING_SET, Collections.EMPTY_SET),
     CUSTOM_THEME("custom_theme", BOOLEAN, FALSE),
     SKIN("skin", BOOLEAN, FALSE),
