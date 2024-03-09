@@ -9,10 +9,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.Reflex
-import app.revanced.bilibili.utils.Utils
-import app.revanced.bilibili.utils.children
-import app.revanced.bilibili.utils.dp
+import app.revanced.bilibili.utils.*
 import com.bilibili.music.podcast.view.PodcastSpeedSeekBar
 import tv.danmaku.ijk.media.player.IMediaPlayer
 
@@ -190,8 +187,10 @@ object PlaybackSpeedPatch {
     fun onNewPodcastSpeedSeekBar(seekBar: PodcastSpeedSeekBar) {
         val newSpeedReversedArray = newSpeedReversedArray.takeIf { it.isNotEmpty() }
             ?: stockReverseSpeedArray
-        seekBar.speedNameListForBiliRoaming.apply { clear() }
-            .addAll(newSpeedReversedArray.map { Pair(it, "${it}x") })
+        val speedNameList = seekBar.speedNameListForBiliRoaming.ifEmpty { return }
+        val pairClass = speedNameList.first().javaClass
+        speedNameList.clear()
+        speedNameList.addAll(newSpeedReversedArray.map { pairClass.new(it, "${it}x") })
         seekBar.setSpeedArrayForBiliRoaming(newSpeedReversedArray)
         seekBar.max = newSpeedReversedArray.lastIndex.coerceAtLeast(0) * 100
     }
