@@ -32,7 +32,8 @@ class BUpgradeInfo(
 
 object Upgrade : ApiHook() {
     private const val UPGRADE_CHECK_API =
-        "https://api.github.com/repos/zjns/BiliRoamingX-integrations/releases"
+        "https://api.github.com/repos/zjns/BiliRoamingX-integrations/releases?per_page=100&page=1"
+    private val changelogRegex = Regex("""版本信息：(.*?)\n(.*)""", RegexOption.DOT_MATCHES_ALL)
 
     override fun shouldHook(url: String, code: Int): Boolean {
         return (Settings.BLOCK_UPDATE.boolean || UpgradePatch.customUpdate())
@@ -63,10 +64,13 @@ object Upgrade : ApiHook() {
                 continue
             if (data.optBoolean("draft", true))
                 continue
-            val versionSum = data.optString("name")
-            val changelog = data.optString("body").replace("\r\n", "\n")
+            val body = data.optString("body").replace("\r\n", "\n")
+            val values = changelogRegex.matchEntire(body)?.groupValues ?: break
+            val versionSum = values[1]
+            val changelog = values[2].trim()
             val url = data.optJSONArray("assets")
                 ?.optJSONObject(0)?.optString("browser_download_url") ?: break
+            LogHelper.debug { "Upgrade, versionSum: $versionSum, changelog: $changelog, url: $url" }
             val info = BUpgradeInfo(versionSum, url, changelog)
             if (sn < info.sn || (sn == info.sn && patchVersionCode < info.patchVersionCode)) {
                 val sameApp = sn == info.sn
