@@ -31,7 +31,7 @@ public class BLRoutePatch {
                 if (!TextUtils.isEmpty(newQuery)) {
                     if (Settings.REPLACE_STORY_VIDEO.getBoolean())
                         newQuery = newQuery.replace(STORY_ROUTER_QUERY, "").replace(STORY_TYPE_QUERY, "");
-                    boolean needRemovePayload = VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.fullScreenQuality() != 0 || Settings.DEFAULT_PLAYBACK_SPEED.getFloat() != 0f;
+                    boolean needRemovePayload = VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.getMatchedFullScreenQuality() != 0 || Settings.DEFAULT_PLAYBACK_SPEED.getFloat() != 0f;
                     if (needRemovePayload)
                         newQuery = playerPreloadRegex.matcher(newQuery).replaceAll("");
                 }
@@ -41,9 +41,11 @@ public class BLRoutePatch {
                 return uri.buildUpon().appendQueryParameter("force_old_playlist", "1").build();
             }
         } else if ("https".equals(scheme)) {
-            boolean needRemovePayload = VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.fullScreenQuality() != 0 || Settings.DEFAULT_PLAYBACK_SPEED.getFloat() != 0f;
-            if (needRemovePayload && url.startsWith("https://www.bilibili.com/bangumi/play"))
-                return Uri.parse(playerPreloadRegex.matcher(url).replaceAll(""));
+            if (url.startsWith("https://www.bilibili.com/bangumi/play")) {
+                boolean needRemovePayload = VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.getMatchedFullScreenQuality() != 0 || Settings.DEFAULT_PLAYBACK_SPEED.getFloat() != 0f;
+                if (needRemovePayload)
+                    return Uri.parse(playerPreloadRegex.matcher(url).replaceAll(""));
+            }
             if (Settings.REPLACE_STORY_VIDEO.getBoolean() && url.startsWith("https://www.bilibili.com/video")) {
                 return Uri.parse(url.replace(STORY_ROUTER_QUERY, "").replace(STORY_TYPE_QUERY, ""));
             }
