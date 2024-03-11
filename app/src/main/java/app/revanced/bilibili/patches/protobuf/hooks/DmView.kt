@@ -87,16 +87,6 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
                 extraSubtitles.add(cnSub)
             }
         }
-        if (Settings.SUBTITLE_ADD_CLOSE.boolean
-            && dmViewReq.spmid.contains("pgc")
-            && (result.subtitle.subtitlesList.isNotEmpty() || extraSubtitles.isNotEmpty())
-        ) {
-            val closeSub = SubtitleItem().apply {
-                lan = "nodisplay"
-                lanDoc = Utils.getString("Player_option_subtitle_lan_doc_nodisplay")
-            }
-            extraSubtitles.add(closeSub)
-        }
         if (extraSubtitles.isNotEmpty())
             result.subtitle.addAllSubtitles(extraSubtitles)
         return result

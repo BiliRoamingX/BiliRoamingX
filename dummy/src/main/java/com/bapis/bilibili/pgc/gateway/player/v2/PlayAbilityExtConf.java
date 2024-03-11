@@ -164,7 +164,7 @@ public final class PlayAbilityExtConf extends GeneratedMessageLite<PlayAbilityEx
         GeneratedMessageLite.registerDefaultInstance(PlayAbilityExtConf.class, playAbilityExtConf);
     }
 
-    private PlayAbilityExtConf() {
+    public PlayAbilityExtConf() {
     }
 
     public void clearAllowCloseSubtitle() {

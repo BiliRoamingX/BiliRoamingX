@@ -116,6 +116,7 @@ object BangumiPlayUrlHook {
     ): PlayViewReply? {
         if (error is NetworkException)
             throw error
+        reply?.playExtConf?.allowCloseSubtitle = true
         val response = reply ?: PlayViewReply()
         if (Settings.UNLOCK_AREA_LIMIT.boolean && needProxy(response)) {
             return try {
@@ -499,6 +500,13 @@ object BangumiPlayUrlHook {
                 freyaEnterDisable = true
                 freyaFullDisable = true
             }
+            if (hasPlayExtConf()) {
+                playExtConf.allowCloseSubtitle = true
+            } else {
+                playExtConf = PlayAbilityExtConf().apply {
+                    allowCloseSubtitle = true
+                }
+            }
         }
     }.onFailure { LogHelper.error({ "Failed to reconstruct response" }, it) }
         .getOrDefault(response)
@@ -547,6 +555,14 @@ object BangumiPlayUrlHook {
             val newSupplement = supplement.apply {
                 fixBusinessProto(thaiSeason, thaiEp, jsonContent)
                 viewInfo = ViewInfo()
+                // in fact, unite player does not case about "allowCloseSubtitle" field
+                if (hasPlayExtConf()) {
+                    playExtConf.allowCloseSubtitle = true
+                } else {
+                    playExtConf = PlayAbilityExtConf().apply {
+                        allowCloseSubtitle = true
+                    }
+                }
             }
             this.supplement = newAny(PGC_ANY_MODEL_TYPE_URL, newSupplement)
             playArcConf = PlayArcConf().apply {
