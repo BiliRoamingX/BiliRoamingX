@@ -3,6 +3,7 @@ package app.revanced.bilibili.patches.main;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import androidx.annotation.Keep;
 
@@ -11,6 +12,7 @@ import com.bilibili.app.preferences.BiliPreferencesActivity;
 import app.revanced.bilibili.patches.drawer.DrawerPatch;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.settings.fragments.BiliRoamingSettingsFragment;
+import app.revanced.bilibili.utils.LogHelper;
 import app.revanced.bilibili.utils.Utils;
 import tv.danmaku.bili.MainActivityV2;
 
@@ -30,6 +32,16 @@ public class MainActivityDelegate {
     @Keep
     public static boolean onBackPressed(MainActivityV2 activity) {
         return DrawerPatch.onMainActivityBackPressed(activity);
+    }
+
+    @Keep
+    public static void onSaveInstanceState(MainActivityV2 activityV2, Bundle outState) {
+        if (Utils.isHd()) {
+            Bundle bundle = outState.getBundle("androidx.lifecycle.BundlableSavedStateRegistry.key");
+            if (bundle != null) {
+                bundle.remove("android:support:fragments");
+            }
+        }
     }
 
     static void showHintIfNeeded(Context context) {

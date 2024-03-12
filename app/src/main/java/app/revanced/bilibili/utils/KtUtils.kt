@@ -468,23 +468,28 @@ fun vibrate(milliseconds: Long) {
 }
 
 @Suppress("DEPRECATION")
+private fun Any?.jsonValue(): Any? {
+    val value = this
+    return if (value is Size) {
+        mapOf("width" to value.width, "height" to value.height)
+    } else if (value is SizeF) {
+        mapOf("width" to value.width, "height" to value.height)
+    } else if (value is Array<*> && value.isArrayOf<Parcelable>()) {
+        value.map { it.jsonValue() }
+    } else if (value is SparseArray<*>) {
+        (0 until value.size()).associate {
+            value.keyAt(it).toString() to value.valueAt(it).jsonValue()
+        }
+    } else if (value is Bundle) {
+        value.keySet().associateWith { k -> value.get(k).jsonValue() }
+    } else if (value is Parcelable) {
+        value.toString()
+    } else value
+}
+
+@Suppress("DEPRECATION")
 fun Bundle.toJson(pretty: Boolean = false): String {
-    return keySet().associateWith { key ->
-        val value = get(key)
-        if (value is Size) {
-            JSONObject(mapOf("width" to value.width, "height" to value.height))
-        } else if (value is SizeF) {
-            JSONObject(mapOf("width" to value.width, "height" to value.height))
-        } else if (value is Array<*> && value.isArrayOf<Parcelable>()) {
-            value.map { it.toString() }
-        } else if (value is SparseArray<*>) {
-            (0 until value.size()).associate { value.keyAt(it) to value.valueAt(it) }
-        } else if (value is Bundle) {
-            toJson(pretty)
-        } else if (value is Parcelable) {
-            value.toString()
-        } else value
-    }.let {
+    return keySet().associateWith { key -> get(key).jsonValue() }.let {
         if (pretty) {
             JSONObject(it).toString(2)
         } else JSONObject(it).toString()
