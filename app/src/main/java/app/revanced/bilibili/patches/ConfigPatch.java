@@ -24,6 +24,8 @@ public class ConfigPatch {
             return origin;
         } else if ("ff_player_use_remote_auto_threshold_qn".equals(key))
             return Boolean.TRUE;
+        else if ("ff_channel_redirect_to_search".equals(key) && Settings.ADD_CHANNEL.getBoolean())
+            return Boolean.FALSE;
         return origin;
     }
 

@@ -183,13 +183,22 @@ public class JSONPatch {
                     String uri = item.uri;
                     String id = String.valueOf(item.id);
                     boolean showing = shouldShowing(items, id);
-                    drawerItems.add(new BottomItem(itemTitle, uri, id));
+                    if (!"设置".equals(itemTitle))
+                        drawerItems.add(new BottomItem(itemTitle, uri, id));
                     if (purifyRedDot) {
                         item.redDot = 0;
                         item.redDotRorNew = false;
                     }
-                    return !showing;
+                    return !"设置".equals(itemTitle) && !showing;
                 });
+            }
+            if (Settings.ADD_CHANNEL.getBoolean()) {
+                var channelItem = new MenuGroup.Item();
+                channelItem.id = 114514;
+                channelItem.title = "频道中心";
+                channelItem.uri = "bilibili://pegasus/channel/discover";
+                channelItem.icon = "http://i0.hdslb.com/bfs/archive/f6739d905dee57d2c0429d9b66acb3f39b294aff.png";
+                mine.moreSectionList.add(0, channelItem);
             }
         } else {
             List<MenuGroup> sectionListV2 = mine.sectionListV2;
@@ -231,6 +240,15 @@ public class JSONPatch {
                 }
                 if (drawerStyle != 0)
                     section.style = drawerStyle;
+
+                if ("更多服务".equals(section.title) && Settings.ADD_CHANNEL.getBoolean()) {
+                    var channelItem = new MenuGroup.Item();
+                    channelItem.id = 114514;
+                    channelItem.title = "频道中心";
+                    channelItem.uri = "bilibili://pegasus/channel/discover";
+                    channelItem.icon = "http://i0.hdslb.com/bfs/archive/f6739d905dee57d2c0429d9b66acb3f39b294aff.png";
+                    section.itemList.add(0, channelItem);
+                }
             }
             sectionListV2.removeIf(section -> !TextUtils.isEmpty(section.title) && !shouldShowing(items, section.title));
         }
@@ -263,9 +281,6 @@ public class JSONPatch {
             });
         }
 
-        if (Settings.ADD_CHANNEL.getBoolean())
-            addChannelTab(data.bottom);
-
         if (Settings.PURIFY_GAME.getBoolean()) {
             data.top.removeIf(tab -> {
                 String uri = tab.uri;
@@ -274,33 +289,6 @@ public class JSONPatch {
         }
 
         configTab(data.tab);
-    }
-
-    private static void addChannelTab(List<MainResourceManager.Tab> tabs) {
-        var hasChannel = false;
-        for (int i = 0; i < tabs.size(); i++) {
-            var tabUri = tabs.get(i).uri;
-            if (!TextUtils.isEmpty(tabUri) && tabUri.startsWith("bilibili://pegasus/channel")) {
-                hasChannel = true;
-                break;
-            }
-        }
-        if (hasChannel) return;
-        var newTab = new MainResourceManager.Tab();
-        newTab.tabId = "123";
-        newTab.reportId = "频道Bottom";
-        newTab.name = "频道";
-        newTab.uri = "bilibili://main/top_category";
-        newTab.icon = "http://i0.hdslb.com/bfs/archive/e16c9303e9edbf23031f545fcafc44d1f60cd07b.png";
-        newTab.iconSelected = "http://i0.hdslb.com/bfs/archive/f6739d905dee57d2c0429d9b66acb3f39b294aff.png";
-        var pos = 2;
-        newTab.pos = pos;
-        for (int i = 0; i < tabs.size(); i++) {
-            var tab = tabs.get(i);
-            var tabPos = tab.pos;
-            tab.pos = tabPos >= pos ? tabPos + 1 : tabPos;
-        }
-        tabs.add(0, newTab);
     }
 
     private static void configTab(List<MainResourceManager.Tab> tabs) {
