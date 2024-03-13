@@ -10,7 +10,7 @@ object SearchByType : MossHook<SearchByTypeRequest, SearchByTypeResponse>() {
     override val async: Boolean = true
 
     override fun shouldHook(req: GeneratedMessageLite<*, *>): Boolean {
-        return req is SearchByTypeRequest && BangumiSeasonHook.extraSearchHandleable(req)
+        return req is SearchByTypeRequest && BangumiSeasonHook.extraSearchHandleable(req.type)
     }
 
     override fun hookBefore(req: SearchByTypeRequest): Any {

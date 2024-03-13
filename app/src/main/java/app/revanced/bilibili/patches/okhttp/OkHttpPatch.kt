@@ -19,6 +19,8 @@ object OkHttpPatch {
         HistoryReport,
         Media,
         QoeShow,
+        SearchAll,
+        SearchByType,
         Season,
         SeasonRecommend,
         ShareChannels,

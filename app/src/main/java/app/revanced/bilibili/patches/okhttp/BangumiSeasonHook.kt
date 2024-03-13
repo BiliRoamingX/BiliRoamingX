@@ -223,6 +223,11 @@ object BangumiSeasonHook {
     }
 
     @JvmStatic
+    fun searchAllResponseHookForHd(reply: JSONObject) {
+        addAreaTagsForHd(reply)
+    }
+
+    @JvmStatic
     fun injectExtraSearchTypes() {
         if (Versions.ge7_64_0()) return
         if (!Settings.SEARCH_BANGUMI.boolean && !Settings.SEARCH_MOVIE.boolean) {
@@ -268,8 +273,8 @@ object BangumiSeasonHook {
         BiliMainSearchResultPage.PageTypes.`$VALUES` = newPageTypes
     }
 
-    fun extraSearchHandleable(request: SearchByTypeRequest): Boolean {
-        return searchTypes.containsKey(request.type)
+    fun extraSearchHandleable(type: Int): Boolean {
+        return searchTypes.containsKey(type)
     }
 
     @JvmStatic
@@ -281,6 +286,22 @@ object BangumiSeasonHook {
         val type = searchType.type
         return retrieveExtraSearch(request, area, type)
             ?: throw BusinessException(-1, "搜索失败，请重试")
+    }
+
+    @JvmStatic
+    fun handleExtraSearchForHd(url: String): String {
+        val uri = Uri.parse(url)
+        val query = uri.run {
+            queryParameterNames.associateWith { getQueryParameter(it) ?: "" }
+        }
+        val type = uri.getQueryParameter("type").orEmpty().toInt()
+        val searchType = searchTypes[type]!!
+        return getAreaSearchBangumi(query, searchType.area, searchType.type)?.also {
+            checkErrorToast(it.toJSONObject(), true)
+        } ?: JSONObject().apply {
+            put("code", "-1")
+            put("message", "搜索失败，请重试")
+        }.toString()
     }
 
     private fun retrieveExtraSearch(
@@ -519,6 +540,33 @@ object BangumiSeasonHook {
                 reply.addNav(1, nav)
             }
         }
+    }
+
+    private fun addAreaTagsForHd(reply: JSONObject) {
+        if (!Settings.SEARCH_BANGUMI.boolean && !Settings.SEARCH_MOVIE.boolean) return
+        val currentArea = country
+        val navList = reply.optJSONArray("nav") ?: return
+        val newNavList = JSONArray()
+        newNavList.put(navList[0])
+        for ((type, info) in searchTypes.toList().reversed()) {
+            val area = info.area
+            val typeStr = info.typeStr
+            if (area == currentArea)
+                continue
+            if (Settings.getServerByArea(area).isNotEmpty()
+                && Settings.getExtraSearchByType(typeStr)
+            ) {
+                val nav = JSONObject().apply {
+                    put("name", info.text)
+                    put("type", type)
+                }
+                newNavList.put(nav)
+            }
+        }
+        navList.forEachIndexed { index, item ->
+            if (index > 0) newNavList.put(item)
+        }
+        reply.put("nav", newNavList)
     }
 
     private fun filterSearchResult(reply: SearchAllResponse) {
