@@ -39,6 +39,10 @@ public class BLRoutePatch {
                 return newUri.build();
             } else if ("1".equals(Settings.PLAYER_VERSION.getString()) && url.startsWith("bilibili://music/playlist/playpage")) {
                 return uri.buildUpon().appendQueryParameter("force_old_playlist", "1").build();
+            } else if (Settings.ADD_CHANNEL.getBoolean() && url.startsWith("bilibili://pegasus/channel/v2")) {
+                // for hd, consistent with the default behavior of selecting "select" tab before deleting the "topic" tab
+                if (TextUtils.isEmpty(uri.getQueryParameter("tab")))
+                    return uri.buildUpon().appendQueryParameter("tab", "select").build();
             }
         } else if ("https".equals(scheme)) {
             if (url.startsWith("https://www.bilibili.com/bangumi/play")) {

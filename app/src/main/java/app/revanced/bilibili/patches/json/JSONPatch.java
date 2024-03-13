@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.Keep;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.bilibili.ad.adview.videodetail.danmakuv2.model.Dm;
 import com.bilibili.ad.adview.videodetail.danmakuv2.model.DmAdvert;
 import com.bilibili.app.authorspace.api.BiliSpace;
@@ -20,12 +21,15 @@ import com.bilibili.bililive.videoliveplayer.net.beans.gateway.userinfo.Function
 import com.bilibili.bililive.videoliveplayer.net.beans.giftpendant.LiveGiftPendantInfo;
 import com.bilibili.lib.homepage.mine.MenuGroup;
 import com.bilibili.okretro.GeneralResponse;
+import com.bilibili.pegasus.api.model.ChannelTabV2;
+import com.bilibili.pegasus.api.model.ChannelV2;
 import com.bilibili.search.api.DefaultKeyword;
 import com.bilibili.search.api.SearchRank;
 import com.bilibili.search.api.SearchReferral;
 import com.bilibili.video.story.StoryDetail;
 import com.bilibili.video.story.api.StoryFeedResponse;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -35,8 +39,12 @@ import java.util.Set;
 import app.revanced.bilibili.meta.BottomItem;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Constants;
+import app.revanced.bilibili.utils.LogHelper;
+import app.revanced.bilibili.utils.Reflex;
 import app.revanced.bilibili.utils.Utils;
 import app.revanced.bilibili.utils.Versions;
+import kotlin.Lazy;
+import kotlin.LazyKt;
 import tv.danmaku.bili.ui.main.event.model.EventEntranceModel;
 import tv.danmaku.bili.ui.main2.api.AccountMine;
 import tv.danmaku.bili.ui.main2.resource.MainResourceManager;
@@ -52,6 +60,17 @@ import tv.danmaku.bili.ui.splash.event.EventSplashDataList;
 public class JSONPatch {
     public static List<BottomItem> drawerItems = new ArrayList<>();
     public static List<BottomItem> bottomItems = new ArrayList<>();
+    private static final Lazy<String> tabIdFieldName = LazyKt.lazy(() -> {
+        var name = "";
+        for (Field field : ChannelTabV2.class.getDeclaredFields()) {
+            JSONField jsonField = field.getAnnotation(JSONField.class);
+            if (jsonField != null && "id".equals(jsonField.name())) {
+                name = field.getName();
+                break;
+            }
+        }
+        return name;
+    });
 
     @Keep
     public static Object parseObjectHook(Object obj) {
@@ -147,6 +166,22 @@ public class JSONPatch {
                 brandSplashData.setPreloadList(null);
                 brandSplashData.setQueryList(null);
                 brandSplashData.setShowList(null);
+            }
+        } else if (data instanceof ChannelV2 channelV2) {
+            if (Settings.ADD_CHANNEL.getBoolean()) {
+                var tabs = channelV2.tabs;
+                // topic was deprecated by official
+                if (tabs != null) try {
+                    tabs.removeIf(tab -> "topic".equals(tab.tabId));
+                } catch (Throwable t) {
+                    // tabId field is obfuscated on hd
+                    var tabIdFieldName = JSONPatch.tabIdFieldName.getValue();
+                    if (!tabIdFieldName.isEmpty()) {
+                        tabs.removeIf(tab -> "topic".equals(Reflex.getObjectField(tab, tabIdFieldName)));
+                    } else {
+                        LogHelper.error(() -> "topic channel tab remove failed", t);
+                    }
+                }
             }
         }
         return obj;
