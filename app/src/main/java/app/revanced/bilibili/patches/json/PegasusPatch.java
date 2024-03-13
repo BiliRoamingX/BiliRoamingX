@@ -1132,9 +1132,16 @@ public class PegasusPatch {
                 idxList.add(i);
                 continue;
             }
-            if (blockTopicList && card.hasTopicList()) {
-                idxList.add(i);
-                continue;
+            if (blockTopicList) {
+                var hasTopicList = false;
+                try {
+                    hasTopicList = card.hasTopicList();
+                } catch (Throwable ignored) {
+                }
+                if (hasTopicList) {
+                    idxList.add(i);
+                    continue;
+                }
             }
             if (blockRcmdUp && card.hasRcmdOneItem() && card.getRcmdOneItem().getBase().getCardGoto().startsWith("up_rcmd")) {
                 idxList.add(i);

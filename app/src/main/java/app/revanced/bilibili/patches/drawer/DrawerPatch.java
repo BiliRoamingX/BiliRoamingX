@@ -22,7 +22,7 @@ public class DrawerPatch {
     private static View navView;
 
     public static void onMainActivityCreate(MainActivityV2 activity) {
-        if (!Settings.DRAWER.getBoolean()) return;
+        if (Utils.isHd() || !Settings.DRAWER.getBoolean()) return;
         ViewGroup contentView = activity.findViewById(Window.ID_ANDROID_CONTENT);
         View view = contentView.getChildAt(0);
         contentView.removeViewInLayout(view);
@@ -38,7 +38,7 @@ public class DrawerPatch {
     }
 
     public static void onMainActivityStart(MainActivityV2 activity) {
-        if (!Settings.DRAWER.getBoolean()) return;
+        if (Utils.isHd() || !Settings.DRAWER.getBoolean()) return;
         if (drawerLayout == null) return;
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         Fragment mineFragment = fragmentManager.findFragmentByTag("mine");
@@ -55,7 +55,7 @@ public class DrawerPatch {
     }
 
     public static boolean onMainActivityBackPressed(MainActivityV2 activity) {
-        if (!Settings.DRAWER.getBoolean()) return false;
+        if (Utils.isHd() || !Settings.DRAWER.getBoolean()) return false;
         if (drawerLayout == null || navView == null) return false;
         if (drawerLayout.isDrawerOpenEx(navView)) {
             drawerLayout.closeDrawerEx(navView, true);
@@ -66,7 +66,7 @@ public class DrawerPatch {
 
     @Keep
     public static void onMainFrameFragmentViewCreated(View view) {
-        if (!Settings.DRAWER.getBoolean()) return;
+        if (Utils.isHd() || !Settings.DRAWER.getBoolean()) return;
         int id = Utils.getResId("avatar_layout", "id");
         View avatarView = view.findViewById(id);
         if (avatarView == null) return;

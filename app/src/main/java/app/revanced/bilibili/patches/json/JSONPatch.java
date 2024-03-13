@@ -309,24 +309,70 @@ public class JSONPatch {
             return !showing;
         });
 
-        if (Settings.DRAWER.getBoolean()) {
+        if (!Utils.isHd() && Settings.DRAWER.getBoolean()) {
             data.bottom.removeIf(tab -> {
                 String uri = tab.uri;
                 return !TextUtils.isEmpty(uri) && uri.startsWith("bilibili://user_center/mine");
             });
         }
 
-        if (Settings.PURIFY_GAME.getBoolean()) {
+        if (Settings.PURIFY_GAME.getBoolean() && data.top != null) {
             data.top.removeIf(tab -> {
                 String uri = tab.uri;
                 return !TextUtils.isEmpty(uri) && uri.startsWith("bilibili://game_center/home");
             });
         }
 
-        configTab(data.tab);
+        configTab(data);
     }
 
-    private static void configTab(List<MainResourceManager.Tab> tabs) {
+    private static void configTab(MainResourceManager.TabData data) {
+        var tabs = data.tab;
+        if (Utils.isHd() && (tabs == null || tabs.isEmpty())) {
+            tabs = new ArrayList<>();
+            data.tab = tabs;
+
+            var liveTab = new MainResourceManager.Tab();
+            liveTab.tabId = "20";
+            liveTab.name = "直播";
+            liveTab.uri = "bilibili://live/home";
+            liveTab.reportId = "直播tab";
+            liveTab.pos = 1;
+            tabs.add(liveTab);
+
+            var feedTab = new MainResourceManager.Tab();
+            feedTab.tabId = "24";
+            feedTab.name = "推荐";
+            feedTab.uri = "bilibili://pegasus/promo";
+            feedTab.reportId = "推荐tab";
+            feedTab.pos = 2;
+            feedTab.selected = 1;
+            tabs.add(feedTab);
+
+            var hotTab = new MainResourceManager.Tab();
+            hotTab.tabId = "27";
+            hotTab.name = "热门";
+            hotTab.uri = "bilibili://pegasus/hottopic";
+            hotTab.reportId = "hottopic";
+            hotTab.pos = 3;
+            tabs.add(hotTab);
+
+            var animeTab = new MainResourceManager.Tab();
+            animeTab.tabId = "30";
+            animeTab.name = "追番";
+            animeTab.uri = "bilibili://pgc/home";
+            animeTab.reportId = "bangumi";
+            animeTab.pos = 4;
+            tabs.add(animeTab);
+
+            var cinemaTab = new MainResourceManager.Tab();
+            cinemaTab.tabId = "13";
+            cinemaTab.name = "影视";
+            cinemaTab.uri = "bilibili://pgc/home?home_flow_type=2";
+            cinemaTab.reportId = "film";
+            cinemaTab.pos = 5;
+            tabs.add(cinemaTab);
+        }
         if (tabs == null || tabs.isEmpty())
             return;
         var hasBangumiCN = false;
