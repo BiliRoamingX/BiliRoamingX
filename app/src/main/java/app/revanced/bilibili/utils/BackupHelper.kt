@@ -4,7 +4,6 @@ import app.revanced.bilibili.patches.SplashPatch
 import app.revanced.bilibili.settings.Settings
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
@@ -12,7 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.zip.ZipEntry
-import java.util.zip.ZipInputStream
+import java.util.zip.ZipFile
 import java.util.zip.ZipOutputStream
 
 object BackupHelper {
@@ -25,10 +24,11 @@ object BackupHelper {
         get() = Utils.getContext().dataDir
     private val externalDir: File
         get() = Utils.getContext().getExternalFilesDir(null)?.parentFile!!
+    private val tempFile: File
+        get() = File(Utils.getContext().getExternalFilesDir(null), "biliroaming_backup.tmp")
 
     fun backup(output: OutputStream) {
-        val bytesOut = ByteArrayOutputStream()
-        val zipOut = ZipOutputStream(bytesOut)
+        val zipOut = ZipOutputStream(output)
         zipOut.setLevel(5)
         val metaInfo = JSONObject()
         metaInfo.put("version", 1)
@@ -70,22 +70,15 @@ object BackupHelper {
         zipOut.putNextEntry(ZipEntry("backup.json"))
         zipOut.write(metaInfo.toString().toByteArray())
         zipOut.finish()
-        bytesOut.toByteArray().inputStream().copyTo(output)
     }
 
     fun restore(input: InputStream) {
-        val bytesInput = input.readBytes().inputStream()
-        var zipInput = ZipInputStream(bytesInput)
-        var metaInfo = JSONObject()
-        while (true) {
-            val entry = zipInput.nextEntry ?: break
-            if (entry.name == "backup.json") {
-                metaInfo = JSONObject(zipInput.readBytes().toString(Charsets.UTF_8))
-                break
-            }
-        }
-        if (metaInfo.length() == 0) return
-
+        val tempFile = tempFile.apply { delete() }
+        tempFile.outputStream().use { input.copyTo(it) }
+        val zipFile = ZipFile(tempFile)
+        fun ZipFile.entry(name: String) = run { getInputStream(getEntry(name)) }
+        val metaInfo = zipFile.entry("backup.json")
+            .use { it.readBytes() }.toString(Charsets.UTF_8).toJSONObject()
         val version = metaInfo.optInt("version")
         LogHelper.debug { "backup version: $version" }
 
@@ -103,17 +96,9 @@ object BackupHelper {
             when (val type = item.optString("type")) {
                 TYPE_PREFS -> {
                     val name = item.optString("name")
-                    bytesInput.reset()
-                    zipInput = ZipInputStream(bytesInput)
-                    while (true) {
-                        val entry = zipInput.nextEntry ?: break
-                        if (entry.name == "$type/$name.xml") {
-                            zipInput.readBytes().inputStream().use { input ->
-                                prefsPath(name).outputStream().use { output ->
-                                    input.copyTo(output)
-                                }
-                            }
-                            break
+                    zipFile.entry("$type/$name.xml").use { input ->
+                        prefsPath(name).outputStream().use { output ->
+                            input.copyTo(output)
                         }
                     }
                 }
@@ -121,22 +106,16 @@ object BackupHelper {
                 TYPE_FILE -> {
                     val location = item.optString("location")
                     val restorePath = item.optString("restore_path")
-                    bytesInput.reset()
-                    zipInput = ZipInputStream(bytesInput)
-                    while (true) {
-                        val entry = zipInput.nextEntry ?: break
-                        if (entry.name == "$type/$location") {
-                            zipInput.readBytes().inputStream().use { input ->
-                                restorePath.fromPathDescriptor().outputStream().use { output ->
-                                    input.copyTo(output)
-                                }
-                            }
-                            break
+                    zipFile.entry("$type/$location").use { input ->
+                        restorePath.fromPathDescriptor().outputStream().use { output ->
+                            input.copyTo(output)
                         }
                     }
                 }
             }
         }
+
+        tempFile.delete()
     }
 
     private fun prefsPath(name: String): File {
