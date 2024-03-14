@@ -44,6 +44,8 @@ object BiliRoamingApi {
     private const val BILI_SECTION_URL = "api.bilibili.com/pgc/web/season/section"
     private const val BILI_USER_STATUS_URL = "api.bilibili.com/pgc/view/web/season/user/status"
     private const val BILI_REVIEW_URL = "api.bilibili.com/pgc/review/user"
+    private const val BILI_SEASON_URL = "api.bilibili.com/pgc/view/v2/app/season"
+    private const val BILI_EPISODES_URL = "api.bilibili.com/pgc/view/v2/app/eps"
 
     private const val PATH_PLAYURL = "/pgc/player/api/playurl"
     private const val THAILAND_PATH_PLAYURL = "/intl/gateway/v2/ogv/playurl"
@@ -208,15 +210,16 @@ object BiliRoamingApi {
     }
 
     @JvmStatic
-    fun getSeason(info: Map<String, String?>): String? {
+    fun getSeason(info: Map<String, String?>, forPlay: Boolean = false): String? {
         val thUrl = Settings.TH_SERVER.string
-        if (thUrl.isEmpty()) {
+        if (!forPlay && thUrl.isEmpty()) {
             Toasts.showShort("请配置泰区解析服务器地址")
             return null
         }
         val seasonId = info.getOrDefault("season_id", null)?.toInt() ?: 0
         val cache = seasonCache.get()
-        val seasonCache = if (seasonId != 0) {
+        // not cache since want to get latest watch progress every time
+        val seasonCache = if (!forPlay && seasonId != 0) {
             if (cache?.seasonId == seasonId && cache.valid.get()) {
                 cache.latch.await()
                 return cache.seasonJson.get()
@@ -226,28 +229,34 @@ object BiliRoamingApi {
                 }
             }
         } else null
-        val builder = Uri.Builder().scheme("https")
-            .encodedAuthority(thUrl + THAILAND_PATH_SEASON)
-            .appendQueryParameter("s_locale", "zh_SG")
-            .appendQueryParameter("access_key", Utils.getAccessKey())
-            .appendQueryParameter("mobi_app", "bstar_a")
-            .appendQueryParameter("build", "1080003")
-        info.filterNot { it.value.isNullOrEmpty() }
-            .forEach { builder.appendQueryParameter(it.key, it.value) }
         var thSeason: JSONObject? = null
         var hidden = false
-        val seasonJson = getContent(builder.toString())?.toJSONObject()?.also {
-            thSeason = it
-            it.optJSONObject("result")?.run {
-                fixThailandSeason(this)
-            }
-        }?.takeIf { it.optInt("code", -1) == 0 }
-            ?: getHiddenSeason(seasonId)?.toJSONObject()?.also { hidden = true } ?: run {
-                thSeason?.let { checkErrorToast(it, true) }
-                seasonCache?.valid?.set(false)
-                seasonCache?.latch?.countDown()
-                return null
-            }
+        val seasonJson = (if (!forPlay) {
+            val builder = Uri.Builder().scheme("https")
+                .encodedAuthority(thUrl + THAILAND_PATH_SEASON)
+                .appendQueryParameter("s_locale", "zh_SG")
+                .appendQueryParameter("access_key", Utils.getAccessKey())
+                .appendQueryParameter("mobi_app", "bstar_a")
+                .appendQueryParameter("build", "1080003")
+            info.filterNot { it.value.isNullOrEmpty() }
+                .forEach { builder.appendQueryParameter(it.key, it.value) }
+            getContent(builder.toString())?.toJSONObject()?.also {
+                thSeason = it
+                it.optJSONObject("result")?.run {
+                    fixThailandSeason(this)
+                }
+            }?.takeIf { it.optInt("code", -1) == 0 }
+        } else null) ?: getHiddenSeasonForPlayClient(info)?.toJSONObject()
+            ?.takeIf { it.optInt("code", -1) == 0 }
+            ?.apply {
+                put("result", optJSONObject("data"))
+                remove("data")
+            } ?: getHiddenSeason(seasonId)?.toJSONObject()?.also { hidden = true } ?: run {
+            thSeason?.let { checkErrorToast(it, true) }
+            seasonCache?.valid?.set(false)
+            seasonCache?.latch?.countDown()
+            return null
+        }
         return seasonJson.toString().also {
             if (seasonJson.optInt("code", -1) == 0) {
                 if (hidden) {
@@ -262,9 +271,48 @@ object BiliRoamingApi {
         }
     }
 
+    private fun getHiddenSeasonForPlayClient(info: Map<String, String?>): String? {
+        // PlayView grpc api return null when request non-cn bangumi on play client,
+        // season api response will not contains episodes info too.
+        val query = buildMap {
+            put("access_key", Utils.getAccessKey())
+            for ((k, v) in info)
+                if (!v.isNullOrEmpty())
+                    put(k, v)
+        }
+        // fake to pink client to get episodes
+        val extraQuery = mapOf(
+            "appkey" to "1d8b6e7d45233436",
+            "mobi_app" to "android",
+            "build" to "7690300"
+        )
+        val url = Uri.Builder()
+            .scheme("https")
+            .encodedAuthority(BILI_SEASON_URL)
+            .encodedQuery(signQuery(query, extraQuery))
+            .toString()
+        return getContent(url)
+    }
+
+    fun getHiddenEpisodesForPlayClient(seasonId: String): String? {
+        val query = mapOf("access_key" to Utils.getAccessKey(), "season_id" to seasonId)
+        // fake to pink client to get episodes
+        val extraQuery = mapOf(
+            "appkey" to "1d8b6e7d45233436",
+            "mobi_app" to "android",
+            "build" to "7690300"
+        )
+        val url = Uri.Builder()
+            .scheme("https")
+            .encodedAuthority(BILI_EPISODES_URL)
+            .encodedQuery(signQuery(query, extraQuery))
+            .toString()
+        return getContent(url)
+    }
+
     @JvmStatic
     private fun getHiddenSeason(seasonId: Int): String? {
-        // few cn bangumi maybe hidden for oversea ip, eg. 4623(品酒要在成为夫妻后)
+        // few cn bangumi maybe hidden for oversea ip, eg. 6423(品酒要在成为夫妻后)
         if (seasonId == 0) return null
         val result = getMediaInfo(seasonId)?.toJSONObject()
             ?.optJSONObject("mediaInfo") ?: return null
@@ -433,7 +481,7 @@ object BiliRoamingApi {
     }
 
     @JvmStatic
-    private fun getUserStatus(seasonId: Int): String? {
+    fun getUserStatus(seasonId: Int): String? {
         val url = Uri.Builder()
             .scheme("https")
             .encodedAuthority(BILI_USER_STATUS_URL)

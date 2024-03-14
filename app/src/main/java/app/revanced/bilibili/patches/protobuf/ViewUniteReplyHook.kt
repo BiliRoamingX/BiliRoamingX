@@ -52,9 +52,16 @@ object ViewUniteReplyHook {
             hookTabModules(viewReply)
             hookSupplement(viewReply)
         }
-        if (viewReply == null && Settings.UNLOCK_AREA_LIMIT.boolean
-            && viewReq.extraContentMap.let { it.containsKey("season_id") || it.containsKey("ep_id") }
-        ) return unlockThaiBangumi(viewReq)
+        var forPlay = false
+        if (Settings.UNLOCK_AREA_LIMIT.boolean && (viewReply == null || Utils.isPlay() && run {
+                (viewReply.supplement.typeUrl == VIEW_PGC_ANY_TYPE_URL
+                        && viewReply.tab.tabModuleList.first {
+                    it.hasIntroduction()
+                }.introduction.modulesList.none {
+                    it.type == ModuleType.POSITIVE
+                }).also { forPlay = it }
+            }) && viewReq.extraContentMap.let { it.containsKey("season_id") || it.containsKey("ep_id") }
+        ) return unlockThaiBangumi(viewReq, forPlay = forPlay)
         if (error != null) throw error else return viewReply
     }
 
@@ -161,7 +168,7 @@ object ViewUniteReplyHook {
         }
     }
 
-    private fun unlockThaiBangumi(viewReq: ViewReq): ViewReply? {
+    private fun unlockThaiBangumi(viewReq: ViewReq, forPlay: Boolean = false): ViewReply? {
         val extraContent = viewReq.extraContentMap
         val reqEpId = extraContent.getOrDefault("ep_id", "0")
         val reqSeasonId = extraContent.getOrDefault("season_id", "0")
@@ -174,9 +181,10 @@ object ViewUniteReplyHook {
             lastSeasonInfo["season_id"] = reqSeasonId
         }
         LogHelper.info { "Info: $lastSeasonInfo" }
-        val (newCode, newResult) = getSeason(lastSeasonInfo)?.toJSONObject()?.let {
-            it.optInt("code", FAIL_CODE) to it.optJSONObject("result")
-        } ?: (FAIL_CODE to null)
+        val (newCode, newResult) = getSeason(lastSeasonInfo, forPlay = forPlay)
+            ?.toJSONObject()?.let {
+                it.optInt("code", FAIL_CODE) to it.optJSONObject("result")
+            } ?: (FAIL_CODE to null)
         LogHelper.debug { "unlockThaiBangumi, newCode: $newCode, newResult: $newResult" }
         if (isBangumiWithWatchPermission(newResult, newCode)) {
             val seasonId = newResult.optString("season_id")

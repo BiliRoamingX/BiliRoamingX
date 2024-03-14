@@ -3,6 +3,7 @@ package app.revanced.bilibili.patches.protobuf
 import android.net.Uri
 import app.revanced.bilibili.api.BiliRoamingApi.getPlayUrl
 import app.revanced.bilibili.api.BiliRoamingApi.getSeason
+import app.revanced.bilibili.api.BiliRoamingApi.getUserStatus
 import app.revanced.bilibili.api.CustomServerException
 import app.revanced.bilibili.patches.TrialQualityPatch
 import app.revanced.bilibili.patches.VideoQualityPatch
@@ -120,8 +121,7 @@ object BangumiPlayUrlHook {
         val response = reply ?: PlayViewReply()
         if (Settings.UNLOCK_AREA_LIMIT.boolean && needProxy(response)) {
             return try {
-                val seasonId = req.seasonId.toString().takeIf { it != "0" }
-                    ?: lastSeasonInfo["season_id"] ?: "0"
+                val seasonId = req.seasonId.toString()
                 val (thaiSeason, thaiEp) = getThaiSeason(seasonId, req.epId)
                 lastSeasonInfo["season_id"] = seasonId
                 lastSeasonInfo["title"] = response.business.episodeInfo.seasonInfo.title
@@ -276,9 +276,11 @@ object BangumiPlayUrlHook {
                     .orEmpty().asSequence<JSONObject>()
             }.toList()
             var episode: JSONObject? = null
-            if (reqEpId != 0L) {
+            val epId = if (reqEpId != 0L) reqEpId else s.optJSONObject("user_status")
+                ?.optJSONObject("progress")?.optLong("last_ep_id") ?: 0L
+            if (epId != 0L) {
                 // located to the request episode
-                episode = allEps.firstOrNull { it.optLong("ep_id") == reqEpId }
+                episode = allEps.firstOrNull { it.optLong("ep_id") == epId }
             } else {
                 val (lastEpId, histories) = getVideoHistory(s.optInt("season_id"))
                 val last = histories.find { it.epId == lastEpId }
@@ -376,11 +378,6 @@ object BangumiPlayUrlHook {
             }.let {
                 if (it != 0L) it else thaiEp.value.optLong("ep_id")
             }.toString())
-            appendQueryParameter("cid", req.cid.let {
-                if (it != 0L) it else episodeInfo.cid
-            }.let {
-                if (it != 0L) it else thaiEp.value.optLong("cid")
-            }.toString())
             appendQueryParameter("qn", req.qn.toString())
             appendQueryParameter("fnver", req.fnver.toString())
             appendQueryParameter("fnval", req.fnval.toString())
@@ -401,11 +398,6 @@ object BangumiPlayUrlHook {
                 if (!it.isNullOrEmpty() && it != "0") it.toLong() else episodeInfo.epId.toLong()
             }.let {
                 if (it != 0L) it else thaiEp.value.optLong("ep_id")
-            }.toString())
-            appendQueryParameter("cid", req.vod.cid.let {
-                if (it != 0L) it else episodeInfo.cid
-            }.let {
-                if (it != 0L) it else thaiEp.value.optLong("cid")
             }.toString())
             appendQueryParameter("qn", req.vod.qn.toString())
             appendQueryParameter("fnver", req.vod.fnver.toString())
@@ -547,13 +539,15 @@ object BangumiPlayUrlHook {
                         }
                     }
                     val timeLength = jsonContent.optLong("timelength")
-                    watchTimeLength = timeLength
+                    runCatchingOrNull {
+                        watchTimeLength = timeLength
+                        durationMs = timeLength % 1000
+                    }
                     duration = timeLength / 1000
-                    durationMs = timeLength % 1000
                 }
             }
             val newSupplement = supplement.apply {
-                fixBusinessProto(thaiSeason, thaiEp, jsonContent)
+                fixBusinessProto(thaiSeason, thaiEp, jsonContent, true)
                 viewInfo = ViewInfo()
                 // in fact, unite player does not case about "allowCloseSubtitle" field
                 if (hasPlayExtConf()) {
@@ -578,15 +572,29 @@ object BangumiPlayUrlHook {
                 }
             }
             if (thai) {
-                history = History().apply {
-                    if (Settings.SAVE_TH_HISTORY.boolean) {
-                        val season = thaiSeason.value
-                        val episode = thaiEp.value
-                        val seasonId = season.optInt("season_id")
-                        val currentEp = episode.optInt("ep_id")
-                        val (current, last) = getHistory(season, seasonId, currentEp)
-                        current?.let { currentVideo = it }
-                        last?.let { relatedVideo = it }
+                val season = thaiSeason.value
+                val seasonId = season.optInt("season_id")
+                val episode = thaiEp.value
+                val currentEp = episode.optInt("ep_id")
+                var historySetOk = false
+                if (Utils.isPlay()) {
+                    val fromApi = getHistoryFromApi(season, seasonId, currentEp)
+                    if (fromApi != null) {
+                        val (current, last) = fromApi
+                        history = History().apply {
+                            current?.let { currentVideo = it }
+                            last?.let { relatedVideo = it }
+                        }
+                        historySetOk = true
+                    }
+                }
+                if (!historySetOk) {
+                    history = History().apply {
+                        if (Settings.SAVE_TH_HISTORY.boolean) {
+                            val (current, last) = getHistory(season, seasonId, currentEp)
+                            current?.let { currentVideo = it }
+                            last?.let { relatedVideo = it }
+                        }
                     }
                 }
             }
@@ -776,6 +784,57 @@ object BangumiPlayUrlHook {
         return currentHistory to lastHistory
     }
 
+    private fun getHistoryFromApi(
+        season: JSONObject,
+        seasonId: Int,
+        currentEp: Int
+    ): Pair<HistoryInfo?, HistoryInfo?>? {
+        val statusProgress = getUserStatus(seasonId)?.toJSONObject()
+            ?.takeIf { it.optInt("code", -1) == 0 }
+            ?.optJSONObject("result")?.optJSONObject("progress")
+            ?: return null
+        val lastEpId = statusProgress.optInt("last_ep_id")
+        val lastTime = statusProgress.optLong("last_time")
+        val allEps = season.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
+            it.optJSONObject("data")?.optJSONArray("episodes")
+                .orEmpty().asSequence<JSONObject>()
+        }.toList()
+        val toastWithoutTime = Toast().apply {
+            button = Button().apply { text = "跳转播放" }
+            text = "你有最近观看的进度 "
+        }
+        val currentHistory = if (currentEp == lastEpId) HistoryInfo().apply {
+            val episode = allEps.first { it.optInt("ep_id") == lastEpId }
+            lastPlayCid = episode.optLong("cid")
+            lastPlayAid = episode.optLong("aid")
+            progress = lastTime
+            if (progress != -1L) {
+                this.toastWithoutTime = toastWithoutTime
+                toast = Toast().apply {
+                    button = Button()
+                    text = "已为您定位至上次观看位置"
+                }
+            }
+        } else null
+
+        val lastHistory = HistoryInfo().apply {
+            val episode = allEps.first { it.optInt("ep_id") == lastEpId }
+            val title = episode.optString("title")
+            lastPlayCid = episode.optLong("cid")
+            lastPlayAid = episode.optLong("aid")
+            progress = lastTime
+            if (progress != -1L) {
+                this.toastWithoutTime = toastWithoutTime
+                toast = Toast().apply {
+                    button = Button().apply { text = "跳转播放" }
+                    val lastTitle = if (title.toIntOrNull() != null) "第${title}话" else title
+                    text = "上次看到$lastTitle ${progress.secondFormat()} "
+                }
+            }
+        }
+        return currentHistory to lastHistory
+    }
+
     private fun getWatchProgress(
         season: JSONObject,
         seasonId: Int,
@@ -848,10 +907,81 @@ object BangumiPlayUrlHook {
         return currentProgress to lastProgress
     }
 
+    private fun getWatchProgressFromApi(
+        season: JSONObject,
+        seasonId: Int,
+        currentEp: Int
+    ): Pair<WatchProgress?, WatchProgress?>? {
+        val statusProgress = getUserStatus(seasonId)?.toJSONObject()
+            ?.takeIf { it.optInt("code", -1) == 0 }
+            ?.optJSONObject("result")?.optJSONObject("progress")
+            ?: return null
+        val lastEpId = statusProgress.optInt("last_ep_id")
+        val lastEpIndex = statusProgress.optString("last_ep_index")
+        val lastTime = statusProgress.optLong("last_time")
+        val allEps = season.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
+            it.optJSONObject("data")?.optJSONArray("episodes")
+                .orEmpty().asSequence<JSONObject>()
+        }.toList()
+        val toastWithoutTime = com.bapis.bilibili.pgc.gateway.player.v2.Toast().apply {
+            button = ButtonInfo().apply {
+                text = "跳转播放"
+                textColor = "#FF6699"
+            }
+            toastText = com.bapis.bilibili.pgc.gateway.player.v2.TextInfo().apply {
+                text = "你有最近观看的进度 "
+                textColor = "#FFFFFF"
+            }
+        }
+        val currentProgress = if (currentEp == lastEpId) WatchProgress().apply {
+            val episode = allEps.first { it.optInt("ep_id") == lastEpId }
+            this.lastEpId = lastEpId
+            this.lastEpIndex = lastEpIndex
+            lastPlayCid = episode.optLong("cid")
+            lastPlayAid = episode.optLong("aid")
+            progress = lastTime
+            if (progress != -1L) {
+                this.toastWithoutTime = toastWithoutTime
+                toast = com.bapis.bilibili.pgc.gateway.player.v2.Toast().apply {
+                    toastText = com.bapis.bilibili.pgc.gateway.player.v2.TextInfo().apply {
+                        text = "已为您定位至上次观看位置"
+                        textColor = "#FFFFFF"
+                    }
+                }
+            }
+        } else null
+
+        val lastProgress = WatchProgress().apply {
+            val episode = allEps.first { it.optInt("ep_id") == lastEpId }
+            this.lastEpId = lastEpId
+            this.lastEpIndex = lastEpIndex
+            lastPlayCid = episode.optLong("cid")
+            lastPlayAid = episode.optLong("aid")
+            progress = lastTime
+            if (progress != -1L) {
+                this.toastWithoutTime = toastWithoutTime
+                toast = com.bapis.bilibili.pgc.gateway.player.v2.Toast().apply {
+                    button = ButtonInfo().apply {
+                        text = "跳转播放"
+                        textColor = "#FF6699"
+                    }
+                    val lastTitle =
+                        if (lastEpIndex.toIntOrNull() != null) "第${lastEpIndex}话" else lastEpIndex
+                    toastText = com.bapis.bilibili.pgc.gateway.player.v2.TextInfo().apply {
+                        text = "上次看到$lastTitle ${progress.secondFormat()} "
+                        textColor = "#FFFFFF"
+                    }
+                }
+            }
+        }
+        return currentProgress to lastProgress
+    }
+
     private fun PlayViewReply.fixBusinessProto(
         thaiSeason: Lazy<JSONObject>,
         thaiEp: Lazy<JSONObject>,
-        jsonContent: JSONObject
+        jsonContent: JSONObject,
+        unite: Boolean = false
     ) {
         if (hasBusiness()) {
             business.run {
@@ -861,7 +991,7 @@ object BangumiPlayUrlHook {
                     inlineType = InlineType.TYPE_WHOLE
             }
         } else {
-            // thai
+            // thai or tw&hk on play client
             business = PlayViewBusinessInfo().apply {
                 val season = thaiSeason.value
                 val episode = thaiEp.value
@@ -918,11 +1048,28 @@ object BangumiPlayUrlHook {
                         })
                     }
                 }
-                userStatus = UserStatus().apply {
-                    if (Settings.SAVE_TH_HISTORY.boolean) {
+                if (!unite) {
+                    var statusSetOk = false
+                    if (Utils.isPlay()) {
+                        // maybe tw or hk bangumi
+                        val fromApi = getWatchProgressFromApi(season, seasonId, epId)
+                        if (fromApi != null) {
+                            val (current, last) = fromApi
+                            userStatus = UserStatus().apply {
+                                current?.let { aidWatchProgress = it }
+                                last?.let { watchProgress = it }
+                            }
+                            statusSetOk = true
+                        }
+                    }
+                    if (!statusSetOk) {
                         val (current, last) = getWatchProgress(season, seasonId, epId)
-                        current?.let { aidWatchProgress = it }
-                        last?.let { watchProgress = it }
+                        userStatus = UserStatus().apply {
+                            if (Settings.SAVE_TH_HISTORY.boolean) {
+                                current?.let { aidWatchProgress = it }
+                                last?.let { watchProgress = it }
+                            }
+                        }
                     }
                 }
             }
