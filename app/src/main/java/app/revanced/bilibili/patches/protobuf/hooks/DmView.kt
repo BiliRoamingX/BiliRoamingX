@@ -89,6 +89,16 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
         }
         if (extraSubtitles.isNotEmpty())
             result.subtitle.addAllSubtitles(extraSubtitles)
+        if (Utils.isHd()) {
+            result.subtitle.subtitlesList.withIndex().run {
+                find { (_, item) -> item.lan == "zh-CN" }
+                    ?: find { (_, item) -> item.lan == "zh-Hans" }
+            }?.let { (index, item) ->
+                result.subtitle.removeSubtitles(index)
+                result.subtitle.addSubtitles(0, item)
+            }
+        }
+        LogHelper.debug { "reconstructed dmView: $result" }
         return result
     }
 
