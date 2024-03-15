@@ -6,7 +6,6 @@ import app.revanced.bilibili.patches.okhttp.ApiHook
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.FAIL_CODE
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.isBangumiWithWatchPermission
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.Versions
 import app.revanced.bilibili.utils.asSequence
 import app.revanced.bilibili.utils.orEmpty
 import app.revanced.bilibili.utils.toJSONObject
@@ -16,7 +15,6 @@ import org.json.JSONObject
 object Eps : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
         return Settings.UNLOCK_AREA_LIMIT.boolean
-                && Versions.ge7_39_0()
                 && url.startsWith("https://api.bilibili.com/pgc/view/v2/app/eps")
                 && code.isOk
     }
