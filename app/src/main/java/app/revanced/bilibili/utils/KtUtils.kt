@@ -21,6 +21,8 @@ import androidx.preference.PreferenceManager
 import app.revanced.bilibili.meta.CookieInfo
 import app.revanced.bilibili.meta.VideoHistory
 import app.revanced.bilibili.patches.main.ApplicationDelegate
+import com.bapis.bilibili.metadata.Metadata
+import com.bapis.bilibili.metadata.device.Device
 import com.bilibili.lib.moss.api.BusinessException
 import com.google.protobuf.GeneratedMessageLite
 import com.google.protobuf.GeneratedMessageLiteEx
@@ -516,3 +518,55 @@ fun isWifiConnected(): Boolean {
 fun speedupGhUrl(url: String): String {
     return if (country == Area.CN) "${Constants.GITHUB_SPEEDUP_URL}/$url" else url
 }
+
+val buvidPrefs by lazy {
+    Utils.rawBlkvPrefsByFile(Utils.getContext().packageName + "_buvid", true)
+}
+val fpPrefs by lazy { Utils.rawBlkvPrefsByFile("fingerprint", true) }
+val envPrefs: SharedPreferences by lazy {
+    Utils.getContext().getSharedPreferences("environment_prefs", Context.MODE_PRIVATE)
+}
+
+val pinkMetadataHeader: String
+    get() {
+        val buvid = buvidPrefs.getString("buvid", "").orEmpty()
+        val privacyAllowed = blkvPrefs.getBoolean("bili.privacy.allowed", false)
+        val buvidFinal = if (privacyAllowed) buvid else ""
+        return Metadata().apply {
+            accessKey = Utils.getAccessKey()
+            mobiApp = "android"
+            device = ""
+            build = versionCode
+            channel = "master"
+            this.buvid = buvidFinal
+            platform = "android"
+        }.toByteArray().base64
+    }
+
+val pinkDeviceHeader: String
+    get() {
+        val buvid = buvidPrefs.getString("buvid", "").orEmpty()
+        val fpLocal = fpPrefs.getString("fp_local", "").orEmpty()
+        val fpServer = fpPrefs.getString("fp_server", "").orEmpty()
+        val fp = fpServer.ifEmpty { fpLocal }
+        val privacyAllowed = blkvPrefs.getBoolean("bili.privacy.allowed", false)
+        val buvidFinal = if (privacyAllowed) buvid else ""
+        val firstRunTime = envPrefs.getLong("first_run_time", 0L)
+        return Device().apply {
+            appId = 1
+            build = 7700200
+            this.buvid = buvidFinal
+            mobiApp = "android"
+            platform = "android"
+            device = ""
+            channel = "master"
+            brand = Build.BRAND
+            model = Build.MODEL
+            osver = Build.VERSION.RELEASE
+            this.fpLocal = fpLocal
+            this.fpRemote = fpServer
+            versionName = "7.70.0"
+            this.fp = fp
+            fts = firstRunTime
+        }.toByteArray().base64
+    }

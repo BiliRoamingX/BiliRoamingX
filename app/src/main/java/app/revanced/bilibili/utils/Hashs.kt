@@ -2,6 +2,7 @@
 
 package app.revanced.bilibili.utils
 
+import android.util.Base64
 import java.io.File
 import java.io.InputStream
 import java.security.DigestInputStream
@@ -46,3 +47,6 @@ val File.sha256Hex: String
 
 val ByteArray.md5Hex: String
     get() = hash(inputStream(), "MD5")?.toHexString().orEmpty()
+
+val ByteArray.base64: String
+    get() = Base64.encodeToString(this, Base64.NO_WRAP)

@@ -1,13 +1,15 @@
 package app.revanced.bilibili.patches.okhttp.hooks
 
 import android.net.Uri
-import app.revanced.bilibili.api.BiliRoamingApi
 import app.revanced.bilibili.api.BiliRoamingApi.getSeason
 import app.revanced.bilibili.patches.okhttp.ApiHook
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.FAIL_CODE
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.isBangumiWithWatchPermission
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.*
+import app.revanced.bilibili.utils.Versions
+import app.revanced.bilibili.utils.asSequence
+import app.revanced.bilibili.utils.orEmpty
+import app.revanced.bilibili.utils.toJSONObject
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -23,27 +25,15 @@ object Eps : ApiHook() {
         val json = JSONObject(response)
         if (!Settings.UNLOCK_AREA_LIMIT.boolean)
             return response
-        val seasonId = Uri.parse(url).getQueryParameter("season_id")
-            ?: return response
         if (json.optInt("code", -1) == 0) {
-            var data = json.optJSONObject("data") ?: return response
-            if (Utils.isPlay() && data.optJSONArray("modules")
-                    .orEmpty().asSequence<JSONObject>().flatMap {
-                        it.optJSONObject("data")?.optJSONArray("episodes")
-                            .orEmpty().asSequence<JSONObject>()
-                    }.none()
-            ) {
-                data = BiliRoamingApi.getHiddenEpisodesForPlayClient(seasonId)
-                    ?.toJSONObject()?.takeIf { it.optInt("code", -1) == 0 }
-                    ?.optJSONObject("data") ?: return response
-                json.put("data", data)
-            }
-            data.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
-                it.optJSONObject("data")?.optJSONArray("episodes")
-                    .orEmpty().asSequence<JSONObject>()
-            }.forEach { it.unlock() }
+            json.optJSONObject("data")?.optJSONArray("modules").orEmpty()
+                .asSequence<JSONObject>().flatMap {
+                    it.optJSONObject("data")?.optJSONArray("episodes")
+                        .orEmpty().asSequence<JSONObject>()
+                }.forEach { it.unlock() }
             return json.toString()
         } else {
+            val seasonId = Uri.parse(url).getQueryParameter("season_id")
             val (newCode, newResult) = getSeason(mapOf("season_id" to seasonId))
                 ?.toJSONObject()?.let {
                     it.optInt("code", FAIL_CODE) to it.optJSONObject("result")

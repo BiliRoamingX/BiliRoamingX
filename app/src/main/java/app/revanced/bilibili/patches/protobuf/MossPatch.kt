@@ -7,9 +7,12 @@ import app.revanced.bilibili.patches.protobuf.hooks.*
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.MossDebugPrinter
 import app.revanced.bilibili.utils.Utils
+import app.revanced.bilibili.utils.pinkDeviceHeader
+import app.revanced.bilibili.utils.pinkMetadataHeader
 import com.bilibili.lib.moss.api.MossException
 import com.bilibili.lib.moss.api.MossResponseHandler
 import com.google.protobuf.GeneratedMessageLite
+import java.util.AbstractMap
 
 object MossPatch {
     private val hooks = arrayOf(
@@ -48,6 +51,12 @@ object MossPatch {
         ViewRelatesFeedUnite,
         ViewTFInfo,
         ViewUnite
+    )
+
+    val fakeToPinkClientGrpcApis = arrayOf(
+        "bilibili.pgc.gateway.player.v2.PlayURL/PlayView",
+        "bilibili.app.playerunite.v1.Player/PlayViewUnite",
+        "bilibili.app.viewunite.v1.View/View",
     )
 
     /**
@@ -133,5 +142,16 @@ object MossPatch {
             finalHandler.onError(e)
             return HookFlags.STOP_EXECUTION
         }
+    }
+
+    @Keep
+    @JvmStatic
+    fun hookBeforeRequest(url: String, headers: ArrayList<Map.Entry<String, String>>): String {
+        if (Utils.isPlay() && fakeToPinkClientGrpcApis.any { url.endsWith(it) }) {
+            headers.removeIf { (k, _) -> k == "x-bili-metadata-bin" || k == "x-bili-device-bin" }
+            headers.add(AbstractMap.SimpleImmutableEntry("x-bili-metadata-bin", pinkMetadataHeader))
+            headers.add(AbstractMap.SimpleImmutableEntry("x-bili-device-bin", pinkDeviceHeader))
+        }
+        return url
     }
 }

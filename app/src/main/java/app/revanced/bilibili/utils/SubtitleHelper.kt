@@ -152,7 +152,7 @@ object SubtitleHelper {
         }.onFailure { LogHelper.error({ "failed to get dict api response" }, it) }
             .getOrNull() ?: return if (!dictExist) downloadDictFromCdn() else false
         val tagName = json.optString("tag_name")
-        val latestVer = cachePrefs.getString("subtitle_dict_latest_version", null) ?: ""
+        val latestVer = cachePrefs.getString("subtitle_dict_latest_version", null).orEmpty()
         if (latestVer != tagName || !dictExist) {
             val sha256sum = json.optString("body")
                 .takeUnless { it.isNullOrEmpty() } ?: return false

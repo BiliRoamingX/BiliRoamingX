@@ -235,6 +235,11 @@ public class Utils {
         throw new UnsupportedOperationException();
     }
 
+    @NonNull
+    public static SharedPreferences rawBlkvPrefsByFile(String name, boolean multiProcess) {
+        return blkvPrefsByFile(new File(context.getDir("blkv", Context.MODE_PRIVATE), name + ".raw_kv"), multiProcess);
+    }
+
     @Keep
     // codes will filled by patcher
     @NonNull

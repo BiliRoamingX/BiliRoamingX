@@ -90,7 +90,7 @@ object BangumiSeasonHook {
     fun unlockBangumi(url: String, response: String): String {
         val jo = response.toJSONObject()
         val code = jo.optInt("code")
-        var data = jo.optJSONObject("data")
+        val data = jo.optJSONObject("data")
         if (Settings.UNLOCK_AREA_LIMIT.boolean && (code == FAIL_CODE || data == null)) {
             return unlockThaiBangumi(url, response)
         } else if (data == null || code != 0) {
@@ -103,22 +103,6 @@ object BangumiSeasonHook {
             data.remove("activity_tab")
         if (!Settings.UNLOCK_AREA_LIMIT.boolean)
             return jo.toString()
-        // play client season api response not contains episodes when request non-cn bangumi
-        if (Utils.isPlay() && data.optJSONArray("modules")
-                .orEmpty().asSequence<JSONObject>().flatMap {
-                    it.optJSONObject("data")?.optJSONArray("episodes")
-                        .orEmpty().asSequence<JSONObject>()
-                }.none()
-        ) {
-            val uri = Uri.parse(url)
-            val seasonId = uri.getQueryParameter("season_id")
-            val epId = uri.getQueryParameter("ep_id")
-            data = getSeason(
-                mapOf("season_id" to seasonId, "ep_id" to epId), forPlay = true
-            )?.toJSONObject()?.takeIf { it.optInt("code", -1) == 0 }
-                ?.optJSONObject("result") ?: return response
-            jo.put("data", data)
-        }
         lastSeasonInfo["title"] = data.optString("title")
         lastSeasonInfo["season_id"] = data.optString("season_id")
         data.optJSONObject("rights")?.run {
@@ -308,7 +292,7 @@ object BangumiSeasonHook {
     fun handleExtraSearchForHd(url: String): String {
         val uri = Uri.parse(url)
         val query = uri.run {
-            queryParameterNames.associateWith { getQueryParameter(it) ?: "" }
+            queryParameterNames.associateWith { getQueryParameter(it).orEmpty() }
         }
         val type = uri.getQueryParameter("type").orEmpty().toInt()
         val searchType = searchTypes[type]!!
@@ -390,7 +374,7 @@ object BangumiSeasonHook {
         fun FollowButton.reconstructFrom(json: JSONObject) = json.run {
             icon = optString("icon")
             optJSONObject("texts")?.let { o ->
-                o.keys().asSequence().associateWith { o.opt(it)?.toString() ?: "" }
+                o.keys().asSequence().associateWith { o.opt(it)?.toString().orEmpty() }
             }?.let { mutableTextsMap.putAll(it) }
             statusReport = optString("status_report")
         }
