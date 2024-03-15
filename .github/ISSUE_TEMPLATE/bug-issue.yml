@@ -30,7 +30,8 @@ body:
       options:
         - 粉版（普通版）
         - HD 版
-      description: 目前仅支持粉版、HD 版
+        - Play 版（国际版）
+      description: 目前仅支持粉版、HD 版、Play 版
     validations:
       required: true
 
