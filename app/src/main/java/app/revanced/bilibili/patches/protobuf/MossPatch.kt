@@ -147,7 +147,9 @@ object MossPatch {
     @Keep
     @JvmStatic
     fun hookBeforeRequest(url: String, headers: ArrayList<Map.Entry<String, String>>): String {
-        if (Utils.isPlay() && fakeToPinkClientGrpcApis.any { url.endsWith(it) }) {
+        if (Settings.UNLOCK_AREA_LIMIT.boolean && Utils.isPlay()
+            && fakeToPinkClientGrpcApis.any { url.endsWith(it) }
+        ) {
             headers.removeIf { (k, _) -> k == "x-bili-metadata-bin" || k == "x-bili-device-bin" }
             headers.add(AbstractMap.SimpleImmutableEntry("x-bili-metadata-bin", pinkMetadataHeader))
             headers.add(AbstractMap.SimpleImmutableEntry("x-bili-device-bin", pinkDeviceHeader))

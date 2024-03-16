@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.Keep;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import app.revanced.bilibili.settings.Settings;
@@ -49,9 +50,21 @@ public class BLRoutePatch {
                 boolean needRemovePayload = VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.getMatchedFullScreenQuality() != 0 || Settings.DEFAULT_PLAYBACK_SPEED.getFloat() != 0f;
                 if (needRemovePayload)
                     return Uri.parse(playerPreloadRegex.matcher(url).replaceAll(""));
-            }
-            if (Settings.REPLACE_STORY_VIDEO.getBoolean() && url.startsWith("https://www.bilibili.com/video")) {
+            } else if (Settings.REPLACE_STORY_VIDEO.getBoolean() && url.startsWith("https://www.bilibili.com/video")) {
                 return Uri.parse(url.replace(STORY_ROUTER_QUERY, "").replace(STORY_TYPE_QUERY, ""));
+            } else if (Settings.DEFAULT_MAX_QN.getBoolean() && url.startsWith("https://live.bilibili.com")) {
+                List<String> pathSegments = uri.getPathSegments();
+                if (pathSegments.size() == 1 && TextUtils.isDigitsOnly(pathSegments.get(0))) {
+                    Uri.Builder builder = uri.buildUpon().clearQuery();
+                    for (String name : uri.getQueryParameterNames()) {
+                        if (!"current_qn".equals(name) && !"current_quality".equals(name)
+                                && !"playurl_h264".equals(name) && !"playurl_h265".equals(name)) {
+                            String value = uri.getQueryParameter(name);
+                            builder.appendQueryParameter(name, value);
+                        }
+                    }
+                    return builder.build();
+                }
             }
         }
         return uri;

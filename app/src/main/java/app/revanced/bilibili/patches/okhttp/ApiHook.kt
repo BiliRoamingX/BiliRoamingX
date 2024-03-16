@@ -1,12 +1,25 @@
 package app.revanced.bilibili.patches.okhttp
 
+import android.util.Pair
 import java.net.HttpURLConnection
 
 abstract class ApiHook {
     protected val Int.isOk: Boolean
         inline get() = this == HttpURLConnection.HTTP_OK
 
-    abstract fun shouldHook(url: String, code: Int): Boolean
+    open fun shouldHookBefore(url: String, headers: Array<String>): Boolean {
+        return false
+    }
 
-    abstract fun hook(url: String, code: Int, request: String, response: String): String
+    open fun hookBefore(url: String, headers: Array<String>): Pair<String, Array<String>> {
+        return Pair.create(url, headers)
+    }
+
+    open fun shouldHook(url: String, code: Int): Boolean {
+        return false
+    }
+
+    open fun hook(url: String, code: Int, request: String, response: String): String {
+        return response
+    }
 }
