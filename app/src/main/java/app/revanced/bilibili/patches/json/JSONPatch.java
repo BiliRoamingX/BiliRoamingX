@@ -247,7 +247,7 @@ public class JSONPatch {
                 List<MenuGroup.Item> itemList = section.itemList;
                 if (itemList == null || itemList.isEmpty())
                     continue;
-                section.itemList.removeIf(item -> {
+                itemList.removeIf(item -> {
                     String itemTitle = item.title;
                     if (TextUtils.isEmpty(itemTitle))
                         return false;
@@ -276,13 +276,22 @@ public class JSONPatch {
                 if (drawerStyle != 0)
                     section.style = drawerStyle;
 
-                if ("更多服务".equals(section.title) && Settings.ADD_CHANNEL.getBoolean()) {
+                if (Utils.isPlay() && Settings.ADD_PODCAST.getBoolean() && "更多服务".equals(title)
+                        && itemList.stream().noneMatch(item -> "bilibili://podcast".equals(item.uri))) {
+                    var podcastItem = new MenuGroup.Item();
+                    podcastItem.id = 811;
+                    podcastItem.title = "听视频";
+                    podcastItem.uri = "bilibili://podcast";
+                    podcastItem.icon = "http://i0.hdslb.com/bfs/feed-admin/97276c5df099e516946682edf4ef10dc6b18c7dc.png";
+                    itemList.add(0, podcastItem);
+                }
+                if ("更多服务".equals(title) && Settings.ADD_CHANNEL.getBoolean()) {
                     var channelItem = new MenuGroup.Item();
                     channelItem.id = 114514;
                     channelItem.title = "频道中心";
                     channelItem.uri = "bilibili://pegasus/channel/discover";
                     channelItem.icon = "http://i0.hdslb.com/bfs/archive/f6739d905dee57d2c0429d9b66acb3f39b294aff.png";
-                    section.itemList.add(0, channelItem);
+                    itemList.add(0, channelItem);
                 }
             }
             sectionListV2.removeIf(section -> !TextUtils.isEmpty(section.title) && !shouldShowing(items, section.title));

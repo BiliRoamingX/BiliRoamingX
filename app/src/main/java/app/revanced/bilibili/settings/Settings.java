@@ -80,7 +80,6 @@ public enum Settings {
     PURIFY_GAME("purify_game", BOOLEAN, FALSE, true),
     DRAWER("drawer", BOOLEAN, FALSE),
     DISABLE_MAIN_PAGE_STORY("disable_main_page_story", BOOLEAN, FALSE, true),
-    ADD_CHANNEL("add_channel", BOOLEAN, FALSE, true),
     BLOCK_TOP_ACTIVITY("block_top_activity", BOOLEAN, FALSE, true),
     BLOCK_RECOMMEND_GUIDANCE("block_recommend_guidance", BOOLEAN, FALSE, true),
     BLOCK_POPULAR_TOP_ENTRANCE("block_popular_top_entrance", BOOLEAN, FALSE),
@@ -112,6 +111,8 @@ public enum Settings {
     REMOVE_VIP_SECTION("remove_vip_section", BOOLEAN, FALSE, true),
     SHOWING_DRAWER_ITEMS("showing_drawer_items", STRING_SET, Set.of(Constants.ALL_VALUE)),
     SWITCH_DARK_DIALOG("switch_dark_dialog", BOOLEAN, FALSE),
+    ADD_CHANNEL("add_channel", BOOLEAN, FALSE, true),
+    ADD_PODCAST("add_podcast", BOOLEAN, FALSE),
 
     // 直播间
     FORBID_SWITCH_LIVE_ROOM("forbid_switch_live_room", BOOLEAN, FALSE),
