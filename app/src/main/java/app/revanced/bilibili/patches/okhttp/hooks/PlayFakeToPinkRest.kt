@@ -10,6 +10,7 @@ import app.revanced.bilibili.utils.signQuery
 object PlayFakeToPinkRest : ApiHook() {
     private val fakeToPinkClientRestApis = arrayOf(
         "https://api.bilibili.com/pgc/view/v2/app/season",
+        "https://api.bilibili.com/pgc/view/v2/app/fav/season",
         "https://api.bilibili.com/pgc/view/v2/app/eps",
     )
 

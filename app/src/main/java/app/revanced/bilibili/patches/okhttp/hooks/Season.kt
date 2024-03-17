@@ -7,7 +7,8 @@ import app.revanced.bilibili.settings.Settings
 object Season : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
         return (Settings.UNLOCK_AREA_LIMIT.boolean || Settings.BLOCK_BANGUMI_PAGE_ADS.boolean)
-                && url.startsWith("https://api.bilibili.com/pgc/view/v2/app/season")
+                && (url.startsWith("https://api.bilibili.com/pgc/view/v2/app/season")
+                || url.startsWith("https://api.bilibili.com/pgc/view/v2/app/fav/season"))
                 && code.isOk
     }
 
