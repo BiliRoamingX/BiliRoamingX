@@ -38,7 +38,7 @@ public class BLRoutePatch {
                 }
                 newUri.encodedQuery(newQuery);
                 return newUri.build();
-            } else if ("1".equals(Settings.PLAYER_VERSION.getString()) && url.startsWith("bilibili://music/playlist/playpage")) {
+            } else if ("1".equals(Settings.PLAYER_VERSION.getString()) && url.startsWith("bilibili://music/playlist/playpage") && !url.equals("bilibili://music/playlist/playpage/0")) {
                 return uri.buildUpon().appendQueryParameter("force_old_playlist", "1").build();
             } else if (Settings.ADD_CHANNEL.getBoolean() && url.startsWith("bilibili://pegasus/channel/v2")) {
                 // for hd, consistent with the default behavior of selecting "select" tab before deleting the "topic" tab

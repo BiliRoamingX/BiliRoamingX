@@ -52,7 +52,9 @@ object ViewUniteReplyHook {
             hookTabModules(viewReply)
             hookSupplement(viewReply)
         }
-        if (Settings.UNLOCK_AREA_LIMIT.boolean && viewReply == null && viewReq.extraContentMap.let {
+        if (Settings.UNLOCK_AREA_LIMIT.boolean
+            && (viewReply == null || viewReply == ViewReply.getDefaultInstance())
+            && viewReq.extraContentMap.let {
                 it.containsKey("season_id") || it.containsKey("ep_id")
             }
         ) return unlockThaiBangumi(viewReq)
