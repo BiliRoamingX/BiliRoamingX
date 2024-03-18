@@ -18,6 +18,7 @@ import androidx.annotation.Keep
 import androidx.annotation.WorkerThread
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
+import app.revanced.bilibili.meta.Client
 import app.revanced.bilibili.meta.CookieInfo
 import app.revanced.bilibili.meta.VideoHistory
 import app.revanced.bilibili.patches.main.ApplicationDelegate
@@ -527,46 +528,50 @@ val envPrefs: SharedPreferences by lazy {
     Utils.getContext().getSharedPreferences("environment_prefs", Context.MODE_PRIVATE)
 }
 
+fun grpcMetadataHeader(client: Client): String {
+    val buvid = buvidPrefs.getString("buvid", "").orEmpty()
+    val privacyAllowed = blkvPrefs.getBoolean("bili.privacy.allowed", false)
+    val buvidFinal = if (privacyAllowed) buvid else ""
+    return Metadata().apply {
+        accessKey = Utils.getAccessKey()
+        mobiApp = client.mobiApp
+        device = ""
+        build = client.verCode
+        channel = "master"
+        this.buvid = buvidFinal
+        platform = "android"
+    }.toByteArray().base64
+}
+
+fun grpcDeviceHeader(client: Client): String {
+    val buvid = buvidPrefs.getString("buvid", "").orEmpty()
+    val fpLocal = fpPrefs.getString("fp_local", "").orEmpty()
+    val fpServer = fpPrefs.getString("fp_server", "").orEmpty()
+    val fp = fpServer.ifEmpty { fpLocal }
+    val privacyAllowed = blkvPrefs.getBoolean("bili.privacy.allowed", false)
+    val buvidFinal = if (privacyAllowed) buvid else ""
+    val firstRunTime = envPrefs.getLong("first_run_time", 0L)
+    return Device().apply {
+        appId = client.appId
+        build = client.verCode
+        this.buvid = buvidFinal
+        mobiApp = client.mobiApp
+        platform = "android"
+        device = ""
+        channel = "master"
+        brand = Build.BRAND
+        model = Build.MODEL
+        osver = Build.VERSION.RELEASE
+        this.fpLocal = fpLocal
+        this.fpRemote = fpServer
+        versionName = client.verName
+        this.fp = fp
+        fts = firstRunTime
+    }.toByteArray().base64
+}
+
 val pinkMetadataHeader: String
-    get() {
-        val buvid = buvidPrefs.getString("buvid", "").orEmpty()
-        val privacyAllowed = blkvPrefs.getBoolean("bili.privacy.allowed", false)
-        val buvidFinal = if (privacyAllowed) buvid else ""
-        return Metadata().apply {
-            accessKey = Utils.getAccessKey()
-            mobiApp = "android"
-            device = ""
-            build = versionCode
-            channel = "master"
-            this.buvid = buvidFinal
-            platform = "android"
-        }.toByteArray().base64
-    }
+    get() = grpcMetadataHeader(Client.PINK)
 
 val pinkDeviceHeader: String
-    get() {
-        val buvid = buvidPrefs.getString("buvid", "").orEmpty()
-        val fpLocal = fpPrefs.getString("fp_local", "").orEmpty()
-        val fpServer = fpPrefs.getString("fp_server", "").orEmpty()
-        val fp = fpServer.ifEmpty { fpLocal }
-        val privacyAllowed = blkvPrefs.getBoolean("bili.privacy.allowed", false)
-        val buvidFinal = if (privacyAllowed) buvid else ""
-        val firstRunTime = envPrefs.getLong("first_run_time", 0L)
-        return Device().apply {
-            appId = 1
-            build = 7700200
-            this.buvid = buvidFinal
-            mobiApp = "android"
-            platform = "android"
-            device = ""
-            channel = "master"
-            brand = Build.BRAND
-            model = Build.MODEL
-            osver = Build.VERSION.RELEASE
-            this.fpLocal = fpLocal
-            this.fpRemote = fpServer
-            versionName = "7.70.0"
-            this.fp = fp
-            fts = firstRunTime
-        }.toByteArray().base64
-    }
+    get() = grpcDeviceHeader(Client.PINK)
