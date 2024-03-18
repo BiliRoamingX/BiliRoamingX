@@ -486,6 +486,26 @@ public class JSONPatch {
                 String param = tab.param;
                 if (TextUtils.isEmpty(param))
                     return false;
+                if ("contribute".equals(param) && Settings.ADD_ARTICLE_TAB.getBoolean()) {
+                    var hasArticle = false;
+                    var opusIndex = -1;
+                    var subTabs = tab.items;
+                    for (int i = 0; i < subTabs.size(); i++) {
+                        var subParam = subTabs.get(i).param;
+                        if ("article".equals(subParam)) {
+                            hasArticle = true;
+                        } else if ("opus".equals(subParam)) {
+                            opusIndex = i;
+                            break;
+                        }
+                    }
+                    if (!hasArticle && opusIndex != -1) {
+                        var articleTab = new BiliSpace.Tab();
+                        articleTab.title = "专栏";
+                        articleTab.param = "article";
+                        subTabs.add(opusIndex, articleTab);
+                    }
+                }
                 String tabKey = "tab." + param;
                 return values.contains(tabKey);
             });

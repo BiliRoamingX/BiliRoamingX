@@ -105,7 +105,7 @@ public enum Settings {
     DYNAMIC_PURIFY_TOPIC("customize_dynamic_keyword_topic", STRING_SET, Collections.EMPTY_SET),
     DYNAMIC_FORCE_OLD_TAB("dynamic_force_old_tab", BOOLEAN, FALSE, true),
 
-    // 我的页面
+    // 我的页
     DRAWER_STYLE("drawer_style_value", STRING, "0"),
     PURIFY_DRAWER_RED_DOT("purify_drawer_reddot", BOOLEAN, FALSE),
     REMOVE_VIP_SECTION("remove_vip_section", BOOLEAN, FALSE, true),
@@ -157,6 +157,7 @@ public enum Settings {
     // 用户空间页
     FIX_SPACE("fix_space", BOOLEAN, TRUE),
     CUSTOMIZE_SPACE("customize_space", STRING_SET, Collections.EMPTY_SET),
+    ADD_ARTICLE_TAB("add_article_tab", BOOLEAN, FALSE),
 
     // 搜索页
     PURIFY_SEARCH("purify_search", BOOLEAN, FALSE),
