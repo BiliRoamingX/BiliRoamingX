@@ -5,7 +5,7 @@ import app.revanced.bilibili.patches.okhttp.BaseFakeClientRestHook
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Utils
 
-object PlayFakeToPinkRest : BaseFakeClientRestHook() {
+object UnlockEpisodesForPlay : BaseFakeClientRestHook() {
     private val apis = arrayOf(
         "https://api.bilibili.com/pgc/view/v2/app/season",
         "https://api.bilibili.com/pgc/view/v2/app/fav/season",

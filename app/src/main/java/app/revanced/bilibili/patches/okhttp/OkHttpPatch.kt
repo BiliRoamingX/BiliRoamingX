@@ -19,8 +19,6 @@ object OkHttpPatch {
         Eps,
         HistoryReport,
         Media,
-        PlayFakeToPinkGrpc,
-        PlayFakeToPinkRest,
         QoeShow,
         RoomPlayInfo,
         SearchAll,
@@ -31,6 +29,9 @@ object OkHttpPatch {
         Skin,
         Space,
         Subtitle,
+        TrialQualityForPlayAndHd,
+        UnlockPGCPlayViewForPlay,
+        UnlockEpisodesForPlay,
         Upgrade,
     )
 
