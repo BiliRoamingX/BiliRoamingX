@@ -53,11 +53,12 @@ object MossPatch {
         ViewUnite
     )
 
-    val fakeToPinkClientGrpcApis = arrayOf(
+    val fakeToPinkForUnlockAreaLimitApis = arrayOf(
         "bilibili.pgc.gateway.player.v2.PlayURL/PlayView",
         "bilibili.app.playerunite.v1.Player/PlayViewUnite",
         "bilibili.app.viewunite.v1.View/View",
     )
+    const val FAKE_TO_PINK_FOR_TRIAL_QUALITY_API = "bilibili.app.playurl.v1.PlayURL/PlayView"
 
     /**
      * @return [HookFlags.STOP_EXECUTION] to stop method execution and return null,
@@ -148,7 +149,9 @@ object MossPatch {
     @JvmStatic
     fun hookBeforeRequest(url: String, headers: ArrayList<Map.Entry<String, String>>): String {
         if (Settings.UNLOCK_AREA_LIMIT.boolean && Utils.isPlay()
-            && fakeToPinkClientGrpcApis.any { url.endsWith(it) }
+            && fakeToPinkForUnlockAreaLimitApis.any { url.endsWith(it) }
+            || Settings.TRIAL_VIP_QUALITY.boolean && (Utils.isHd() || Utils.isPlay())
+            && url.endsWith(FAKE_TO_PINK_FOR_TRIAL_QUALITY_API)
         ) {
             headers.removeIf { (k, _) -> k == "x-bili-metadata-bin" || k == "x-bili-device-bin" }
             headers.add(AbstractMap.SimpleImmutableEntry("x-bili-metadata-bin", pinkMetadataHeader))

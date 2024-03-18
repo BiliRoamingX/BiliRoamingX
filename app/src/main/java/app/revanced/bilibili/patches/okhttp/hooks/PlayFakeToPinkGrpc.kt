@@ -11,7 +11,9 @@ import app.revanced.bilibili.utils.pinkMetadataHeader
 object PlayFakeToPinkGrpc : ApiHook() {
     override fun shouldHookBefore(url: String, headers: Array<String>): Boolean {
         return Settings.UNLOCK_AREA_LIMIT.boolean && Utils.isPlay()
-                && MossPatch.fakeToPinkClientGrpcApis.any { url.endsWith(it) }
+                && MossPatch.fakeToPinkForUnlockAreaLimitApis.any { url.endsWith(it) }
+                || Settings.TRIAL_VIP_QUALITY.boolean && (Utils.isHd() || Utils.isPlay())
+                && url.endsWith(MossPatch.FAKE_TO_PINK_FOR_TRIAL_QUALITY_API)
     }
 
     override fun hookBefore(url: String, headers: Array<String>): Pair<String, Array<String>> {
