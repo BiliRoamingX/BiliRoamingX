@@ -29,7 +29,6 @@ object OkHttpPatch {
         Skin,
         Space,
         Subtitle,
-        TrialQualityForPlayAndHd,
         UnlockPGCPlayViewForPlay,
         UnlockEpisodesForPlay,
         Upgrade,
