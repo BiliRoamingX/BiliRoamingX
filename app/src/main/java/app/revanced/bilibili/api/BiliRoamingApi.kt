@@ -587,6 +587,7 @@ object BiliRoamingApi {
             put("link", "https://www.bilibili.tv/en/play$seasonId")
             put("media_id", seasonId)
             put("total", total)
+            put("mode", 2)
         }
     }
 
