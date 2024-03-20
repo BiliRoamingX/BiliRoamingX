@@ -110,6 +110,7 @@ object SubtitleHelper {
     @Suppress("RegExpRedundantEscape")
     private val noStyleRegex =
         Regex("""\{\\?\\an\d+\}|<font\s[^>]*>|<\\?/font>|<i>|<\\?/i>|<b>|<\\?/b>|<u>|<\\?/u>""")
+    private val assTextStyleRegex = Regex("""\{\\.*?\}""")
 
     @JvmStatic
     val dictExist get() = dictFile.isFile
@@ -270,5 +271,53 @@ object SubtitleHelper {
                 }
             }
         } else apply { put(info) }
+    }
+
+    fun ass2BJson(ass: String): String? {
+        var startIndex = -1
+        var endIndex = -1
+        var textIndex = -1
+        val body = JSONArray()
+        val result = JSONObject().put("body", body)
+
+        fun String.toSeconds(): Float {
+            val (h, m, s) = split(':')
+            return h.toInt() * 60 * 60 + m.toInt() * 60 + s.toFloat()
+        }
+
+        val lines = ass.lines()
+        var formatParsed = false
+        lines.withIndex().forEach { (index, line) ->
+            if (!formatParsed && line.startsWith("[Events]")) {
+                val eventFormat = lines[index + 1]
+                if (!eventFormat.startsWith("Format:"))
+                    return null
+                val names = eventFormat.removePrefix("Format:")
+                    .split(',', limit = 10).map(String::trim)
+                startIndex = names.indexOf("Start")
+                endIndex = names.indexOf("End")
+                textIndex = names.indexOf("Text")
+                if (startIndex == -1 || endIndex == -1 || textIndex == -1)
+                    return null
+                formatParsed = true
+            } else if (line.startsWith("Dialogue:")) {
+                val values = line.removePrefix("Dialogue:")
+                    .trim().split(',', limit = 10)
+                val start = values[startIndex]
+                val end = values[endIndex]
+                val text = values[textIndex]
+                JSONObject().apply {
+                    put("from", start.toSeconds())
+                    put("to", end.toSeconds())
+                    put("location", 2)
+                    val content = text.replace(assTextStyleRegex, "")
+                        .replace("\\h", " ")
+                        .replace("\\N", "\n")
+                    put("content", content)
+                }.let { body.put(it) }
+            }
+        }
+
+        return result.toString()
     }
 }

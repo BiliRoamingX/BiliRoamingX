@@ -72,19 +72,21 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
             val subtitles = result.subtitle.subtitlesList + extraSubtitles
             if (subtitles.map { it.lan }.let { "zh-Hant" in it && "zh-CN" !in it }) {
                 val hantSub = subtitles.first { it.lan == "zh-Hant" }
-                val cnUrl = Uri.parse(hantSub.subtitleUrl).buildUpon()
-                    .appendQueryParameter("zh_converter", "t2cn")
-                    .build().toString()
-                val cnId = hantSub.id + 1
-                val cnSub = SubtitleItem().apply {
-                    lan = "zh-CN"
-                    lanDoc = "简中（生成）"
-                    lanDocBrief = "简中"
-                    subtitleUrl = cnUrl
-                    id = cnId
-                    idStr = cnId.toString()
+                if (!hantSub.lanDoc.contains("機翻")) {
+                    val cnUrl = Uri.parse(hantSub.subtitleUrl).buildUpon()
+                        .appendQueryParameter("zh_converter", "t2cn")
+                        .build().toString()
+                    val cnId = hantSub.id + 1
+                    val cnSub = SubtitleItem().apply {
+                        lan = "zh-CN"
+                        lanDoc = "简中（生成）"
+                        lanDocBrief = "简中"
+                        subtitleUrl = cnUrl
+                        id = cnId
+                        idStr = cnId.toString()
+                    }
+                    extraSubtitles.add(cnSub)
                 }
-                extraSubtitles.add(cnSub)
             }
         }
         if (extraSubtitles.isNotEmpty())
