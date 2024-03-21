@@ -308,8 +308,8 @@ final class MessageLiteToStringEx {
 
         if (object instanceof String) {
             String string = (String) object;
-            if ((string.startsWith("bilibili://") || string.startsWith("http")) && string.length() > 256)
-                string = string.substring(0, 256);
+            if ((string.startsWith("bilibili://") || string.startsWith("http")) && string.length() > 1024)
+                string = string.substring(0, 1024);
             buffer.append(": \"").append(string).append('"');
         } else if (object instanceof ByteString) {
             ByteString bytes = (ByteString) object;
