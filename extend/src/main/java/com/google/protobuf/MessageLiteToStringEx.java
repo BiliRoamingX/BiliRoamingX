@@ -58,6 +58,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
@@ -288,7 +289,11 @@ final class MessageLiteToStringEx {
         }
         if (object instanceof Map<?, ?>) {
             Map<?, ?> map = (Map<?, ?>) object;
-            for (Map.Entry<?, ?> entry : map.entrySet()) {
+            Map<?, ?> sortedMap = map;
+            if (!map.isEmpty() && !(map instanceof SortedMap) && map.keySet().stream().anyMatch(e -> e instanceof Comparable)) {
+                sortedMap = new TreeMap<>(map);
+            }
+            for (Map.Entry<?, ?> entry : sortedMap.entrySet()) {
                 printField(buffer, indent, name, entry);
             }
             return;

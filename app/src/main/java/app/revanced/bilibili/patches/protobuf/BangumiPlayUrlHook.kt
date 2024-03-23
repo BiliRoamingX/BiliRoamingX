@@ -192,14 +192,6 @@ object BangumiPlayUrlHook {
 
     private fun hookPlayViewUniteAfterExtraActions(playReply: PlayViewUniteReply?) {
         if (playReply == null) return
-        if (Settings.DEBUG.boolean) {
-            val sortedArcConfsMap = playReply.playArcConf.arcConfsMap.toSortedMap()
-            playReply.playArcConf.mutableArcConfsMap.clear()
-            playReply.playArcConf.mutableArcConfsMap.putAll(sortedArcConfsMap)
-            val sortedDeviceConfsMap = playReply.playDeviceConf.deviceConfsMap.toSortedMap()
-            playReply.playDeviceConf.mutableDeviceConfsMap.clear()
-            playReply.playDeviceConf.mutableDeviceConfsMap.putAll(sortedDeviceConfsMap)
-        }
         if (Settings.REMEMBER_LOSSLESS_SETTING.boolean) {
             playReply.playDeviceConf.deviceConfsMap.forEach { (key, deviceConf) ->
                 if (key == ConfType.LOSSLESS.number)
