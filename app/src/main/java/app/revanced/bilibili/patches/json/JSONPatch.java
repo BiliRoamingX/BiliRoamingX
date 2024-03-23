@@ -332,6 +332,13 @@ public class JSONPatch {
             });
         }
 
+        if (Settings.DISABLE_MAIN_PAGE_STORY.getBoolean()) try {
+            var topLeftInfo = data.topLeftInfo;
+            if (topLeftInfo != null && topLeftInfo.url != null && topLeftInfo.url.startsWith("bilibili://videoshortcut"))
+                data.topLeftInfo = null;
+        } catch (Throwable ignored) {
+        }
+
         configTab(data);
     }
 
