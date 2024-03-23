@@ -53,6 +53,7 @@ public class ApplicationDelegate {
         }
     }
 
+    @Keep
     static int getCustomDpi() {
         float scale = Float.parseFloat(Settings.DISPLAY_SIZE.getString());
         if (scale == 0f) return 0;
@@ -81,6 +82,7 @@ public class ApplicationDelegate {
         return base.createConfigurationContext(configuration);
     }
 
+    @Keep
     static void updateDpi(Activity activity, int newDpi) {
         var systemDm = Resources.getSystem().getDisplayMetrics();
         var scale = systemDm.scaledDensity / systemDm.density;
