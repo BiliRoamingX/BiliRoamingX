@@ -39,6 +39,7 @@ import java.util.Set;
 import app.revanced.bilibili.meta.BottomItem;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Constants;
+import app.revanced.bilibili.utils.KtUtils;
 import app.revanced.bilibili.utils.LogHelper;
 import app.revanced.bilibili.utils.Reflex;
 import app.revanced.bilibili.utils.Utils;
@@ -413,7 +414,7 @@ public class JSONPatch {
             if (!hasBangumiCN) {
                 var tab = new MainResourceManager.Tab();
                 tab.tabId = "50";
-                tab.name = "追番（大陸）";
+                tab.name = KtUtils.isChinaEnv() ? "追番" : "追番（大陸）";
                 tab.uri = "bilibili://pgc/home";
                 tab.reportId = "bangumi";
                 tab.pos = 50;
@@ -433,7 +434,7 @@ public class JSONPatch {
             if (!hasMovieCN) {
                 var tab = new MainResourceManager.Tab();
                 tab.tabId = "70";
-                tab.name = "影視（大陸）";
+                tab.name = KtUtils.isChinaEnv() ? "影视" : "影視（大陸）";
                 tab.uri = "bilibili://pgc/home?home_flow_type=2";
                 tab.reportId = "film";
                 tab.pos = 70;
