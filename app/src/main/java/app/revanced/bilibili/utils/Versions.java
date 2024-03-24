@@ -24,4 +24,8 @@ public class Versions {
     public static boolean ge7_68_0() {
         return KtUtils.getVersionCode() >= 7680000;
     }
+
+    public static boolean ge7_70_0() {
+        return KtUtils.getVersionCode() >= 7700000;
+    }
 }

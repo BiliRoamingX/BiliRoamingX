@@ -22,6 +22,7 @@ import java.util.ArrayDeque;
 import java.util.Objects;
 
 import app.revanced.bilibili.patches.CustomThemePatch;
+import app.revanced.bilibili.patches.DpiPatch;
 import app.revanced.bilibili.patches.PlaybackSpeedPatch;
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.patches.protobuf.ViewUniteReplyHook;
@@ -53,9 +54,8 @@ public class ApplicationDelegate {
         }
     }
 
-    @Keep
     static int getCustomDpi() {
-        float scale = Float.parseFloat(Settings.DISPLAY_SIZE.getString());
+        float scale = DpiPatch.displayScale;
         if (scale == 0f) return 0;
         float sysDensity = Resources.getSystem().getDisplayMetrics().density;
         float newDensity = sysDensity + scale;
@@ -82,7 +82,6 @@ public class ApplicationDelegate {
         return base.createConfigurationContext(configuration);
     }
 
-    @Keep
     static void updateDpi(Activity activity, int newDpi) {
         var systemDm = Resources.getSystem().getDisplayMetrics();
         var scale = systemDm.scaledDensity / systemDm.density;
