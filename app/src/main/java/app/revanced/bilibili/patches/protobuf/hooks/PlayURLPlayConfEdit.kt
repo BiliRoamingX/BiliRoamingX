@@ -14,10 +14,12 @@ object PlayURLPlayConfEdit : MossHook<PlayConfEditReq, PlayConfEditReply>() {
 
     override fun hookBefore(req: PlayConfEditReq): Any? {
         if (Settings.REMEMBER_LOSSLESS_SETTING.boolean) {
-            req.playConfList.firstOrNull {
-                it.confTypeValue == ConfType.LOSSLESS.number
-            }?.let {
-                Settings.LOSSLESS_ENABLED.saveValue(it.confValue.switchVal)
+            req.playConfList.forEach {
+                if (it.confTypeValue == ConfType.LOSSLESS.number) {
+                    Settings.LOSSLESS_ENABLED.saveValue(it.confValue.switchVal)
+                } else if (it.confTypeValue == ConfType.BACKGROUNDPLAY.number) {
+                    Settings.BG_PLAYING_ENABLED.saveValue(it.confValue.switchVal)
+                }
             }
         }
         return null

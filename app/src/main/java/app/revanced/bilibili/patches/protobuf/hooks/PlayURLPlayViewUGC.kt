@@ -26,21 +26,28 @@ object PlayURLPlayViewUGC : MossHook<PlayViewReq, PlayViewReply>() {
         reply: PlayViewReply?,
         error: MossException?
     ): PlayViewReply? {
-        if (Settings.REMEMBER_LOSSLESS_SETTING.boolean)
-            reply?.playConf?.takeIf(PlayAbilityConf::hasLossLessConf)?.run {
-                lossLessConf.confValue.switchVal = Settings.LOSSLESS_ENABLED.boolean
-            }
-        if (Settings.UNLOCK_PLAY_LIMIT.boolean)
-            reply?.playArc?.run {
-                arrayOf(castConf, backgroundPlayConf, smallWindowConf).forEach {
-                    it.isSupport = true
-                    it.disabled = false
+        if (reply != null) {
+            if (Settings.REMEMBER_LOSSLESS_SETTING.boolean)
+                reply.playConf.takeIf(PlayAbilityConf::hasLossLessConf)?.run {
+                    lossLessConf.confValue.switchVal = Settings.LOSSLESS_ENABLED.boolean
+                }
+            if (Settings.UNLOCK_PLAY_LIMIT.boolean) {
+                if (reply.playArc.backgroundPlayConf.disabled) {
+                    reply.playConf.takeIf(PlayAbilityConf::hasBackgroundPlayConf)?.run {
+                        backgroundPlayConf.confValue.switchVal = Settings.BG_PLAYING_ENABLED.boolean
+                    }
+                }
+                reply.playArc.run {
+                    arrayOf(castConf, backgroundPlayConf, smallWindowConf).forEach {
+                        it.isSupport = true
+                        it.disabled = false
+                    }
                 }
             }
-        if (req.download < 1 && reply != null
-            && !Utils.isEffectiveVip()
-            && Settings.TRIAL_VIP_QUALITY.boolean
-        ) TrialQualityPatch.makeVipFree(reply)
+            if (req.download < 1 && !Utils.isEffectiveVip()
+                && Settings.TRIAL_VIP_QUALITY.boolean
+            ) TrialQualityPatch.makeVipFree(reply)
+        }
         return super.hookAfter(req, reply, error)
     }
 }

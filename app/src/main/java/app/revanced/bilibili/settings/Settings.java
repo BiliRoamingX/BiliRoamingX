@@ -210,6 +210,7 @@ public enum Settings {
 
     // 非配置项
     LOSSLESS_ENABLED("lossless_enabled", BOOLEAN, FALSE),
+    BG_PLAYING_ENABLED("bg_playing_enabled", BOOLEAN, FALSE),
     CUSTOM_COLOR("biliroaming_custom_color", INTEGER, -0xe6b7d),
     SKIN_JSON("skin_json", STRING, "");
 

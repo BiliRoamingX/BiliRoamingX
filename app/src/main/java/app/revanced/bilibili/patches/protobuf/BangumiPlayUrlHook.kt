@@ -193,12 +193,18 @@ object BangumiPlayUrlHook {
     private fun hookPlayViewUniteAfterExtraActions(playReply: PlayViewUniteReply?) {
         if (playReply == null) return
         if (Settings.REMEMBER_LOSSLESS_SETTING.boolean) {
-            playReply.playDeviceConf.deviceConfsMap.forEach { (key, deviceConf) ->
-                if (key == ConfType.LOSSLESS.number)
-                    deviceConf.confValue.switchVal = Settings.LOSSLESS_ENABLED.boolean
-            }
+            playReply.playDeviceConf.deviceConfsMap.asSequence().find {
+                it.key == ConfType.LOSSLESS.number
+            }?.value?.confValue?.switchVal = Settings.LOSSLESS_ENABLED.boolean
         }
         if (Settings.UNLOCK_PLAY_LIMIT.boolean) {
+            if (playReply.playArcConf.arcConfsMap.asSequence().find {
+                    it.key == ConfType.BACKGROUNDPLAY.number
+                }?.value?.disabled == true) {
+                playReply.playDeviceConf.deviceConfsMap.asSequence().find {
+                    it.key == ConfType.BACKGROUNDPLAY.number
+                }?.value?.confValue?.switchVal = Settings.BG_PLAYING_ENABLED.boolean
+            }
             val supportedConf = ArcConf().apply {
                 isSupport = true
                 disabled = false
