@@ -3,6 +3,7 @@ package app.revanced.bilibili.utils
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.BitmapFactory.Options
+import app.revanced.bilibili.settings.Settings
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
@@ -267,13 +268,16 @@ object SubtitleHelper {
             .joinToString(separator = "", prefix = "<ol>", postfix = "</ol>") {
                 "<li>${it.format()}</li>"
             }
-        val translated = GoogleTranslator.translateHtml(html)
-            ?: return errorResponse("字幕翻译失败，请检查网络是否可以访问谷歌服务")
+        val server = Settings.SUBTITLE_TRANSLATE_SERVER.string
+        val translator = if (server == "microsoft") MicrosoftTranslator else GoogleTranslator
+        val translated = translator.translate(html)
+            ?: return errorResponse("字幕翻译失败，请检查网络是否可以访问翻译服务提供商")
         val liList = translated.removeSurrounding(prefix = "<ol>", suffix = "</ol>")
         htmlContentRegex.findAll(liList).map {
             it.groupValues[1].replace(brRegex, "\n")
         }.zip(subBody.asSequence<JSONObject>()).forEach { (content, item) ->
-            item.put("content", content.removeSuffix("。"))
+            val prettyContent = content.replace("。。。", "...").removeSuffix("，").removeSuffix("。")
+            item.put("content", prettyContent)
         }
         subBody = subBody.appendInfo("请注意，站内宣传漫游或脚本会被拉黑")
         return subJson.apply {
