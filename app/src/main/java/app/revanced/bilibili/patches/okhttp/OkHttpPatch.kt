@@ -33,6 +33,7 @@ object OkHttpPatch {
         UnlockPGCPlayViewForPlay,
         UnlockEpisodesForPlay,
         Upgrade,
+        VipAds,
     )
 
     @Keep
