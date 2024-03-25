@@ -14,7 +14,6 @@ import java.util.zip.GZIPInputStream
 object OkHttpPatch {
     @JvmStatic
     private val hooks = arrayOf(
-        AssSubtitle,
         BangumiCards,
         BangumiMaterial,
         Eps,

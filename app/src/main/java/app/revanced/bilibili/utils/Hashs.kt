@@ -5,6 +5,7 @@ package app.revanced.bilibili.utils
 import android.util.Base64
 import java.io.File
 import java.io.InputStream
+import java.net.URLEncoder
 import java.security.DigestInputStream
 import java.security.MessageDigest
 
@@ -50,3 +51,6 @@ val ByteArray.md5Hex: String
 
 val ByteArray.base64: String
     get() = Base64.encodeToString(this, Base64.NO_WRAP)
+
+val String.urlencoded: String
+    get() = URLEncoder.encode(this, "UTF-8")

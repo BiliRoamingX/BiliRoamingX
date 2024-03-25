@@ -7,9 +7,7 @@ import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.subtitlesCache
 import app.revanced.bilibili.patches.protobuf.MossHook
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
-import com.bapis.bilibili.community.service.dm.v1.DmViewReply
-import com.bapis.bilibili.community.service.dm.v1.DmViewReq
-import com.bapis.bilibili.community.service.dm.v1.SubtitleItem
+import com.bapis.bilibili.community.service.dm.v1.*
 import com.bilibili.lib.moss.api.MossException
 import com.bilibili.lib.moss.api.NetworkException
 import com.google.protobuf.GeneratedMessageLite
@@ -79,7 +77,7 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
                     val cnId = hantSub.id + 1
                     val cnSub = SubtitleItem().apply {
                         lan = "zh-CN"
-                        lanDoc = "简中（生成）"
+                        lanDoc = "简中（漫游生成）"
                         lanDocBrief = "简中"
                         subtitleUrl = cnUrl
                         id = cnId
@@ -87,6 +85,27 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
                     }
                     extraSubtitles.add(cnSub)
                 }
+            }
+        }
+        if (Settings.SUBTITLE_AUTO_GENERATE.boolean) {
+            val subtitles = result.subtitle.subtitlesList + extraSubtitles
+            if (subtitles.map { it.lan }.let {
+                    "zh-Hans" !in it && "zh-CN" !in it && "ai-zh" !in it && "en" in it
+                }) {
+                val enSub = subtitles.first { it.lan == "en" }
+                val autoCNSub = SubtitleItem().apply {
+                    aiStatus = SubtitleAiStatus.Assist
+                    aiType = SubtitleAiType.Translate
+                    id = enSub.id + 2233
+                    idStr = id.toString()
+                    lan = "ai-zh"
+                    lanDoc = "简中（漫游翻译）"
+                    lanDocBrief = "简中"
+                    subtitleUrl = Uri.parse(enSub.subtitleUrl).buildUpon()
+                        .appendQueryParameter("zh_converter", "en2cn").toString()
+                    type = SubtitleType.AI
+                }
+                extraSubtitles.add(autoCNSub)
             }
         }
         if (extraSubtitles.isNotEmpty())

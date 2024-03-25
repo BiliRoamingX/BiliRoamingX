@@ -111,6 +111,9 @@ object SubtitleHelper {
     private val noStyleRegex =
         Regex("""\{\\?\\an\d+\}|<font\s[^>]*>|<\\?/font>|<i>|<\\?/i>|<b>|<\\?/b>|<u>|<\\?/u>""")
     private val assTextStyleRegex = Regex("""\{\\.*?\}""")
+    private val needMergeRegex = Regex(".*(,|[a-z]|[A-Z])$")
+    private val brRegex = Regex("""\s*<br>\s*""")
+    private val htmlContentRegex = Regex("""<li>\s*(.*?)\s*</li>""")
 
     @JvmStatic
     val dictExist get() = dictFile.isFile
@@ -238,6 +241,45 @@ object SubtitleHelper {
             })
         })
     }.toString()
+
+    @JvmStatic
+    fun translate(json: String): String {
+        fun String.format(): String {
+            val lines = this.lines()
+            if (lines.size == 1) return this
+            val result = StringBuilder()
+            lines.withIndex().forEach { (index, line) ->
+                val trimmed = line.trim()
+                result.append(trimmed)
+                if (trimmed.matches(needMergeRegex)) {
+                    result.append(' ')
+                } else if (index != lines.lastIndex) {
+                    result.append("<br>")
+                }
+            }
+            return result.toString()
+        }
+
+        val subJson = JSONObject(json)
+        var subBody = subJson.optJSONArray("body") ?: return json
+        val html = subBody.asSequence<JSONObject>()
+            .map { it.optString("content") }
+            .joinToString(separator = "", prefix = "<ol>", postfix = "</ol>") {
+                "<li>${it.format()}</li>"
+            }
+        val translated = GoogleTranslator.translateHtml(html)
+            ?: return errorResponse("字幕翻译失败，请检查网络是否可以访问谷歌服务")
+        val liList = translated.removeSurrounding(prefix = "<ol>", suffix = "</ol>")
+        htmlContentRegex.findAll(liList).map {
+            it.groupValues[1].replace(brRegex, "\n")
+        }.zip(subBody.asSequence<JSONObject>()).forEach { (content, item) ->
+            item.put("content", content.removeSuffix("。"))
+        }
+        subBody = subBody.appendInfo("请注意，站内宣传漫游或脚本会被拉黑")
+        return subJson.apply {
+            put("body", subBody)
+        }.toString()
+    }
 
     private fun JSONArray.appendInfo(content: String): JSONArray {
         if (length() == 0) return this
