@@ -98,11 +98,9 @@ class Dictionary(
     }
 }
 
-@Suppress("UNUSED")
 object SubtitleHelper {
     private val dictFile by lazy { File(Utils.getContext().filesDir, "t2cn.txt") }
     private val tmpDictFile by lazy { File(Utils.getContext().filesDir, "t2cn.txt.tmp") }
-    private val dictionary by lazy { Dictionary.loadDictionary(dictFile) }
     private const val DICT_URL =
         "https://archive.biliimg.com/bfs/archive/566adec17e127bf92aed21832db0206ccecc8caa.png"
     private const val CHECK_INTERVAL = 60 * 1000
@@ -113,8 +111,6 @@ object SubtitleHelper {
         Regex("""\{\\?\\an\d+\}|<font\s[^>]*>|<\\?/font>|<i>|<\\?/i>|<b>|<\\?/b>|<u>|<\\?/u>""")
     private val assTextStyleRegex = Regex("""\{\\.*?\}""")
     private val needMergeRegex = Regex(".*(,|[a-z]|[A-Z])$")
-    private val brRegex = Regex("""\s*<br>\s*""")
-    private val htmlContentRegex = Regex("""<li>\s*(.*?)\s*</li>""")
 
     @JvmStatic
     val dictExist get() = dictFile.isFile
@@ -249,33 +245,28 @@ object SubtitleHelper {
             val lines = this.lines()
             if (lines.size == 1) return this
             val result = StringBuilder()
-            lines.withIndex().forEach { (index, line) ->
+            lines.forEach { line ->
                 val trimmed = line.trim()
                 result.append(trimmed)
                 if (trimmed.matches(needMergeRegex)) {
                     result.append(' ')
-                } else if (index != lines.lastIndex) {
-                    result.append("<br>")
+                } else {
+                    result.appendLine()
                 }
             }
-            return result.toString()
+            return result.toString().trimEnd()
         }
 
         val subJson = JSONObject(json)
         var subBody = subJson.optJSONArray("body") ?: return json
-        val html = subBody.asSequence<JSONObject>()
-            .map { it.optString("content") }
-            .joinToString(separator = "", prefix = "<ol>", postfix = "</ol>") {
-                "<li>${it.format()}</li>"
-            }
+        val texts = subBody.asSequence<JSONObject>()
+            .map { it.optString("content").format() }.toList()
         val server = Settings.SUBTITLE_TRANSLATE_SERVER.string
         val translator = if (server == "microsoft") MicrosoftTranslator else GoogleTranslator
-        val translated = translator.translate(html)
-            ?: return errorResponse("字幕翻译失败，请检查网络是否可以访问翻译服务提供商")
-        val liList = translated.removeSurrounding(prefix = "<ol>", suffix = "</ol>")
-        htmlContentRegex.findAll(liList).map {
-            it.groupValues[1].replace(brRegex, "\n")
-        }.zip(subBody.asSequence<JSONObject>()).forEach { (content, item) ->
+        val trans = translator.translate(texts).ifEmpty {
+            return errorResponse("字幕翻译失败，请检查网络是否可以访问翻译服务提供商")
+        }
+        subBody.asSequence<JSONObject>().zip(trans.asSequence()).forEach { (item, content) ->
             val prettyContent = content.replace("。。。", "...").removeSuffix("，").removeSuffix("。")
             item.put("content", prettyContent)
         }

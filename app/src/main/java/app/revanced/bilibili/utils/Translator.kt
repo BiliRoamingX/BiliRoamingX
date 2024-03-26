@@ -72,34 +72,38 @@ private fun request(
     LogHelper.debug { "Translate request execute success, url: $url, result: $it" }
 }
 
-interface HtmlTranslator {
-    fun translate(html: String): String?
+abstract class Translator {
+    open fun translate(text: String): String? {
+        return translate(listOf(text)).firstOrNull()
+    }
+
+    abstract fun translate(texts: List<String>): List<String>
 }
 
-object GoogleTranslator : HtmlTranslator {
+object GoogleTranslator : Translator() {
     private const val API_URL = "https://translate.googleapis.com/translate_a/t"
     private const val ELEMENT_URL = "https://translate.googleapis.com/translate_a/element.js"
     private const val REFERER = "https://translate.google.com/"
 
-    override fun translate(html: String): String? {
+    override fun translate(texts: List<String>): List<String> {
         val url = Uri.parse(API_URL).buildUpon()
             .appendQueryParameter("sl", "auto")
             .appendQueryParameter("tl", "zh-CN")
             .appendQueryParameter("client", "te_lib")
-            .appendQueryParameter("format", "html")
-            .appendQueryParameter("tk", html.tk())
+            //.appendQueryParameter("format", "html") // '\n' will be ignored if indicated
+            .appendQueryParameter("tk", texts.joinToString("").tk())
             .toString()
         val response = request(
             url,
             method = "POST",
             contentType = "application/x-www-form-urlencoded",
-            data = "q=${html.urlencoded}",
+            data = texts.joinToString(separator = "&") { "q=${it.urlencoded}" },
             encoding = "gzip",
             referer = REFERER,
-        ) ?: return null
-        return JSONArray(response).optJSONArray(0).let {
-            it.opt(0) as? String
-        }
+        ) ?: return listOf()
+        return JSONArray(response).asSequence<JSONArray>().map {
+            it.optString(0)
+        }.toList()
     }
 
     /**
@@ -215,28 +219,29 @@ object GoogleTranslator : HtmlTranslator {
     }
 }
 
-object MicrosoftTranslator : HtmlTranslator {
+object MicrosoftTranslator : Translator() {
     private const val API_URL = "https://api.cognitive.microsofttranslator.com/translate"
     private const val AUTH_URL = "https://edge.microsoft.com/translate/auth"
 
-    override fun translate(html: String): String? {
-        val token = Token.get() ?: return null
+    override fun translate(texts: List<String>): List<String> {
+        val token = Token.get() ?: return listOf()
         val url = Uri.parse(API_URL).buildUpon()
             .appendQueryParameter("api-version", "3.0")
-            .appendQueryParameter("to", "zh-Hans")
-            .appendQueryParameter("textType", "html")
+            .appendQueryParameter("to", "zh-CHS")
             .toString()
         val response = request(
             url,
             method = "POST",
             auth = "Bearer $token",
             contentType = "application/json",
-            data = JSONArray().put(JSONObject().put("Text", html)).toString(),
-        ) ?: return null
-        return JSONArray(response).optJSONObject(0)
-            ?.optJSONArray("translations")
-            ?.optJSONObject(0)
-            ?.opt("text") as? String
+            data = JSONArray().apply {
+                texts.forEach { put(JSONObject().put("Text", it)) }
+            }.toString(),
+        ) ?: return listOf()
+        return JSONArray(response).asSequence<JSONObject>().map {
+            it.optJSONArray("translations")?.optJSONObject(0)
+                ?.optString("text").orEmpty()
+        }.toList()
     }
 
     private object Token {
