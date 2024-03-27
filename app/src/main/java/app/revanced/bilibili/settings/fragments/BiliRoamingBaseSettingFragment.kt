@@ -13,6 +13,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import androidx.preference.TwoStatePreference
 import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.utils.LogHelper
 import app.revanced.bilibili.utils.Reflex
 import app.revanced.bilibili.utils.Utils
 import app.revanced.bilibili.utils.onPreferenceTreeClick
@@ -89,9 +90,8 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
             val args = Bundle(preference.extras).apply {
                 putString(EXTRA_TITLE, preference.title?.toString().orEmpty())
             }
-            val fragment = fragmentManager.fragmentFactory.instantiate(
-                requireActivity().classLoader, it
-            )
+            val classLoader = Utils.getContext().classLoader
+            val fragment = fragmentManager.fragmentFactory.instantiate(classLoader, it)
             fragment.arguments = args
             fragmentManager.beginTransaction()
                 .replace((requireView().parent as View).id, fragment)
@@ -128,7 +128,8 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
         val preferenceManager = PreferenceManager(Utils.getContext())
         preferenceManagerField.set(this, preferenceManager)
         setOnNavigateToScreenListenerMethod?.invoke(preferenceManager, this)
-    } catch (_: Throwable) {
+    } catch (t: Throwable) {
+        LogHelper.error({ "PreferenceManager fix failed" }, t)
     }
 
     protected open fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
