@@ -294,6 +294,15 @@ public class JSONPatch {
                     channelItem.icon = "http://i0.hdslb.com/bfs/archive/f6739d905dee57d2c0429d9b66acb3f39b294aff.png";
                     itemList.add(0, channelItem);
                 }
+                // for pink client to fix setting icon jitter when customizing dpi
+                if ("更多服务".equals(title) && itemList.stream().noneMatch(item -> "activity://main/preference".equals(item.uri))) {
+                    var settingItem = new MenuGroup.Item();
+                    settingItem.id = 458;
+                    settingItem.title = "设置";
+                    settingItem.uri = "activity://main/preference";
+                    settingItem.icon = "http://i0.hdslb.com/bfs/archive/e932404f2ee62e075a772920019e9fbdb4b5656a.png";
+                    itemList.add(settingItem);
+                }
             }
             sectionListV2.removeIf(section -> !TextUtils.isEmpty(section.title) && !shouldShowing(items, section.title));
         }
