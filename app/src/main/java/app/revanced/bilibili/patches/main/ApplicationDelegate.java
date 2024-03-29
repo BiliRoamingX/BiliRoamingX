@@ -3,9 +3,13 @@ package app.revanced.bilibili.patches.main;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
@@ -15,6 +19,8 @@ import com.bilibili.multitypeplayerV2.MultiTypeVideoContentActivity;
 import com.bilibili.ship.theseus.all.UnitedBizDetailsActivity;
 import com.bilibili.ship.theseus.playlist.UnitedPlaylistActivity;
 import com.bilibili.video.videodetail.VideoDetailsActivity;
+
+import org.lsposed.hiddenapibypass.HiddenApiBypass;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -29,6 +35,7 @@ import app.revanced.bilibili.patches.protobuf.ViewUniteReplyHook;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.KtUtils;
 import app.revanced.bilibili.utils.LogHelper;
+import app.revanced.bilibili.utils.Reflex;
 import app.revanced.bilibili.utils.SubtitleParamsCache;
 import app.revanced.bilibili.utils.UposReplacer;
 import app.revanced.bilibili.utils.Utils;
@@ -37,10 +44,14 @@ import tv.danmaku.bili.MainActivityV2;
 
 public class ApplicationDelegate {
     private static final ArrayDeque<WeakReference<Activity>> activityRefs = new ArrayDeque<>();
+    private static volatile boolean appCreated = false;
 
     @Keep
     public static void onCreate(Application app) {
+        appCreated = true;
         app.registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
+        app.registerComponentCallbacks(new ComponentCallbacks());
+        setBitmapDefaultDensity();
         if (Utils.isInMainProcess()) {
             Utils.async(ApplicationDelegate::startLog);
             CustomThemePatch.refresh();
@@ -51,6 +62,42 @@ public class ApplicationDelegate {
             Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypes));
             Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypesV2));
             Utils.runOnMainThread(2000L, () -> Utils.async(CouponAutoReceiver::check));
+        }
+    }
+
+    @Keep
+    public static Context attachBaseContext(Context base) {
+        return new ContextWrapper(base) {
+            @Override
+            public Resources getResources() {
+                Resources resources = super.getResources();
+                // We can not access application context to get customize dpi
+                // when content provider initializing, just let them go first.
+                if (appCreated) {
+                    int newDpi = getCustomDpi();
+                    if (newDpi != 0) {
+                        updateDpi(resources.getDisplayMetrics(), newDpi);
+                        resources.getConfiguration().densityDpi = newDpi;
+                    }
+                }
+                return resources;
+            }
+        };
+    }
+
+    static void setBitmapDefaultDensity() {
+        // to let pictures like cover show correctly when customizing dpi.
+        float scale = DpiPatch.displayScale;
+        if (scale != 0f) {
+            float density = Resources.getSystem().getDisplayMetrics().density;
+            int newDpi = (int) ((density + scale) * 160);
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                    HiddenApiBypass.addHiddenApiExemptions("Landroid/graphics/Bitmap;");
+                Reflex.setStaticIntField(Bitmap.class, "sDefaultDensity", newDpi);
+            } catch (Throwable t) {
+                LogHelper.error(() -> "Failed to setting Bitmap default density", t);
+            }
         }
     }
 
@@ -83,9 +130,12 @@ public class ApplicationDelegate {
     }
 
     static void updateDpi(Activity activity, int newDpi) {
+        updateDpi(activity.getResources().getDisplayMetrics(), newDpi);
+    }
+
+    static void updateDpi(DisplayMetrics dm, int newDpi) {
         var systemDm = Resources.getSystem().getDisplayMetrics();
         var scale = systemDm.scaledDensity / systemDm.density;
-        var dm = activity.getResources().getDisplayMetrics();
         var newDensity = newDpi / 160f;
         dm.densityDpi = newDpi;
         dm.density = newDensity;
@@ -139,9 +189,6 @@ public class ApplicationDelegate {
         public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
             printLifecycle(activity, "onActivityCreated", true);
             activityRefs.push(new WeakReference<>(activity));
-            var newDpi = getCustomDpi();
-            if (newDpi != 0)
-                updateDpi(activity, newDpi);
         }
 
         @Override
@@ -204,6 +251,18 @@ public class ApplicationDelegate {
                 var value = extras.get(key);
                 LogHelper.debug(() -> "intent.extra, " + key + ": " + value + ", type: " + (value != null ? value.getClass().getName() : null));
             }
+        }
+    }
+
+    static class ComponentCallbacks implements android.content.ComponentCallbacks {
+
+        @Override
+        public void onConfigurationChanged(@NonNull Configuration newConfig) {
+            setBitmapDefaultDensity();
+        }
+
+        @Override
+        public void onLowMemory() {
         }
     }
 }

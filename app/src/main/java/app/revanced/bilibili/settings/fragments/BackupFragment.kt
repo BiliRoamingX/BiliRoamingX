@@ -86,7 +86,7 @@ class BackupFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_backu
                     }
                 }.onSuccess {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                        HiddenApiBypass.addHiddenApiExemptions("Landroid")
+                        HiddenApiBypass.addHiddenApiExemptions("Landroid/content/Context;")
                     Utils.getContext().callMethod("reloadSharedPreferences")
                     Settings.reload()
                     afterRestore()
@@ -122,6 +122,9 @@ class BackupFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_backu
             }
         if (Settings.PURIFY_SPLASH.boolean)
             Utils.clearSplashConfigCache()
-        changeComponentState(BiliDocumentsProvider::class.java, Settings.ENABLE_DOC_PROVIDER.boolean)
+        changeComponentState(
+            BiliDocumentsProvider::class.java,
+            Settings.ENABLE_DOC_PROVIDER.boolean
+        )
     }
 }
