@@ -3,7 +3,6 @@ package app.revanced.bilibili.patches.main;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -66,23 +65,17 @@ public class ApplicationDelegate {
     }
 
     @Keep
-    public static Context attachBaseContext(Context base) {
-        return new ContextWrapper(base) {
-            @Override
-            public Resources getResources() {
-                Resources resources = super.getResources();
-                // We can not access application context to get customize dpi
-                // when content provider initializing, just let them go first.
-                if (appCreated) {
-                    int newDpi = getCustomDpi();
-                    if (newDpi != 0) {
-                        updateDpi(resources.getDisplayMetrics(), newDpi);
-                        resources.getConfiguration().densityDpi = newDpi;
-                    }
-                }
-                return resources;
+    public static Resources getResources(Resources resources) {
+        // We can not access application context to get customize dpi
+        // when content provider initializing, just let them go first.
+        if (appCreated) {
+            int newDpi = getCustomDpi();
+            if (newDpi != 0) {
+                updateDpi(resources.getDisplayMetrics(), newDpi);
+                resources.getConfiguration().densityDpi = newDpi;
             }
-        };
+        }
+        return resources;
     }
 
     static void setBitmapDefaultDensity() {
