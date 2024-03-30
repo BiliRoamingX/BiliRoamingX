@@ -33,4 +33,8 @@ public class LiveRoomPatch {
             return false;
         }
     }
+
+    public static boolean disableSlideLeft() {
+        return Settings.DISABLE_SLIDE_LEFT.getBoolean();
+    }
 }

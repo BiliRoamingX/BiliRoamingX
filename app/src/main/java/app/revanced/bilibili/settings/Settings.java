@@ -120,6 +120,7 @@ public enum Settings {
     PURIFY_LIVE_POPUPS("purify_live_popups", STRING_SET, Collections.EMPTY_SET),
     REMOVE_LIVE_MASK("remove_live_mask", BOOLEAN, FALSE),
     DEFAULT_MAX_QN("default_max_qn", BOOLEAN, FALSE),
+    DISABLE_SLIDE_LEFT("disable_slide_left", BOOLEAN, FALSE),
 
     // 视频详情页
     AUTO_LIKE("auto_like", BOOLEAN, FALSE),
