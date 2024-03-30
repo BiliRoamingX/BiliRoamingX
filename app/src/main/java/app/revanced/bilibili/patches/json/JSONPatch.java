@@ -100,18 +100,19 @@ public class JSONPatch {
                 info.shoppingCardDetail = null;
                 info.recommendCardDetail = null;
             }
-        } else if (data instanceof LiveGoodsCardInfo || (!Utils.isHd() && data instanceof LiveShoppingRecommendCardGoodsDetail)) {
+        } else if (data instanceof LiveGoodsCardInfo || data instanceof LiveShoppingRecommendCardGoodsDetail) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("shoppingCard"))
                 return null;
         } else if (data instanceof BiliLiveRoomInfo roomInfo) {
-            if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("follow")) {
+            Set<String> keys = Settings.PURIFY_LIVE_POPUPS.getStringSet();
+            if (keys.contains("follow")) {
                 BiliLiveRoomInfo.FunctionCard card = roomInfo.functionCard;
                 if (card != null)
                     card.followCard = null;
             }
-            if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("banner"))
+            if (keys.contains("banner"))
                 roomInfo.bannerInfo = null;
-            if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("giftStar")) {
+            if (keys.contains("giftStar")) {
                 LiveGiftPendantInfo pendantInfo = roomInfo.revenueGiftPendantInfo;
                 if (pendantInfo != null)
                     pendantInfo.liveGiftStarPendantInfo = null;
@@ -123,17 +124,25 @@ public class JSONPatch {
         } else if (data instanceof LiveRoomRecommendCard) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("follow"))
                 return null;
-        } else if (!Utils.isHd() && data instanceof LiveRoomReserveInfo info) {
+        } else if (data instanceof LiveRoomReserveInfo info) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("reserve"))
                 info.showReserveDetail = false;
         } else if (data instanceof BiliLiveRoomUserInfo info) {
-            if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("gift")) {
+            Set<String> keys = Settings.PURIFY_LIVE_POPUPS.getStringSet();
+            if (keys.contains("gift")) {
                 FunctionCard card = info.functionCard;
                 if (card != null)
                     card.sengGiftCard = null;
             }
-            if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("task"))
+            if (keys.contains("task"))
                 info.taskInfo = null;
+            if (keys.contains("playTogether")) {
+                info.playTogetherInfo = null;
+                try {
+                    info.playTogetherInfoV2 = null;
+                } catch (Throwable ignored) {
+                }
+            }
         } else if (data instanceof LiveShoppingGotoBuyInfo) {
             if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("gotoBuy"))
                 return null;
