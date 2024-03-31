@@ -121,6 +121,7 @@ public enum Settings {
     REMOVE_LIVE_MASK("remove_live_mask", BOOLEAN, FALSE),
     DEFAULT_MAX_QN("default_max_qn", BOOLEAN, FALSE),
     DISABLE_SLIDE_LEFT("disable_slide_left", BOOLEAN, FALSE),
+    DISABLE_AUTO_FLOAT("disable_auto_float", BOOLEAN, FALSE),
 
     // 视频详情页
     AUTO_LIKE("auto_like", BOOLEAN, FALSE),

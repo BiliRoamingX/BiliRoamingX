@@ -37,4 +37,8 @@ public class LiveRoomPatch {
     public static boolean disableSlideLeft() {
         return Settings.DISABLE_SLIDE_LEFT.getBoolean();
     }
+
+    public static boolean disableAutoFloat() {
+        return Settings.DISABLE_AUTO_FLOAT.getBoolean();
+    }
 }
