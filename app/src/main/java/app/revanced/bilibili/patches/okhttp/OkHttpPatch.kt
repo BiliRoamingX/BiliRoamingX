@@ -26,6 +26,7 @@ object OkHttpPatch {
         Season,
         SeasonRecommend,
         ShareChannels,
+        ShareClick,
         Skin,
         Space,
         Subtitle,
