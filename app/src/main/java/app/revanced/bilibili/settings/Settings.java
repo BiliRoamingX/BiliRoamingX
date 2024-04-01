@@ -179,6 +179,7 @@ public enum Settings {
     SUBTITLE_STROKE_WIDTH("subtitle_stroke_width", FLOAT, 5.0f),
     SUBTITLE_OFFSET("subtitle_offset", INTEGER, 0),
     SUBTITLE_TRANSLATE_SERVER("subtitle_translate_server", STRING, "microsoft"),
+    SUBTITLE_IMPORT("subtitle_import", BOOLEAN, FALSE),
 
     // 杂项
     TEENAGER_MODE_DIALOG("teenagers_mode_dialog", BOOLEAN, FALSE),

@@ -106,11 +106,13 @@ object SubtitleHelper {
     private const val CHECK_INTERVAL = 60 * 1000
 
     // !!! Do not remove symbol '\' for "\}", Android need it
-    @Suppress("RegExpRedundantEscape")
     private val noStyleRegex =
         Regex("""\{\\?\\an\d+\}|<font\s[^>]*>|<\\?/font>|<i>|<\\?/i>|<b>|<\\?/b>|<u>|<\\?/u>""")
     private val assTextStyleRegex = Regex("""\{\\.*?\}""")
     private val needMergeRegex = Regex(".*(,|[a-z]|[A-Z])$")
+    private val vttTimeLineRegex =
+        Regex("""((?<fromH>\d{2,4}):)?(?<fromM>\d{2}):(?<fromS>\d{2}[.,]\d{2,3})\s-->\s((?<toH>\d{2,4}):)?(?<toM>\d{2}):(?<toS>\d{2}[.,]\d{2,3})""")
+    private val vttCueStyleRegex = Regex("""(^-+\s?)|(<.*?>)|(</\w+>)""")
 
     @JvmStatic
     val dictExist get() = dictFile.isFile
@@ -310,7 +312,7 @@ object SubtitleHelper {
         } else apply { put(info) }
     }
 
-    fun ass2BJson(ass: String): String? {
+    fun ass2Bcc(ass: String): String {
         var startIndex = -1
         var endIndex = -1
         var textIndex = -1
@@ -322,20 +324,24 @@ object SubtitleHelper {
             return h.toInt() * 60 * 60 + m.toInt() * 60 + s.toFloat()
         }
 
+        fun String.format() = replace(assTextStyleRegex, "")
+            .replace("\\h", " ")
+            .replace("\\N", "\n")
+
         val lines = ass.lines()
         var formatParsed = false
         lines.withIndex().forEach { (index, line) ->
             if (!formatParsed && line.startsWith("[Events]")) {
                 val eventFormat = lines[index + 1]
                 if (!eventFormat.startsWith("Format:"))
-                    return null
+                    error("invalid ass subtitle")
                 val names = eventFormat.removePrefix("Format:")
                     .split(',', limit = 10).map(String::trim)
                 startIndex = names.indexOf("Start")
                 endIndex = names.indexOf("End")
                 textIndex = names.indexOf("Text")
                 if (startIndex == -1 || endIndex == -1 || textIndex == -1)
-                    return null
+                    error("invalid ass subtitle")
                 formatParsed = true
             } else if (line.startsWith("Dialogue:")) {
                 val values = line.removePrefix("Dialogue:")
@@ -347,14 +353,75 @@ object SubtitleHelper {
                     put("from", start.toSeconds())
                     put("to", end.toSeconds())
                     put("location", 2)
-                    val content = text.replace(assTextStyleRegex, "")
-                        .replace("\\h", " ")
-                        .replace("\\N", "\n")
-                    put("content", content)
+                    put("content", text.format())
                 }.let { body.put(it) }
             }
         }
 
+        return result.toString()
+    }
+
+    fun vttOrSrt2Bcc(vtt: String): String {
+        // Reference https://developer.mozilla.org/zh-CN/docs/Web/API/WebVTT_API
+        val body = JSONArray()
+        val result = JSONObject().put("body", body)
+
+        fun MatchGroupCollection.timeline(): Pair<Float, Float> {
+            val fromH = this["fromH"]?.value.orEmpty()
+            val fromM = this["fromM"]?.value.orEmpty()
+            val fromS = this["fromS"]?.value.orEmpty()
+            val toH = this["toH"]?.value.orEmpty()
+            val toM = this["toM"]?.value.orEmpty()
+            val toS = this["toS"]?.value.orEmpty()
+            val from = fromH.ifEmpty { "0" }.toInt() * 60 * 60 +
+                    fromM.toInt() * 60 + fromS.replace(',', '.').toFloat()
+            val to = toH.ifEmpty { "0" }.toInt() * 60 * 60 +
+                    toM.toInt() * 60 + toS.replace(',', '.').toFloat()
+            return from to to
+        }
+
+        fun String.format() = replace(vttCueStyleRegex, "")
+            .replace("&amp;", "&")
+            .replace("&lt;", "<")
+            .replace("&gt;", ">")
+            .replace("&lrm;", "")
+            .replace("&rlm;", "")
+            .replace("&nbsp;", " ")
+
+        var from = 0f
+        var to = 0f
+        var content = StringBuilder()
+        var newLine = false
+        vtt.lineSequence().forEach { line ->
+            val timeline = vttTimeLineRegex.find(line)?.groups?.timeline()
+            if (timeline != null) {
+                newLine = true
+                from = timeline.first
+                to = timeline.second
+            } else if (newLine && line.isNotBlank()) {
+                if (content.isNotEmpty())
+                    content.appendLine()
+                content.append(line.format())
+            } else if (newLine) {
+                body.put(JSONObject().apply {
+                    put("from", from)
+                    put("to", to)
+                    put("location", 2)
+                    put("content", content.toString())
+                })
+                content = StringBuilder()
+                newLine = false
+            }
+        }
+        if (newLine) {
+            // maybe not ends with empty line
+            body.put(JSONObject().apply {
+                put("from", from)
+                put("to", to)
+                put("location", 2)
+                put("content", content.toString())
+            })
+        }
         return result.toString()
     }
 }
