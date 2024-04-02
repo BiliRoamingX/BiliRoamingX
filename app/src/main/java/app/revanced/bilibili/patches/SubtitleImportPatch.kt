@@ -9,8 +9,6 @@ import androidx.annotation.Keep
 import androidx.documentfile.provider.DocumentFile
 import app.revanced.bilibili.patches.SubtitleImportPatch.HookInfoProvider.getDanmakuParamsMethod
 import app.revanced.bilibili.patches.SubtitleImportPatch.HookInfoProvider.getDmViewReplyMethod
-import app.revanced.bilibili.patches.SubtitleImportPatch.HookInfoProvider.getInteractLayerService
-import app.revanced.bilibili.patches.SubtitleImportPatch.HookInfoProvider.getWidgetService
 import app.revanced.bilibili.patches.SubtitleImportPatch.HookInfoProvider.hideWidgetMethod
 import app.revanced.bilibili.patches.SubtitleImportPatch.HookInfoProvider.loadSubtitleMethod
 import app.revanced.bilibili.patches.SubtitleImportPatch.HookInfoProvider.setDmViewReplyMethod
@@ -20,7 +18,6 @@ import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import com.bapis.bilibili.community.service.dm.v1.DmViewReply
 import com.bapis.bilibili.community.service.dm.v1.SubtitleItem
-import java.lang.reflect.Modifier
 import kotlin.random.Random
 
 object SubtitleImportPatch {
@@ -59,8 +56,12 @@ object SubtitleImportPatch {
             return
         }
         importButton.visibility = View.VISIBLE
-        val interactLayerService = widget.getInteractLayerService() ?: return
-        val widgetService = widget.getWidgetService() ?: return
+        val interactLayerService = widget.getObjectField(
+            "interactLayerServiceForBiliRoaming"
+        ) ?: return
+        val widgetService = widget.getObjectField(
+            "widgetServiceForBiliRoaming"
+        ) ?: return
         importButton.setOnClickListener { button ->
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 type = "*/*"
@@ -122,26 +123,6 @@ object SubtitleImportPatch {
     object HookInfoProvider {
         @Keep
         @JvmStatic
-        private var playerContainerField = ""
-
-        @Keep
-        @JvmStatic
-        private var interactLayerServiceField = ""
-
-        @Keep
-        @JvmStatic
-        private var widgetServiceField = ""
-
-        @Keep
-        @JvmStatic
-        private var getInteractLayerServiceMethod = ""
-
-        @Keep
-        @JvmStatic
-        private var getWidgetServiceMethod = ""
-
-        @Keep
-        @JvmStatic
         var getDanmakuParamsMethod = ""
 
         @Keep
@@ -172,23 +153,5 @@ object SubtitleImportPatch {
         @JvmStatic
         private fun init() {
         }
-
-        fun Any.getInteractLayerService() = runCatchingOrNull {
-            if (Reflex.findFieldIfExists(javaClass, playerContainerField)?.type?.let {
-                    Modifier.isAbstract(it.modifiers) && !Modifier.isInterface(it.modifiers) && it.interfaces.size == 1
-                } == true
-            ) {
-                getObjectField(playerContainerField)?.callMethod(getInteractLayerServiceMethod)
-            } else null
-        } ?: getObjectField(interactLayerServiceField)
-
-        fun Any.getWidgetService() = runCatchingOrNull {
-            if (Reflex.findFieldIfExists(javaClass, playerContainerField)?.type?.let {
-                    Modifier.isAbstract(it.modifiers) && !Modifier.isInterface(it.modifiers) && it.interfaces.size == 1
-                } == true
-            ) {
-                getObjectField(playerContainerField)?.callMethod(getWidgetServiceMethod)
-            } else null
-        } ?: getObjectField(widgetServiceField)
     }
 }
