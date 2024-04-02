@@ -105,14 +105,14 @@ object SubtitleHelper {
         "https://archive.biliimg.com/bfs/archive/566adec17e127bf92aed21832db0206ccecc8caa.png"
     private const val CHECK_INTERVAL = 60 * 1000
 
-    // !!! Do not remove symbol '\' for "\}", Android need it
-    private val noStyleRegex =
-        Regex("""\{\\?\\an\d+\}|<font\s[^>]*>|<\\?/font>|<i>|<\\?/i>|<b>|<\\?/b>|<u>|<\\?/u>""")
     private val assTextStyleRegex = Regex("""\{\\.*?\}""")
     private val needMergeRegex = Regex(".*(,|[a-z]|[A-Z])$")
-    private val vttTimeLineRegex =
+    private val vttOrSrtTimeLineRegex =
         Regex("""((?<fromH>\d{2,4}):)?(?<fromM>\d{2}):(?<fromS>\d{2}[.,]\d{2,3})\s-->\s((?<toH>\d{2,4}):)?(?<toM>\d{2}):(?<toS>\d{2}[.,]\d{2,3})""")
-    private val vttCueStyleRegex = Regex("""(^-+\s?)|(<.*?>)|(</\w+>)""")
+
+    // vtt reference: https://developer.mozilla.org/zh-CN/docs/Web/API/WebVTT_API
+    // srt reference: https://docs.fileformat.com/video/srt/#formatting-of-srt-files
+    private val vttOrSrtCueStyleRegex = Regex("""(^-+\s?)|(<.*?>)|(\{.*?\})""")
 
     @JvmStatic
     val dictExist get() = dictFile.isFile
@@ -211,13 +211,11 @@ object SubtitleHelper {
     fun convert(json: String): String {
         val subJson = JSONObject(json)
         var subBody = subJson.optJSONArray("body") ?: return json
-        val subText = subBody.asSequence<JSONObject>().map { it.optString("content") }
-            .joinToString("\u0000").run {
-                // Remove srt style, bilibili not support it
-                if (contains("\\an") || contains("<font")
-                    || contains("<i>") || contains("<b>") || contains("<u>")
-                ) replace(noStyleRegex, "") else this
-            }
+        val subText = subBody.asSequence<JSONObject>().map {
+            it.optString("content")
+        }.joinToString("\u0000")
+            // Remove srt style, bilibili not support it
+            .replace(vttOrSrtCueStyleRegex, "")
         val converted = dict().convert(subText)
         val lines = converted.split('\u0000')
         subBody.asSequence<JSONObject>().zip(lines.asSequence()).forEach { (obj, line) ->
@@ -362,7 +360,7 @@ object SubtitleHelper {
     }
 
     fun vttOrSrt2Bcc(vtt: String): String {
-        // Reference https://developer.mozilla.org/zh-CN/docs/Web/API/WebVTT_API
+        // reference: https://developer.mozilla.org/zh-CN/docs/Web/API/WebVTT_API
         val body = JSONArray()
         val result = JSONObject().put("body", body)
 
@@ -380,7 +378,7 @@ object SubtitleHelper {
             return from to to
         }
 
-        fun String.format() = replace(vttCueStyleRegex, "")
+        fun String.format() = replace(vttOrSrtCueStyleRegex, "")
             .replace("&amp;", "&")
             .replace("&lt;", "<")
             .replace("&gt;", ">")
@@ -393,7 +391,7 @@ object SubtitleHelper {
         var content = StringBuilder()
         var newLine = false
         vtt.lineSequence().forEach { line ->
-            val timeline = vttTimeLineRegex.find(line)?.groups?.timeline()
+            val timeline = vttOrSrtTimeLineRegex.find(line)?.groups?.timeline()
             if (timeline != null) {
                 newLine = true
                 from = timeline.first

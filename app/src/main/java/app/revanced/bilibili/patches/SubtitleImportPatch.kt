@@ -1,10 +1,12 @@
 package app.revanced.bilibili.patches
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.view.View
 import androidx.annotation.Keep
+import androidx.documentfile.provider.DocumentFile
 import app.revanced.bilibili.patches.SubtitleImportPatch.HookInfoProvider.getDanmakuParamsMethod
 import app.revanced.bilibili.patches.SubtitleImportPatch.HookInfoProvider.getDmViewReplyMethod
 import app.revanced.bilibili.patches.SubtitleImportPatch.HookInfoProvider.getInteractLayerService
@@ -49,6 +51,7 @@ object SubtitleImportPatch {
 
     @Keep
     @JvmStatic
+    @SuppressLint("InlinedApi")
     fun onCreateSubtitleWidget(widget: Any, view: View) {
         val importButton = view.findView<View>("biliroaming_import_subtitle")
         if (!Settings.SUBTITLE_IMPORT.boolean) {
@@ -59,22 +62,27 @@ object SubtitleImportPatch {
         val interactLayerService = widget.getInteractLayerService() ?: return
         val widgetService = widget.getWidgetService() ?: return
         importButton.setOnClickListener { button ->
-            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 type = "*/*"
+                putExtra(
+                    Intent.EXTRA_MIME_TYPES,
+                    arrayOf("application/x-subrip", "application/octet-stream", "application/json")
+                )
                 addCategory(Intent.CATEGORY_OPENABLE)
             }
-            ActivityLauncher.with(button.context as Activity).launch(intent) { code, data ->
+            (button.context as Activity).launchCatching(intent) { code, data ->
                 val uri = data?.data
-                if (code != Activity.RESULT_OK || uri == null) return@launch
-                val type = uri.toString().substringAfterLast('.').lowercase()
+                if (code != Activity.RESULT_OK || uri == null) return@launchCatching
+                val type = (DocumentFile.fromSingleUri(Utils.getContext(), uri)?.name
+                    ?: uri.toString()).substringAfterLast('.').lowercase()
                 if (!supportedSubExt.contains(type)) {
                     Utils.runOnMainThread(800L) {
                         Toasts.showShort("字幕导入失败，格式不支持")
                     }
-                    return@launch
+                    return@launchCatching
                 }
                 val dmViewReply = interactLayerService.callMethod(getDanmakuParamsMethod)
-                    ?.callMethodAs<DmViewReply>(getDmViewReplyMethod) ?: return@launch
+                    ?.callMethodAs<DmViewReply>(getDmViewReplyMethod) ?: return@launchCatching
                 val newDmViewReply = DmViewReply.parseFrom(dmViewReply.toByteArray())
                 val subtitle = newDmViewReply.subtitle
                 if (subtitle.subtitlesList.none { it.lan.startsWith("import") }) {
@@ -83,7 +91,7 @@ object SubtitleImportPatch {
                 }
                 readAndConvertSubtitle(uri, type)?.let {
                     Subtitle.importedSubtitles[unique] = it
-                } ?: return@launch
+                } ?: return@launchCatching
                 val newSubtitle = SubtitleItem().apply {
                     val randomId = Random.nextLong()
                     id = randomId
@@ -105,6 +113,8 @@ object SubtitleImportPatch {
                 Utils.runOnMainThread(800L) {
                     Toasts.showShort("字幕导入成功")
                 }
+            }.onFailure {
+                Toasts.showShortWithId("biliroaming_pls_install_file_manager")
             }
         }
     }

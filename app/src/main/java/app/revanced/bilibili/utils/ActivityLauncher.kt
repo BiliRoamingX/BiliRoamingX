@@ -9,6 +9,13 @@ import kotlin.random.Random
 
 typealias ActivityResult = (code: Int, data: Intent?) -> Unit
 
+fun Activity.launch(intent: Intent, result: ActivityResult) {
+    ActivityLauncher.with(this).launch(intent, result)
+}
+
+fun Activity.launchCatching(intent: Intent, result: ActivityResult) =
+    runCatching { launch(intent, result) }
+
 class ActivityLauncher private constructor(private val activity: Activity) {
     companion object {
         private const val TAG_LAUNCHER = "tag_activity_launcher"
