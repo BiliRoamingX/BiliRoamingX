@@ -36,6 +36,10 @@ android {
             }
         }
     }
+    buildFeatures {
+        buildConfig = false
+        resValues = false
+    }
     compileOptions {
         sourceCompatibility(JavaVersion.VERSION_17)
         targetCompatibility(JavaVersion.VERSION_17)
@@ -49,6 +53,9 @@ dependencies {
     implementation(project(mapOf("path" to ":extend")))
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
     implementation("io.github.yubyf:truetypeparser-light:2.1.4")
+    implementation("androidx.documentfile:documentfile:1.0.1") {
+        isTransitive = false
+    }
     compileOnly(project(mapOf("path" to ":dummy")))
     compileOnly("androidx.annotation:annotation:1.7.1")
     compileOnly("androidx.appcompat:appcompat:1.7.0-alpha03")
