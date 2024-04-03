@@ -9,7 +9,7 @@ import org.json.JSONArray
 object VipAds : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
         return Utils.isHd() && Settings.REMOVE_VIP_SECTION.boolean && code.isOk
-                && url.startsWith("https://api.bilibili.com/x/vip/ads/materials")
+                && url.contains("/x/vip/ads/materials")
                 && url.contains("position=3")
     }
 

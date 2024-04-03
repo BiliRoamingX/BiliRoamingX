@@ -7,9 +7,9 @@ import app.revanced.bilibili.utils.Utils
 
 object UnlockEpisodesForPlay : BaseFakeClientRestHook() {
     private val apis = arrayOf(
-        "https://api.bilibili.com/pgc/view/v2/app/season",
-        "https://api.bilibili.com/pgc/view/v2/app/fav/season",
-        "https://api.bilibili.com/pgc/view/v2/app/eps",
+        "/pgc/view/v2/app/season",
+        "/pgc/view/v2/app/fav/season",
+        "/pgc/view/v2/app/eps",
     )
 
     override val fakeToClient: Client
@@ -17,6 +17,6 @@ object UnlockEpisodesForPlay : BaseFakeClientRestHook() {
 
     override fun shouldHookBefore(url: String, headers: Array<String>): Boolean {
         return Settings.UNLOCK_AREA_LIMIT.boolean && Utils.isPlay()
-                && apis.any { url.startsWith(it) }
+                && apis.any { url.contains(it) }
     }
 }

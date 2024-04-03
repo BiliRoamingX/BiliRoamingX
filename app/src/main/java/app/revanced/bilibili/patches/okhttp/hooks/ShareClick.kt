@@ -14,7 +14,7 @@ object ShareClick : ApiHook() {
     private val contentRegex = Regex("(.*)(http\\S*)(.*)")
 
     override fun shouldHook(url: String, code: Int): Boolean {
-        return code.isOk && url.startsWith("https://api.bilibili.com/x/share/click")
+        return code.isOk && url.contains("/x/share/click")
                 && (Settings.PURIFY_SHARE.boolean || Settings.FUCK_MINI_PROGRAM.boolean)
     }
 

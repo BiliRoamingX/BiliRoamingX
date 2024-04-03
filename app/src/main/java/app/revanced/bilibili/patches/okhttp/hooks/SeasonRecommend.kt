@@ -9,7 +9,7 @@ import app.revanced.bilibili.utils.toJSONObject
 object SeasonRecommend : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
         return Settings.REMOVE_RELATE_PROMOTE.boolean
-                && url.startsWith("https://api.bilibili.com/pgc/season/app/related/recommend")
+                && url.contains("/pgc/season/app/related/recommend")
                 && code.isOk
     }
 

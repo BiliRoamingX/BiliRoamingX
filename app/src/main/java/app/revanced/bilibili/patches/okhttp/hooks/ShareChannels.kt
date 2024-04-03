@@ -15,7 +15,7 @@ object ShareChannels : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
         // start from 7.38.0, switched to bson and gson type adapter, so hook response directly
         return (Settings.UNLOCK_PLAY_LIMIT.boolean || Settings.UNLOCK_AREA_LIMIT.boolean)
-                && url.startsWith("https://api.bilibili.com/x/share/channels")
+                && url.contains("/x/share/channels")
                 && code.isOk
     }
 

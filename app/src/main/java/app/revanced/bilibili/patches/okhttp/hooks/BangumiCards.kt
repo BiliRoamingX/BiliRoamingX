@@ -6,8 +6,8 @@ import app.revanced.bilibili.settings.Settings
 object BangumiCards : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
         return Settings.BLOCK_UP_RCMD_ADS.boolean
-                && (url.startsWith("https://api.bilibili.com/pgc/season/player/cards")
-                || url.startsWith("https://api.bilibili.com/pgc/season/player/ogv/cards"))
+                && (url.contains("/pgc/season/player/cards")
+                || url.contains("/pgc/season/player/ogv/cards"))
                 && code.isOk
     }
 

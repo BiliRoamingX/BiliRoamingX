@@ -15,7 +15,7 @@ import org.json.JSONObject
 object Eps : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
         return Settings.UNLOCK_AREA_LIMIT.boolean
-                && url.startsWith("https://api.bilibili.com/pgc/view/v2/app/eps")
+                && url.contains("/pgc/view/v2/app/eps")
                 && code.isOk
     }
 

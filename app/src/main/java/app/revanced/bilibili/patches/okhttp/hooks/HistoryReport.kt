@@ -12,7 +12,7 @@ object HistoryReport : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
         return code.isOk && Settings.UNLOCK_AREA_LIMIT.boolean
                 && Settings.SAVE_TH_HISTORY.boolean
-                && url == "https://api.bilibili.com/x/v2/history/report"
+                && url.contains("/x/v2/history/report")
     }
 
     override fun hook(url: String, code: Int, request: String, response: String): String {

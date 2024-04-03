@@ -17,7 +17,7 @@ object Media : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
         return Settings.UNLOCK_AREA_LIMIT.boolean
                 && Versions.ge7_39_0()
-                && url.startsWith("https://api.bilibili.com/pgc/view/v2/app/media")
+                && url.contains("/pgc/view/v2/app/media")
                 && code.isOk
     }
 
