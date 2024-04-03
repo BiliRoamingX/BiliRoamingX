@@ -11,7 +11,7 @@ import org.json.JSONObject
 object SearchAll : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
         return code.isOk && (Settings.SEARCH_BANGUMI.boolean || Settings.SEARCH_MOVIE.boolean)
-                && url.startsWith("https://app.bilibili.com/x/v2/search?")
+                && url.contains("/x/v2/search?")
     }
 
     override fun hook(url: String, code: Int, request: String, response: String): String {

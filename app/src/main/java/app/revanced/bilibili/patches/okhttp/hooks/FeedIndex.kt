@@ -7,8 +7,7 @@ import app.revanced.bilibili.utils.toJSONObject
 
 object FeedIndex : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
-        return code.isOk && Versions.ge7_62_0()
-                && url.startsWith("https://app.bilibili.com/x/v2/feed/index?")
+        return code.isOk && Versions.ge7_62_0() && url.contains("/x/v2/feed/index?")
     }
 
     override fun hook(url: String, code: Int, request: String, response: String): String {

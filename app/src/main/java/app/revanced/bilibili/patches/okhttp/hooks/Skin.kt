@@ -11,7 +11,7 @@ object Skin : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
         return Settings.SKIN.boolean
                 && Settings.SKIN_JSON.string.isNotEmpty()
-                && url.startsWith("https://app.bilibili.com/x/resource/show/skin")
+                && url.contains("/x/resource/show/skin")
                 && code.isOk
     }
 

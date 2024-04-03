@@ -9,7 +9,7 @@ import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook
  */
 object SearchByType : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
-        return code.isOk && url.startsWith("https://app.bilibili.com/x/v2/search/type") && url.run {
+        return code.isOk && url.contains("/x/v2/search/type") && url.run {
             Uri.parse(this).getQueryParameter("type")?.let {
                 BangumiSeasonHook.extraSearchHandleable(it.toInt())
             } ?: false

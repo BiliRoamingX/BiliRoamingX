@@ -44,7 +44,7 @@ object Upgrade : ApiHook() {
 
     override fun shouldHook(url: String, code: Int): Boolean {
         return (Settings.BLOCK_UPDATE.boolean || customUpdate(fromSelf = fromSelf))
-                && url.startsWith("https://app.bilibili.com/x/v2/version/fawkes/upgrade")
+                && url.contains("/x/v2/version/fawkes/upgrade")
     }
 
     override fun hook(url: String, code: Int, request: String, response: String): String {

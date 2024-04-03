@@ -7,9 +7,7 @@ import app.revanced.bilibili.settings.Settings
 
 object Space : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
-        return Settings.FIX_SPACE.boolean
-                && url.startsWith("https://app.bilibili.com/x/v2/space?")
-                && code.isOk
+        return Settings.FIX_SPACE.boolean && url.contains("/x/v2/space?") && code.isOk
     }
 
     override fun hook(url: String, code: Int, request: String, response: String): String {
