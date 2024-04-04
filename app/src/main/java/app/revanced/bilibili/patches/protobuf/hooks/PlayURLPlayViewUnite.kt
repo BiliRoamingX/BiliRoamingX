@@ -1,5 +1,7 @@
 package app.revanced.bilibili.patches.protobuf.hooks
 
+import app.revanced.bilibili.meta.VideoInfo
+import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.patches.protobuf.BangumiPlayUrlHook
 import app.revanced.bilibili.patches.protobuf.MossHook
 import com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReply
@@ -21,5 +23,14 @@ object PlayURLPlayViewUnite : MossHook<PlayViewUniteReq, PlayViewUniteReply>() {
         req: PlayViewUniteReq,
         reply: PlayViewUniteReply?,
         error: MossException?
-    ) = BangumiPlayUrlHook.hookPlayViewUniteAfter(req, reply, error)
+    ): PlayViewUniteReply? {
+        val newReply = BangumiPlayUrlHook.hookPlayViewUniteAfter(req, reply, error)
+        if (newReply != null && !BangumiPlayUrlHook.isDownloadUnite) {
+            val cid = newReply.playArc.cid
+            VideoInfoHolder.updateCurrent { videoInfo ->
+                videoInfo?.apply { this.cid = cid } ?: VideoInfo(cid, null)
+            }
+        }
+        return newReply
+    }
 }

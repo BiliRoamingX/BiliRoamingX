@@ -9,7 +9,7 @@ import app.revanced.bilibili.utils.runCatchingOrNull
 import java.util.concurrent.TimeUnit
 
 object Subtitle : ApiHook() {
-    val importedSubtitles = mutableMapOf<Int, String>()
+    var importedSubtitles = Pair<Long, MutableList<String>>(0L, mutableListOf())
 
     override fun shouldHook(url: String, code: Int): Boolean {
         return code.isOk && (url.contains("zh_converter")
@@ -60,8 +60,8 @@ object Subtitle : ApiHook() {
                 LogHelper.error({ "Subtitle translate from en to cn failed" }, it)
             }.getOrDefault(SubtitleHelper.errorResponse("字幕翻译失败，请重试"))
         } else if (converter == "import") {
-            val unique = uri.getQueryParameter("import_unique")?.toInt() ?: 1
-            newResponse = importedSubtitles[unique]
+            val index = uri.getQueryParameter("import_index")?.toInt() ?: 0
+            newResponse = importedSubtitles.second.getOrNull(index)
                 ?: SubtitleHelper.errorResponse("暂无导入字幕")
         }
         return newResponse

@@ -27,7 +27,7 @@ object Media : ApiHook() {
             && (Area.TH == seasonAreasCache[mediaId] || (cachePrefs.contains(mediaId)
                     && Area.TH == Area.of(cachePrefs.getString(mediaId, null))))
         ) {
-            val (newCode, newResult) = getSeason(mapOf("season_id" to mediaId))
+            val (newCode, newResult) = getSeason(seasonId = mediaId?.toLong() ?: 0L)
                 ?.toJSONObject()?.let {
                     it.optInt("code", FAIL_CODE) to it.optJSONObject("result")
                 } ?: (FAIL_CODE to null)

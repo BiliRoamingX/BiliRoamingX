@@ -1,13 +1,12 @@
 package app.revanced.bilibili.patches.protobuf
 
-import android.net.Uri
 import app.revanced.bilibili.api.BiliRoamingApi.getPlayUrl
 import app.revanced.bilibili.api.BiliRoamingApi.getSeason
 import app.revanced.bilibili.api.CustomServerException
 import app.revanced.bilibili.patches.TrialQualityPatch
 import app.revanced.bilibili.patches.VideoQualityPatch
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.clipInfoCache
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
+import app.revanced.bilibili.patches.main.VideoInfoHolder
+import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.bangumiInfoCache
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import app.revanced.bilibili.utils.UposReplacer.isPCdnUpos
@@ -74,10 +73,12 @@ object BangumiPlayUrlHook {
         ConfType.RECORDSCREEN.number,
     )
 
-    private var isDownloadPGC = false
+    var isDownloadPGC = false
+        private set
     private var allowDownloadPGC = false
 
-    private var isDownloadUnite = false
+    var isDownloadUnite = false
+        private set
     private var allowDownloadUnite = false
 
     @JvmStatic
@@ -120,11 +121,19 @@ object BangumiPlayUrlHook {
         val response = reply ?: PlayViewReply()
         if (Settings.UNLOCK_AREA_LIMIT.boolean && needProxy(response)) {
             return try {
-                val seasonId = req.seasonId.toString()
+                val seasonId = req.seasonId.takeIf { it != 0L }
+                    ?: bangumiInfoCache.firstNotNullOfOrNull {
+                        if (it.value.keys.contains(req.epId)) it.key else null
+                    } ?: VideoInfoHolder.currentSeason()?.id ?: 0L
                 val (thaiSeason, thaiEp) = getThaiSeason(seasonId, req.epId)
-                lastSeasonInfo["season_id"] = seasonId
-                lastSeasonInfo["title"] = response.business.episodeInfo.seasonInfo.title
-                val content = getPlayUrl(reconstructQuery(req, response, thaiEp))
+                val seasonTitle = response.business.episodeInfo.seasonInfo.title.ifEmpty {
+                    VideoInfoHolder.currentSeason()?.title.orEmpty()
+                }
+                val content = getPlayUrl(
+                    reconstructQuery(req, response, thaiEp),
+                    seasonId = seasonId,
+                    seasonTitle = seasonTitle
+                )
                 if (content == null) {
                     throw CustomServerException(mapOf("未知错误" to "请检查哔哩漫游设置中解析服务器设置。"))
                 } else {
@@ -159,17 +168,25 @@ object BangumiPlayUrlHook {
         if (reply != null && typeUrl != PGC_ANY_MODEL_TYPE_URL)
             if (error != null) throw error else return reply
         val extraContent = req.extraContentMap
-        val seasonId = extraContent.getOrDefault("season_id", "0")
         val reqEpId = extraContent.getOrDefault("ep_id", "0").toLong()
-        if (seasonId == "0" && reqEpId == 0L)
+        val seasonId = extraContent.getOrDefault("season_id", "0").toLong()
+            .takeIf { it != 0L } ?: bangumiInfoCache.firstNotNullOfOrNull {
+            if (it.value.keys.contains(reqEpId)) it.key else null
+        } ?: VideoInfoHolder.currentSeason()?.id ?: 0L
+        if (seasonId == 0L && reqEpId == 0L)
             if (error != null) throw error else return reply
         val supplement = PlayViewReply.parseFrom(supplementAny.value.toByteArray())
         if (Settings.UNLOCK_AREA_LIMIT.boolean && needProxyUnite(response, supplement)) {
             return try {
                 val (thaiSeason, thaiEp) = getThaiSeason(seasonId, reqEpId)
-                lastSeasonInfo["season_id"] = seasonId
-                lastSeasonInfo["title"] = supplement.business.episodeInfo.seasonInfo.title
-                val content = getPlayUrl(reconstructQueryUnite(req, supplement, thaiEp))
+                val seasonTitle = supplement.business.episodeInfo.seasonInfo.title.ifEmpty {
+                    VideoInfoHolder.currentSeason()?.title.orEmpty()
+                }
+                val content = getPlayUrl(
+                    reconstructQueryUnite(req, supplement, thaiEp),
+                    seasonId = seasonId,
+                    seasonTitle = seasonTitle
+                )
                 if (content == null) {
                     throw CustomServerException(mapOf("未知错误" to "请检查哔哩漫游设置中解析服务器设置。"))
                 } else {
@@ -259,11 +276,10 @@ object BangumiPlayUrlHook {
     }
 
     private fun getThaiSeason(
-        seasonId: String, reqEpId: Long
+        seasonId: Long, reqEpId: Long
     ): Pair<Lazy<JSONObject>, Lazy<JSONObject>> {
         val season = lazy {
-            getSeason(mapOf("season_id" to seasonId, "ep_id" to reqEpId.toString()))
-                ?.toJSONObject()?.optJSONObject("result")
+            getSeason(seasonId, reqEpId)?.toJSONObject()?.optJSONObject("result")
                 ?: throw CustomServerException(mapOf("解析服务器错误" to "无法获取剧集信息"))
         }
         val ep = lazy {
@@ -365,42 +381,36 @@ object BangumiPlayUrlHook {
         req: PlayViewReq,
         resp: PlayViewReply,
         thaiEp: Lazy<JSONObject>,
-    ): String? {
+    ) = buildMap {
         val episodeInfo = resp.business.episodeInfo
-        return Uri.Builder().run {
-            appendQueryParameter("ep_id", req.epId.let {
-                if (it != 0L) it else episodeInfo.epId.toLong()
-            }.let {
-                if (it != 0L) it else thaiEp.value.optLong("ep_id")
-            }.toString())
-            appendQueryParameter("qn", req.qn.toString())
-            appendQueryParameter("fnver", req.fnver.toString())
-            appendQueryParameter("fnval", req.fnval.toString())
-            appendQueryParameter("force_host", req.forceHost.toString())
-            appendQueryParameter("fourk", if (req.fourk) "1" else "0")
-            build()
-        }.query
+        put("ep_id", req.epId.let {
+            if (it != 0L) it else episodeInfo.epId.toLong()
+        }.let {
+            if (it != 0L) it else thaiEp.value.optLong("ep_id")
+        }.toString())
+        put("qn", req.qn.toString())
+        put("fnver", req.fnver.toString())
+        put("fnval", req.fnval.toString())
+        put("force_host", req.forceHost.toString())
+        put("fourk", if (req.fourk) "1" else "0")
     }
 
     private fun reconstructQueryUnite(
         req: PlayViewUniteReq,
         supplement: PlayViewReply,
         thaiEp: Lazy<JSONObject>,
-    ): String? {
+    ) = buildMap {
         val episodeInfo = supplement.business.episodeInfo
-        return Uri.Builder().run {
-            appendQueryParameter("ep_id", req.extraContentMap["ep_id"].let {
-                if (!it.isNullOrEmpty() && it != "0") it.toLong() else episodeInfo.epId.toLong()
-            }.let {
-                if (it != 0L) it else thaiEp.value.optLong("ep_id")
-            }.toString())
-            appendQueryParameter("qn", req.vod.qn.toString())
-            appendQueryParameter("fnver", req.vod.fnver.toString())
-            appendQueryParameter("fnval", req.vod.fnval.toString())
-            appendQueryParameter("force_host", req.vod.forceHost.toString())
-            appendQueryParameter("fourk", if (req.vod.fourk) "1" else "0")
-            build()
-        }.query
+        put("ep_id", req.extraContentMap["ep_id"].let {
+            if (!it.isNullOrEmpty() && it != "0") it.toLong() else episodeInfo.epId.toLong()
+        }.let {
+            if (it != 0L) it else thaiEp.value.optLong("ep_id")
+        }.toString())
+        put("qn", req.vod.qn.toString())
+        put("fnver", req.vod.fnver.toString())
+        put("fnval", req.vod.fnval.toString())
+        put("force_host", req.vod.forceHost.toString())
+        put("fourk", if (req.vod.fourk) "1" else "0")
     }
 
     private fun showPlayerError(response: PlayViewReply, message: String) =
@@ -887,8 +897,8 @@ object BangumiPlayUrlHook {
                 }
                 if (Settings.ALLOW_MINI_PLAY.boolean)
                     inlineType = InlineType.TYPE_WHOLE
-                val clipInfo = clipInfoCache[seasonId.toString()]
-                    ?.get(epId.toString())
+                val clipInfo = bangumiInfoCache[seasonId.toLong()]
+                    ?.get(epId.toLong())?.clipInfo
                 if (clipInfo != null) {
                     clipInfo.optJSONObject("op")?.let { op ->
                         addClipInfo(ClipInfo().apply {

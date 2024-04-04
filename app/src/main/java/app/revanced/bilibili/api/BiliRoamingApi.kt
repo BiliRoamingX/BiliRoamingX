@@ -6,7 +6,6 @@ import android.os.Build
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
@@ -28,7 +27,7 @@ class CustomServerException(private val errors: Map<String, String>) : Throwable
 }
 
 class SeasonCache(
-    var seasonId: Int,
+    var seasonId: Long,
     var seasonJson: AtomicReference<String>,
     var latch: CountDownLatch,
     var valid: AtomicBoolean = AtomicBoolean(true)
@@ -58,8 +57,12 @@ object BiliRoamingApi {
         Regex("""[\w\W]*window\.__INITIAL_STATE__=(.*);\(function\(\)[\w\W]*""")
 
     @JvmStatic
-    fun getPlayUrl(queryString: String?, priorityArea: Array<Area>? = null): String? {
-        queryString ?: return null
+    fun getPlayUrl(
+        query: Map<String, String>,
+        priorityArea: Array<Area>? = null,
+        seasonId: Long = 0L,
+        seasonTitle: String = "",
+    ): String? {
         val twUrl = Settings.TW_SERVER.string
         val hkUrl = Settings.HK_SERVER.string
         val cnUrl = Settings.CN_SERVER.string
@@ -76,25 +79,10 @@ object BiliRoamingApi {
         ).filter { (k, v) -> k != country && v.isNotEmpty() }.let { hostList.putAll(it) }
         if (hostList.isEmpty()) return null
 
-        val epIdStartIdx = queryString.indexOf("ep_id=")
-        if (epIdStartIdx == -1) return null
-        val epIdEndIdx = queryString.indexOf("&", epIdStartIdx)
-        if (epIdEndIdx == -1) return null
-        val epId = queryString.substring(epIdStartIdx + 6, epIdEndIdx)
-        if (epId.isEmpty()) return null
+        val epId = query["ep_id"] ?: return null
+        LogHelper.debug { "unlockBangumi, getPlayUrl, epId: $epId, seasonId: $seasonId, seasonTitle: $seasonTitle" }
 
-        val cacheSeasonId = lastSeasonInfo["season_id"]
-        val cacheTitle = lastSeasonInfo["title"]
-        if (lastSeasonInfo["ep_ids"].let { it == null || epId !in it })
-            lastSeasonInfo.clear()
-        if (cacheSeasonId.let { it != null && it != "0" })
-            lastSeasonInfo["season_id"] = cacheSeasonId
-        else lastSeasonInfo.remove("season_id")
-        if (!cacheTitle.isNullOrEmpty())
-            lastSeasonInfo["title"] = cacheTitle
-        else lastSeasonInfo.remove("title")
-
-        lastSeasonInfo["title"]?.run {
+        seasonTitle.run {
             if (contains(hkRegex) && hkUrl.isNotEmpty()) hostList[Area.HK]
             if (contains(twRegex) && twUrl.isNotEmpty()) hostList[Area.TW]
             if (contains(thRegex) && thUrl.isNotEmpty()) hostList[Area.TH]
@@ -104,12 +92,12 @@ object BiliRoamingApi {
             if (hostList.containsKey(area)) hostList[area]
         }
 
-        val seasonId = lastSeasonInfo["season_id"] ?: "ep$epId"
+        val cacheId = seasonId.takeIf { it != 0L }?.toString() ?: "ep$epId"
 
-        if (cachePrefs.contains(seasonId)) {
-            val cachedArea = Area.of(cachePrefs.getString(seasonId, null))
+        if (cachePrefs.contains(cacheId)) {
+            val cachedArea = Area.of(cachePrefs.getString(cacheId, null))
             if (hostList.containsKey(cachedArea)) {
-                LogHelper.debug { "use cached area $cachedArea for $seasonId" }
+                LogHelper.debug { "use cached area $cachedArea for $cacheId" }
                 hostList[cachedArea]
             }
         }
@@ -133,21 +121,15 @@ object BiliRoamingApi {
             val uri = Uri.Builder()
                 .scheme("https")
                 .encodedAuthority(host + path)
-                .encodedQuery(signQuery(queryString, extraMap))
+                .encodedQuery(signQuery(query, extraMap))
                 .toString()
             getContent(uri)?.let {
                 LogHelper.debug { "use server $area $host for playurl" }
                 if (it.contains("\"code\":0")) {
-                    seasonAreasCache[seasonId] = area
-                    if (!cachePrefs.contains(seasonId)
-                        || cachePrefs.getString(seasonId, null) != area.value
-                    ) {
-                        cachePrefs.edit {
-                            putString(seasonId, area.value)
-                            lastSeasonInfo["ep_ids"]?.split(";")
-                                ?.forEach { epId -> putString("ep$epId", area.value) }
-                        }
-                    }
+                    seasonAreasCache[cacheId] = area
+                    if (!cachePrefs.contains(cacheId)
+                        || cachePrefs.getString(cacheId, null) != area.value
+                    ) cachePrefs.edit { putString(cacheId, area.value) }
                     return if (area == Area.TH) fixThailandPlayurl(it) else it
                 }
                 val message = runCatchingOrNull { JSONObject(it) }?.optString("message")
@@ -208,15 +190,14 @@ object BiliRoamingApi {
     }
 
     @JvmStatic
-    fun getSeason(info: Map<String, String?>): String? {
+    fun getSeason(seasonId: Long = 0L, epId: Long = 0L): String? {
         val thUrl = Settings.TH_SERVER.string
         if (thUrl.isEmpty()) {
             Toasts.showShort("请配置泰区解析服务器地址")
             return null
         }
-        val seasonId = info.getOrDefault("season_id", null)?.toInt() ?: 0
         val cache = seasonCache.get()
-        val seasonCache = if (seasonId != 0) {
+        val seasonCache = if (seasonId != 0L) {
             if (cache?.seasonId == seasonId && cache.valid.get()) {
                 cache.latch.await()
                 return cache.seasonJson.get()
@@ -226,14 +207,17 @@ object BiliRoamingApi {
                 }
             }
         } else null
+        LogHelper.debug { "unlockBangumi, getSeason, seasonId: $seasonId, epId: $epId" }
         val builder = Uri.Builder().scheme("https")
             .encodedAuthority(thUrl + THAILAND_PATH_SEASON)
             .appendQueryParameter("s_locale", "zh_SG")
             .appendQueryParameter("access_key", Utils.getAccessKey())
             .appendQueryParameter("mobi_app", "bstar_a")
             .appendQueryParameter("build", "1080003")
-        info.filterNot { it.value.isNullOrEmpty() }
-            .forEach { builder.appendQueryParameter(it.key, it.value) }
+        if (seasonId != 0L)
+            builder.appendQueryParameter("season_id", seasonId.toString())
+        if (epId != 0L)
+            builder.appendQueryParameter("ep_id", epId.toString())
         var thSeason: JSONObject? = null
         var hidden = false
         val seasonJson = getContent(builder.toString())?.toJSONObject()?.also {
@@ -263,9 +247,9 @@ object BiliRoamingApi {
     }
 
     @JvmStatic
-    private fun getHiddenSeason(seasonId: Int): String? {
+    private fun getHiddenSeason(seasonId: Long): String? {
         // few cn bangumi maybe hidden for oversea ip, eg. 6423(品酒要在成为夫妻后)
-        if (seasonId == 0) return null
+        if (seasonId == 0L) return null
         val result = getMediaInfo(seasonId)?.toJSONObject()
             ?.optJSONObject("mediaInfo") ?: return null
         val sectionResult = getSection(seasonId)?.takeIf {
@@ -417,13 +401,13 @@ object BiliRoamingApi {
     }
 
     @JvmStatic
-    private fun getMediaInfo(mediaId: Int): String? {
+    private fun getMediaInfo(mediaId: Long): String? {
         val content = getContent(BILI_MEDIA_URL + mediaId) ?: return null
         return mediaSeasonRegex.matchEntire(content)?.groupValues?.get(1)
     }
 
     @JvmStatic
-    private fun getSection(seasonId: Int): String? {
+    private fun getSection(seasonId: Long): String? {
         val url = Uri.Builder()
             .scheme("https")
             .encodedAuthority(BILI_SECTION_URL)
@@ -433,7 +417,7 @@ object BiliRoamingApi {
     }
 
     @JvmStatic
-    private fun getUserStatus(seasonId: Int): String? {
+    private fun getUserStatus(seasonId: Long): String? {
         val url = Uri.Builder()
             .scheme("https")
             .encodedAuthority(BILI_USER_STATUS_URL)
@@ -444,7 +428,7 @@ object BiliRoamingApi {
     }
 
     @JvmStatic
-    private fun getReviewInfo(mediaId: Int): String? {
+    private fun getReviewInfo(mediaId: Long): String? {
         val url = Uri.Builder()
             .scheme("https")
             .encodedAuthority(BILI_REVIEW_URL)
@@ -455,7 +439,7 @@ object BiliRoamingApi {
     }
 
     @JvmStatic
-    private fun getAppMediaInfo(mediaId: Int): String? {
+    private fun getAppMediaInfo(mediaId: Long): String? {
         val query = mapOf("media_id" to mediaId.toString(), "access_key" to Utils.getAccessKey())
         val url = Uri.Builder()
             .scheme("https")
@@ -466,14 +450,14 @@ object BiliRoamingApi {
     }
 
     @JvmStatic
-    fun getThailandSubtitles(epId: String?): String? {
+    fun getThailandSubtitles(epId: Long): String? {
         LogHelper.debug { "Getting subtitle $epId form thailand" }
-        epId ?: return null
+        epId.takeIf { it != 0L } ?: return null
         val thUrl = Settings.TH_SERVER.string.ifEmpty { return null }
         val uri = Uri.Builder()
             .scheme("https")
             .encodedAuthority(thUrl + THAILAND_PATH_SUBTITLES)
-            .appendQueryParameter("ep_id", epId)
+            .appendQueryParameter("ep_id", epId.toString())
             .toString()
         return getContent(uri)
     }

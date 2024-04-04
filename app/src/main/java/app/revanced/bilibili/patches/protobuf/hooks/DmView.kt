@@ -2,8 +2,9 @@ package app.revanced.bilibili.patches.protobuf.hooks
 
 import android.net.Uri
 import app.revanced.bilibili.api.BiliRoamingApi.getThailandSubtitles
+import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.bangumiInfoCache
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.subtitlesCache
+import app.revanced.bilibili.patches.okhttp.hooks.Subtitle
 import app.revanced.bilibili.patches.protobuf.MossHook
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
@@ -43,18 +44,19 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
         val extraSubtitles = ArrayList<SubtitleItem>()
         if (Settings.UNLOCK_AREA_LIMIT.boolean && Settings.TH_SERVER.string.isNotEmpty()) {
             // when thailand, epId equals oid(cid), seasonId equals pid(aid)
-            val epId = dmViewReq.oid.toString()
-            val seasonId = dmViewReq.pid.toString()
+            val epId = dmViewReq.oid
+            val seasonId = dmViewReq.pid
+            val cacheId = seasonId.toString()
             val seasonAreasCache = seasonAreasCache
-            val sArea = seasonAreasCache[seasonId]
+            val sArea = seasonAreasCache[cacheId]
             val epArea = seasonAreasCache["ep$epId"]
             if (Area.TH.let { it == sArea || it == epArea } ||
-                (cachePrefs.contains(seasonId) && Area.TH == Area.of(
-                    cachePrefs.getString(seasonId, null)
+                (cachePrefs.contains(cacheId) && Area.TH == Area.of(
+                    cachePrefs.getString(cacheId, null)
                 )) || (cachePrefs.contains("ep$epId") && Area.TH == Area.of(
                     cachePrefs.getString("ep$epId", null)
                 ))) {
-                val subtitles = subtitlesCache[seasonId]?.get(epId) ?: run {
+                val subtitles = bangumiInfoCache[seasonId]?.get(epId)?.subtitles ?: run {
                     val res = getThailandSubtitles(epId)?.toJSONObject()
                     if (res != null && res.optInt("code") == 0) {
                         res.optJSONObject("data")
@@ -110,6 +112,16 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
         }
         if (extraSubtitles.isNotEmpty())
             result.subtitle.addAllSubtitles(extraSubtitles)
+        val subtitle = result.subtitle
+        val (cid, importedSubtitles) = Subtitle.importedSubtitles
+        if (cid == dmViewReq.oid && subtitle.subtitlesList.isNotEmpty() && importedSubtitles.isNotEmpty()) {
+            importedSubtitles.indices.forEach { index ->
+                newImportSubtitle(index, subtitle)
+                    ?.let { subtitle.addSubtitles(it) }
+            }
+        } else if (cid != dmViewReq.oid) {
+            Subtitle.importedSubtitles = dmViewReq.oid to mutableListOf()
+        }
         return result
     }
 
@@ -162,5 +174,28 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
             }.let { subList.add(it) }
         }
         return subList
+    }
+
+    fun newImportSubtitle(index: Int, subtitle: VideoSubtitle): SubtitleItem? {
+        val order = index + 1
+        val importLan = "import${order}"
+        val subtitles = subtitle.subtitlesList
+        if (subtitles.any { it.lan == importLan })
+            return null
+        return SubtitleItem().apply {
+            val baseId = 114514L
+            val delegateUrl = subtitles.find { s ->
+                s.subtitleUrl.let { it.contains("aisubtitle") || it.contains("bstarstatic") }
+            }?.subtitleUrl ?: subtitles.first().subtitleUrl
+            id = baseId + index
+            idStr = id.toString()
+            lan = importLan
+            lanDoc = "漫游导入${order}"
+            lanDocBrief = "导入"
+            subtitleUrl = Uri.parse(delegateUrl).buildUpon()
+                .appendQueryParameter("zh_converter", "import")
+                .appendQueryParameter("import_index", index.toString())
+                .toString()
+        }
     }
 }

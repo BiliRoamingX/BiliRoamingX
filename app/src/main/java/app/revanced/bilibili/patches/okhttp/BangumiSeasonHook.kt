@@ -10,6 +10,7 @@ import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
 import app.revanced.bilibili.api.BiliRoamingApi.getAreaSearchBangumi
 import app.revanced.bilibili.api.BiliRoamingApi.getSeason
+import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import com.bapis.bilibili.pagination.PaginationReply
@@ -28,10 +29,9 @@ import kotlin.contracts.contract
 
 data class SearchType(val area: Area, val text: String, val type: String, val typeStr: String)
 
-object BangumiSeasonHook {
-    @JvmStatic
-    val lastSeasonInfo = hashMapOf<String, String?>()
+data class EpisodeInfo(val subtitles: JSONArray?, val clipInfo: JSONObject?)
 
+object BangumiSeasonHook {
     @JvmStatic
     val seasonAreasCache = object : LinkedHashMap<String, Area>(8, 1.0F, true) {
         override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, Area>): Boolean {
@@ -40,15 +40,8 @@ object BangumiSeasonHook {
     }
 
     @JvmStatic
-    val subtitlesCache = object : LinkedHashMap<String, HashMap<String, JSONArray>>(8, 1.0F, true) {
-        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, HashMap<String, JSONArray>>): Boolean {
-            return size > 6
-        }
-    }
-
-    @JvmStatic
-    val clipInfoCache = object : LinkedHashMap<String, HashMap<String, JSONObject>>(8, 1.0F, true) {
-        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, HashMap<String, JSONObject>>): Boolean {
+    val bangumiInfoCache = object : LinkedHashMap<Long, HashMap<Long, EpisodeInfo>>(8, 1.0F, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<Long, HashMap<Long, EpisodeInfo>>): Boolean {
             return size > 6
         }
     }
@@ -68,11 +61,6 @@ object BangumiSeasonHook {
         1919 to SearchType(Area.HK, "港", "7", "bangumi"),
         810 to SearchType(Area.TW, "台", "7", "bangumi")
     )
-
-    const val overseaTestParams =
-        "cid=120453316&ep_id=285145&otype=json&fnval=16&module=pgc&platform=android&test=true"
-    const val mainlandTestParams =
-        "cid=13073143&ep_id=100615&otype=json&fnval=16&module=pgc&platform=android&test=true"
 
     init {
         Settings.registerPreferenceChangeListener { _, key ->
@@ -96,15 +84,12 @@ object BangumiSeasonHook {
         } else if (data == null || code != 0) {
             return response
         }
-        lastSeasonInfo.clear()
         if (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean)
             data.put("activity_entrance", JSONArray())
         if (Settings.BLOCK_ACTIVITY_TAB.boolean)
             data.remove("activity_tab")
         if (!Settings.UNLOCK_AREA_LIMIT.boolean)
             return jo.toString()
-        lastSeasonInfo["title"] = data.optString("title")
-        lastSeasonInfo["season_id"] = data.optString("season_id")
         data.optJSONObject("rights")?.run {
             put("area_limit", 0)
             if (Settings.ALLOW_DOWNLOAD.boolean) {
@@ -135,44 +120,32 @@ object BangumiSeasonHook {
             if (Settings.ALLOW_DOWNLOAD.boolean)
                 put("allow_download", 1)
         }
-        if (episode.has("ep_id")) {
-            val epId = episode.optString("ep_id")
-            lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
-        }
     }
 
     private fun unlockThaiBangumi(url: String, response: String): String {
-        Uri.parse(url)?.run {
-            getQueryParameter("ep_id")?.let {
-                lastSeasonInfo.clear()
-                lastSeasonInfo["ep_id"] = it
-            }
-            getQueryParameter("season_id")?.let {
-                lastSeasonInfo.clear()
-                lastSeasonInfo["season_id"] = it
-            }
-        }
-        LogHelper.info { "Info: $lastSeasonInfo" }
-        val (newCode, newResult) = getSeason(lastSeasonInfo)?.toJSONObject()?.let {
+        val uri = Uri.parse(url)
+        val epId = uri.getQueryParameter("ep_id")?.toLongOrNull() ?: 0L
+        val seasonId = uri.getQueryParameter("season_id")?.toLongOrNull()
+            ?.takeIf { it != 0L } ?: bangumiInfoCache.firstNotNullOfOrNull {
+            if (it.value.keys.contains(epId)) it.key else null
+        } ?: VideoInfoHolder.currentSeason()?.id ?: 0L
+        val (newCode, newResult) = getSeason(seasonId, epId)?.toJSONObject()?.let {
             it.optInt("code", FAIL_CODE) to it.optJSONObject("result")
         } ?: (FAIL_CODE to null)
         LogHelper.debug { "unlockThaiBangumi, old, newCode: $newCode, newResult: $newResult" }
         if (isBangumiWithWatchPermission(newResult, newCode)) {
-            val seasonId = newResult.optString("season_id")
-            lastSeasonInfo["title"] = newResult.optString("title")
-            lastSeasonInfo["season_id"] = seasonId
+            val sid = newResult.optLong("season_id")
             newResult.optJSONObject("rights")?.apply {
                 if (has("allow_comment") && getInt("allow_comment") == 0) {
                     remove("allow_comment")
                     put("area_limit", 1)
-                    lastSeasonInfo["allow_comment"] = "0"
                     setCommentInvalidFragmentContent()
                 }
             }
             newResult.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
                 it.optJSONObject("data")?.optJSONArray("episodes").orEmpty()
                     .asSequence<JSONObject>()
-            }.forEach { onEachThaiEpisode(it, seasonId) }
+            }.forEach { onEachThaiEpisode(it, sid) }
             if (Settings.ALLOW_DOWNLOAD.boolean) {
                 newResult.optJSONObject("rights")?.run {
                     put("allow_download", 1)
@@ -196,22 +169,16 @@ object BangumiSeasonHook {
         } ?: run { code != FAIL_CODE && newResult != null }
     }
 
-    private fun onEachThaiEpisode(episode: JSONObject, seasonId: String) {
+    private fun onEachThaiEpisode(episode: JSONObject, seasonId: Long) {
         if (Settings.ALLOW_DOWNLOAD.boolean)
             episode.optJSONObject("rights")
                 ?.put("allow_download", 1)
         if (episode.has("ep_id")) {
-            val epId = episode.optString("ep_id")
-            lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
-            episode.optJSONArray("subtitles")?.takeIf { it.length() > 0 }?.let {
-                subtitlesCache.compute(seasonId) { _, v ->
-                    (v ?: hashMapOf()).apply { this[epId] = it }
-                }
-            }
-            episode.optJSONObject("jump")?.let {
-                clipInfoCache.compute(seasonId) { _, v ->
-                    (v ?: hashMapOf()).apply { this[epId] = it }
-                }
+            val epId = episode.optLong("ep_id")
+            val subtitles = episode.optJSONArray("subtitles")
+            val clipInfo = episode.optJSONObject("jump")
+            bangumiInfoCache.compute(seasonId) { _, v ->
+                (v ?: hashMapOf()).apply { this[epId] = EpisodeInfo(subtitles, clipInfo) }
             }
         }
     }
@@ -505,7 +472,6 @@ object BangumiSeasonHook {
     fun onCommentInvalidFragmentViewCreated(fragment: Fragment): Boolean {
         invalidFragmentRef = WeakReference(fragment)
         val view = fragment.view ?: return false
-        if (lastSeasonInfo["allow_comment"] != "0") return false
         view.findView<TextView>("info").run {
             gravity = Gravity.CENTER
             text = "由于泰区番剧评论会串到其他正常视频中\n因而禁止泰区评论"

@@ -11,15 +11,14 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.annotation.Keep
 import app.revanced.bilibili.patches.main.ApplicationDelegate
-import app.revanced.bilibili.patches.protobuf.ViewUniteReplyHook
+import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import app.revanced.bilibili.widget.OnLongClickOriginListener
 import com.bapis.bilibili.app.viewunite.common.DescType
+import com.bapis.bilibili.app.viewunite.v1.ViewReply
 import com.bilibili.bplus.followingcard.widget.EllipsizingTextView
 import com.bilibili.bplus.im.business.model.BaseTypedMessage
-import com.bilibili.ship.theseus.all.UnitedBizDetailsActivity
-import com.bilibili.ship.theseus.playlist.UnitedPlaylistActivity
 import org.json.JSONObject
 
 object CopyEnhancePatch {
@@ -36,96 +35,86 @@ object CopyEnhancePatch {
     fun onCopyDesc(isBv: Boolean, desc: String): Boolean {
         if (!Settings.COMMENT_COPY.boolean) return false
         if (!Settings.COMMENT_COPY_ENHANCE.boolean) return true
-        val topActivity = ApplicationDelegate.requireTopActivity()
-        val united = (Versions.ge7_39_0() && !Versions.ge7_47_0()
-                && topActivity is UnitedBizDetailsActivity)
-                || (Versions.ge7_47_0()
-                && topActivity is com.bilibili.ship.theseus.detail.UnitedBizDetailsActivity)
-                || (Utils.isPink() && topActivity is UnitedPlaylistActivity)
 
         fun SpannableStringBuilder.appendTitle(title: CharSequence) =
             relativeSize(proportion = 1.05f) { bold { appendLine(title) } }
 
-        val allDesc = if (united) {
-            val view = ViewUniteReplyHook.viewUniteMap[topActivity.hashCode()]
-            if (view != null) {
-                val introTab = view.tab.tabModuleList.find { it.hasIntroduction() }?.introduction
-                if (introTab != null) {
-                    val modules = introTab.modulesList
-                    val headline = modules.find { it.hasHeadLine() }?.headLine
-                    val intro = modules.find { it.hasUgcIntroduction() }?.ugcIntroduction
-                    if (headline != null && intro != null) {
-                        buildSpannedString {
-                            appendTitle("标题：")
-                            appendLine(headline.content).appendLine()
-                            appendTitle("AV号：")
-                            appendLine("AV${view.arc.aid}").appendLine()
-                            appendTitle("BV号：")
-                            appendLine(view.arc.bvid).appendLine()
-                            appendTitle("封面：")
-                            clickable(0xFF2196F3.toInt(), onClick = {
-                                Utils.async { Utils.saveImage(view.arc.cover) }
-                            }) { append("点我保存") }
-                            appendLine().appendLine()
-                            val introDesc = intro.descList.joinToString("") {
-                                if (it.type == DescType.DescTypeAt) "@${it.text}" else it.text
-                            }
-                            if (introDesc.isNotEmpty()) {
-                                appendTitle("简介：")
-                                appendLine(introDesc).appendLine()
-                            }
-                            val introBgm = intro.bgmList.joinToString("\n") { m ->
-                                m.author.let { if (it.isEmpty()) m.title else "${m.title} - $it" }
-                            }
-                            if (introBgm.isNotEmpty()) {
-                                appendTitle("BGM：")
-                                appendLine(introBgm).appendLine()
-                            }
-                            val introTags = intro.tagsList.joinToString(" ") { it.name }
-                            if (introTags.isNotEmpty()) {
-                                appendTitle("标签：")
-                                appendLine(introTags).appendLine()
-                            }
-                        }.removeSuffix("\n\n")
-                    } else desc
+        val view = VideoInfoHolder.current?.view
+        val allDesc = if (view != null && view is com.bapis.bilibili.app.view.v1.ViewReply) {
+            buildSpannedString {
+                appendTitle("标题：")
+                appendLine(view.arc.title).appendLine()
+                appendTitle("AV号：")
+                appendLine("AV${view.arc.aid}").appendLine()
+                appendTitle("BV号：")
+                appendLine(view.bvid).appendLine()
+                appendTitle("封面：")
+                clickable(0xFF2196F3.toInt(), onClick = {
+                    Utils.async { Utils.saveImage(view.arc.pic) }
+                }) { append("点我保存") }
+                appendLine().appendLine()
+                val introDesc = view.arc.desc
+                if (desc.isNotEmpty()) {
+                    appendTitle("简介：")
+                    appendLine(introDesc).appendLine()
+                }
+                val introBgm = view.bgmList.joinToString("\n") { m ->
+                    m.author.let { if (it.isEmpty()) m.title else "${m.title} - $it" }
+                }
+                if (introBgm.isNotEmpty()) {
+                    appendTitle("BGM：")
+                    appendLine(introBgm).appendLine()
+                }
+                val introTags = view.descTagList.joinToString(" ") { it.name }
+                if (introTags.isNotEmpty()) {
+                    appendTitle("标签：")
+                    appendLine(introTags).appendLine()
+                }
+            }.removeSuffix("\n\n")
+        } else if (view != null && view is ViewReply) {
+            val introTab = view.tab.tabModuleList.find { it.hasIntroduction() }?.introduction
+            if (introTab != null) {
+                val modules = introTab.modulesList
+                val headline = modules.find { it.hasHeadLine() }?.headLine
+                val intro = modules.find { it.hasUgcIntroduction() }?.ugcIntroduction
+                if (headline != null && intro != null) {
+                    buildSpannedString {
+                        appendTitle("标题：")
+                        appendLine(headline.content).appendLine()
+                        appendTitle("AV号：")
+                        appendLine("AV${view.arc.aid}").appendLine()
+                        appendTitle("BV号：")
+                        appendLine(view.arc.bvid).appendLine()
+                        appendTitle("封面：")
+                        clickable(0xFF2196F3.toInt(), onClick = {
+                            Utils.async { Utils.saveImage(view.arc.cover) }
+                        }) { append("点我保存") }
+                        appendLine().appendLine()
+                        val introDesc = intro.descList.joinToString("") {
+                            if (it.type == DescType.DescTypeAt) "@${it.text}" else it.text
+                        }
+                        if (introDesc.isNotEmpty()) {
+                            appendTitle("简介：")
+                            appendLine(introDesc).appendLine()
+                        }
+                        val introBgm = intro.bgmList.joinToString("\n") { m ->
+                            m.author.let { if (it.isEmpty()) m.title else "${m.title} - $it" }
+                        }
+                        if (introBgm.isNotEmpty()) {
+                            appendTitle("BGM：")
+                            appendLine(introBgm).appendLine()
+                        }
+                        val introTags = intro.tagsList.joinToString(" ") { it.name }
+                        if (introTags.isNotEmpty()) {
+                            appendTitle("标签：")
+                            appendLine(introTags).appendLine()
+                        }
+                    }.removeSuffix("\n\n")
                 } else desc
             } else desc
-        } else {
-            val view = ViewUniteReplyHook.viewMap[topActivity.hashCode()]
-            if (view != null) {
-                buildSpannedString {
-                    appendTitle("标题：")
-                    appendLine(view.arc.title).appendLine()
-                    appendTitle("AV号：")
-                    appendLine("AV${view.arc.aid}").appendLine()
-                    appendTitle("BV号：")
-                    appendLine(view.bvid).appendLine()
-                    appendTitle("封面：")
-                    clickable(0xFF2196F3.toInt(), onClick = {
-                        Utils.async { Utils.saveImage(view.arc.pic) }
-                    }) { append("点我保存") }
-                    appendLine().appendLine()
-                    val introDesc = view.arc.desc
-                    if (desc.isNotEmpty()) {
-                        appendTitle("简介：")
-                        appendLine(introDesc).appendLine()
-                    }
-                    val introBgm = view.bgmList.joinToString("\n") { m ->
-                        m.author.let { if (it.isEmpty()) m.title else "${m.title} - $it" }
-                    }
-                    if (introBgm.isNotEmpty()) {
-                        appendTitle("BGM：")
-                        appendLine(introBgm).appendLine()
-                    }
-                    val introTags = view.descTagList.joinToString(" ") { it.name }
-                    if (introTags.isNotEmpty()) {
-                        appendTitle("标签：")
-                        appendLine(introTags).appendLine()
-                    }
-                }.removeSuffix("\n\n")
-            } else desc
-        }
-        showCopyDialog(topActivity, allDesc) { v ->
+        } else desc
+
+        showCopyDialog(ApplicationDelegate.requireTopActivity(), allDesc) { v ->
             setClipboardContent(label = "text", v)
             Toasts.showShortWithId("biliroaming_copy_success")
         }

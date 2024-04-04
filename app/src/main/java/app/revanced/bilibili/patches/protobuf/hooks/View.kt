@@ -1,11 +1,11 @@
 package app.revanced.bilibili.patches.protobuf.hooks
 
 import android.util.Pair
+import app.revanced.bilibili.meta.VideoInfo
 import app.revanced.bilibili.patches.AutoLikePatch
 import app.revanced.bilibili.patches.json.PegasusPatch
-import app.revanced.bilibili.patches.main.ApplicationDelegate
+import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.patches.protobuf.MossHook
-import app.revanced.bilibili.patches.protobuf.ViewUniteReplyHook
 import app.revanced.bilibili.settings.Settings
 import com.bapis.bilibili.app.view.v1.ViewReply
 import com.bapis.bilibili.app.view.v1.ViewReq
@@ -19,10 +19,10 @@ object View : MossHook<ViewReq, ViewReply>() {
 
     override fun hookAfter(req: ViewReq, reply: ViewReply?, error: MossException?): ViewReply? {
         if (reply != null) {
-            AutoLikePatch.detail = Pair.create(reply.arc.aid, reply.reqUser.like)
-            ApplicationDelegate.getTopActivity()?.let {
-                ViewUniteReplyHook.viewMap[it.hashCode()] = reply
+            VideoInfoHolder.updateCurrent { videoInfo ->
+                videoInfo?.apply { view = reply } ?: VideoInfo(0, reply)
             }
+            AutoLikePatch.detail = Pair.create(reply.arc.aid, reply.reqUser.like)
             if (Settings.REMOVE_ELEC_BUTTON.boolean)
                 reply.reqUser.clearElecPlusBtn()
             if (Settings.UNLOCK_PLAY_LIMIT.boolean)

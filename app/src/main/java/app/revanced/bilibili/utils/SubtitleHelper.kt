@@ -109,6 +109,8 @@ object SubtitleHelper {
     private val needMergeRegex = Regex(".*(,|[a-z]|[A-Z])$")
     private val vttOrSrtTimeLineRegex =
         Regex("""((?<fromH>\d{2,4}):)?(?<fromM>\d{2}):(?<fromS>\d{2}[.,]\d{2,3})\s-->\s((?<toH>\d{2,4}):)?(?<toM>\d{2}):(?<toS>\d{2}[.,]\d{2,3})""")
+    private val appendedInfoRegex =
+        Regex("""\n?(「字幕.*?」|（禁止.*?(拉黑|相关内容)）|请注意，.*?拉黑)\n?""")
 
     // vtt reference: https://developer.mozilla.org/zh-CN/docs/Web/API/WebVTT_API
     // srt reference: https://docs.fileformat.com/video/srt/#formatting-of-srt-files
@@ -421,5 +423,106 @@ object SubtitleHelper {
             })
         }
         return result.toString()
+    }
+
+    fun formatBcc(bcc: String) = bcc.toJSONObject().run {
+        optJSONArray("body").orEmpty()
+            .removeAppendedInfo().reSort().let {
+                put("body", it)
+            }
+    }.toString()
+
+    fun bccToSrt(bcc: String): String {
+        val lines = bcc.toJSONObject().optJSONArray("body").orEmpty()
+
+        fun Double.toTime(): String {
+            val time = this
+            val ms = (1000 * (time - time.toInt())).toInt()
+            val seconds = time.toInt()
+            val sec = seconds % 60
+            val minutes = seconds / 60
+            val min = minutes % 60
+            val hour = minutes / 60
+            return "%02d:%02d:%02d,%03d".format(hour, min, sec, ms)
+        }
+
+        var lineCount = 1
+        val result = StringBuilder()
+        for (o in lines) {
+            val content = o.optString("content")
+            val from = o.optDouble("from")
+            val to = o.optDouble("to")
+            result.appendLine(lineCount++)
+            result.appendLine(from.toTime() + " --> " + to.toTime())
+            result.appendLine(content.trim())
+            result.appendLine()
+        }
+        return result.toString()
+    }
+
+    private fun JSONArray.removeAppendedInfo() = apply {
+        (5 downTo 0).forEach { idx ->
+            optJSONObject(idx)?.run {
+                val newContent = optString("content").replace(appendedInfoRegex, "")
+                if (newContent.isEmpty()) remove(idx) else put("content", newContent)
+            }
+        }
+
+        // try merge same line after purge
+        var end = -1
+        var start = -1
+        var content = ""
+        var from = 0.0
+        var to = 0.0
+        (5 downTo 0).forEach { idx ->
+            optJSONObject(idx)?.let {
+                val f = it.optDouble("from")
+                val t = it.optDouble("to")
+                val c = it.optString("content")
+                if (end == -1) {
+                    end = idx; content = c; to = t; from = f
+                } else {
+                    if (c != content) {
+                        if (start != -1) {
+                            for (i in end downTo start + 1)
+                                remove(i)
+                            optJSONObject(start)?.put("to", to)
+                        }
+                        end = idx; content = c; to = t; from = f; start = -1
+                    } else if (t == from) {
+                        start = idx; from = t
+                        if (start == 0) {
+                            for (i in end downTo 1)
+                                remove(i)
+                            optJSONObject(0)?.put("to", to)
+                        }
+                    }
+                }
+            }
+        }
+
+        val lastIdx = length() - 1
+        optJSONObject(lastIdx)?.run {
+            if (optString("content").matches(appendedInfoRegex)) {
+                remove(lastIdx)
+            }
+        }
+    }
+
+    private fun JSONArray.reSort() = apply {
+        for (o in this) {
+            val content = o.getString("content")
+            val from = o.getDouble("from")
+            val location = o.getInt("location")
+            val to = o.getDouble("to")
+            o.remove("content")
+            o.remove("from")
+            o.remove("location")
+            o.remove("to")
+            o.put("content", content)
+            o.put("from", from)
+            o.put("to", to)
+            o.put("location", location)
+        }
     }
 }

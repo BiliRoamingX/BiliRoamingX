@@ -11,9 +11,6 @@ import android.view.ViewGroup
 import android.widget.*
 import app.revanced.bilibili.api.BiliRoamingApi.getPlayUrl
 import app.revanced.bilibili.api.CustomServerException
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.mainlandTestParams
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.overseaTestParams
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import org.json.JSONObject
@@ -211,9 +208,21 @@ class SpeedTestDialog(context: Context, onDismiss: (Boolean) -> Unit) :
         0L
     }
 
+    private val overseaTestParams = mapOf(
+        "ep_id" to "285145",
+        "fnval" to "16",
+        "platform" to "android",
+        "test" to "true"
+    )
+    private val mainlandTestParams = mapOf(
+        "ep_id" to "100615",
+        "fnval" to "16",
+        "platform" to "android",
+        "test" to "true"
+    )
+
     private fun getTestUrl() = try {
         speedTestExecutor.submit<String?> {
-            lastSeasonInfo.clear()
             val json = if (country == Area.CN) {
                 getPlayUrl(overseaTestParams, arrayOf(Area.HK, Area.TW))
             } else getPlayUrl(mainlandTestParams, arrayOf(Area.CN))

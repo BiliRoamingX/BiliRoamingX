@@ -4,12 +4,11 @@ import android.util.Pair
 import app.revanced.bilibili.api.BiliRoamingApi.getSeason
 import app.revanced.bilibili.patches.AutoLikePatch
 import app.revanced.bilibili.patches.json.PegasusPatch
-import app.revanced.bilibili.patches.main.ApplicationDelegate
+import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.FAIL_CODE
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.clipInfoCache
+import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.bangumiInfoCache
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.isBangumiWithWatchPermission
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.lastSeasonInfo
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.subtitlesCache
+import app.revanced.bilibili.patches.okhttp.EpisodeInfo
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import com.bapis.bilibili.app.viewunite.common.*
@@ -23,14 +22,10 @@ import com.bilibili.lib.moss.api.NetworkException
 import org.json.JSONObject
 
 object ViewUniteReplyHook {
-    private const val VIEW_PGC_ANY_TYPE_URL =
+    const val VIEW_PGC_ANY_TYPE_URL =
         "type.googleapis.com/bilibili.app.viewunite.pgcanymodel.ViewPgcAny"
-
-    @JvmStatic
-    val viewMap = mutableMapOf<Int, com.bapis.bilibili.app.view.v1.ViewReply>()
-
-    @JvmStatic
-    val viewUniteMap = mutableMapOf<Int, ViewReply>()
+    const val VIEW_UGC_ANY_TYPE_URL =
+        "type.googleapis.com/bilibili.app.viewunite.ugcanymodel.ViewUgcAny"
 
     @JvmStatic
     fun hook(viewReq: ViewReq, viewReply: ViewReply?, error: MossException?): ViewReply? {
@@ -40,12 +35,8 @@ object ViewUniteReplyHook {
             val aid = viewReply.arc.aid
             val like = viewReply.reqUser.like
             AutoLikePatch.detail = Pair.create(aid, like)
-            if (viewReply.viewBase.bizType == BizType.BIZ_TYPE_UGC) {
+            if (viewReply.viewBase.bizType == BizType.BIZ_TYPE_UGC)
                 AutoLikePatch.autoLikeUnite()
-                val topActivity = ApplicationDelegate.getTopActivity()
-                if (topActivity != null)
-                    viewUniteMap[topActivity.hashCode()] = viewReply
-            }
             if (Settings.REMOVE_ELEC_BUTTON.boolean)
                 viewReply.reqUser.clearElecPlusBtn()
             hookArc(viewReply)
@@ -74,12 +65,9 @@ object ViewUniteReplyHook {
         val supplementAny = viewReply.supplement
         if (supplementAny.typeUrl != VIEW_PGC_ANY_TYPE_URL)
             return
-        lastSeasonInfo.clear()
         val viewPgcAny = ViewPgcAny.parseFrom(supplementAny.value)
         if (!viewPgcAny.hasOgvData()) return
         viewPgcAny.ogvData.run {
-            lastSeasonInfo["title"] = title
-            lastSeasonInfo["season_id"] = seasonId.toString()
             rights.run {
                 if (Settings.UNLOCK_AREA_LIMIT.boolean) {
                     areaLimit = 0
@@ -158,33 +146,20 @@ object ViewUniteReplyHook {
                 allowDownload = 1
             }
         }
-        if (epId != 0L) {
-            val epId = epId.toString()
-            lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
-        }
     }
 
     private fun unlockThaiBangumi(viewReq: ViewReq): ViewReply? {
         val extraContent = viewReq.extraContentMap
-        val reqEpId = extraContent.getOrDefault("ep_id", "0")
-        val reqSeasonId = extraContent.getOrDefault("season_id", "0")
-        if (reqEpId != "0") {
-            lastSeasonInfo.clear()
-            lastSeasonInfo["ep_id"] = reqEpId
-        }
-        if (reqSeasonId != "0") {
-            lastSeasonInfo.clear()
-            lastSeasonInfo["season_id"] = reqSeasonId
-        }
-        LogHelper.info { "Info: $lastSeasonInfo" }
-        val (newCode, newResult) = getSeason(lastSeasonInfo)?.toJSONObject()?.let {
+        val epId = extraContent.getOrDefault("ep_id", "0").toLong()
+        val seasonId = extraContent.getOrDefault("season_id", "0")
+            .toLong().takeIf { it != 0L } ?: bangumiInfoCache.firstNotNullOfOrNull {
+            if (it.value.keys.contains(epId)) it.key else null
+        } ?: VideoInfoHolder.currentSeason()?.id ?: 0L
+        val (newCode, newResult) = getSeason(seasonId, epId)?.toJSONObject()?.let {
             it.optInt("code", FAIL_CODE) to it.optJSONObject("result")
         } ?: (FAIL_CODE to null)
         LogHelper.debug { "unlockThaiBangumi, newCode: $newCode, newResult: $newResult" }
         if (isBangumiWithWatchPermission(newResult, newCode)) {
-            val seasonId = newResult.optString("season_id")
-            lastSeasonInfo["title"] = newResult.optString("title")
-            lastSeasonInfo["season_id"] = seasonId
             return runCatching {
                 val th = newResult.optString("link").startsWith("https://www.bilibili.tv")
                 ViewReply().apply {
@@ -407,7 +382,7 @@ object ViewUniteReplyHook {
         // seasons & episodes & sections
         result.optJSONArray("modules")?.forEach { module ->
             val style = module.optString("style")
-            val seasonId = result.optString("season_id")
+            val seasonId = result.optLong("season_id")
             when (style) {
                 "season" -> Module().apply {
                     type = ModuleType.OGV_SEASONS
@@ -462,7 +437,7 @@ object ViewUniteReplyHook {
 
     private fun reconstructSection(
         module: JSONObject,
-        seasonId: String,
+        seasonId: Long,
         more: String = module.optString("more"),
     ) = SectionData().apply {
         id = module.optInt("id")
@@ -554,17 +529,11 @@ object ViewUniteReplyHook {
             }.let { addEpisodes(it) }
 
             if (episode.has("ep_id")) {
-                val epId = episode.optString("ep_id")
-                lastSeasonInfo["ep_ids"] = lastSeasonInfo["ep_ids"]?.let { "$it;$epId" } ?: epId
-                episode.optJSONArray("subtitles")?.takeIf { it.length() > 0 }?.let {
-                    subtitlesCache.compute(seasonId) { _, v ->
-                        (v ?: hashMapOf()).apply { this[epId] = it }
-                    }
-                }
-                episode.optJSONObject("jump")?.let {
-                    clipInfoCache.compute(seasonId) { _, v ->
-                        (v ?: hashMapOf()).apply { this[epId] = it }
-                    }
+                val epId = episode.optLong("ep_id")
+                val subtitles = episode.optJSONArray("subtitles")
+                val clipInfo = episode.optJSONObject("jump")
+                bangumiInfoCache.compute(seasonId) { _, v ->
+                    (v ?: hashMapOf()).apply { this[epId] = EpisodeInfo(subtitles, clipInfo) }
                 }
             }
         }

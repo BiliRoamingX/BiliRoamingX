@@ -1,5 +1,7 @@
 package app.revanced.bilibili.patches.protobuf.hooks
 
+import app.revanced.bilibili.meta.VideoInfo
+import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.patches.protobuf.MossHook
 import app.revanced.bilibili.patches.protobuf.ViewUniteReplyHook
 import app.revanced.bilibili.utils.Versions
@@ -14,6 +16,12 @@ object ViewUnite : MossHook<ViewReq, ViewReply>() {
     }
 
     override fun hookAfter(req: ViewReq, reply: ViewReply?, error: MossException?): ViewReply? {
-        return ViewUniteReplyHook.hook(req, reply, error)
+        val newReply = ViewUniteReplyHook.hook(req, reply, error)
+        if (newReply != null && newReply != ViewReply.getDefaultInstance()) {
+            VideoInfoHolder.updateCurrent { videoInfo ->
+                videoInfo?.apply { view = newReply } ?: VideoInfo(0, newReply)
+            }
+        }
+        return newReply
     }
 }

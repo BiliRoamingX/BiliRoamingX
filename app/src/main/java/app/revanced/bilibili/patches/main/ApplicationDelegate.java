@@ -14,11 +14,6 @@ import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.bilibili.multitypeplayerV2.MultiTypeVideoContentActivity;
-import com.bilibili.ship.theseus.all.UnitedBizDetailsActivity;
-import com.bilibili.ship.theseus.playlist.UnitedPlaylistActivity;
-import com.bilibili.video.videodetail.VideoDetailsActivity;
-
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
 
 import java.io.File;
@@ -30,7 +25,6 @@ import app.revanced.bilibili.patches.CustomThemePatch;
 import app.revanced.bilibili.patches.DpiPatch;
 import app.revanced.bilibili.patches.PlaybackSpeedPatch;
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
-import app.revanced.bilibili.patches.protobuf.ViewUniteReplyHook;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.KtUtils;
 import app.revanced.bilibili.utils.LogHelper;
@@ -38,7 +32,6 @@ import app.revanced.bilibili.utils.Reflex;
 import app.revanced.bilibili.utils.SubtitleParamsCache;
 import app.revanced.bilibili.utils.UposReplacer;
 import app.revanced.bilibili.utils.Utils;
-import app.revanced.bilibili.utils.Versions;
 import tv.danmaku.bili.MainActivityV2;
 
 public class ApplicationDelegate {
@@ -195,13 +188,7 @@ public class ApplicationDelegate {
                     break;
                 }
             }
-            if ((Versions.ge7_39_0() && !Versions.ge7_47_0() && activity instanceof UnitedBizDetailsActivity)
-                    || (Versions.ge7_47_0() && activity instanceof com.bilibili.ship.theseus.detail.UnitedBizDetailsActivity)
-                    || (Utils.isPink() && activity instanceof UnitedPlaylistActivity)) {
-                ViewUniteReplyHook.getViewUniteMap().remove(activity.hashCode());
-            } else if (activity instanceof VideoDetailsActivity || activity instanceof MultiTypeVideoContentActivity) {
-                ViewUniteReplyHook.getViewMap().remove(activity.hashCode());
-            }
+            VideoInfoHolder.removeCache(activity);
         }
 
         @Override
@@ -212,11 +199,8 @@ public class ApplicationDelegate {
         @Override
         public void onActivityResumed(@NonNull Activity activity) {
             printLifecycle(activity, "onActivityResumed", false);
-            if (activity instanceof MainActivityV2) {
-                ViewUniteReplyHook.getViewMap().clear();
-                if (Versions.ge7_39_0())
-                    ViewUniteReplyHook.getViewUniteMap().clear();
-            }
+            if (activity instanceof MainActivityV2)
+                VideoInfoHolder.clearCache();
         }
 
         @Override

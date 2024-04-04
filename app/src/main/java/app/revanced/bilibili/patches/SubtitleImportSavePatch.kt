@@ -3,26 +3,31 @@ package app.revanced.bilibili.patches
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.Keep
 import androidx.documentfile.provider.DocumentFile
-import app.revanced.bilibili.patches.SubtitleImportPatch.HookInfoProvider.getDanmakuParamsMethod
-import app.revanced.bilibili.patches.SubtitleImportPatch.HookInfoProvider.getDmViewReplyMethod
-import app.revanced.bilibili.patches.SubtitleImportPatch.HookInfoProvider.hideWidgetMethod
-import app.revanced.bilibili.patches.SubtitleImportPatch.HookInfoProvider.loadSubtitleMethod
-import app.revanced.bilibili.patches.SubtitleImportPatch.HookInfoProvider.setDmViewReplyMethod
-import app.revanced.bilibili.patches.SubtitleImportPatch.HookInfoProvider.widgetTokenField
+import app.revanced.bilibili.patches.SubtitleImportSavePatch.HookInfo.getDanmakuParamsMethod
+import app.revanced.bilibili.patches.SubtitleImportSavePatch.HookInfo.getDmViewReplyMethod
+import app.revanced.bilibili.patches.SubtitleImportSavePatch.HookInfo.hideWidgetMethod
+import app.revanced.bilibili.patches.SubtitleImportSavePatch.HookInfo.loadSubtitleMethod
+import app.revanced.bilibili.patches.SubtitleImportSavePatch.HookInfo.setDmViewReplyMethod
+import app.revanced.bilibili.patches.SubtitleImportSavePatch.HookInfo.widgetTokenField
+import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.patches.okhttp.hooks.Subtitle
+import app.revanced.bilibili.patches.protobuf.hooks.DmView
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import com.bapis.bilibili.community.service.dm.v1.DmViewReply
-import com.bapis.bilibili.community.service.dm.v1.SubtitleItem
-import kotlin.random.Random
+import java.io.File
+import java.net.URL
 
-object SubtitleImportPatch {
+object SubtitleImportSavePatch {
     private val supportedSubExt = arrayOf("ass", "srt", "vtt", "json")
-    private var unique = 1
 
     private fun readAndConvertSubtitle(uri: Uri, type: String) = runCatching {
         Utils.getContext().contentResolver.openInputStream(uri)
@@ -51,11 +56,14 @@ object SubtitleImportPatch {
     @SuppressLint("InlinedApi")
     fun onCreateSubtitleWidget(widget: Any, view: View) {
         val importButton = view.findView<View>("biliroaming_import_subtitle")
-        if (!Settings.SUBTITLE_IMPORT.boolean) {
+        val saveButton = view.findView<View>("biliroaming_save_subtitle")
+        if (!Settings.SUBTITLE_IMPORT_SAVE.boolean) {
             importButton.visibility = View.GONE
+            saveButton.visibility = View.GONE
             return
         }
         importButton.visibility = View.VISIBLE
+        saveButton.visibility = View.VISIBLE
         val interactLayerService = widget.getObjectField(
             "interactLayerServiceForBiliRoaming"
         ) ?: return
@@ -86,27 +94,12 @@ object SubtitleImportPatch {
                     ?.callMethodAs<DmViewReply>(getDmViewReplyMethod) ?: return@launchCatching
                 val newDmViewReply = DmViewReply.parseFrom(dmViewReply.toByteArray())
                 val subtitle = newDmViewReply.subtitle
-                if (subtitle.subtitlesList.none { it.lan.startsWith("import") }) {
-                    Subtitle.importedSubtitles.clear()
-                    unique = 1
-                }
+                val importedSubtitles = Subtitle.importedSubtitles.second
+                val index = importedSubtitles.size
                 readAndConvertSubtitle(uri, type)?.let {
-                    Subtitle.importedSubtitles[unique] = it
+                    importedSubtitles.add(it)
                 } ?: return@launchCatching
-                val newSubtitle = SubtitleItem().apply {
-                    val randomId = Random.nextLong()
-                    id = randomId
-                    idStr = randomId.toString()
-                    lan = "import${unique}"
-                    lanDoc = "漫游导入${unique}"
-                    lanDocBrief = "导入"
-                    val url = subtitle.subtitlesList.first().subtitleUrl
-                    subtitleUrl = Uri.parse(url).buildUpon()
-                        .appendQueryParameter("zh_converter", "import")
-                        .appendQueryParameter("import_unique", unique.toString())
-                        .toString()
-                }
-                unique++
+                val newSubtitle = DmView.newImportSubtitle(index, subtitle)
                 subtitle.addSubtitles(newSubtitle)
                 interactLayerService.callMethod(setDmViewReplyMethod, newDmViewReply)
                 interactLayerService.callMethod(loadSubtitleMethod, newSubtitle, null)
@@ -118,9 +111,75 @@ object SubtitleImportPatch {
                 Toasts.showShortWithId("biliroaming_pls_install_file_manager")
             }
         }
+        saveButton.setOnClickListener { button ->
+            val dmViewReply = interactLayerService.callMethod(getDanmakuParamsMethod)
+                ?.callMethodAs<DmViewReply>(getDmViewReplyMethod) ?: return@setOnClickListener
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+                Utils.async { saveSubtitles(dmViewReply) }
+            } else {
+                (button.context as Activity).requestPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) { granted, shouldExplain ->
+                    if (granted) {
+                        Utils.async { saveSubtitles(dmViewReply) }
+                    } else if (shouldExplain) {
+                        Toasts.showShort("获取存储权限失败，请前往设置开启存储权限")
+                    }
+                }
+            }
+            widgetService.callMethod(hideWidgetMethod, widget.getObjectField(widgetTokenField))
+        }
     }
 
-    object HookInfoProvider {
+    private fun saveSubtitles(dmViewReply: DmViewReply) {
+        val (main, episode) = VideoInfoHolder.currentTitle() ?: return
+        Toasts.showShort("字幕保存中")
+        val downloadDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val subtitleDir = File(downloadDir, "bilibili/subtitles")
+        val saveDir = if (episode.isEmpty()) {
+            File(subtitleDir, main).apply { mkdirs() }
+        } else {
+            File(subtitleDir, "$main/$episode").apply { mkdirs() }
+        }
+        var successCount = 0
+        var failedCount = 0
+        dmViewReply.subtitle.subtitlesList.forEach { sub ->
+            runCatching {
+                val bcc = URL(sub.subtitleUrl).readText().let { SubtitleHelper.formatBcc(it) }
+                arrayOf("json", "srt").forEach { format ->
+                    val filename = if (episode.isEmpty()) {
+                        "$main-${sub.lan}-${sub.lanDoc}.$format"
+                    } else {
+                        "$main-$episode-${sub.lan}-${sub.lanDoc}.$format"
+                    }
+                    val saveFile = File(saveDir, filename)
+                    if (format == "json") {
+                        saveFile.writeText(bcc)
+                    } else {
+                        saveFile.writeText(SubtitleHelper.bccToSrt(bcc))
+                    }
+                }
+            }.onFailure {
+                LogHelper.error({ "subtitle save failed, url: ${sub.subtitleUrl}" }, it)
+                failedCount++
+            }.onSuccess {
+                successCount++
+            }
+        }
+        MediaScannerConnection.scanFile(
+            Utils.getContext(),
+            arrayOf(saveDir.path),
+            null, null
+        )
+        if (failedCount != 0 && successCount == 0) {
+            Toasts.showShort("所有字幕保存失败")
+        } else if (failedCount != 0) {
+            Toasts.show("部分字幕成功保存至 ${saveDir.path}", Toast.LENGTH_LONG)
+        } else {
+            Toasts.show("所有字幕成功保存至 ${saveDir.path}", Toast.LENGTH_LONG)
+        }
+    }
+
+    object HookInfo {
         @Keep
         @JvmStatic
         var getDanmakuParamsMethod = ""

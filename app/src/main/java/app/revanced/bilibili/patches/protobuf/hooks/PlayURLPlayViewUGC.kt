@@ -1,7 +1,9 @@
 package app.revanced.bilibili.patches.protobuf.hooks
 
+import app.revanced.bilibili.meta.VideoInfo
 import app.revanced.bilibili.patches.TrialQualityPatch
 import app.revanced.bilibili.patches.VideoQualityPatch
+import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.patches.protobuf.MossHook
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Utils
@@ -27,6 +29,11 @@ object PlayURLPlayViewUGC : MossHook<PlayViewReq, PlayViewReply>() {
         error: MossException?
     ): PlayViewReply? {
         if (reply != null) {
+            if (req.download == 0) {
+                VideoInfoHolder.updateCurrent { videoInfo ->
+                    videoInfo?.apply { cid = req.cid } ?: VideoInfo(req.cid, null)
+                }
+            }
             if (Settings.REMEMBER_LOSSLESS_SETTING.boolean)
                 reply.playConf.takeIf(PlayAbilityConf::hasLossLessConf)?.run {
                     lossLessConf.confValue.switchVal = Settings.LOSSLESS_ENABLED.boolean

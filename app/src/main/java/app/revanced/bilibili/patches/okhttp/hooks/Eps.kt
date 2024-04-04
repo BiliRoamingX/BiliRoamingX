@@ -31,11 +31,10 @@ object Eps : ApiHook() {
                 }.forEach { it.unlock() }
             return json.toString()
         } else {
-            val seasonId = Uri.parse(url).getQueryParameter("season_id")
-            val (newCode, newResult) = getSeason(mapOf("season_id" to seasonId))
-                ?.toJSONObject()?.let {
-                    it.optInt("code", FAIL_CODE) to it.optJSONObject("result")
-                } ?: (FAIL_CODE to null)
+            val seasonId = Uri.parse(url).getQueryParameter("season_id")?.toLong() ?: 0L
+            val (newCode, newResult) = getSeason(seasonId)?.toJSONObject()?.let {
+                it.optInt("code", FAIL_CODE) to it.optJSONObject("result")
+            } ?: (FAIL_CODE to null)
             if (isBangumiWithWatchPermission(newResult, newCode)) {
                 val positiveModule = newResult.optJSONArray("modules").orEmpty()
                     .asSequence<JSONObject>().find { it.optString("style") == "positive" }
@@ -57,7 +56,7 @@ object Eps : ApiHook() {
                     newEp?.let { put("new_ep", it) }
                     publish?.let { put("publish", it) }
                     put("rights", rights)
-                    put("season_id", seasonId?.toInt() ?: 0)
+                    put("season_id", seasonId)
                     put("show_season_type", showSeasonType)
                 }
                 return JSONObject().apply {
