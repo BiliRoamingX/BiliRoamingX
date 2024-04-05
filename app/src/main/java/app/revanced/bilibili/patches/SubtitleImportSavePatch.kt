@@ -135,11 +135,12 @@ object SubtitleImportSavePatch {
         val downloadDir =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val subtitleDir = File(downloadDir, "bilibili/subtitles")
-        val saveDir = if (episode.isEmpty()) {
-            File(subtitleDir, main).apply { mkdirs() }
+        val childPath = if (episode.isEmpty()) {
+            main.toValidFatFilename()
         } else {
-            File(subtitleDir, "$main/$episode").apply { mkdirs() }
+            "${main.toValidFatFilename()}/${episode.toValidFatFilename()}"
         }
+        val saveDir = File(subtitleDir, childPath).apply { mkdirs() }
         var successCount = 0
         var failedCount = 0
         dmViewReply.subtitle.subtitlesList.forEach { sub ->
@@ -150,7 +151,7 @@ object SubtitleImportSavePatch {
                         "$main-${sub.lan}-${sub.lanDoc}.$format"
                     } else {
                         "$main-$episode-${sub.lan}-${sub.lanDoc}.$format"
-                    }
+                    }.toValidFatFilename()
                     val saveFile = File(saveDir, filename)
                     if (format == "json") {
                         saveFile.writeText(bcc)

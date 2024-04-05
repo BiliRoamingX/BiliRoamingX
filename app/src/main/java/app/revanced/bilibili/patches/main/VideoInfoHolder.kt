@@ -49,8 +49,9 @@ object VideoInfoHolder {
             // old player ugc
             is com.bapis.bilibili.app.view.v1.ViewReply -> {
                 val mainTitle = view.arc.title
-                val episodeTitle = view.pagesList.find { it.page.cid == cid }
-                    ?.page?.part?.takeIf { it != mainTitle }.orEmpty()
+                val episodeTitle = if (view.pagesList.size > 1) {
+                    view.pagesList.find { it.page.cid == cid }?.page?.part.orEmpty()
+                } else ""
                 return mainTitle to episodeTitle
             }
 
@@ -78,8 +79,9 @@ object VideoInfoHolder {
                     ViewUniteReplyHook.VIEW_UGC_ANY_TYPE_URL -> {
                         mainTitle = view.arc.title
                         val viewUgcAny = ViewUgcAny.parseFrom(supplement.value)
-                        episodeTitle = viewUgcAny.pagesList.find { it.cid == cid }
-                            ?.part?.takeIf { it != mainTitle }.orEmpty()
+                        episodeTitle = if (viewUgcAny.pagesList.size > 1) {
+                            viewUgcAny.pagesList.find { it.cid == cid }?.part.orEmpty()
+                        } else ""
                     }
 
                     ViewUniteReplyHook.VIEW_PGC_ANY_TYPE_URL -> {
@@ -125,6 +127,7 @@ object VideoInfoHolder {
         return null
     }
 
+    @JvmStatic
     fun currentVideoUrl(): String? {
         val videoInfo = current ?: return null
         val cid = videoInfo.cid
