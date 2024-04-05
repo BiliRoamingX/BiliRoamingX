@@ -1,12 +1,12 @@
 package app.revanced.bilibili.patches
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.Keep
-import androidx.appcompat.app.AlertDialog
 import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
