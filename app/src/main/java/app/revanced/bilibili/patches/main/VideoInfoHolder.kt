@@ -59,8 +59,8 @@ object VideoInfoHolder {
                 val data = view.toJSONObject().optJSONObject("data")
                     ?: return null
                 val mainTitle = data.optString("title")
-                val episodeTitle = view.toJSONObject().optJSONObject("data")
-                    ?.optJSONArray("modules").orEmpty().asSequence<JSONObject>().flatMap {
+                val episodeTitle = data.optJSONArray("modules").orEmpty()
+                    .asSequence<JSONObject>().flatMap {
                         it.optJSONObject("data")?.optJSONArray("episodes")
                             .orEmpty().asSequence<JSONObject>()
                     }.find { it.optLong("cid") == cid }?.optString("title").orEmpty()
@@ -86,9 +86,9 @@ object VideoInfoHolder {
                         val modules = view.tab.tabModuleList.find { it.hasIntroduction() }
                             ?.introduction?.modulesList.orEmpty()
                         mainTitle = modules.find { it.hasOgvTitle() }?.ogvTitle?.title.orEmpty()
-                        episodeTitle =
-                            modules.find { it.hasSectionData() }?.sectionData?.episodesList
-                                ?.find { it.cid == cid }?.title.orEmpty()
+                        episodeTitle = modules.filter { it.hasSectionData() }.asSequence().flatMap {
+                            it.sectionData.episodesList
+                        }.find { it.cid == cid }?.title.orEmpty()
                     }
                 }
                 if (mainTitle.isEmpty() && episodeTitle.isEmpty())
@@ -123,5 +123,64 @@ object VideoInfoHolder {
             }
         }
         return null
+    }
+
+    fun currentVideoUrl(): String? {
+        val videoInfo = current ?: return null
+        val cid = videoInfo.cid
+        val view = videoInfo.view
+        if (cid == 0L || view == null)
+            return null
+        return when (view) {
+            is com.bapis.bilibili.app.view.v1.ViewReply -> {
+                val aid = view.arc.aid
+                val p = view.pagesList.indexOfFirst {
+                    it.page.cid == cid
+                }.let { if (it == -1) 0 else it } + 1
+                "https://www.bilibili.com/video/av$aid".let {
+                    if (p == 1) it else "$it?p=$p"
+                }
+            }
+
+            is String -> {
+                val data = view.toJSONObject().optJSONObject("data")
+                    ?: return null
+                val epId = data.optJSONArray("modules").orEmpty()
+                    .asSequence<JSONObject>().flatMap {
+                        it.optJSONObject("data")?.optJSONArray("episodes")
+                            .orEmpty().asSequence<JSONObject>()
+                    }.find { it.optLong("cid") == cid }?.optString("ep_id")
+                    .orEmpty().ifEmpty { return null }
+                "https://www.bilibili.com/bangumi/play/ep$epId"
+            }
+
+            is ViewReply -> {
+                val supplement = view.supplement
+                when (supplement.typeUrl) {
+                    ViewUniteReplyHook.VIEW_UGC_ANY_TYPE_URL -> {
+                        val aid = view.arc.aid
+                        val viewUgcAny = ViewUgcAny.parseFrom(supplement.value)
+                        val p = viewUgcAny.pagesList.indexOfFirst {
+                            it.cid == cid
+                        }.let { if (it == -1) 0 else it } + 1
+                        "https://www.bilibili.com/video/av$aid".let {
+                            if (p == 1) it else "$it?p=$p"
+                        }
+                    }
+
+                    ViewUniteReplyHook.VIEW_PGC_ANY_TYPE_URL -> {
+                        val epId = view.tab.tabModuleList.find { it.hasIntroduction() }
+                            ?.introduction?.modulesList.orEmpty().filter { it.hasSectionData() }
+                            .asSequence().flatMap { it.sectionData.episodesList }
+                            .find { it.cid == cid }?.epId ?: return null
+                        "https://www.bilibili.com/bangumi/play/ep$epId"
+                    }
+
+                    else -> null
+                }
+            }
+
+            else -> null
+        }
     }
 }
