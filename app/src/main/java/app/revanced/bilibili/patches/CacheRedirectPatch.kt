@@ -1,6 +1,7 @@
 package app.revanced.bilibili.patches
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.Toast
@@ -23,7 +24,7 @@ object CacheRedirectPatch {
             originListener.onClick_Origin(menuView)
             return
         }
-        val downloaderPackageName = Settings.EXTERNAL_DOWNLOADER_NAME.string.ifEmpty {
+        val packageName = Settings.EXTERNAL_DOWNLOADER_NAME.string.ifEmpty {
             originListener.onClick_Origin(menuView)
             return
         }
@@ -34,36 +35,66 @@ object CacheRedirectPatch {
                 return
             }
             dismissDialog(originListener)
-            val appDialogTheme = Utils.getResId("AppTheme.Dialog.Alert", "style")
-            AlertDialog.Builder(menuView.context, appDialogTheme)
-                .setMessage(Utils.getString("biliroaming_whether_use_external_downloader"))
-                .setNegativeButton(Utils.getString("biliroaming_n")) { _, _ ->
-                    originListener.onClick_Origin(menuView)
-                }.setPositiveButton(Utils.getString("biliroaming_y")) { _, _ ->
-                    val enabled = runCatchingOrNull {
-                        Utils.getContext().packageManager
-                            .getApplicationInfo(downloaderPackageName, 0).enabled
-                    } ?: false
-                    if (!enabled) {
-                        Toasts.showWithId(
-                            "biliroaming_external_downloader_not_installed", Toast.LENGTH_LONG
-                        )
-                    } else {
-                        val intent = Intent(Intent.ACTION_SEND).apply {
-                            setPackage(downloaderPackageName)
-                            type = "text/plain"
-                            putExtra(Intent.EXTRA_TEXT, videoUrl)
-                        }
-                        menuView.context.runCatching {
-                            startActivity(intent)
-                        }.onFailure {
-                            LogHelper.error({ "external downloader launch failed" }, it)
-                        }
-                    }
-                }.show()
+            showConfirmDialog(context = menuView.context, videoUrl, packageName) {
+                originListener.onClick_Origin(menuView)
+            }
         } else {
             originListener.onClick_Origin(menuView)
         }
+    }
+
+    @Keep
+    @JvmStatic
+    fun onOgvDownload(
+        service: Any,
+        originMethod: String,
+        context: Context,
+        cacheFromType: Enum<*>
+    ): Boolean {
+        if (cacheFromType.name != "FROM_ACTION_TYPE")
+            return false
+        if (!Settings.EXTERNAL_DOWNLOADER.boolean) return false
+        val packageName = Settings.EXTERNAL_DOWNLOADER_NAME.string
+            .ifEmpty { return false }
+        val videoUrl = VideoInfoHolder.currentVideoUrl() ?: return false
+        showConfirmDialog(context, videoUrl, packageName) {
+            service.callMethod(originMethod, context, cacheFromType)
+        }
+        return true
+    }
+
+    private fun showConfirmDialog(
+        context: Context,
+        videoUrl: String,
+        packageName: String,
+        onCancel: () -> Unit
+    ) {
+        val appDialogTheme = Utils.getResId("AppTheme.Dialog.Alert", "style")
+        AlertDialog.Builder(context, appDialogTheme)
+            .setMessage(Utils.getString("biliroaming_whether_use_external_downloader"))
+            .setNegativeButton(Utils.getString("biliroaming_n")) { _, _ ->
+                onCancel()
+            }.setPositiveButton(Utils.getString("biliroaming_y")) { _, _ ->
+                val enabled = runCatchingOrNull {
+                    Utils.getContext().packageManager.getApplicationInfo(packageName, 0).enabled
+                } ?: false
+                if (!enabled) {
+                    Toasts.showWithId(
+                        "biliroaming_external_downloader_not_installed", Toast.LENGTH_LONG
+                    )
+                } else {
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        `package` = packageName
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, videoUrl)
+                    }
+                    context.runCatching {
+                        startActivity(intent)
+                    }.onFailure {
+                        LogHelper.error({ "external downloader launch failed" }, it)
+                    }
+                }
+            }.show()
     }
 
     private fun dismissDialog(listener: OnClickOriginListener) = runCatching {
