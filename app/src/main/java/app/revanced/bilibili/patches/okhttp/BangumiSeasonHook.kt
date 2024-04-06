@@ -476,6 +476,10 @@ object BangumiSeasonHook {
     fun onCommentInvalidFragmentViewCreated(fragment: Fragment): Boolean {
         invalidFragmentRef = WeakReference(fragment)
         val view = fragment.view ?: return false
+        if (VideoInfoHolder.current?.view.let {
+                it !is String || !it.toJSONObject().optJSONObject("data")
+                    ?.optString("link").orEmpty().startsWith("https://www.bilibili.tv")
+            }) return false
         view.findView<TextView>("info").run {
             gravity = Gravity.CENTER
             text = "由于泰区番剧评论会串到其他正常视频中\n因而禁止泰区评论"

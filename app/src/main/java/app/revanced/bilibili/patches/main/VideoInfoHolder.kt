@@ -154,7 +154,13 @@ object VideoInfoHolder {
                             .orEmpty().asSequence<JSONObject>()
                     }.find { it.optLong("cid") == cid }?.optString("ep_id")
                     .orEmpty().ifEmpty { return null }
-                "https://www.bilibili.com/bangumi/play/ep$epId"
+                val th = data.optString("link").startsWith("https://www.bilibili.tv")
+                if (th) {
+                    val seasonId = data.optString("season_id")
+                    "https://www.bilibili.tv/en/play/$seasonId/$epId"
+                } else {
+                    "https://www.bilibili.com/bangumi/play/ep$epId"
+                }
             }
 
             is ViewReply -> {
@@ -176,7 +182,14 @@ object VideoInfoHolder {
                             ?.introduction?.modulesList.orEmpty().filter { it.hasSectionData() }
                             .asSequence().flatMap { it.sectionData.episodesList }
                             .find { it.cid == cid }?.epId ?: return null
-                        "https://www.bilibili.com/bangumi/play/ep$epId"
+                        val ogvData = ViewPgcAny.parseFrom(supplement.value).ogvData
+                        val th = ogvData.shareUrl.startsWith("https://www.bilibili.tv")
+                        if (th) {
+                            val seasonId = ogvData.seasonId
+                            "https://www.bilibili.tv/en/play/$seasonId/$epId"
+                        } else {
+                            "https://www.bilibili.com/bangumi/play/ep$epId"
+                        }
                     }
 
                     else -> null
