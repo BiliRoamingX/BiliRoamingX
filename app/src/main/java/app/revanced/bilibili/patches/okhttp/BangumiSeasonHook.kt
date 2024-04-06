@@ -263,9 +263,13 @@ object BangumiSeasonHook {
         }
         val type = uri.getQueryParameter("type").orEmpty().toInt()
         val searchType = searchTypes[type]!!
-        return getAreaSearchBangumi(query, searchType.area, searchType.type)?.also {
-            checkErrorToast(it.toJSONObject(), true)
-        } ?: JSONObject().apply {
+        return getAreaSearchBangumi(query, searchType.area, searchType.type)?.toJSONObject()?.also {
+            checkErrorToast(it, true)
+            it.optJSONObject("data")?.optJSONArray("items")?.forEach { item ->
+                if (item.has("Offset"))
+                    item.remove("follow_button")
+            }
+        }?.toString() ?: JSONObject().apply {
             put("code", "-1")
             put("message", "搜索失败，请重试")
         }.toString()
@@ -411,7 +415,7 @@ object BangumiSeasonHook {
             this.pages = pages
             this.keyword = keyword
             for (json in newData.optJSONArray("items").orEmpty()) {
-                if (json.optInt("Offset", -1) != -1)
+                if (json.has("Offset"))
                     json.remove("follow_button")
                 addItems(Item().apply { reconstructFrom(json) })
             }
