@@ -344,6 +344,10 @@ fun newAny(typeUrl: String, message: GeneratedMessageLite<*, *>): com.google.pro
         .setValue(message.toByteString())
         .build()
 
+inline fun GeneratedMessageLite<*, *>.clearUnknownFields() {
+    setUnknownFields(UnknownFieldSetLite.getDefaultInstance())
+}
+
 inline fun GeneratedMessageLite<*, *>.setUnknownFields(unknownFields: UnknownFieldSetLite) {
     GeneratedMessageLiteEx.setUnknownFields(this, unknownFields)
 }

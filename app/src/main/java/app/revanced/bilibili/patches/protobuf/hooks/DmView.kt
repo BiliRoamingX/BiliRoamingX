@@ -12,7 +12,6 @@ import com.bapis.bilibili.community.service.dm.v1.*
 import com.bilibili.lib.moss.api.MossException
 import com.bilibili.lib.moss.api.NetworkException
 import com.google.protobuf.GeneratedMessageLite
-import com.google.protobuf.UnknownFieldSetLite
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -32,7 +31,7 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
                 reply.clearCommand()
                 reply.clearQoe()
             }
-            reply.setUnknownFields(UnknownFieldSetLite.getDefaultInstance())
+            reply.clearUnknownFields()
         }
         if (error !is NetworkException)
             return addSubtitles(req, reply)

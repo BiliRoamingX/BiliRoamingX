@@ -4,7 +4,10 @@ import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
 import app.revanced.bilibili.patches.protobuf.MossHook
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Area
+import app.revanced.bilibili.utils.Utils
 import app.revanced.bilibili.utils.cachePrefs
+import app.revanced.bilibili.utils.clearUnknownFields
+import com.bapis.bilibili.community.service.dm.v1.DmColorfulType
 import com.bapis.bilibili.community.service.dm.v1.DmSegMobileReply
 import com.bapis.bilibili.community.service.dm.v1.DmSegMobileReq
 import com.bilibili.lib.moss.api.MossException
@@ -32,6 +35,15 @@ object DmSegMobile : MossHook<DmSegMobileReq, DmSegMobileReply>() {
                 )) || (cachePrefs.contains("ep$epId") && Area.TH == Area.of(
                     cachePrefs.getString("ep$epId", null)
                 ))) reply.clearElems()
+        }
+        if (reply != null && Settings.NO_COLORFUL_DANMAKU.boolean) {
+            reply.elemsList.forEach {
+                if (!Utils.isHd())
+                    it.colorful = DmColorfulType.NoneType
+                else {
+                    it.clearUnknownFields()
+                }
+            }
         }
         return super.hookAfter(req, reply, error)
     }
