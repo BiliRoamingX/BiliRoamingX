@@ -1,12 +1,14 @@
 package app.revanced.bilibili.patches.main
 
 import android.widget.Toast
+import app.revanced.bilibili.http.ContentType
+import app.revanced.bilibili.http.HttpClient
+import app.revanced.bilibili.http.RequestBody
+import app.revanced.bilibili.http.RequestBody.Companion.toRequestBody
 import app.revanced.bilibili.meta.CouponInfo
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import org.json.JSONObject
-import java.net.HttpURLConnection
-import java.net.URL
 
 object CouponAutoReceiver {
 
@@ -37,69 +39,43 @@ object CouponAutoReceiver {
             }
     } else Unit
 
-    private fun getCouponInfo() = runCatchingOrNull {
-        val connection = URL("https://api.bilibili.com/x/vip/privilege/my")
-            .openConnection() as HttpURLConnection
-        connection.setRequestMethod("GET")
-        connection.setRequestProperty("Cookie", "SESSDATA=$cookieSESSDATA")
-        connection.setRequestProperty("User-Agent", defaultUA)
-        connection.connect()
-        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            val json = getStreamContent(connection.inputStream).toJSONObject()
-            LogHelper.debug { "CouponAutoReceiver.couponInfo: $json" }
-            if (json.optInt("code", -1) == 0) {
-                json.optJSONObject("data")?.optJSONArray("list")
-                    .orEmpty().asSequence<JSONObject>()
-                    .map {
-                        CouponInfo.Item(
-                            it.optInt("type"),
-                            it.optInt("state"),
-                            it.optLong("next_receive_days"),
-                            it.optInt("vip_type"),
-                        )
-                    }
-                    .toList().let { CouponInfo(it) }
-            } else null
+    private fun getCouponInfo() = HttpClient.get(
+        "https://api.bilibili.com/x/vip/privilege/my",
+        headers = mapOf("Cookie" to "SESSDATA=$cookieSESSDATA")
+    )?.json()?.run {
+        LogHelper.debug { "CouponAutoReceiver.couponInfo: $this" }
+        if (optInt("code", -1) == 0) {
+            optJSONObject("data")?.optJSONArray("list")
+                .orEmpty().asSequence<JSONObject>().map {
+                    CouponInfo.Item(
+                        it.optInt("type"),
+                        it.optInt("state"),
+                        it.optLong("next_receive_days"),
+                        it.optInt("vip_type"),
+                    )
+                }.toList().let { CouponInfo(it) }
         } else null
     }
 
-    private fun receiveCoupon(type: Int) = runCatchingOrNull {
-        val connection = URL("https://api.bilibili.com/x/vip/privilege/receive")
-            .openConnection() as HttpURLConnection
-        connection.setRequestMethod("POST")
-        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
-        connection.setRequestProperty("Cookie", "SESSDATA=$cookieSESSDATA")
-        connection.setRequestProperty("User-Agent", defaultUA)
-        connection.setDoOutput(true)
-        connection.outputStream.write("type=$type&csrf=$cookieBiliJct".toByteArray())
-        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            val json = getStreamContent(connection.inputStream).toJSONObject()
-            LogHelper.debug { "CouponAutoReceiver.receiveCoupon, type: $type, response: $json" }
-            json.optInt("code", -1) == 0
-        } else false
+    private fun receiveCoupon(type: Int) = HttpClient.post(
+        "https://api.bilibili.com/x/vip/privilege/receive",
+        headers = mapOf("Cookie" to "SESSDATA=$cookieSESSDATA"),
+        body = RequestBody.form(listOf("type" to type, "csrf" to cookieBiliJct))
+    )?.json()?.run {
+        LogHelper.debug { "CouponAutoReceiver.receiveCoupon, type: $type, response: $this" }
+        optInt("code", -1) == 0
     } ?: false
 
-    private fun receiveExperience() = runCatchingOrNull {
-        val connection = URL("https://api.bilibili.com/x/vip/experience/add")
-            .openConnection() as HttpURLConnection
-        connection.setRequestMethod("POST")
-        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
-        connection.setRequestProperty("Cookie", "SESSDATA=$cookieSESSDATA")
-        connection.setRequestProperty("User-Agent", defaultUA)
-        connection.outputStream.write("csrf=$cookieBiliJct".toByteArray())
-        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            val json = getStreamContent(connection.inputStream).toJSONObject()
-            LogHelper.debug { "CouponAutoReceiver.receiveExperience, response: $json" }
-            json.optInt("code", -1) == 0
-        } else false
+    private fun receiveExperience() = HttpClient.post(
+        "https://api.bilibili.com/x/vip/experience/add",
+        headers = mapOf("Cookie" to "SESSDATA=$cookieSESSDATA"),
+        body = RequestBody.form(listOf("csrf" to cookieBiliJct))
+    )?.json()?.run {
+        LogHelper.debug { "CouponAutoReceiver.receiveExperience, response: $this" }
+        optInt("code", -1) == 0
     } ?: false
 
-    private fun receiveShareExperience() = runCatchingOrNull {
-        val connection = URL("https://api.bilibili.com/x/share/finish")
-            .openConnection() as HttpURLConnection
-        connection.setRequestMethod("POST")
-        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
-        connection.setRequestProperty("User-Agent", defaultUA)
+    private fun receiveShareExperience(): Boolean {
         val oid = "170001" // aid
         val sid = arrayOf(
             "279786",
@@ -125,12 +101,13 @@ object CouponAutoReceiver {
                 "success" to "true",
             )
         )
-        connection.outputStream.write(body.toByteArray())
-        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            val json = getStreamContent(connection.inputStream).toJSONObject()
-            LogHelper.debug { "CouponAutoReceiver.receiveShareExperience, response: $json" }
-            json.optInt("code", -1) == 0
-                    && !json.optJSONObject("data")?.optString("toast").isNullOrEmpty()
-        } else false
-    } ?: false
+        return HttpClient.post(
+            "https://api.bilibili.com/x/share/finish",
+            body = body.toRequestBody(ContentType.form)
+        )?.json()?.run {
+            LogHelper.debug { "CouponAutoReceiver.receiveShareExperience, response: $this" }
+            optInt("code", -1) == 0
+                    && !optJSONObject("data")?.optString("toast").isNullOrEmpty()
+        } ?: false
+    }
 }

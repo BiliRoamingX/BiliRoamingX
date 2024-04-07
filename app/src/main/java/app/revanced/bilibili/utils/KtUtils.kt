@@ -30,7 +30,6 @@ import com.google.protobuf.GeneratedMessageLiteEx
 import com.google.protobuf.UnknownFieldSetLite
 import org.json.JSONObject
 import java.io.File
-import java.io.InputStream
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.lang.reflect.Field
@@ -118,13 +117,6 @@ inline fun SharedPreferences.edit(
     commit: Boolean = false,
     action: SharedPreferences.Editor.() -> Unit
 ) = edit().apply(action).run { if (commit) commit() else apply() }
-
-fun getStreamContent(input: InputStream) = try {
-    input.bufferedReader().use { it.readText() }
-} catch (e: Throwable) {
-    LogHelper.error({ "get stream content failed" }, e)
-    null
-}
 
 fun fetchJson(url: String) = try {
     JSONObject(URL(url).readText())
@@ -376,6 +368,9 @@ private val cookieInfoCache by lazy {
 }
 
 val defaultUA = "Mozilla/5.0 BiliDroid/$versionName (bbcallen@gmail.com)"
+
+val browserUA =
+    "Mozilla/5.0 (Linux; Android ${Build.VERSION.RELEASE}; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
 @JvmOverloads
 @Suppress("DEPRECATION")

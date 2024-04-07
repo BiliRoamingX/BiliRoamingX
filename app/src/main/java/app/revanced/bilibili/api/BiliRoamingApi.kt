@@ -1,25 +1,15 @@
 package app.revanced.bilibili.api
 
-import android.annotation.SuppressLint
 import android.net.Uri
-import android.os.Build
-import android.webkit.JavascriptInterface
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import app.revanced.bilibili.http.HttpClient
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
-import java.util.zip.GZIPInputStream
-import java.util.zip.InflaterInputStream
 
 class CustomServerException(private val errors: Map<String, String>) : Throwable() {
     override val message: String
@@ -123,7 +113,7 @@ object BiliRoamingApi {
                 .encodedAuthority(host + path)
                 .encodedQuery(signQuery(query, extraMap))
                 .toString()
-            getContent(uri)?.let {
+            HttpClient.biliroaming(uri)?.plain()?.let {
                 LogHelper.debug { "use server $area $host for playurl" }
                 if (it.contains("\"code\":0")) {
                     seasonAreasCache[cacheId] = area
@@ -158,7 +148,7 @@ object BiliRoamingApi {
                 )
             )
             .toString()
-        return getContent(uri)
+        return HttpClient.biliroaming(uri)?.plain()
     }
 
     @JvmStatic
@@ -183,7 +173,7 @@ object BiliRoamingApi {
                 )
             )
             .toString()
-        return getContent(uri)?.replace(
+        return HttpClient.biliroaming(uri)?.plain()?.replace(
             "bstar://bangumi/season/",
             "https://bangumi.bilibili.com/anime/"
         )
@@ -220,13 +210,13 @@ object BiliRoamingApi {
             builder.appendQueryParameter("ep_id", epId.toString())
         var thSeason: JSONObject? = null
         var hidden = false
-        val seasonJson = getContent(builder.toString())?.toJSONObject()?.also {
+        val seasonJson = HttpClient.biliroaming(builder.toString())?.json()?.also {
             thSeason = it
             it.optJSONObject("result")?.run {
                 fixThailandSeason(this)
             }
         }?.takeIf { it.optInt("code", -1) == 0 }
-            ?: getHiddenSeason(seasonId)?.toJSONObject()?.also { hidden = true } ?: run {
+            ?: getHiddenSeason(seasonId)?.also { hidden = true } ?: run {
                 thSeason?.let { checkErrorToast(it, true) }
                 seasonCache?.valid?.set(false)
                 seasonCache?.latch?.countDown()
@@ -247,7 +237,7 @@ object BiliRoamingApi {
     }
 
     @JvmStatic
-    private fun getHiddenSeason(seasonId: Long): String? {
+    private fun getHiddenSeason(seasonId: Long): JSONObject? {
         // few cn bangumi maybe hidden for oversea ip, eg. 6423(品酒要在成为夫妻后)
         if (seasonId == 0L) return null
         val result = getMediaInfo(seasonId)?.toJSONObject()
@@ -397,12 +387,12 @@ object BiliRoamingApi {
         return JSONObject().apply {
             put("code", 0)
             put("result", result)
-        }.toString()
+        }
     }
 
     @JvmStatic
     private fun getMediaInfo(mediaId: Long): String? {
-        val content = getContent(BILI_MEDIA_URL + mediaId) ?: return null
+        val content = HttpClient.get(BILI_MEDIA_URL + mediaId)?.plain() ?: return null
         return mediaSeasonRegex.matchEntire(content)?.groupValues?.get(1)
     }
 
@@ -413,7 +403,7 @@ object BiliRoamingApi {
             .encodedAuthority(BILI_SECTION_URL)
             .appendQueryParameter("season_id", seasonId.toString())
             .toString()
-        return getContent(url)
+        return HttpClient.get(url)?.plain()
     }
 
     @JvmStatic
@@ -424,7 +414,7 @@ object BiliRoamingApi {
             .appendQueryParameter("season_id", seasonId.toString())
             .appendQueryParameter("access_key", Utils.getAccessKey())
             .toString()
-        return getContent(url)
+        return HttpClient.get(url)?.plain()
     }
 
     @JvmStatic
@@ -435,7 +425,7 @@ object BiliRoamingApi {
             .appendQueryParameter("media_id", mediaId.toString())
             .appendQueryParameter("access_key", Utils.getAccessKey())
             .toString()
-        return getContent(url)
+        return HttpClient.get(url)?.plain()
     }
 
     @JvmStatic
@@ -446,7 +436,7 @@ object BiliRoamingApi {
             .encodedAuthority(BILI_APP_MEDIA_URL)
             .encodedQuery(signQuery(query))
             .toString()
-        return getContent(url)
+        return HttpClient.get(url)?.plain()
     }
 
     @JvmStatic
@@ -459,7 +449,7 @@ object BiliRoamingApi {
             .encodedAuthority(thUrl + THAILAND_PATH_SUBTITLES)
             .appendQueryParameter("ep_id", epId.toString())
             .toString()
-        return getContent(uri)
+        return HttpClient.biliroaming(uri)?.plain()
     }
 
     @JvmStatic
@@ -577,8 +567,8 @@ object BiliRoamingApi {
 
     @JvmStatic
     fun getSpace(mid: Long): String? {
-        val content = getContent("$BILI_CARD_URL?mid=$mid")
-            ?.toJSONObject() ?: return null
+        val content = HttpClient.get("$BILI_CARD_URL?mid=$mid")?.json()
+            ?: return null
         if (content.optInt("code") != 0) return null
         val card = content.optJSONObject("card") ?: return null
         val levelInfo = card.optJSONObject("level_info") ?: return null
@@ -663,86 +653,5 @@ object BiliRoamingApi {
         output.put("dash", dash)
 
         return output.toString()
-    }
-
-    @SuppressLint("SetJavaScriptEnabled")
-    fun getContent(url: String): String? = try {
-        val timeout = 10000
-        val mobiApp = Utils.getMobiApp()
-        val verName = "1.7.0"
-        val verCode = "1344"
-        // Work around for android 7
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N
-            && url.startsWith("https")
-            && !url.contains("bilibili.com")
-        ) {
-            LogHelper.debug { "Found Android 7, try to bypass ssl issue" }
-            val listener = object : Any() {
-                val latch = CountDownLatch(1)
-                var result = ""
-
-                @Suppress("UNUSED")
-                @JavascriptInterface
-                fun callback(r: String) {
-                    result = r
-                    latch.countDown()
-                }
-            }
-            Utils.runOnMainThread {
-                val webView = WebView(Utils.getContext())
-                webView.addJavascriptInterface(listener, "listener")
-                webView.webViewClient = object : WebViewClient() {
-                    override fun onPageFinished(view: WebView, url: String) {
-                        view.settings.javaScriptEnabled = true
-                        view.loadUrl("javascript:listener.callback(document.documentElement.innerText)")
-                    }
-                }
-                webView.loadUrl(
-                    url, mapOf(
-                        "x-from-biliroaming" to verName,
-                        "platform-from-biliroaming" to mobiApp,
-                        "Build" to verCode,
-                        "User-Agent" to defaultUA,
-                    )
-                )
-            }
-            try {
-                if (!listener.latch.await((timeout * 2).toLong(), TimeUnit.MILLISECONDS)) {
-                    Toasts.showShort("连接超时，请重试")
-                    throw IOException("Timeout connection to server")
-                }
-            } catch (e: InterruptedException) {
-                throw IOException("Connection to server was interrupted")
-            }
-            listener.result
-        } else {
-            val connection = URL(url).openConnection() as HttpURLConnection
-            connection.requestMethod = "GET"
-            connection.connectTimeout = timeout
-            connection.readTimeout = timeout
-            connection.setRequestProperty("x-from-biliroaming", verName)
-            connection.setRequestProperty("platform-from-biliroaming", mobiApp)
-            connection.setRequestProperty("Build", verCode)
-            connection.setRequestProperty("User-Agent", defaultUA)
-            connection.setRequestProperty("Accept-Encoding", "br,gzip,deflate")
-            connection.connect()
-            if (connection.responseCode == HttpURLConnection.HTTP_OK) {
-                val inputStream = connection.inputStream
-                getStreamContent(
-                    when (connection.contentEncoding?.lowercase()) {
-                        "br" -> BrotliInputStream(inputStream)
-                        "gzip" -> GZIPInputStream(inputStream)
-                        "deflate" -> InflaterInputStream(inputStream)
-                        else -> inputStream
-                    }
-                )
-            } else null
-        }
-    } catch (e: Throwable) {
-        LogHelper.error({ "getContent error: ${e.message} with url $url" }, e)
-        null
-    }?.also {
-        LogHelper.debug { "getContent url: $url" }
-        LogHelper.debug { "getContent result: $it" }
     }
 }

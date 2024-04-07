@@ -1,76 +1,15 @@
 package app.revanced.bilibili.utils
 
 import android.net.Uri
-import android.os.Build
 import android.util.Base64
-import app.revanced.bilibili.api.BrotliInputStream
+import app.revanced.bilibili.http.Encoding
+import app.revanced.bilibili.http.HttpClient
+import app.revanced.bilibili.http.RequestBody
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.InputStream
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.TimeUnit
-import java.util.zip.DeflaterInputStream
-import java.util.zip.DeflaterOutputStream
-import java.util.zip.GZIPInputStream
-import java.util.zip.GZIPOutputStream
-import javax.net.ssl.HttpsURLConnection
 import kotlin.math.abs
-
-private val UA =
-    "Mozilla/5.0 (Linux; Android ${Build.VERSION.RELEASE}; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-
-private fun request(
-    url: String,
-    method: String = "GET",
-    auth: String? = null,
-    contentType: String? = null,
-    data: String? = null,
-    referer: String? = null,
-    encoding: String? = null,
-): String? = runCatching {
-    fun InputStream.readText(encoding: String?) = (when (encoding?.lowercase()) {
-        "gzip" -> GZIPInputStream(this)
-        "deflate" -> DeflaterInputStream(this)
-        "br" -> BrotliInputStream(this)
-        else -> this
-    }).bufferedReader().use { it.readText() }
-
-    val connection = URL(url).openConnection() as HttpsURLConnection
-    connection.requestMethod = method
-    connection.connectTimeout = 5000
-    connection.readTimeout = 5000
-    connection.setRequestProperty("User-Agent", UA)
-    connection.setRequestProperty("Accept-Encoding", "gzip,deflate,br")
-    if (auth != null)
-        connection.setRequestProperty("Authorization", auth)
-    if (referer != null)
-        connection.setRequestProperty("Referer", referer)
-    if (data != null) {
-        connection.setRequestProperty("Content-Type", contentType)
-        connection.setRequestProperty("Content-Encoding", encoding)
-        connection.doOutput = true
-        val outputStream = connection.outputStream
-        (when (encoding) {
-            "gzip" -> GZIPOutputStream(outputStream)
-            "deflate" -> DeflaterOutputStream(outputStream)
-            else -> outputStream
-        }).use { it.write(data.toByteArray()) }
-    }
-    val status = connection.responseCode
-    if (status == HttpURLConnection.HTTP_OK) {
-        connection.inputStream.readText(connection.contentEncoding)
-    } else {
-        val error = connection.errorStream?.readText(connection.contentEncoding)
-        LogHelper.error { "Translate request execute failed, url: $url, status: $status, error: $error" }
-        null
-    }
-}.onFailure {
-    LogHelper.error({ "Translate request execute failed, url: $url" }, it)
-}.getOrNull()?.also {
-    LogHelper.debug { "Translate request execute success, url: $url, result: $it" }
-}
 
 abstract class Translator {
     open fun translate(text: String): String? {
@@ -93,15 +32,12 @@ object GoogleTranslator : Translator() {
             //.appendQueryParameter("format", "html") // '\n' will be ignored if indicated
             .appendQueryParameter("tk", texts.joinToString("").tk())
             .toString()
-        val response = request(
+        return HttpClient.post(
             url,
-            method = "POST",
-            contentType = "application/x-www-form-urlencoded",
-            data = texts.joinToString(separator = "&") { "q=${it.urlencoded}" },
-            encoding = "gzip",
+            body = RequestBody.form(texts.map { "q" to it }, encoding = Encoding.GZIP),
+            ua = browserUA,
             referer = REFERER,
-        ) ?: return listOf()
-        return JSONArray(response).asSequence<JSONArray>().map {
+        )?.jsonArray().orEmpty().asSequence<JSONArray>().map {
             it.optString(0)
         }.toList()
     }
@@ -153,8 +89,8 @@ object GoogleTranslator : Translator() {
          * 从谷歌翻译的网页中获取TKK值
          */
         private fun fetchTKK(): Pair<Long, Long>? {
-            val elementJS = request(ELEMENT_URL, referer = REFERER)
-                ?: return null
+            val elementJS = HttpClient.get(ELEMENT_URL, ua = browserUA, referer = REFERER)
+                ?.plain() ?: return null
             val (_, value1, value2) = tkkRegex.find(elementJS)?.groupValues
                 ?: return null
             return value1.toLong() to value2.toLong()
@@ -229,16 +165,14 @@ object MicrosoftTranslator : Translator() {
             .appendQueryParameter("api-version", "3.0")
             .appendQueryParameter("to", "zh-CHS")
             .toString()
-        val response = request(
+        return HttpClient.post(
             url,
-            method = "POST",
+            ua = browserUA,
             auth = "Bearer $token",
-            contentType = "application/json",
-            data = JSONArray().apply {
+            body = RequestBody.json(JSONArray().apply {
                 texts.forEach { put(JSONObject().put("Text", it)) }
-            }.toString(),
-        ) ?: return listOf()
-        return JSONArray(response).asSequence<JSONObject>().map {
+            }),
+        )?.jsonArray().orEmpty().asSequence<JSONObject>().map {
             it.optJSONArray("translations")?.optJSONObject(0)
                 ?.optString("text").orEmpty()
         }.toList()
@@ -262,7 +196,7 @@ object MicrosoftTranslator : Translator() {
 
             return runCatchingOrNull {
                 Utils.submitTask {
-                    request(AUTH_URL)?.let {
+                    HttpClient.get(AUTH_URL, ua = browserUA)?.plain()?.let {
                         if (it.matches(jwtRegex)) {
                             update(it); it
                         } else null
