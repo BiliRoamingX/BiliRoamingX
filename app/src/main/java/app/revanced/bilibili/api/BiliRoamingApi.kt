@@ -532,9 +532,6 @@ object BiliRoamingApi {
             put("title", optString("title").ifEmpty { "制作信息" })
             put("info", optString("info").trimEnd())
         }
-        result.optJSONObject("new_ep")?.run {
-            put("desc", optString("new_ep_display"))
-        }
         val views = result.optJSONObject("stat")?.optLong("views") ?: 0
         val play = views.cnCountFormat()
         // fake likes to followers
@@ -556,6 +553,7 @@ object BiliRoamingApi {
         result.apply {
             remove("stat_format")
             remove("series")
+            remove("new_ep")
             put("season_title", result.optString("title"))
             put("show_season_type", result.optInt("type"))
             put("link", "https://www.bilibili.tv/en/play$seasonId")

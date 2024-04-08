@@ -212,8 +212,8 @@ object ViewUniteReplyHook {
         hasCanPlayEp = if (positiveEpisodes.length() > 0) 1 else 0
         mediaId = result.optInt("media_id")
         mode = result.optInt("mode")
-        newEp = NewEp().apply {
-            result.optJSONObject("new_ep")?.run {
+        result.optJSONObject("new_ep")?.run {
+            newEp = NewEp().apply {
                 desc = optString("desc")
                 id = optInt("id")
                 title = optString("title")
