@@ -53,13 +53,13 @@ object BangumiSeasonHook {
     private var invalidFragmentRef = WeakReference<Fragment>(null)
 
     private val searchTypes = mapOf(
-        931 to SearchType(Area.CN, "陆(影)", "8", "movie"),
-        364364 to SearchType(Area.HK, "港(影)", "8", "movie"),
-        889464 to SearchType(Area.TW, "台(影)", "8", "movie"),
-        114 to SearchType(Area.TH, "泰", "7", "bangumi"),
-        514 to SearchType(Area.CN, "陆", "7", "bangumi"),
-        1919 to SearchType(Area.HK, "港", "7", "bangumi"),
-        810 to SearchType(Area.TW, "台", "7", "bangumi")
+        931 to SearchType(Area.cn, "陆(影)", "8", "movie"),
+        364364 to SearchType(Area.hk, "港(影)", "8", "movie"),
+        889464 to SearchType(Area.tw, "台(影)", "8", "movie"),
+        114 to SearchType(Area.th, "泰", "7", "bangumi"),
+        514 to SearchType(Area.cn, "陆", "7", "bangumi"),
+        1919 to SearchType(Area.hk, "港", "7", "bangumi"),
+        810 to SearchType(Area.tw, "台", "7", "bangumi")
     )
 
     init {
@@ -205,8 +205,8 @@ object BangumiSeasonHook {
         val extraTypes = searchTypes.mapNotNull { type ->
             val area = type.value.area
             val typeStr = type.value.typeStr
-            if (Settings.getServerByArea(area).isNotEmpty()
-                && Settings.getExtraSearchByType(typeStr)
+            if (getServerByArea(area).isNotEmpty()
+                && getExtraSearchByType(typeStr)
             ) PageTypes(
                 "PAGE_" + typeStr.uppercase(Locale.getDefault()), 4,
                 "bilibili://search-result/new-$typeStr?from=$area",
@@ -228,8 +228,8 @@ object BangumiSeasonHook {
         val extraTypes = searchTypes.mapNotNull { type ->
             val area = type.value.area
             val typeStr = type.value.typeStr
-            if (Settings.getServerByArea(area).isNotEmpty()
-                && Settings.getExtraSearchByType(typeStr)
+            if (getServerByArea(area).isNotEmpty()
+                && getExtraSearchByType(typeStr)
             ) BiliMainSearchResultPage.PageTypes(
                 "PAGE_" + typeStr.uppercase(Locale.getDefault()), 4,
                 "bilibili://search-result/new-$typeStr?from=$area",
@@ -504,8 +504,8 @@ object BangumiSeasonHook {
             val typeStr = searchType.value.typeStr
             if (area == currentArea)
                 continue
-            if (Settings.getServerByArea(area).isNotEmpty()
-                && Settings.getExtraSearchByType(typeStr)
+            if (getServerByArea(area).isNotEmpty()
+                && getExtraSearchByType(typeStr)
             ) {
                 val nav = Nav().apply {
                     name = searchType.value.text
@@ -527,8 +527,8 @@ object BangumiSeasonHook {
             val typeStr = info.typeStr
             if (area == currentArea)
                 continue
-            if (Settings.getServerByArea(area).isNotEmpty()
-                && Settings.getExtraSearchByType(typeStr)
+            if (getServerByArea(area).isNotEmpty()
+                && getExtraSearchByType(typeStr)
             ) {
                 val nav = JSONObject().apply {
                     put("name", info.text)

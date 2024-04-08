@@ -223,9 +223,9 @@ class SpeedTestDialog(context: Context, onDismiss: (Boolean) -> Unit) :
 
     private fun getTestUrl() = try {
         speedTestExecutor.submit<String?> {
-            val json = if (country == Area.CN) {
-                getPlayUrl(overseaTestParams, arrayOf(Area.HK, Area.TW))
-            } else getPlayUrl(mainlandTestParams, arrayOf(Area.CN))
+            val json = if (country == Area.cn) {
+                getPlayUrl(overseaTestParams, arrayOf(Area.hk, Area.tw))
+            } else getPlayUrl(mainlandTestParams, arrayOf(Area.cn))
             json?.toJSONObject()?.optJSONObject("dash")?.getJSONArray("audio")
                 ?.asSequence<JSONObject>()
                 ?.minWithOrNull { a, b -> a.optInt("bandwidth") - b.optInt("bandwidth") }

@@ -11,7 +11,6 @@ import static app.revanced.bilibili.settings.Settings.ValueType.STRING_SET;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
@@ -19,7 +18,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import app.revanced.bilibili.utils.Area;
 import app.revanced.bilibili.utils.Constants;
 import app.revanced.bilibili.utils.LogHelper;
 import app.revanced.bilibili.utils.Utils;
@@ -403,26 +401,6 @@ public enum Settings {
 
     public static void unregisterPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
         preferenceChangeListener.remove(listener);
-    }
-
-    public static String getServerByArea(Area area) {
-        return switch (area) {
-            case CN -> CN_SERVER.getString();
-            case HK -> HK_SERVER.getString();
-            case TW -> TW_SERVER.getString();
-            case TH -> TH_SERVER.getString();
-            default -> "";
-        };
-    }
-
-    public static boolean getExtraSearchByType(String type) {
-        if (TextUtils.isEmpty(type))
-            return false;
-        if ("bangumi".equals(type))
-            return SEARCH_BANGUMI.getBoolean();
-        if ("movie".equals(type))
-            return Settings.SEARCH_MOVIE.getBoolean();
-        return false;
     }
 
     public enum ValueType {

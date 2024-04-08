@@ -29,12 +29,12 @@ object DmSegMobile : MossHook<DmSegMobileReq, DmSegMobileReply>() {
             val seasonAreasCache = seasonAreasCache
             val sArea = seasonAreasCache[seasonId]
             val epArea = seasonAreasCache["ep$epId"]
-            if (Area.TH.let { it == sArea || it == epArea } ||
-                (cachePrefs.contains(seasonId) && Area.TH == Area.of(
-                    cachePrefs.getString(seasonId, null)
-                )) || (cachePrefs.contains("ep$epId") && Area.TH == Area.of(
-                    cachePrefs.getString("ep$epId", null)
-                ))) reply.clearElems()
+            if (Area.th.let { it == sArea || it == epArea } ||
+                (cachePrefs.contains(seasonId) && Area.th.value
+                        == cachePrefs.getString(seasonId, null))
+                || (cachePrefs.contains("ep$epId") && Area.th.value
+                        == cachePrefs.getString("ep$epId", null))
+            ) reply.clearElems()
         }
         if (reply != null && Settings.NO_COLORFUL_DANMAKU.boolean) {
             reply.elemsList.forEach {

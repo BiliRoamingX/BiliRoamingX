@@ -25,8 +25,15 @@ import java.util.zip.DeflaterOutputStream
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
-enum class Method(val key: String) {
-    GET("GET"), POST("POST"), PUT("PUT"), HEAD("HEAD"), OPTIONS("OPTIONS"),
+@JvmInline
+value class Method private constructor(val key: String) {
+    companion object {
+        val get = Method("GET")
+        val post = Method("POST")
+        val put = Method("PUT")
+        val head = Method("HEAD")
+        val options = Method("OPTIONS")
+    }
 }
 
 @JvmInline
@@ -37,14 +44,19 @@ value class ContentType(val key: String) {
     }
 }
 
-enum class Encoding(val key: String) {
-    NONE(""), DEFLATE("deflate"), GZIP("gzip")
+@JvmInline
+value class Encoding(val key: String) {
+    companion object {
+        val none = Encoding("")
+        val deflate = Encoding("deflate")
+        val gzip = Encoding("gzip")
+    }
 }
 
 class RequestBody(val contentType: ContentType, val encoding: Encoding, val body: ByteArray) {
     companion object {
         @JvmStatic
-        fun form(params: List<Pair<Any, Any>>, encoding: Encoding = Encoding.NONE): RequestBody {
+        fun form(params: List<Pair<Any, Any>>, encoding: Encoding = Encoding.none): RequestBody {
             val body = params.joinToString("&") { (k, v) ->
                 "$k=${v.toString().urlencoded}"
             }.toByteArray()
@@ -52,28 +64,28 @@ class RequestBody(val contentType: ContentType, val encoding: Encoding, val body
         }
 
         @JvmStatic
-        fun json(json: String, encoding: Encoding = Encoding.NONE): RequestBody {
+        fun json(json: String, encoding: Encoding = Encoding.none): RequestBody {
             val body = json.toByteArray()
             return RequestBody(ContentType.json, encoding, body)
         }
 
         @JvmStatic
-        inline fun json(json: JSONObject, encoding: Encoding = Encoding.NONE) =
+        inline fun json(json: JSONObject, encoding: Encoding = Encoding.none) =
             json(json.toString(), encoding)
 
         @JvmStatic
-        inline fun json(json: JSONArray, encoding: Encoding = Encoding.NONE) =
+        inline fun json(json: JSONArray, encoding: Encoding = Encoding.none) =
             json(json.toString(), encoding)
 
         @JvmStatic
-        inline fun json(params: Map<String, Any>, encoding: Encoding = Encoding.NONE) =
+        inline fun json(params: Map<String, Any>, encoding: Encoding = Encoding.none) =
             json(params.toJsonObject().toString(), encoding)
 
         @JvmStatic
         @JvmName("create")
         inline fun String.toRequestBody(
             contentType: ContentType,
-            encoding: Encoding = Encoding.NONE
+            encoding: Encoding = Encoding.none
         ) = RequestBody(contentType, encoding, toByteArray())
     }
 }
@@ -132,7 +144,7 @@ object HttpClient {
         proxy: Proxy = Proxy.direct,
     ) = request(
         url,
-        method = Method.GET,
+        method = Method.get,
         headers,
         body = null,
         ua, auth, referer, timeout, proxy
@@ -150,7 +162,7 @@ object HttpClient {
         proxy: Proxy = Proxy.direct,
     ) = request(
         url = url,
-        method = Method.POST,
+        method = Method.post,
         headers, body, ua, auth, referer, timeout, proxy
     )
 
@@ -163,7 +175,7 @@ object HttpClient {
             "platform-from-biliroaming" to Utils.getMobiApp(),
             "Build" to verCode,
         )
-        return request(url, method = Method.GET, headers = headers)
+        return request(url, method = Method.get, headers = headers)
     }
 
     @JvmStatic
@@ -179,7 +191,7 @@ object HttpClient {
         proxy: Proxy = Proxy.direct,
     ): ResponseBody? = runCatching {
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N
-            && method === Method.GET
+            && method == Method.get
             && url.startsWith("https")
             && !url.contains("bilibili.com")
         ) {
@@ -258,14 +270,15 @@ object HttpClient {
             if (body != null) {
                 val encoding = body.encoding
                 connection.setRequestProperty("Content-Type", body.contentType.key)
-                if (encoding !== Encoding.NONE)
+                if (encoding != Encoding.none)
                     connection.setRequestProperty("Content-Encoding", encoding.key)
                 connection.doOutput = true
                 val outputStream = connection.outputStream
                 (when (encoding) {
-                    Encoding.GZIP -> GZIPOutputStream(outputStream)
-                    Encoding.DEFLATE -> DeflaterOutputStream(outputStream)
-                    Encoding.NONE -> outputStream
+                    Encoding.gzip -> GZIPOutputStream(outputStream)
+                    Encoding.deflate -> DeflaterOutputStream(outputStream)
+                    Encoding.none -> outputStream
+                    else -> outputStream
                 }).use { it.write(body.body) }
             }
             val status = connection.responseCode

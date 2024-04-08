@@ -34,7 +34,7 @@ object GoogleTranslator : Translator() {
             .toString()
         return HttpClient.post(
             url,
-            body = RequestBody.form(texts.map { "q" to it }, encoding = Encoding.GZIP),
+            body = RequestBody.form(texts.map { "q" to it }, encoding = Encoding.gzip),
             ua = browserUA,
             referer = REFERER,
         )?.jsonArray().orEmpty().asSequence<JSONArray>().map {

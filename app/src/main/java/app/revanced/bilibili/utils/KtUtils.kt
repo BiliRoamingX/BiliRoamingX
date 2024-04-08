@@ -22,6 +22,7 @@ import app.revanced.bilibili.meta.Client
 import app.revanced.bilibili.meta.CookieInfo
 import app.revanced.bilibili.meta.VideoHistory
 import app.revanced.bilibili.patches.main.ApplicationDelegate
+import app.revanced.bilibili.settings.Settings
 import com.bapis.bilibili.metadata.Metadata
 import com.bapis.bilibili.metadata.device.Device
 import com.bilibili.lib.moss.api.BusinessException
@@ -124,20 +125,26 @@ fun fetchJson(url: String) = try {
     null
 }
 
-enum class Area(@JvmField val value: String) {
-    CN("cn"), HK("hk"), TW("tw"), TH("th"), GLOBAL("global");
+@JvmInline
+value class Area private constructor(val value: String) {
 
     override fun toString() = value
 
     companion object {
+        val cn = Area("cn")
+        val hk = Area("hk")
+        val tw = Area("tw")
+        val th = Area("th")
+        val global = Area("global")
+
         @JvmStatic
         fun of(value: String?) = when (value) {
-            CN.value -> CN
-            HK.value -> HK
-            TW.value -> TW
-            TH.value -> TH
-            GLOBAL.value -> GLOBAL
-            else -> error("invalid area value: $value")
+            cn.value -> cn
+            hk.value -> hk
+            tw.value -> tw
+            th.value -> th
+            global.value -> global
+            else -> null
         }
     }
 }
@@ -145,10 +152,10 @@ enum class Area(@JvmField val value: String) {
 val countryTask: Future<Area> by lazy {
     Utils.submitTask {
         when (fetchJson(Constants.ZONE_URL)?.optJSONObject("data")?.optInt("country_code") ?: 0) {
-            86 -> Area.CN
-            852, 853 -> Area.HK
-            886 -> Area.TW
-            else -> Area.GLOBAL
+            86 -> Area.cn
+            852, 853 -> Area.hk
+            886 -> Area.tw
+            else -> Area.global
         }.also { LogHelper.debug { "当前地区: $it" } }
     }
 }
@@ -516,7 +523,7 @@ fun isWifiConnected(): Boolean {
 
 @WorkerThread
 fun speedupGhUrl(url: String): String {
-    return if (country == Area.CN) "${Constants.GITHUB_SPEEDUP_URL}/$url" else url
+    return if (country == Area.cn) "${Constants.GITHUB_SPEEDUP_URL}/$url" else url
 }
 
 val buvidPrefs by lazy {
@@ -579,3 +586,23 @@ val isChinaEnv: Boolean
     get() = Utils.getContext().resources.configuration.locales[0].let {
         it.language == "zh" && (it.country == "CN" || it.script == "Hans")
     }
+
+fun getServerByArea(area: Area): String {
+    return when (area) {
+        Area.cn -> Settings.CN_SERVER.string
+        Area.hk -> Settings.HK_SERVER.string
+        Area.tw -> Settings.TW_SERVER.string
+        Area.th -> Settings.TH_SERVER.string
+        else -> ""
+    }
+}
+
+fun getExtraSearchByType(type: String): Boolean {
+    if (type.isEmpty())
+        return false
+    if ("bangumi" == type)
+        return Settings.SEARCH_BANGUMI.boolean
+    if ("movie" == type)
+        return Settings.SEARCH_MOVIE.boolean
+    return false
+}

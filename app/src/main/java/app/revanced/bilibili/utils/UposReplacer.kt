@@ -16,7 +16,7 @@ object UposReplacer {
     private val aliovHost = Utils.getString("biliroaming_aliov_host")
     private val hkBcacheHost = Utils.getString("biliroaming_hk_bcache_host")
 
-    private val isLocatedInCn by lazy { country.let { it == null || it == Area.CN } }
+    private val isLocatedInCn by lazy { country.let { it == null || it == Area.cn } }
 
     val uposBase: String
         get() = Settings.UPOS_HOST.string.ifEmpty {
