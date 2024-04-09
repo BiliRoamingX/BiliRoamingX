@@ -7,8 +7,8 @@ import app.revanced.bilibili.patches.okhttp.hooks.*
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.LogHelper
 import java.io.InputStream
-import java.util.zip.DeflaterInputStream
 import java.util.zip.GZIPInputStream
+import java.util.zip.InflaterInputStream
 
 @Suppress("unused")
 object OkHttpPatch {
@@ -63,13 +63,13 @@ object OkHttpPatch {
             ""
         } else (when (reqEncoding) {
             "gzip" -> GZIPInputStream(reqStream)
-            "deflate" -> DeflaterInputStream(reqStream)
+            "deflate" -> InflaterInputStream(reqStream)
             "br" -> BrotliInputStream(reqStream)
             else -> reqStream
         }).bufferedReader().use { it.readText() }
         val response = (when (respEncoding) {
             "gzip" -> GZIPInputStream(respStream)
-            "deflate" -> DeflaterInputStream(respStream)
+            "deflate" -> InflaterInputStream(respStream)
             "br" -> BrotliInputStream(respStream)
             else -> respStream
         }).bufferedReader().use { it.readText() }

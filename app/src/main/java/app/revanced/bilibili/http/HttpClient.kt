@@ -20,10 +20,10 @@ import java.net.Proxy.Type
 import java.net.URL
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-import java.util.zip.DeflaterInputStream
 import java.util.zip.DeflaterOutputStream
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
+import java.util.zip.InflaterInputStream
 
 @JvmInline
 value class Method private constructor(val key: String) {
@@ -237,7 +237,7 @@ object HttpClient {
             fun InputStream.readText(encoding: String?) = (when (encoding?.lowercase()) {
                 "br" -> BrotliInputStream(this)
                 "gzip" -> GZIPInputStream(this)
-                "deflate" -> DeflaterInputStream(this)
+                "deflate" -> InflaterInputStream(this)
                 else -> this
             }).bufferedReader().use { it.readText() }
 
