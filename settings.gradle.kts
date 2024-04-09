@@ -10,4 +10,4 @@ include(":app")
 include(":dummy")
 include(":extend")
 
-rootProject.name = "revanced-integrations"
+rootProject.name = "BiliRoamingX-integrations"

@@ -63,7 +63,7 @@ object Upgrade : ApiHook() {
             context.packageName, PackageManager.GET_META_DATA
         ).metaData.getInt("BUILD_SN").toLong()
         val patchVersion = Constants.VERSION
-        val patchVersionCode = Constants.versionCode()
+        val patchVersionCode = Constants.VERSION_CODE
         val response = JSONArray(URL(UPGRADE_CHECK_API).readText())
         val mobiApp = Utils.getMobiApp()
         for (data in response) {

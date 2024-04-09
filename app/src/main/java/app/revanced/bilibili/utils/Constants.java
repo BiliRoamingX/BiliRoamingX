@@ -1,7 +1,10 @@
 package app.revanced.bilibili.utils;
 
+import app.revanced.bilibili.integrations.BuildConfig;
+
 public class Constants {
-    public static final String VERSION = "1.19.2";
+    public static final String VERSION = BuildConfig.VERSION_NAME;
+    public static final int VERSION_CODE = BuildConfig.VERSION_CODE;
     public static final String PINK_PACKAGE_NAME = "tv.danmaku.bili";
     public static final String BLUE_PACKAGE_NAME = "com.bilibili.app.blue";
     public static final String PLAY_PACKAGE_NAME = "com.bilibili.app.in";
@@ -18,9 +21,4 @@ public class Constants {
     public static final String PRE_BUILD_SIG_MD5 = "d6cd98a96eee91706e8689ddffb9bf68";
     public static final String PREFS_VH = "biliroaming_vh";
     public static final String GITHUB_SPEEDUP_URL = "https://mirror.ghproxy.com";
-
-    public static int versionCode() {
-        String[] split = VERSION.split("\\.");
-        return Integer.parseInt(split[0]) * 1000000 + Integer.parseInt(split[1]) * 1000 + Integer.parseInt(split[2]);
-    }
 }

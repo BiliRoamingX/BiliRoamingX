@@ -9,14 +9,18 @@ plugins {
 
 android {
     compileSdk = 34
-    namespace = "app.revanced.integrations"
+    namespace = "app.revanced.bilibili.integrations"
 
     defaultConfig {
-        applicationId = "app.revanced.integrations"
+        applicationId = "app.revanced.bilibili.integrations"
         minSdk = 24
         targetSdk = 34
         multiDexEnabled = false
-        versionName = project.version as String
+        val verName = project.version as String
+        versionName = verName
+        versionCode = verName.split('.', limit = 3).let { (m, s, f) ->
+            m.toInt() * 1000000 + s.toInt() * 1000 + f.toInt()
+        }
     }
 
     buildTypes {
@@ -37,7 +41,7 @@ android {
         }
     }
     buildFeatures {
-        buildConfig = false
+        buildConfig = true
         resValues = false
     }
     compileOptions {
