@@ -211,7 +211,7 @@ object CopyEnhancePatch {
             }
             .setNeutralButton(neuButton) { _, _ -> onCopyAll(text) }
             .setNegativeButton(android.R.string.cancel, null)
-            .show()
+            .create().apply { constraintSize();show() }
         (alertDialog.findViewById<TextView>(android.R.id.message)).run {
             setTextIsSelectable(true)
             movementMethod = LinkMovementMethod.getInstance()

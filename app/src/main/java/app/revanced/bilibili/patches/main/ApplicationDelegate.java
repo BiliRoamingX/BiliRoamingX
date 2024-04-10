@@ -6,9 +6,12 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Pair;
+import android.view.WindowManager;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
@@ -37,6 +40,7 @@ import tv.danmaku.bili.MainActivityV2;
 public class ApplicationDelegate {
     private static final ArrayDeque<WeakReference<Activity>> activityRefs = new ArrayDeque<>();
     private static volatile boolean appCreated = false;
+    private static final Point screenSize = new Point();
 
     @Keep
     public static void onCreate(Application app) {
@@ -65,7 +69,11 @@ public class ApplicationDelegate {
             int newDpi = getCustomDpi();
             if (newDpi != 0) {
                 updateDpi(resources.getDisplayMetrics(), newDpi);
-                resources.getConfiguration().densityDpi = newDpi;
+                Configuration configuration = resources.getConfiguration();
+                configuration.densityDpi = newDpi;
+                var newAxisDpi = calcNewAxisDpi();
+                configuration.screenWidthDp = newAxisDpi.first;
+                configuration.screenHeightDp = newAxisDpi.second;
             }
         }
         return resources;
@@ -101,6 +109,9 @@ public class ApplicationDelegate {
         var newDpi = getCustomDpi();
         if (newDpi != 0) {
             newConfig.densityDpi = newDpi;
+            var newAxisDpi = calcNewAxisDpi();
+            newConfig.screenWidthDp = newAxisDpi.first;
+            newConfig.screenHeightDp = newAxisDpi.second;
             updateDpi(activity, newDpi);
         }
     }
@@ -112,7 +123,27 @@ public class ApplicationDelegate {
         if (newDpi == 0) return base;
         var configuration = base.getResources().getConfiguration();
         configuration.densityDpi = newDpi;
+        var newAxisDpi = calcNewAxisDpi();
+        configuration.screenWidthDp = newAxisDpi.first;
+        configuration.screenHeightDp = newAxisDpi.second;
         return base.createConfigurationContext(configuration);
+    }
+
+    private static Pair<Integer, Integer> calcNewAxisDpi() {
+        Resources sysRes = Resources.getSystem();
+        float sysDensity = sysRes.getDisplayMetrics().density;
+        int sysWidthDp = sysRes.getConfiguration().screenWidthDp;
+        int sysHeightDp = sysRes.getConfiguration().screenHeightDp;
+        var windowManager = (WindowManager) Utils.getContext().getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getRealSize(screenSize);
+        int widthPixels = screenSize.x;
+        int heightPixels = screenSize.y;
+        int widthInsets = Math.max(0, widthPixels - (int) (sysWidthDp * sysDensity));
+        int heightInsets = Math.max(0, heightPixels - (int) (sysHeightDp * sysDensity));
+        float customDensity = DpiPatch.displayScale + sysDensity;
+        int newWidthDp = (int) ((widthPixels - widthInsets) / customDensity);
+        int newHeightDp = (int) ((heightPixels - heightInsets) / customDensity);
+        return Pair.create(newWidthDp, newHeightDp);
     }
 
     static void updateDpi(Activity activity, int newDpi) {

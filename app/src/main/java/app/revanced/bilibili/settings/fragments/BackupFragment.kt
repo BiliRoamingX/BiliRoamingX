@@ -107,7 +107,7 @@ class BackupFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_backu
             .setMessage(message)
             .setNegativeButton(later, null)
             .setPositiveButton(confirm) { _, _ -> Utils.reboot() }
-            .show()
+            .create().constraintSize().show()
     }
 
     /**

@@ -13,10 +13,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import androidx.preference.TwoStatePreference
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.LogHelper
-import app.revanced.bilibili.utils.Reflex
-import app.revanced.bilibili.utils.Utils
-import app.revanced.bilibili.utils.onPreferenceTreeClick
+import app.revanced.bilibili.utils.*
 import app.revanced.bilibili.widget.HdBaseToolbar
 import com.bilibili.lib.ui.BasePreferenceFragment
 import java.lang.reflect.Method
@@ -143,7 +140,7 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
                     .setMessage(message)
                     .setNegativeButton(later, null)
                     .setPositiveButton(confirm) { _, _ -> Utils.reboot() }
-                    .show()
+                    .create().constraintSize().show()
                 break
             }
         }

@@ -42,8 +42,7 @@
     public <init>(...);
 }
 
--keep interface app.revanced.bilibili.widget.OnClickOriginListener { *; }
--keep interface app.revanced.bilibili.widget.OnLongClickOriginListener { *; }
+-keep interface app.revanced.bilibili.widget.*Listener { *; }
 
 #-keep class app.revanced.bilibili.** { *; }
 -keep class com.google.protobuf.*Ex { *; }

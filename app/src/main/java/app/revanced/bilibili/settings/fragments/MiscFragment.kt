@@ -93,7 +93,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
             .setPositiveButton(android.R.string.ok, null)
             .setNegativeButton(Utils.getString("biliroaming_skin_get"), null)
             .setNeutralButton(Utils.getString("biliroaming_skin_import_from_file"), null)
-            .create().apply {
+            .create().constraintSize(maxHeight = -1).apply {
                 setOnShowListener {
                     getButton(Dialog.BUTTON_POSITIVE)?.setOnClickListener {
                         val text = view.text.toString().trim()

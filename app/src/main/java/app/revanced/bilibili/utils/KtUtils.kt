@@ -4,6 +4,7 @@
 package app.revanced.bilibili.utils
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -12,7 +13,9 @@ import android.os.*
 import android.util.*
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.MeasureSpec
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.annotation.Keep
 import androidx.annotation.WorkerThread
@@ -332,7 +335,7 @@ fun saveVideoHistory(sid: Int, epId: Int, progress: Long) {
 
 @JvmOverloads
 fun setClipboardContent(label: String = "", content: CharSequence) {
-    val clipboardManager = Utils.getContext().getSystemService(ClipboardManager::class.java)
+    val clipboardManager = systemService<ClipboardManager>()
     val clipData = ClipData.newPlainText(label, content)
     clipboardManager.setPrimaryClip(clipData)
 }
@@ -467,7 +470,7 @@ private fun Throwable.print(printer: PrintWriter) {
 @Suppress("DEPRECATION")
 @SuppressLint("MissingPermission")
 fun vibrate(milliseconds: Long) {
-    val vibrator = Utils.getContext().getSystemService(Vibrator::class.java)
+    val vibrator = systemService<Vibrator>()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val effect = VibrationEffect.createOneShot(milliseconds, VibrationEffect.DEFAULT_AMPLITUDE)
         vibrator.vibrate(effect)
@@ -515,8 +518,7 @@ inline fun BusinessException(
 
 @Suppress("DEPRECATION")
 fun isWifiConnected(): Boolean {
-    val manager = Utils.getContext().getSystemService(Context.CONNECTIVITY_SERVICE)
-            as ConnectivityManager
+    val manager = systemService<ConnectivityManager>()
     val networkInfo = manager.activeNetworkInfo ?: return false
     return networkInfo.isConnected && networkInfo.type == ConnectivityManager.TYPE_WIFI
 }
@@ -605,4 +607,27 @@ fun getExtraSearchByType(type: String): Boolean {
     if ("movie" == type)
         return Settings.SEARCH_MOVIE.boolean
     return false
+}
+
+inline fun <reified T> systemService(): T {
+    return Utils.getContext().getSystemService(T::class.java)
+}
+
+fun <T : Dialog> T.constraintSize(
+    maxHeight: Int = (context.resources.displayMetrics.heightPixels * 0.8f).toInt()
+) = apply {
+    create()
+    val decorView = window?.decorView ?: return@apply
+    val dm = context.resources.displayMetrics
+    val width = (dm.widthPixels * 0.9f).toInt()
+    if (maxHeight > 0) {
+        decorView.measure(
+            MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+            MeasureSpec.UNSPECIFIED
+        )
+        val height = decorView.measuredHeight
+        window?.setLayout(width, height.coerceAtMost(maxHeight))
+    } else {
+        window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
+    }
 }

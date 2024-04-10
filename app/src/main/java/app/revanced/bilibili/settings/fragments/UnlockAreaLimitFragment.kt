@@ -44,8 +44,7 @@ class UnlockAreaLimitFragment :
                     val intent = Intent(Intent.ACTION_VIEW, uri)
                     startActivity(intent)
                 }
-                show()
-            }
+            }.create().constraintSize().show()
             true
         }
         findPreference<Preference>("test_upos")?.onClick {

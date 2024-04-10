@@ -155,7 +155,7 @@ class SpeedTestDialog(context: Context, onDismiss: (Boolean) -> Unit) :
     }
 
     override fun show(): AlertDialog {
-        val dialog = super.show()
+        val dialog = super.create().constraintSize(maxHeight = -1).apply { show() }
         dialog.setTitle(Utils.getString("biliroaming_speed_testing"))
         val results = Utils.getStringArray("biliroaming_upos_entries")
             .zip(Utils.getStringArray("biliroaming_upos_values"))

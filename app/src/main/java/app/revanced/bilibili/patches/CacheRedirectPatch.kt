@@ -94,7 +94,7 @@ object CacheRedirectPatch {
                         LogHelper.error({ "external downloader launch failed" }, it)
                     }
                 }
-            }.show()
+            }.create().constraintSize().show()
     }
 
     private fun dismissDialog(listener: OnClickOriginListener) = runCatching {

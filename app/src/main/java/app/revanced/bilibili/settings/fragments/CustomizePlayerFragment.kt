@@ -7,10 +7,7 @@ import android.text.InputType
 import android.widget.EditText
 import androidx.preference.Preference
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.Toasts
-import app.revanced.bilibili.utils.Utils
-import app.revanced.bilibili.utils.onClick
-import app.revanced.bilibili.utils.runCatchingOrNull
+import app.revanced.bilibili.utils.*
 
 class CustomizePlayerFragment :
     BiliRoamingBaseSettingFragment("biliroaming_setting_customize_player") {
@@ -35,7 +32,7 @@ class CustomizePlayerFragment :
             .setView(editText)
             .setPositiveButton(android.R.string.ok, null)
             .setNegativeButton(android.R.string.cancel, null)
-            .create().apply {
+            .create().constraintSize().apply {
                 setOnShowListener {
                     getButton(Dialog.BUTTON_POSITIVE)?.setOnClickListener {
                         val text = editText.text.toString().trim()
@@ -61,6 +58,7 @@ class CustomizePlayerFragment :
 
     private fun onPlaybackSpeedOverrideClick(): Boolean {
         val editText = EditText(activity)
+        editText.inputType = InputType.TYPE_CLASS_TEXT
         editText.hint = Utils.getString("biliroaming_speed_override_hint")
         editText.setText(Settings.OVERRIDE_PLAYBACK_SPEED.string)
         AlertDialog.Builder(activity)
@@ -68,7 +66,7 @@ class CustomizePlayerFragment :
             .setView(editText)
             .setPositiveButton(android.R.string.ok, null)
             .setNegativeButton(android.R.string.cancel, null)
-            .create().apply {
+            .create().constraintSize().apply {
                 setOnShowListener {
                     getButton(Dialog.BUTTON_POSITIVE)?.setOnClickListener {
                         val text = editText.text.toString().trim()

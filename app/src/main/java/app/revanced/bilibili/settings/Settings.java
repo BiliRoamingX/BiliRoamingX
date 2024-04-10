@@ -154,7 +154,7 @@ public enum Settings {
     BLOCK_COMMENT_CONTENT_REGEX_MODE("block_comment_content_regex_mode", BOOLEAN, FALSE),
     BLOCK_COMMENT_UP_LEVEL("block_comment_up_level", INTEGER, 0),
     EXTERNAL_DOWNLOADER("external_downloader", BOOLEAN, FALSE),
-    EXTERNAL_DOWNLOADER_NAME("external_downloader_name", STRING, ""),
+    EXTERNAL_DOWNLOADER_NAME("external_downloader_name", STRING, "com.junkfood.seal"),
     NO_COLORFUL_DANMAKU("no_colorful_danmaku", BOOLEAN, FALSE),
 
     // 用户空间页

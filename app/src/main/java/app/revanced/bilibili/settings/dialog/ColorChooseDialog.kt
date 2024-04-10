@@ -74,6 +74,8 @@ class ColorChooseDialog(
         tvColorB.text = progressB.toString()
     }
 
+    override fun show(): AlertDialog = super.create().constraintSize().apply { show() }
+
     init {
         setView(view)
         setEditTextListener()
