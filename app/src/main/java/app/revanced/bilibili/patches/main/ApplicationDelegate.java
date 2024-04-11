@@ -48,9 +48,9 @@ public class ApplicationDelegate {
         app.registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
         app.registerComponentCallbacks(new ComponentCallbacks());
         setBitmapDefaultDensity();
+        CustomThemePatch.refresh();
         if (Utils.isInMainProcess()) {
             Utils.async(ApplicationDelegate::startLog);
-            CustomThemePatch.refresh();
             Utils.async(PlaybackSpeedPatch::refreshOverrideSpeedList);
             SubtitleParamsCache.updateFont();
             KtUtils.getCountryTask();
