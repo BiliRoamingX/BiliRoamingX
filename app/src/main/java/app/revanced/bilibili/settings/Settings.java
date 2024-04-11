@@ -269,24 +269,23 @@ public enum Settings {
     private static void migrateIfNeeded() {
         String prefsMigratedKey = "prefs_migrated";
         if (prefs.getBoolean(prefsMigratedKey, false)) return;
-        Settings[] allPrefs = values();
         SharedPreferences.Editor newPrefs = prefs.edit();
         SharedPreferences oldPrefs = Utils.getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         for (Map.Entry<String, ?> entry : oldPrefs.getAll().entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
-            for (Settings p : allPrefs) {
-                if (p.key.equals(key)) {
-                    switch (p.valueType) {
-                        case BOOLEAN -> newPrefs.putBoolean(key, (Boolean) value);
-                        case LONG -> newPrefs.putLong(key, (Long) value);
-                        case FLOAT -> newPrefs.putFloat(key, (Float) value);
-                        case INTEGER -> newPrefs.putInt(key, (Integer) value);
-                        case STRING -> newPrefs.putString(key, (String) value);
-                        case STRING_SET -> newPrefs.putStringSet(key, (Set<String>) value);
-                    }
-                    break;
-                }
+            if (value instanceof Boolean v) {
+                newPrefs.putBoolean(key, v);
+            } else if (value instanceof Integer v) {
+                newPrefs.putInt(key, v);
+            } else if (value instanceof Long v) {
+                newPrefs.putLong(key, v);
+            } else if (value instanceof Float v) {
+                newPrefs.putFloat(key, v);
+            } else if (value instanceof String v) {
+                newPrefs.putString(key, v);
+            } else if (value instanceof Set<?>) {
+                newPrefs.putStringSet(key, (Set<String>) value);
             }
         }
         newPrefs.putBoolean(prefsMigratedKey, true);
