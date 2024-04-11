@@ -267,11 +267,11 @@ public enum Settings {
     @SuppressWarnings("unchecked")
     @SuppressLint("ApplySharedPref")
     private static void migrateIfNeeded() {
-        SharedPreferences oldPrefs = Utils.getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String prefsMigratedKey = "prefs_migrated";
-        if (oldPrefs.getBoolean(prefsMigratedKey, false)) return;
+        if (prefs.getBoolean(prefsMigratedKey, false)) return;
         Settings[] allPrefs = values();
         SharedPreferences.Editor newPrefs = prefs.edit();
+        SharedPreferences oldPrefs = Utils.getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         for (Map.Entry<String, ?> entry : oldPrefs.getAll().entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
@@ -289,8 +289,8 @@ public enum Settings {
                 }
             }
         }
+        newPrefs.putBoolean(prefsMigratedKey, true);
         newPrefs.commit();
-        oldPrefs.edit().putBoolean(prefsMigratedKey, true).commit();
     }
 
     private static void loadAllSettings() {
