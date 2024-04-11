@@ -9,6 +9,7 @@ import static app.revanced.bilibili.settings.Settings.ValueType.LONG;
 import static app.revanced.bilibili.settings.Settings.ValueType.STRING;
 import static app.revanced.bilibili.settings.Settings.ValueType.STRING_SET;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -16,6 +17,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import app.revanced.bilibili.utils.Constants;
@@ -224,6 +226,8 @@ public enum Settings {
 
     private static final Set<SharedPreferences.OnSharedPreferenceChangeListener> preferenceChangeListener = new HashSet<>();
 
+    private static final SharedPreferences.OnSharedPreferenceChangeListener innerListener = Settings::onPreferenceChanged;
+
     @NonNull
     public final String key;
     @NonNull
@@ -253,9 +257,40 @@ public enum Settings {
     }
 
     public static void reload() {
-        Context context = Utils.getContext();
-        prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        prefs = Utils.blkvPrefsByName(PREFS_NAME, true);
+        migrateIfNeeded();
         loadAllSettings();
+        prefs.unregisterOnSharedPreferenceChangeListener(innerListener);
+        prefs.registerOnSharedPreferenceChangeListener(innerListener);
+    }
+
+    @SuppressWarnings("unchecked")
+    @SuppressLint("ApplySharedPref")
+    private static void migrateIfNeeded() {
+        SharedPreferences oldPrefs = Utils.getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String prefsMigratedKey = "prefs_migrated";
+        if (oldPrefs.getBoolean(prefsMigratedKey, false)) return;
+        Settings[] allPrefs = values();
+        SharedPreferences.Editor newPrefs = prefs.edit();
+        for (Map.Entry<String, ?> entry : oldPrefs.getAll().entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            for (Settings p : allPrefs) {
+                if (p.key.equals(key)) {
+                    switch (p.valueType) {
+                        case BOOLEAN -> newPrefs.putBoolean(key, (Boolean) value);
+                        case LONG -> newPrefs.putLong(key, (Long) value);
+                        case FLOAT -> newPrefs.putFloat(key, (Float) value);
+                        case INTEGER -> newPrefs.putInt(key, (Integer) value);
+                        case STRING -> newPrefs.putString(key, (String) value);
+                        case STRING_SET -> newPrefs.putStringSet(key, (Set<String>) value);
+                    }
+                    break;
+                }
+            }
+        }
+        newPrefs.commit();
+        oldPrefs.edit().putBoolean(prefsMigratedKey, true).commit();
     }
 
     private static void loadAllSettings() {
@@ -356,7 +391,7 @@ public enum Settings {
     }
 
     @SuppressWarnings("unchecked")
-    public static void onPreferenceChanged(SharedPreferences preferences, String key) {
+    static void onPreferenceChanged(SharedPreferences preferences, String key) {
         LogHelper.debug(() -> "onPreferenceChanged, key: " + key);
         for (Settings settings : values()) {
             if (settings.key.equals(key)) {

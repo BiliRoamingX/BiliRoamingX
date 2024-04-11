@@ -17,7 +17,7 @@ class CustomizeHomeFragment : BiliRoamingBaseSettingFragment("biliroaming_settin
 
     override fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
         super.onPreferenceChanged(sharedPreferences, key)
-        if (Settings.BLOCK_TOP_ACTIVITY.key == key && Settings.BLOCK_TOP_ACTIVITY.boolean) {
+        if (resumed && Settings.BLOCK_TOP_ACTIVITY.key == key && Settings.BLOCK_TOP_ACTIVITY.boolean) {
             blkvPrefs.edit {
                 putString("PREF_KEY_ENTRANCE_CACHE", "")
             }

@@ -15,7 +15,7 @@ class CustomizeDrawerFragment : BaseDynamicItemsFragment(
 ) {
     override fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
         super.onPreferenceChanged(sharedPreferences, key)
-        if (!Utils.isHd() && key == Settings.SHOWING_DRAWER_ITEMS.key
+        if (resumed && !Utils.isHd() && key == Settings.SHOWING_DRAWER_ITEMS.key
             && Settings.SHOWING_DRAWER_ITEMS.stringSet.let {
                 !it.contains(Constants.ALL_VALUE) && !it.contains("更多服务")
             }

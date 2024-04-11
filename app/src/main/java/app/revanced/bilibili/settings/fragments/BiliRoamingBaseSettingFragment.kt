@@ -8,42 +8,41 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.Keep
 import androidx.preference.Preference
-import androidx.preference.PreferenceManager
+import androidx.preference.PreferenceScreen
 import androidx.preference.TwoStatePreference
+import app.revanced.bilibili.settings.ModulePreferenceManager
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import app.revanced.bilibili.widget.HdBaseToolbar
 import com.bilibili.lib.ui.BasePreferenceFragment
-import java.lang.reflect.Method
+import java.lang.reflect.Field
 
 enum class PrefsDisableReason { APP_VERSION, OS_VERSION, NEW_PLAYER }
 
-@Keep
 abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) :
     BasePreferenceFragment(), (Preference) -> Boolean {
 
-    private var resumed = false
+    protected var resumed = false
+        private set
+    private val preferenceManager = ModulePreferenceManager(Utils.getContext(), Settings.prefs)
     private val listener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
-        Settings.onPreferenceChanged(sharedPreferences, key)
         onPreferenceChanged(sharedPreferences, key)
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         fixPreferenceManager()
-        preferenceManager.sharedPreferencesName = Settings.PREFS_NAME
         val resId = Utils.getResId(prefsXmlName, "xml")
         addPreferencesFromResource(resId)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        preferenceManager.sharedPreferences?.registerOnSharedPreferenceChangeListener(listener)
+        preferenceManager.prefs.registerOnSharedPreferenceChangeListener(listener)
     }
 
     override fun onDestroy() {
-        preferenceManager.sharedPreferences?.unregisterOnSharedPreferenceChangeListener(listener)
+        preferenceManager.prefs.unregisterOnSharedPreferenceChangeListener(listener)
         super.onDestroy()
     }
 
@@ -109,22 +108,22 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
         resumed = false
     }
 
-    @SuppressLint("RestrictedApi")
     private fun fixPreferenceManager() = try {
         val preferenceManagerField = Reflex.findField(javaClass, "mPreferenceManager")
-        if (setOnNavigateToScreenListenerMethod == null) {
-            for (method in PreferenceManager::class.java.declaredMethods) {
-                if (method.name == "setOnNavigateToScreenListener") {
-                    method.isAccessible = true
-                    setOnNavigateToScreenListenerMethod = method
-                    break
+        val mOnNavigateToScreenListenerField = mOnNavigateToScreenListenerField ?: run {
+            preferenceManagerField.type.declaredFields.find { f ->
+                f.type.isInterface && f.type.declaredMethods.let { ms ->
+                    ms.size == 1 && ms[0].parameterTypes.let { ps ->
+                        ps.size == 1 && ps[0] == PreferenceScreen::class.java
+                    }
                 }
+            }?.also {
+                it.isAccessible = true
+                mOnNavigateToScreenListenerField = it
             }
         }
-        // not use activity context, see com.bilibili.app.preferences.BiliPreferencesActivity#getSharedPreferences
-        val preferenceManager = PreferenceManager(Utils.getContext())
         preferenceManagerField.set(this, preferenceManager)
-        setOnNavigateToScreenListenerMethod?.invoke(preferenceManager, this)
+        mOnNavigateToScreenListenerField?.set(preferenceManager, this)
     } catch (t: Throwable) {
         LogHelper.error({ "PreferenceManager fix failed" }, t)
     }
@@ -184,7 +183,7 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
     }
 
     companion object {
-        private var setOnNavigateToScreenListenerMethod: Method? = null
+        private var mOnNavigateToScreenListenerField: Field? = null
         const val EXTRA_TITLE = "biliroaming_extra_title"
     }
 }

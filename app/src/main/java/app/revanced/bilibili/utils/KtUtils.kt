@@ -17,14 +17,13 @@ import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.annotation.ColorInt
-import androidx.annotation.Keep
 import androidx.annotation.WorkerThread
 import androidx.preference.Preference
-import androidx.preference.PreferenceManager
 import app.revanced.bilibili.meta.Client
 import app.revanced.bilibili.meta.CookieInfo
 import app.revanced.bilibili.meta.VideoHistory
 import app.revanced.bilibili.patches.main.ApplicationDelegate
+import app.revanced.bilibili.settings.ModulePreferenceManager
 import app.revanced.bilibili.settings.Settings
 import com.bapis.bilibili.metadata.Metadata
 import com.bapis.bilibili.metadata.device.Device
@@ -36,7 +35,6 @@ import org.json.JSONObject
 import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
-import java.lang.reflect.Field
 import java.lang.reflect.Proxy
 import java.net.URL
 import java.net.URLDecoder
@@ -214,11 +212,8 @@ fun Preference.onChange(onChange: (preference: Preference, newValue: Any?) -> Bo
     changeListenerField.set(this, proxy)
 }
 
-private val onPreferenceTreeClickListenerField by lazy { retrieveOnPreferenceTreeClickListenerField() }
-
-@Keep
-private fun retrieveOnPreferenceTreeClickListenerField(): Field? {
-    return PreferenceManager::class.java.declaredFields.find { f ->
+private val onPreferenceTreeClickListenerField by lazy {
+    ModulePreferenceManager::class.java.superclass.declaredFields.find { f ->
         f.type.isInterface && f.type.declaredMethods.let {
             it.size == 1 && it[0].returnType == Boolean::class.javaPrimitiveType && it[0].parameterTypes.let { ts ->
                 ts.size == 1 && ts[0] == Preference::class.java
@@ -227,8 +222,7 @@ private fun retrieveOnPreferenceTreeClickListenerField(): Field? {
     }.also { it?.isAccessible = true }
 }
 
-@Keep
-fun PreferenceManager.onPreferenceTreeClick(action: ((Preference) -> Boolean)?) {
+fun ModulePreferenceManager.onPreferenceTreeClick(action: ((Preference) -> Boolean)?) {
     val field = onPreferenceTreeClickListenerField ?: return
     if (action == null) {
         field.set(this, null)

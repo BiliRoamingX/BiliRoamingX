@@ -33,7 +33,8 @@ object CustomThemePatch {
             this[CUSTOM_THEME_ID2] = CUSTOM_THEME_ID2
         }
         Settings.registerPreferenceChangeListener { _, key ->
-            if (key == Settings.CUSTOM_THEME.key) refresh()
+            if (key == Settings.CUSTOM_THEME.key || key == Settings.CUSTOM_COLOR.key)
+                refresh()
         }
     }
 
@@ -46,6 +47,7 @@ object CustomThemePatch {
 
     @JvmStatic
     fun refresh() {
+        val customColor = customColor
         getColorArray().run {
             generateColorArray(customColor).let { colors ->
                 put(CUSTOM_THEME_ID1, colors)

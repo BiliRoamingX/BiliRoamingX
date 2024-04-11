@@ -84,13 +84,16 @@ class BackupFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_backu
                     resolver.openInputStream(uri)?.use { input ->
                         BackupHelper.restore(input)
                     }
-                }.onSuccess {
+                }.mapCatching {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                         HiddenApiBypass.addHiddenApiExemptions("Landroid/content/Context;")
                     Utils.getContext().callMethod("reloadSharedPreferences")
                     Settings.reload()
-                    afterRestore()
-                    Utils.runOnMainThread { showNeedRebootDialog() }
+                }.onSuccess {
+                    Utils.runOnMainThread {
+                        afterRestore()
+                        showNeedRebootDialog()
+                    }
                 }.onFailure {
                     LogHelper.error({ "restore failed" }, it)
                     Toasts.showShortWithId("biliroaming_toast_restore_failed")

@@ -1,5 +1,6 @@
 package app.revanced.bilibili.utils
 
+import android.content.Context
 import app.revanced.bilibili.patches.SplashPatch
 import app.revanced.bilibili.settings.Settings
 import org.json.JSONArray
@@ -19,6 +20,7 @@ object BackupHelper {
     private const val DESCRIPTOR_ID_EXTERNAL = "external"
     private const val TYPE_PREFS = "prefs"
     private const val TYPE_FILE = "file"
+    private const val TYPE_BLKV = "blkv"
 
     private val internalDir: File
         get() = Utils.getContext().dataDir
@@ -31,20 +33,22 @@ object BackupHelper {
         val zipOut = ZipOutputStream(output)
         zipOut.setLevel(5)
         val metaInfo = JSONObject()
-        metaInfo.put("version", 1)
+        metaInfo.put("version", 2)
         metaInfo.put("time", System.currentTimeMillis())
         val items = JSONArray()
         metaInfo.put("items", items)
 
-        val backupPrefsIfExist = { name: String ->
-            val prefsFile = prefsPath(name)
+        val backupPrefsIfExist = { name: String, blkv: Boolean ->
+            val prefsFile = prefsPath(name, blkv)
             if (prefsFile.isFile) {
+                val type = if (blkv) TYPE_BLKV else TYPE_PREFS
+                val ext = if (blkv) "blkv" else "xml"
                 val prefsItem = JSONObject().apply {
-                    put("type", TYPE_PREFS)
+                    put("type", type)
                     put("name", name)
                 }
                 items.put(prefsItem)
-                zipOut.putNextEntry(ZipEntry("$TYPE_PREFS/$name.xml"))
+                zipOut.putNextEntry(ZipEntry("$type/$name.$ext"))
                 prefsFile.inputStream().use { it.copyTo(zipOut) }
             }
         }
@@ -61,8 +65,9 @@ object BackupHelper {
             }
         }
 
-        backupPrefsIfExist(Settings.PREFS_NAME)
-        backupPrefsIfExist(Constants.PREFS_VH)
+        backupPrefsIfExist(Settings.PREFS_NAME, false)
+        backupPrefsIfExist(Constants.PREFS_VH, false)
+        backupPrefsIfExist(Settings.PREFS_NAME, true)
         backupFileIfExist(SubtitleParamsCache.FONT_FILE)
         backupFileIfExist(File(Utils.getContext().filesDir, SplashPatch.SPLASH_IMAGE))
         backupFileIfExist(File(Utils.getContext().filesDir, SplashPatch.LOGO_IMAGE))
@@ -94,10 +99,13 @@ object BackupHelper {
 
         items?.forEach { item ->
             when (val type = item.optString("type")) {
-                TYPE_PREFS -> {
+                TYPE_PREFS, TYPE_BLKV -> {
                     val name = item.optString("name")
-                    zipFile.entry("$type/$name.xml").use { input ->
-                        prefsPath(name).outputStream().use { output ->
+                    val blkv = type == TYPE_BLKV
+                    val entryName = if (blkv) "$TYPE_BLKV/$name.blkv" else "$TYPE_PREFS/$name.xml"
+                    val prefsPath = prefsPath(name, blkv)
+                    zipFile.entry(entryName).use { input ->
+                        prefsPath.outputStream().use { output ->
                             input.copyTo(output)
                         }
                     }
@@ -112,14 +120,18 @@ object BackupHelper {
                         }
                     }
                 }
+
+                else -> LogHelper.warn { "not supported backup item type: $type" }
             }
         }
 
         tempFile.delete()
     }
 
-    private fun prefsPath(name: String): File {
-        return File(Utils.getContext().dataDir, "shared_prefs/$name.xml")
+    private fun prefsPath(name: String, blkv: Boolean) = if (blkv) {
+        File(Utils.getContext().getDir("blkv", Context.MODE_PRIVATE), "$name.blkv")
+    } else {
+        File(Utils.getContext().dataDir, "shared_prefs/$name.xml")
     }
 
     private fun File.toPathDescriptor(): String {
