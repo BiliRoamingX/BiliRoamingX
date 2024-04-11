@@ -253,12 +253,12 @@ public enum Settings {
     }
 
     static {
-        reload();
+        reload(false);
     }
 
-    public static void reload() {
+    public static void reload(boolean forceMigrate) {
         prefs = Utils.blkvPrefsByName(PREFS_NAME, true);
-        migrateIfNeeded();
+        migrateIfNeeded(forceMigrate);
         loadAllSettings();
         prefs.unregisterOnSharedPreferenceChangeListener(innerListener);
         prefs.registerOnSharedPreferenceChangeListener(innerListener);
@@ -266,9 +266,9 @@ public enum Settings {
 
     @SuppressWarnings("unchecked")
     @SuppressLint("ApplySharedPref")
-    private static void migrateIfNeeded() {
+    private static void migrateIfNeeded(boolean force) {
         String prefsMigratedKey = "prefs_migrated";
-        if (prefs.getBoolean(prefsMigratedKey, false)) return;
+        if (!force && prefs.getBoolean(prefsMigratedKey, false)) return;
         SharedPreferences.Editor newPrefs = prefs.edit();
         SharedPreferences oldPrefs = Utils.getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         for (Map.Entry<String, ?> entry : oldPrefs.getAll().entrySet()) {

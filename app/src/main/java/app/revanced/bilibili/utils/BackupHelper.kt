@@ -76,7 +76,7 @@ object BackupHelper {
         zipOut.finish()
     }
 
-    fun restore(input: InputStream) {
+    fun restore(input: InputStream): Int {
         val tempFile = tempFile.apply { delete() }
         tempFile.outputStream().use { input.copyTo(it) }
         val zipFile = ZipFile(tempFile)
@@ -125,6 +125,7 @@ object BackupHelper {
         }
 
         tempFile.delete()
+        return version
     }
 
     private fun prefsPath(name: String, blkv: Boolean) = if (blkv) {
