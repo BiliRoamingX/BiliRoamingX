@@ -65,7 +65,6 @@ object BackupHelper {
             }
         }
 
-        backupPrefsIfExist(Settings.PREFS_NAME, false)
         backupPrefsIfExist(Constants.PREFS_VH, false)
         backupPrefsIfExist(Settings.PREFS_NAME, true)
         backupFileIfExist(SubtitleParamsCache.FONT_FILE)
