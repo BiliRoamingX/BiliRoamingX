@@ -25,9 +25,11 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
 
     protected var resumed = false
         private set
+    protected var restoring = false
     private val preferenceManager = ModulePreferenceManager(Utils.getContext(), Settings.prefs)
     private val listener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
-        onPreferenceChanged(sharedPreferences, key)
+        if (!restoring)
+            onPreferenceChanged(sharedPreferences, key)
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

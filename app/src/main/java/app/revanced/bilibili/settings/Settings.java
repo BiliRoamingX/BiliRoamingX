@@ -222,7 +222,7 @@ public enum Settings {
 
     public static final String PREFS_NAME = "biliroaming";
 
-    public static SharedPreferences prefs;
+    public static final SharedPreferences prefs;
 
     private static final Set<SharedPreferences.OnSharedPreferenceChangeListener> preferenceChangeListener = new HashSet<>();
 
@@ -253,15 +253,22 @@ public enum Settings {
     }
 
     static {
+        prefs = Utils.blkvPrefsByName(PREFS_NAME, true);
         reload(false);
+        registerInnerListener();
+    }
+
+    public static void unregisterInnerListener() {
+        prefs.unregisterOnSharedPreferenceChangeListener(innerListener);
+    }
+
+    public static void registerInnerListener() {
+        prefs.registerOnSharedPreferenceChangeListener(innerListener);
     }
 
     public static void reload(boolean forceMigrate) {
-        prefs = Utils.blkvPrefsByName(PREFS_NAME, true);
         migrateIfNeeded(forceMigrate);
         loadAllSettings();
-        prefs.unregisterOnSharedPreferenceChangeListener(innerListener);
-        prefs.registerOnSharedPreferenceChangeListener(innerListener);
     }
 
     @SuppressWarnings("unchecked")
@@ -270,6 +277,8 @@ public enum Settings {
         String prefsMigratedKey = "prefs_migrated";
         if (!force && prefs.getBoolean(prefsMigratedKey, false)) return;
         SharedPreferences.Editor newPrefs = prefs.edit();
+        newPrefs.clear().commit();
+        newPrefs = prefs.edit();
         SharedPreferences oldPrefs = Utils.getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         for (Map.Entry<String, ?> entry : oldPrefs.getAll().entrySet()) {
             String key = entry.getKey();

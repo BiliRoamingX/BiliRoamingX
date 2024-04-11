@@ -2,6 +2,7 @@
 
 package app.revanced.bilibili.settings.fragments
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
@@ -13,6 +14,7 @@ import app.revanced.bilibili.content.BiliDocumentsProvider
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import org.lsposed.hiddenapibypass.HiddenApiBypass
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -85,11 +87,17 @@ class BackupFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_backu
                         ?: error("stream open failed, uri: $uri")).use { input ->
                         BackupHelper.restore(input)
                     }
-                }.mapCatching { version ->
+                }.mapCatching { (version, blkvSettingTmpFile) ->
+                    Settings.unregisterInnerListener()
+                    restoring = true
+                    if (blkvSettingTmpFile != null && blkvSettingTmpFile.isFile)
+                        restoreBlkvSettings(blkvSettingTmpFile)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                         HiddenApiBypass.addHiddenApiExemptions("Landroid/content/Context;")
                     Utils.getContext().callMethod("reloadSharedPreferences")
                     Settings.reload(version < 2)
+                    Settings.registerInnerListener()
+                    restoring = false
                 }.onSuccess {
                     Utils.runOnMainThread {
                         afterRestore()
@@ -101,6 +109,27 @@ class BackupFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_backu
                 }
             }
         }
+    }
+
+    @SuppressLint("ApplySharedPref")
+    @Suppress("UNCHECKED_CAST")
+    private fun restoreBlkvSettings(file: File) {
+        val tmpPrefs = Utils.blkvPrefsByFile(file, true)
+        var prefs = Settings.prefs.edit()
+        prefs.clear().commit()
+        prefs = Settings.prefs.edit()
+        for ((key, value) in tmpPrefs.all) {
+            when (value) {
+                is Boolean -> prefs.putBoolean(key, value)
+                is Int -> prefs.putInt(key, value)
+                is Long -> prefs.putLong(key, value)
+                is Float -> prefs.putFloat(key, value)
+                is String -> prefs.putString(key, value)
+                is Set<*> -> prefs.putStringSet(key, value as Set<String>)
+            }
+        }
+        prefs.commit()
+        file.delete()
     }
 
     private fun showNeedRebootDialog() {

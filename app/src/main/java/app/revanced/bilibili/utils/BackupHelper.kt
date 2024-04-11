@@ -76,7 +76,7 @@ object BackupHelper {
         zipOut.finish()
     }
 
-    fun restore(input: InputStream): Int {
+    fun restore(input: InputStream): Pair<Int, File?> {
         val tempFile = tempFile.apply { delete() }
         tempFile.outputStream().use { input.copyTo(it) }
         val zipFile = ZipFile(tempFile)
@@ -96,13 +96,19 @@ object BackupHelper {
         val items = metaInfo.optJSONArray("items")
         LogHelper.debug { "backup items: ${items?.toString(2)}" }
 
+        var blkvSettingTmpFile: File? = null
         items?.forEach { item ->
             when (val type = item.optString("type")) {
                 TYPE_PREFS, TYPE_BLKV -> {
                     val name = item.optString("name")
                     val blkv = type == TYPE_BLKV
                     val entryName = if (blkv) "$TYPE_BLKV/$name.blkv" else "$TYPE_PREFS/$name.xml"
-                    val prefsPath = prefsPath(name, blkv)
+                    var prefsPath = prefsPath(name, blkv)
+                    if (blkv && name == Settings.PREFS_NAME) {
+                        val tmpExt = System.currentTimeMillis()
+                        prefsPath = File(prefsPath.parentFile, prefsPath.name + ".$tmpExt")
+                        blkvSettingTmpFile = prefsPath
+                    }
                     zipFile.entry(entryName).use { input ->
                         prefsPath.outputStream().use { output ->
                             input.copyTo(output)
@@ -125,7 +131,7 @@ object BackupHelper {
         }
 
         tempFile.delete()
-        return version
+        return version to blkvSettingTmpFile
     }
 
     private fun prefsPath(name: String, blkv: Boolean) = if (blkv) {
