@@ -3,6 +3,7 @@ package app.revanced.bilibili.patches.main;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -33,6 +34,7 @@ import app.revanced.bilibili.utils.KtUtils;
 import app.revanced.bilibili.utils.LogHelper;
 import app.revanced.bilibili.utils.Reflex;
 import app.revanced.bilibili.utils.SubtitleParamsCache;
+import app.revanced.bilibili.utils.ThemeRefreshReceiver;
 import app.revanced.bilibili.utils.UposReplacer;
 import app.revanced.bilibili.utils.Utils;
 import tv.danmaku.bili.MainActivityV2;
@@ -58,6 +60,9 @@ public class ApplicationDelegate {
             Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypes));
             Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypesV2));
             Utils.runOnMainThread(2000L, () -> Utils.async(CouponAutoReceiver::check));
+        }
+        if (Utils.getCurrentProcessName().endsWith(":web")) {
+            Utils.getContext().registerReceiver(new ThemeRefreshReceiver(), new IntentFilter(ThemeRefreshReceiver.ACTION));
         }
     }
 

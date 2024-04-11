@@ -9,7 +9,6 @@ import static app.revanced.bilibili.settings.Settings.ValueType.LONG;
 import static app.revanced.bilibili.settings.Settings.ValueType.STRING;
 import static app.revanced.bilibili.settings.Settings.ValueType.STRING_SET;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -17,7 +16,6 @@ import androidx.annotation.NonNull;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import app.revanced.bilibili.utils.Constants;
@@ -222,7 +220,7 @@ public enum Settings {
 
     public static final String PREFS_NAME = "biliroaming";
 
-    public static final SharedPreferences prefs;
+    public static SharedPreferences prefs;
 
     private static final Set<SharedPreferences.OnSharedPreferenceChangeListener> preferenceChangeListener = new HashSet<>();
 
@@ -253,52 +251,13 @@ public enum Settings {
     }
 
     static {
-        prefs = Utils.blkvPrefsByName(PREFS_NAME, true);
-        reload(false);
-        registerInnerListener();
+        reload();
     }
 
-    public static void unregisterInnerListener() {
-        prefs.unregisterOnSharedPreferenceChangeListener(innerListener);
-    }
-
-    public static void registerInnerListener() {
-        prefs.registerOnSharedPreferenceChangeListener(innerListener);
-    }
-
-    public static void reload(boolean forceMigrate) {
-        migrateIfNeeded(forceMigrate);
+    public static void reload() {
+        prefs = Utils.getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         loadAllSettings();
-    }
-
-    @SuppressWarnings("unchecked")
-    @SuppressLint("ApplySharedPref")
-    private static void migrateIfNeeded(boolean force) {
-        String prefsMigratedKey = "prefs_migrated";
-        if (!force && prefs.getBoolean(prefsMigratedKey, false)) return;
-        SharedPreferences.Editor newPrefs = prefs.edit();
-        newPrefs.clear().commit();
-        newPrefs = prefs.edit();
-        SharedPreferences oldPrefs = Utils.getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        for (Map.Entry<String, ?> entry : oldPrefs.getAll().entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            if (value instanceof Boolean v) {
-                newPrefs.putBoolean(key, v);
-            } else if (value instanceof Integer v) {
-                newPrefs.putInt(key, v);
-            } else if (value instanceof Long v) {
-                newPrefs.putLong(key, v);
-            } else if (value instanceof Float v) {
-                newPrefs.putFloat(key, v);
-            } else if (value instanceof String v) {
-                newPrefs.putString(key, v);
-            } else if (value instanceof Set<?>) {
-                newPrefs.putStringSet(key, (Set<String>) value);
-            }
-        }
-        newPrefs.putBoolean(prefsMigratedKey, true);
-        newPrefs.commit();
+        prefs.registerOnSharedPreferenceChangeListener(innerListener);
     }
 
     private static void loadAllSettings() {
