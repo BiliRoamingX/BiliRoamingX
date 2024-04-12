@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -51,6 +52,7 @@ public class Utils {
     private static Boolean isBlue = null;
     private static Boolean isPlay = null;
     private static Boolean isHd = null;
+    private static final ConcurrentHashMap<String, Integer> idsCache = new ConcurrentHashMap<>();
 
     @Keep
     public static Context getContext() {
@@ -62,7 +64,8 @@ public class Utils {
 
     @SuppressLint("DiscouragedApi")
     public static int getResId(String name, String type) {
-        return context.getResources().getIdentifier(name, type, context.getPackageName());
+        String fullName = context.getPackageName() + ":" + type + "/" + name;
+        return idsCache.computeIfAbsent(fullName, (key) -> context.getResources().getIdentifier(key, null, null));
     }
 
     public static String getString(String idName) {
