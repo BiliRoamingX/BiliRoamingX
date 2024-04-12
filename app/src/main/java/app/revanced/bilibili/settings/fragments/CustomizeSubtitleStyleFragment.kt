@@ -13,12 +13,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.settings.dialog.ARGBColorChooseDialog
 import app.revanced.bilibili.utils.*
+import com.bilibili.magicasakura.widgets.TintButton
 import com.yubyf.truetypeparser.TTFFile
 import com.yubyf.truetypeparser.get
 import java.util.Locale
@@ -196,7 +196,7 @@ class CustomizeSubtitleStyleFragment : BaseWidgetSettingFragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
             ).apply { weight = 1F }
         }
-        val textView = TextView(context).apply {
+        val textView = tintView<TextView>().apply {
             text = string("biliroaming_custom_subtitle_font")
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
             layoutParams = LinearLayout.LayoutParams(
@@ -227,7 +227,7 @@ class CustomizeSubtitleStyleFragment : BaseWidgetSettingFragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
-        val resetButton = Button(context).apply {
+        val resetButton = TintButton(context).apply {
             text = string("biliroaming_custom_subtitle_reset")
             setOnClickListener { onReset() }
             layoutParams = LinearLayout.LayoutParams(
@@ -235,7 +235,7 @@ class CustomizeSubtitleStyleFragment : BaseWidgetSettingFragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
-        val importButton = Button(context).apply {
+        val importButton = TintButton(context).apply {
             text = string("biliroaming_custom_subtitle_import")
             setOnClickListener { onImport() }
             layoutParams = LinearLayout.LayoutParams(

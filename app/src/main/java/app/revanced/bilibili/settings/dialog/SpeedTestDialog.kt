@@ -79,7 +79,8 @@ class SpeedTestItemView(
                 0, ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply { weight = 2f }
         }.also { addView(it) }
-        checkedView = RadioButton(context).apply {
+        val radioButton = Widgets.createTintView<RadioButton>(context, "RadioButton")
+        checkedView = radioButton.apply {
             layoutParams = LayoutParams(
                 0, ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply {

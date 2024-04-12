@@ -1,7 +1,6 @@
 package app.revanced.bilibili.settings.fragments
 
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.text.InputFilter.LengthFilter
 import android.text.TextUtils
@@ -17,11 +16,21 @@ import androidx.appcompat.widget.SwitchCompat
 import app.revanced.bilibili.utils.*
 import app.revanced.bilibili.widget.HdBaseToolbar
 import com.bilibili.lib.ui.BaseFragment
+import com.bilibili.magicasakura.widgets.TintButton
 
 abstract class BaseWidgetSettingFragment : BaseFragment() {
     protected fun string(idName: String): String = Utils.getString(idName)
 
-    protected fun categoryTitle(title: String) = TextView(context).apply {
+    protected inline fun <reified T : View> tintView(): T {
+        val clazz = T::class.java
+        val className = clazz.name
+        val name = if (className.startsWith("android.")) {
+            clazz.simpleName
+        } else className
+        return Widgets.createTintView(requireContext(), name)
+    }
+
+    protected fun categoryTitle(title: String) = tintView<TextView>().apply {
         text = title
         typeface = Typeface.DEFAULT_BOLD
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 18F)
@@ -31,7 +40,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
         ).apply { topMargin = 10.dp }
     }
 
-    protected fun textInputTitle(title: String) = TextView(context).apply {
+    protected fun textInputTitle(title: String) = tintView<TextView>().apply {
         text = title
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 18F)
         layoutParams = LinearLayout.LayoutParams(
@@ -51,7 +60,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
-        val textView = TextView(context).apply {
+        val textView = tintView<TextView>().apply {
             text = name
             setSingleLine()
             ellipsize = TextUtils.TruncateAt.END
@@ -91,7 +100,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
-        val textView = TextView(context).apply {
+        val textView = tintView<TextView>().apply {
             this.text = name
             setSingleLine()
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
@@ -113,7 +122,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply { weight = 1F }
         }
-        val button = Button(context).apply {
+        val button = TintButton(context).apply {
             this.text = buttonName
             setOnClickListener { onButtonClick(editText) }
             layoutParams = LinearLayout.LayoutParams(
@@ -144,7 +153,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
-        val nameView = TextView(context).apply {
+        val nameView = tintView<TextView>().apply {
             text = name
             typeface = Typeface.DEFAULT_BOLD
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
@@ -154,7 +163,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
             )
             minWidth = namMinWidth
         }
-        val addView = Button(context).apply {
+        val addView = TintButton(context).apply {
             text = string("biliroaming_keyword_group_add")
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -164,7 +173,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
             minimumWidth = 60.dp
             setOnClickListener(onAdd)
         }
-        val clearView = Button(context).apply {
+        val clearView = TintButton(context).apply {
             text = string("biliroaming_keyword_group_clear")
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -175,17 +184,16 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
             minimumWidth = 60.dp
             setOnClickListener { group.removeAllViews() }
         }
-        val regexModeView = TextView(context).apply {
+        val regexModeView = tintView<TextView>().apply {
             text = string("biliroaming_regex_mode")
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply { marginStart = 4.dp }
         }
-        val regexModeSwitch = SwitchCompat(requireContext()).apply {
+        val regexModeSwitch = tintView<SwitchCompat>().apply {
             isSoundEffectsEnabled = false
             isHapticFeedbackEnabled = false
-            applyStyle()
         }
         if (!showRegex) {
             regexModeView.visibility = View.GONE
@@ -221,7 +229,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply { weight = 1F }
         }
-        val button = Button(context).apply {
+        val button = TintButton(context).apply {
             text = string("biliroaming_keyword_group_delete")
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -278,19 +286,6 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
         return Pair(group, regexModeSwitch)
     }
 
-    private fun SwitchCompat.applyStyle() {
-        val trackDrawable = Utils.getDrawable("abc_switch_track_mtrl_alpha")
-        val thumbDrawable = Utils.getDrawable("abc_switch_thumb_material")
-        val trackTint = Utils.getColorStateList("selector_switch_track")
-        val thumbTint = Utils.getColorStateList("selector_switch_thumb")
-        trackDrawable.setTintMode(PorterDuff.Mode.SRC_IN)
-        trackDrawable.setTintList(trackTint)
-        thumbDrawable.setTintMode(PorterDuff.Mode.MULTIPLY)
-        thumbDrawable.setTintList(thumbTint)
-        setTrackDrawable(trackDrawable)
-        setThumbDrawable(thumbDrawable)
-    }
-
     protected fun switchPrefsItem(title: String): Pair<LinearLayout, SwitchCompat> {
         val layout = LinearLayout(context).apply {
             gravity = Gravity.CENTER_VERTICAL
@@ -300,7 +295,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
-        val titleView = TextView(context).apply {
+        val titleView = tintView<TextView>().apply {
             text = title
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
             setSingleLine()
@@ -313,12 +308,11 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply { weight = 1F; marginEnd = 10.dp }
         }
-        val switcher = SwitchCompat(requireContext()).apply {
+        val switcher = tintView<SwitchCompat>().apply {
             isClickable = false
             isSoundEffectsEnabled = false
             isHapticFeedbackEnabled = false
             setBackgroundColor(Color.TRANSPARENT)
-            applyStyle()
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -338,7 +332,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
         zeroIndicator: String = "",
         max: Int = 100,
     ): Pair<LinearLayout, SeekBar> {
-        val layout = LinearLayout(activity).apply {
+        val layout = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -346,7 +340,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
             )
             setPadding(0, 8.dp, 0, 8.dp)
         }
-        val nameView = TextView(activity).apply {
+        val nameView = tintView<TextView>().apply {
             text = name
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
             setSingleLine()
@@ -356,7 +350,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
-        val progressView = TextView(activity).apply {
+        val progressView = TextView(context).apply {
             text = if (current == 0 && zeroIndicator.isNotEmpty()) zeroIndicator
             else indicator.format(current)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 14F)
@@ -368,7 +362,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
-        val seekBarView = SeekBar(activity).apply {
+        val seekBarView = SeekBar(context).apply {
             progress = current
             this.max = max
             layoutParams = LinearLayout.LayoutParams(
@@ -395,7 +389,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
         return Pair(layout, seekBarView)
     }
 
-    protected fun saveButton() = TextView(context).apply {
+    protected fun saveButton() = tintView<TextView>().apply {
         setBackgroundColor(Utils.getColor(context, "Wh0"))
         setRippleForeground()
         text = string("biliroaming_save")

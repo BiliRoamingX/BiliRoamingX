@@ -17,4 +17,7 @@ public class TintRadioButton extends AppCompatRadioButton {
     public TintRadioButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
+
+    public void setCompoundButtonTintList(int resId) {
+    }
 }

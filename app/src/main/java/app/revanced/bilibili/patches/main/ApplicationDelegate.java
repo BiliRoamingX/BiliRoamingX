@@ -10,13 +10,21 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Pair;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.WindowManager;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.bilibili.app.preferences.BiliPreferencesActivity;
+import com.bilibili.bplus.im.setting.MessageTipItemActivity;
+import com.bilibili.magicasakura.widgets.TintCheckBox;
+import com.bilibili.magicasakura.widgets.TintRadioButton;
 
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
 
@@ -206,11 +214,63 @@ public class ApplicationDelegate {
         }
     }
 
+    static class SettingsLayoutFactory implements LayoutInflater.Factory2 {
+
+        private final LayoutInflater.Factory2 delegate;
+
+        public SettingsLayoutFactory(LayoutInflater.Factory2 delegate) {
+            this.delegate = delegate;
+        }
+
+        public View redirectView(String name, Context context, AttributeSet attrs) {
+            if (name.equals("CheckBox")) {
+                TintCheckBox checkBox = new TintCheckBox(context, attrs);
+                int drawableId = Utils.getResId("abc_btn_check_material_anim", "drawable");
+                int tintId = Utils.getResId("selector_compoundbutton_normal", "color");
+                checkBox.setButtonDrawable(drawableId);
+                checkBox.setCompoundButtonTintList(tintId);
+                return checkBox;
+            } else if (name.equals("RadioButton")) {
+                TintRadioButton radioButton = new TintRadioButton(context, attrs);
+                int drawableId = Utils.getResId("abc_btn_radio_material_anim", "drawable");
+                int tintId = Utils.getResId("selector_radiobutton_preference_tint", "color");
+                radioButton.setButtonDrawable(drawableId);
+                radioButton.setCompoundButtonTintList(tintId);
+                radioButton.setText(null);
+                return radioButton;
+            } else if (context instanceof Activity activity) {
+                return activity.onCreateView(name, context, attrs);
+            }
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@Nullable View parent, @NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+            View view = redirectView(name, context, attrs);
+            return view != null ? view : delegate.onCreateView(parent, name, context, attrs);
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+            View view = redirectView(name, context, attrs);
+            return view != null ? view : delegate.onCreateView(name, context, attrs);
+        }
+    }
+
     static class ActivityLifecycleCallback implements Application.ActivityLifecycleCallbacks {
         @Override
         public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
             printLifecycle(activity, "onActivityCreated", true);
             activityRefs.push(new WeakReference<>(activity));
+            if (activity instanceof BiliPreferencesActivity || activity instanceof MessageTipItemActivity) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                    HiddenApiBypass.addHiddenApiExemptions("Landroid/view/LayoutInflater;");
+                LayoutInflater layoutInflater = activity.getLayoutInflater();
+                LayoutInflater.Factory2 factory2 = layoutInflater.getFactory2();
+                Reflex.setObjectField(layoutInflater, "mFactory2", new SettingsLayoutFactory(factory2));
+            }
         }
 
         @Override
