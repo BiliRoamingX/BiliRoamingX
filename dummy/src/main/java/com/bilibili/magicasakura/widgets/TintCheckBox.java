@@ -1,11 +1,12 @@
 package com.bilibili.magicasakura.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.CheckBox;
 
-import androidx.appcompat.widget.AppCompatCheckBox;
-
-public class TintCheckBox extends AppCompatCheckBox {
+@SuppressLint("AppCompatCustomView")
+public class TintCheckBox extends CheckBox {
     public TintCheckBox(Context context) {
         super(context);
     }

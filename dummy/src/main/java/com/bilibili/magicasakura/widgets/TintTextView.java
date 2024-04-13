@@ -1,11 +1,12 @@
 package com.bilibili.magicasakura.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.TextView;
 
-import androidx.appcompat.widget.AppCompatTextView;
-
-public class TintTextView extends AppCompatTextView {
+@SuppressLint("AppCompatCustomView")
+public class TintTextView extends TextView {
     public TintTextView(Context context) {
         super(context);
     }

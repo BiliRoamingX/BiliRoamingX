@@ -123,6 +123,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
             ).apply { weight = 1F }
         }
         val button = TintButton(context).apply {
+            setBackgroundTintList(Utils.getResId("Wh0", "color"))
             this.text = buttonName
             setOnClickListener { onButtonClick(editText) }
             layoutParams = LinearLayout.LayoutParams(
@@ -164,6 +165,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
             minWidth = namMinWidth
         }
         val addView = TintButton(context).apply {
+            setBackgroundTintList(Utils.getResId("Wh0", "color"))
             text = string("biliroaming_keyword_group_add")
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -174,6 +176,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
             setOnClickListener(onAdd)
         }
         val clearView = TintButton(context).apply {
+            setBackgroundTintList(Utils.getResId("Wh0", "color"))
             text = string("biliroaming_keyword_group_clear")
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -230,6 +233,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
             ).apply { weight = 1F }
         }
         val button = TintButton(context).apply {
+            setBackgroundTintList(Utils.getResId("Wh0", "color"))
             text = string("biliroaming_keyword_group_delete")
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,

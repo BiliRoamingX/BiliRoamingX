@@ -228,6 +228,7 @@ class CustomizeSubtitleStyleFragment : BaseWidgetSettingFragment() {
             )
         }
         val resetButton = TintButton(context).apply {
+            setBackgroundTintList(Utils.getResId("Wh0", "color"))
             text = string("biliroaming_custom_subtitle_reset")
             setOnClickListener { onReset() }
             layoutParams = LinearLayout.LayoutParams(
@@ -236,6 +237,7 @@ class CustomizeSubtitleStyleFragment : BaseWidgetSettingFragment() {
             )
         }
         val importButton = TintButton(context).apply {
+            setBackgroundTintList(Utils.getResId("Wh0", "color"))
             text = string("biliroaming_custom_subtitle_import")
             setOnClickListener { onImport() }
             layoutParams = LinearLayout.LayoutParams(

@@ -1,11 +1,12 @@
 package com.bilibili.magicasakura.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.RadioButton;
 
-import androidx.appcompat.widget.AppCompatButton;
-
-public class TintButton extends AppCompatButton {
+@SuppressLint("AppCompatCustomView")
+public class TintButton extends RadioButton {
     public TintButton(Context context) {
         super(context);
     }
@@ -16,5 +17,8 @@ public class TintButton extends AppCompatButton {
 
     public TintButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    public void setBackgroundTintList(int i14) {
     }
 }
