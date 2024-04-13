@@ -268,17 +268,17 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
         group.setOnHierarchyChangeListener(object : ViewGroup.OnHierarchyChangeListener {
             override fun onChildViewAdded(parent: View, child: View) {
                 if (group.childCount == 0) {
-                    clearButton.visibility = View.GONE
+                    clearButton.hide()
                 } else {
-                    clearButton.visibility = View.VISIBLE
+                    clearButton.show()
                 }
             }
 
             override fun onChildViewRemoved(parent: View, child: View) {
                 if (group.childCount == 0) {
-                    clearButton.visibility = View.GONE
+                    clearButton.hide()
                 } else {
-                    clearButton.visibility = View.VISIBLE
+                    clearButton.show()
                 }
             }
         })

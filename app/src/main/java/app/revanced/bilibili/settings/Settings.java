@@ -106,7 +106,7 @@ public enum Settings {
     // 我的页
     DRAWER_STYLE("drawer_style_value", STRING, "0"),
     PURIFY_DRAWER_RED_DOT("purify_drawer_reddot", BOOLEAN, FALSE),
-    REMOVE_VIP_SECTION("remove_vip_section", BOOLEAN, FALSE, true),
+    REMOVE_VIP_SECTION("remove_vip_section", BOOLEAN, FALSE),
     SHOWING_DRAWER_ITEMS("showing_drawer_items", STRING_SET, Set.of(Constants.ALL_VALUE)),
     SWITCH_DARK_DIALOG("switch_dark_dialog", BOOLEAN, FALSE),
     ADD_CHANNEL("add_channel", BOOLEAN, FALSE, true),

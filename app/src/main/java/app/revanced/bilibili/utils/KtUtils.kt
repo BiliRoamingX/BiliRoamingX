@@ -65,29 +65,6 @@ val Int.dp: Int
         ).roundToInt()
     }
 
-operator fun ViewGroup.iterator(): MutableIterator<View> = object : MutableIterator<View> {
-    private var index = 0
-    override fun hasNext() = index < childCount
-    override fun next() = getChildAt(index++) ?: throw IndexOutOfBoundsException()
-    override fun remove() = removeViewAt(--index)
-}
-
-val ViewGroup.children: Sequence<View>
-    get() = object : Sequence<View> {
-        override fun iterator() = this@children.iterator()
-    }
-
-inline fun View.setRippleBackground() = with(TypedValue()) {
-    context.theme.resolveAttribute(android.R.attr.selectableItemBackground, this, true)
-    setBackgroundResource(resourceId)
-}
-
-@SuppressLint("UseCompatLoadingForDrawables")
-inline fun View.setRippleForeground() = with(TypedValue()) {
-    context.theme.resolveAttribute(android.R.attr.selectableItemBackground, this, true)
-    foreground = context.getDrawable(resourceId)
-}
-
 @JvmOverloads
 inline fun Context.inflateLayout(
     resIdName: String,
@@ -97,9 +74,6 @@ inline fun Context.inflateLayout(
     val resource = Utils.getResId(resIdName, "layout")
     return LayoutInflater.from(this).inflate(resource, root, attachToRoot)
 }
-
-inline fun <T : View> View.findView(idName: String): T =
-    findViewById(Utils.getResId(idName, "id"))
 
 @JvmOverloads
 inline fun Int.toHexColor(alpha: Boolean = true) = if (alpha)

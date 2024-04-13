@@ -58,12 +58,12 @@ object SubtitleImportSavePatch {
         val importButton = view.findView<View>("biliroaming_import_subtitle")
         val saveButton = view.findView<View>("biliroaming_save_subtitle")
         if (!Settings.SUBTITLE_IMPORT_SAVE.boolean) {
-            importButton.visibility = View.GONE
-            saveButton.visibility = View.GONE
+            importButton.hide()
+            saveButton.hide()
             return
         }
-        importButton.visibility = View.VISIBLE
-        saveButton.visibility = View.VISIBLE
+        importButton.show()
+        saveButton.show()
         val interactLayerService = widget.getObjectField(
             "interactLayerServiceForBiliRoaming"
         ) ?: return
