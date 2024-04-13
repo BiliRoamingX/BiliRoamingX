@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -20,11 +23,13 @@ import android.view.WindowManager;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.bilibili.app.preferences.BiliPreferencesActivity;
 import com.bilibili.bplus.im.setting.MessageTipItemActivity;
 import com.bilibili.magicasakura.widgets.TintCheckBox;
 import com.bilibili.magicasakura.widgets.TintRadioButton;
+import com.bilibili.magicasakura.widgets.TintSwitchCompat;
 
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
 
@@ -238,6 +243,19 @@ public class ApplicationDelegate {
                 radioButton.setCompoundButtonTintList(tintId);
                 radioButton.setText(null);
                 return radioButton;
+            } else if (Utils.isHd() && name.equals(SwitchCompat.class.getName())) {
+                TintSwitchCompat switchCompat = new TintSwitchCompat(context, attrs);
+                Drawable trackDrawable = Utils.getDrawable("abc_switch_track_mtrl_alpha");
+                Drawable thumbDrawable = Utils.getDrawable("abc_switch_thumb_material");
+                ColorStateList trackTint = Utils.getColorStateList(context, "selector_switch_track");
+                ColorStateList thumbTint = Utils.getColorStateList(context, "selector_switch_thumb");
+                trackDrawable.setTintMode(PorterDuff.Mode.SRC_IN);
+                trackDrawable.setTintList(trackTint);
+                thumbDrawable.setTintMode(PorterDuff.Mode.MULTIPLY);
+                thumbDrawable.setTintList(thumbTint);
+                switchCompat.setTrackDrawable(trackDrawable);
+                switchCompat.setThumbDrawable(thumbDrawable);
+                return switchCompat;
             } else if (context instanceof Activity activity) {
                 return activity.onCreateView(name, context, attrs);
             }
