@@ -137,7 +137,7 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
                 val message = Utils.getString("biliroaming_need_reboot_dialog_message")
                 val confirm = Utils.getString("biliroaming_need_reboot_dialog_confirm")
                 val later = Utils.getString("biliroaming_need_reboot_dialog_later")
-                AlertDialog.Builder(requireContext())
+                AlertDialog.Builder(context)
                     .setMessage(message)
                     .setNegativeButton(later, null)
                     .setPositiveButton(confirm) { _, _ -> Utils.reboot() }

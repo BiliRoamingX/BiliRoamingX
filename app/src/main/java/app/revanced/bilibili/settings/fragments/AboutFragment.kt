@@ -46,7 +46,7 @@ class AboutFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_about"
         if (Upgrade.customUpdate(fromSelf = true)) {
             runCatching {
                 val (serviceClass, checkUpdateMethod) = checkUpdateMethod.split('#', limit = 2)
-                val activity = requireContext() as Activity
+                val activity = context as Activity
                 Upgrade.fromSelf = true
                 Class.forName(serviceClass).new().callMethod(checkUpdateMethod, activity)
             }.onFailure {

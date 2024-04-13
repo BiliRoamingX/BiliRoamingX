@@ -87,7 +87,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
         val view = EditText(activity)
         skinInput = view
         view.setText(Settings.SKIN_JSON.string)
-        AlertDialog.Builder(activity)
+        AlertDialog.Builder(context)
             .setTitle(Utils.getString("biliroaming_skin_title"))
             .setView(view)
             .setPositiveButton(android.R.string.ok, null)

@@ -27,7 +27,7 @@ class CustomizePlayerFragment :
         editText.hint = Utils.getString("biliroaming_default_speed_hint")
         editText.setText(settings.float.takeIf { it != 0f }?.toString().orEmpty())
         editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-        AlertDialog.Builder(activity)
+        AlertDialog.Builder(context)
             .setTitle(Utils.getString(titleId))
             .setView(editText)
             .setPositiveButton(android.R.string.ok, null)
@@ -61,7 +61,7 @@ class CustomizePlayerFragment :
         editText.inputType = InputType.TYPE_CLASS_TEXT
         editText.hint = Utils.getString("biliroaming_speed_override_hint")
         editText.setText(Settings.OVERRIDE_PLAYBACK_SPEED.string)
-        AlertDialog.Builder(activity)
+        AlertDialog.Builder(context)
             .setTitle(Utils.getString("biliroaming_speed_override_title"))
             .setView(editText)
             .setPositiveButton(android.R.string.ok, null)

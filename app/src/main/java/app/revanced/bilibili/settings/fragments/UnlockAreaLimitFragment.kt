@@ -15,8 +15,8 @@ class UnlockAreaLimitFragment :
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
         findPreference<Preference>("custom_server")?.onClick {
-            AlertDialog.Builder(activity).run {
-                val view = context.inflateLayout("biliroaming_dialog_customize_backup")
+            AlertDialog.Builder(context).run {
+                val view = context.inflateLayout("biliroaming_dialog_area_server")
                 val editTexts = arrayOf<EditText>(
                     view.findView("cn_server"),
                     view.findView("hk_server"),

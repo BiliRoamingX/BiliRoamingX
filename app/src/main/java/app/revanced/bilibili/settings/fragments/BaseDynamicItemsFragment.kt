@@ -43,7 +43,7 @@ abstract class BaseDynamicItemsFragment(
         if (hintShown) return
         if (allItems.isNotEmpty()) return
         hintShown = true
-        AlertDialog.Builder(requireContext())
+        AlertDialog.Builder(context)
             .setMessage(Utils.getString("biliroaming_hint_open_from_mine"))
             .setPositiveButton(Utils.getString("biliroaming_get_it"), null)
             .create().constraintSize().show()

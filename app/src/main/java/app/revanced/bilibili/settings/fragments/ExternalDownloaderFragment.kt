@@ -23,7 +23,7 @@ class ExternalDownloaderFragment :
             editText.inputType = EditorInfo.TYPE_CLASS_TEXT
             editText.imeOptions = EditorInfo.IME_ACTION_DONE
             editText.setText(Settings.EXTERNAL_DOWNLOADER_NAME.string)
-            val dialog = AlertDialog.Builder(requireContext())
+            val dialog = AlertDialog.Builder(context)
                 .setView(editText)
                 .setTitle(it.title)
                 .setNegativeButton(android.R.string.cancel, null)

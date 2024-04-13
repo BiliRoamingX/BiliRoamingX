@@ -27,7 +27,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
         val name = if (className.startsWith("android.")) {
             clazz.simpleName
         } else className
-        return Widgets.createTintView(requireContext(), name)
+        return Widgets.createTintView(context, name)
     }
 
     protected fun categoryTitle(title: String) = tintView<TextView>().apply {
