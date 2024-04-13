@@ -264,7 +264,9 @@ public class ApplicationDelegate {
         public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
             printLifecycle(activity, "onActivityCreated", true);
             activityRefs.push(new WeakReference<>(activity));
-            if (activity instanceof BiliPreferencesActivity || activity instanceof MessageTipItemActivity) {
+            if (activity instanceof BiliPreferencesActivity
+                    || activity instanceof MessageTipItemActivity
+                    || (Utils.isHd() && activity instanceof MainActivityV2)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                     HiddenApiBypass.addHiddenApiExemptions("Landroid/view/LayoutInflater;");
                 LayoutInflater layoutInflater = activity.getLayoutInflater();

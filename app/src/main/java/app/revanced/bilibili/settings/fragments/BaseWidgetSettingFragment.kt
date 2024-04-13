@@ -1,6 +1,7 @@
 package app.revanced.bilibili.settings.fragments
 
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.text.InputFilter.LengthFilter
 import android.text.TextUtils
@@ -22,12 +23,19 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
     protected fun string(idName: String): String = Utils.getString(idName)
 
     protected inline fun <reified T : View> tintView(): T {
-        val clazz = T::class.java
-        val className = clazz.name
+        return T::class.java.tintView()
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    protected fun <T : View> Class<T>.tintView(): T {
+        val className = name
         val name = if (className.startsWith("android.")) {
-            clazz.simpleName
+            simpleName
         } else className
-        return Widgets.createTintView(context, name)
+        var view: T? = Widgets.createTintView(context, name)
+        if (view == null && this === SwitchCompat::class.java)
+            view = SwitchCompat(requireContext()) as T
+        return view!!
     }
 
     protected fun categoryTitle(title: String) = tintView<TextView>().apply {
@@ -197,6 +205,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
         val regexModeSwitch = tintView<SwitchCompat>().apply {
             isSoundEffectsEnabled = false
             isHapticFeedbackEnabled = false
+            if (Utils.isHd()) applyStyle()
         }
         if (!showRegex) {
             regexModeView.visibility = View.GONE
@@ -208,6 +217,19 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
         layout.addView(regexModeView)
         layout.addView(regexModeSwitch)
         return Triple(layout, clearView, regexModeSwitch)
+    }
+
+    private fun SwitchCompat.applyStyle() {
+        val trackDrawable = Utils.getDrawable("abc_switch_track_mtrl_alpha")
+        val thumbDrawable = Utils.getDrawable("abc_switch_thumb_material")
+        val trackTint = Utils.getColorStateList(context, "selector_switch_track")
+        val thumbTint = Utils.getColorStateList(context, "selector_switch_thumb")
+        trackDrawable.setTintMode(PorterDuff.Mode.SRC_IN)
+        trackDrawable.setTintList(trackTint)
+        thumbDrawable.setTintMode(PorterDuff.Mode.MULTIPLY)
+        thumbDrawable.setTintList(thumbTint)
+        setTrackDrawable(trackDrawable)
+        setThumbDrawable(thumbDrawable)
     }
 
     protected fun keywordInputItem(
@@ -317,6 +339,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
             isSoundEffectsEnabled = false
             isHapticFeedbackEnabled = false
             setBackgroundColor(Color.TRANSPARENT)
+            if (Utils.isHd()) applyStyle()
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
