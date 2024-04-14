@@ -1,5 +1,6 @@
 package app.revanced.bilibili.patches.protobuf
 
+import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.api.BiliRoamingApi.getPlayUrl
 import app.revanced.bilibili.api.BiliRoamingApi.getSeason
 import app.revanced.bilibili.api.CustomServerException
@@ -234,7 +235,7 @@ object BangumiPlayUrlHook {
                 ConfType.LISTEN.number
             )) arcConfs[key] = supportedConf
         }
-        if (!isDownloadUnite && !Utils.isEffectiveVip()
+        if (!isDownloadUnite && !Accounts.isEffectiveVip
             && Settings.TRIAL_VIP_QUALITY.boolean
         ) TrialQualityPatch.makeVipFree(playReply)
         if (Settings.REMOVE_CMD_DMS.boolean) {

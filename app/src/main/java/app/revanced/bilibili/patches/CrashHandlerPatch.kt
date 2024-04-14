@@ -10,7 +10,7 @@ object CrashHandlerPatch {
     @JvmStatic
     fun onCrash(thread: Thread, error: Throwable) {
         LogHelper.error({
-            "FATAL, crashed, pid: ${Os.getpid()}, tid: ${thread.id}, pname: ${Utils.getCurrentProcessName()}, tname: ${thread.name}, error: "
+            "FATAL, crashed, pid: ${Os.getpid()}, tid: ${thread.id}, pname: ${Utils.currentProcessName()}, tname: ${thread.name}, error: "
         }, error)
     }
 }

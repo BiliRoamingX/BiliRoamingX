@@ -7,8 +7,7 @@ import app.revanced.bilibili.patches.CustomThemePatch
 
 class ThemeRefreshReceiver : BroadcastReceiver() {
     companion object {
-        @JvmField
-        val ACTION = Utils.getContext().packageName + ".biliroamingx.refresh_theme"
+        const val ACTION = "biliroamingx.action.refresh_theme"
         const val EXTRA_NEW_COLOR = "new_color"
     }
 

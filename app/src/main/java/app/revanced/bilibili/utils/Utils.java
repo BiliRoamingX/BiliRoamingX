@@ -36,6 +36,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import javax.crypto.spec.IvParameterSpec;
+
 import kotlin.io.ByteStreamsKt;
 import kotlin.io.ConstantsKt;
 
@@ -226,9 +228,8 @@ public class Utils {
     }
 
     @Keep
-    // codes will filled by patcher
-    public static String getAccessKey() {
-        return "";
+    public static IvParameterSpec getAesIv(String appKey) {
+        return null;
     }
 
     @Keep
@@ -252,19 +253,6 @@ public class Utils {
 
     @Keep
     // codes will filled by patcher
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean isEffectiveVip() {
-        return false;
-    }
-
-    @Keep
-    // codes will filled by patcher
-    public static boolean isLogin() {
-        return false;
-    }
-
-    @Keep
-    // codes will filled by patcher
     public static boolean isNightFollowSystem() {
         return false;
     }
@@ -282,7 +270,7 @@ public class Utils {
         throw new UnsupportedOperationException();
     }
 
-    public static String getCurrentProcessName() {
+    public static String currentProcessName() {
         String name = "";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             name = Application.getProcessName();
@@ -294,7 +282,7 @@ public class Utils {
     }
 
     public static boolean isInMainProcess() {
-        String name = getCurrentProcessName();
+        String name = currentProcessName();
         return !name.isEmpty() && !name.contains(":");
     }
 

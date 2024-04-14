@@ -1,4 +1,4 @@
-package app.revanced.bilibili.meta;
+package app.revanced.bilibili.account.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 

@@ -1,6 +1,7 @@
 package app.revanced.bilibili.api
 
 import android.net.Uri
+import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.http.HttpClient
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
 import app.revanced.bilibili.settings.Settings
@@ -95,7 +96,7 @@ object BiliRoamingApi {
         val errors = mutableMapOf<String, String>()
 
         for ((area, host) in hostList.toList().asReversed()) {
-            val accessKey = Utils.getAccessKey()
+            val accessKey = Accounts.accessKey
             val extraMap = if (area == Area.th) mapOf(
                 "area" to area.value,
                 "appkey" to "7d089525d3611b1c",
@@ -201,7 +202,7 @@ object BiliRoamingApi {
         val builder = Uri.Builder().scheme("https")
             .encodedAuthority(thUrl + THAILAND_PATH_SEASON)
             .appendQueryParameter("s_locale", "zh_SG")
-            .appendQueryParameter("access_key", Utils.getAccessKey())
+            .appendQueryParameter("access_key", Accounts.accessKey)
             .appendQueryParameter("mobi_app", "bstar_a")
             .appendQueryParameter("build", "1080003")
         if (seasonId != 0L)
@@ -336,7 +337,7 @@ object BiliRoamingApi {
         }
         result.put("modules", modules)
         result.put("user_status", statusResult.apply {
-            if (status == 13 && Utils.isEffectiveVip())
+            if (status == 13 && Accounts.isEffectiveVip)
                 put("pay", 1)
             if (optJSONObject("vip_info")?.optInt("status") == 1)
                 put("vip", 1)
@@ -412,7 +413,7 @@ object BiliRoamingApi {
             .scheme("https")
             .encodedAuthority(BILI_USER_STATUS_URL)
             .appendQueryParameter("season_id", seasonId.toString())
-            .appendQueryParameter("access_key", Utils.getAccessKey())
+            .appendQueryParameter("access_key", Accounts.accessKey)
             .toString()
         return HttpClient.get(url)?.plain()
     }
@@ -423,14 +424,14 @@ object BiliRoamingApi {
             .scheme("https")
             .encodedAuthority(BILI_REVIEW_URL)
             .appendQueryParameter("media_id", mediaId.toString())
-            .appendQueryParameter("access_key", Utils.getAccessKey())
+            .appendQueryParameter("access_key", Accounts.accessKey)
             .toString()
         return HttpClient.get(url)?.plain()
     }
 
     @JvmStatic
     private fun getAppMediaInfo(mediaId: Long): String? {
-        val query = mapOf("media_id" to mediaId.toString(), "access_key" to Utils.getAccessKey())
+        val query = mapOf("media_id" to mediaId.toString(), "access_key" to Accounts.accessKey)
         val url = Uri.Builder()
             .scheme("https")
             .encodedAuthority(BILI_APP_MEDIA_URL)

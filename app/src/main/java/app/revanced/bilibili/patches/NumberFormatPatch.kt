@@ -3,8 +3,8 @@ package app.revanced.bilibili.patches
 import android.widget.TextView
 import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
+import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.Utils
 import app.revanced.bilibili.utils.findView
 import com.bilibili.app.authorspace.api.BiliMemberCard
 import tv.danmaku.bili.ui.main2.api.AccountMine
@@ -15,7 +15,7 @@ object NumberFormatPatch {
     fun onMineBindAccountState(fragment: Fragment, accountMine: AccountMine?) {
         if (!Settings.NUMBER_FORMAT.boolean) return
         val view = fragment.view ?: return
-        if (accountMine == null || !Utils.isLogin()) return
+        if (accountMine == null || !Accounts.isLogin) return
 
         val followingCount = view.findView<TextView>("following_count")
         val attentionCount = view.findView<TextView>("attention_count")

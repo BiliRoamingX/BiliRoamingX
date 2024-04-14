@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
+import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.api.BiliRoamingApi.getAreaSearchBangumi
 import app.revanced.bilibili.api.BiliRoamingApi.getSeason
 import app.revanced.bilibili.patches.main.VideoInfoHolder
@@ -284,7 +285,7 @@ object BangumiSeasonHook {
         val ps = request.pagination.pageSize
         val keyword = request.keyword
         val query = mapOf(
-            "access_key" to Utils.getAccessKey(),
+            "access_key" to Accounts.accessKey,
             "fnval" to request.playerArgs.fnval.toString(),
             "fnver" to request.playerArgs.fnver.toString(),
             "qn" to request.playerArgs.qn.toString(),

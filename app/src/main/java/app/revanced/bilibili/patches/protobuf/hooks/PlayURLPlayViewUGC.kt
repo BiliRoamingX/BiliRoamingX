@@ -1,12 +1,12 @@
 package app.revanced.bilibili.patches.protobuf.hooks
 
+import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.meta.VideoInfo
 import app.revanced.bilibili.patches.TrialQualityPatch
 import app.revanced.bilibili.patches.VideoQualityPatch
 import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.patches.protobuf.MossHook
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.Utils
 import com.bapis.bilibili.app.playurl.v1.PlayAbilityConf
 import com.bapis.bilibili.app.playurl.v1.PlayViewReply
 import com.bapis.bilibili.app.playurl.v1.PlayViewReq
@@ -51,7 +51,7 @@ object PlayURLPlayViewUGC : MossHook<PlayViewReq, PlayViewReply>() {
                     }
                 }
             }
-            if (req.download < 1 && !Utils.isEffectiveVip()
+            if (req.download < 1 && !Accounts.isEffectiveVip
                 && Settings.TRIAL_VIP_QUALITY.boolean
             ) TrialQualityPatch.makeVipFree(reply)
         }

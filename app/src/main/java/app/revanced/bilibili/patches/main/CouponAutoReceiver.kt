@@ -1,6 +1,7 @@
 package app.revanced.bilibili.patches.main
 
 import android.widget.Toast
+import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.http.ContentType
 import app.revanced.bilibili.http.HttpClient
 import app.revanced.bilibili.http.RequestBody
@@ -41,7 +42,7 @@ object CouponAutoReceiver {
 
     private fun getCouponInfo() = HttpClient.get(
         "https://api.bilibili.com/x/vip/privilege/my",
-        headers = mapOf("Cookie" to "SESSDATA=$cookieSESSDATA")
+        headers = mapOf("Cookie" to "SESSDATA=${Accounts.cookieSESSDATA}")
     )?.json()?.run {
         LogHelper.debug { "CouponAutoReceiver.couponInfo: $this" }
         if (optInt("code", -1) == 0) {
@@ -59,8 +60,8 @@ object CouponAutoReceiver {
 
     private fun receiveCoupon(type: Int) = HttpClient.post(
         "https://api.bilibili.com/x/vip/privilege/receive",
-        headers = mapOf("Cookie" to "SESSDATA=$cookieSESSDATA"),
-        body = RequestBody.form(listOf("type" to type, "csrf" to cookieBiliJct))
+        headers = mapOf("Cookie" to "SESSDATA=${Accounts.cookieSESSDATA}"),
+        body = RequestBody.form(listOf("type" to type, "csrf" to Accounts.cookieBiliJct))
     )?.json()?.run {
         LogHelper.debug { "CouponAutoReceiver.receiveCoupon, type: $type, response: $this" }
         optInt("code", -1) == 0
@@ -68,8 +69,8 @@ object CouponAutoReceiver {
 
     private fun receiveExperience() = HttpClient.post(
         "https://api.bilibili.com/x/vip/experience/add",
-        headers = mapOf("Cookie" to "SESSDATA=$cookieSESSDATA"),
-        body = RequestBody.form(listOf("csrf" to cookieBiliJct))
+        headers = mapOf("Cookie" to "SESSDATA=${Accounts.cookieSESSDATA}"),
+        body = RequestBody.form(listOf("csrf" to Accounts.cookieBiliJct))
     )?.json()?.run {
         LogHelper.debug { "CouponAutoReceiver.receiveExperience, response: $this" }
         optInt("code", -1) == 0
@@ -91,7 +92,7 @@ object CouponAutoReceiver {
         ).random() // cid
         val body = signQuery(
             mapOf(
-                "access_key" to Utils.getAccessKey(),
+                "access_key" to Accounts.accessKey,
                 "oid" to oid,
                 "panel_type" to "1",
                 "share_channel" to "QQ",

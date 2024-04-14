@@ -10,7 +10,10 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.*
-import android.util.*
+import android.util.Size
+import android.util.SizeF
+import android.util.SparseArray
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.MeasureSpec
@@ -19,8 +22,8 @@ import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.annotation.WorkerThread
 import androidx.preference.Preference
+import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.meta.Client
-import app.revanced.bilibili.meta.CookieInfo
 import app.revanced.bilibili.meta.VideoHistory
 import app.revanced.bilibili.patches.main.ApplicationDelegate
 import app.revanced.bilibili.settings.ModulePreferenceManager
@@ -41,8 +44,9 @@ import java.net.URLDecoder
 import java.util.TreeMap
 import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
+import javax.crypto.Cipher
+import javax.crypto.spec.SecretKeySpec
 import kotlin.Boolean
-import kotlin.Pair
 import kotlin.math.roundToInt
 
 @get:JvmName("sp2px")
@@ -322,29 +326,6 @@ inline fun GeneratedMessageLite<*, *>.setUnknownFields(unknownFields: UnknownFie
     GeneratedMessageLiteEx.setUnknownFields(this, unknownFields)
 }
 
-val cookieInfo get() = if (Utils.isLogin()) cookieInfoCache else null
-
-val cookieSESSDATA get() = cookieInfo?.cookies?.find { it.name == "SESSDATA" }?.value.orEmpty()
-val cookieBiliJct get() = cookieInfo?.cookies?.find { it.name == "bili_jct" }?.value.orEmpty()
-
-private val cookieInfoCache by lazy {
-    val cookieFile = File(Utils.getContext().filesDir, "bili.account.storage")
-    val currentAccount = accountPrefs.getString("current_account", "").orEmpty()
-    runCatching {
-        val cookie = if (currentAccount.isNotEmpty()) {
-            currentAccount.toJSONObject().optString("cookie")
-        } else if (cookieFile.isFile) {
-            cookieFile.bufferedReader().use { it.readText() }
-        } else null
-        if (cookie != null) {
-            Base64.decode(cookie, Base64.NO_WRAP).toString(Charsets.UTF_8).toJSONObject()
-                .optJSONArray("cookies")?.asSequence<JSONObject>().orEmpty()
-                .map { CookieInfo.CookieBean(it.optString("name"), it.optString("value")) }
-                .toList().let { CookieInfo(it) }
-        } else null
-    }.getOrNull()
-}
-
 val defaultUA = "Mozilla/5.0 BiliDroid/$versionName (bbcallen@gmail.com)"
 
 val browserUA =
@@ -509,7 +490,7 @@ fun grpcMetadataHeader(client: Client): String {
     val privacyAllowed = blkvPrefs.getBoolean("bili.privacy.allowed", false)
     val buvidFinal = if (privacyAllowed) buvid else ""
     return Metadata().apply {
-        accessKey = Utils.getAccessKey()
+        accessKey = Accounts.accessKey
         mobiApp = client.mobiApp
         device = ""
         build = client.verCode
@@ -599,3 +580,16 @@ fun <T : Dialog> T.constraintSize(
         window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
     }
 }
+
+private fun biliAes(bytes: ByteArray, decrypt: Boolean): ByteArray {
+    val appKey = Utils.getAppKey()
+    val key = appKey.toByteArray().copyOf(16)
+    val keySpec = SecretKeySpec(key, "AES")
+    val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+    val mode = if (decrypt) Cipher.DECRYPT_MODE else Cipher.ENCRYPT_MODE
+    cipher.init(mode, keySpec, Utils.getAesIv(appKey))
+    return cipher.doFinal(bytes)
+}
+
+fun biliAesDecrypt(bytes: ByteArray) = biliAes(bytes, true)
+fun biliAesEncrypt(bytes: ByteArray) = biliAes(bytes, false)

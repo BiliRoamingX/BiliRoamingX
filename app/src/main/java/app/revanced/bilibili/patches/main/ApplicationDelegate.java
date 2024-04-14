@@ -1,5 +1,6 @@
 package app.revanced.bilibili.patches.main;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -38,6 +39,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayDeque;
 import java.util.Objects;
 
+import app.revanced.bilibili.account.PassportChangeReceiver;
 import app.revanced.bilibili.patches.CustomThemePatch;
 import app.revanced.bilibili.patches.DpiPatch;
 import app.revanced.bilibili.patches.PlaybackSpeedPatch;
@@ -58,12 +60,14 @@ public class ApplicationDelegate {
     private static final Point screenSize = new Point();
 
     @Keep
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     public static void onCreate(Application app) {
         appCreated = true;
         app.registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
         app.registerComponentCallbacks(new ComponentCallbacks());
         setBitmapDefaultDensity();
         CustomThemePatch.refresh();
+        Utils.getContext().registerReceiver(new PassportChangeReceiver(), new IntentFilter(PassportChangeReceiver.ACTION));
         if (Utils.isInMainProcess()) {
             Utils.async(ApplicationDelegate::startLog);
             Utils.async(PlaybackSpeedPatch::refreshOverrideSpeedList);
@@ -74,7 +78,7 @@ public class ApplicationDelegate {
             Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypesV2));
             Utils.runOnMainThread(2000L, () -> Utils.async(CouponAutoReceiver::check));
         }
-        if (Utils.getCurrentProcessName().endsWith(":web")) {
+        if (Utils.currentProcessName().endsWith(":web")) {
             Utils.getContext().registerReceiver(new ThemeRefreshReceiver(), new IntentFilter(ThemeRefreshReceiver.ACTION));
         }
     }
