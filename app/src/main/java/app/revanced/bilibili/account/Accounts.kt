@@ -3,6 +3,7 @@ package app.revanced.bilibili.account
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Process
 import android.util.Base64
@@ -174,12 +175,18 @@ object Accounts {
 class PassportChangeReceiver : BroadcastReceiver() {
 
     companion object {
-        const val ACTION = "com.bilibili.passport.ACTION_MSG"
+        private const val ACTION = "com.bilibili.passport.ACTION_MSG"
         const val ACTION_SIGN_OUT = 2
         const val ACTION_UPDATE_ACCOUNT = 5
         private const val EXTRA_WHAT = "com.bilibili.passport.what"
         private const val EXTRA_PID = "com.bilibili.passport.pid"
         private const val EXTRA_UID = "com.bilibili.passport.uid"
+
+        @JvmStatic
+        fun register() {
+            Utils.getContext()
+                .registerReceiverCompat(PassportChangeReceiver(), IntentFilter(ACTION))
+        }
     }
 
     override fun onReceive(context: Context, intent: Intent) {

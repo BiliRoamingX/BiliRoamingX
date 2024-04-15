@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -45,11 +44,12 @@ import app.revanced.bilibili.patches.DpiPatch;
 import app.revanced.bilibili.patches.PlaybackSpeedPatch;
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.settings.Settings;
+import app.revanced.bilibili.utils.PreferenceUpdater;
 import app.revanced.bilibili.utils.KtUtils;
 import app.revanced.bilibili.utils.LogHelper;
 import app.revanced.bilibili.utils.Reflex;
+import app.revanced.bilibili.utils.SettingsSyncHelper;
 import app.revanced.bilibili.utils.SubtitleParamsCache;
-import app.revanced.bilibili.utils.ThemeRefreshReceiver;
 import app.revanced.bilibili.utils.UposReplacer;
 import app.revanced.bilibili.utils.Utils;
 import tv.danmaku.bili.MainActivityV2;
@@ -67,19 +67,19 @@ public class ApplicationDelegate {
         app.registerComponentCallbacks(new ComponentCallbacks());
         setBitmapDefaultDensity();
         CustomThemePatch.refresh();
-        Utils.getContext().registerReceiver(new PassportChangeReceiver(), new IntentFilter(PassportChangeReceiver.ACTION));
+        PassportChangeReceiver.register();
         if (Utils.isMainProcess()) {
             Utils.async(ApplicationDelegate::startLog);
             Utils.async(PlaybackSpeedPatch::refreshOverrideSpeedList);
             SubtitleParamsCache.updateFont();
             KtUtils.getCountryTask();
             UposReplacer.getBaseUposList();
+            PreferenceUpdater.register();
             Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypes));
             Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypesV2));
             Utils.runOnMainThread(2000L, () -> Utils.async(CouponAutoReceiver::check));
-        }
-        if (Utils.isWebProcess()) {
-            Utils.getContext().registerReceiver(new ThemeRefreshReceiver(), new IntentFilter(ThemeRefreshReceiver.ACTION));
+        } else {
+            SettingsSyncHelper.register();
         }
     }
 

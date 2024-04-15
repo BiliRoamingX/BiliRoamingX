@@ -20,7 +20,10 @@ import java.util.Set;
 
 import app.revanced.bilibili.utils.Constants;
 import app.revanced.bilibili.utils.LogHelper;
+import app.revanced.bilibili.utils.PreferenceUpdater;
+import app.revanced.bilibili.utils.SettingsSyncHelper;
 import app.revanced.bilibili.utils.Utils;
+import kotlin.Pair;
 
 
 public enum Settings {
@@ -306,18 +309,22 @@ public enum Settings {
 
     @SuppressWarnings("unchecked")
     public void saveValue(Object newValue) {
-        setValue(newValue);
-        SharedPreferences.Editor editor = prefs.edit();
-        switch (valueType) {
-            case BOOLEAN -> editor.putBoolean(key, (Boolean) newValue);
-            case INTEGER -> editor.putInt(key, (Integer) newValue);
-            case LONG -> editor.putLong(key, (Long) newValue);
-            case FLOAT -> editor.putFloat(key, (Float) newValue);
-            case STRING -> editor.putString(key, (String) newValue);
-            case STRING_SET -> editor.putStringSet(key, (Set<String>) newValue);
-            default -> throw new IllegalStateException(name());
+        if (Utils.isMainProcess()) {
+            setValue(newValue);
+            SharedPreferences.Editor editor = prefs.edit();
+            switch (valueType) {
+                case BOOLEAN -> editor.putBoolean(key, (Boolean) newValue);
+                case INTEGER -> editor.putInt(key, (Integer) newValue);
+                case LONG -> editor.putLong(key, (Long) newValue);
+                case FLOAT -> editor.putFloat(key, (Float) newValue);
+                case STRING -> editor.putString(key, (String) newValue);
+                case STRING_SET -> editor.putStringSet(key, (Set<String>) newValue);
+                default -> throw new IllegalStateException(name());
+            }
+            editor.apply();
+        } else {
+            PreferenceUpdater.update(new Pair<>(key, newValue));
         }
-        editor.apply();
     }
 
     public void appendValue(String value) {
@@ -366,26 +373,32 @@ public enum Settings {
                     case BOOLEAN:
                         boolean newBool = preferences.getBoolean(key, (Boolean) settings.defValue);
                         Settings.setValue(settings, newBool);
+                        SettingsSyncHelper.sync(new Pair<>(key, newBool));
                         break;
                     case INTEGER:
                         int newInt = preferences.getInt(key, (Integer) settings.defValue);
                         Settings.setValue(settings, newInt);
+                        SettingsSyncHelper.sync(new Pair<>(key, newInt));
                         break;
                     case LONG:
                         long newLong = preferences.getLong(key, (Long) settings.defValue);
                         Settings.setValue(settings, newLong);
+                        SettingsSyncHelper.sync(new Pair<>(key, newLong));
                         break;
                     case FLOAT:
                         float newFloat = preferences.getFloat(key, (Float) settings.defValue);
                         Settings.setValue(settings, newFloat);
+                        SettingsSyncHelper.sync(new Pair<>(key, newFloat));
                         break;
                     case STRING:
                         String newStr = preferences.getString(key, (String) settings.defValue);
                         Settings.setValue(settings, newStr);
+                        SettingsSyncHelper.sync(new Pair<>(key, newStr));
                         break;
                     case STRING_SET:
                         Set<String> newSet = preferences.getStringSet(key, (Set<String>) settings.defValue);
                         Settings.setValue(settings, newSet);
+                        SettingsSyncHelper.sync(new Pair<>(key, newSet));
                         break;
                     default:
                         throw new IllegalStateException(settings.name());
@@ -395,6 +408,17 @@ public enum Settings {
         }
         for (SharedPreferences.OnSharedPreferenceChangeListener listener : preferenceChangeListener)
             listener.onSharedPreferenceChanged(preferences, key);
+    }
+
+    public static void notifySettingsChangedForViceProcess(String key, Object value) {
+        for (Settings settings : Settings.values()) {
+            if (settings.key.equals(key)) {
+                Settings.setValue(settings, value);
+                for (SharedPreferences.OnSharedPreferenceChangeListener listener : preferenceChangeListener)
+                    listener.onSharedPreferenceChanged(prefs, key);
+                break;
+            }
+        }
     }
 
     public static void registerPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {

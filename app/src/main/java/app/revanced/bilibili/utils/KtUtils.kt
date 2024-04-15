@@ -37,6 +37,7 @@ import com.google.protobuf.UnknownFieldSetLite
 import org.json.JSONObject
 import java.io.File
 import java.io.PrintWriter
+import java.io.Serializable
 import java.io.StringWriter
 import java.lang.reflect.Proxy
 import java.net.URL
@@ -593,3 +594,23 @@ private fun biliAes(bytes: ByteArray, decrypt: Boolean): ByteArray {
 
 fun biliAesDecrypt(bytes: ByteArray) = biliAes(bytes, true)
 fun biliAesEncrypt(bytes: ByteArray) = biliAes(bytes, false)
+
+inline fun <reified T : Serializable> Intent.serializableExtra(name: String): T? {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        getSerializableExtra(name, T::class.java)
+    } else {
+        @Suppress("DEPRECATION")
+        getSerializableExtra(name) as? T
+    }
+}
+
+@SuppressLint("UnspecifiedRegisterReceiverFlag", "InlinedApi")
+fun Context.registerReceiverCompat(
+    receiver: BroadcastReceiver,
+    intentFilter: IntentFilter,
+    flags: Int = Context.RECEIVER_NOT_EXPORTED
+) = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    registerReceiver(receiver, intentFilter, flags)
+} else {
+    registerReceiver(receiver, intentFilter)
+}

@@ -2,7 +2,6 @@
 
 package app.revanced.bilibili.patches
 
-import android.content.Intent
 import android.graphics.Color
 import android.util.SparseArray
 import android.view.View
@@ -10,8 +9,6 @@ import androidx.annotation.ColorInt
 import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.settings.dialog.ColorChooseDialog
-import app.revanced.bilibili.utils.ThemeRefreshReceiver
-import app.revanced.bilibili.utils.Utils
 import app.revanced.bilibili.utils.blkvPrefs
 import app.revanced.bilibili.widget.OnClickOriginListener
 import com.bilibili.compose.theme.ThemeDayNight
@@ -49,9 +46,8 @@ object CustomThemePatch {
         inline set(value) = Settings.CUSTOM_COLOR.saveValue(value)
 
     @JvmStatic
-    @JvmOverloads
-    fun refresh(newColor: Int = 0) {
-        val customColor = if (newColor != 0) newColor else customColor
+    fun refresh() {
+        val customColor = customColor
         getColorArray().run {
             generateColorArray(customColor).let { colors ->
                 put(CUSTOM_THEME_ID1, colors)
@@ -64,15 +60,6 @@ object CustomThemePatch {
                 put(CUSTOM_THEME_ID2.toLong(), theme)
             }
         }
-    }
-
-    @JvmStatic
-    fun notifyWebRefresh(newColor: Int) {
-        val context = Utils.getContext()
-        context.sendBroadcast(Intent(ThemeRefreshReceiver.ACTION).apply {
-            `package` = context.packageName
-            putExtra(ThemeRefreshReceiver.EXTRA_NEW_COLOR, newColor)
-        })
     }
 
     // codes will filled by patcher
@@ -145,7 +132,6 @@ object CustomThemePatch {
             ColorChooseDialog(view.context, customColor) { color ->
                 customColor = color
                 refresh()
-                notifyWebRefresh(color)
                 val newId = if (mId == CUSTOM_THEME_ID1) CUSTOM_THEME_ID2 else CUSTOM_THEME_ID1
                 biliSkin.mId = newId
                 listener.onClick_Origin(view)
