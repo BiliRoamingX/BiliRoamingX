@@ -281,9 +281,13 @@ public class Utils {
         return name;
     }
 
-    public static boolean isInMainProcess() {
+    public static boolean isMainProcess() {
         String name = currentProcessName();
         return !name.isEmpty() && !name.contains(":");
+    }
+
+    public static boolean isWebProcess() {
+        return currentProcessName().endsWith(":web");
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

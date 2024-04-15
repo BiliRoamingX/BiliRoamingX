@@ -68,7 +68,7 @@ public class ApplicationDelegate {
         setBitmapDefaultDensity();
         CustomThemePatch.refresh();
         Utils.getContext().registerReceiver(new PassportChangeReceiver(), new IntentFilter(PassportChangeReceiver.ACTION));
-        if (Utils.isInMainProcess()) {
+        if (Utils.isMainProcess()) {
             Utils.async(ApplicationDelegate::startLog);
             Utils.async(PlaybackSpeedPatch::refreshOverrideSpeedList);
             SubtitleParamsCache.updateFont();
@@ -78,7 +78,7 @@ public class ApplicationDelegate {
             Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypesV2));
             Utils.runOnMainThread(2000L, () -> Utils.async(CouponAutoReceiver::check));
         }
-        if (Utils.currentProcessName().endsWith(":web")) {
+        if (Utils.isWebProcess()) {
             Utils.getContext().registerReceiver(new ThemeRefreshReceiver(), new IntentFilter(ThemeRefreshReceiver.ACTION));
         }
     }

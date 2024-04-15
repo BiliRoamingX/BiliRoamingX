@@ -10,6 +10,8 @@ import app.revanced.bilibili.account.model.*
 import app.revanced.bilibili.utils.*
 import org.json.JSONObject
 import java.io.File
+import java.io.RandomAccessFile
+import java.nio.channels.FileChannel
 
 object Accounts {
 
@@ -84,12 +86,12 @@ object Accounts {
             val account = if (accountMigrated) {
                 accountJson?.optString("token")
             } else if (passportFile.isFile) {
-                passportFile.bufferedReader().use { it.readText() }
+                passportFile.fastReadToString()
             } else null
             val cookie = if (accountMigrated) {
                 accountJson?.optString("cookie")
             } else if (cookieFile.isFile) {
-                cookieFile.bufferedReader().use { it.readText() }
+                cookieFile.fastReadToString()
             } else null
             if (!account.isNullOrEmpty() && !cookie.isNullOrEmpty()) {
                 val accountInfo = biliAesDecrypt(Base64.decode(account, Base64.NO_WRAP))
@@ -112,6 +114,18 @@ object Accounts {
         }.onFailure {
             LogHelper.error({ "Accounts, failed to read account" }, it)
         }.getOrNull()
+    }
+
+    @JvmStatic
+    private fun File.fastReadToString(): String {
+        return RandomAccessFile(this, "r").use { file ->
+            val channel = file.channel
+            val length = file.length()
+            channel.lock(0L, length, true).use {
+                val buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, length)
+                ByteArray(length.toInt()).apply { buffer.get(this) }.toString(Charsets.UTF_8)
+            }
+        }
     }
 
     @JvmStatic
@@ -142,14 +156,17 @@ object Accounts {
 
     @JvmStatic
     fun refresh(action: Int) {
-        accountCache = null
-        accountInfoCache = null
         val isSignOut = action == PassportChangeReceiver.ACTION_SIGN_OUT
         val isUpdateAccount = action == PassportChangeReceiver.ACTION_UPDATE_ACCOUNT
-        if (!isSignOut) Utils.async {
-            get()
-            if (isUpdateAccount)
-                getInfo()
+        if (isSignOut) {
+            accountCache = null
+            accountInfoCache = null
+        } else if (!isUpdateAccount) {
+            accountCache = null
+            Utils.async { get() }
+        } else {
+            accountInfoCache = null
+            Utils.async { getInfo() }
         }
     }
 }
