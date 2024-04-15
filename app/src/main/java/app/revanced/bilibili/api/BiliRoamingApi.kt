@@ -71,7 +71,7 @@ object BiliRoamingApi {
         if (hostList.isEmpty()) return null
 
         val epId = query["ep_id"] ?: return null
-        LogHelper.debug { "unlockBangumi, getPlayUrl, epId: $epId, seasonId: $seasonId, seasonTitle: $seasonTitle" }
+        Logger.debug { "unlockBangumi, getPlayUrl, epId: $epId, seasonId: $seasonId, seasonTitle: $seasonTitle" }
 
         seasonTitle.run {
             if (contains(hkRegex) && hkUrl.isNotEmpty()) hostList[Area.hk]
@@ -88,7 +88,7 @@ object BiliRoamingApi {
         if (cachePrefs.contains(cacheId)) {
             val cachedArea = Area.of(cachePrefs.getString(cacheId, null))
             if (cachedArea != null && hostList.containsKey(cachedArea)) {
-                LogHelper.debug { "use cached area $cachedArea for $cacheId" }
+                Logger.debug { "use cached area $cachedArea for $cacheId" }
                 hostList[cachedArea]
             }
         }
@@ -115,7 +115,7 @@ object BiliRoamingApi {
                 .encodedQuery(signQuery(query, extraMap))
                 .toString()
             HttpClient.biliroaming(uri)?.plain()?.let {
-                LogHelper.debug { "use server $area $host for playurl" }
+                Logger.debug { "use server $area $host for playurl" }
                 if (it.contains("\"code\":0")) {
                     seasonAreasCache[cacheId] = area
                     if (!cachePrefs.contains(cacheId)
@@ -198,7 +198,7 @@ object BiliRoamingApi {
                 }
             }
         } else null
-        LogHelper.debug { "unlockBangumi, getSeason, seasonId: $seasonId, epId: $epId" }
+        Logger.debug { "unlockBangumi, getSeason, seasonId: $seasonId, epId: $epId" }
         val builder = Uri.Builder().scheme("https")
             .encodedAuthority(thUrl + THAILAND_PATH_SEASON)
             .appendQueryParameter("s_locale", "zh_SG")
@@ -442,7 +442,7 @@ object BiliRoamingApi {
 
     @JvmStatic
     fun getThailandSubtitles(epId: Long): String? {
-        LogHelper.debug { "Getting subtitle $epId form thailand" }
+        Logger.debug { "Getting subtitle $epId form thailand" }
         epId.takeIf { it != 0L } ?: return null
         val thUrl = Settings.TH_SERVER.string.ifEmpty { return null }
         val uri = Uri.Builder()

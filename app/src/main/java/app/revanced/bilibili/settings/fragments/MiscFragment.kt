@@ -67,7 +67,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
                     destFile.outputStream().use { output -> input.copyTo(output) }
                 }
             } catch (e: Exception) {
-                LogHelper.error({ "failed to apply splash image" }, e)
+                Logger.error(e) { "failed to apply splash image" }
             }
         }
         if (resultCode != Activity.RESULT_OK || uri == null) return
@@ -77,7 +77,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
                     skinInput?.setText(it.bufferedReader().readText().trim())
                 }
             } catch (e: Exception) {
-                LogHelper.error({ "failed to import skin" }, e)
+                Logger.error(e) { "failed to import skin" }
             }
         }
     }

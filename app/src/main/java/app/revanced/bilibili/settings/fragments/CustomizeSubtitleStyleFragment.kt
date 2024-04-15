@@ -177,7 +177,7 @@ class CustomizeSubtitleStyleFragment : BaseWidgetSettingFragment() {
                     if (subfamily != "Regular") "$family $subfamily" else family
                 }
             }.onFailure {
-                LogHelper.error({ "Font parse filed" }, it)
+                Logger.error(it) { "Font parse filed" }
             }.getOrNull() ?: string("biliroaming_custom_subtitle_status_custom")
         } else {
             string("biliroaming_custom_subtitle_status_default")

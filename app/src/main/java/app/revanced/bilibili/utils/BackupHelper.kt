@@ -84,17 +84,17 @@ object BackupHelper {
         val metaInfo = zipFile.entry("backup.json")
             .use { it.readBytes() }.toString(Charsets.UTF_8).toJSONObject()
         val version = metaInfo.optInt("version")
-        LogHelper.debug { "backup version: $version" }
+        Logger.debug { "backup version: $version" }
 
         val time = metaInfo.optLong("time")
-        LogHelper.debug {
+        Logger.debug {
             val formatTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
                 .format(Date(time))
             "backup time: $formatTime"
         }
 
         val items = metaInfo.optJSONArray("items")
-        LogHelper.debug { "backup items: ${items?.toString(2)}" }
+        Logger.debug { "backup items: ${items?.toString(2)}" }
 
         items?.forEach { item ->
             when (val type = item.optString("type")) {
@@ -120,7 +120,7 @@ object BackupHelper {
                     }
                 }
 
-                else -> LogHelper.warn { "not supported backup item type: $type" }
+                else -> Logger.warn { "not supported backup item type: $type" }
             }
         }
 

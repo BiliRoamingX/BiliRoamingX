@@ -158,7 +158,7 @@ object ViewUniteReplyHook {
         val (newCode, newResult) = getSeason(seasonId, epId)?.toJSONObject()?.let {
             it.optInt("code", FAIL_CODE) to it.optJSONObject("result")
         } ?: (FAIL_CODE to null)
-        LogHelper.debug { "unlockThaiBangumi, newCode: $newCode, newResult: $newResult" }
+        Logger.debug { "unlockThaiBangumi, newCode: $newCode, newResult: $newResult" }
         if (isBangumiWithWatchPermission(newResult, newCode)) {
             return runCatching {
                 val th = newResult.optString("link").startsWith("https://www.bilibili.tv")
@@ -193,9 +193,9 @@ object ViewUniteReplyHook {
                     }
                 }
             }.onFailure {
-                LogHelper.error({ "unlockThaiBangumi, failed to reconstruct unite view" }, it)
+                Logger.error(it) { "unlockThaiBangumi, failed to reconstruct unite view" }
             }.onSuccess {
-                LogHelper.debug { "unlockThaiBangumi, reconstruct view: $it" }
+                Logger.debug { "unlockThaiBangumi, reconstruct view: $it" }
             }.getOrNull()
         }
         return null

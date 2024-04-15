@@ -133,7 +133,7 @@ object BangumiSeasonHook {
         val (newCode, newResult) = getSeason(seasonId, epId)?.toJSONObject()?.let {
             it.optInt("code", FAIL_CODE) to it.optJSONObject("result")
         } ?: (FAIL_CODE to null)
-        LogHelper.debug { "unlockThaiBangumi, old, newCode: $newCode, newResult: $newResult" }
+        Logger.debug { "unlockThaiBangumi, old, newCode: $newCode, newResult: $newResult" }
         if (isBangumiWithWatchPermission(newResult, newCode)) {
             val sid = newResult.optLong("season_id")
             newResult.optJSONObject("rights")?.apply {

@@ -53,12 +53,12 @@ object RoomPlayInfo : ApiHook() {
                             val bCodec = b.optString("codec_name")
                             if (aCodec == "hevc") 1 else if (bCodec == "hevc") -1 else 0
                         }).firstOrNull()?.let { best ->
-                            LogHelper.debug { "RoomPlayInfo, best codec: $best" }
+                            Logger.debug { "RoomPlayInfo, best codec: $best" }
                             codecList?.removeIf { it != best }
                         }
                 }
             }
-        LogHelper.debug { "RoomPlayInfo, new room play info: $jo" }
+        Logger.debug { "RoomPlayInfo, new room play info: $jo" }
         return jo.toString()
     }
 }

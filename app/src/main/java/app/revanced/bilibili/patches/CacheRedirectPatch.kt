@@ -91,7 +91,7 @@ object CacheRedirectPatch {
                     context.runCatching {
                         startActivity(intent)
                     }.onFailure {
-                        LogHelper.error({ "external downloader launch failed" }, it)
+                        Logger.error(it) { "external downloader launch failed" }
                     }
                 }
             }.create().constraintSize().show()
@@ -113,6 +113,6 @@ object CacheRedirectPatch {
         val menuPanel = menuPanelField.get(menuItemClickListener) as? Dialog
         menuPanel?.dismiss()
     }.onFailure {
-        LogHelper.error({ "menu dialog dismiss failed" }, it)
+        Logger.error(it) { "menu dialog dismiss failed" }
     }
 }

@@ -195,7 +195,7 @@ object HttpClient {
             && url.startsWith("https")
             && !url.contains("bilibili.com")
         ) {
-            LogHelper.debug { "Found Android 7, try to bypass ssl issue" }
+            Logger.debug { "Found Android 7, try to bypass ssl issue" }
             val listener = object : Any() {
                 val latch = CountDownLatch(1)
                 var result = ""
@@ -288,14 +288,14 @@ object HttpClient {
                 }
             } else {
                 val error = connection.errorStream?.readText(connection.contentEncoding)
-                LogHelper.error { "Request failed, url: $url, status: $status, error: $error" }
+                Logger.error { "Request failed, url: $url, status: $status, error: $error" }
                 null
             }
         }
     }.onFailure {
-        LogHelper.error({ "Request failed, url: $url" }, it)
+        Logger.error(it) { "Request failed, url: $url" }
     }.getOrNull()?.also {
-        LogHelper.debug { "Request success, url: $url" }
-        LogHelper.debug { "Request success, result: ${it.plain()}" }
+        Logger.debug { "Request success, url: $url" }
+        Logger.debug { "Request success, result: ${it.plain()}" }
     }
 }

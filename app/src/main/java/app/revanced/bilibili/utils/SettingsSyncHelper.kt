@@ -31,7 +31,7 @@ class SettingsSyncHelper : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val settings = intent.serializableExtra<ArrayList<Pair<String, Any?>>>(EXTRA_SETTINGS)
-        LogHelper.debug { "SettingsSyncHelper, received sync settings request, settings: $settings" }
+        Logger.debug { "SettingsSyncHelper, received sync settings request, settings: $settings" }
         settings?.forEach { (k, v) ->
             Settings.notifySettingsChangedForViceProcess(k, v)
         }

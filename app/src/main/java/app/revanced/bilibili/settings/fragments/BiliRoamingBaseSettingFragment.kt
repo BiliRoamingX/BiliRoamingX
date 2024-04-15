@@ -127,7 +127,7 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
         preferenceManagerField.set(this, preferenceManager)
         mOnNavigateToScreenListenerField?.set(preferenceManager, this)
     } catch (t: Throwable) {
-        LogHelper.error({ "PreferenceManager fix failed" }, t)
+        Logger.error(t) { "PreferenceManager fix failed" }
     }
 
     protected open fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {

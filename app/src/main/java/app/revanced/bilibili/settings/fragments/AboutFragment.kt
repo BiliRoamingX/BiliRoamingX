@@ -51,7 +51,7 @@ class AboutFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_about"
                 Class.forName(serviceClass).new().callMethod(checkUpdateMethod, activity)
             }.onFailure {
                 Upgrade.fromSelf = false
-                LogHelper.error({ "Update check failed" }, it)
+                Logger.error(it) { "Update check failed" }
             }
         } else if (Build.SUPPORTED_64_BIT_ABIS.isEmpty()) {
             Toasts.showShortWithId("biliroaming_custom_update_only_64")

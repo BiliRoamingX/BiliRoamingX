@@ -21,13 +21,13 @@ object CouponAutoReceiver {
                 receiveCoupon(item.type)
             else false
         } ?: 0
-        LogHelper.debug { "CouponAutoReceiver.couponSuccessCount: $couponSuccessCount" }
+        Logger.debug { "CouponAutoReceiver.couponSuccessCount: $couponSuccessCount" }
         val experienceSuccessCount = couponInfo?.list?.count { item ->
             if (item.type == 9 && item.state == 0 && item.vipType > 0)
                 receiveExperience()
             else false
         } ?: 0
-        LogHelper.debug { "CouponAutoReceiver.experienceSuccessCount: $experienceSuccessCount" }
+        Logger.debug { "CouponAutoReceiver.experienceSuccessCount: $experienceSuccessCount" }
         val coupon = if (couponSuccessCount > 0) "${couponSuccessCount}张卡券" else null
         val vipExp = if (experienceSuccessCount > 0) "大会员每日经验" else null
         val shareExp = if (receiveShareExperience()) "每日视频分享经验" else null
@@ -44,7 +44,7 @@ object CouponAutoReceiver {
         "https://api.bilibili.com/x/vip/privilege/my",
         headers = mapOf("Cookie" to "SESSDATA=${Accounts.cookieSESSDATA}")
     )?.json()?.run {
-        LogHelper.debug { "CouponAutoReceiver.couponInfo: $this" }
+        Logger.debug { "CouponAutoReceiver.couponInfo: $this" }
         if (optInt("code", -1) == 0) {
             optJSONObject("data")?.optJSONArray("list")
                 .orEmpty().asSequence<JSONObject>().map {
@@ -63,7 +63,7 @@ object CouponAutoReceiver {
         headers = mapOf("Cookie" to "SESSDATA=${Accounts.cookieSESSDATA}"),
         body = RequestBody.form(listOf("type" to type, "csrf" to Accounts.cookieBiliJct))
     )?.json()?.run {
-        LogHelper.debug { "CouponAutoReceiver.receiveCoupon, type: $type, response: $this" }
+        Logger.debug { "CouponAutoReceiver.receiveCoupon, type: $type, response: $this" }
         optInt("code", -1) == 0
     } ?: false
 
@@ -72,7 +72,7 @@ object CouponAutoReceiver {
         headers = mapOf("Cookie" to "SESSDATA=${Accounts.cookieSESSDATA}"),
         body = RequestBody.form(listOf("csrf" to Accounts.cookieBiliJct))
     )?.json()?.run {
-        LogHelper.debug { "CouponAutoReceiver.receiveExperience, response: $this" }
+        Logger.debug { "CouponAutoReceiver.receiveExperience, response: $this" }
         optInt("code", -1) == 0
     } ?: false
 
@@ -106,7 +106,7 @@ object CouponAutoReceiver {
             "https://api.bilibili.com/x/share/finish",
             body = body.toRequestBody(ContentType.form)
         )?.json()?.run {
-            LogHelper.debug { "CouponAutoReceiver.receiveShareExperience, response: $this" }
+            Logger.debug { "CouponAutoReceiver.receiveShareExperience, response: $this" }
             optInt("code", -1) == 0
                     && !optJSONObject("data")?.optString("toast").isNullOrEmpty()
         } ?: false

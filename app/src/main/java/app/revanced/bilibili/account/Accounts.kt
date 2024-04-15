@@ -113,7 +113,7 @@ object Accounts {
                 Account(accountInfo, cookieInfo)
             } else null
         }.onFailure {
-            LogHelper.error({ "Accounts, failed to read account" }, it)
+            Logger.error(it) { "Accounts, failed to read account" }
         }.getOrNull()
     }
 
@@ -152,7 +152,7 @@ object Accounts {
             }
         }
     }.onFailure {
-        LogHelper.error({ "Accounts, failed to read account info" }, it)
+        Logger.error(it) { "Accounts, failed to read account info" }
     }.getOrNull()
 
     @JvmStatic
@@ -194,7 +194,7 @@ class PassportChangeReceiver : BroadcastReceiver() {
         val what = intent.getIntExtra(EXTRA_WHAT, 0)
         val pid = intent.getIntExtra(EXTRA_PID, 0)
         val uid = intent.getIntExtra(EXTRA_UID, 0)
-        LogHelper.debug { "Accounts, passport changed, what: $what, pid: $pid, receiver pname: ${Utils.currentProcessName()}" }
+        Logger.debug { "Accounts, passport changed, what: $what, pid: $pid, receiver pname: ${Utils.currentProcessName()}" }
         if (uid == Process.myUid())
             Accounts.refresh(what)
     }

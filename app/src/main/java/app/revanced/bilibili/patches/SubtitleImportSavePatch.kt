@@ -36,7 +36,7 @@ object SubtitleImportSavePatch {
         Utils.runOnMainThread(800L) {
             Toasts.showShort("字幕导入失败，无法读取")
         }
-        LogHelper.error({ "Failed to read subtitle, type: $type, uri: $uri" }, it)
+        Logger.error(it) { "Failed to read subtitle, type: $type, uri: $uri" }
     }.mapCatching {
         when (type) {
             "ass" -> SubtitleHelper.ass2Bcc(it)
@@ -48,7 +48,7 @@ object SubtitleImportSavePatch {
         Utils.runOnMainThread(800L) {
             Toasts.showShort("字幕导入失败，无法转换")
         }
-        LogHelper.error({ "Failed to convert subtitle, type: $type, uri: $uri" }, it)
+        Logger.error(it) { "Failed to convert subtitle, type: $type, uri: $uri" }
     }.getOrNull()
 
     @Keep
@@ -160,7 +160,7 @@ object SubtitleImportSavePatch {
                     }
                 }
             }.onFailure {
-                LogHelper.error({ "subtitle save failed, url: ${sub.subtitleUrl}" }, it)
+                Logger.error(it) { "subtitle save failed, url: ${sub.subtitleUrl}" }
                 failedCount++
             }.onSuccess {
                 successCount++

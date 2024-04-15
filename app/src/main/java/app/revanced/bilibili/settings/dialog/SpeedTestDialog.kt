@@ -233,10 +233,10 @@ class SpeedTestDialog(context: Context, onDismiss: (Boolean) -> Unit) :
                 ?.optString("base_url")?.replace("https", "http")
         }.get(5, TimeUnit.SECONDS)
     } catch (e: CustomServerException) {
-        LogHelper.error({ "UPOS 测速失败, ${e.message}" }, e)
+        Logger.error(e) { "UPOS 测速失败, ${e.message}" }
         null
     } catch (e: Throwable) {
-        LogHelper.error({ "UPOS 测速失败, message: ${e.message}" }, e)
+        Logger.error(e) { "UPOS 测速失败, message: ${e.message}" }
         null
     }
 }

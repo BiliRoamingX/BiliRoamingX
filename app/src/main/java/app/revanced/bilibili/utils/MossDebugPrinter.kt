@@ -35,12 +35,12 @@ object MossDebugPrinter {
             }
         }
         if (skipEnabled && allSkippedMossApis.contains(mossMethod)) return
-        LogHelper.debug { "call blocking moss method $mossMethod" }
-        LogHelper.debug { "blocking moss method $mossMethod req:\n$req" }
+        Logger.debug { "call blocking moss method $mossMethod" }
+        Logger.debug { "blocking moss method $mossMethod req:\n$req" }
         if (skipEnabled && replySkippedMossApis.contains(mossMethod)) return
-        LogHelper.debug { "blocking moss method $mossMethod reply:\n$reply" }
+        Logger.debug { "blocking moss method $mossMethod reply:\n$reply" }
         if (error != null)
-            LogHelper.debug { "blocking moss method $mossMethod error: ${error.toPrintString()}" }
+            Logger.debug { "blocking moss method $mossMethod error: ${error.toPrintString()}" }
     }
 
     @JvmStatic
@@ -59,13 +59,13 @@ object MossDebugPrinter {
             }
         }
         if (skipEnabled && allSkippedMossApis.contains(mossMethod)) return handler
-        LogHelper.debug { "call async moss method $mossMethod, handler type: ${handler.javaClass.name}" }
-        LogHelper.debug { "async moss method $mossMethod req:\n$req" }
+        Logger.debug { "call async moss method $mossMethod, handler type: ${handler.javaClass.name}" }
+        Logger.debug { "async moss method $mossMethod req:\n$req" }
         if (skipEnabled && replySkippedMossApis.contains(mossMethod)) return handler
         return MossResponseHandlerProxy.get(handler, {
-            LogHelper.debug { "async moss method $mossMethod reply:\n${it}" }; it
+            Logger.debug { "async moss method $mossMethod reply:\n${it}" }; it
         }, { _, error ->
-            LogHelper.debug { "async moss method $mossMethod error: ${error?.toPrintString()}" }
+            Logger.debug { "async moss method $mossMethod error: ${error?.toPrintString()}" }
             false
         })
     }

@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import app.revanced.bilibili.utils.Constants;
-import app.revanced.bilibili.utils.LogHelper;
+import app.revanced.bilibili.utils.Logger;
 import app.revanced.bilibili.utils.PreferenceUpdater;
 import app.revanced.bilibili.utils.SettingsSyncHelper;
 import app.revanced.bilibili.utils.Utils;
@@ -268,7 +268,7 @@ public enum Settings {
             for (Settings setting : values())
                 setting.load(prefs);
         } catch (Exception ex) {
-            LogHelper.error(() -> "Failed to load settings", ex);
+            Logger.error(ex, () -> "Failed to load settings");
         }
     }
 
@@ -284,9 +284,9 @@ public enum Settings {
                 case STRING_SET -> setValue(prefs.getStringSet(key, (Set<String>) defValue));
                 default -> throw new IllegalStateException(name());
             }
-            LogHelper.debug(() -> String.format("Loaded setting '%s' with value %s", name(), value));
+            Logger.debug(() -> String.format("Loaded setting '%s' with value %s", name(), value));
         } catch (ClassCastException ex) {
-            LogHelper.error(() -> "Failed to read value", ex);
+            Logger.error(ex, () -> "Failed to read value");
         }
     }
 
@@ -366,7 +366,7 @@ public enum Settings {
 
     @SuppressWarnings("unchecked")
     static void onPreferenceChanged(SharedPreferences preferences, String key) {
-        LogHelper.debug(() -> "onPreferenceChanged, key: " + key);
+        Logger.debug(() -> "onPreferenceChanged, key: " + key);
         for (Settings settings : values()) {
             if (settings.key.equals(key)) {
                 switch (settings.valueType) {

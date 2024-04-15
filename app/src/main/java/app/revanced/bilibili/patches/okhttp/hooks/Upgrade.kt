@@ -77,7 +77,7 @@ object Upgrade : ApiHook() {
             val changelog = values[2].trim()
             val url = data.optJSONArray("assets")
                 ?.optJSONObject(0)?.optString("browser_download_url") ?: break
-            LogHelper.debug { "Upgrade, versionSum: $versionSum, changelog: $changelog, url: $url" }
+            Logger.debug { "Upgrade, versionSum: $versionSum, changelog: $changelog, url: $url" }
             val info = BUpgradeInfo(versionSum, url, changelog)
             if (sn < info.sn || (sn == info.sn && patchVersionCode < info.patchVersionCode)) {
                 val sameApp = sn == info.sn
@@ -113,7 +113,7 @@ object Upgrade : ApiHook() {
                         "ptime" to info.publishTime,
                     )
                 ).toJsonObject().also {
-                    LogHelper.debug { "Upgrade check result: $it" }
+                    Logger.debug { "Upgrade check result: $it" }
                 }
             }
             break

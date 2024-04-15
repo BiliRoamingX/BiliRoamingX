@@ -5,7 +5,7 @@ import androidx.annotation.Keep
 import app.revanced.bilibili.api.BrotliInputStream
 import app.revanced.bilibili.patches.okhttp.hooks.*
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.LogHelper
+import app.revanced.bilibili.utils.Logger
 import java.io.InputStream
 import java.util.zip.GZIPInputStream
 import java.util.zip.InflaterInputStream
@@ -43,7 +43,7 @@ object OkHttpPatch {
     @Keep
     @JvmStatic
     fun shouldHook(url: String, code: Int): Boolean {
-        LogHelper.debug { "OkHttpPatch.shouldHook, code: %d, url: %s".format(code, url) }
+        Logger.debug { "OkHttpPatch.shouldHook, code: %d, url: %s".format(code, url) }
         return (code == 200 && Settings.DEBUG.boolean) || hooks.any { it.shouldHook(url, code) }
     }
 
@@ -77,9 +77,9 @@ object OkHttpPatch {
             "br" -> BrotliInputStream(respStream)
             else -> respStream
         }).bufferedReader().use { it.readText() }
-        LogHelper.debug { "OkHttpPatch.hook, code: %d, url: %s".format(code, url) }
-        LogHelper.debug { "OkHttpPatch.hook, request, encoding: $reqEncoding, content: $request" }
-        LogHelper.debug { "OkHttpPatch.hook, response, encoding: $respEncoding, content: $response" }
+        Logger.debug { "OkHttpPatch.hook, code: %d, url: %s".format(code, url) }
+        Logger.debug { "OkHttpPatch.hook, request, encoding: $reqEncoding, content: $request" }
+        Logger.debug { "OkHttpPatch.hook, response, encoding: $respEncoding, content: $response" }
         return hook(url, code, request, response)
     }
 

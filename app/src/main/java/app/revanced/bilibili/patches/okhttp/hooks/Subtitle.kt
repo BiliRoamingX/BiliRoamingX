@@ -2,7 +2,7 @@ package app.revanced.bilibili.patches.okhttp.hooks
 
 import android.net.Uri
 import app.revanced.bilibili.patches.okhttp.ApiHook
-import app.revanced.bilibili.utils.LogHelper
+import app.revanced.bilibili.utils.Logger
 import app.revanced.bilibili.utils.SubtitleHelper
 import app.revanced.bilibili.utils.Utils
 import app.revanced.bilibili.utils.runCatchingOrNull
@@ -27,7 +27,7 @@ object Subtitle : ApiHook() {
             newResponse = runCatching {
                 SubtitleHelper.ass2Bcc(response)
             }.onFailure {
-                LogHelper.error({ "Ass subtitle convert failed" }, it)
+                Logger.error(it) { "Ass subtitle convert failed" }
             }.getOrNull() ?: return response
         }
         if (converter == "t2cn") {
@@ -44,7 +44,7 @@ object Subtitle : ApiHook() {
                 runCatching {
                     SubtitleHelper.convert(newResponse)
                 }.onFailure {
-                    LogHelper.error({ "Subtitle convert from t to cn failed" }, it)
+                    Logger.error(it) { "Subtitle convert from t to cn failed" }
                 }.getOrDefault(SubtitleHelper.errorResponse("字幕转换失败，请重试"))
             }
             Utils.async {
@@ -57,7 +57,7 @@ object Subtitle : ApiHook() {
             newResponse = runCatching {
                 SubtitleHelper.translate(newResponse)
             }.onFailure {
-                LogHelper.error({ "Subtitle translate from en to cn failed" }, it)
+                Logger.error(it) { "Subtitle translate from en to cn failed" }
             }.getOrDefault(SubtitleHelper.errorResponse("字幕翻译失败，请重试"))
         } else if (converter == "import") {
             val index = uri.getQueryParameter("import_index")?.toInt() ?: 0

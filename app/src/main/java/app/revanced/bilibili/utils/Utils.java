@@ -59,7 +59,7 @@ public class Utils {
     @Keep
     public static Context getContext() {
         if (context == null) {
-            LogHelper.error(() -> "Context is null");
+            Logger.error(() -> "Context is null");
         }
         return context;
     }

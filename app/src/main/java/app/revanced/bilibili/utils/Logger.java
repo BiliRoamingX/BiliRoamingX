@@ -11,22 +11,22 @@ import java.util.function.Consumer;
 
 import app.revanced.bilibili.settings.Settings;
 
-public class LogHelper {
+public class Logger {
 
     /**
      * Log messages using lambdas.
      */
     public interface LogMessage {
         @NonNull
-        String buildMessageString();
+        String build();
     }
 
     private static final int MAX_LENGTH = 3000;
     public static final String LOG_TAG = "BiliRoamingX";
 
-    public static void debug(@NonNull LogMessage message, boolean trace) {
+    public static void debug(boolean trace, @NonNull LogMessage message) {
         if (Settings.DEBUG.getBoolean()) {
-            var logMessage = message.buildMessageString();
+            var logMessage = message.build();
             if (trace) {
                 var builder = new StringBuilder(logMessage);
                 var sw = new StringWriter();
@@ -39,21 +39,21 @@ public class LogHelper {
     }
 
     public static void debug(@NonNull LogMessage message) {
-        debug(message, false);
+        debug(false, message);
     }
 
     /**
      * Logs warn messages using the outer class name of the code calling this method.
      */
     public static void warn(@NonNull LogMessage message) {
-        warn(message, null);
+        warn(null, message);
     }
 
     /**
      * Logs warn messages using the outer class name of the code calling this method.
      */
-    public static void warn(@NonNull LogMessage message, @Nullable Exception ex) {
-        var logMessage = message.buildMessageString();
+    public static void warn(@Nullable Exception ex, @NonNull LogMessage message) {
+        var logMessage = message.build();
         if (ex != null)
             logMessage = logMessage + '\n' + KtUtils.fullStackTraceString(ex);
         log(logMessage, (m) -> Log.w(LOG_TAG, m));
@@ -63,14 +63,14 @@ public class LogHelper {
      * Logs information messages using the outer class name of the code calling this method.
      */
     public static void info(@NonNull LogMessage message) {
-        info(message, null);
+        info(null, message);
     }
 
     /**
      * Logs information messages using the outer class name of the code calling this method.
      */
-    public static void info(@NonNull LogMessage message, @Nullable Exception ex) {
-        var logMessage = message.buildMessageString();
+    public static void info(@Nullable Exception ex, @NonNull LogMessage message) {
+        var logMessage = message.build();
         if (ex != null)
             logMessage = logMessage + '\n' + KtUtils.fullStackTraceString(ex);
         log(logMessage, (m) -> Log.i(LOG_TAG, m));
@@ -80,23 +80,17 @@ public class LogHelper {
      * Logs exceptions under the outer class name of the code calling this method.
      */
     public static void error(@NonNull LogMessage message) {
-        error(message, null);
+        error(null, message);
     }
 
     /**
      * Logs exceptions under the outer class name of the code calling this method.
      */
-    public static void error(@NonNull LogMessage message, @Nullable Throwable ex) {
-        String logMessage = message.buildMessageString();
+    public static void error(@Nullable Throwable ex, @NonNull LogMessage message) {
+        String logMessage = message.build();
         if (ex != null)
             logMessage = logMessage + '\n' + KtUtils.fullStackTraceString(ex);
         log(logMessage, (m) -> Log.e(LOG_TAG, m));
-    }
-
-    public static void trace() {
-        var sw = new StringWriter();
-        new Throwable().printStackTrace(new PrintWriter(sw));
-        Log.e(LOG_TAG + ".LogHelper", sw.toString());
     }
 
     private static void log(String message, Consumer<String> logger) {

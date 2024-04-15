@@ -40,7 +40,7 @@ import app.revanced.bilibili.meta.BottomItem;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Constants;
 import app.revanced.bilibili.utils.KtUtils;
-import app.revanced.bilibili.utils.LogHelper;
+import app.revanced.bilibili.utils.Logger;
 import app.revanced.bilibili.utils.Reflex;
 import app.revanced.bilibili.utils.Utils;
 import app.revanced.bilibili.utils.Versions;
@@ -189,7 +189,7 @@ public class JSONPatch {
                     if (!tabIdFieldName.isEmpty()) {
                         tabs.removeIf(tab -> "topic".equals(Reflex.getObjectField(tab, tabIdFieldName)));
                     } else {
-                        LogHelper.error(() -> "topic channel tab remove failed", t);
+                        Logger.error(t, () -> "topic channel tab remove failed");
                     }
                 }
             }
@@ -496,10 +496,10 @@ public class JSONPatch {
             case "bilibili://pegasus/hottopic" -> tabSet.contains("hottopic");
             case "bilibili://pgc/home", "bilibili://following/home_activity_tab/6544" ->
                     tabSet.contains("bangumi");
-            case "bilibili://pgc/home?home_flow_type=2", "bilibili://pgc/cinema-tab", "bilibili://following/home_activity_tab/168644" ->
-                    tabSet.contains("movie");
-            case "bilibili://following/home_activity_tab/95636", "bilibili://following/home_activity_tab/163541" ->
-                    tabSet.contains("korea");
+            case "bilibili://pgc/home?home_flow_type=2", "bilibili://pgc/cinema-tab",
+                 "bilibili://following/home_activity_tab/168644" -> tabSet.contains("movie");
+            case "bilibili://following/home_activity_tab/95636",
+                 "bilibili://following/home_activity_tab/163541" -> tabSet.contains("korea");
             default -> tabSet.contains("other_tabs");
         });
     }

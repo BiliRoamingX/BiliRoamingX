@@ -137,7 +137,7 @@ object SubtitleHelper {
         }.onSuccess {
             return true
         }.onFailure {
-            LogHelper.error({ "failed to download subtitle convert dict from cdn" }, it)
+            Logger.error(it) { "failed to download subtitle convert dict from cdn" }
             dictFile.delete()
         }
         return false
@@ -154,7 +154,7 @@ object SubtitleHelper {
         val url = "https://api.github.com/repos/BBSub/ZhConvertDict/releases/latest"
         val json = runCatching {
             JSONObject(URL(url).readText())
-        }.onFailure { LogHelper.error({ "failed to get dict api response" }, it) }
+        }.onFailure { Logger.error(it) { "failed to get dict api response" } }
             .getOrNull() ?: return if (!dictExist) downloadDictFromCdn() else false
         val tagName = json.optString("tag_name")
         val latestVer = cachePrefs.getString("subtitle_dict_latest_version", null).orEmpty()
@@ -182,7 +182,7 @@ object SubtitleHelper {
                 }
                 tmpDictFile.delete()
             }.onFailure {
-                LogHelper.error({ "failed to download subtitle convert dict" }, it)
+                Logger.error(it) { "failed to download subtitle convert dict" }
                 tmpDictFile.delete()
             }
         }

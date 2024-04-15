@@ -74,7 +74,7 @@ class BackupFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_backu
                 }.onSuccess {
                     Toasts.showShortWithId("biliroaming_toast_backup_success")
                 }.onFailure {
-                    LogHelper.error({ "backup failed" }, it)
+                    Logger.error(it) { "backup failed" }
                     Toasts.showShortWithId("biliroaming_toast_backup_failed")
                 }
             }
@@ -98,7 +98,7 @@ class BackupFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_backu
                         showNeedRebootDialog()
                     }
                 }.onFailure {
-                    LogHelper.error({ "restore failed" }, it)
+                    Logger.error(it) { "restore failed" }
                     Toasts.showShortWithId("biliroaming_toast_restore_failed")
                 }
             }

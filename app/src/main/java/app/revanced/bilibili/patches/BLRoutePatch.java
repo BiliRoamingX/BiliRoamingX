@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import app.revanced.bilibili.settings.Settings;
-import app.revanced.bilibili.utils.LogHelper;
+import app.revanced.bilibili.utils.Logger;
 
 public class BLRoutePatch {
     private static final String STORY_ROUTER_QUERY = "&-Arouter=story";
@@ -19,7 +19,7 @@ public class BLRoutePatch {
     @Keep
     public static Uri intercept(Uri uri) {
         if (uri == null) return null;
-        LogHelper.debug(() -> "Route uri: " + uri);
+        Logger.debug(() -> "Route uri: " + uri);
         String scheme = uri.getScheme();
         String url = uri.toString();
         if ("bilibili".equals(scheme)) {

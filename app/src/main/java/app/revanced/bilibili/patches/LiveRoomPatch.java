@@ -5,7 +5,7 @@ import androidx.annotation.Keep;
 import com.bilibili.bililive.room.ui.roomv3.player.container.LiveRoomPlayerContainerView;
 
 import app.revanced.bilibili.settings.Settings;
-import app.revanced.bilibili.utils.LogHelper;
+import app.revanced.bilibili.utils.Logger;
 import app.revanced.bilibili.utils.Reflex;
 
 @Keep
@@ -29,7 +29,7 @@ public class LiveRoomPatch {
             }
             return true;
         } catch (Throwable e) {
-            LogHelper.error(() -> "disable live room double tap failed", e);
+            Logger.error(e, () -> "disable live room double tap failed");
             return false;
         }
     }

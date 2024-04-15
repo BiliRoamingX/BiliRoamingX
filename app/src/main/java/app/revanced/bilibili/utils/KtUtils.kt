@@ -136,7 +136,7 @@ val countryTask: Future<Area> by lazy {
             852, 853 -> Area.hk
             886 -> Area.tw
             else -> Area.global
-        }.also { LogHelper.debug { "当前地区: $it" } }
+        }.also { Logger.debug { "当前地区: $it" } }
     }
 }
 

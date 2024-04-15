@@ -46,7 +46,7 @@ import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.PreferenceUpdater;
 import app.revanced.bilibili.utils.KtUtils;
-import app.revanced.bilibili.utils.LogHelper;
+import app.revanced.bilibili.utils.Logger;
 import app.revanced.bilibili.utils.Reflex;
 import app.revanced.bilibili.utils.SettingsSyncHelper;
 import app.revanced.bilibili.utils.SubtitleParamsCache;
@@ -112,7 +112,7 @@ public class ApplicationDelegate {
                     HiddenApiBypass.addHiddenApiExemptions("Landroid/graphics/Bitmap;");
                 Reflex.setStaticIntField(Bitmap.class, "sDefaultDensity", newDpi);
             } catch (Throwable t) {
-                LogHelper.error(() -> "Failed to setting Bitmap default density", t);
+                Logger.error(t, () -> "Failed to setting Bitmap default density");
             }
         }
     }
@@ -215,7 +215,7 @@ public class ApplicationDelegate {
                             "100",
                             "-f",
                             logFile.getAbsolutePath(),
-                            LogHelper.LOG_TAG,
+                            Logger.LOG_TAG,
                             "*:S"
                     }
             );
@@ -340,13 +340,13 @@ public class ApplicationDelegate {
 
         static void printLifecycle(Activity activity, String name, boolean printIntent) {
             if (!Settings.DEBUG.getBoolean()) return;
-            LogHelper.debug(() -> name + ", activity: " + activity.getClass().getName());
+            Logger.debug(() -> name + ", activity: " + activity.getClass().getName());
             if (!printIntent) return;
             var extras = activity.getIntent().getExtras();
             if (extras == null) return;
             for (String key : extras.keySet()) {
                 var value = extras.get(key);
-                LogHelper.debug(() -> "intent.extra, " + key + ": " + value + ", type: " + (value != null ? value.getClass().getName() : null));
+                Logger.debug(() -> "intent.extra, " + key + ": " + value + ", type: " + (value != null ? value.getClass().getName() : null));
             }
         }
     }

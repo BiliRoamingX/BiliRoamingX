@@ -32,7 +32,7 @@ class PreferenceUpdater : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val prefs = intent.serializableExtra<ArrayList<Pair<String, Any?>>>(EXTRA_PREFS)
-        LogHelper.debug { "PreferenceUpdater, received update preferences request, prefs: $prefs" }
+        Logger.debug { "PreferenceUpdater, received update preferences request, prefs: $prefs" }
         prefs?.forEach { (k, v) ->
             Settings.entries.find { it.key == k }?.saveValue(v)
         }
