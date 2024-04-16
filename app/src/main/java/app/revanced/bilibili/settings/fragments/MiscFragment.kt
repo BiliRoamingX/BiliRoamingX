@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -24,8 +25,8 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
-        findPreference<Preference>(Settings.SKIN.key)?.onChange { _, newValue ->
-            if (newValue == true) onSkinClick()
+        findPreference<Preference>("skin_json_pref")?.onClick {
+            onSkinClick()
             true
         }
         findPreference<Preference>(Settings.CUSTOM_SPLASH.key)?.onChange { _, newValue ->
@@ -49,6 +50,13 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
             { Utils.getString("biliroaming_custom_update_only_64") } to { Build.SUPPORTED_64_BIT_ABIS.isEmpty() },
             { Utils.getString("biliroaming_custom_update_invalid_sig") } to { sigMd5() != Constants.PRE_BUILD_SIG_MD5 }
         )
+    }
+
+    override fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
+        super.onPreferenceChanged(sharedPreferences, key)
+        if (resumed && key == Settings.SKIN.key) {
+            changeThemeState(Settings.SKIN.boolean)
+        }
     }
 
     @Deprecated("Deprecated in Java")
@@ -82,14 +90,34 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
         }
     }
 
+    private fun changeThemeState(
+        enabled: Boolean,
+        onSuccess: () -> Unit = {}
+    ) = Utils.async {
+        if (enabled) runCatching {
+            ThemeApplier.applyCustomTheme(context)
+        }.onFailure {
+            Logger.error(it) { "download current theme failed" }
+            Toasts.showShort("主题设置失败！")
+        }.onSuccess {
+            onSuccess()
+        } else runCatching {
+            ThemeApplier.unloadTheme(context)
+        }.onFailure {
+            Logger.error(it) { "unload theme failed" }
+        }.onSuccess {
+            onSuccess()
+        }
+    }
+
     private var skinInput: EditText? = null
     private fun onSkinClick() {
-        val view = EditText(activity)
+        val view = EditText(context)
         skinInput = view
         view.setText(Settings.SKIN_JSON.string)
         AlertDialog.Builder(context)
-            .setTitle(Utils.getString("biliroaming_skin_title"))
             .setView(view)
+            .setTitle(Utils.getString("biliroaming_skin_json_pref_title"))
             .setPositiveButton(android.R.string.ok, null)
             .setNegativeButton(Utils.getString("biliroaming_skin_get"), null)
             .setNeutralButton(Utils.getString("biliroaming_skin_import_from_file"), null)
@@ -102,7 +130,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
                             return@setOnClickListener
                         }
                         Settings.SKIN_JSON.saveValue(text)
-                        Toasts.showShortWithId("biliroaming_skin_success")
+                        changeThemeState(true)
                         dismiss()
                     }
                     getButton(Dialog.BUTTON_NEUTRAL)?.setOnClickListener {

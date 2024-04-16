@@ -1,7 +1,6 @@
 package app.revanced.bilibili.settings.fragments
 
 import android.content.SharedPreferences
-import android.widget.Toast
 import app.revanced.bilibili.patches.json.JSONPatch
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Constants
@@ -19,8 +18,6 @@ class CustomizeDrawerFragment : BaseDynamicItemsFragment(
             && Settings.SHOWING_DRAWER_ITEMS.stringSet.let {
                 !it.contains(Constants.ALL_VALUE) && !it.contains("更多服务")
             }
-        ) {
-            Toasts.showWithId("biliroaming_hide_more_category_warning", Toast.LENGTH_LONG)
-        }
+        ) Toasts.showLongWithId("biliroaming_hide_more_category_warning")
     }
 }

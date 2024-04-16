@@ -1,6 +1,5 @@
 package app.revanced.bilibili.patches.main
 
-import android.widget.Toast
 import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.http.ContentType
 import app.revanced.bilibili.http.HttpClient
@@ -33,10 +32,7 @@ object CouponAutoReceiver {
         val shareExp = if (receiveShareExperience()) "每日视频分享经验" else null
         arrayOf(coupon, vipExp, shareExp).filterNotNull().joinToString("、")
             .takeIf { it.isNotEmpty() }?.let {
-                Toasts.show(
-                    Utils.getString("biliroaming_coupon_receive_success", it),
-                    Toast.LENGTH_LONG
-                )
+                Toasts.showLongWithId("biliroaming_coupon_receive_success", it)
             }
     } else Unit
 

@@ -7,15 +7,14 @@ import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import tv.danmaku.bili.ui.main2.mine.HomeUserCenterFragment
-import java.io.File
 
 object RemoveVipSectionPatch {
 
     @JvmStatic
-    private var currentResolvedThemeId = -1
+    private var currentResolvedThemeId = -1L
 
     @JvmStatic
-    private var lastResolvedThemeId = -1
+    private var lastResolvedThemeId = -1L
 
     @JvmStatic
     private fun processingLayout(view: View?) {
@@ -27,8 +26,8 @@ object RemoveVipSectionPatch {
             vipLayout.children.forEach { it.hide() }
             val currentThemeId = currentThemeId()
             val lastThemeId = lastThemeId()
-            val pureThemeIds = CustomThemePatch.getThemeNames().values
-            if (currentThemeId == 8/*white*/ || (currentThemeId == 1/*black*/ && (lastThemeId == -1 || lastThemeId in pureThemeIds))) {
+            val pureThemeIds = CustomThemePatch.getThemeNames().values.map { it.toLong() }
+            if (currentThemeId == 8L/*white*/ || (currentThemeId == 1L/*black*/ && (lastThemeId == -1L || lastThemeId in pureThemeIds))) {
                 mineRecycle.updatePadding(top = 0)
                 vipLayout.updateLayoutParams {
                     height = 0
@@ -49,26 +48,26 @@ object RemoveVipSectionPatch {
     }
 
     @JvmStatic
-    private fun currentThemeId(): Int {
-        val mid = Accounts.mid
-        if (mid == 0L) return 8
-        if (currentResolvedThemeId != -1)
+    private fun currentThemeId(): Long {
+        if (!Accounts.isLogin)
+            return 8
+        if (currentResolvedThemeId != -1L)
             return currentResolvedThemeId
-        val confFile = File(Utils.getContext().filesDir, "garb/$mid/garb.conf")
+        val confFile = ThemeApplier.garbConf
         return (if (confFile.isFile) runCatchingOrNull {
-            confFile.readText().toJSONObject().optInt("id", 8)
+            confFile.readText().toJSONObject().optLong("id", 8)
         } ?: 8 else 8).also { currentResolvedThemeId = it }
     }
 
     @JvmStatic
-    private fun lastThemeId(): Int {
-        val mid = Accounts.mid
-        if (mid == 0L) return -1
-        if (lastResolvedThemeId != -1)
+    private fun lastThemeId(): Long {
+        if (!Accounts.isLogin)
+            return -1
+        if (lastResolvedThemeId != -1L)
             return lastResolvedThemeId
-        val confFile = File(Utils.getContext().filesDir, "garb/$mid/last.garb.conf")
+        val confFile = ThemeApplier.lastGarbConf
         return (if (confFile.isFile) runCatchingOrNull {
-            confFile.readText().toJSONObject().optInt("id", -1)
+            confFile.readText().toJSONObject().optLong("id", -1)
         } ?: -1 else -1).also { lastResolvedThemeId = it }
     }
 

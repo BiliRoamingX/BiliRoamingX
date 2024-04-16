@@ -11,36 +11,40 @@ public class Toasts {
         throw new AssertionError("no instance for you!");
     }
 
-    public static void showWithId(String idName, int duration) {
+    public static void showShortWithId(String idName) {
         var message = Utils.getString(idName);
-        showOnMainThread(Utils.getContext(), prefixMessage() + message, duration);
+        show(message, Toast.LENGTH_SHORT);
     }
 
-    public static void showShortWithId(String idName) {
-        showWithId(idName, Toast.LENGTH_SHORT);
+    public static void showLongWithId(String idName) {
+        var message = Utils.getString(idName);
+        show(message, Toast.LENGTH_LONG);
     }
 
     public static void showShortWithId(String idName, Object... formatArgs) {
         var message = Utils.getString(idName, formatArgs);
-        showOnMainThread(Utils.getContext(), prefixMessage() + message, Toast.LENGTH_SHORT);
+        show(message, Toast.LENGTH_SHORT);
     }
 
-    public static void show(String message, int duration) {
-        showOnMainThread(Utils.getContext(), prefixMessage() + message, duration);
+    public static void showLongWithId(String idName, Object... formatArgs) {
+        var message = Utils.getString(idName, formatArgs);
+        show(message, Toast.LENGTH_LONG);
     }
 
     public static void showShort(String message) {
-        showOnMainThread(Utils.getContext(), prefixMessage() + message, Toast.LENGTH_SHORT);
+        show(message, Toast.LENGTH_SHORT);
     }
 
-    private static String prefixMessage() {
-        return Utils.getString("biliroaming_toast_prefix");
+    public static void showLong(String message) {
+        show(message, Toast.LENGTH_LONG);
     }
 
-    private static void showOnMainThread(Context context, String message, int duration) {
+    private static void show(String message, int duration) {
+        var prefixMessage = Utils.getString("biliroaming_toast_prefix");
+        var finalMessage = prefixMessage + message;
         Utils.runOnMainThread(() -> {
             cancel();
-            show(context, message, duration);
+            show(Utils.getContext(), finalMessage, duration);
         });
     }
 

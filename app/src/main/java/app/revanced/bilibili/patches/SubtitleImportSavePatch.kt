@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.view.View
-import android.widget.Toast
 import androidx.annotation.Keep
 import androidx.documentfile.provider.DocumentFile
 import app.revanced.bilibili.patches.SubtitleImportSavePatch.HookInfo.getDanmakuParamsMethod
@@ -174,9 +173,9 @@ object SubtitleImportSavePatch {
         if (failedCount != 0 && successCount == 0) {
             Toasts.showShort("所有字幕保存失败")
         } else if (failedCount != 0) {
-            Toasts.show("部分字幕成功保存至 ${saveDir.path}", Toast.LENGTH_LONG)
+            Toasts.showLong("部分字幕成功保存至 ${saveDir.path}")
         } else {
-            Toasts.show("所有字幕成功保存至 ${saveDir.path}", Toast.LENGTH_LONG)
+            Toasts.showLong("所有字幕成功保存至 ${saveDir.path}")
         }
     }
 

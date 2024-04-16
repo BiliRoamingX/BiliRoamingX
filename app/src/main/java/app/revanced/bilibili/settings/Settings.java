@@ -14,6 +14,8 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -225,7 +227,7 @@ public enum Settings {
 
     public static SharedPreferences prefs;
 
-    private static final Set<SharedPreferences.OnSharedPreferenceChangeListener> preferenceChangeListener = new HashSet<>();
+    private static final ArrayList<WeakReference<SharedPreferences.OnSharedPreferenceChangeListener>> preferenceChangeListeners = new ArrayList<>();
 
     private static final SharedPreferences.OnSharedPreferenceChangeListener innerListener = Settings::onPreferenceChanged;
 
@@ -406,27 +408,33 @@ public enum Settings {
                 break;
             }
         }
-        for (SharedPreferences.OnSharedPreferenceChangeListener listener : preferenceChangeListener)
-            listener.onSharedPreferenceChanged(preferences, key);
+        for (var ref : preferenceChangeListeners) {
+            var listener = ref.get();
+            if (listener != null)
+                listener.onSharedPreferenceChanged(preferences, key);
+        }
     }
 
     public static void notifySettingsChangedForViceProcess(String key, Object value) {
         for (Settings settings : Settings.values()) {
             if (settings.key.equals(key)) {
                 Settings.setValue(settings, value);
-                for (SharedPreferences.OnSharedPreferenceChangeListener listener : preferenceChangeListener)
-                    listener.onSharedPreferenceChanged(prefs, key);
+                for (var ref : preferenceChangeListeners) {
+                    var listener = ref.get();
+                    if (listener != null)
+                        listener.onSharedPreferenceChanged(prefs, key);
+                }
                 break;
             }
         }
     }
 
     public static void registerPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
-        preferenceChangeListener.add(listener);
+        preferenceChangeListeners.add(new WeakReference<>(listener));
     }
 
     public static void unregisterPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
-        preferenceChangeListener.remove(listener);
+        preferenceChangeListeners.removeIf(ref -> ref.get() == listener);
     }
 
     public enum ValueType {

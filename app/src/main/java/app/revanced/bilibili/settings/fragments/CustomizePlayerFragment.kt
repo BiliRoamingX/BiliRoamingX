@@ -23,7 +23,7 @@ class CustomizePlayerFragment :
         else "biliroaming_default_speed_title"
         val settings = if (longPress) Settings.LONG_PRESS_PLAYBACK_SPEED
         else Settings.DEFAULT_PLAYBACK_SPEED
-        val editText = EditText(activity)
+        val editText = EditText(context)
         editText.hint = Utils.getString("biliroaming_default_speed_hint")
         editText.setText(settings.float.takeIf { it != 0f }?.toString().orEmpty())
         editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
@@ -57,7 +57,7 @@ class CustomizePlayerFragment :
     }
 
     private fun onPlaybackSpeedOverrideClick(): Boolean {
-        val editText = EditText(activity)
+        val editText = EditText(context)
         editText.inputType = InputType.TYPE_CLASS_TEXT
         editText.hint = Utils.getString("biliroaming_speed_override_hint")
         editText.setText(Settings.OVERRIDE_PLAYBACK_SPEED.string)

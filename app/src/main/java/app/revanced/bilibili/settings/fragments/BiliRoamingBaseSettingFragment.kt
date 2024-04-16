@@ -40,11 +40,13 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        preferenceManager.prefs.registerOnSharedPreferenceChangeListener(listener)
+        // make sure listening after setting changed
+        Settings.registerPreferenceChangeListener(listener)
     }
 
     override fun onDestroy() {
-        preferenceManager.prefs.unregisterOnSharedPreferenceChangeListener(listener)
+        // make sure listening after setting changed
+        Settings.unregisterPreferenceChangeListener(listener)
         super.onDestroy()
     }
 

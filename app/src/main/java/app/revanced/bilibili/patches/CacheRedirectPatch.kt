@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.view.View
-import android.widget.Toast
 import androidx.annotation.Keep
 import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.settings.Settings
@@ -79,9 +78,7 @@ object CacheRedirectPatch {
                     Utils.getContext().packageManager.getApplicationInfo(packageName, 0).enabled
                 } ?: false
                 if (!enabled) {
-                    Toasts.showWithId(
-                        "biliroaming_external_downloader_not_installed", Toast.LENGTH_LONG
-                    )
+                    Toasts.showLongWithId("biliroaming_external_downloader_not_installed")
                 } else {
                     val intent = Intent(Intent.ACTION_SEND).apply {
                         `package` = packageName
