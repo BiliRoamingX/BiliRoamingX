@@ -56,13 +56,11 @@ import tv.danmaku.bili.MainActivityV2;
 
 public class ApplicationDelegate {
     private static final ArrayDeque<WeakReference<Activity>> activityRefs = new ArrayDeque<>();
-    private static volatile boolean appCreated = false;
     private static final Point screenSize = new Point();
 
     @Keep
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     public static void onCreate(Application app) {
-        appCreated = true;
         app.registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
         app.registerComponentCallbacks(new ComponentCallbacks());
         setBitmapDefaultDensity();
@@ -85,18 +83,14 @@ public class ApplicationDelegate {
 
     @Keep
     public static Resources getResources(Resources resources) {
-        // We can not access application context to get customize dpi
-        // when content provider initializing, just let them go first.
-        if (appCreated) {
-            int newDpi = getCustomDpi();
-            if (newDpi != 0) {
-                updateDpi(resources.getDisplayMetrics(), newDpi);
-                Configuration configuration = resources.getConfiguration();
-                configuration.densityDpi = newDpi;
-                var newAxisDpi = calcNewAxisDpi();
-                configuration.screenWidthDp = newAxisDpi.first;
-                configuration.screenHeightDp = newAxisDpi.second;
-            }
+        int newDpi = getCustomDpi();
+        if (newDpi != 0) {
+            updateDpi(resources.getDisplayMetrics(), newDpi);
+            Configuration configuration = resources.getConfiguration();
+            configuration.densityDpi = newDpi;
+            var newAxisDpi = calcNewAxisDpi();
+            configuration.screenWidthDp = newAxisDpi.first;
+            configuration.screenHeightDp = newAxisDpi.second;
         }
         return resources;
     }
