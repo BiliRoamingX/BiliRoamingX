@@ -24,6 +24,8 @@ import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.lsposed.hiddenapibypass.HiddenApiBypass;
+
 import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -60,6 +62,9 @@ public class Utils {
     public static Context getContext() {
         if (context == null) {
             Logger.error(() -> "Context is null");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                HiddenApiBypass.addHiddenApiExemptions("Landroid/app/ActivityThread;");
+            context = ActivityThread.currentActivityThread().getApplication();
         }
         return context;
     }

@@ -290,8 +290,16 @@ final class MessageLiteToStringEx {
         if (object instanceof Map<?, ?>) {
             Map<?, ?> map = (Map<?, ?>) object;
             Map<?, ?> sortedMap = map;
-            if (!map.isEmpty() && !(map instanceof SortedMap) && map.keySet().stream().anyMatch(e -> e instanceof Comparable)) {
-                sortedMap = new TreeMap<>(map);
+            if (!map.isEmpty() && !(map instanceof SortedMap)) {
+                boolean sortable = false;
+                for (Object key : map.keySet()) {
+                    if (key instanceof Comparable) {
+                        sortable = true;
+                        break;
+                    }
+                }
+                if (sortable)
+                    sortedMap = new TreeMap<>(map);
             }
             for (Map.Entry<?, ?> entry : sortedMap.entrySet()) {
                 printField(buffer, indent, name, entry);

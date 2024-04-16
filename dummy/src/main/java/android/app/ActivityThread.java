@@ -8,4 +8,8 @@ public class ActivityThread {
     public static String currentProcessName() {
         throw new UnsupportedOperationException("Stub");
     }
+
+    public Application getApplication() {
+        throw new UnsupportedOperationException("Stub");
+    }
 }
