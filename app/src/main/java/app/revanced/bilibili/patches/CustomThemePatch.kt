@@ -9,6 +9,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.settings.dialog.ColorChooseDialog
+import app.revanced.bilibili.utils.Toasts
 import app.revanced.bilibili.utils.blkvPrefs
 import app.revanced.bilibili.widget.OnClickOriginListener
 import com.bilibili.compose.theme.ThemeDayNight
@@ -134,11 +135,20 @@ object CustomThemePatch {
                 refresh()
                 val newId = if (mId == CUSTOM_THEME_ID1) CUSTOM_THEME_ID2 else CUSTOM_THEME_ID1
                 biliSkin.mId = newId
+                closeCustomSkin()
                 listener.onClick_Origin(view)
             }.show()
             return true
+        } else {
+            closeCustomSkin()
+            return false
         }
-        return false
+    }
+
+    @JvmStatic
+    private fun closeCustomSkin() {
+        Settings.SKIN.saveValue(false)
+        Toasts.showShort("已关闭自制主题！")
     }
 
     @Keep
