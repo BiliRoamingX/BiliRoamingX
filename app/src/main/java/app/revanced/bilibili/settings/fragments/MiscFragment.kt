@@ -50,6 +50,9 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
             { Utils.getString("biliroaming_custom_update_only_64") } to { Build.SUPPORTED_64_BIT_ABIS.isEmpty() },
             { Utils.getString("biliroaming_custom_update_invalid_sig") } to { sigMd5() != Constants.PRE_BUILD_SIG_MD5 }
         )
+        disablePreference(Settings.SKIN.key, PrefsDisableReason.APP_VERSION) {
+            Utils.isHd()
+        }
     }
 
     override fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
