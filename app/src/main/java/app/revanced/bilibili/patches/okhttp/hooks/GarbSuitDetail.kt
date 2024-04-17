@@ -15,13 +15,19 @@ object GarbSuitDetail : ApiHook() {
         val json = response.toJSONObject()
         if (json.optInt("code", -1) != 0)
             return response
-        val suitItems = json.optJSONObject("data")?.optJSONObject("suit_items")
+        val data = json.optJSONObject("data")
+            ?: return response
+        val id = data.optLong("item_id")
+        val name = data.optString("name")
+        val suitItems = data.optJSONObject("suit_items")
             ?: return response
         val skin = suitItems.optJSONArray("skin")?.optJSONObject(0)
             ?: return response
         val skinProps = skin.optJSONObject("properties")
             ?: return response
         val loading = suitItems.optJSONArray("loading")?.optJSONObject(0)
+        val playIcon = suitItems.optJSONArray("play_icon")?.optJSONObject(0)
+        val spaceBg = suitItems.optJSONArray("space_bg")?.optJSONObject(0)
         if (skin.optLong("item_id") == ThemeApplier.customThemeId())
             return response
         Utils.runOnMainThread(1000L) {
@@ -33,7 +39,9 @@ object GarbSuitDetail : ApiHook() {
                     .setPositiveButton(android.R.string.ok) { _, _ ->
                         Utils.async {
                             runCatching {
-                                ThemeApplier.applyTheme(skin, skinProps, loading)
+                                ThemeApplier.applyTheme(
+                                    id, name, skin, skinProps, loading, playIcon, spaceBg
+                                )
                             }.onFailure {
                                 Logger.error(it) { "theme set failed" }
                                 Toasts.showShort("主题设置失败！")

@@ -56,6 +56,14 @@ value class Encoding(val key: String) {
 class RequestBody(val contentType: ContentType, val encoding: Encoding, val body: ByteArray) {
     companion object {
         @JvmStatic
+        fun form(vararg params: Pair<Any, Any>, encoding: Encoding = Encoding.none): RequestBody {
+            val body = params.joinToString("&") { (k, v) ->
+                "$k=${v.toString().urlencoded}"
+            }.toByteArray()
+            return RequestBody(ContentType.form, encoding, body)
+        }
+
+        @JvmStatic
         fun form(params: List<Pair<Any, Any>>, encoding: Encoding = Encoding.none): RequestBody {
             val body = params.joinToString("&") { (k, v) ->
                 "$k=${v.toString().urlencoded}"

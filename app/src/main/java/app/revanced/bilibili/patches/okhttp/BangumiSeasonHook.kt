@@ -89,6 +89,18 @@ object BangumiSeasonHook {
             data.put("activity_entrance", JSONArray())
         if (Settings.BLOCK_ACTIVITY_TAB.boolean)
             data.remove("activity_tab")
+        if (Settings.SKIN.boolean && data.optJSONObject("player_icon") == null) {
+            val playIcon = Settings.SKIN_JSON.string.runCatchingOrNull {
+                toJSONObject()
+            }?.optJSONObject("play_icon")
+            if (playIcon != null) {
+                data.put("player_icon", JSONObject().apply {
+                    put("drag_left_png", playIcon.optString("drag_left_png"))
+                    put("drag_right_png", playIcon.optString("drag_right_png"))
+                    put("middle_png", playIcon.optString("middle_png"))
+                })
+            }
+        }
         if (!Settings.UNLOCK_AREA_LIMIT.boolean)
             return jo.toString()
         data.optJSONObject("rights")?.run {

@@ -343,7 +343,7 @@ public final class PlayerIcon extends GeneratedMessageLite<PlayerIcon, PlayerIco
         GeneratedMessageLite.registerDefaultInstance(PlayerIcon.class, playerIcon);
     }
 
-    private PlayerIcon() {
+    public PlayerIcon() {
     }
 
     public void clearDragData() {

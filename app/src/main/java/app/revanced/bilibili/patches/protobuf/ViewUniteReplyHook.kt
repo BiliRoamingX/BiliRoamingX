@@ -42,6 +42,7 @@ object ViewUniteReplyHook {
             hookArc(viewReply)
             hookTabModules(viewReply)
             hookSupplement(viewReply)
+            hookViewConfig(viewReply.viewBase.config)
         }
         if (Settings.UNLOCK_AREA_LIMIT.boolean
             && (viewReply == null || viewReply == ViewReply.getDefaultInstance())
@@ -50,6 +51,24 @@ object ViewUniteReplyHook {
             }
         ) return unlockThaiBangumi(viewReq)
         if (error != null) throw error else return viewReply
+    }
+
+    private fun hookViewConfig(config: Config) {
+        val storyEntrance = config.storyEntrance
+        if (Settings.DISABLE_STORY_FULL.boolean)
+            storyEntrance.arcLandscapeStory = false
+        if (config.playerIcon !== PlayerIcon.getDefaultInstance() || !Settings.SKIN.boolean)
+            return
+        val playIcon = Settings.SKIN_JSON.string.runCatchingOrNull {
+            toJSONObject()
+        }?.optJSONObject("play_icon")
+        if (playIcon != null) {
+            config.playerIcon = PlayerIcon().apply {
+                dragLeftPng = playIcon.optString("drag_left_png")
+                dragRightPng = playIcon.optString("drag_right_png")
+                middlePng = playIcon.optString("middle_png")
+            }
+        }
     }
 
     private fun hookArc(viewReply: ViewReply) {
@@ -181,6 +200,7 @@ object ViewUniteReplyHook {
                     viewBase = ViewBase().apply {
                         bizType = BizType.BIZ_TYPE_PGC
                         config = Config().apply {
+                            hookViewConfig(this)
                             if (!th) online = Online().apply {
                                 onlineShow = true
                             }

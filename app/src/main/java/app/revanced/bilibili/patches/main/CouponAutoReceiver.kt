@@ -57,7 +57,7 @@ object CouponAutoReceiver {
     private fun receiveCoupon(type: Int) = HttpClient.post(
         "https://api.bilibili.com/x/vip/privilege/receive",
         headers = mapOf("Cookie" to "SESSDATA=${Accounts.cookieSESSDATA}"),
-        body = RequestBody.form(listOf("type" to type, "csrf" to Accounts.cookieBiliJct))
+        body = RequestBody.form("type" to type, "csrf" to Accounts.cookieBiliJct)
     )?.json()?.run {
         Logger.debug { "CouponAutoReceiver.receiveCoupon, type: $type, response: $this" }
         optInt("code", -1) == 0
@@ -66,7 +66,7 @@ object CouponAutoReceiver {
     private fun receiveExperience() = HttpClient.post(
         "https://api.bilibili.com/x/vip/experience/add",
         headers = mapOf("Cookie" to "SESSDATA=${Accounts.cookieSESSDATA}"),
-        body = RequestBody.form(listOf("csrf" to Accounts.cookieBiliJct))
+        body = RequestBody.form("csrf" to Accounts.cookieBiliJct)
     )?.json()?.run {
         Logger.debug { "CouponAutoReceiver.receiveExperience, response: $this" }
         optInt("code", -1) == 0
@@ -86,18 +86,16 @@ object CouponAutoReceiver {
             "267714",
             "270380",
         ).random() // cid
-        val body = signQuery(
-            mapOf(
-                "access_key" to Accounts.accessKey,
-                "oid" to oid,
-                "panel_type" to "1",
-                "share_channel" to "QQ",
-                "share_id" to "main.ugc-video-detail.0.0.pv",
-                "share_origin" to "vinfo_player",
-                "sid" to sid,
-                "success" to "true",
-            )
-        )
+        val body = mapOf(
+            "access_key" to Accounts.accessKey,
+            "oid" to oid,
+            "panel_type" to "1",
+            "share_channel" to "QQ",
+            "share_id" to "main.ugc-video-detail.0.0.pv",
+            "share_origin" to "vinfo_player",
+            "sid" to sid,
+            "success" to "true",
+        ).let { signQuery(it) }
         return HttpClient.post(
             "https://api.bilibili.com/x/share/finish",
             body = body.toRequestBody(ContentType.form)

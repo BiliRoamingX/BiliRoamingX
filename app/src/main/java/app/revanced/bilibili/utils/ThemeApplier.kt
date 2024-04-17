@@ -51,14 +51,54 @@ object ThemeApplier {
     }
 
     fun applyTheme(
+        id: Long,
+        name: String,
         skin: JSONObject,
         skinProps: JSONObject,
-        loading: JSONObject?
+        loading: JSONObject?,
+        playIcon: JSONObject?,
+        spaceBg: JSONObject?
     ): JSONObject {
         val theme = convertToTheme(skin, skinProps, loading)
         val userEquip = theme.getJSONObject("user_equip")
         val loadEquip = theme.optJSONObject("load_equip")
         applyThemeInner(userEquip, loadEquip, null)
+        theme.put("id", id)
+        theme.put("name", name)
+        val playIconProps = playIcon?.optJSONObject("properties")
+        if (playIconProps != null) {
+            theme.put("play_icon", JSONObject().apply {
+                put("id", playIcon.optLong("item_id"))
+                put("drag_left_png", playIconProps.optString("drag_left_png"))
+                put("drag_right_png", playIconProps.optString("drag_right_png"))
+                put("middle_png", playIconProps.optString("middle_png"))
+                put("ver", playIconProps.optLong("ver"))
+            })
+        }
+        val spaceBgProps = spaceBg?.optJSONObject("properties")
+        if (spaceBgProps != null) {
+            theme.put("space_bg", JSONObject().apply {
+                put("id", spaceBg.optLong("item_id"))
+                val images = JSONArray()
+                spaceBgProps.names().orEmpty().asSequence<String>().associateWith {
+                    spaceBgProps.optString(it).orEmpty()
+                }.asSequence().filter { (name, _) -> name.startsWith("image") }
+                    .groupBy(keySelector = { (name, _) ->
+                        name.split('_', limit = 2)[0]
+                    }, valueTransform = { (name, value) ->
+                        name to value
+                    }).forEach { (name, values) ->
+                        val map = values.toMap()
+                        val landscape = map["${name}_landscape"].orEmpty()
+                        val portrait = map["${name}_portrait"].orEmpty()
+                        images.put(JSONObject().apply {
+                            put("landscape", landscape)
+                            put("portrait", portrait)
+                        })
+                    }
+                put("images", images)
+            })
+        }
         return theme
     }
 
