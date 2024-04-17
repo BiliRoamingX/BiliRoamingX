@@ -111,7 +111,6 @@ object ThemeApplier {
         val skinId = userEquip.optLong("id")
         val skinVer = userEquip.optLong("ver")
         val skinPkgUrl = userEquip.optString("package_url")
-        val context = Utils.getContext()
         val garbDir = this.garbDir
         val assetsDir = File(garbDir, "$skinId/$skinVer").also { it.mkdirs() }
         val skinPkgFile = File(garbDir, "$skinId/$skinId")
@@ -127,10 +126,10 @@ object ThemeApplier {
             blkvPrefs.edit {
                 putString("garb_load_equip_conf", loadEquip.toString())
             }
+            Utils.getContext().sendBroadcast(Intent(loadEquipChangeAction))
         } else {
-            blkvPrefs.edit { remove("garb_load_equip_conf") }
+            unloadLoadEquip()
         }
-        context.sendBroadcast(Intent(loadEquipChangeAction))
         if (Utils.isWebProcess()) {
             blkvPrefs.edit {
                 putBoolean("pref_key_garb_has_changed", true)
@@ -151,7 +150,6 @@ object ThemeApplier {
     }
 
     fun unloadTheme(activity: Context? = null) {
-        val context = Utils.getContext()
         val (name, id) = "white" to 8
         val garb = PURE_GARB_TEMPLATE.format(name, id)
         garbConf.writeText(garb)
@@ -170,8 +168,12 @@ object ThemeApplier {
                     activity.recreate()
             }
         }
+        unloadLoadEquip()
+    }
+
+    fun unloadLoadEquip() {
         blkvPrefs.edit { remove("garb_load_equip_conf") }
-        context.sendBroadcast(Intent(loadEquipChangeAction))
+        Utils.getContext().sendBroadcast(Intent(loadEquipChangeAction))
     }
 
     private fun notifyGarbChanged(garb: String) {
