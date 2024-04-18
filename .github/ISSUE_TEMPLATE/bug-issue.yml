@@ -8,7 +8,7 @@ body:
       value: |
         # 反馈须知
 
-        在反馈问题之前，请仔细[检查](https://github.com/zjns/BiliRoamingX-integrations/issues?q=label%3Abug)此问题是否已经反馈过，避免重复反馈。
+        在反馈问题之前，请仔细[检查](https://github.com/BiliRoamingX/BiliRoamingX-integrations/issues?q=label%3Abug)此问题是否已经反馈过，避免重复反馈。
 
   - type: input
     attributes:
