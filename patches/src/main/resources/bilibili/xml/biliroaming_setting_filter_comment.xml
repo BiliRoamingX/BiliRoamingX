@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory>
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="block_comment_only_at"
+            android:title="@string/biliroaming_block_comment_only_at_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="block_comment_goods"
+            android:title="@string/biliroaming_block_comment_goods_title" />
+        <androidx.preference.Preference
+            android:fragment="app.revanced.bilibili.settings.fragments.FilterCommentByKeywordFragment"
+            android:key="filter_comment_by_keyword"
+            android:title="@string/biliroaming_filter_comment_by_keyword_title" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

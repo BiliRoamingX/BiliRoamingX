@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory
+      android:title="@string/biliroaming_quality_title"
+      android:layout="@layout/bili_app_layout_preference_category_title">
+        <tv.danmaku.bili.widget.preference.BLRadioGroupEntrancePreference
+          android:fragment="app.revanced.bilibili.settings.fragments.HalfScreenQualitySettingFragment"
+          android:key="half_screen_quality"
+          android:persistent="true"
+          android:title="@string/biliroaming_half_screen_quality_title"
+          app:migration_settings_type="none"
+          app:radioDefaultValue="0"
+          app:radioEntries="@array/biliroaming_half_screen_quality_entries"
+          app:radioEntryValues="@array/biliroaming_half_screen_quality_values" />
+        <tv.danmaku.bili.widget.preference.BLRadioGroupEntrancePreference
+          android:fragment="app.revanced.bilibili.settings.fragments.FullScreenQualitySettingFragment"
+          android:key="full_screen_quality"
+          android:persistent="true"
+          android:title="@string/biliroaming_full_screen_quality_wifi_title"
+          app:migration_settings_type="none"
+          app:radioDefaultValue="0"
+          app:radioEntries="@array/biliroaming_full_screen_quality_entries"
+          app:radioEntryValues="@array/biliroaming_full_screen_quality_values" />
+        <tv.danmaku.bili.widget.preference.BLRadioGroupEntrancePreference
+          android:fragment="app.revanced.bilibili.settings.fragments.FullScreenQualityMobileSettingFragment"
+          android:key="full_screen_quality_mobile"
+          android:persistent="true"
+          android:title="@string/biliroaming_full_screen_quality_mobile_title"
+          app:migration_settings_type="none"
+          app:radioDefaultValue="0"
+          app:radioEntries="@array/biliroaming_full_screen_quality_entries"
+          app:radioEntryValues="@array/biliroaming_full_screen_quality_values" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+      android:title="@string/biliroaming_customize_subtitle_title"
+      android:layout="@layout/bili_app_layout_preference_category_title">
+        <androidx.preference.SwitchPreferenceCompat
+          android:key="auto_generate_subtitle"
+          android:title="@string/biliroaming_generate_subtitle_title"
+          android:summary="@string/biliroaming_generate_subtitle_summary" />
+        <tv.danmaku.bili.widget.preference.BLRadioGroupEntrancePreference
+          android:fragment="app.revanced.bilibili.settings.fragments.SubtitleTranslateServerFragment"
+          android:key="subtitle_translate_server"
+          android:persistent="true"
+          android:title="@string/biliroaming_subtitle_translate_server_title"
+          app:migration_settings_type="none"
+          app:radioDefaultValue="microsoft"
+          app:radioEntries="@array/biliroaming_subtitle_translate_server_entries"
+          app:radioEntryValues="@array/biliroaming_subtitle_translate_server_values" />
+        <androidx.preference.Preference
+          android:fragment="app.revanced.bilibili.settings.fragments.CustomizeSubtitleStyleFragment"
+          android:key="customize_subtitle_style"
+          android:title="@string/biliroaming_subtitle_style_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="subtitle_import_save"
+            android:title="@string/biliroaming_subtitle_import_save_title"
+            android:summary="@string/biliroaming_subtitle_import_save_summary" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+      android:title="@string/biliroaming_playback_speed_title"
+      android:layout="@layout/bili_app_layout_preference_category_title">
+        <androidx.preference.Preference
+          android:key="default_speed"
+          android:title="@string/biliroaming_default_speed_title"
+          android:summary="@string/biliroaming_default_speed_summary" />
+        <androidx.preference.Preference
+          android:key="long_press_speed"
+          android:title="@string/biliroaming_long_press_speed_title"
+          android:summary="@string/biliroaming_long_press_speed_summary" />
+        <androidx.preference.Preference
+          android:key="override_speed"
+          android:title="@string/biliroaming_speed_override_title"
+          android:summary="@string/biliroaming_speed_override_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+          android:key="disable_player_long_press"
+          android:title="@string/biliroaming_disable_player_long_press_title" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+      android:title="@string/biliroaming_other_title"
+      android:layout="@layout/bili_app_layout_preference_category_title">
+        <tv.danmaku.bili.widget.preference.BLRadioGroupEntrancePreference
+          android:fragment="app.revanced.bilibili.settings.fragments.PlayerVersionFragment"
+          android:key="player_version"
+          android:persistent="true"
+          android:title="@string/biliroaming_player_version_title"
+          app:migration_settings_type="none"
+          app:radioDefaultValue="0"
+          app:radioEntries="@array/biliroaming_player_version_entries"
+          app:radioEntryValues="@array/biliroaming_player_version_values" />
+        <androidx.preference.SwitchPreferenceCompat
+          android:key="remember_lossless_setting"
+          android:title="@string/biliroaming_remember_lossless_setting_title" />
+        <androidx.preference.SwitchPreferenceCompat
+          android:key="disable_segmented_section"
+          android:title="@string/biliroaming_disable_segmented_section_title" />
+        <androidx.preference.SwitchPreferenceCompat
+          android:key="disable_auto_next_play"
+          android:title="@string/biliroaming_disable_auto_next_play_title" />
+        <androidx.preference.SwitchPreferenceCompat
+          android:key="scale_to_switch_ratio"
+          android:title="@string/biliroaming_scale_to_switch_ratio_title"
+          android:summary="@string/biliroaming_scale_to_switch_ratio_summary" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        android:title="@string/biliroaming_unstable_feature_title"
+        android:layout="@layout/bili_app_layout_preference_category_title">
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="trial_vip_quality"
+            android:title="@string/biliroaming_trial_vip_quality_title"
+            android:summary="@string/biliroaming_trial_vip_quality_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="force_hw_codec"
+            android:title="@string/biliroaming_force_hw_codec_title"
+            android:summary="@string/biliroaming_force_hw_codec_summary" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <tv.danmaku.bili.widget.RadioGroupPreference
+        android:key="drawer_style_value"
+        android:layout="@layout/bili_app_layout_preference_category_title"
+        android:persistent="true"
+        android:title="@string/biliroaming_drawer_style_title"
+        app:migration_settings_type="none"
+        app:radioDefaultValue="0"
+        app:radioEntries="@array/biliroaming_drawer_style_entries"
+        app:radioEntryValues="@array/biliroaming_drawer_style_values" />
+
+    <androidx.preference.PreferenceCategory>
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="purify_drawer_reddot"
+            android:title="@string/biliroaming_purify_drawer_reddot_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="remove_vip_section"
+            android:title="@string/biliroaming_remove_vip_section_title" />
+        <androidx.preference.Preference
+            android:fragment="app.revanced.bilibili.settings.fragments.CustomizeDrawerFragment"
+            android:key="customize_drawer"
+            android:title="@string/biliroaming_customize_drawer_title" />
+        <androidx.preference.SwitchPreferenceCompat
+          android:key="add_channel"
+          android:title="@string/biliroaming_add_channel_title"
+          android:summary="@string/biliroaming_add_channel_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="add_podcast"
+            android:title="@string/biliroaming_add_podcast_title"
+            android:summary="@string/biliroaming_add_podcast_summary" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory>
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="switch_dark_dialog"
+            android:title="@string/biliroaming_switch_dark_dialog_title"
+            android:summary="@string/biliroaming_switch_dark_dialog_summary" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

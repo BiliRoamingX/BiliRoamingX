@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory>
+        <androidx.preference.Preference
+            android:fragment="app.revanced.bilibili.settings.fragments.FilterHomeRcmdByTypeFragment"
+            android:key="filter_home_recommend_by_type"
+            android:title="@string/biliroaming_filter_home_recommend_by_type_title" />
+        <androidx.preference.Preference
+            android:fragment="app.revanced.bilibili.settings.fragments.FilterHomeRcmdByKeywordFragment"
+            android:key="filter_home_recommend_by_keyword"
+            android:title="@string/biliroaming_filter_home_recommend_by_keyword_title" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

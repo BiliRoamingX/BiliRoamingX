@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <tv.danmaku.bili.widget.RadioGroupPreference
+        android:key="subtitle_translate_server"
+        android:persistent="true"
+        app:migration_settings_type="none"
+        app:radioDefaultValue="microsoft"
+        app:radioEntries="@array/biliroaming_subtitle_translate_server_entries"
+        app:radioEntryValues="@array/biliroaming_subtitle_translate_server_values" />
+</androidx.preference.PreferenceScreen>

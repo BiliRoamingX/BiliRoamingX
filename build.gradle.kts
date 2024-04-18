@@ -1,21 +1,18 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath("com.android.tools.build:gradle:8.3.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.23")
-    }
+tasks.register<Delete>("clean") {
+    group = "build"
+    delete(layout.buildDirectory)
 }
 
-// Tracking issue https://github.com/semantic-release/semantic-release/issues/963
-tasks.register("publish", DefaultTask::class) {
-    group = "publish"
-    description =
-        "Dummy publish to pass the verification phase of the gradle-semantic-release-plugin"
-}
-
-tasks.register("clean", Delete::class) {
-    delete(rootProject.layout.buildDirectory)
+tasks.register<Sync>("dist") {
+    group = "build"
+    dependsOn(":clean")
+    dependsOn(":integrations:app:assembleRelease")
+    dependsOn(":patches:dist")
+    from(project(":integrations:app").layout.buildDirectory.dir("outputs/apk/release")) {
+        include("*.apk")
+    }
+    from(project(":patches").layout.buildDirectory.dir("libs")) {
+        include("*.jar")
+    }
+    into(layout.buildDirectory)
 }

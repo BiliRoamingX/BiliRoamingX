@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory>
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="main_func"
+            android:title="@string/biliroaming_unlock_area_limit_title"
+            android:summary="@string/biliroaming_unlock_area_limit_summary" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory android:dependency="main_func">
+        <androidx.preference.Preference
+            android:key="custom_server"
+            android:title="@string/biliroaming_custom_server_title"
+            android:summary="@string/biliroaming_custom_server_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="allow_download"
+            android:title="@string/biliroaming_allow_download_title"
+            android:summary="@string/biliroaming_allow_download_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="allow_mini_play"
+            android:title="@string/biliroaming_allow_mini_play_title"
+            android:summary="@string/biliroaming_allow_mini_play_summary" />
+        <tv.danmaku.bili.widget.preference.BLRadioGroupEntrancePreference
+            android:fragment="app.revanced.bilibili.settings.fragments.UposSettingFragment"
+            android:key="upos_host"
+            android:persistent="true"
+            android:title="@string/biliroaming_custom_upos_title"
+            app:migration_settings_type="none"
+            app:radioDefaultValue="@string/biliroaming_hw_host"
+            app:radioEntries="@array/biliroaming_upos_entries"
+            app:radioEntryValues="@array/biliroaming_upos_values" />
+        <androidx.preference.Preference
+            android:key="test_upos"
+            android:title="@string/biliroaming_test_upos_title"
+            android:summary="@string/biliroaming_test_upos_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="save_th_history"
+            android:defaultValue="true"
+            android:title="@string/biliroaming_save_th_history_title"
+            android:summary="@string/biliroaming_save_th_history_summary" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

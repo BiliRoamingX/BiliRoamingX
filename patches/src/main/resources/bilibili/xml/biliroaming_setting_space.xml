@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory>
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="fix_space"
+            android:title="@string/biliroaming_fix_space_title"
+            android:summary="@string/biliroaming_fix_space_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="add_article_tab"
+            android:title="@string/biliroaming_add_article_tab_title"
+            android:summary="@string/biliroaming_add_article_tab_summary" />
+        <androidx.preference.Preference
+            android:fragment="app.revanced.bilibili.settings.fragments.CustomizeSpaceFragment"
+            android:title="@string/biliroaming_customize_space_title" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

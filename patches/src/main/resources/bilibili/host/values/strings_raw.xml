@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="biliroaming_server_url">https://github.com/yujincheng08/BiliRoaming/wiki/%E5%85%AC%E5%85%B1%E8%A7%A3%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8</string>
+    <string name="biliroaming_ali_host">upos-sz-mirrorali.bilivideo.com</string>
+    <string name="biliroaming_alib_host">upos-sz-mirroralib.bilivideo.com</string>
+    <string name="biliroaming_alio1_host">upos-sz-mirroralio1.bilivideo.com</string>
+    <string name="biliroaming_bos_host">upos-sz-mirrorbos.bilivideo.com</string>
+    <string name="biliroaming_cos_host">upos-sz-mirrorcos.bilivideo.com</string>
+    <string name="biliroaming_cosb_host">upos-sz-mirrorcosb.bilivideo.com</string>
+    <string name="biliroaming_coso1_host">upos-sz-mirrorcoso1.bilivideo.com</string>
+    <string name="biliroaming_hw_host">upos-sz-mirrorhw.bilivideo.com</string>
+    <string name="biliroaming_hwb_host">upos-sz-mirrorhwb.bilivideo.com</string>
+    <string name="biliroaming_hwo1_host">upos-sz-mirrorhwo1.bilivideo.com</string>
+    <string name="biliroaming_hw_08c_host">upos-sz-mirror08c.bilivideo.com</string>
+    <string name="biliroaming_hw_08h_host">upos-sz-mirror08h.bilivideo.com</string>
+    <string name="biliroaming_hw_08ct_host">upos-sz-mirror08ct.bilivideo.com</string>
+    <string name="biliroaming_tf_hw_host">upos-tf-all-hw.bilivideo.com</string>
+    <string name="biliroaming_tf_tx_host">upos-tf-all-tx.bilivideo.com</string>
+    <string name="biliroaming_akamai_host">upos-hz-mirrorakam.akamaized.net</string>
+    <string name="biliroaming_aliov_host">upos-sz-mirroraliov.bilivideo.com</string>
+    <string name="biliroaming_cosov_host">upos-sz-mirrorcosov.bilivideo.com</string>
+    <string name="biliroaming_hwov_host">upos-sz-mirrorhwov.bilivideo.com</string>
+    <string name="biliroaming_hk_bcache_host">cn-hk-eq-bcache-01.bilivideo.com</string>
+    <string name="biliroaming_project_url">https://github.com/BiliRoamingX/BiliRoamingX</string>
+    <string name="biliroaming_tg_url">https://t.me/bb_show</string>
+    <string name="biliroaming_feedback_url">https://github.com/BiliRoamingX/BiliRoamingX/issues/new/choose</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <app.revanced.bilibili.widget.CheckBoxGroupPreference
+        android:key="customize_home_tab"
+        android:persistent="true"
+        android:entries="@array/biliroaming_home_tab_entries"
+        android:entryValues="@array/biliroaming_home_tab_values"
+        app:migration_settings_type="none" />
+</androidx.preference.PreferenceScreen>

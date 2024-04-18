@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory>
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="search_area_bangumi"
+            android:title="@string/biliroaming_search_area_title"
+            android:summary="@string/biliroaming_search_area_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="search_area_movie"
+            android:title="@string/biliroaming_search_area_movie_title"
+            android:summary="@string/biliroaming_search_area_movie_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="purify_search"
+            android:title="@string/biliroaming_purify_search_title"
+            android:summary="@string/biliroaming_purify_search_summary" />
+        <androidx.preference.Preference
+            android:key="search_type"
+            android:fragment="app.revanced.bilibili.settings.fragments.FilterSearchTypeFragment"
+            android:title="@string/biliroaming_filter_search_type_title" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

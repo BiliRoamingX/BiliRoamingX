@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory>
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="external_downloader"
+            android:title="@string/biliroaming_external_downloader_title"
+            android:summary="@string/biliroaming_external_downloader_summary" />
+        <androidx.preference.Preference
+            android:key="package_name"
+            android:title="@string/biliroaming_external_downloader_name_title"
+            android:summary="@string/biliroaming_external_downloader_name_summary" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

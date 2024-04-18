@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory>
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="teenagers_mode_dialog"
+            android:title="@string/biliroaming_teenagers_mode_dialog_title"
+            android:summary="@string/biliroaming_teenagers_mode_dialog_summary" />
+        <androidx.preference.Preference
+            android:fragment="app.revanced.bilibili.settings.fragments.BlockFollowFragment"
+            android:key="follow_button"
+            android:title="@string/biliroaming_block_follow_button_title"
+            android:summary="@string/biliroaming_block_follow_button_summary" />
+        <androidx.preference.Preference
+            android:fragment="app.revanced.bilibili.settings.fragments.TextFoldFragment"
+            android:key="text_fold"
+            android:title="@string/biliroaming_text_fold_title"
+            android:summary="@string/biliroaming_text_fold_summary" />
+        <androidx.preference.Preference
+            android:fragment="app.revanced.bilibili.settings.fragments.BlockModuleFragment"
+            android:title="@string/biliroaming_block_modules_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="music_notification"
+            android:title="@string/biliroaming_music_notification_title"
+            android:summary="@string/biliroaming_music_notification_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="number_format"
+            android:title="@string/biliroaming_number_format_title"
+            android:summary="@string/biliroaming_number_format_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="auto_receive_coupon"
+            android:title="@string/biliroaming_auto_receive_coupon_title"
+            android:summary="@string/biliroaming_auto_receive_coupon_summary" />
+        <tv.danmaku.bili.widget.preference.BLRadioGroupEntrancePreference
+          android:fragment="app.revanced.bilibili.settings.fragments.DisplaySizeFragment"
+          android:key="display_size"
+          android:persistent="true"
+          android:title="@string/biliroaming_display_size_title"
+          app:migration_settings_type="none"
+          app:radioDefaultValue="0"
+          app:radioEntries="@array/biliroaming_display_size_entries"
+          app:radioEntryValues="@array/biliroaming_display_size_values" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="enable_av"
+            android:title="@string/biliroaming_enable_av_title"
+            android:summary="@string/biliroaming_enable_av_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="enable_doc_provider"
+            android:title="@string/biliroaming_enable_doc_provider_title"
+            android:summary="@string/biliroaming_enable_doc_provider_summary" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        android:title="@string/biliroaming_theme_title"
+        android:layout="@layout/bili_app_layout_preference_category_title">
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="custom_theme"
+            android:title="@string/biliroaming_custom_theme_title"
+            android:summary="@string/biliroaming_custom_theme_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="skin"
+            android:title="@string/biliroaming_skin_title" />
+        <androidx.preference.Preference
+          android:key="skin_json_pref"
+          android:dependency="skin"
+          android:title="@string/biliroaming_skin_json_pref_title" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        android:title="@string/biliroaming_copy_title"
+        android:layout="@layout/bili_app_layout_preference_category_title">
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="comment_copy"
+            android:title="@string/biliroaming_comment_copy_title"
+            android:summary="@string/biliroaming_comment_copy_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:dependency="comment_copy"
+            android:key="comment_copy_enhance"
+            android:title="@string/biliroaming_comment_copy_enhance_title"
+            android:summary="@string/biliroaming_comment_copy_enhance_summary" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        android:title="@string/biliroaming_share_title"
+        android:layout="@layout/bili_app_layout_preference_category_title">
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="purify_share"
+            android:title="@string/biliroaming_purify_share_title"
+            android:summary="@string/biliroaming_purify_share_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="mini_program"
+            android:title="@string/biliroaming_mini_program_title"
+            android:summary="@string/biliroaming_mini_program_summary" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        android:title="@string/biliroaming_splash_title"
+        android:layout="@layout/bili_app_layout_preference_category_title">
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="custom_splash"
+            android:title="@string/biliroaming_custom_splash_title"
+            android:summary="@string/biliroaming_custom_splash_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="custom_splash_logo"
+            android:title="@string/biliroaming_custom_splash_logo_title"
+            android:summary="@string/biliroaming_custom_splash_logo_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="full_splash"
+            android:title="@string/biliroaming_full_splash_title"
+            android:summary="@string/biliroaming_full_splash_summary" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        android:title="@string/biliroaming_update_title"
+        android:layout="@layout/bili_app_layout_preference_category_title">
+        <androidx.preference.SwitchPreferenceCompat
+          android:key="block_update"
+          android:title="@string/biliroaming_block_update_title" />
+        <androidx.preference.SwitchPreferenceCompat
+          android:defaultValue="true"
+          android:key="custom_update"
+          android:title="@string/biliroaming_custom_update_title"
+          android:summary="@string/biliroaming_custom_update_summary" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory>
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="purify_splash"
+            android:title="@string/biliroaming_purify_splash_title"
+            android:summary="@string/biliroaming_purify_splash_summary" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        android:title="@string/biliroaming_always_enabled_title"
+        android:layout="@layout/bili_app_layout_preference_category_title">
+        <androidx.preference.Preference
+            android:title="@string/biliroaming_clear_app_icon_title"
+            android:summary="@string/biliroaming_clear_app_icon_summary"
+            android:widgetLayout="@null" />
+        <androidx.preference.Preference
+            android:title="@string/biliroaming_themed_icon_title"
+            android:summary="@string/biliroaming_themed_icon_summary"
+            android:widgetLayout="@null" />
+        <androidx.preference.Preference
+            android:title="@string/biliroaming_splash_follow_dark_title"
+            android:summary="@string/biliroaming_splash_follow_dark_summary"
+            android:widgetLayout="@null" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

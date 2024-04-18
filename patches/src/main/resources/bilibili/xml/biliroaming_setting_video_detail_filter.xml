@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory>
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="remove_video_relate_promote"
+            android:title="@string/biliroaming_rm_video_relate_promote_title"
+            android:summary="@string/biliroaming_rm_video_relate_promote_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:dependency="remove_video_relate_promote"
+            android:key="remove_video_relate_only_av"
+            android:title="@string/biliroaming_rm_video_relate_only_av_title"
+            android:summary="@string/biliroaming_rm_video_relate_only_av_summary" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:dependency="remove_video_relate_only_av"
+            android:key="remove_video_relate_nothing"
+            android:title="@string/biliroaming_rm_video_relate_nothing_title"
+            android:summary="@string/biliroaming_rm_video_relate_nothing_summary" />
+        <androidx.preference.Preference
+            android:fragment="app.revanced.bilibili.settings.fragments.FilterHomeRcmdByKeywordFragment"
+            android:key="relate_keyword_filter"
+            android:title="@string/biliroaming_video_relate_filter_title"
+            android:summary="@string/biliroaming_video_relate_filter_summary" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <tv.danmaku.bili.widget.RadioGroupPreference
+        android:key="player_version"
+        android:persistent="true"
+        app:migration_settings_type="none"
+        app:radioDefaultValue="0"
+        app:radioEntries="@array/biliroaming_player_version_entries"
+        app:radioEntryValues="@array/biliroaming_player_version_values" />
+</androidx.preference.PreferenceScreen>

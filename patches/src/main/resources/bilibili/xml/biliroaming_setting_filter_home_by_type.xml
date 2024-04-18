@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <app.revanced.bilibili.widget.CheckBoxGroupPreference
+        android:key="customize_home_recommend"
+        android:layout="@layout/bili_app_layout_preference_category_title"
+        android:persistent="true"
+        android:title="@string/biliroaming_filter_home_recommend_by_type_hint"
+        android:entries="@array/biliroaming_home_recommend_entries"
+        android:entryValues="@array/biliroaming_home_recommend_values"
+        app:radioEntrySummaries="@array/biliroaming_home_recommend_summaries"
+        app:migration_settings_type="none" />
+</androidx.preference.PreferenceScreen>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <app.revanced.bilibili.widget.CheckBoxGroupPreference
+        android:key="filter_search_type"
+        android:layout="@layout/bili_app_layout_preference_category_title"
+        android:persistent="true"
+        android:title="@string/biliroaming_filter_search_type_summary"
+        android:entries="@array/biliroaming_search_type_entries"
+        android:entryValues="@array/biliroaming_search_type_values"
+        app:migration_settings_type="none" />
+</androidx.preference.PreferenceScreen>

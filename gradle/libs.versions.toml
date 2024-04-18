@@ -1,0 +1,37 @@
+[versions]
+# integrations
+agp = "8.2.0"
+hiddenapibypass = "4.3"
+truetypeparser = "2.1.4"
+androidx-documentfile = "1.0.1"
+androidx-annotation = "1.7.1"
+androidx-appcompat = "1.7.0-alpha03"
+androidx-preference = "1.2.1"
+protobuf = "3.25.3"
+# patches
+revanced-patcher = "19.3.1"
+smali = "3.0.3"
+gson = "2.10.1"
+kotlin = "1.9.23"
+
+[libraries]
+# integrations
+hiddenapibypass = { module = "org.lsposed.hiddenapibypass:hiddenapibypass", version.ref = "hiddenapibypass" }
+truetypeparser = { module = "io.github.yubyf:truetypeparser-light", version.ref = "truetypeparser" }
+androidx-documentfile = { module = "androidx.documentfile:documentfile", version.ref = "androidx-documentfile" }
+androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidx-annotation" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+androidx-preference = { module = "androidx.preference:preference", version.ref = "androidx-preference" }
+protobuf = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
+# patches
+revanced-patcher = { module = "kofua.app.revanced:revanced-patcher", version.ref = "revanced-patcher" }
+smali = { module = "com.android.tools.smali:smali", version.ref = "smali" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+
+[plugins]
+# integrations
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+# patches
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

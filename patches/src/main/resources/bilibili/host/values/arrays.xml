@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="biliroaming_full_screen_quality_entries">
+        <item>默认</item>
+        <item>240P</item>
+        <item>360P</item>
+        <item>480P</item>
+        <item>720P</item>
+        <item>720P 60帧</item>
+        <item>1080P</item>
+        <item>1080P 高码率</item>
+        <item>1080P 60帧</item>
+        <item>4K</item>
+        <item>HDR</item>
+        <item>杜比视界</item>
+        <item>8K</item>
+    </string-array>
+    <string-array name="biliroaming_full_screen_quality_values">
+        <item>0</item>
+        <item>6</item>
+        <item>16</item>
+        <item>32</item>
+        <item>64</item>
+        <item>74</item>
+        <item>80</item>
+        <item>112</item>
+        <item>116</item>
+        <item>120</item>
+        <item>125</item>
+        <item>126</item>
+        <item>127</item>
+    </string-array>
+    <string-array name="biliroaming_half_screen_quality_entries">
+        <item>默认</item>
+        <item>跟随全屏清晰度</item>
+        <item>240P</item>
+        <item>360P</item>
+        <item>480P</item>
+        <item>720P</item>
+        <item>720P 60帧</item>
+        <item>1080P</item>
+        <item>1080P 高码率</item>
+        <item>1080P 60帧</item>
+        <item>4K</item>
+        <item>HDR</item>
+        <item>杜比视界</item>
+        <item>8K</item>
+    </string-array>
+    <string-array name="biliroaming_half_screen_quality_values">
+        <item>0</item>
+        <item>1</item>
+        <item>6</item>
+        <item>16</item>
+        <item>32</item>
+        <item>64</item>
+        <item>74</item>
+        <item>80</item>
+        <item>112</item>
+        <item>116</item>
+        <item>120</item>
+        <item>125</item>
+        <item>126</item>
+        <item>127</item>
+    </string-array>
+    <string-array name="biliroaming_live_popup_entries">
+        <item>购物卡片</item>
+        <item>购物精选</item>
+        <item>关注提醒</item>
+        <item>直播预约</item>
+        <item>投喂支持</item>
+        <item>滚动横幅</item>
+        <item>电池任务</item>
+        <item>正在去买</item>
+        <item>礼物星球</item>
+        <item>主播帮玩</item>
+    </string-array>
+    <string-array name="biliroaming_live_popup_values">
+        <item>shoppingCard</item>
+        <item>shoppingSelected</item>
+        <item>follow</item>
+        <item>reserve</item>
+        <item>gift</item>
+        <item>banner</item>
+        <item>task</item>
+        <item>gotoBuy</item>
+        <item>giftStar</item>
+        <item>playTogether</item>
+    </string-array>
+    <string-array name="biliroaming_drawer_style_entries">
+        <item>默认</item>
+        <item>按钮</item>
+        <item>列表</item>
+    </string-array>
+    <string-array name="biliroaming_drawer_style_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="biliroaming_home_tab_entries">
+        <item>直播</item>
+        <item>推荐</item>
+        <item>热门</item>
+        <item>番剧</item>
+        <item>影视</item>
+        <item>韩综</item>
+        <item>其它</item>
+    </string-array>
+    <string-array name="biliroaming_home_tab_values">
+        <item>live</item>
+        <item>promo</item>
+        <item>hottopic</item>
+        <item>bangumi</item>
+        <item>movie</item>
+        <item>korea</item>
+        <item>other_tabs</item>
+    </string-array>
+    <string-array name="biliroaming_home_recommend_entries">
+        <item>广告</item>
+        <item>游戏</item>
+        <item>轮播图</item>
+        <item>通知</item>
+        <item>文章</item>
+        <item>动态</item>
+        <item>竖屏视频</item>
+        <item>直播</item>
+        <item>内联视频</item>
+        <item>PGC 内容</item>
+        <item>大卡</item>
+        <item>中卡</item>
+        <item>小卡</item>
+    </string-array>
+    <string-array name="biliroaming_home_recommend_summaries">
+        <item>包含轮播图的广告</item>
+        <item/>
+        <item/>
+        <item>追番更新、活动提示</item>
+        <item/>
+        <item>一般带有图文标签</item>
+        <item/>
+        <item/>
+        <item/>
+        <item>番剧、电影、电视剧、纪录片……</item>
+        <item>单列显示的</item>
+        <item/>
+        <item>双列显示的</item>
+    </string-array>
+    <string-array name="biliroaming_home_recommend_values">
+        <item>advertisement</item>
+        <item>game</item>
+        <item>banner</item>
+        <item>notify</item>
+        <item>article</item>
+        <item>picture</item>
+        <item>vertical</item>
+        <item>live</item>
+        <item>inline</item>
+        <item>bangumi</item>
+        <item>large_cover</item>
+        <item>middle_cover</item>
+        <item>small_cover</item>
+    </string-array>
+    <string-array name="biliroaming_dynamic_type_entries">
+        <item>转发</item>
+        <item>投稿视频</item>
+        <item>番剧、电影等</item>
+        <item>付费内容 1</item>
+        <item>付费内容 2</item>
+        <item>折叠</item>
+        <item>文字</item>
+        <item>图文</item>
+        <item>文章</item>
+        <item>音频</item>
+        <item>通用 方形</item>
+        <item>通用 竖形</item>
+        <item>直播</item>
+        <item>播放列表</item>
+        <item>广告</item>
+        <item>小程序</item>
+        <item>订阅</item>
+        <item>新订阅</item>
+        <item>直播推荐</item>
+        <item>横幅</item>
+        <item>合集</item>
+        <item>故事</item>
+        <item>话题推荐</item>
+        <item>付费更新</item>
+        <item>话题集合</item>
+        <item>通知</item>
+    </string-array>
+    <string-array name="biliroaming_dynamic_type_summaries">
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item>你可能感兴趣的UP主</item>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+        <item/>
+    </string-array>
+    <string-array name="biliroaming_dynamic_type_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>14</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>21</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+    </string-array>
+    <string-array name="biliroaming_space_entries">
+        <item>分页：主页</item>
+        <item>分页：动态</item>
+        <item>分页：投稿</item>
+        <item>分页：商品</item>
+        <item>分页：追番</item>
+        <item>分页：课堂</item>
+        <item>直播</item>
+        <item>充电</item>
+        <item>大航海</item>
+        <item>推广橱窗</item>
+        <item>视频</item>
+        <item>专栏</item>
+        <item>音频</item>
+        <item>最近追番</item>
+        <item>最近投币</item>
+        <item>最近点赞</item>
+        <item>最近追漫</item>
+        <item>玩的游戏</item>
+        <item>课堂</item>
+        <item>粉丝装扮</item>
+        <item>收藏夹</item>
+        <item>comic list</item>
+        <item>ugc season list</item>
+        <item>数字藏品展现</item>
+        <item>NFT头像</item>
+    </string-array>
+    <string-array name="biliroaming_space_values">
+        <item>tab.home</item>
+        <item>tab.dynamic</item>
+        <item>tab.contribute</item>
+        <item>tab.shop</item>
+        <item>tab.bangumi</item>
+        <item>tab.cheese</item>
+        <item>liveEntry</item>
+        <item>chargeResult</item>
+        <item>guard</item>
+        <item>adV2</item>
+        <item>archiveVideo</item>
+        <item>article</item>
+        <item>audio</item>
+        <item>season</item>
+        <item>coinVideo</item>
+        <item>recommendVideo</item>
+        <item>followComicList</item>
+        <item>spaceGame</item>
+        <item>cheeseVideo</item>
+        <item>fansDress</item>
+        <item>favoriteBox</item>
+        <item>comicList</item>
+        <item>ugcSeasonList</item>
+        <item>contractResource</item>
+        <item>nftShowModule</item>
+    </string-array>
+    <string-array name="biliroaming_upos_entries">
+        <item>不替换</item>
+        <item>ali（阿里）</item>
+        <item>alib（阿里）</item>
+        <item>alio1（阿里）</item>
+        <item>bos（百度）</item>
+        <item>cos（腾讯）</item>
+        <item>cosb（腾讯）</item>
+        <item>coso1（腾讯）</item>
+        <item>hw（华为）</item>
+        <item>hwb（华为）</item>
+        <item>hwo1（华为）</item>
+        <item>08c（华为）</item>
+        <item>08h（华为）</item>
+        <item>08ct（华为）</item>
+        <item>tf_hw（华为）</item>
+        <item>tf_tx（腾讯）</item>
+        <item>akamai（Akamai海外）</item>
+        <item>aliov（阿里海外）</item>
+        <item>cosov（腾讯海外）</item>
+        <item>hwov（华为海外）</item>
+        <item>hk_bcache（Bilibili海外）</item>
+    </string-array>
+    <string-array name="biliroaming_upos_values">
+        <item>$1</item>
+        <item>@string/biliroaming_ali_host</item>
+        <item>@string/biliroaming_alib_host</item>
+        <item>@string/biliroaming_alio1_host</item>
+        <item>@string/biliroaming_bos_host</item>
+        <item>@string/biliroaming_cos_host</item>
+        <item>@string/biliroaming_cosb_host</item>
+        <item>@string/biliroaming_coso1_host</item>
+        <item>@string/biliroaming_hw_host</item>
+        <item>@string/biliroaming_hwb_host</item>
+        <item>@string/biliroaming_hwo1_host</item>
+        <item>@string/biliroaming_hw_08c_host</item>
+        <item>@string/biliroaming_hw_08h_host</item>
+        <item>@string/biliroaming_hw_08ct_host</item>
+        <item>@string/biliroaming_tf_hw_host</item>
+        <item>@string/biliroaming_tf_tx_host</item>
+        <item>@string/biliroaming_akamai_host</item>
+        <item>@string/biliroaming_aliov_host</item>
+        <item>@string/biliroaming_cosov_host</item>
+        <item>@string/biliroaming_hwov_host</item>
+        <item>@string/biliroaming_hk_bcache_host</item>
+    </string-array>
+    <string-array name="biliroaming_search_type_entries">
+        <item>热搜横幅</item>
+        <item>投稿视频</item>
+        <item>相关搜索</item>
+        <item>游戏</item>
+        <item>UP主</item>
+        <item>广告</item>
+        <item>漫画</item>
+        <item>频道</item>
+        <item>番剧</item>
+        <item>话题</item>
+        <item>合集</item>
+        <item>专栏</item>
+        <item>动态</item>
+    </string-array>
+    <string-array name="biliroaming_search_type_values">
+        <item>hot_banner</item>
+        <item>video</item>
+        <item>related_search</item>
+        <item>game</item>
+        <item>user</item>
+        <item>ad</item>
+        <item>comic</item>
+        <item>channel</item>
+        <item>bangumi</item>
+        <item>subject</item>
+        <item>collection</item>
+        <item>article</item>
+        <item>twitter</item>
+    </string-array>
+    <string-array name="biliroaming_block_follow_button_entries">
+        <item>评论</item>
+        <item>动态</item>
+    </string-array>
+    <string-array name="biliroaming_block_follow_button_values">
+        <item>comment</item>
+        <item>dynamic</item>
+    </string-array>
+    <string-array name="biliroaming_filter_story_entries">
+        <item>广告</item>
+        <item>直播</item>
+    </string-array>
+    <string-array name="biliroaming_filter_story_values">
+        <item>ad</item>
+        <item>live</item>
+    </string-array>
+    <string-array name="block_modules_exception_entries">
+        <item>发布动态</item>
+    </string-array>
+    <string-array name="block_modules_exception_values">
+        <item>dynamic</item>
+    </string-array>
+    <string-array name="biliroaming_player_version_entries">
+        <item>默认</item>
+        <item>旧版</item>
+        <item>新版</item>
+    </string-array>
+    <string-array name="biliroaming_player_version_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="biliroaming_display_size_entries">
+        <item>更小</item>
+        <item>较小</item>
+        <item>小</item>
+        <item>默认</item>
+        <item>大</item>
+        <item>较大</item>
+        <item>更大</item>
+    </string-array>
+    <string-array name="biliroaming_display_size_values">
+        <item>-0.75</item>
+        <item>-0.5</item>
+        <item>-0.25</item>
+        <item>0</item>
+        <item>0.25</item>
+        <item>0.5</item>
+        <item>0.75</item>
+    </string-array>
+    <string-array name="biliroaming_subtitle_translate_server_entries">
+        <item>微软</item>
+        <item>谷歌</item>
+    </string-array>
+    <string-array name="biliroaming_subtitle_translate_server_values">
+        <item>microsoft</item>
+        <item>google</item>
+    </string-array>
+</resources>

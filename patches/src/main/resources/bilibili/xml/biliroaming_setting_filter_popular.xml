@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory>
+        <androidx.preference.SwitchPreferenceCompat
+          android:key="block_popular_top_entrance"
+          android:title="@string/biliroaming_block_popular_top_entrance_title" />
+        <androidx.preference.SwitchPreferenceCompat
+          android:key="block_popular_topic_list"
+          android:title="@string/biliroaming_block_popular_topic_list_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="block_popular_rcmd_up"
+            android:title="@string/biliroaming_block_popular_rcmd_up_title" />
+        <androidx.preference.Preference
+            android:fragment="app.revanced.bilibili.settings.fragments.FilterHomeRcmdByKeywordFragment"
+            android:key="filter_popular_by_keyword"
+            android:title="@string/biliroaming_filter_popular_by_keyword_title"
+            android:summary="@string/biliroaming_filter_popular_by_keyword_summary" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

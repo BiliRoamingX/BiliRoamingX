@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory>
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="prefer_video_tab"
+            android:title="@string/biliroaming_dynamic_prefer_video_tab" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="purify_city"
+            android:title="@string/biliroaming_dynamic_purify_city_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="purify_campus"
+            android:title="@string/biliroaming_dynamic_purify_campus_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="customize_dynamic_all_rm_topic"
+            android:title="@string/biliroaming_dynamic_all_rm_topic_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="customize_dynamic_all_rm_up"
+            android:title="@string/biliroaming_dynamic_all_rm_up_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="customize_dynamic_video_rm_up"
+            android:title="@string/biliroaming_dynamic_video_rm_up_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="dynamic_force_old_tab"
+            android:title="@string/biliroaming_dynamic_force_old_tab_title"
+            android:summary="@string/biliroaming_dynamic_force_old_tab_summary" />
+    </androidx.preference.PreferenceCategory>
+    <androidx.preference.PreferenceCategory
+        android:title="@string/biliroaming_filter_dynamic_category_title"
+        android:layout="@layout/bili_app_layout_preference_category_title">
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="filter_apply_to_video"
+            android:title="@string/biliroaming_dynamic_filter_apply_to_video" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="customize_dynamic_rm_blocked"
+            android:title="@string/biliroaming_dynamic_rm_blocked_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="customize_dynamic_rm_ad_link"
+            android:title="@string/biliroaming_dynamic_rm_ad_link_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="customize_dynamic_rm_up_reservation"
+            android:title="@string/biliroaming_dynamic_rm_up_reservation_title" />
+        <androidx.preference.Preference
+            android:fragment="app.revanced.bilibili.settings.fragments.FilterDynamicByTypeFragment"
+            android:key="filter_dynamic_by_type"
+            android:title="@string/biliroaming_filter_dynamic_by_type_title" />
+        <androidx.preference.Preference
+            android:fragment="app.revanced.bilibili.settings.fragments.FilterDynamicByKeywordFragment"
+            android:key="filter_dynamic_by_keyword"
+            android:title="@string/biliroaming_filter_dynamic_by_keyword_title" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

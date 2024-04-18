@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <tv.danmaku.bili.widget.RadioGroupPreference
+        android:key="upos_host"
+        android:layout="@layout/bili_app_layout_preference_category_title"
+        android:persistent="true"
+        android:title="@string/biliroaming_custom_upos_summary"
+        app:migration_settings_type="none"
+        app:radioDefaultValue="@string/biliroaming_hw_host"
+        app:radioEntries="@array/biliroaming_upos_entries"
+        app:radioEntryValues="@array/biliroaming_upos_values" />
+</androidx.preference.PreferenceScreen>
