@@ -14,5 +14,8 @@ tasks.register<Sync>("dist") {
     from(project(":patches").layout.buildDirectory.dir("libs")) {
         include("*.jar")
     }
+    from(project(":patches").layout.projectDirectory) {
+        include("patches.json")
+    }
     into(layout.buildDirectory)
 }
