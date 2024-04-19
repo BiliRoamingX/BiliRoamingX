@@ -19,40 +19,29 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
-
-import com.bilibili.app.preferences.BiliPreferencesActivity;
-import com.bilibili.bplus.im.setting.MessageTipItemActivity;
-import com.bilibili.magicasakura.widgets.TintCheckBox;
-import com.bilibili.magicasakura.widgets.TintRadioButton;
-import com.bilibili.magicasakura.widgets.TintSwitchCompat;
-
-import org.lsposed.hiddenapibypass.HiddenApiBypass;
-
-import java.io.File;
-import java.lang.ref.WeakReference;
-import java.util.ArrayDeque;
-import java.util.Objects;
-
 import app.revanced.bilibili.account.PassportChangeReceiver;
 import app.revanced.bilibili.patches.CustomThemePatch;
 import app.revanced.bilibili.patches.DpiPatch;
 import app.revanced.bilibili.patches.PlaybackSpeedPatch;
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.settings.Settings;
-import app.revanced.bilibili.utils.KtUtils;
-import app.revanced.bilibili.utils.Logger;
-import app.revanced.bilibili.utils.PreferenceUpdater;
-import app.revanced.bilibili.utils.Reflex;
-import app.revanced.bilibili.utils.SettingsSyncHelper;
-import app.revanced.bilibili.utils.SubtitleParamsCache;
-import app.revanced.bilibili.utils.UposReplacer;
-import app.revanced.bilibili.utils.Utils;
+import app.revanced.bilibili.utils.*;
+import com.bilibili.app.preferences.BiliPreferencesActivity;
+import com.bilibili.bplus.im.setting.MessageTipItemActivity;
+import com.bilibili.magicasakura.widgets.TintCheckBox;
+import com.bilibili.magicasakura.widgets.TintRadioButton;
+import com.bilibili.magicasakura.widgets.TintSwitchCompat;
+import org.lsposed.hiddenapibypass.HiddenApiBypass;
 import tv.danmaku.bili.MainActivityV2;
+
+import java.io.File;
+import java.lang.ref.WeakReference;
+import java.util.ArrayDeque;
+import java.util.Objects;
 
 public class ApplicationDelegate {
     private static final ArrayDeque<WeakReference<Activity>> activityRefs = new ArrayDeque<>();
@@ -283,8 +272,6 @@ public class ApplicationDelegate {
             if (activity instanceof BiliPreferencesActivity
                     || activity instanceof MessageTipItemActivity
                     || (Utils.isHd() && activity instanceof MainActivityV2)) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                    HiddenApiBypass.addHiddenApiExemptions("Landroid/view/LayoutInflater;");
                 LayoutInflater layoutInflater = activity.getLayoutInflater();
                 LayoutInflater.Factory2 factory2 = layoutInflater.getFactory2();
                 Reflex.setObjectField(layoutInflater, "mFactory2", new SettingsLayoutFactory(factory2));
