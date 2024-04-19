@@ -1,6 +1,5 @@
 package app.revanced.bilibili.patches
 
-import android.R
 import android.app.AlertDialog
 import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
@@ -21,8 +20,10 @@ object DarkSwitchPatch {
             val context = (listener as Fragment).context
             AlertDialog.Builder(context)
                 .setMessage(Utils.getString("biliroaming_switch_dark_tips"))
-                .setPositiveButton(R.string.ok) { _, _ -> listener.switchDarkMode_Origin(report) }
-                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    listener.switchDarkMode_Origin(report)
+                }
+                .setNegativeButton(android.R.string.cancel, null)
                 .create().constraintSize().show()
         } else {
             listener.switchDarkMode_Origin(report)

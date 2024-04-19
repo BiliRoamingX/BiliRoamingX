@@ -8,6 +8,7 @@ import android.app.Dialog
 import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.media.MediaScannerConnection
 import android.net.ConnectivityManager
 import android.os.*
 import android.util.Size
@@ -613,4 +614,34 @@ fun Context.registerReceiverCompat(
     registerReceiver(receiver, intentFilter, flags)
 } else {
     registerReceiver(receiver, intentFilter)
+}
+
+fun saveImage(url: String) {
+    fun save(url: String) = runCatching {
+        URL(url).openStream().use { input ->
+            val picDir =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            val filename = url.substringAfterLast('/')
+            val savePath = File(picDir, "bili/$filename")
+            savePath.outputStream().use { input.copyTo(it) }
+            MediaScannerConnection.scanFile(
+                Utils.getContext(), arrayOf(savePath.absolutePath), null, null
+            )
+            Toasts.showLongWithId("biliroaming_toast_image_save_success", savePath.path)
+        }
+    }.onFailure {
+        Toasts.showShortWithId("biliroaming_toast_image_save_failed")
+    }
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+        Utils.async { save(url) }
+    } else {
+        val activity = ApplicationDelegate.requireTopActivity()
+        activity.requestPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) { granted, shouldExplain ->
+            if (granted) {
+                Utils.async { save(url) }
+            } else if (shouldExplain) {
+                Toasts.showShort("获取存储权限失败，请前往设置开启存储权限")
+            }
+        }
+    }
 }

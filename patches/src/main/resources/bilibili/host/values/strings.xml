@@ -118,8 +118,7 @@
     <string name="biliroaming_customize_space_summary">选择要屏蔽的元素（全选会让你什么也看不到）</string>
     <string name="biliroaming_auto_like_title">自动点赞</string>
     <string name="biliroaming_toast_image_save_success">图片已保存至\n%s</string>
-    <string name="biliroaming_toast_image_save_failed">图片保存失败，可能已经保存或未授予权限</string>
-    <string name="biliroaming_toast_image_get_failed">图片获取失败</string>
+    <string name="biliroaming_toast_image_save_failed">图片保存失败</string>
     <string name="biliroaming_save_comment_image_title">笔记图片长按预览保存</string>
     <string name="biliroaming_save_comment_image_summary">笔记图片点开后长按保存到本地</string>
     <string name="biliroaming_play_arc_conf_title">解除播放限制</string>

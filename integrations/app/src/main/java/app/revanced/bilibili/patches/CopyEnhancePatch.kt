@@ -50,7 +50,7 @@ object CopyEnhancePatch {
                 appendLine(view.bvid).appendLine()
                 appendTitle("封面：")
                 clickable(0xFF2196F3.toInt(), onClick = {
-                    Utils.async { Utils.saveImage(view.arc.pic) }
+                    saveImage(view.arc.pic)
                 }) { append("点我保存") }
                 appendLine().appendLine()
                 val introDesc = view.arc.desc
@@ -87,7 +87,7 @@ object CopyEnhancePatch {
                         appendLine(view.arc.bvid).appendLine()
                         appendTitle("封面：")
                         clickable(0xFF2196F3.toInt(), onClick = {
-                            Utils.async { Utils.saveImage(view.arc.cover) }
+                            saveImage(view.arc.cover)
                         }) { append("点我保存") }
                         appendLine().appendLine()
                         val introDesc = intro.descList.joinToString("") {

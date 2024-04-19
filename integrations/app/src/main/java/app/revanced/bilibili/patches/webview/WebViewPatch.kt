@@ -5,15 +5,14 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.Utils
+import app.revanced.bilibili.utils.saveImage as saveImageReal
 
 object WebViewPatch {
     private val jsHooker = object : Any() {
         @Suppress("UNUSED")
         @JavascriptInterface
         fun saveImage(url: String) {
-            val originUrl = url.substringBeforeLast('@')
-            Utils.async { Utils.saveImage(originUrl) }
+            saveImageReal(url.substringBeforeLast('@'))
         }
     }
 

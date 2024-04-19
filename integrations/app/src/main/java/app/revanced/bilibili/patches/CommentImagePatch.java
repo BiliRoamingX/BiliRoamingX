@@ -8,6 +8,7 @@ import androidx.annotation.Keep;
 import com.bilibili.lib.imageviewer.fragment.ImageFragment;
 
 import app.revanced.bilibili.settings.Settings;
+import app.revanced.bilibili.utils.KtUtils;
 import app.revanced.bilibili.utils.Reflex;
 import app.revanced.bilibili.utils.Utils;
 
@@ -37,7 +38,7 @@ public class CommentImagePatch {
         final var finalImageUrl = imageUrl;
         imageView.setOnLongClickListener(v -> {
             v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-            Utils.async(() -> Utils.saveImage(finalImageUrl));
+            KtUtils.saveImage(finalImageUrl);
             return true;
         });
     }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.ActivityThread;
 import android.app.Application;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,10 +11,8 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.Surface;
 import android.view.WindowManager;
@@ -25,8 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.io.File;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -37,9 +32,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import javax.crypto.spec.IvParameterSpec;
-
-import kotlin.io.ByteStreamsKt;
-import kotlin.io.ConstantsKt;
 
 @SuppressWarnings("unused")
 public class Utils {
@@ -289,49 +281,6 @@ public class Utils {
 
     public static boolean isWebProcess() {
         return currentProcessName().endsWith(":web");
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void saveImage(String url) {
-        try {
-            try (var input = new URL(url).openStream()) {
-                var relativePath = Environment.DIRECTORY_PICTURES + File.separator + "bilibili";
-                var fullFilename = url.substring(url.lastIndexOf('/') + 1);
-                var filename = fullFilename.substring(0, fullFilename.lastIndexOf('.'));
-
-                var now = System.currentTimeMillis();
-                var contentValues = new ContentValues();
-                var mimeType = HttpURLConnection.guessContentTypeFromName(fullFilename);
-                if (TextUtils.isEmpty(mimeType)) mimeType = "image/png";
-                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, filename);
-                contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);
-                contentValues.put(MediaStore.MediaColumns.DATE_ADDED, now / 1000);
-                contentValues.put(MediaStore.MediaColumns.DATE_MODIFIED, now / 1000);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    contentValues.put(MediaStore.MediaColumns.DATE_TAKEN, now);
-                    contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath);
-                } else {
-                    var path = new File(Environment.getExternalStoragePublicDirectory(
-                            Environment.DIRECTORY_PICTURES
-                    ), "bilibili");
-                    path.mkdirs();
-                    contentValues.put(MediaStore.MediaColumns.DATA, new File(path, fullFilename).getAbsolutePath());
-                }
-                try {
-                    var resolver = Utils.getContext().getContentResolver();
-                    var uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
-                    if (uri == null) return;
-                    try (var output = resolver.openOutputStream(uri)) {
-                        ByteStreamsKt.copyTo(input, output, ConstantsKt.DEFAULT_BUFFER_SIZE);
-                    }
-                    Toasts.showShortWithId("biliroaming_toast_image_save_success", relativePath + File.separator + fullFilename);
-                } catch (Throwable th2) {
-                    Toasts.showShortWithId("biliroaming_toast_image_save_failed");
-                }
-            }
-        } catch (Throwable th) {
-            Toasts.showShortWithId("biliroaming_toast_image_get_failed");
-        }
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
