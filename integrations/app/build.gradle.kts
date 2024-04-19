@@ -47,6 +47,11 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
+    packaging.resources.excludes += setOf(
+        "kotlin/**",
+        "META-INF/**",
+        "kotlin-tooling-metadata.json",
+    )
 }
 
 dependencies {
