@@ -622,14 +622,16 @@ fun saveImage(url: String) {
             val picDir =
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
             val filename = url.substringAfterLast('/')
-            val savePath = File(picDir, "bili/$filename")
-            savePath.outputStream().use { input.copyTo(it) }
+            val saveDir = File(picDir, "bili").also { it.mkdirs() }
+            val imageFile = File(saveDir, filename)
+            imageFile.outputStream().use { input.copyTo(it) }
             MediaScannerConnection.scanFile(
-                Utils.getContext(), arrayOf(savePath.absolutePath), null, null
+                Utils.getContext(), arrayOf(imageFile.absolutePath), null, null
             )
-            Toasts.showLongWithId("biliroaming_toast_image_save_success", savePath.path)
+            Toasts.showLongWithId("biliroaming_toast_image_save_success", imageFile.path)
         }
     }.onFailure {
+        Logger.error(it) { "image save failed, url: $url" }
         Toasts.showShortWithId("biliroaming_toast_image_save_failed")
     }
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
