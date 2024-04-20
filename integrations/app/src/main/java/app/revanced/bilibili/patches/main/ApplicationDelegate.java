@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -19,29 +18,38 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
+
+import com.bilibili.app.preferences.BiliPreferencesActivity;
+import com.bilibili.bplus.im.setting.MessageTipItemActivity;
+import com.bilibili.magicasakura.widgets.TintCheckBox;
+import com.bilibili.magicasakura.widgets.TintRadioButton;
+import com.bilibili.magicasakura.widgets.TintSwitchCompat;
+
+import java.io.File;
+import java.lang.ref.WeakReference;
+import java.util.ArrayDeque;
+import java.util.Objects;
+
 import app.revanced.bilibili.account.PassportChangeReceiver;
 import app.revanced.bilibili.patches.CustomThemePatch;
 import app.revanced.bilibili.patches.DpiPatch;
 import app.revanced.bilibili.patches.PlaybackSpeedPatch;
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.settings.Settings;
-import app.revanced.bilibili.utils.*;
-import com.bilibili.app.preferences.BiliPreferencesActivity;
-import com.bilibili.bplus.im.setting.MessageTipItemActivity;
-import com.bilibili.magicasakura.widgets.TintCheckBox;
-import com.bilibili.magicasakura.widgets.TintRadioButton;
-import com.bilibili.magicasakura.widgets.TintSwitchCompat;
-import org.lsposed.hiddenapibypass.HiddenApiBypass;
+import app.revanced.bilibili.utils.KtUtils;
+import app.revanced.bilibili.utils.Logger;
+import app.revanced.bilibili.utils.PreferenceUpdater;
+import app.revanced.bilibili.utils.Reflex;
+import app.revanced.bilibili.utils.SettingsSyncHelper;
+import app.revanced.bilibili.utils.SubtitleParamsCache;
+import app.revanced.bilibili.utils.UposReplacer;
+import app.revanced.bilibili.utils.Utils;
 import tv.danmaku.bili.MainActivityV2;
-
-import java.io.File;
-import java.lang.ref.WeakReference;
-import java.util.ArrayDeque;
-import java.util.Objects;
 
 public class ApplicationDelegate {
     private static final ArrayDeque<WeakReference<Activity>> activityRefs = new ArrayDeque<>();
@@ -52,7 +60,7 @@ public class ApplicationDelegate {
     public static void onCreate(Application app) {
         app.registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
         app.registerComponentCallbacks(new ComponentCallbacks());
-        setBitmapDefaultDensity();
+        updateBitmapDefaultDensity();
         CustomThemePatch.refresh();
         PassportChangeReceiver.register();
         if (Utils.isMainProcess()) {
@@ -84,18 +92,16 @@ public class ApplicationDelegate {
         return resources;
     }
 
-    static void setBitmapDefaultDensity() {
+    static void updateBitmapDefaultDensity() {
         // to let pictures like cover show correctly when customizing dpi.
         float scale = DpiPatch.displayScale;
         if (scale != 0f) {
             float density = Resources.getSystem().getDisplayMetrics().density;
             int newDpi = (int) ((density + scale) * 160);
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                    HiddenApiBypass.addHiddenApiExemptions("Landroid/graphics/Bitmap;");
-                Reflex.setStaticIntField(Bitmap.class, "sDefaultDensity", newDpi);
+                Reflex.callStaticMethod(Bitmap.class, "setDefaultDensity", newDpi);
             } catch (Throwable t) {
-                Logger.error(t, () -> "Failed to setting Bitmap default density");
+                Logger.error(t, () -> "Failed to update bitmap default density");
             }
         }
     }
@@ -336,7 +342,7 @@ public class ApplicationDelegate {
 
         @Override
         public void onConfigurationChanged(@NonNull Configuration newConfig) {
-            setBitmapDefaultDensity();
+            updateBitmapDefaultDensity();
         }
 
         @Override
