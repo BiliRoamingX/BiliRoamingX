@@ -203,6 +203,8 @@ object ThemeApplier {
                     File(dir, entry.name).outputStream().use { output ->
                         it.buffered().copyTo(output)
                     }
+                } else {
+                    File(dir, entry.name).mkdirs()
                 }
                 entry = it.nextEntry
             }
