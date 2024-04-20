@@ -32,24 +32,22 @@ class CustomizePlayerFragment :
             .setView(editText)
             .setPositiveButton(android.R.string.ok, null)
             .setNegativeButton(android.R.string.cancel, null)
-            .create().constraintSize().apply {
-                setOnShowListener {
-                    getButton(Dialog.BUTTON_POSITIVE)?.setOnClickListener {
-                        val text = editText.text.toString().trim()
-                        if (text.isEmpty()) {
-                            settings.saveValue(0f)
-                            dismiss()
-                            Toasts.showShortWithId("biliroaming_speed_save_ok")
-                            return@setOnClickListener
-                        }
-                        val speed = text.toFloatOrNull()
-                        if (speed == null || speed <= 0f || !speed.isFinite()) {
-                            Toasts.showShortWithId("biliroaming_speed_invalid")
-                        } else {
-                            settings.saveValue(speed)
-                            Toasts.showShortWithId("biliroaming_speed_save_ok")
-                            dismiss()
-                        }
+            .create().constraintSize().onShow {
+                getButton(Dialog.BUTTON_POSITIVE)?.setOnClickListener {
+                    val text = editText.text.toString().trim()
+                    if (text.isEmpty()) {
+                        settings.saveValue(0f)
+                        dismiss()
+                        Toasts.showShortWithId("biliroaming_speed_save_ok")
+                        return@setOnClickListener
+                    }
+                    val speed = text.toFloatOrNull()
+                    if (speed == null || speed <= 0f || !speed.isFinite()) {
+                        Toasts.showShortWithId("biliroaming_speed_invalid")
+                    } else {
+                        settings.saveValue(speed)
+                        Toasts.showShortWithId("biliroaming_speed_save_ok")
+                        dismiss()
                     }
                 }
             }.show()
@@ -66,30 +64,28 @@ class CustomizePlayerFragment :
             .setView(editText)
             .setPositiveButton(android.R.string.ok, null)
             .setNegativeButton(android.R.string.cancel, null)
-            .create().constraintSize().apply {
-                setOnShowListener {
-                    getButton(Dialog.BUTTON_POSITIVE)?.setOnClickListener {
-                        val text = editText.text.toString().trim()
-                        if (text.isEmpty()) {
-                            Settings.OVERRIDE_PLAYBACK_SPEED.saveValue("")
-                            dismiss()
-                            Toasts.showShortWithId("biliroaming_speed_save_ok")
-                            return@setOnClickListener
-                        }
-                        val speedList = text.runCatchingOrNull {
-                            split(' ').filter { it.isNotBlank() }
-                                .map { it.toFloat() }.filter { it > 0f && it.isFinite() }
-                        }
-                        if (speedList == null) {
-                            Toasts.showShortWithId("biliroaming_speed_invalid")
-                        } else if (!speedList.contains(1f)) {
-                            Toasts.showShortWithId("biliroaming_speed_override_must")
-                        } else {
-                            val formatSpeedText = speedList.joinToString(" ")
-                            Settings.OVERRIDE_PLAYBACK_SPEED.saveValue(formatSpeedText)
-                            dismiss()
-                            Toasts.showShortWithId("biliroaming_speed_save_ok")
-                        }
+            .create().constraintSize().onShow {
+                getButton(Dialog.BUTTON_POSITIVE)?.setOnClickListener {
+                    val text = editText.text.toString().trim()
+                    if (text.isEmpty()) {
+                        Settings.OVERRIDE_PLAYBACK_SPEED.saveValue("")
+                        dismiss()
+                        Toasts.showShortWithId("biliroaming_speed_save_ok")
+                        return@setOnClickListener
+                    }
+                    val speedList = text.runCatchingOrNull {
+                        split(' ').filter { it.isNotBlank() }
+                            .map { it.toFloat() }.filter { it > 0f && it.isFinite() }
+                    }
+                    if (speedList == null) {
+                        Toasts.showShortWithId("biliroaming_speed_invalid")
+                    } else if (!speedList.contains(1f)) {
+                        Toasts.showShortWithId("biliroaming_speed_override_must")
+                    } else {
+                        val formatSpeedText = speedList.joinToString(" ")
+                        Settings.OVERRIDE_PLAYBACK_SPEED.saveValue(formatSpeedText)
+                        dismiss()
+                        Toasts.showShortWithId("biliroaming_speed_save_ok")
                     }
                 }
             }.show()

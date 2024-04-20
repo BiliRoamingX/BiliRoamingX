@@ -7,6 +7,9 @@ import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patches.bilibili.misc.other.fingerprints.BLRouteBuilderFingerprint
 import app.revanced.patches.bilibili.misc.other.fingerprints.RouteRequestFingerprint
+import app.revanced.patches.bilibili.utils.cloneMutable
+import app.revanced.patches.bilibili.utils.isPublic
+import app.revanced.patches.bilibili.utils.isStatic
 import app.revanced.util.exception
 
 @Patch(
@@ -28,7 +31,8 @@ object BLRoutePatch : BytecodePatch(setOf(BLRouteBuilderFingerprint, RouteReques
             move-result-object p1
         """.trimIndent()
         ) ?: throw BLRouteBuilderFingerprint.exception
-        RouteRequestFingerprint.result?.mutableClass?.methods?.find { m ->
+        val result = RouteRequestFingerprint.result
+        result?.mutableClass?.methods?.find { m ->
             m.name == "<init>" && m.parameterTypes.let { it.size == 2 && it[0] == "Landroid/net/Uri;" }
         }?.addInstructions(
             0, """
@@ -36,5 +40,24 @@ object BLRoutePatch : BytecodePatch(setOf(BLRouteBuilderFingerprint, RouteReques
             move-result-object p1
         """.trimIndent()
         ) ?: throw RouteRequestFingerprint.exception
+        val routeToMethod = context.classes.asSequence().flatMap { it.methods }.first { m ->
+            m.accessFlags.let { it.isStatic() && it.isPublic() }
+                    && m.parameterTypes == listOf(
+                result.classDef.type, "Landroid/content/Context;"
+            )
+        }
+        val utilsClass = context.findClass("Lapp/revanced/bilibili/utils/Utils;")!!.mutableClass
+        val utilsRouteToMethod = utilsClass.methods.first { it.name == "routeTo" }
+        utilsRouteToMethod.also { utilsClass.methods.remove(it) }
+            .cloneMutable(registerCount = 3, clearImplementation = true).apply {
+                addInstructions(
+                    """
+                    new-instance v0, ${result.classDef}
+                    invoke-direct {v0, p0}, ${result.classDef}-><init>(Landroid/net/Uri;)V
+                    invoke-static {v0, p1}, $routeToMethod
+                    return-void
+                """.trimIndent()
+                )
+            }.also { utilsClass.methods.add(it) }
     }
 }

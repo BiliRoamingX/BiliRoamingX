@@ -12,6 +12,7 @@ import androidx.preference.Preference
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.constraintSize
 import app.revanced.bilibili.utils.onClick
+import app.revanced.bilibili.utils.onShow
 import app.revanced.bilibili.utils.systemService
 
 class ExternalDownloaderFragment :
@@ -30,20 +31,17 @@ class ExternalDownloaderFragment :
                 .setPositiveButton(android.R.string.ok) { _, _ ->
                     val newName = editText.text.toString().trim()
                     Settings.EXTERNAL_DOWNLOADER_NAME.saveValue(newName)
-                }.create().constraintSize().apply {
-                    setOnShowListener {
-                        editText.requestFocus()
-                        editText.setSelection(editText.text.length)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            window?.decorView?.windowInsetsController?.show(WindowInsets.Type.ime())
-                        } else {
-                            editText.postDelayed({
-                                systemService<InputMethodManager>().showSoftInput(editText, 0)
-                            }, 50L)
-                        }
+                }.create().constraintSize().onShow {
+                    editText.requestFocus()
+                    editText.setSelection(editText.text.length)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        window?.decorView?.windowInsetsController?.show(WindowInsets.Type.ime())
+                    } else {
+                        editText.postDelayed({
+                            systemService<InputMethodManager>().showSoftInput(editText, 0)
+                        }, 50L)
                     }
-                    show()
-                }
+                }.apply { show() }
             editText.setOnEditorActionListener { v, actionId, event ->
                 if (actionId == EditorInfo.IME_ACTION_DONE || event.keyCode == KeyEvent.KEYCODE_ENTER) {
                     val newName = v.text.toString().trim()

@@ -4,11 +4,13 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.ActivityNotFoundException
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.InputType
 import android.widget.EditText
 import androidx.preference.Preference
 import app.revanced.bilibili.content.BiliDocumentsProvider
@@ -45,6 +47,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
             changeComponentState(BiliDocumentsProvider::class.java, newValue == true)
             true
         }
+        findPreference<Preference>("route")?.onClick { route();true }
         disablePreference(
             key = Settings.CUSTOM_UPDATE.key,
             { Utils.getString("biliroaming_custom_update_only_64") } to { Build.SUPPORTED_64_BIT_ABIS.isEmpty() },
@@ -124,37 +127,35 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
             .setPositiveButton(android.R.string.ok, null)
             .setNegativeButton(Utils.getString("biliroaming_skin_get"), null)
             .setNeutralButton(Utils.getString("biliroaming_skin_import_from_file"), null)
-            .create().constraintSize(maxHeight = -1).apply {
-                setOnShowListener {
-                    getButton(Dialog.BUTTON_POSITIVE)?.setOnClickListener {
-                        val text = view.text.toString().trim()
-                        if (text.runCatchingOrNull { toJSONObject() } == null) {
-                            Toasts.showShortWithId("biliroaming_skin_invalid")
-                            return@setOnClickListener
-                        }
-                        Settings.SKIN_JSON.saveValue(text)
-                        changeThemeState(true)
-                        dismiss()
+            .create().constraintSize(maxHeight = -1).onShow {
+                getButton(Dialog.BUTTON_POSITIVE)?.setOnClickListener {
+                    val text = view.text.toString().trim()
+                    if (text.runCatchingOrNull { toJSONObject() } == null) {
+                        Toasts.showShortWithId("biliroaming_skin_invalid")
+                        return@setOnClickListener
                     }
-                    getButton(Dialog.BUTTON_NEUTRAL)?.setOnClickListener {
-                        try {
-                            startActivityForResult(
-                                Intent.createChooser(Intent().apply {
-                                    action = Intent.ACTION_GET_CONTENT
-                                    type = "application/json"
-                                    addCategory(Intent.CATEGORY_OPENABLE)
-                                }, Utils.getString("biliroaming_skin_choose")),
-                                2336
-                            )
-                        } catch (ex: ActivityNotFoundException) {
-                            Toasts.showShortWithId("biliroaming_pls_install_file_manager")
-                        }
+                    Settings.SKIN_JSON.saveValue(text)
+                    changeThemeState(true)
+                    dismiss()
+                }
+                getButton(Dialog.BUTTON_NEUTRAL)?.setOnClickListener {
+                    try {
+                        startActivityForResult(
+                            Intent.createChooser(Intent().apply {
+                                action = Intent.ACTION_GET_CONTENT
+                                type = "application/json"
+                                addCategory(Intent.CATEGORY_OPENABLE)
+                            }, Utils.getString("biliroaming_skin_choose")),
+                            2336
+                        )
+                    } catch (ex: ActivityNotFoundException) {
+                        Toasts.showShortWithId("biliroaming_pls_install_file_manager")
                     }
-                    getButton(Dialog.BUTTON_NEGATIVE)?.setOnClickListener {
-                        val uri = Uri.parse("https://github.com/Rovniced/bilibili-skin")
-                        val intent = Intent(Intent.ACTION_VIEW, uri)
-                        startActivity(intent)
-                    }
+                }
+                getButton(Dialog.BUTTON_NEGATIVE)?.setOnClickListener {
+                    val uri = Uri.parse("https://github.com/Rovniced/bilibili-skin")
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    startActivity(intent)
                 }
             }.show()
     }
@@ -167,5 +168,31 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
         }, Utils.getString("biliroaming_choose_image")), request)
     } catch (ex: ActivityNotFoundException) {
         Toasts.showShortWithId("biliroaming_pls_install_file_manager")
+    }
+
+    private fun route() {
+        val editText = EditText(context)
+        editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI
+        val hintUrl = Utils.getString("biliroaming_route_hint")
+        editText.hint = hintUrl
+        AlertDialog.Builder(context)
+            .setView(editText)
+            .setTitle(Utils.getString("biliroaming_route_title"))
+            .setNegativeButton(android.R.string.cancel, null)
+            .setPositiveButton("Go") { _, _ ->
+                val editUrl = editText.text.toString().trim()
+                val uri = Uri.parse(editUrl.ifEmpty { hintUrl })
+                runCatching {
+                    Utils.routeTo(uri, context)
+                    if (editUrl.isEmpty()) Utils.runOnMainThread(300) {
+                        Toasts.showShort("你被骗啦")
+                    }
+                }.onFailure {
+                    Logger.error(it) { "route failed, uri: $uri" }
+                    Toasts.showShort("打开失败")
+                }
+            }.create().onShow {
+                getButton(DialogInterface.BUTTON_POSITIVE).isAllCaps = false
+            }.constraintSize(maxHeight = -1).show()
     }
 }

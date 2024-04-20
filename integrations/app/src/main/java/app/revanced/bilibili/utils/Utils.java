@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -261,6 +262,10 @@ public class Utils {
     @Nullable
     public static String getConfig(String key, @Nullable String defValue) {
         throw new UnsupportedOperationException();
+    }
+
+    @Keep
+    public static void routeTo(Uri uri, Context context) {
     }
 
     public static String currentProcessName() {

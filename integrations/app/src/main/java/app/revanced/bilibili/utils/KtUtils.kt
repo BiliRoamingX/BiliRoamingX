@@ -583,6 +583,10 @@ fun <T : Dialog> T.constraintSize(
     }
 }
 
+inline fun <T : Dialog> T.onShow(crossinline listener: T.() -> Unit) = apply {
+    setOnShowListener { listener() }
+}
+
 private fun biliAes(bytes: ByteArray, decrypt: Boolean): ByteArray {
     val appKey = Utils.getAppKey()
     val key = appKey.toByteArray().copyOf(16)

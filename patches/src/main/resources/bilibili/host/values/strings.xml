@@ -387,4 +387,6 @@
     <string name="biliroaming_whether_use_external_downloader">是否使用外部视频下载器下载？</string>
     <string name="biliroaming_external_downloader_not_installed">下载器未安装或未启用！</string>
     <string name="biliroaming_no_colorful_danmaku_title">去掉会员彩色弹幕多彩效果</string>
+    <string name="biliroaming_route_title">应用内打开链接</string>
+    <string name="biliroaming_route_hint">bilibili://video/928861104</string>
 </resources>
