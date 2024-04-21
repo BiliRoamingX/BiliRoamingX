@@ -168,7 +168,8 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
                         || (it == "cn.catchplay" && replaceToCatchPlay)
                     ) "zh-Hans" else it
                 }
-                lanDoc = subtitle.optString("title")
+                lanDoc = subtitle.optString("title").replace("[非官方]", "")
+                    .replace("富睿字幕组", "").trim()
             }.let { subList.add(it) }
         }
         return subList
