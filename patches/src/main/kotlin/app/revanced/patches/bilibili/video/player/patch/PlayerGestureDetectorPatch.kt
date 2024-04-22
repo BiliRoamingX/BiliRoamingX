@@ -5,7 +5,6 @@ import app.revanced.patcher.extensions.InstructionExtensions.addInstruction
 import app.revanced.patcher.extensions.InstructionExtensions.addInstructions
 import app.revanced.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
 import app.revanced.patcher.patch.BytecodePatch
-import app.revanced.patcher.patch.PatchException
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patcher.util.proxy.mutableTypes.MutableMethod
@@ -14,6 +13,7 @@ import app.revanced.patches.bilibili.utils.isInterface
 import app.revanced.patches.bilibili.utils.isPrivate
 import app.revanced.patches.bilibili.video.player.fingerprints.PlayerGestureListenerFingerprint
 import app.revanced.patches.bilibili.video.player.fingerprints.PlayerGestureRotateFingerprint
+import app.revanced.patches.bilibili.video.player.fingerprints.PlayerResizableGestureListenerFingerprint
 import app.revanced.patches.bilibili.video.player.fingerprints.ResetResizeFunctionWidgetFingerprint
 import app.revanced.util.exception
 import com.android.tools.smali.dexlib2.Opcode
@@ -35,32 +35,17 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 object PlayerGestureDetectorPatch : BytecodePatch(
     setOf(
         PlayerGestureListenerFingerprint,
+        PlayerResizableGestureListenerFingerprint,
         PlayerGestureRotateFingerprint,
         ResetResizeFunctionWidgetFingerprint,
     )
 ) {
     override fun execute(context: BytecodeContext) {
-        val patchClass = context.findClass("Lapp/revanced/bilibili/patches/PlayerGestureDetectorPatch;")!!.mutableClass
-        val hookProviderClass = context.findClass("Lapp/revanced/bilibili/utils/PlayerHookProvider")!!.mutableClass
-        context.classes.firstNotNullOfOrNull { cl ->
-            if (cl.fields.count() == 3 && cl.fields.any {
-                    it.type == "Landroid/view/GestureDetector;"
-                } && cl.fields.any { f ->
-                    context.classes.find { it.type == f.type }?.let { c ->
-                        c.accessFlags.isInterface() && c.methods.singleOrNull()?.let {
-                            it.returnType == "V" && it.parameterTypes == listOf("Landroid/view/MotionEvent;")
-                        } == true
-                    } == true
-                }) {
-                cl.fields.firstNotNullOfOrNull { f ->
-                    context.classes.find { it.type == f.type }?.takeIf {
-                        it.superclass == "Landroid/view/GestureDetector\$SimpleOnGestureListener;"
-                    }
-                }?.let { context.proxy(it).mutableClass }
-            } else null
-        }?.methods?.firstOrNull {
-            it.name == "onLongPress" && it.parameterTypes == listOf("Landroid/view/MotionEvent;")
-        }?.addInstructionsWithLabels(
+        val patchClass =
+            context.findClass("Lapp/revanced/bilibili/patches/PlayerGestureDetectorPatch;")!!.mutableClass
+        val hookProviderClass =
+            context.findClass("Lapp/revanced/bilibili/utils/PlayerHookProvider")!!.mutableClass
+        PlayerGestureListenerFingerprint.result?.mutableMethod?.addInstructionsWithLabels(
             0, """
             invoke-static {}, $patchClass->disableLongPress()Z
             move-result v0
@@ -69,8 +54,8 @@ object PlayerGestureDetectorPatch : BytecodePatch(
             :jump
             nop
         """.trimIndent()
-        ) ?: throw PatchException("not found PlayerGestureDetector class")
-        PlayerGestureListenerFingerprint.result?.mutableClass?.run {
+        ) ?: throw PlayerGestureListenerFingerprint.exception
+        PlayerResizableGestureListenerFingerprint.result?.mutableClass?.run {
             fun MutableMethod.disablePatch() = addInstructionsWithLabels(
                 0, """
                 invoke-static {}, $patchClass->scaleToSwitchRatio()Z
@@ -143,8 +128,10 @@ object PlayerGestureDetectorPatch : BytecodePatch(
                 it.returnType == PlayerToastPatch.toastServiceInterfaceName
             }.name
             val showToastMethodName = PlayerToastPatch.showToastMethodName
-            val gestureServiceFieldNameField = patchClass.fields.first { it.name == "gestureServiceFieldName" }
-            val getPlayerMethodNameField = patchClass.fields.first { it.name == "getPlayerMethodName" }
+            val gestureServiceFieldNameField =
+                patchClass.fields.first { it.name == "gestureServiceFieldName" }
+            val getPlayerMethodNameField =
+                patchClass.fields.first { it.name == "getPlayerMethodName" }
             val getRenderServiceMethodNameField =
                 hookProviderClass.fields.first { it.name == "getRenderServiceMethodName" }
             val getAspectRatioMethodNameField =
@@ -169,7 +156,8 @@ object PlayerGestureDetectorPatch : BytecodePatch(
                     """.trimIndent()
                     )
                 }.also { patchClass.methods.add(it) }
-            hookProviderClass.methods.first { it.name == "init" }.also { hookProviderClass.methods.remove(it) }
+            hookProviderClass.methods.first { it.name == "init" }
+                .also { hookProviderClass.methods.remove(it) }
                 .cloneMutable(registerCount = 1, clearImplementation = true).apply {
                     addInstructions(
                         0, """
@@ -189,7 +177,7 @@ object PlayerGestureDetectorPatch : BytecodePatch(
                     """.trimIndent()
                     )
                 }.also { hookProviderClass.methods.add(it) }
-        } ?: throw PlayerGestureListenerFingerprint.exception
+        } ?: throw PlayerResizableGestureListenerFingerprint.exception
         ResetResizeFunctionWidgetFingerprint.result?.mutableClass?.run {
             val textField = fields.first { it.type == "Landroid/widget/TextView;" }
             methods.filter { m ->
@@ -197,9 +185,13 @@ object PlayerGestureDetectorPatch : BytecodePatch(
                     inst is BuilderInstruction35c && (inst.reference as MethodReference).name == "setVisibility"
                 } ?: false
             }.forEach { m ->
-                val opcode = if (m.accessFlags.isPrivate()) Opcode.INVOKE_DIRECT else Opcode.INVOKE_VIRTUAL
+                val opcode =
+                    if (m.accessFlags.isPrivate()) Opcode.INVOKE_DIRECT else Opcode.INVOKE_VIRTUAL
                 val regs = (0..m.parameters.size).joinToString { "p$it" }
-                m.cloneMutable(registerCount = m.parameters.size + 2, clearImplementation = true).apply {
+                m.cloneMutable(
+                    registerCount = m.parameters.size + 2,
+                    clearImplementation = true
+                ).apply {
                     m.name += "_Origin"
                     addInstructions(
                         """

@@ -20,6 +20,6 @@ object PlayerGestureRotateFingerprint : MethodFingerprint(
     ),
     customFingerprint = { methodDef, classDef ->
         methodDef.parameterTypes.size == 1
-                && classDef.type == PlayerGestureListenerFingerprint.result!!.classDef.type
+                && classDef.type == PlayerResizableGestureListenerFingerprint.result!!.classDef.type
     }
 )
