@@ -421,8 +421,8 @@ public class JSONPatch {
             switch (tab.uri) {
                 case "bilibili://pgc/home" -> hasBangumiCN = true;
                 case "bilibili://following/home_activity_tab/6544" -> hasBangumiTW = true;
-                case "bilibili://pgc/home?home_flow_type=2", "bilibili://pgc/cinema-tab" ->
-                        hasMovieCN = true;
+                case "bilibili://pgc/home?home_flow_type=2",
+                     "bilibili://pgc/cinema-tab", "bilibili://pgc/cinema_v2" -> hasMovieCN = true;
                 case "bilibili://following/home_activity_tab/168644" -> hasMovieTW = true;
                 case "bilibili://following/home_activity_tab/163541" -> hasKoreaHK = true;
                 case "bilibili://following/home_activity_tab/95636" -> hasKoreaTW = true;
@@ -496,7 +496,8 @@ public class JSONPatch {
             case "bilibili://pegasus/hottopic" -> tabSet.contains("hottopic");
             case "bilibili://pgc/home", "bilibili://following/home_activity_tab/6544" ->
                     tabSet.contains("bangumi");
-            case "bilibili://pgc/home?home_flow_type=2", "bilibili://pgc/cinema-tab",
+            case "bilibili://pgc/home?home_flow_type=2",
+                 "bilibili://pgc/cinema-tab", "bilibili://pgc/cinema_v2",
                  "bilibili://following/home_activity_tab/168644" -> tabSet.contains("movie");
             case "bilibili://following/home_activity_tab/95636",
                  "bilibili://following/home_activity_tab/163541" -> tabSet.contains("korea");
