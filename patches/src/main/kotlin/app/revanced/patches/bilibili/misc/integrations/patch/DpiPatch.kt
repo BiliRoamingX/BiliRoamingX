@@ -3,12 +3,18 @@ package app.revanced.patches.bilibili.misc.integrations.patch
 import app.revanced.patcher.data.BytecodeContext
 import app.revanced.patcher.extensions.InstructionExtensions.addInstruction
 import app.revanced.patcher.extensions.InstructionExtensions.addInstructions
+import app.revanced.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.revanced.patcher.patch.BytecodePatch
 import app.revanced.patcher.patch.PatchException
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patches.bilibili.misc.integrations.fingerprints.AppCompatActivityFingerprint
+import app.revanced.patches.bilibili.utils.isAbstract
+import app.revanced.patches.bilibili.utils.isNative
 import app.revanced.util.exception
+import app.revanced.util.findMutableMethodOf
+import app.revanced.util.getReference
+import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction35c
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 
@@ -51,5 +57,26 @@ object DpiPatch : BytecodePatch(setOf(AppCompatActivityFingerprint)) {
             move-result v$register
         """.trimIndent()
         )
+        context.classes.filterNot { c ->
+            c.type.let { it == "Lapp/revanced/bilibili/patches/main/ApplicationDelegate;" || it == "Lapp/revanced/bilibili/patches/DpiPatch;" }
+        }.forEach { c ->
+            c.methods.filterNot { m ->
+                m.accessFlags.let { it.isAbstract() || it.isNative() }
+            }.forEach { m ->
+                val instructions = m.implementation!!.instructions.toList()
+                val instIndex = instructions.withIndex().indexOfFirst { (index, inst) ->
+                    inst.opcode == Opcode.INVOKE_STATIC && inst.getReference<MethodReference>()
+                        .toString() == "Landroid/content/res/Resources;->getSystem()Landroid/content/res/Resources;"
+                            && instructions[index + 1].opcode == Opcode.MOVE_RESULT_OBJECT
+                }
+                if (instIndex != -1) {
+                    context.proxy(c).mutableClass.findMutableMethodOf(m).replaceInstruction(
+                        instIndex, """
+                        invoke-static {}, Lapp/revanced/bilibili/utils/Utils;->getResources()Landroid/content/res/Resources;
+                    """.trimIndent()
+                    )
+                }
+            }
+        }
     }
 }

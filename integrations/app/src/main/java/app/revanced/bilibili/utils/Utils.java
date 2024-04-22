@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -52,57 +53,65 @@ public class Utils {
     @Keep
     public static Context getContext() {
         if (context == null) {
-            Logger.error(() -> "Context is null");
             context = ActivityThread.currentActivityThread().getApplication();
+            if (context == null)
+                Logger.error(() -> "Context is null");
         }
         return context;
     }
 
+    @Keep
+    public static Resources getResources() {
+        return getContext().getResources();
+    }
+
     @SuppressLint("DiscouragedApi")
     public static int getResId(String name, String type) {
+        Context context = getContext();
         String fullName = context.getPackageName() + ":" + type + "/" + name;
         return idsCache.computeIfAbsent(fullName, (key) -> context.getResources().getIdentifier(key, null, null));
     }
 
     public static String getString(String idName) {
-        return context.getString(getResId(idName, "string"));
+        return getContext().getString(getResId(idName, "string"));
     }
 
     public static String getString(String idName, Object... formatArgs) {
-        return context.getString(getResId(idName, "string"), formatArgs);
+        return getContext().getString(getResId(idName, "string"), formatArgs);
     }
 
     public static String[] getStringArray(String idName) {
-        return context.getResources().getStringArray(getResId(idName, "array"));
+        return getContext().getResources().getStringArray(getResId(idName, "array"));
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public static Drawable getDrawable(String idName) {
-        return context.getDrawable(getResId(idName, "drawable"));
+        return getContext().getDrawable(getResId(idName, "drawable"));
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public static Drawable getDrawable(Context context, String idName) {
-        return context.getDrawable(getResId(idName, "drawable"));
+        return getContext().getDrawable(getResId(idName, "drawable"));
     }
 
     public static int getColor(String idName) {
-        return context.getColor(getResId(idName, "color"));
+        return getContext().getColor(getResId(idName, "color"));
     }
 
     public static int getColor(Context context, String idName) {
-        return context.getColor(getResId(idName, "color"));
+        return getContext().getColor(getResId(idName, "color"));
     }
 
     public static ColorStateList getColorStateList(String idName) {
-        return context.getColorStateList(getResId(idName, "color"));
+        return getContext().getColorStateList(getResId(idName, "color"));
     }
 
     public static ColorStateList getColorStateList(Context context, String idName) {
-        return context.getColorStateList(getResId(idName, "color"));
+        return getContext().getColorStateList(getResId(idName, "color"));
     }
 
     public static void reboot() {
+        Context context = getContext();
         PackageManager pm = context.getPackageManager();
         Intent intent = pm.getLaunchIntentForPackage(context.getPackageName());
         if (intent != null)
@@ -119,6 +128,7 @@ public class Utils {
     public static String getMobiApp() {
         if (TextUtils.isEmpty(mobiApp)) {
             String mobiApp = null;
+            Context context = getContext();
             try {
                 mobiApp = context.getPackageManager()
                         .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA)
@@ -204,7 +214,7 @@ public class Utils {
 
     @SuppressWarnings("deprecation")
     public static boolean currentIsLandscape() {
-        WindowManager windowManager = context.getSystemService(WindowManager.class);
+        WindowManager windowManager = getContext().getSystemService(WindowManager.class);
         int orientation = windowManager.getDefaultDisplay().getOrientation();
         return orientation == Surface.ROTATION_90 || orientation == Surface.ROTATION_270;
     }
@@ -235,7 +245,7 @@ public class Utils {
 
     @NonNull
     public static SharedPreferences rawBlkvPrefsByFile(String name, boolean multiProcess) {
-        return blkvPrefsByFile(new File(context.getDir("blkv", Context.MODE_PRIVATE), name + ".raw_kv"), multiProcess);
+        return blkvPrefsByFile(new File(getContext().getDir("blkv", Context.MODE_PRIVATE), name + ".raw_kv"), multiProcess);
     }
 
     @Keep

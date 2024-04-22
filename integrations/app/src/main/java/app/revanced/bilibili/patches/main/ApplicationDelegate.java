@@ -92,6 +92,7 @@ public class ApplicationDelegate {
         return resources;
     }
 
+    @Keep
     static void updateBitmapDefaultDensity() {
         // to let pictures like cover show correctly when customizing dpi.
         float scale = DpiPatch.displayScale;
@@ -106,6 +107,7 @@ public class ApplicationDelegate {
         }
     }
 
+    @Keep
     static int getCustomDpi() {
         float scale = DpiPatch.displayScale;
         if (scale == 0f) return 0;
@@ -140,6 +142,7 @@ public class ApplicationDelegate {
         return base.createConfigurationContext(configuration);
     }
 
+    @Keep
     private static Pair<Integer, Integer> calcNewAxisDpi() {
         Resources sysRes = Resources.getSystem();
         float sysDensity = sysRes.getDisplayMetrics().density;
@@ -161,6 +164,7 @@ public class ApplicationDelegate {
         updateDpi(activity.getResources().getDisplayMetrics(), newDpi);
     }
 
+    @Keep
     static void updateDpi(DisplayMetrics dm, int newDpi) {
         var systemDm = Resources.getSystem().getDisplayMetrics();
         var scale = systemDm.scaledDensity / systemDm.density;
