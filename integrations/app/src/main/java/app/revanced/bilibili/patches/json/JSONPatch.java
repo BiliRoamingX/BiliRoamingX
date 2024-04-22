@@ -366,47 +366,12 @@ public class JSONPatch {
         if (Utils.isHd() && (tabs == null || tabs.isEmpty())) {
             tabs = new ArrayList<>();
             data.tab = tabs;
-
-            var liveTab = new MainResourceManager.Tab();
-            liveTab.tabId = "20";
-            liveTab.name = "直播";
-            liveTab.uri = "bilibili://live/home";
-            liveTab.reportId = "直播tab";
-            liveTab.pos = 1;
-            tabs.add(liveTab);
-
-            var feedTab = new MainResourceManager.Tab();
-            feedTab.tabId = "24";
-            feedTab.name = "推荐";
-            feedTab.uri = "bilibili://pegasus/promo";
-            feedTab.reportId = "推荐tab";
-            feedTab.pos = 2;
-            feedTab.selected = 1;
-            tabs.add(feedTab);
-
-            var hotTab = new MainResourceManager.Tab();
-            hotTab.tabId = "27";
-            hotTab.name = "热门";
-            hotTab.uri = "bilibili://pegasus/hottopic";
-            hotTab.reportId = "hottopic";
-            hotTab.pos = 3;
-            tabs.add(hotTab);
-
-            var animeTab = new MainResourceManager.Tab();
-            animeTab.tabId = "30";
-            animeTab.name = "追番";
-            animeTab.uri = "bilibili://pgc/home";
-            animeTab.reportId = "bangumi";
-            animeTab.pos = 4;
-            tabs.add(animeTab);
-
-            var cinemaTab = new MainResourceManager.Tab();
-            cinemaTab.tabId = "13";
-            cinemaTab.name = "影视";
-            cinemaTab.uri = "bilibili://pgc/home?home_flow_type=2";
-            cinemaTab.reportId = "film";
-            cinemaTab.pos = 5;
-            tabs.add(cinemaTab);
+            var liveTab = newTab("20", "直播", "bilibili://live/home", "直播tab", 1);
+            var feedTab = newTab("24", "推荐", "bilibili://pegasus/promo", "推荐tab", 2, true);
+            var hotTab = newTab("27", "热门", "bilibili://pegasus/hottopic", "hottopic", 3);
+            var animeTab = newTab("30", "追番", "bilibili://pgc/home", "bangumi", 4);
+            var cinemaTab = newTab("13", "影视", "bilibili://pgc/home?home_flow_type=2", "film", 5);
+            tabs.addAll(Arrays.asList(liveTab, feedTab, hotTab, animeTab, cinemaTab));
         }
         if (tabs == null || tabs.isEmpty())
             return;
@@ -430,61 +395,33 @@ public class JSONPatch {
         }
         if (Settings.ADD_BANGUMI.getBoolean()) {
             if (!hasBangumiCN) {
-                var tab = new MainResourceManager.Tab();
-                tab.tabId = "50";
-                tab.name = KtUtils.isChinaEnv() ? "追番" : "追番（大陸）";
-                tab.uri = "bilibili://pgc/home";
-                tab.reportId = "bangumi";
-                tab.pos = 50;
+                var name = KtUtils.isChinaEnv() ? "追番" : "追番（大陸）";
+                var tab = newTab("50", name, "bilibili://pgc/home", "bangumi", 50);
                 tabs.add(tab);
             }
             if (!hasBangumiTW) {
-                var tab = new MainResourceManager.Tab();
-                tab.tabId = "60";
-                tab.name = "追番（港澳台）";
-                tab.uri = "bilibili://following/home_activity_tab/6544";
-                tab.reportId = "bangumi";
-                tab.pos = 60;
+                var tab = newTab("60", "追番（港澳台）", "bilibili://following/home_activity_tab/6544", "bangumi", 60);
                 tabs.add(tab);
             }
         }
         if (Settings.ADD_MOVIE.getBoolean()) {
             if (!hasMovieCN) {
-                var tab = new MainResourceManager.Tab();
-                tab.tabId = "70";
-                tab.name = KtUtils.isChinaEnv() ? "影视" : "影視（大陸）";
-                tab.uri = "bilibili://pgc/home?home_flow_type=2";
-                tab.reportId = "film";
-                tab.pos = 70;
+                var name = KtUtils.isChinaEnv() ? "影视" : "影視（大陸）";
+                var tab = newTab("70", name, "bilibili://pgc/home?home_flow_type=2", "film", 70);
                 tabs.add(tab);
             }
             if (!hasMovieTW) {
-                var tab = new MainResourceManager.Tab();
-                tab.tabId = "80";
-                tab.name = "戏剧（港澳台）";
-                tab.uri = "bilibili://following/home_activity_tab/168644";
-                tab.reportId = "jptv";
-                tab.pos = 80;
+                var tab = newTab("80", "戏剧（港澳台）", "bilibili://following/home_activity_tab/168644", "jptv", 80);
                 tabs.add(tab);
             }
         }
         if (Settings.ADD_KOREA.getBoolean()) {
             if (!hasKoreaHK) {
-                var tab = new MainResourceManager.Tab();
-                tab.tabId = "803";
-                tab.name = "韩综（港澳）";
-                tab.uri = "bilibili://following/home_activity_tab/163541";
-                tab.reportId = "koreavhk";
-                tab.pos = 803;
+                var tab = newTab("803", "韩综（港澳）", "bilibili://following/home_activity_tab/163541", "koreavhk", 803);
                 tabs.add(tab);
             }
             if (!hasKoreaTW) {
-                var tab = new MainResourceManager.Tab();
-                tab.tabId = "804";
-                tab.name = "韩综（台湾）";
-                tab.uri = "bilibili://following/home_activity_tab/95636";
-                tab.reportId = "koreavtw";
-                tab.pos = 804;
+                var tab = newTab("804", "韩综（台湾）", "bilibili://following/home_activity_tab/95636", "koreavtw", 804);
                 tabs.add(tab);
             }
         }
@@ -503,6 +440,21 @@ public class JSONPatch {
                  "bilibili://following/home_activity_tab/163541" -> tabSet.contains("korea");
             default -> tabSet.contains("other_tabs");
         });
+    }
+
+    private static MainResourceManager.Tab newTab(String tabId, String name, String uri, String reportId, int pos) {
+        return newTab(tabId, name, uri, reportId, pos, false);
+    }
+
+    private static MainResourceManager.Tab newTab(String tabId, String name, String uri, String reportId, int pos, boolean selected) {
+        var tab = new MainResourceManager.Tab();
+        tab.tabId = tabId;
+        tab.name = name;
+        tab.uri = uri;
+        tab.reportId = reportId;
+        tab.pos = pos;
+        tab.selected = selected ? 1 : 0;
+        return tab;
     }
 
     private static void customizeSpace(BiliSpace space) {
