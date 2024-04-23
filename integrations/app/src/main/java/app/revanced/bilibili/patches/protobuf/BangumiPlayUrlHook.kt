@@ -1,5 +1,6 @@
 package app.revanced.bilibili.patches.protobuf
 
+import android.util.SparseArray
 import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.api.BiliRoamingApi.getPlayUrl
 import app.revanced.bilibili.api.BiliRoamingApi.getSeason
@@ -98,6 +99,17 @@ object BangumiPlayUrlHook {
     @JvmStatic
     fun hookPlayViewUniteBefore(req: PlayViewUniteReq) {
         VideoQualityPatch.unlockLimit(req)
+        if (Settings.TRIAL_VIP_QUALITY.boolean && !Accounts.isEffectiveVip) {
+            runCatching {
+                req.vod.isNeedTrial = true
+            }.recoverCatching {
+                val fields = SparseArray<Any>()
+                fields.put(VideoVod.IS_NEED_TRIAL_FIELD_NUMBER, true)
+                req.vod.setUnknownFields(fields.toUnknownFields())
+            }.onFailure {
+                Logger.error(it) { "Failed to set need trial filed" }
+            }
+        }
         isDownloadUnite = req.vod.download >= 1
         if (!Settings.UNLOCK_AREA_LIMIT.boolean) return
         allowDownloadUnite = Settings.ALLOW_DOWNLOAD.boolean && isDownloadUnite

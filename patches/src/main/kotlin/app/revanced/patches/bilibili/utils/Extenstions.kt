@@ -7,6 +7,7 @@ import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.HiddenApiRestriction
 import com.android.tools.smali.dexlib2.iface.Method
 import com.android.tools.smali.dexlib2.iface.MethodParameter
+import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
 import com.android.tools.smali.dexlib2.immutable.*
 import com.android.tools.smali.dexlib2.immutable.debug.ImmutableDebugItem
 import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstruction
@@ -138,3 +139,8 @@ fun Field(
     annotations,
     hiddenApiRestrictions
 )
+
+fun FiveRegisterInstruction.args(): String {
+    return arrayOf(registerC, registerD, registerE, registerF, registerG)
+        .take(registerCount).joinToString(",") { "v$it" }
+}

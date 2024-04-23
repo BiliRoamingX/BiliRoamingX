@@ -328,6 +328,10 @@ inline fun GeneratedMessageLite<*, *>.setUnknownFields(unknownFields: UnknownFie
     GeneratedMessageLiteEx.setUnknownFields(this, unknownFields)
 }
 
+inline fun SparseArray<Any>.toUnknownFields(original: UnknownFieldSetLite? = null): UnknownFieldSetLite {
+    return GeneratedMessageLiteEx.newUnknownFields(original, this)
+}
+
 val defaultUA = "Mozilla/5.0 BiliDroid/$versionName (bbcallen@gmail.com)"
 
 val browserUA =

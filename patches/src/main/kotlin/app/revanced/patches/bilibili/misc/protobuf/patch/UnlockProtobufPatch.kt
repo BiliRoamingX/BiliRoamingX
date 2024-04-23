@@ -5,6 +5,7 @@ import app.revanced.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.revanced.patcher.patch.BytecodePatch
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
+import app.revanced.patches.bilibili.utils.args
 import app.revanced.patches.bilibili.utils.toPublic
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
@@ -33,10 +34,7 @@ object UnlockProtobufPatch : BytecodePatch() {
                     val inst = m.implementation!!.instructions[0]
                     // step 2, invoke-direct to invoke-virtual
                     if (inst.opcode == Opcode.INVOKE_DIRECT) {
-                        inst as BuilderInstruction35c
-                        val args = arrayOf(
-                            inst.registerC, inst.registerD, inst.registerE, inst.registerF, inst.registerG
-                        ).take(inst.registerCount).joinToString { "v$it" }
+                        val args = (inst as BuilderInstruction35c).args()
                         m.replaceInstruction(
                             0, """
                                 invoke-virtual {$args}, ${inst.reference}

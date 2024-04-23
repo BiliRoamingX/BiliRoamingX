@@ -5,7 +5,6 @@ import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.ExtensionRegistryLite;
 import com.google.protobuf.GeneratedMessageLite;
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.MessageLiteOrBuilder;
 import com.google.protobuf.Parser;
 
 import java.io.IOException;
@@ -13,8 +12,8 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 /* compiled from: BL */
-/* loaded from: classes14.dex */
-public final class VideoVod extends GeneratedMessageLite<VideoVod, VideoVod.Builder> implements MessageLiteOrBuilder {
+/* loaded from: classes23.dex */
+public final class VideoVod extends GeneratedMessageLite<VideoVod, VideoVod.b> implements e1 {
     public static final int AID_FIELD_NUMBER = 1;
     public static final int CID_FIELD_NUMBER = 2;
     private static final VideoVod DEFAULT_INSTANCE;
@@ -23,6 +22,7 @@ public final class VideoVod extends GeneratedMessageLite<VideoVod, VideoVod.Buil
     public static final int FNVER_FIELD_NUMBER = 4;
     public static final int FORCE_HOST_FIELD_NUMBER = 7;
     public static final int FOURK_FIELD_NUMBER = 8;
+    public static final int IS_NEED_TRIAL_FIELD_NUMBER = 11;
     private static volatile Parser<VideoVod> PARSER = null;
     public static final int PREFER_CODEC_TYPE_FIELD_NUMBER = 9;
     public static final int QN_FIELD_NUMBER = 3;
@@ -34,230 +34,256 @@ public final class VideoVod extends GeneratedMessageLite<VideoVod, VideoVod.Buil
     private int fnver_;
     private int forceHost_;
     private boolean fourk_;
+    private boolean isNeedTrial_;
     private int preferCodecType_;
     private long qn_;
     private long voiceBalance_;
 
     /* compiled from: BL */
-    /* renamed from: com.bapis.bilibili.playershared.VideoVod$1 */
-    /* loaded from: classes14.dex */
-    static /* synthetic */ class C79331 {
-
-        /* renamed from: $SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke */
-        static final /* synthetic */ int[] f17636xa1df5c61;
+    /* loaded from: classes23.dex */
+    static /* synthetic */ class a {
+        static final /* synthetic */ int[] $SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke;
 
         static {
             int[] iArr = new int[GeneratedMessageLite.MethodToInvoke.values().length];
-            f17636xa1df5c61 = iArr;
+            $SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke = iArr;
             try {
                 iArr[GeneratedMessageLite.MethodToInvoke.NEW_MUTABLE_INSTANCE.ordinal()] = 1;
             } catch (NoSuchFieldError unused) {
             }
             try {
-                f17636xa1df5c61[GeneratedMessageLite.MethodToInvoke.NEW_BUILDER.ordinal()] = 2;
+                $SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke[GeneratedMessageLite.MethodToInvoke.NEW_BUILDER.ordinal()] = 2;
             } catch (NoSuchFieldError unused2) {
             }
             try {
-                f17636xa1df5c61[GeneratedMessageLite.MethodToInvoke.BUILD_MESSAGE_INFO.ordinal()] = 3;
+                $SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke[GeneratedMessageLite.MethodToInvoke.BUILD_MESSAGE_INFO.ordinal()] = 3;
             } catch (NoSuchFieldError unused3) {
             }
             try {
-                f17636xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_DEFAULT_INSTANCE.ordinal()] = 4;
+                $SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke[GeneratedMessageLite.MethodToInvoke.GET_DEFAULT_INSTANCE.ordinal()] = 4;
             } catch (NoSuchFieldError unused4) {
             }
             try {
-                f17636xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_PARSER.ordinal()] = 5;
+                $SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke[GeneratedMessageLite.MethodToInvoke.GET_PARSER.ordinal()] = 5;
             } catch (NoSuchFieldError unused5) {
             }
             try {
-                f17636xa1df5c61[GeneratedMessageLite.MethodToInvoke.GET_MEMOIZED_IS_INITIALIZED.ordinal()] = 6;
+                $SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke[GeneratedMessageLite.MethodToInvoke.GET_MEMOIZED_IS_INITIALIZED.ordinal()] = 6;
             } catch (NoSuchFieldError unused6) {
             }
             try {
-                f17636xa1df5c61[GeneratedMessageLite.MethodToInvoke.SET_MEMOIZED_IS_INITIALIZED.ordinal()] = 7;
+                $SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke[GeneratedMessageLite.MethodToInvoke.SET_MEMOIZED_IS_INITIALIZED.ordinal()] = 7;
             } catch (NoSuchFieldError unused7) {
             }
         }
     }
 
     /* compiled from: BL */
-    /* loaded from: classes14.dex */
-    public static final class Builder extends GeneratedMessageLite.Builder<VideoVod, Builder> implements MessageLiteOrBuilder {
-        /* synthetic */ Builder(C79331 c79331) {
+    /* loaded from: classes23.dex */
+    public static final class b extends GeneratedMessageLite.Builder<VideoVod, b> implements e1 {
+        /* synthetic */ b(a aVar) {
             this();
         }
 
-        public Builder clearAid() {
+        public b clearAid() {
             copyOnWrite();
             ((VideoVod) this.instance).clearAid();
             return this;
         }
 
-        public Builder clearCid() {
+        public b clearCid() {
             copyOnWrite();
             ((VideoVod) this.instance).clearCid();
             return this;
         }
 
-        public Builder clearDownload() {
+        public b clearDownload() {
             copyOnWrite();
             ((VideoVod) this.instance).clearDownload();
             return this;
         }
 
-        public Builder clearFnval() {
+        public b clearFnval() {
             copyOnWrite();
             ((VideoVod) this.instance).clearFnval();
             return this;
         }
 
-        public Builder clearFnver() {
+        public b clearFnver() {
             copyOnWrite();
             ((VideoVod) this.instance).clearFnver();
             return this;
         }
 
-        public Builder clearForceHost() {
+        public b clearForceHost() {
             copyOnWrite();
             ((VideoVod) this.instance).clearForceHost();
             return this;
         }
 
-        public Builder clearFourk() {
+        public b clearFourk() {
             copyOnWrite();
             ((VideoVod) this.instance).clearFourk();
             return this;
         }
 
-        public Builder clearPreferCodecType() {
+        public b clearIsNeedTrial() {
+            copyOnWrite();
+            ((VideoVod) this.instance).clearIsNeedTrial();
+            return this;
+        }
+
+        public b clearPreferCodecType() {
             copyOnWrite();
             ((VideoVod) this.instance).clearPreferCodecType();
             return this;
         }
 
-        public Builder clearQn() {
+        public b clearQn() {
             copyOnWrite();
             ((VideoVod) this.instance).clearQn();
             return this;
         }
 
-        public Builder clearVoiceBalance() {
+        public b clearVoiceBalance() {
             copyOnWrite();
             ((VideoVod) this.instance).clearVoiceBalance();
             return this;
         }
 
+        @Override // com.bapis.bilibili.playershared.e1
         public long getAid() {
             return ((VideoVod) this.instance).getAid();
         }
 
+        @Override // com.bapis.bilibili.playershared.e1
         public long getCid() {
             return ((VideoVod) this.instance).getCid();
         }
 
+        @Override // com.bapis.bilibili.playershared.e1
         public int getDownload() {
             return ((VideoVod) this.instance).getDownload();
         }
 
+        @Override // com.bapis.bilibili.playershared.e1
         public int getFnval() {
             return ((VideoVod) this.instance).getFnval();
         }
 
+        @Override // com.bapis.bilibili.playershared.e1
         public int getFnver() {
             return ((VideoVod) this.instance).getFnver();
         }
 
+        @Override // com.bapis.bilibili.playershared.e1
         public int getForceHost() {
             return ((VideoVod) this.instance).getForceHost();
         }
 
+        @Override // com.bapis.bilibili.playershared.e1
         public boolean getFourk() {
             return ((VideoVod) this.instance).getFourk();
         }
 
+        @Override // com.bapis.bilibili.playershared.e1
+        public boolean getIsNeedTrial() {
+            return ((VideoVod) this.instance).getIsNeedTrial();
+        }
+
+        @Override // com.bapis.bilibili.playershared.e1
         public CodeType getPreferCodecType() {
             return ((VideoVod) this.instance).getPreferCodecType();
         }
 
+        @Override // com.bapis.bilibili.playershared.e1
         public int getPreferCodecTypeValue() {
             return ((VideoVod) this.instance).getPreferCodecTypeValue();
         }
 
+        @Override // com.bapis.bilibili.playershared.e1
         public long getQn() {
             return ((VideoVod) this.instance).getQn();
         }
 
+        @Override // com.bapis.bilibili.playershared.e1
         public long getVoiceBalance() {
             return ((VideoVod) this.instance).getVoiceBalance();
         }
 
-        public Builder setAid(long j) {
+        public b setAid(long j14) {
             copyOnWrite();
-            ((VideoVod) this.instance).setAid(j);
+            ((VideoVod) this.instance).setAid(j14);
             return this;
         }
 
-        public Builder setCid(long j) {
+        public b setCid(long j14) {
             copyOnWrite();
-            ((VideoVod) this.instance).setCid(j);
+            ((VideoVod) this.instance).setCid(j14);
             return this;
         }
 
-        public Builder setDownload(int i) {
+        public b setDownload(int i14) {
             copyOnWrite();
-            ((VideoVod) this.instance).setDownload(i);
+            ((VideoVod) this.instance).setDownload(i14);
             return this;
         }
 
-        public Builder setFnval(int i) {
+        public b setFnval(int i14) {
             copyOnWrite();
-            ((VideoVod) this.instance).setFnval(i);
+            ((VideoVod) this.instance).setFnval(i14);
             return this;
         }
 
-        public Builder setFnver(int i) {
+        public b setFnver(int i14) {
             copyOnWrite();
-            ((VideoVod) this.instance).setFnver(i);
+            ((VideoVod) this.instance).setFnver(i14);
             return this;
         }
 
-        public Builder setForceHost(int i) {
+        public b setForceHost(int i14) {
             copyOnWrite();
-            ((VideoVod) this.instance).setForceHost(i);
+            ((VideoVod) this.instance).setForceHost(i14);
             return this;
         }
 
-        public Builder setFourk(boolean z) {
+        public b setFourk(boolean z14) {
             copyOnWrite();
-            ((VideoVod) this.instance).setFourk(z);
+            ((VideoVod) this.instance).setFourk(z14);
             return this;
         }
 
-        public Builder setPreferCodecType(CodeType codeType) {
+        public b setIsNeedTrial(boolean z14) {
+            copyOnWrite();
+            ((VideoVod) this.instance).setIsNeedTrial(z14);
+            return this;
+        }
+
+        public b setPreferCodecType(CodeType codeType) {
             copyOnWrite();
             ((VideoVod) this.instance).setPreferCodecType(codeType);
             return this;
         }
 
-        public Builder setPreferCodecTypeValue(int i) {
+        public b setPreferCodecTypeValue(int i14) {
             copyOnWrite();
-            ((VideoVod) this.instance).setPreferCodecTypeValue(i);
+            ((VideoVod) this.instance).setPreferCodecTypeValue(i14);
             return this;
         }
 
-        public Builder setQn(long j) {
+        public b setQn(long j14) {
             copyOnWrite();
-            ((VideoVod) this.instance).setQn(j);
+            ((VideoVod) this.instance).setQn(j14);
             return this;
         }
 
-        public Builder setVoiceBalance(long j) {
+        public b setVoiceBalance(long j14) {
             copyOnWrite();
-            ((VideoVod) this.instance).setVoiceBalance(j);
+            ((VideoVod) this.instance).setVoiceBalance(j14);
             return this;
         }
 
-        private Builder() {
+        private b() {
             super(VideoVod.DEFAULT_INSTANCE);
         }
     }
@@ -307,6 +333,11 @@ public final class VideoVod extends GeneratedMessageLite<VideoVod, VideoVod.Buil
     }
 
     /* JADX INFO: Access modifiers changed from: private */
+    public void clearIsNeedTrial() {
+        this.isNeedTrial_ = false;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
     public void clearPreferCodecType() {
         this.preferCodecType_ = 0;
     }
@@ -325,7 +356,7 @@ public final class VideoVod extends GeneratedMessageLite<VideoVod, VideoVod.Buil
         return DEFAULT_INSTANCE;
     }
 
-    public static Builder newBuilder() {
+    public static b newBuilder() {
         return DEFAULT_INSTANCE.createBuilder();
     }
 
@@ -342,38 +373,43 @@ public final class VideoVod extends GeneratedMessageLite<VideoVod, VideoVod.Buil
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setAid(long j) {
-        this.aid_ = j;
+    public void setAid(long j14) {
+        this.aid_ = j14;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setCid(long j) {
-        this.cid_ = j;
+    public void setCid(long j14) {
+        this.cid_ = j14;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setDownload(int i) {
-        this.download_ = i;
+    public void setDownload(int i14) {
+        this.download_ = i14;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setFnval(int i) {
-        this.fnval_ = i;
+    public void setFnval(int i14) {
+        this.fnval_ = i14;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setFnver(int i) {
-        this.fnver_ = i;
+    public void setFnver(int i14) {
+        this.fnver_ = i14;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setForceHost(int i) {
-        this.forceHost_ = i;
+    public void setForceHost(int i14) {
+        this.forceHost_ = i14;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setFourk(boolean z) {
-        this.fourk_ = z;
+    public void setFourk(boolean z14) {
+        this.fourk_ = z14;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void setIsNeedTrial(boolean z14) {
+        this.isNeedTrial_ = z14;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -382,29 +418,30 @@ public final class VideoVod extends GeneratedMessageLite<VideoVod, VideoVod.Buil
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setPreferCodecTypeValue(int i) {
-        this.preferCodecType_ = i;
+    public void setPreferCodecTypeValue(int i14) {
+        this.preferCodecType_ = i14;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setQn(long j) {
-        this.qn_ = j;
+    public void setQn(long j14) {
+        this.qn_ = j14;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void setVoiceBalance(long j) {
-        this.voiceBalance_ = j;
+    public void setVoiceBalance(long j14) {
+        this.voiceBalance_ = j14;
     }
 
     @Override // com.google.protobuf.GeneratedMessageLite
     protected final Object dynamicMethod(GeneratedMessageLite.MethodToInvoke methodToInvoke, Object obj, Object obj2) {
-        switch (C79331.f17636xa1df5c61[methodToInvoke.ordinal()]) {
+        a aVar = null;
+        switch (a.$SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke[methodToInvoke.ordinal()]) {
             case 1:
                 return new VideoVod();
             case 2:
-                return new Builder(null);
+                return new b(aVar);
             case 3:
-                return GeneratedMessageLite.newMessageInfo(DEFAULT_INSTANCE, "\u0000\n\u0000\u0000\u0001\n\n\u0000\u0000\u0000\u0001\u0002\u0002\u0002\u0003\u0002\u0004\u0004\u0005\u0004\u0006\u000b\u0007\u0004\b\u0007\t\f\n\u0002", new Object[]{"aid_", "cid_", "qn_", "fnver_", "fnval_", "download_", "forceHost_", "fourk_", "preferCodecType_", "voiceBalance_"});
+                return GeneratedMessageLite.newMessageInfo(DEFAULT_INSTANCE, "\u0000\u000b\u0000\u0000\u0001\u000b\u000b\u0000\u0000\u0000\u0001\u0002\u0002\u0002\u0003\u0002\u0004\u0004\u0005\u0004\u0006\u000b\u0007\u0004\b\u0007\t\f\n\u0002\u000b\u0007", new Object[]{"aid_", "cid_", "qn_", "fnver_", "fnval_", "download_", "forceHost_", "fourk_", "preferCodecType_", "voiceBalance_", "isNeedTrial_"});
             case 4:
                 return DEFAULT_INSTANCE;
             case 5:
@@ -428,52 +465,71 @@ public final class VideoVod extends GeneratedMessageLite<VideoVod, VideoVod.Buil
         }
     }
 
+    @Override // com.bapis.bilibili.playershared.e1
     public long getAid() {
         return this.aid_;
     }
 
+    @Override // com.bapis.bilibili.playershared.e1
     public long getCid() {
         return this.cid_;
     }
 
+    @Override // com.bapis.bilibili.playershared.e1
     public int getDownload() {
         return this.download_;
     }
 
+    @Override // com.bapis.bilibili.playershared.e1
     public int getFnval() {
         return this.fnval_;
     }
 
+    @Override // com.bapis.bilibili.playershared.e1
     public int getFnver() {
         return this.fnver_;
     }
 
+    @Override // com.bapis.bilibili.playershared.e1
     public int getForceHost() {
         return this.forceHost_;
     }
 
+    @Override // com.bapis.bilibili.playershared.e1
     public boolean getFourk() {
         return this.fourk_;
     }
 
-    public CodeType getPreferCodecType() {
-        CodeType forNumber = CodeType.forNumber(this.preferCodecType_);
-        return forNumber == null ? CodeType.UNRECOGNIZED : forNumber;
+    @Override // com.bapis.bilibili.playershared.e1
+    public boolean getIsNeedTrial() {
+        return this.isNeedTrial_;
     }
 
+    @Override // com.bapis.bilibili.playershared.e1
+    public CodeType getPreferCodecType() {
+        CodeType forNumber = CodeType.forNumber(this.preferCodecType_);
+        if (forNumber == null) {
+            return CodeType.UNRECOGNIZED;
+        }
+        return forNumber;
+    }
+
+    @Override // com.bapis.bilibili.playershared.e1
     public int getPreferCodecTypeValue() {
         return this.preferCodecType_;
     }
 
+    @Override // com.bapis.bilibili.playershared.e1
     public long getQn() {
         return this.qn_;
     }
 
+    @Override // com.bapis.bilibili.playershared.e1
     public long getVoiceBalance() {
         return this.voiceBalance_;
     }
 
-    public static Builder newBuilder(VideoVod videoVod) {
+    public static b newBuilder(VideoVod videoVod) {
         return DEFAULT_INSTANCE.createBuilder(videoVod);
     }
 
@@ -515,29 +571,5 @@ public final class VideoVod extends GeneratedMessageLite<VideoVod, VideoVod.Buil
 
     public static VideoVod parseFrom(CodedInputStream codedInputStream, ExtensionRegistryLite extensionRegistryLite) throws IOException {
         return (VideoVod) GeneratedMessageLite.parseFrom(DEFAULT_INSTANCE, codedInputStream, extensionRegistryLite);
-    }
-
-    /**
-     * setQn(long)
-     */
-    static void access$500(VideoVod videoVod, long qn) {
-    }
-
-    /**
-     * setFnval(int)
-     */
-    static void access$900(VideoVod videoVod, int fnval) {
-    }
-
-    /**
-     * setDownload(int)
-     */
-    static void access$1100(VideoVod videoVod, int download) {
-    }
-
-    /**
-     * setFourk(boolean)
-     */
-    static void access$1500(VideoVod videoVod, boolean fourk) {
     }
 }

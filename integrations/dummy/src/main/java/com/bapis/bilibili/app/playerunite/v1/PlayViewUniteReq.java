@@ -252,7 +252,7 @@ public final class PlayViewUniteReq extends GeneratedMessageLite<PlayViewUniteRe
             super(PlayViewUniteReq.DEFAULT_INSTANCE);
         }
 
-        public Builder setVod(VideoVod.Builder builder) {
+        public Builder setVod(VideoVod.b  builder) {
             copyOnWrite();
             ((PlayViewUniteReq) this.instance).setVod(builder.build());
             return this;
