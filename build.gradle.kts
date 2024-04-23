@@ -5,14 +5,13 @@ tasks.register<Delete>("clean") {
 
 tasks.register<Sync>("dist") {
     group = "build"
-    dependsOn(":clean")
     dependsOn(":integrations:app:assembleRelease")
     dependsOn(":patches:dist")
     from(project(":integrations:app").layout.buildDirectory.dir("outputs/apk/release")) {
-        include("*.apk")
+        include("*-$version.apk")
     }
     from(project(":patches").layout.buildDirectory.dir("libs")) {
-        include("*.jar")
+        include("*-$version.jar")
     }
     from(project(":patches").layout.projectDirectory) {
         include("patches.json")
