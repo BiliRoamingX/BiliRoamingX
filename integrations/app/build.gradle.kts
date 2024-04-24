@@ -14,7 +14,7 @@ android {
         multiDexEnabled = false
         val verName = project.version as String
         versionName = verName
-        versionCode = verName.split('.', limit = 3).let { (m, s, f) ->
+        versionCode = verName.split('.').let { (m, s, f) ->
             m.toInt() * 1000000 + s.toInt() * 1000 + f.toInt()
         }
     }
