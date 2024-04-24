@@ -6,6 +6,7 @@ import app.revanced.bilibili.api.BrotliInputStream
 import app.revanced.bilibili.patches.okhttp.hooks.*
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Logger
+import app.revanced.bilibili.utils.Utils
 import java.io.InputStream
 import java.util.zip.GZIPInputStream
 import java.util.zip.InflaterInputStream
@@ -40,6 +41,10 @@ object OkHttpPatch {
     @Keep
     @JvmStatic
     fun shouldHook(url: String, code: Int): Boolean {
+        if (Utils.getContext() == null) {
+            // too early, even application not attached, just let them go
+            return false
+        }
         Logger.debug { "OkHttpPatch.shouldHook, code: %d, url: %s".format(code, url) }
         return (code == 200 && Settings.DEBUG.boolean) || hooks.any { it.shouldHook(url, code) }
     }
@@ -83,6 +88,10 @@ object OkHttpPatch {
     @Keep
     @JvmStatic
     fun hookBefore(url: String, headers: Array<String>): Pair<String, Array<String>> {
+        if (Utils.getContext() == null) {
+            // too early, even application not attached, just let them go
+            return Pair.create(url, headers)
+        }
         return hooks.find { it.shouldHookBefore(url, headers) }
             ?.hookBefore(url, headers) ?: Pair.create(url, headers)
     }
