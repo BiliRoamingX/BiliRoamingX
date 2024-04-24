@@ -475,7 +475,7 @@ public class Reflex {
                             method.getParameterTypes(),
                             true)) {
                         // get accessible version of method
-                        if (bestMatch == null || MemberUtilsX.compareMethodFit(
+                        if (bestMatch == null || MemberUtils.compareMethodFit(
                                 method,
                                 bestMatch,
                                 k.parameters) < 0) {
@@ -647,7 +647,7 @@ public class Reflex {
                         constructor.getParameterTypes(),
                         true)) {
                     // get accessible version of method
-                    if (bestMatch == null || MemberUtilsX.compareConstructorFit(
+                    if (bestMatch == null || MemberUtils.compareConstructorFit(
                             constructor,
                             bestMatch,
                             k.parameters) < 0) {
