@@ -13,6 +13,9 @@ class CustomizeHomeFragment : BiliRoamingBaseSettingFragment("biliroaming_settin
         disablePreference(Settings.DRAWER.key, PrefsDisableReason.APP_VERSION) {
             Utils.isHd()
         }
+        disablePreference("customize_bottom", PrefsDisableReason.APP_VERSION) {
+            Utils.isHd()
+        }
     }
 
     override fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {

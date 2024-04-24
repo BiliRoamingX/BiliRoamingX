@@ -329,7 +329,7 @@ public class JSONPatch {
     private static void customizeHomeTab(MainResourceManager.TabData data) {
         bottomItems.clear();
         Set<String> items = Settings.SHOWING_BOTTOM_ITEMS.getStringSet();
-        data.bottom.removeIf(tab -> {
+        if (!Utils.isHd()) data.bottom.removeIf(tab -> {
             var uri = tab.uri;
             var id = tab.tabId;
             var showing = shouldShowing(items, id);

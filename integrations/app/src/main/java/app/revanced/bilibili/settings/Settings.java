@@ -276,20 +276,16 @@ public enum Settings {
 
     @SuppressWarnings("unchecked")
     private void load(SharedPreferences prefs) {
-        try {
-            switch (valueType) {
-                case BOOLEAN -> setValue(prefs.getBoolean(key, (Boolean) defValue));
-                case INTEGER -> setValue(prefs.getInt(key, (Integer) defValue));
-                case LONG -> setValue(prefs.getLong(key, (Long) defValue));
-                case FLOAT -> setValue(prefs.getFloat(key, (Float) defValue));
-                case STRING -> setValue(prefs.getString(key, (String) defValue));
-                case STRING_SET -> setValue(prefs.getStringSet(key, (Set<String>) defValue));
-                default -> throw new IllegalStateException(name());
-            }
-            Logger.debug(() -> String.format("Loaded setting '%s' with value %s", name(), value));
-        } catch (ClassCastException ex) {
-            Logger.error(ex, () -> "Failed to read value");
+        switch (valueType) {
+            case BOOLEAN -> setValue(prefs.getBoolean(key, (Boolean) defValue));
+            case INTEGER -> setValue(prefs.getInt(key, (Integer) defValue));
+            case LONG -> setValue(prefs.getLong(key, (Long) defValue));
+            case FLOAT -> setValue(prefs.getFloat(key, (Float) defValue));
+            case STRING -> setValue(prefs.getString(key, (String) defValue));
+            case STRING_SET -> setValue(prefs.getStringSet(key, (Set<String>) defValue));
+            default -> throw new IllegalStateException(name());
         }
+        Logger.debug(() -> String.format("Loaded setting '%s' with value %s", name(), value));
     }
 
     /**
