@@ -268,11 +268,6 @@ val blkvPrefs by lazy {
     Utils.blkvPrefsByName("instance.bili_preference", true)
 }
 
-val accountPrefs by lazy {
-    val accountDir = Utils.getContext().getDir("account", Context.MODE_PRIVATE)
-    Utils.blkvPrefsByFile(File(accountDir, "controller.blkv"), true)
-}
-
 private val vhPrefs: SharedPreferences by lazy {
     Utils.getContext().getSharedPreferences(Constants.PREFS_VH, Context.MODE_PRIVATE)
 }
