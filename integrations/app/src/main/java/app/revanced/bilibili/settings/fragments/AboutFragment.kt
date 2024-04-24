@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.Keep
 import androidx.preference.Preference
+import app.revanced.bilibili.integrations.BuildConfig
 import app.revanced.bilibili.patches.okhttp.hooks.Upgrade
 import app.revanced.bilibili.utils.*
 
@@ -17,7 +18,7 @@ class AboutFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_about"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         findPreference<Preference>("version")?.run {
-            summary = Utils.getString("biliroaming_version_summary_pattern", Constants.VERSION)
+            summary = Utils.getString("biliroaming_version_summary_pattern", BuildConfig.VERSION_NAME)
             onClick { onVersionClick(); true }
         }
         findPreference<Preference>("debug")?.summary =

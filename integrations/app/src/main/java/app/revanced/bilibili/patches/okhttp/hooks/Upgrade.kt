@@ -2,6 +2,7 @@ package app.revanced.bilibili.patches.okhttp.hooks
 
 import android.content.pm.PackageManager
 import android.os.Build
+import app.revanced.bilibili.integrations.BuildConfig
 import app.revanced.bilibili.patches.okhttp.ApiHook
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
@@ -62,8 +63,8 @@ object Upgrade : ApiHook() {
         val sn = context.packageManager.getApplicationInfo(
             context.packageName, PackageManager.GET_META_DATA
         ).metaData.getInt("BUILD_SN").toLong()
-        val patchVersion = Constants.VERSION
-        val patchVersionCode = Constants.VERSION_CODE
+        val patchVersion = BuildConfig.VERSION_NAME
+        val patchVersionCode = BuildConfig.VERSION_CODE
         val response = JSONArray(URL(UPGRADE_CHECK_API).readText())
         val mobiApp = Utils.getMobiApp()
         for (data in response) {

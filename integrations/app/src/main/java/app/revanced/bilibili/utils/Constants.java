@@ -1,10 +1,6 @@
 package app.revanced.bilibili.utils;
 
-import app.revanced.bilibili.integrations.BuildConfig;
-
 public class Constants {
-    public static final String VERSION = BuildConfig.VERSION_NAME;
-    public static final int VERSION_CODE = BuildConfig.VERSION_CODE;
     public static final String PINK_PACKAGE_NAME = "tv.danmaku.bili";
     public static final String BLUE_PACKAGE_NAME = "com.bilibili.app.blue";
     public static final String PLAY_PACKAGE_NAME = "com.bilibili.app.in";
