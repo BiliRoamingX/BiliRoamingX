@@ -113,12 +113,12 @@ object Upgrade : ApiHook() {
                         "policy_url" to "",
                         "ptime" to info.publishTime,
                     )
-                ).toJsonObject().also {
+                ).toJSONObject().also {
                     Logger.debug { "Upgrade check result: $it" }
                 }
             }
             break
         }
-        return mapOf("code" to -1, "message" to "未发现新版漫游X集成包！").toJsonObject()
+        return mapOf("code" to -1, "message" to "未发现新版漫游X集成包！").toJSONObject()
     }
 }

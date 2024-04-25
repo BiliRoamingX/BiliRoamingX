@@ -87,7 +87,7 @@ class RequestBody(val contentType: ContentType, val encoding: Encoding, val body
 
         @JvmStatic
         inline fun json(params: Map<String, Any>, encoding: Encoding = Encoding.none) =
-            json(params.toJsonObject().toString(), encoding)
+            json(params.toJSONObject().toString(), encoding)
 
         @JvmStatic
         @JvmName("create")

@@ -181,7 +181,7 @@
     <string name="biliroaming_custom_upos_title">UPOS 服务器</string>
     <string name="biliroaming_custom_upos_summary">自定义解锁番剧的 UPOS 服务器，可解决黑屏与无限加载</string>
     <string name="biliroaming_debug_title">调试模式</string>
-    <string name="biliroaming_debug_summary">开启后，调试日志信息将会保存至%s，用于排查问题，会影响APP性能</string>
+    <string name="biliroaming_debug_summary">用于排查问题，会影响APP性能</string>
     <string name="biliroaming_about_title">关于</string>
     <string name="biliroaming_project_title">项目地址</string>
     <string name="biliroaming_tg_title">TG更新频道</string>
@@ -389,4 +389,7 @@
     <string name="biliroaming_no_colorful_danmaku_title">去掉会员彩色弹幕多彩效果</string>
     <string name="biliroaming_route_title">应用内打开链接</string>
     <string name="biliroaming_route_hint">bilibili://video/928861104</string>
+    <string name="biliroaming_save_log_title">保存日志</string>
+    <string name="biliroaming_save_log_summary">日志文件将保存至 %s</string>
+    <string name="biliroaming_write_storage_failed">获取存储权限失败，请前往设置开启存储权限</string>
 </resources>

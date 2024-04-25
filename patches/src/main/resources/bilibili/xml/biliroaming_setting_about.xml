@@ -7,21 +7,24 @@
             android:title="@string/biliroaming_version_title" />
         <androidx.preference.Preference
             android:key="feedback"
-            android:title="@string/biliroaming_feedback_title"
-            android:summary="@string/biliroaming_feedback_summary" />
+            android:summary="@string/biliroaming_feedback_summary"
+            android:title="@string/biliroaming_feedback_title" />
         <androidx.preference.Preference
             android:key="project_url"
-            android:title="@string/biliroaming_project_title"
-            android:summary="@string/biliroaming_project_url" />
+            android:summary="@string/biliroaming_project_url"
+            android:title="@string/biliroaming_project_title" />
         <androidx.preference.Preference
             android:key="tg_link"
-            android:title="@string/biliroaming_tg_title"
-            android:summary="@string/biliroaming_tg_url" />
+            android:summary="@string/biliroaming_tg_url"
+            android:title="@string/biliroaming_tg_title" />
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory>
         <androidx.preference.SwitchPreferenceCompat
             android:key="debug"
             android:title="@string/biliroaming_debug_title" />
+        <androidx.preference.Preference
+            android:key="save_log"
+            android:title="@string/biliroaming_save_log_title" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

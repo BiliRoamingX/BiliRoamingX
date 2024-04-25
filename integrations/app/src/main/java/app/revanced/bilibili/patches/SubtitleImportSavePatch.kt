@@ -120,7 +120,7 @@ object SubtitleImportSavePatch {
                     if (granted) {
                         Utils.async { saveSubtitles(dmViewReply) }
                     } else if (shouldExplain) {
-                        Toasts.showShort("获取存储权限失败，请前往设置开启存储权限")
+                        Toasts.showShortWithId("biliroaming_write_storage_failed")
                     }
                 }
             }

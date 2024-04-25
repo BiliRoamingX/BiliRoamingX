@@ -8,10 +8,6 @@ import org.json.JSONObject
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
-inline fun String?.toJSONObject() = JSONObject(orEmpty())
-
-inline fun Map<String, Any>.toJsonObject() = JSONObject(this)
-
 @Suppress("UNCHECKED_CAST")
 fun <T> JSONArray.asSequence() = (0 until length()).asSequence().map { get(it) as T }
 
@@ -34,7 +30,7 @@ operator fun JSONArray.iterator() = object : MutableIterator<JSONObject> {
 
 inline fun JSONArray?.orEmpty() = this ?: JSONArray()
 
-inline fun Map<String, Any>.toJson() = JSONObject(this).toString()
+inline fun String?.toJSONObject() = JSONObject(orEmpty())
 
 inline fun Map<String, Any>.toJSONObject() = JSONObject(this)
 

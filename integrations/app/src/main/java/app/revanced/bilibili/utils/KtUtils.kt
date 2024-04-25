@@ -245,6 +245,14 @@ val logFile by lazy { File(Utils.getContext().externalCacheDir, "log.txt") }
 
 val oldLogFile by lazy { File(Utils.getContext().externalCacheDir, "old_log.txt") }
 
+val pubLogFile by lazy {
+    val pubDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+    val context = Utils.getContext()
+    val appName = context.applicationInfo.let { context.getString(it.labelRes) }
+    val logDir = File(pubDir, "bilibili/log")/*.apply { mkdirs() }*/ // maybe don't have permission
+    File(logDir, "log_$appName.zip")
+}
+
 fun checkErrorToast(json: JSONObject, isCustomServer: Boolean = false) {
     if (json.optInt("code", -1) != 0) {
         Toasts.showShort(
@@ -645,7 +653,7 @@ fun saveImage(url: String) {
             if (granted) {
                 Utils.async { save(url) }
             } else if (shouldExplain) {
-                Toasts.showShort("获取存储权限失败，请前往设置开启存储权限")
+                Toasts.showShortWithId("biliroaming_write_storage_failed")
             }
         }
     }
