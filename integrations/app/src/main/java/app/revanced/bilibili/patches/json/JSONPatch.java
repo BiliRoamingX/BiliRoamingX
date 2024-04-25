@@ -465,10 +465,10 @@ public class JSONPatch {
                 String param = tab.param;
                 if (TextUtils.isEmpty(param))
                     return false;
-                if ("contribute".equals(param) && Settings.ADD_ARTICLE_TAB.getBoolean()) {
+                var subTabs = tab.items;
+                if ("contribute".equals(param) && subTabs != null && !subTabs.isEmpty() && Settings.ADD_ARTICLE_TAB.getBoolean()) {
                     var hasArticle = false;
                     var opusIndex = -1;
-                    var subTabs = tab.items;
                     for (int i = 0; i < subTabs.size(); i++) {
                         var subParam = subTabs.get(i).param;
                         if ("article".equals(subParam)) {
