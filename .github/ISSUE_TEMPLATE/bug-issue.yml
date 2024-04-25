@@ -64,7 +64,7 @@ body:
   - type: textarea
     attributes:
       label: 日志
-      description: 请开启哔哩漫游X设置里的调试模式，并用文件管理器（例如MT管理器）将日志上传到此。
+      description: 请开启哔哩漫游X设置关于页面里的调试模式，若能复现则复现一遍，点击保存日志选项将日志上传到此。
       placeholder: 点击文本框下面小长条可以上传文件
     validations:
       required: true
