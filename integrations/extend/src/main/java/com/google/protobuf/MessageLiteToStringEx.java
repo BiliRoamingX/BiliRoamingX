@@ -37,8 +37,10 @@ import com.bapis.bilibili.app.distribution.setting.experimental.MultipleTusConfi
 import com.bapis.bilibili.app.distribution.setting.night.NightSettingsConfig;
 import com.bapis.bilibili.app.distribution.setting.other.OtherSettingsConfig;
 import com.bapis.bilibili.app.distribution.setting.pegasus.PegasusDeviceConfig;
+import com.bapis.bilibili.app.distribution.setting.pegasus.PegasusDeviceWithoutFplocalConfig;
 import com.bapis.bilibili.app.distribution.setting.pegasus.PegasusMidConfig;
 import com.bapis.bilibili.app.distribution.setting.play.CloudPlayConfig;
+import com.bapis.bilibili.app.distribution.setting.play.MidPlayConfig;
 import com.bapis.bilibili.app.distribution.setting.play.PlayConfig;
 import com.bapis.bilibili.app.distribution.setting.play.SpecificPlayConfig;
 import com.bapis.bilibili.app.distribution.setting.privacy.MidPrivacySettingsConfig;
@@ -93,6 +95,8 @@ final class MessageLiteToStringEx {
             typeMap.put("type.googleapis.com/bilibili.app.distribution.pegasus.v1.PegasusMidConfig", PegasusMidConfig.class);
             typeMap.put("type.googleapis.com/bilibili.app.distribution.story.v1.MidStoryConfig", MidStoryConfig.class);
             typeMap.put("type.googleapis.com/bilibili.app.distribution.story.v1.StoryConfig", StoryConfig.class);
+            typeMap.put("type.googleapis.com/bilibili.app.distribution.pegasus.v1.PegasusDeviceWithoutFplocalConfig", PegasusDeviceWithoutFplocalConfig.class);
+            typeMap.put("type.googleapis.com/bilibili.app.distribution.play.v1.MidPlayConfig", MidPlayConfig.class);
         } catch (Throwable ignored) {
         }
     }
