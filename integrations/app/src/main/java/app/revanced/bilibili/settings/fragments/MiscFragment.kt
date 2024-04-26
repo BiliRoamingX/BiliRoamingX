@@ -12,6 +12,8 @@ import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.ScrollView
 import androidx.preference.Preference
 import app.revanced.bilibili.content.BiliDocumentsProvider
 import app.revanced.bilibili.patches.SplashPatch
@@ -119,10 +121,16 @@ class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") 
     private var skinInput: EditText? = null
     private fun onSkinClick() {
         val view = EditText(context)
+        val layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+        val wrapper = ScrollView(context)
+        wrapper.addView(view, layoutParams)
         skinInput = view
         view.setText(Settings.SKIN_JSON.string)
         AlertDialog.Builder(context)
-            .setView(view)
+            .setView(wrapper)
             .setTitle(Utils.getString("biliroaming_skin_json_pref_title"))
             .setPositiveButton(android.R.string.ok, null)
             .setNegativeButton(Utils.getString("biliroaming_skin_get"), null)
