@@ -389,7 +389,6 @@
     <string name="biliroaming_no_colorful_danmaku_title">去掉会员彩色弹幕多彩效果</string>
     <string name="biliroaming_route_title">应用内打开链接</string>
     <string name="biliroaming_route_hint">bilibili://video/928861104</string>
-    <string name="biliroaming_save_log_title">保存日志</string>
-    <string name="biliroaming_save_log_summary">日志文件将保存至 %s</string>
+    <string name="biliroaming_share_log_title">分享日志</string>
     <string name="biliroaming_write_storage_failed">获取存储权限失败，请前往设置开启存储权限</string>
 </resources>

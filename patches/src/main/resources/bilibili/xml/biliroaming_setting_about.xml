@@ -24,7 +24,7 @@
             android:key="debug"
             android:title="@string/biliroaming_debug_title" />
         <androidx.preference.Preference
-            android:key="save_log"
-            android:title="@string/biliroaming_save_log_title" />
+            android:key="share_log"
+            android:title="@string/biliroaming_share_log_title" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>
