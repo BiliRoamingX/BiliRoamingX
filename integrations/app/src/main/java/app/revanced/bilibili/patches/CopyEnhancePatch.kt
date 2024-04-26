@@ -161,6 +161,20 @@ object CopyEnhancePatch {
 
     @Keep
     @JvmStatic
+    fun onCommentMenuItemClick(self: Any, action: Enum<*>, originMethod: String): Boolean {
+        if (!Settings.COMMENT_COPY_ENHANCE.boolean) return false
+        if (action.name != "COPY") return false
+        val context = self.getFirstFieldByExactType<Context>()
+        val toCopyText = self.getFirstFieldByExactType<String?>()
+            .orEmpty().ifEmpty { return false }
+        showCopyDialog(context, toCopyText) {
+            self.callMethod(originMethod, action)
+        }
+        return true
+    }
+
+    @Keep
+    @JvmStatic
     fun onConversationCopy(
         activity: Activity,
         message: BaseTypedMessage<*>,

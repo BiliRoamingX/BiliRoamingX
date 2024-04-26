@@ -25,7 +25,8 @@ object CopyEnhancePatch : MultiMethodBytecodePatch(
         CommentCopyOldFingerprint,
         CommentCopyNewFingerprint,
         Comment3CopyFingerprint,
-        ConversationCopyFingerprint
+        Comment3DialogCopyFingerprint,
+        ConversationCopyFingerprint,
     ),
     multiFingerprints = setOf(DescCopyFingerprint)
 ) {
@@ -45,7 +46,8 @@ object CopyEnhancePatch : MultiMethodBytecodePatch(
             """.trimIndent()
             )
         }
-        val onLongClickOriginListenerType = "Lapp/revanced/bilibili/widget/OnLongClickOriginListener;"
+        val onLongClickOriginListenerType =
+            "Lapp/revanced/bilibili/widget/OnLongClickOriginListener;"
         context.classes.filter {
             it.type.startsWith("Lcom/bilibili/bplus/followinglist/module/item")
                     && it.interfaces.contains("Landroid/view/View\$OnLongClickListener;")
@@ -108,5 +110,22 @@ object CopyEnhancePatch : MultiMethodBytecodePatch(
             nop
         """.trimIndent()
         ) ?: throw ConversationCopyFingerprint.exception
+        Comment3DialogCopyFingerprint.result?.run {
+            mutableMethod.cloneMutable(registerCount = 3, clearImplementation = true).apply {
+                mutableMethod.name += "_Origin"
+                addInstructionsWithLabels(
+                    0, """
+                    const-string v0, "${mutableMethod.name}"
+                    invoke-static {p0, p1, v0}, Lapp/revanced/bilibili/patches/CopyEnhancePatch;->onCommentMenuItemClick(Ljava/lang/Object;Ljava/lang/Enum;Ljava/lang/String;)Z
+                    move-result v0
+                    if-eqz v0, :call_origin_method
+                    return-void
+                    :call_origin_method
+                    invoke-virtual {p0, p1}, $mutableMethod
+                    return-void
+                """.trimIndent()
+                )
+            }.also { mutableClass.methods.add(it) }
+        }
     }
 }
