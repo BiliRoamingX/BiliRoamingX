@@ -1,6 +1,5 @@
 package app.revanced.bilibili.patches.main;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -56,7 +55,6 @@ public class ApplicationDelegate {
     private static final Point screenSize = new Point();
 
     @Keep
-    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     public static void onCreate(Application app) {
         app.registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
         app.registerComponentCallbacks(new ComponentCallbacks());

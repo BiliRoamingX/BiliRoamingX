@@ -6,6 +6,7 @@ import app.revanced.patcher.extensions.InstructionExtensions.addInstructionsWith
 import app.revanced.patcher.patch.BytecodePatch
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
+import app.revanced.patches.bilibili.utils.cloneMutable
 import app.revanced.patches.bilibili.video.quality.fingerprints.PlayerSettingHelperFingerprint
 import app.revanced.util.exception
 import com.android.tools.smali.dexlib2.iface.Method
@@ -34,13 +35,17 @@ object VideoQualityPatch : BytecodePatch(setOf(PlayerSettingHelperFingerprint)) 
             nop
         """.trimIndent()
         ) ?: throw PlayerSettingHelperFingerprint.exception
-        context.findClass("Lapp/revanced/bilibili/patches/VideoQualityPatch;")!!
-            .mutableClass.methods.first { it.name == "defaultQn" }.addInstructions(
-                0, """
-                invoke-static {}, $defaultQnMethod
-                move-result v0
-                return v0
-            """.trimIndent()
-            )
+        context.findClass("Lapp/revanced/bilibili/patches/VideoQualityPatch;")!!.mutableClass.run {
+            methods.first { it.name == "defaultQn" }.also { methods.remove(it) }
+                .cloneMutable(registerCount = 1, clearImplementation = true).apply {
+                    addInstructions(
+                        """
+                        invoke-static {}, $defaultQnMethod
+                        move-result v0
+                        return v0
+                    """.trimIndent()
+                    )
+                }.also { methods.add(it) }
+        }
     }
 }
