@@ -11,9 +11,10 @@ import app.revanced.util.exception
 @Patch(
     name = "Forbid live room slide left",
     description = "禁止直播间向左滑动弹出抽屉",
-    compatiblePackages = [CompatiblePackage(name = "tv.danmaku.bili")]
+    compatiblePackages = [CompatiblePackage(name = "tv.danmaku.bili"), CompatiblePackage(name = "com.bilibili.app.in")]
 )
-object ForbidLiveRoomSlideLeftPatch : BytecodePatch(setOf(LiveRoomTouchDispatchViewModelFingerprint)) {
+object ForbidLiveRoomSlideLeftPatch :
+    BytecodePatch(setOf(LiveRoomTouchDispatchViewModelFingerprint)) {
     override fun execute(context: BytecodeContext) {
         LiveRoomTouchDispatchViewModelFingerprint.result?.mutableClass?.methods?.find {
             it.parameterTypes.isEmpty() && it.returnType == "V" && it.name != "<clinit>" && it.name != "<init>"
