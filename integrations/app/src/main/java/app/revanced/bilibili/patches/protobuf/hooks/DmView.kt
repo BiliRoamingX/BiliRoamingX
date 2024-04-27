@@ -127,13 +127,14 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
         val subList = mutableListOf<SubtitleItem>()
         val lanCodes = asSequence<JSONObject>().map { it.optString("key") }.toList()
         // prefer select furry cn subtitle if official hans subtitle not exist,
-        // then consider kktv, iqiyi, mewatch, catchplay
+        // then consider kktv, iqiyi, mewatch, catchplay, friday
         var replaceable = true
         var hasCnFurry = false
         var hasCnKKTV = false
         var hasCnIqiyi = false
         var hasCnMeWatch = false
         var hasCnCatchPlay = false
+        var hasCnFriday = false
         for (lanCode in lanCodes) {
             if (lanCode == "zh-Hans")
                 replaceable = false
@@ -147,6 +148,8 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
                 hasCnMeWatch = true
             if (lanCode == "cn.catchplay")
                 hasCnCatchPlay = true
+            if (lanCode == "cn.friday")
+                hasCnFriday = true
         }
         val replaceToFurry = replaceable && hasCnFurry
         val replaceToKKTV = replaceable && !replaceToFurry && hasCnKKTV
@@ -155,6 +158,8 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
             replaceable && !replaceToFurry && !replaceToKKTV && !replaceToIqiyi && hasCnMeWatch
         val replaceToCatchPlay =
             replaceable && !replaceToFurry && !replaceToKKTV && !replaceToIqiyi && !replaceToMeWatch && hasCnCatchPlay
+        val replaceToFriday =
+            replaceable && !replaceToFurry && !replaceToKKTV && !replaceToIqiyi && !replaceToMeWatch && !replaceToCatchPlay && hasCnFriday
         for (subtitle in this) {
             SubtitleItem().apply {
                 id = subtitle.optLong("id")
@@ -166,6 +171,7 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
                         || (it == "cn.iqiyi" && replaceToIqiyi)
                         || (it == "cn.mewatch" && replaceToMeWatch)
                         || (it == "cn.catchplay" && replaceToCatchPlay)
+                        || (it == "cn.friday" && replaceToFriday)
                     ) "zh-Hans" else it
                 }
                 lanDoc = subtitle.optString("title").replace("[非官方]", "")
