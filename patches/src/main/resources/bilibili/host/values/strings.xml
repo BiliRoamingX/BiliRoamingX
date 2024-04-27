@@ -313,6 +313,7 @@
     <string name="biliroaming_block_popular_top_entrance_title">移除顶部分类列表</string>
     <string name="biliroaming_block_popular_topic_list_title">移除热门话题列表</string>
     <string name="biliroaming_block_popular_rcmd_up_title">过滤推荐的UP主</string>
+    <string name="biliroaming_block_popular_live_title">过滤推荐的直播</string>
     <string name="biliroaming_filter_popular_by_keyword_title">按关键词过滤</string>
     <string name="biliroaming_filter_popular_by_keyword_summary">复用首页推荐关键词过滤</string>
     <string name="biliroaming_save_success_and_refresh_popular">保存成功，刷新热门生效</string>

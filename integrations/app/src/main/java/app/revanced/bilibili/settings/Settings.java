@@ -88,6 +88,7 @@ public enum Settings {
     BLOCK_POPULAR_TOP_ENTRANCE("block_popular_top_entrance", BOOLEAN, FALSE),
     BLOCK_POPULAR_TOPIC_LIST("block_popular_topic_list", BOOLEAN, FALSE),
     BLOCK_POPULAR_RCMD_UP("block_popular_rcmd_up", BOOLEAN, FALSE),
+    BLOCK_POPULAR_LIVE("block_popular_live", BOOLEAN, FALSE),
 
     // 动态页
     DYNAMIC_PREFER_VIDEO_TAB("prefer_video_tab", BOOLEAN, FALSE),

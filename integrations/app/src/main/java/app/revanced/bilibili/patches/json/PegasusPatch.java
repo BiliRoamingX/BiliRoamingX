@@ -1083,6 +1083,7 @@ public class PegasusPatch {
         boolean blockTopEntrance = Settings.BLOCK_POPULAR_TOP_ENTRANCE.getBoolean();
         boolean blockTopicList = Settings.BLOCK_POPULAR_TOPIC_LIST.getBoolean();
         boolean blockRcmdUp = Settings.BLOCK_POPULAR_RCMD_UP.getBoolean();
+        boolean blockLive = Settings.BLOCK_POPULAR_LIVE.getBoolean();
         boolean filterApplyToPopular = Settings.HOME_FILTER_APPLY_TO_POPULAR.getBoolean();
         long playCountLimit = Settings.LOW_PLAY_COUNT_LIMIT.getLong();
         var shortDurationLimit = Settings.SHORT_DURATION_LIMIT.getInt();
@@ -1144,6 +1145,10 @@ public class PegasusPatch {
                 }
             }
             if (blockRcmdUp && card.hasRcmdOneItem() && card.getRcmdOneItem().getBase().getCardGoto().startsWith("up_rcmd")) {
+                idxList.add(i);
+                continue;
+            }
+            if (blockLive && card.hasSmallCoverV5() && card.getSmallCoverV5().getBase().getCardGoto().startsWith("live")) {
                 idxList.add(i);
                 continue;
             }
