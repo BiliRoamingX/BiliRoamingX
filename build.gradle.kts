@@ -10,6 +10,9 @@ tasks.register<Sync>("dist") {
     from(project(":integrations:app").layout.buildDirectory.dir("outputs/apk/release")) {
         include("*-$version.apk")
     }
+    from(project(":integrations:app").layout.buildDirectory.dir("outputs/mapping/release")) {
+        include("mapping.txt")
+    }
     from(project(":patches").layout.buildDirectory.dir("libs")) {
         include("*-$version.jar")
     }
