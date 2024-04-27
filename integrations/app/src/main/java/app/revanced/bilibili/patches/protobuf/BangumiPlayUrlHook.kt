@@ -370,6 +370,10 @@ object BangumiPlayUrlHook {
         supplement: PlayViewReply
     ) = response.apply {
         this.supplement = newAny(PGC_ANY_MODEL_TYPE_URL, purifyViewInfo(supplement))
+        if (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean) {
+            if (viewInfo.promptBar.buttonList.any { it.actionType == ButtonAction.VIP })
+                viewInfo.clearPromptBar()
+        }
     }
 
     private fun needProxy(response: PlayViewReply): Boolean {
