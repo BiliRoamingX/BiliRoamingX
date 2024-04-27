@@ -63,6 +63,10 @@ cd BiliRoamingX
   2. 从 [releases](https://github.com/BiliRoamingX/BiliRoamingX/releases/latest) 下载 `integrations.apk` 和 `patches.jar`
   3. 执行终端命令 `java -jar revanced-cli.jar patch --merge integrations.apk --patch-bundle patches.jar --signing-levels 2,3 bilibili.apk`
 
+## ⭐ Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=BiliRoamingX/BiliRoamingX&type=Timeline)](https://star-history.com/#BiliRoamingX/BiliRoamingX&Timeline)
+
 ## 📃 Licence
 
 [![GitHub](https://img.shields.io/github/license/BiliRoamingX/BiliRoamingX?style=for-the-badge)](https://github.com/BiliRoamingX/BiliRoamingX/blob/main/LICENSE)
