@@ -397,7 +397,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
     }
 
     protected fun saveButton() = tintView<TextView>().apply {
-        setBackgroundColor(Utils.getColor(context, "Wh0"))
+        setBackgroundResource(Utils.getResId("Wh0", "color"))
         setRippleForeground()
         text = string("biliroaming_save")
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
