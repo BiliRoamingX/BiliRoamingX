@@ -5,13 +5,19 @@ import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.api.BiliRoamingApi.getSpace
 import app.revanced.bilibili.patches.okhttp.ApiHook
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.*
+import app.revanced.bilibili.utils.iterator
+import app.revanced.bilibili.utils.orEmpty
+import app.revanced.bilibili.utils.runCatchingOrNull
+import app.revanced.bilibili.utils.toJSONObject
 import org.json.JSONArray
 import org.json.JSONObject
 
 object Space : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
-        return (Settings.FIX_SPACE.boolean || Settings.SKIN.boolean) && url.contains("/x/v2/space?") && code.isOk
+        return (Settings.FIX_SPACE.boolean
+                || Settings.SKIN.boolean
+                || Settings.IGNORE_BLACKLIST.boolean
+                ) && url.contains("/x/v2/space?") && code.isOk
     }
 
     override fun hook(url: String, code: Int, request: String, response: String): String {
@@ -27,6 +33,10 @@ object Space : ApiHook() {
                 ?: return response
             data.writeSpaceImages(skinJson, spaceBg)
             return respJson.toString()
+        } else if (respOk && Settings.IGNORE_BLACKLIST.boolean) {
+            return response.toJSONObject().apply {
+                optJSONObject("data")?.remove("hidden_attribute")
+            }.toString()
         }
         if (!respOk && Settings.FIX_SPACE.boolean) {
             val vmid = Uri.parse(url).getQueryParameter("vmid")

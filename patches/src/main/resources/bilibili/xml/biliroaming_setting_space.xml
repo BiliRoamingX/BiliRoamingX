@@ -5,12 +5,15 @@
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="fix_space"
-            android:title="@string/biliroaming_fix_space_title"
-            android:summary="@string/biliroaming_fix_space_summary" />
+            android:summary="@string/biliroaming_fix_space_summary"
+            android:title="@string/biliroaming_fix_space_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="add_article_tab"
-            android:title="@string/biliroaming_add_article_tab_title"
-            android:summary="@string/biliroaming_add_article_tab_summary" />
+            android:summary="@string/biliroaming_add_article_tab_summary"
+            android:title="@string/biliroaming_add_article_tab_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="ignore_blacklist"
+            android:title="@string/biliroaming_ignore_blacklist_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.CustomizeSpaceFragment"
             android:title="@string/biliroaming_customize_space_title" />

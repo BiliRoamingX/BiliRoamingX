@@ -167,6 +167,7 @@ public enum Settings {
     FIX_SPACE("fix_space", BOOLEAN, TRUE),
     CUSTOMIZE_SPACE("customize_space", STRING_SET, Collections.EMPTY_SET),
     ADD_ARTICLE_TAB("add_article_tab", BOOLEAN, FALSE),
+    IGNORE_BLACKLIST("ignore_blacklist", BOOLEAN, FALSE),
 
     // 搜索页
     PURIFY_SEARCH("purify_search", BOOLEAN, FALSE),

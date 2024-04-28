@@ -393,4 +393,5 @@
     <string name="biliroaming_share_log_title">分享日志</string>
     <string name="biliroaming_write_storage_failed">获取存储权限失败，请前往设置开启存储权限</string>
     <string name="biliroaming_official_supported">官方已支持此功能</string>
+    <string name="biliroaming_ignore_blacklist_title">允许查看拉黑你的UP主空间</string>
 </resources>
