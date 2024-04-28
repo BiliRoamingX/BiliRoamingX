@@ -162,7 +162,7 @@ public final class Int64Value extends GeneratedMessageLite<Int64Value, Int64Valu
         GeneratedMessageLite.registerDefaultInstance(Int64Value.class, int64Value);
     }
 
-    private Int64Value() {
+    public Int64Value() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */

@@ -66,7 +66,7 @@ import java.util.TreeMap;
 /**
  * Helps generate {@link String} representations of {@link MessageLite} protos.
  */
-final class MessageLiteToStringEx {
+public final class MessageLiteToStringEx {
 
     private static final String LIST_SUFFIX = "List";
     private static final String BUILDER_LIST_SUFFIX = "OrBuilderList";
@@ -74,7 +74,7 @@ final class MessageLiteToStringEx {
     private static final String BYTES_SUFFIX = "Bytes";
     private static final char[] INDENT_BUFFER = new char[80];
 
-    private static final Map<String, Class<? extends GeneratedMessageLite<?, ?>>> typeMap = new HashMap<>();
+    public static final Map<String, Class<? extends MessageLite>> typeMap = new HashMap<>();
 
     static {
         Arrays.fill(INDENT_BUFFER, ' ');
@@ -205,7 +205,7 @@ final class MessageLiteToStringEx {
                 continue;
             }
             if (suffix.endsWith(BYTES_SUFFIX)
-                    && getters.containsKey("get" + suffix.substring(0, suffix.length() - "Bytes".length()))) {
+                    && getters.containsKey("get" + suffix.substring(0, suffix.length() - BYTES_SUFFIX.length()))) {
                 // Heuristic to skip bytes based accessors for string fields.
                 continue;
             }
@@ -284,15 +284,13 @@ final class MessageLiteToStringEx {
      */
     @SuppressWarnings("unchecked")
     static void printField(StringBuilder buffer, int indent, String name, Object object) {
-        if (object instanceof List<?>) {
-            List<?> list = (List<?>) object;
+        if (object instanceof List<?> list) {
             for (Object entry : list) {
                 printField(buffer, indent, name, entry);
             }
             return;
         }
-        if (object instanceof Map<?, ?>) {
-            Map<?, ?> map = (Map<?, ?>) object;
+        if (object instanceof Map<?, ?> map) {
             Map<?, ?> sortedMap = map;
             if (!map.isEmpty() && !(map instanceof SortedMap)) {
                 boolean sortable = false;
@@ -323,13 +321,11 @@ final class MessageLiteToStringEx {
         indent(indent, buffer);
         buffer.append(prettyName);
 
-        if (object instanceof String) {
-            String string = (String) object;
+        if (object instanceof String string) {
             if ((string.startsWith("bilibili://") || string.startsWith("http")) && string.length() > 1024)
                 string = string.substring(0, 1024);
             buffer.append(": \"").append(string).append('"');
-        } else if (object instanceof ByteString) {
-            ByteString bytes = (ByteString) object;
+        } else if (object instanceof ByteString bytes) {
             buffer.append(": \"");
             if (bytes.isValidUtf8()) {
                 buffer.append(bytes.toStringUtf8());
@@ -337,39 +333,34 @@ final class MessageLiteToStringEx {
                 buffer.append(TextFormatEscaper.escapeBytes(bytes));
             }
             buffer.append('"');
-        } else if (object instanceof GeneratedMessageLite) {
+        } else if (object instanceof MessageLite realObject) {
             buffer.append(" {");
-            GeneratedMessageLite<?, ?> realObject = (GeneratedMessageLite<?, ?>) object;
-            if (object instanceof Any) {
-                Any any = (Any) object;
+            if (object instanceof Any any) {
                 String typeUrl = any.getTypeUrl();
                 String type = typeUrl.substring(typeUrl.indexOf('/') + 1);
 
-                Class<? extends GeneratedMessageLite<?, ?>> realClass = null;
+                Class<? extends MessageLite> realClass = null;
                 try {
                     String guessType = "com.bapis." + type;
-                    realClass = (Class<GeneratedMessageLite<?, ?>>) Class.forName(guessType);
+                    realClass = (Class<MessageLite>) Class.forName(guessType);
                 } catch (ClassNotFoundException ignored) {
                 }
                 if (realClass == null)
                     realClass = typeMap.get(typeUrl);
-                if (realClass != null) {
-                    try {
-                        Method parseFromMethod = realClass.getDeclaredMethod("parseFrom", ByteString.class);
-                        parseFromMethod.setAccessible(true);
-                        realObject = (GeneratedMessageLite<?, ?>) parseFromMethod.invoke(null, any.getValue());
-                    } catch (NoSuchMethodException | IllegalAccessException |
-                             InvocationTargetException ignored) {
-                    }
+                if (realClass != null) try {
+                    Method parseFromMethod = realClass.getDeclaredMethod("parseFrom", ByteString.class);
+                    parseFromMethod.setAccessible(true);
+                    realObject = (MessageLite) parseFromMethod.invoke(null, any.getValue());
+                } catch (NoSuchMethodException | IllegalAccessException |
+                         InvocationTargetException ignored) {
                 }
             }
             reflectivePrintWithIndent(realObject, buffer, indent + 2);
             buffer.append('\n');
             indent(indent, buffer);
             buffer.append('}');
-        } else if (object instanceof Map.Entry<?, ?>) {
+        } else if (object instanceof Map.Entry<?, ?> entry) {
             buffer.append(" {");
-            Map.Entry<?, ?> entry = (Map.Entry<?, ?>) object;
             printField(buffer, indent + 2, "key", entry.getKey());
             printField(buffer, indent + 2, "value", entry.getValue());
             buffer.append('\n');

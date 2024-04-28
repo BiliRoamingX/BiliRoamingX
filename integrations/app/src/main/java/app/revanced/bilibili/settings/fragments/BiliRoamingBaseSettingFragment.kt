@@ -18,7 +18,7 @@ import app.revanced.bilibili.widget.HdBaseToolbar
 import com.bilibili.lib.ui.BasePreferenceFragment
 import java.lang.reflect.Field
 
-enum class PrefsDisableReason { APP_VERSION, OS_VERSION, NEW_PLAYER }
+enum class PrefsDisableReason { APP_VERSION, OS_VERSION, NEW_PLAYER, OFFICIAL_SUPPORTED }
 
 abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) :
     BasePreferenceFragment(), (Preference) -> Boolean {
@@ -165,6 +165,10 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
 
             PrefsDisableReason.NEW_PLAYER -> {
                 { Utils.getString("biliroaming_only_support_new_player") }
+            }
+
+            PrefsDisableReason.OFFICIAL_SUPPORTED -> {
+                { Utils.getString("biliroaming_official_supported") }
             }
         }
         disablePreference(key, reason to condition)

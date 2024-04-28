@@ -26,6 +26,8 @@ public class ConfigPatch {
             return Boolean.TRUE;
         else if ("ff_channel_redirect_to_search".equals(key) && Settings.ADD_CHANNEL.getBoolean())
             return Boolean.FALSE;
+        else if ("ff_pegasus_setting_auto_refresh_display".equals(key))
+            return Boolean.TRUE;
         return origin;
     }
 

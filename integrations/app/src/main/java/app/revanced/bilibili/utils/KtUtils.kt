@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.media.MediaScannerConnection
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.*
 import android.util.Size
 import android.util.SizeF
@@ -32,9 +33,7 @@ import app.revanced.bilibili.settings.Settings
 import com.bapis.bilibili.metadata.Metadata
 import com.bapis.bilibili.metadata.device.Device
 import com.bilibili.lib.moss.api.BusinessException
-import com.google.protobuf.GeneratedMessageLite
-import com.google.protobuf.GeneratedMessageLiteEx
-import com.google.protobuf.UnknownFieldSetLite
+import com.google.protobuf.*
 import org.json.JSONObject
 import java.io.File
 import java.io.PrintWriter
@@ -48,8 +47,10 @@ import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
+import kotlin.Any
 import kotlin.Boolean
 import kotlin.math.roundToInt
+import com.google.protobuf.Any as ProtoBufAny
 
 @get:JvmName("sp2px")
 val Int.sp: Int
@@ -315,8 +316,8 @@ fun setClipboardContent(label: String = "", content: CharSequence) {
     clipboardManager.setPrimaryClip(clipData)
 }
 
-fun newAny(typeUrl: String, message: GeneratedMessageLite<*, *>): com.google.protobuf.Any =
-    com.google.protobuf.Any.newBuilder()
+fun newAny(typeUrl: String, message: MessageLite): ProtoBufAny =
+    ProtoBufAny.newBuilder()
         .setTypeUrl(typeUrl)
         .setValue(message.toByteString())
         .build()
@@ -469,7 +470,7 @@ inline fun BusinessException(
     message: String?,
     cause: Throwable? = null,
     reason: String? = null,
-    details: List<com.google.protobuf.Any>? = null
+    details: List<ProtoBufAny>? = null
 ) = BusinessException(code, message, cause, reason, details)
 
 @Suppress("DEPRECATION")
@@ -655,4 +656,35 @@ fun saveImage(url: String) {
             }
         }
     }
+}
+
+inline fun <reified T : MessageLite> getDeviceSetting(): T? {
+    val context = Utils.getContext()
+    val callUri = "content://${context.packageName}.device.settings.DeviceSettingProvider/call"
+    val cr = context.contentResolver
+    val typeClass = T::class.java
+    val typeUrl = MessageLiteToStringEx.typeMap.entries.find {
+        it.value == typeClass
+    }?.key ?: return null
+    val callResult = cr.call(Uri.parse(callUri), "method_call_get_setting", typeUrl, null)
+    val bytes = callResult?.getByteArray(typeUrl) ?: return null
+    return bytes.runCatchingOrNull {
+        val any = ProtoBufAny.parseFrom(this)
+        Reflex.callStaticMethod(typeClass, "parseFrom", any.value) as? T
+    }
+}
+
+fun setDeviceSetting(message: MessageLite): Boolean {
+    val context = Utils.getContext()
+    val callUri = "content://${context.packageName}.device.settings.DeviceSettingProvider/call"
+    val cr = context.contentResolver
+    val typeClass = message.javaClass
+    val typeUrl = MessageLiteToStringEx.typeMap.entries.find {
+        it.value == typeClass
+    }?.key ?: return false
+    val any = newAny(typeUrl, message)
+    val extras = Bundle().apply { putByteArray(typeUrl, any.toByteArray()) }
+    return cr.runCatchingOrNull {
+        call(Uri.parse(callUri), "method_call_set_setting", typeUrl, extras); true
+    } ?: false
 }

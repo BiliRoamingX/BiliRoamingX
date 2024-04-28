@@ -18,5 +18,8 @@ class CustomizeVideoDetailFragment :
         disablePreference(Settings.DISABLE_AUTO_SUBSCRIBE.key, PrefsDisableReason.APP_VERSION) {
             Versions.ge7_62_0()
         }
+        disablePreference(Settings.SAVE_COMMENT_IMAGE.key, PrefsDisableReason.OFFICIAL_SUPPORTED) {
+            Versions.ge7_76_0()
+        }
     }
 }

@@ -3,9 +3,9 @@ package app.revanced.bilibili.settings.fragments
 import android.content.SharedPreferences
 import android.os.Bundle
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.Utils
-import app.revanced.bilibili.utils.blkvPrefs
-import app.revanced.bilibili.utils.edit
+import app.revanced.bilibili.utils.*
+import com.bapis.bilibili.app.distribution.Int64Value
+import com.bapis.bilibili.app.distribution.setting.pegasus.PegasusDeviceWithoutFplocalConfig
 
 class CustomizeHomeFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_customize_home") {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -16,6 +16,7 @@ class CustomizeHomeFragment : BiliRoamingBaseSettingFragment("biliroaming_settin
         disablePreference("customize_bottom", PrefsDisableReason.APP_VERSION) {
             Utils.isHd()
         }
+        disableAutoRefreshPreferenceIfNeeded()
     }
 
     override fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
@@ -25,5 +26,25 @@ class CustomizeHomeFragment : BiliRoamingBaseSettingFragment("biliroaming_settin
                 putString("PREF_KEY_ENTRANCE_CACHE", "")
             }
         }
+    }
+
+    private fun disableAutoRefreshPreferenceIfNeeded() {
+        if (!Versions.ge7_75_0())
+            return
+        val setting = Settings.HOME_DISABLE_AUTO_REFRESH
+        if (!setting.boolean) {
+            disablePreference(setting.key, PrefsDisableReason.OFFICIAL_SUPPORTED) { true }
+            return
+        }
+        val deviceSetting = getDeviceSetting<PegasusDeviceWithoutFplocalConfig>()
+        if (deviceSetting != null && deviceSetting.autoRefreshState.value == 4L) {
+            disablePreference(setting.key, PrefsDisableReason.OFFICIAL_SUPPORTED) { true }
+            return
+        }
+        val message = PegasusDeviceWithoutFplocalConfig().apply {
+            autoRefreshState = Int64Value().apply { value = 4L }
+        }
+        if (setDeviceSetting(message))
+            disablePreference(setting.key, PrefsDisableReason.OFFICIAL_SUPPORTED) { true }
     }
 }

@@ -110,7 +110,7 @@ public final class PegasusDeviceWithoutFplocalConfig extends GeneratedMessageLit
         GeneratedMessageLite.registerDefaultInstance(PegasusDeviceWithoutFplocalConfig.class, pegasusDeviceWithoutFplocalConfig);
     }
 
-    private PegasusDeviceWithoutFplocalConfig() {
+    public PegasusDeviceWithoutFplocalConfig() {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
