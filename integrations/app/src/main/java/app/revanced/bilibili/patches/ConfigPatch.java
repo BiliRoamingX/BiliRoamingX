@@ -3,15 +3,25 @@ package app.revanced.bilibili.patches;
 import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
+import java.util.Arrays;
+import java.util.List;
+
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.BVUtils;
 
 @Keep
 public class ConfigPatch {
+    private static final List<String> alwaysEnabledAbKeys = Arrays.asList(
+            "ff_switch_account_enable",
+            "ff_player_use_remote_auto_threshold_qn",
+            "ff_pegasus_setting_auto_refresh_display",
+            "player.volume.balance"
+    );
+
     @Nullable
     public static Boolean getAb(String key, @Nullable Boolean defValue, @Nullable Boolean origin) {
         //LogHelper.debug(() -> String.format("ConfigPatch, ab of %s: %s, default: %s", key, origin, defValue));
-        if ("ff_switch_account_enable".equals(key))
+        if (alwaysEnabledAbKeys.contains(key))
             return Boolean.TRUE;
         else if ("ff_player_fav_new".equals(key) && Settings.OLD_FAV.getBoolean())
             return Boolean.FALSE;
@@ -22,12 +32,8 @@ public class ConfigPatch {
             else if ("2".equals(playerVersion))
                 return Boolean.TRUE;
             return origin;
-        } else if ("ff_player_use_remote_auto_threshold_qn".equals(key))
-            return Boolean.TRUE;
-        else if ("ff_channel_redirect_to_search".equals(key) && Settings.ADD_CHANNEL.getBoolean())
+        } else if ("ff_channel_redirect_to_search".equals(key) && Settings.ADD_CHANNEL.getBoolean())
             return Boolean.FALSE;
-        else if ("ff_pegasus_setting_auto_refresh_display".equals(key))
-            return Boolean.TRUE;
         return origin;
     }
 
