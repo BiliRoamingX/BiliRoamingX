@@ -248,7 +248,8 @@ public class Reflex {
         return fieldCache.computeIfAbsent(key, k -> {
             try {
                 Field newField = findFieldRecursiveImpl(k.clazz, k.name);
-                newField.setAccessible(true);
+                if (!newField.isAccessible())
+                    newField.setAccessible(true);
                 return Optional.of(newField);
             } catch (NoSuchFieldException e) {
                 return Optional.empty();
@@ -306,7 +307,8 @@ public class Reflex {
             do {
                 for (Field field : clz.getDeclaredFields()) {
                     if (field.getType() == type) {
-                        field.setAccessible(true);
+                        if (!field.isAccessible())
+                            field.setAccessible(true);
                         return Optional.of(field);
                     }
                 }
@@ -390,7 +392,8 @@ public class Reflex {
         return methodCache.computeIfAbsent(key, k -> {
             try {
                 Method method = k.clazz.getDeclaredMethod(k.name, k.parameters);
-                method.setAccessible(true);
+                if (!method.isAccessible())
+                    method.setAccessible(true);
                 return Optional.of(method);
             } catch (NoSuchMethodException e) {
                 return Optional.empty();
@@ -430,7 +433,8 @@ public class Reflex {
             if (!match)
                 continue;
 
-            method.setAccessible(true);
+            if (!method.isAccessible())
+                method.setAccessible(true);
             result.add(method);
         }
         return result.toArray(new Method[result.size()]);
@@ -487,7 +491,8 @@ public class Reflex {
             } while ((clz = clz.getSuperclass()) != null);
 
             if (bestMatch != null) {
-                bestMatch.setAccessible(true);
+                if (!bestMatch.isAccessible())
+                    bestMatch.setAccessible(true);
                 return Optional.of(bestMatch);
             } else {
                 return Optional.empty();
@@ -614,7 +619,8 @@ public class Reflex {
         return constructorCache.computeIfAbsent(key, k -> {
             try {
                 Constructor<?> constructor = k.clazz.getDeclaredConstructor(k.parameters);
-                constructor.setAccessible(true);
+                if (!constructor.isAccessible())
+                    constructor.setAccessible(true);
                 return Optional.of(constructor);
             } catch (NoSuchMethodException e) {
                 return Optional.empty();
@@ -657,7 +663,8 @@ public class Reflex {
             }
 
             if (bestMatch != null) {
-                bestMatch.setAccessible(true);
+                if (!bestMatch.isAccessible())
+                    bestMatch.setAccessible(true);
                 return Optional.of(bestMatch);
             } else {
                 return Optional.empty();

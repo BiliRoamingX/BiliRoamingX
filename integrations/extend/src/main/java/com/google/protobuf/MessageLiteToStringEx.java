@@ -349,7 +349,6 @@ public final class MessageLiteToStringEx {
                     realClass = typeMap.get(typeUrl);
                 if (realClass != null) try {
                     Method parseFromMethod = realClass.getDeclaredMethod("parseFrom", ByteString.class);
-                    parseFromMethod.setAccessible(true);
                     realObject = (MessageLite) parseFromMethod.invoke(null, any.getValue());
                 } catch (NoSuchMethodException | IllegalAccessException |
                          InvocationTargetException ignored) {
