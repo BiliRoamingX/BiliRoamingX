@@ -29,7 +29,7 @@ class CustomizeHomeFragment : BiliRoamingBaseSettingFragment("biliroaming_settin
     }
 
     private fun disableAutoRefreshPreferenceIfNeeded() {
-        if (!Versions.ge7_75_0())
+        if (!Versions.ge7_76_0())
             return
         val setting = Settings.HOME_DISABLE_AUTO_REFRESH
         if (!setting.boolean) {
