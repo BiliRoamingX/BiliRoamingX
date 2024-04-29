@@ -1,5 +1,7 @@
 package app.revanced.bilibili.account
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -8,11 +10,16 @@ import android.net.Uri
 import android.os.Process
 import android.util.Base64
 import app.revanced.bilibili.account.model.*
+import app.revanced.bilibili.http.HttpClient
+import app.revanced.bilibili.patches.main.ApplicationDelegate
 import app.revanced.bilibili.utils.*
 import org.json.JSONObject
 import java.io.File
 import java.io.RandomAccessFile
 import java.nio.channels.FileChannel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.concurrent.TimeUnit
 
 object Accounts {
 
@@ -32,6 +39,10 @@ object Accounts {
     @JvmStatic
     @Volatile
     private var accountInfoCache: AccountInfo? = null
+
+    @JvmStatic
+    var userBlocked = cachePrefs.getBoolean("user_blocked_$mid", false)
+        private set
 
     @JvmStatic
     val cookieSESSDATA get() = get()?.cookie?.cookies?.find { it.name == "SESSDATA" }?.value.orEmpty()
@@ -162,12 +173,82 @@ object Accounts {
         if (isSignOut) {
             accountCache = null
             accountInfoCache = null
+            userBlocked = false
         } else if (!isUpdateAccount) {
             accountCache = null
             Utils.async { get() }
         } else {
             accountInfoCache = null
             Utils.async { getInfo() }
+            if (Utils.isMainProcess())
+                Utils.runOnMainThread(5000L) {
+                    Utils.async { checkUserStatus() }
+                }
+        }
+    }
+
+    @JvmStatic
+    private var dialogShowing = false
+
+    @JvmStatic
+    @SuppressLint("SimpleDateFormat")
+    private fun checkUserStatus() = runCatching {
+        val mid = Accounts.mid
+        if (mid <= 0) return@runCatching
+        val checkInterval = TimeUnit.HOURS.toMillis(1)
+        val key = "user_status_last_check_time_$mid"
+        val lastCheckTime = cachePrefs.getLong(key, 0L)
+        val current = System.currentTimeMillis()
+        if (lastCheckTime != 0L && current - lastCheckTime < checkInterval)
+            return@runCatching
+        cachePrefs.edit { putLong(key, current) }
+        val json = HttpClient.get("https://black.qimo.ink/api/users/$mid")?.json()
+        if (json == null || json.optInt("code", -1) != 0)
+            return@runCatching
+        val data = json.optJSONObject("data")
+        val blocked = data?.optBoolean("is_blacklist") ?: false
+        val banUntil = (data?.optLong("ban_until", 0L) ?: 0) * 1000L
+        val blockedKey = "user_blocked_$mid"
+        if (blocked && banUntil > current) Utils.runOnMainThread {
+            cachePrefs.edit { putBoolean(blockedKey, true) }
+            userBlocked = true
+            val formatTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                .format(Date(banUntil))
+            val topActivity = ApplicationDelegate.getTopActivity()
+            if (topActivity != null && !dialogShowing) {
+                AlertDialog.Builder(topActivity)
+                    .setTitle("封禁说明")
+                    .setMessage("你因违反哔哩漫游X使用规则已被拉入黑名单，模块所有功能将不可用，解封时间：$formatTime。")
+                    .setNegativeButton("我知道了", null)
+                    .setPositiveButton("查看理由") { _, _ ->
+                        val uri = Uri.parse("https://t.me/BiliRoamingServerBlacklistLog")
+                        topActivity.startActivity(Intent(Intent.ACTION_VIEW, uri))
+                    }.create().constraintSize().apply {
+                        setCancelable(false)
+                        setCanceledOnTouchOutside(false)
+                        onDismiss { dialogShowing = false }
+                    }.show()
+                dialogShowing = true
+            }
+        } else if (cachePrefs.getBoolean(blockedKey, false)) {
+            cachePrefs.edit { putBoolean(blockedKey, false) }
+            userBlocked = false
+            Utils.runOnMainThread {
+                val topActivity = ApplicationDelegate.getTopActivity()
+                if (topActivity != null && !dialogShowing) {
+                    AlertDialog.Builder(topActivity)
+                        .setTitle("解禁说明")
+                        .setMessage("你的哔哩漫游X使用资格已恢复，重启生效。")
+                        .setPositiveButton("立即重启") { _, _ ->
+                            Utils.reboot()
+                        }.create().constraintSize().apply {
+                            setCancelable(false)
+                            setCanceledOnTouchOutside(false)
+                            onDismiss { dialogShowing = false }
+                        }.show()
+                    dialogShowing = true
+                }
+            }
         }
     }
 }

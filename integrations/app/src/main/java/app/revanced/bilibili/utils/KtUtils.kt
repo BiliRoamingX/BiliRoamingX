@@ -593,6 +593,10 @@ inline fun <T : Dialog> T.onShow(crossinline listener: T.() -> Unit) = apply {
     setOnShowListener { listener() }
 }
 
+inline fun <T : Dialog> T.onDismiss(crossinline listener: T.() -> Unit) = apply {
+    setOnDismissListener { listener() }
+}
+
 private fun biliAes(bytes: ByteArray, decrypt: Boolean): ByteArray {
     val appKey = Utils.getAppKey()
     val key = appKey.toByteArray().copyOf(16)

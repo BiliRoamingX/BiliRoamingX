@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import app.revanced.bilibili.account.Accounts;
 import app.revanced.bilibili.utils.Constants;
 import app.revanced.bilibili.utils.Logger;
 import app.revanced.bilibili.utils.PreferenceUpdater;
@@ -335,32 +336,46 @@ public enum Settings {
     }
 
     public boolean getBoolean() {
+        if (Accounts.getUserBlocked() && !key.equals(SHOW_HINT.key))
+            return (Boolean) defValue;
         return (Boolean) value;
     }
 
     public int getInt() {
+        if (Accounts.getUserBlocked())
+            return (Integer) defValue;
         return (Integer) value;
     }
 
     public long getLong() {
+        if (Accounts.getUserBlocked())
+            return (Long) defValue;
         return (Long) value;
     }
 
     public float getFloat() {
+        if (Accounts.getUserBlocked())
+            return (Float) defValue;
         return (Float) value;
     }
 
     public String getString() {
+        if (Accounts.getUserBlocked())
+            return (String) defValue;
         return (String) value;
     }
 
     @SuppressWarnings("unchecked")
     public Set<String> getStringSet() {
+        if (Accounts.getUserBlocked())
+            return (Set<String>) defValue;
         return (Set<String>) value;
     }
 
     @NonNull
     public Object getValue() {
+        if (Accounts.getUserBlocked())
+            return defValue;
         return value;
     }
 
