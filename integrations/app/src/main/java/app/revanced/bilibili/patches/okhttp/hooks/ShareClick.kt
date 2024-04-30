@@ -64,12 +64,15 @@ object ShareClick : ApiHook() {
                 val uri = Uri.parse(realUrl)
                 val startProgress = uri.getQueryParameter("start_progress")
                 val p = uri.getQueryParameter("p")
+                val topicId = uri.getQueryParameter("topic_id")
                 newUrl = uri.buildUpon()
                     .clearQuery().encodedFragment(null).apply {
                         if (!startProgress.isNullOrEmpty())
                             appendQueryParameter("start_progress", startProgress)
                         if (!p.isNullOrEmpty() && p != "1")
                             appendQueryParameter("p", p)
+                        if (!topicId.isNullOrEmpty())
+                            appendQueryParameter("topic_id", topicId)
                     }.build().toString()
             }
         }
