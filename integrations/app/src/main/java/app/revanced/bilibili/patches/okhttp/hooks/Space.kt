@@ -3,21 +3,27 @@ package app.revanced.bilibili.patches.okhttp.hooks
 import android.net.Uri
 import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.api.BiliRoamingApi.getSpace
-import app.revanced.bilibili.patches.okhttp.ApiHook
+import app.revanced.bilibili.meta.Client
+import app.revanced.bilibili.patches.okhttp.BaseFakeClientRestHook
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.iterator
-import app.revanced.bilibili.utils.orEmpty
-import app.revanced.bilibili.utils.runCatchingOrNull
-import app.revanced.bilibili.utils.toJSONObject
+import app.revanced.bilibili.utils.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-object Space : ApiHook() {
+object Space : BaseFakeClientRestHook() {
+    override val fakeToClient: Client
+        get() = Client.PINK
+
+    override fun shouldHookBefore(url: String, headers: Array<String>): Boolean {
+        return Settings.FORCE_SHOW_IP.boolean && Utils.isPlay()
+                && url.contains("/x/v2/space?")
+    }
+
     override fun shouldHook(url: String, code: Int): Boolean {
         return (Settings.FIX_SPACE.boolean
                 || Settings.SKIN.boolean
-                || Settings.IGNORE_BLACKLIST.boolean
-                ) && url.contains("/x/v2/space?") && code.isOk
+                || Settings.IGNORE_BLACKLIST.boolean)
+                && url.contains("/x/v2/space?") && code.isOk
     }
 
     override fun hook(url: String, code: Int, request: String, response: String): String {

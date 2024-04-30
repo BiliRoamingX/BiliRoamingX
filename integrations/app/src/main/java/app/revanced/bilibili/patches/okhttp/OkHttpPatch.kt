@@ -18,6 +18,7 @@ object OkHttpPatch {
         BangumiCards,
         BangumiMaterial,
         Eps,
+        ForceShowIpForPlay,
         GarbSuitDetail,
         HistoryReport,
         Media,

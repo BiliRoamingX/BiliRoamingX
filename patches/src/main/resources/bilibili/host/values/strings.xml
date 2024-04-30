@@ -394,4 +394,6 @@
     <string name="biliroaming_write_storage_failed">获取存储权限失败，请前往设置开启存储权限</string>
     <string name="biliroaming_official_supported">官方已支持此功能</string>
     <string name="biliroaming_ignore_blacklist_title">允许查看拉黑你的UP主空间</string>
+    <string name="biliroaming_force_show_ip_title">Play版强制显示IP归属地</string>
+    <string name="biliroaming_force_show_ip_summary">Play版评论及个人空间页强制显示IP归属地</string>
 </resources>

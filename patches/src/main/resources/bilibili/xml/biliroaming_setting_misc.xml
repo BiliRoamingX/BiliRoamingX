@@ -48,6 +48,10 @@
             android:key="enable_doc_provider"
             android:summary="@string/biliroaming_enable_doc_provider_summary"
             android:title="@string/biliroaming_enable_doc_provider_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="force_show_ip"
+            android:summary="@string/biliroaming_force_show_ip_summary"
+            android:title="@string/biliroaming_force_show_ip_title" />
         <androidx.preference.Preference
             android:key="route"
             android:title="@string/biliroaming_route_title" />
