@@ -1,14 +1,14 @@
 package app.revanced.bilibili.patches.protobuf
 
 import androidx.annotation.Keep
+import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.api.MossResponseHandlerProxy
 import app.revanced.bilibili.meta.HookFlags
 import app.revanced.bilibili.patches.protobuf.hooks.*
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.MossDebugPrinter
-import app.revanced.bilibili.utils.Utils
-import app.revanced.bilibili.utils.pinkDeviceHeader
-import app.revanced.bilibili.utils.pinkMetadataHeader
+import app.revanced.bilibili.utils.*
+import com.bapis.bilibili.metadata.network.Network
+import com.bapis.bilibili.metadata.network.NetworkType
 import com.bilibili.lib.moss.api.MossException
 import com.bilibili.lib.moss.api.MossResponseHandler
 import com.google.protobuf.GeneratedMessageLite
@@ -53,10 +53,12 @@ object MossPatch {
         ViewUnite
     )
 
+    const val PLAY_VIEW_UNITE_API = "bilibili.app.playerunite.v1.Player/PlayViewUnite"
+
     val fakeToPinkForUnlockAreaLimitApis = arrayOf(
         "bilibili.pgc.gateway.player.v2.PlayURL/PlayView",
-        "bilibili.app.playerunite.v1.Player/PlayViewUnite",
         "bilibili.app.viewunite.v1.View/View",
+        PLAY_VIEW_UNITE_API,
     )
 
     val fakeToPinkForIPApis = arrayOf(
@@ -160,6 +162,18 @@ object MossPatch {
             headers.removeIf { (k, _) -> k == "x-bili-metadata-bin" || k == "x-bili-device-bin" }
             headers.add(AbstractMap.SimpleImmutableEntry("x-bili-metadata-bin", pinkMetadataHeader))
             headers.add(AbstractMap.SimpleImmutableEntry("x-bili-device-bin", pinkDeviceHeader))
+        } else if (Utils.isPink() && Settings.TRIAL_VIP_QUALITY.boolean
+            && !Accounts.isEffectiveVip && url.endsWith(PLAY_VIEW_UNITE_API)
+        ) {
+            val networkBinKey = "x-bili-network-bin"
+            val networkBinValue = headers.find { it.key == networkBinKey }?.value
+            if (!networkBinValue.isNullOrEmpty()) {
+                val newNetworkBin = Network.parseFrom(networkBinValue.base64Decode).apply {
+                    type = NetworkType.WIFI
+                }.toByteArray().base64
+                headers.removeIf { (k, _) -> k == networkBinKey }
+                headers.add(AbstractMap.SimpleImmutableEntry(networkBinKey, newNetworkBin))
+            }
         }
         return url
     }

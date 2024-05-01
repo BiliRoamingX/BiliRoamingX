@@ -43,7 +43,7 @@ public class VideoQualityPatch {
      */
     public static void unlockLimit(com.bapis.bilibili.pgc.gateway.player.v2.PlayViewReq playViewReq) {
         int halfScreenQuality = halfScreenQuality();
-        int fulledScreenQuality = fullScreenQuality();
+        int fulledScreenQuality = getMatchedFullScreenQuality();
         if (halfScreenQuality != 0 || fulledScreenQuality != 0) {
             playViewReq.setFnval(Constants.MAX_FNVAL);
             playViewReq.setFourk(true);
@@ -57,7 +57,7 @@ public class VideoQualityPatch {
      */
     public static void unlockLimit(com.bapis.bilibili.app.playurl.v1.PlayViewReq playViewReq) {
         int halfScreenQuality = halfScreenQuality();
-        int fulledScreenQuality = fullScreenQuality();
+        int fulledScreenQuality = getMatchedFullScreenQuality();
         if (halfScreenQuality != 0 || fulledScreenQuality != 0) {
             playViewReq.setFnval(Constants.MAX_FNVAL);
             playViewReq.setFourk(true);
@@ -72,7 +72,7 @@ public class VideoQualityPatch {
     public static void unlockLimit(PlayViewUniteReq playViewReq) {
         VideoVod videoVod = playViewReq.getVod();
         int halfScreenQuality = halfScreenQuality();
-        int fulledScreenQuality = fullScreenQuality();
+        int fulledScreenQuality = getMatchedFullScreenQuality();
         if (halfScreenQuality != 0 || fulledScreenQuality != 0) {
             videoVod.setFnval(Constants.MAX_FNVAL);
             videoVod.setFourk(true);

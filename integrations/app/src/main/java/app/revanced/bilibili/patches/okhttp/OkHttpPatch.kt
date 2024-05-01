@@ -22,6 +22,7 @@ object OkHttpPatch {
         GarbSuitDetail,
         HistoryReport,
         Media,
+        PinNetworkTypeForTrialQuality,
         QoeShow,
         RoomPlayInfo,
         SearchAll,
