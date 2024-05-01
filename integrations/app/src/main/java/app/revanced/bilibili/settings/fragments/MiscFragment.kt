@@ -18,10 +18,12 @@ import androidx.preference.Preference
 import app.revanced.bilibili.content.BiliDocumentsProvider
 import app.revanced.bilibili.patches.SplashPatch
 import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.settings.search.annotation.SettingFragment
 import app.revanced.bilibili.utils.*
 import java.io.File
 
-class MiscFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_misc") {
+@SettingFragment("biliroaming_setting_misc")
+class MiscFragment : BiliRoamingBaseSettingFragment() {
     companion object {
         private const val SELECTION_SPLASH = 222
         private const val SELECTION_LOGO = 223

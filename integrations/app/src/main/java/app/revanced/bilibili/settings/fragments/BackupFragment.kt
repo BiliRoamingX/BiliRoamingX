@@ -11,13 +11,15 @@ import android.os.Bundle
 import androidx.preference.Preference
 import app.revanced.bilibili.content.BiliDocumentsProvider
 import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.settings.search.annotation.SettingFragment
 import app.revanced.bilibili.utils.*
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class BackupFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_backup") {
+@SettingFragment("biliroaming_setting_backup")
+class BackupFragment : BiliRoamingBaseSettingFragment() {
     companion object {
         private const val REQ_CODE_BACKUP = 0x158
         private const val REQ_CODE_RESTORE = 0x159

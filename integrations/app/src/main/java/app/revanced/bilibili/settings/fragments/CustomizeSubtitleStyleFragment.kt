@@ -57,7 +57,7 @@ class CustomizeSubtitleStyleFragment : BaseWidgetSettingFragment() {
             maxLength = 8,
             digits = "0123456789abcdefABCDEF"
         ) {
-            ARGBColorChooseDialog(requireContext(), it.text.toString().toIntColor()) { color ->
+            ARGBColorChooseDialog(hostContext, it.text.toString().toIntColor()) { color ->
                 it.setText(color.toHexColor())
             }.show()
         }.let { content.addView(it.first); it.second }
@@ -87,7 +87,7 @@ class CustomizeSubtitleStyleFragment : BaseWidgetSettingFragment() {
             maxLength = 8,
             digits = "0123456789abcdefABCDEF"
         ) {
-            ARGBColorChooseDialog(requireContext(), it.text.toString().toIntColor()) { color ->
+            ARGBColorChooseDialog(hostContext, it.text.toString().toIntColor()) { color ->
                 it.setText(color.toHexColor())
             }.show()
         }.let { content.addView(it.first); it.second }

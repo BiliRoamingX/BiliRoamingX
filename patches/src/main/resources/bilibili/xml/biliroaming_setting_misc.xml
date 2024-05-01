@@ -18,6 +18,7 @@
             android:title="@string/biliroaming_text_fold_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.BlockModuleFragment"
+            android:key="fragment_block_modules"
             android:title="@string/biliroaming_block_modules_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="music_notification"
@@ -58,6 +59,7 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
+        android:key="category_theme"
         android:layout="@layout/bili_app_layout_preference_category_title"
         android:title="@string/biliroaming_theme_title">
         <androidx.preference.SwitchPreferenceCompat
@@ -74,6 +76,7 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
+        android:key="category_copy"
         android:layout="@layout/bili_app_layout_preference_category_title"
         android:title="@string/biliroaming_copy_title">
         <androidx.preference.SwitchPreferenceCompat
@@ -88,6 +91,7 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
+        android:key="category_share"
         android:layout="@layout/bili_app_layout_preference_category_title"
         android:title="@string/biliroaming_share_title">
         <androidx.preference.SwitchPreferenceCompat
@@ -101,6 +105,7 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
+        android:key="category_splash"
         android:layout="@layout/bili_app_layout_preference_category_title"
         android:title="@string/biliroaming_splash_title">
         <androidx.preference.SwitchPreferenceCompat
@@ -118,6 +123,7 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
+        android:key="category_update"
         android:layout="@layout/bili_app_layout_preference_category_title"
         android:title="@string/biliroaming_update_title">
         <androidx.preference.SwitchPreferenceCompat
@@ -138,17 +144,21 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
+        android:key="category_always_enabled"
         android:layout="@layout/bili_app_layout_preference_category_title"
         android:title="@string/biliroaming_always_enabled_title">
         <androidx.preference.Preference
+            android:key="prefs_clear_app_icon"
             android:summary="@string/biliroaming_clear_app_icon_summary"
             android:title="@string/biliroaming_clear_app_icon_title"
             android:widgetLayout="@null" />
         <androidx.preference.Preference
+            android:key="prefs_themed_icon"
             android:summary="@string/biliroaming_themed_icon_summary"
             android:title="@string/biliroaming_themed_icon_title"
             android:widgetLayout="@null" />
         <androidx.preference.Preference
+            android:key="prefs_follow_dark"
             android:summary="@string/biliroaming_splash_follow_dark_summary"
             android:title="@string/biliroaming_splash_follow_dark_title"
             android:widgetLayout="@null" />

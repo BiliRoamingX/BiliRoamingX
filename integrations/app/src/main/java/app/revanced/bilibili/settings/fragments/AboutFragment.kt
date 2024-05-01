@@ -1,6 +1,5 @@
 package app.revanced.bilibili.settings.fragments
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -10,13 +9,15 @@ import androidx.preference.Preference
 import app.revanced.bilibili.integrations.BuildConfig
 import app.revanced.bilibili.patches.okhttp.hooks.Upgrade
 import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.settings.search.annotation.SettingFragment
 import app.revanced.bilibili.utils.*
 import java.io.File
 import java.nio.file.attribute.FileTime
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-class AboutFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_about") {
+@SettingFragment("biliroaming_setting_about")
+class AboutFragment : BiliRoamingBaseSettingFragment() {
     @Keep
     private var checkUpdateMethod = ""
 
@@ -119,9 +120,8 @@ class AboutFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_about"
         if (Upgrade.customUpdate(fromSelf = true)) {
             runCatching {
                 val (serviceClass, checkUpdateMethod) = checkUpdateMethod.split('#', limit = 2)
-                val activity = context as Activity
                 Upgrade.fromSelf = true
-                Class.forName(serviceClass).new().callMethod(checkUpdateMethod, activity)
+                Class.forName(serviceClass).new().callMethod(checkUpdateMethod, hostActivity)
             }.onFailure {
                 Upgrade.fromSelf = false
                 Logger.error(it) { "Update check failed" }

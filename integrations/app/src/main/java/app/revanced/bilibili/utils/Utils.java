@@ -91,7 +91,7 @@ public class Utils {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public static Drawable getDrawable(Context context, String idName) {
-        return getContext().getDrawable(getResId(idName, "drawable"));
+        return context.getDrawable(getResId(idName, "drawable"));
     }
 
     public static int getColor(String idName) {
@@ -99,7 +99,7 @@ public class Utils {
     }
 
     public static int getColor(Context context, String idName) {
-        return getContext().getColor(getResId(idName, "color"));
+        return context.getColor(getResId(idName, "color"));
     }
 
     public static ColorStateList getColorStateList(String idName) {
@@ -107,7 +107,7 @@ public class Utils {
     }
 
     public static ColorStateList getColorStateList(Context context, String idName) {
-        return getContext().getColorStateList(getResId(idName, "color"));
+        return context.getColorStateList(getResId(idName, "color"));
     }
 
     public static void reboot() {

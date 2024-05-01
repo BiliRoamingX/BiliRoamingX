@@ -2,59 +2,71 @@ package app.revanced.bilibili.settings.fragments
 
 import app.revanced.bilibili.patches.json.JSONPatch
 import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.settings.search.annotation.SettingFragment
 
-class BlockFollowFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_block_follow")
+@SettingFragment("biliroaming_setting_block_follow")
+class BlockFollowFragment : BiliRoamingBaseSettingFragment()
 
-class BlockModuleFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_block_module")
+@SettingFragment("biliroaming_setting_block_module")
+class BlockModuleFragment : BiliRoamingBaseSettingFragment()
 
-class CustomizeBottomFragment : BaseDynamicItemsFragment(
-    "biliroaming_setting_customize_bottom",
-    Settings.SHOWING_BOTTOM_ITEMS, JSONPatch.bottomItems
-)
+@SettingFragment("biliroaming_setting_customize_bottom")
+class CustomizeBottomFragment :
+    BaseDynamicItemsFragment(Settings.SHOWING_BOTTOM_ITEMS, JSONPatch.bottomItems)
 
-class CustomizeDynamicFragment :
-    BiliRoamingBaseSettingFragment("biliroaming_setting_customize_dynamic")
+@SettingFragment("biliroaming_setting_customize_dynamic")
+class CustomizeDynamicFragment : BiliRoamingBaseSettingFragment()
 
-class CustomizeHomeTabFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_home_tab")
+@SettingFragment("biliroaming_setting_home_tab")
+class CustomizeHomeTabFragment : BiliRoamingBaseSettingFragment()
 
-class CustomizeLiveRoomFragment :
-    BiliRoamingBaseSettingFragment("biliroaming_setting_customize_live_room")
+@SettingFragment("biliroaming_setting_customize_live_room")
+class CustomizeLiveRoomFragment : BiliRoamingBaseSettingFragment()
 
-class CustomizeMineFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_customize_mine")
+@SettingFragment("biliroaming_setting_customize_mine")
+class CustomizeMineFragment : BiliRoamingBaseSettingFragment()
 
-class CustomizeSpaceFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_customize_space")
+@SettingFragment("biliroaming_setting_customize_space")
+class CustomizeSpaceFragment : BiliRoamingBaseSettingFragment()
 
-class DisplaySizeFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_display_size")
+@SettingFragment("biliroaming_setting_display_size")
+class DisplaySizeFragment : BiliRoamingBaseSettingFragment()
 
-class FilterCommentFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_filter_comment")
+@SettingFragment("biliroaming_setting_filter_comment")
+class FilterCommentFragment : BiliRoamingBaseSettingFragment()
 
-class FilterDynamicByTypeFragment :
-    BiliRoamingBaseSettingFragment("biliroaming_setting_filter_dynamic_by_type")
+@SettingFragment("biliroaming_setting_filter_dynamic_by_type")
+class FilterDynamicByTypeFragment : BiliRoamingBaseSettingFragment()
 
-class FilterHomeRcmdByTypeFragment :
-    BiliRoamingBaseSettingFragment("biliroaming_setting_filter_home_by_type")
+@SettingFragment("biliroaming_setting_filter_home_by_type")
+class FilterHomeRcmdByTypeFragment : BiliRoamingBaseSettingFragment()
 
-class FilterSearchTypeFragment :
-    BiliRoamingBaseSettingFragment("biliroaming_setting_filter_search_type")
+@SettingFragment("biliroaming_setting_filter_search_type")
+class FilterSearchTypeFragment : BiliRoamingBaseSettingFragment()
 
-class FilterStoryFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_filter_story")
+@SettingFragment("biliroaming_setting_filter_story")
+class FilterStoryFragment : BiliRoamingBaseSettingFragment()
 
-class FullScreenQualityMobileSettingFragment :
-    BiliRoamingBaseSettingFragment("biliroaming_setting_full_screen_quality_mobile")
+@SettingFragment("biliroaming_setting_full_screen_quality_mobile")
+class FullScreenQualityMobileSettingFragment : BiliRoamingBaseSettingFragment()
 
-class FullScreenQualitySettingFragment :
-    BiliRoamingBaseSettingFragment("biliroaming_setting_full_screen_quality")
+@SettingFragment("biliroaming_setting_full_screen_quality")
+class FullScreenQualitySettingFragment : BiliRoamingBaseSettingFragment()
 
-class HalfScreenQualitySettingFragment :
-    BiliRoamingBaseSettingFragment("biliroaming_setting_half_screen_quality")
+@SettingFragment("biliroaming_setting_half_screen_quality")
+class HalfScreenQualitySettingFragment : BiliRoamingBaseSettingFragment()
 
-class PlayerVersionFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_player_version")
+@SettingFragment("biliroaming_setting_player_version")
+class PlayerVersionFragment : BiliRoamingBaseSettingFragment()
 
-class PurifyLivePopupsFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_live_popups")
+@SettingFragment("biliroaming_setting_live_popups")
+class PurifyLivePopupsFragment : BiliRoamingBaseSettingFragment()
 
-class SpaceFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_space")
+@SettingFragment("biliroaming_setting_space")
+class SpaceFragment : BiliRoamingBaseSettingFragment()
 
-class SubtitleTranslateServerFragment :
-    BiliRoamingBaseSettingFragment("biliroaming_setting_subtitle_translate_server")
+@SettingFragment("biliroaming_setting_subtitle_translate_server")
+class SubtitleTranslateServerFragment : BiliRoamingBaseSettingFragment()
 
-class UposSettingFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_upos")
+@SettingFragment("biliroaming_setting_upos")
+class UposSettingFragment : BiliRoamingBaseSettingFragment()

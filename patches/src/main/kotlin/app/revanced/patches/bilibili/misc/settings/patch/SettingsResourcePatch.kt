@@ -23,6 +23,7 @@ object SettingsResourcePatch : ResourcePatch() {
         private set
 
     private val extraPreferences = arrayOf(
+        "biliroaming_search_result.xml",
         "biliroaming_settings.xml",
         "biliroaming_setting_half_screen_quality.xml",
         "biliroaming_setting_full_screen_quality.xml",
@@ -65,12 +66,16 @@ object SettingsResourcePatch : ResourcePatch() {
         "biliroaming_dialog_color_choose.xml",
         "biliroaming_dialog_area_server.xml",
     )
+    private val drawables = arrayOf(
+        "biliroaming_bg_transparent.webp",
+        "biliroaming_ic_search.xml",
+    )
 
     override fun execute(context: ResourceContext) {
         arrayOf(
             ResourceGroup("xml", *extraPreferences),
             ResourceGroup("layout", *layouts),
-            ResourceGroup("drawable", "biliroaming_bg_transparent.webp")
+            ResourceGroup("drawable", *drawables),
         ).forEach {
             context.copyResources("bilibili", it)
         }
@@ -85,6 +90,11 @@ object SettingsResourcePatch : ResourcePatch() {
             "res/values/arrays.xml",
             "bilibili/host/values/arrays.xml"
         )
+        context.mergeXmlNodes(
+            "resources",
+            "res/values/ids.xml",
+            "bilibili/host/values/ids.xml",
+        )
         context.document["res/xml/main_preferences.xml"].use {
             it.addBiliRoamingEntrance()
         }
@@ -96,7 +106,8 @@ object SettingsResourcePatch : ResourcePatch() {
             insertBefore(firstChild, "androidx.preference.PreferenceCategory") {
                 appendChild("androidx.preference.PreferenceScreen") {
                     this["android:title"] = "@string/biliroaming_settings_title"
-                    this["android:fragment"] = "app.revanced.bilibili.settings.fragments.BiliRoamingSettingsFragment"
+                    this["android:fragment"] =
+                        "app.revanced.bilibili.settings.fragments.BiliRoamingSettingsFragment"
                 }
             }
         }

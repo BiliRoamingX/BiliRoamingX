@@ -3,11 +3,13 @@ package app.revanced.bilibili.settings.fragments
 import android.content.SharedPreferences
 import android.os.Bundle
 import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.settings.search.annotation.SettingFragment
 import app.revanced.bilibili.utils.*
 import com.bapis.bilibili.app.distribution.Int64Value
 import com.bapis.bilibili.app.distribution.setting.pegasus.PegasusDeviceWithoutFplocalConfig
 
-class CustomizeHomeFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_customize_home") {
+@SettingFragment("biliroaming_setting_customize_home")
+class CustomizeHomeFragment : BiliRoamingBaseSettingFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
         disablePreference(Settings.DRAWER.key, PrefsDisableReason.APP_VERSION) {

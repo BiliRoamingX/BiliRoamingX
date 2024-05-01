@@ -19,6 +19,6 @@ android {
 }
 
 dependencies {
-    compileOnly(parent!!.childProjects["dummy"]!!)
+    compileOnly(projects.integrations.dummy)
     compileOnly(libs.protobuf)
 }

@@ -7,28 +7,28 @@
             android:title="@string/biliroaming_auto_like_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="save_comment_image"
-            android:title="@string/biliroaming_save_comment_image_title"
-            android:summary="@string/biliroaming_save_comment_image_summary" />
+            android:summary="@string/biliroaming_save_comment_image_summary"
+            android:title="@string/biliroaming_save_comment_image_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="play_arc_conf"
-            android:title="@string/biliroaming_play_arc_conf_title"
-            android:summary="@string/biliroaming_play_arc_conf_summary" />
+            android:summary="@string/biliroaming_play_arc_conf_summary"
+            android:title="@string/biliroaming_play_arc_conf_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="replace_story_video"
-            android:title="@string/biliroaming_replace_story_video_title"
-            android:summary="@string/biliroaming_replace_story_video_summary" />
+            android:summary="@string/biliroaming_replace_story_video_summary"
+            android:title="@string/biliroaming_replace_story_video_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="disable_story_full"
-            android:title="@string/biliroaming_disable_story_full_title"
-            android:summary="@string/biliroaming_disable_story_full_summary" />
+            android:summary="@string/biliroaming_disable_story_full_summary"
+            android:title="@string/biliroaming_disable_story_full_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="remove_video_cmd_dms"
-            android:title="@string/biliroaming_remove_video_cmd_dms_title"
-            android:summary="@string/biliroaming_remove_video_cmd_dms_summary" />
+            android:summary="@string/biliroaming_remove_video_cmd_dms_summary"
+            android:title="@string/biliroaming_remove_video_cmd_dms_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="block_dm_feedback"
-            android:title="@string/biliroaming_block_dm_feedback_title"
-            android:summary="@string/biliroaming_block_dm_feedback_summary" />
+            android:summary="@string/biliroaming_block_dm_feedback_summary"
+            android:title="@string/biliroaming_block_dm_feedback_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="block_fan_guide"
             android:title="@string/biliroaming_block_fan_guide_title" />
@@ -40,64 +40,71 @@
             android:title="@string/biliroaming_block_live_order_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="block_activity_tab"
-            android:title="@string/biliroaming_block_activity_tab_title"
-            android:summary="@string/biliroaming_block_activity_tab_summary" />
+            android:summary="@string/biliroaming_block_activity_tab_summary"
+            android:title="@string/biliroaming_block_activity_tab_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.VideoDetailFilterFragment"
+            android:key="fragment_video_relate"
             android:title="@string/biliroaming_video_relate_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.FilterStoryFragment"
-            android:title="@string/biliroaming_filter_story_title"
-            android:summary="@string/biliroaming_filter_story_summary" />
+            android:key="fragment_filter_story"
+            android:summary="@string/biliroaming_filter_story_summary"
+            android:title="@string/biliroaming_filter_story_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.ExternalDownloaderFragment"
+            android:key="fragment_external_downloader"
             android:title="@string/biliroaming_external_downloader_title" />
     </androidx.preference.PreferenceCategory>
     <androidx.preference.PreferenceCategory
-        android:title="@string/biliroaming_video_detail_comment_category_title"
-        android:layout="@layout/bili_app_layout_preference_category_title">
+        android:key="category_comment"
+        android:layout="@layout/bili_app_layout_preference_category_title"
+        android:title="@string/biliroaming_video_detail_comment_category_title">
         <androidx.preference.SwitchPreferenceCompat
             android:key="block_word_search"
-            android:title="@string/biliroaming_block_word_search_title"
-            android:summary="@string/biliroaming_block_word_search_summary" />
+            android:summary="@string/biliroaming_block_word_search_summary"
+            android:title="@string/biliroaming_block_word_search_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="block_comment_guide"
-            android:title="@string/biliroaming_block_comment_guide_title"
-            android:summary="@string/biliroaming_block_comment_guide_summary" />
+            android:summary="@string/biliroaming_block_comment_guide_summary"
+            android:title="@string/biliroaming_block_comment_guide_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="block_video_comment"
             android:title="@string/biliroaming_block_video_comment_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.FilterCommentFragment"
+            android:key="fragment_filter_comment"
             android:title="@string/biliroaming_filter_comment_title" />
     </androidx.preference.PreferenceCategory>
     <androidx.preference.PreferenceCategory
-        android:title="@string/biliroaming_video_detail_ad_category_title"
-        android:layout="@layout/bili_app_layout_preference_category_title">
+        android:key="category_video_detail_ad"
+        android:layout="@layout/bili_app_layout_preference_category_title"
+        android:title="@string/biliroaming_video_detail_ad_category_title">
         <androidx.preference.SwitchPreferenceCompat
             android:key="block_up_rcmd_ads"
-            android:title="@string/biliroaming_block_up_rcmd_ads_title"
-            android:summary="@string/biliroaming_block_up_rcmd_ads_summary" />
+            android:summary="@string/biliroaming_block_up_rcmd_ads_summary"
+            android:title="@string/biliroaming_block_up_rcmd_ads_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="block_bangumi_page_ads"
-            android:title="@string/biliroaming_block_bangumi_page_ads_title"
-            android:summary="@string/biliroaming_block_bangumi_page_ads_summary" />
+            android:summary="@string/biliroaming_block_bangumi_page_ads_summary"
+            android:title="@string/biliroaming_block_bangumi_page_ads_title" />
     </androidx.preference.PreferenceCategory>
     <androidx.preference.PreferenceCategory
-        android:title="@string/biliroaming_video_detail_other_category_title"
-        android:layout="@layout/bili_app_layout_preference_category_title">
+        android:key="category_video_detail_other"
+        android:layout="@layout/bili_app_layout_preference_category_title"
+        android:title="@string/biliroaming_video_detail_other_category_title">
         <androidx.preference.SwitchPreferenceCompat
             android:key="disable_auto_select"
-            android:title="@string/biliroaming_disable_auto_select_title"
-            android:summary="@string/biliroaming_disable_auto_select_summary" />
+            android:summary="@string/biliroaming_disable_auto_select_summary"
+            android:title="@string/biliroaming_disable_auto_select_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="disable_auto_subscribe"
-            android:title="@string/biliroaming_disable_auto_subscribe_title"
-            android:summary="@string/biliroaming_disable_auto_subscribe_summary" />
+            android:summary="@string/biliroaming_disable_auto_subscribe_summary"
+            android:title="@string/biliroaming_disable_auto_subscribe_title" />
         <androidx.preference.SwitchPreferenceCompat
-          android:key="old_fav"
-          android:title="@string/biliroaming_old_fav_title"
-          android:summary="@string/biliroaming_old_fav_summary" />
+            android:key="old_fav"
+            android:summary="@string/biliroaming_old_fav_summary"
+            android:title="@string/biliroaming_old_fav_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="no_colorful_danmaku"
             android:title="@string/biliroaming_no_colorful_danmaku_title" />

@@ -10,13 +10,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.preference.Preference
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.constraintSize
-import app.revanced.bilibili.utils.onClick
-import app.revanced.bilibili.utils.onShow
-import app.revanced.bilibili.utils.systemService
+import app.revanced.bilibili.settings.search.annotation.SettingFragment
+import app.revanced.bilibili.utils.*
 
-class ExternalDownloaderFragment :
-    BiliRoamingBaseSettingFragment("biliroaming_setting_external_downloader") {
+@SettingFragment("biliroaming_setting_external_downloader")
+class ExternalDownloaderFragment : BiliRoamingBaseSettingFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
         findPreference<Preference>("package_name")?.onClick {
@@ -37,9 +35,9 @@ class ExternalDownloaderFragment :
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         window?.decorView?.windowInsetsController?.show(WindowInsets.Type.ime())
                     } else {
-                        editText.postDelayed({
+                        editText.postDelayed(50) {
                             systemService<InputMethodManager>().showSoftInput(editText, 0)
-                        }, 50L)
+                        }
                     }
                 }.apply { show() }
             editText.setOnEditorActionListener { v, actionId, event ->

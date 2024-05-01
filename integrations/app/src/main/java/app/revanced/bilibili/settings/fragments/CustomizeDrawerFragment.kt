@@ -3,12 +3,13 @@ package app.revanced.bilibili.settings.fragments
 import android.content.SharedPreferences
 import app.revanced.bilibili.patches.json.JSONPatch
 import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.settings.search.annotation.SettingFragment
 import app.revanced.bilibili.utils.Constants
 import app.revanced.bilibili.utils.Toasts
 import app.revanced.bilibili.utils.Utils
 
+@SettingFragment("biliroaming_setting_customize_drawer")
 class CustomizeDrawerFragment : BaseDynamicItemsFragment(
-    "biliroaming_setting_customize_drawer",
     Settings.SHOWING_DRAWER_ITEMS,
     JSONPatch.drawerItems
 ) {

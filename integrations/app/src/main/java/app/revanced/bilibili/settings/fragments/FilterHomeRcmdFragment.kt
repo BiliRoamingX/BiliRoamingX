@@ -2,8 +2,10 @@ package app.revanced.bilibili.settings.fragments
 
 import android.os.Bundle
 import androidx.preference.Preference
+import app.revanced.bilibili.settings.search.annotation.SettingFragment
 
-class FilterHomeRcmdFragment : BiliRoamingBaseSettingFragment("biliroaming_setting_filter_home") {
+@SettingFragment("biliroaming_setting_filter_home")
+class FilterHomeRcmdFragment : BiliRoamingBaseSettingFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
         findPreference<Preference>("filter_home_recommend_by_keyword")

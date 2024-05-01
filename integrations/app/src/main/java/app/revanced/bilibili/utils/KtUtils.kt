@@ -4,6 +4,7 @@
 package app.revanced.bilibili.utils
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Dialog
 import android.content.*
 import android.content.pm.PackageManager
@@ -16,13 +17,12 @@ import android.util.Size
 import android.util.SizeF
 import android.util.SparseArray
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
 import android.view.View.MeasureSpec
-import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.annotation.WorkerThread
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.preference.Preference
 import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.meta.Client
@@ -215,6 +215,32 @@ fun ModulePreferenceManager.onPreferenceTreeClick(action: ((Preference) -> Boole
     ) { _, _, args ->
         val preference = args[0] as Preference
         action(preference)
+    }
+    field.set(this, proxy)
+}
+
+private val onMenuItemClickListenerField by lazy {
+    Toolbar::class.java.declaredFields.find { f ->
+        f.type.isInterface && f.type.enclosingClass == Toolbar::class.java && f.type.declaredMethods.let {
+            it.size == 1 && it[0].returnType == Boolean::class.javaPrimitiveType && it[0].parameterTypes.let { ts ->
+                ts.size == 1 && ts[0] == MenuItem::class.java
+            }
+        }
+    }?.also { it.isAccessible = true }
+}
+
+fun Toolbar.onMenuItemClick(action: ((MenuItem) -> Boolean)?) {
+    val field = onMenuItemClickListenerField ?: return
+    if (action == null) {
+        field.set(this, null)
+        return
+    }
+    val proxy = Proxy.newProxyInstance(
+        javaClass.classLoader,
+        arrayOf(field.type)
+    ) { _, _, args ->
+        val menuItem = args[0] as MenuItem
+        action(menuItem)
     }
     field.set(this, proxy)
 }
@@ -692,3 +718,9 @@ fun setDeviceSetting(message: MessageLite): Boolean {
         call(Uri.parse(callUri), "method_call_set_setting", typeUrl, extras); true
     } ?: false
 }
+
+val Fragment.hostActivity inline get() = context as Activity
+val Fragment.hostContext inline get() = context!!
+
+inline fun <T> unsafeLazy(noinline initializer: () -> T) =
+    lazy(LazyThreadSafetyMode.NONE, initializer)

@@ -3,9 +3,13 @@
 package app.revanced.bilibili.utils
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.annotation.Px
 
 operator fun ViewGroup.iterator(): MutableIterator<View> = object : MutableIterator<View> {
@@ -49,13 +53,84 @@ inline fun View.show() {
 inline fun <T : View> View.findView(idName: String): T =
     findViewById(Utils.getResId(idName, "id"))
 
+inline fun <T : View> Activity.findView(idName: String): T =
+    findViewById(Utils.getResId(idName, "id"))
+
 inline fun View.setRippleBackground() = with(TypedValue()) {
-    context.theme.resolveAttribute(android.R.attr.selectableItemBackground, this, true)
+    val attr = Utils.getResId("selectableItemBackground", "attr")
+    context.theme.resolveAttribute(attr, this, true)
     setBackgroundResource(resourceId)
 }
 
 @SuppressLint("UseCompatLoadingForDrawables")
 inline fun View.setRippleForeground() = with(TypedValue()) {
-    context.theme.resolveAttribute(android.R.attr.selectableItemBackground, this, true)
+    val attr = Utils.getResId("selectableItemBackground", "attr")
+    context.theme.resolveAttribute(attr, this, true)
     foreground = context.getDrawable(resourceId)
+}
+
+inline fun View.postDelayed(delayInMillis: Long, crossinline action: () -> Unit): Runnable {
+    val runnable = Runnable { action() }
+    postDelayed(runnable, delayInMillis)
+    return runnable
+}
+
+inline fun View.doOnNextLayout(crossinline action: (view: View) -> Unit) {
+    addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
+        override fun onLayoutChange(
+            view: View,
+            left: Int,
+            top: Int,
+            right: Int,
+            bottom: Int,
+            oldLeft: Int,
+            oldTop: Int,
+            oldRight: Int,
+            oldBottom: Int
+        ) {
+            view.removeOnLayoutChangeListener(this)
+            action(view)
+        }
+    })
+}
+
+inline fun TextView.doOnTextChanged(
+    crossinline action: (
+        text: CharSequence?,
+        start: Int,
+        count: Int,
+        after: Int
+    ) -> Unit
+) = addTextChangedListener(onTextChanged = action)
+
+inline fun TextView.addTextChangedListener(
+    crossinline beforeTextChanged: (
+        text: CharSequence?,
+        start: Int,
+        count: Int,
+        after: Int
+    ) -> Unit = { _, _, _, _ -> },
+    crossinline onTextChanged: (
+        text: CharSequence?,
+        start: Int,
+        count: Int,
+        after: Int
+    ) -> Unit = { _, _, _, _ -> },
+    crossinline afterTextChanged: (text: Editable?) -> Unit = {}
+): TextWatcher {
+    val textWatcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            afterTextChanged.invoke(s)
+        }
+
+        override fun beforeTextChanged(text: CharSequence?, start: Int, count: Int, after: Int) {
+            beforeTextChanged.invoke(text, start, count, after)
+        }
+
+        override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
+            onTextChanged.invoke(text, start, before, count)
+        }
+    }
+    addTextChangedListener(textWatcher)
+    return textWatcher
 }

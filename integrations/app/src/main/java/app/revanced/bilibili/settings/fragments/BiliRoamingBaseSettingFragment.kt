@@ -4,15 +4,21 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.RippleDrawable
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.TypedValue
+import android.view.*
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.FragmentTransaction
 import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 import androidx.preference.TwoStatePreference
+import androidx.recyclerview.widget.LinearLayoutManager
 import app.revanced.bilibili.settings.ModulePreferenceManager
 import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.settings.search.SearchResultFragment
+import app.revanced.bilibili.settings.search.annotation.SettingFragment
 import app.revanced.bilibili.utils.*
 import app.revanced.bilibili.widget.HdBaseToolbar
 import com.bilibili.lib.ui.BasePreferenceFragment
@@ -20,7 +26,7 @@ import java.lang.reflect.Field
 
 enum class PrefsDisableReason { APP_VERSION, OS_VERSION, NEW_PLAYER, OFFICIAL_SUPPORTED }
 
-abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) :
+abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String = "") :
     BasePreferenceFragment(), (Preference) -> Boolean {
 
     protected var resumed = false
@@ -30,6 +36,31 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
     private val listener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
         if (!restoring)
             onPreferenceChanged(sharedPreferences, key)
+    }
+    private var located = false
+    protected open val showSearchMenu: Boolean
+        get() = true
+    protected var searchMenu: MenuItem? = null
+        private set
+
+    protected val enterAnimResId by unsafeLazy {
+        val windowAnimationStyleId = with(TypedValue()) {
+            hostActivity.theme.resolveAttribute(android.R.attr.windowAnimationStyle, this, true)
+            resourceId
+        }
+        val attributes = ContextThemeWrapper(context, windowAnimationStyleId)
+            .obtainStyledAttributes(intArrayOf(android.R.attr.activityOpenEnterAnimation))
+        val resId = attributes.getResourceId(0, 0)
+        attributes.recycle()
+        resId
+    }
+
+    init {
+        if (prefsXmlName.isEmpty()) {
+            val annotation = javaClass.getAnnotation(SettingFragment::class.java)
+            if (annotation != null)
+                prefsXmlName = annotation.prefsXmlName
+        }
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -47,6 +78,7 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
     override fun onDestroy() {
         // make sure listening after setting changed
         Settings.unregisterPreferenceChangeListener(listener)
+        located = false
         super.onDestroy()
     }
 
@@ -83,20 +115,57 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
         return rootView
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (!Utils.isHd()) addSearchMenu()
+    }
+
+    @SuppressLint("CommitTransaction")
+    private fun addSearchMenu() {
+        val toolbar = hostActivity.findView<Toolbar>("nav_top_bar")
+        val menuId = Utils.getResId("biliroaming_menu_item_action_search", "id")
+        val menuItem = toolbar.menu.findItem(menuId)
+        if (menuItem == null) {
+            val menuTitle = Utils.getString("biliroaming_search")
+            searchMenu = toolbar.menu.add(Menu.NONE, menuId, Menu.NONE, menuTitle).apply {
+                icon = Utils.getDrawable(context, "biliroaming_ic_search")
+                setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            }
+        } else {
+            searchMenu = menuItem
+        }
+        toolbar.onMenuItemClick {
+            if (it.itemId == menuId) {
+                val title = Utils.getString("biliroaming_search")
+                hostActivity.title = title
+                val contentId = Utils.getResId("content_layout", "id")
+                val tag = SearchResultFragment::class.java.name
+                parentFragmentManager.beginTransaction()
+                    .setCustomAnimations(enterAnimResId, 0, 0, 0)
+                    .replace(contentId, SearchResultFragment(), tag)
+                    .addToBackStack("stack:tag:biliPreferences")
+                    .setBreadCrumbTitle(title)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commitAllowingStateLoss()
+                true
+            } else false
+        }
+    }
+
     @SuppressLint("CommitTransaction")
     override fun invoke(preference: Preference): Boolean {
         preference.fragment?.let {
             val fragmentManager = parentFragmentManager
-            val args = Bundle(preference.extras).apply {
+            val args = preference.extras.apply {
                 putString(EXTRA_TITLE, preference.title?.toString().orEmpty())
             }
             val classLoader = Utils.getContext().classLoader
             val fragment = fragmentManager.fragmentFactory.instantiate(classLoader, it)
             fragment.arguments = args
             fragmentManager.beginTransaction()
-                .replace((requireView().parent as View).id, fragment)
-                .addToBackStack(null)
-                .commit()
+                .replace((requireView().parent as View).id, fragment, it)
+                .addToBackStack("stack:tag:biliPreferences")
+                .commitAllowingStateLoss()
             return true
         }
         return false
@@ -105,6 +174,58 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
     override fun onResume() {
         super.onResume()
         resumed = true
+        searchMenu?.isVisible = showSearchMenu
+        if (!located) {
+            located = true
+            val locationKey = arguments?.getString(EXTRA_LOCATION).orEmpty()
+            if (locationKey.isNotEmpty()) runCatching {
+                highlight(locationKey)
+            }.onFailure {
+                Logger.error(it) { "Failed to highlight preference, key: $locationKey" }
+            }
+        }
+    }
+
+    private fun highlight(key: String) {
+        val listView = listView
+        val adapter = listView.callMethod("getAdapter") ?: return
+        val getPositionMethod = adapter.javaClass.interfaces.firstNotNullOfOrNull { i ->
+            if (i.methods.run { size == 2 && all { it.returnType == Int::class.javaPrimitiveType } }) {
+                i.methods.first { ms -> ms.parameterTypes.let { it.size == 1 && it[0] == String::class.java } }
+            } else null
+        } ?: return
+        val position = adapter.callMethodAs<Int>(getPositionMethod.name, key)
+        if (position == -1) return
+        listView.post {
+            val layoutManager = listView.layoutManager as LinearLayoutManager
+            val centerOffset = ((listView.measuredHeight - 44.dp) / 2).coerceAtLeast(0)
+            layoutManager.scrollToPositionWithOffset(position, centerOffset)
+        }
+        var animCount = 0
+        fun RippleDrawable.performAnimation(view: View) {
+            setState(intArrayOf(android.R.attr.state_pressed, android.R.attr.state_enabled))
+            view.postDelayed(300) {
+                setState(intArrayOf())
+                if (++animCount < 3) {
+                    view.postDelayed(300) {
+                        performAnimation(view)
+                    }
+                }
+            }
+        }
+        listView.postDelayed(300) {
+            runCatching {
+                val holder = listView.callMethod("findViewHolderForAdapterPosition", position)
+                if (holder != null) {
+                    val itemView = holder.getFirstFieldByExactType<View>()
+                    val foreground = itemView.getFirstFieldByExactType<Drawable>()
+                    if (foreground is RippleDrawable)
+                        foreground.performAnimation(listView)
+                }
+            }.onFailure {
+                Logger.error(it) { "Failed to perform ripple animation" }
+            }
+        }
     }
 
     override fun onPause() {
@@ -193,5 +314,6 @@ abstract class BiliRoamingBaseSettingFragment(private val prefsXmlName: String) 
     companion object {
         private var mOnNavigateToScreenListenerField: Field? = null
         const val EXTRA_TITLE = "biliroaming_extra_title"
+        const val EXTRA_LOCATION = "biliroaming_extra_location"
     }
 }

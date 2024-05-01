@@ -1,5 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 val gprUser = providers.gradleProperty("gpr.user")
 val gprKey = providers.gradleProperty("gpr.key")
 
@@ -29,10 +31,12 @@ dependencyResolutionManagement {
     }
 }
 
-include(":integrations:app")
-include(":integrations:dummy")
-include(":integrations:extend")
-include(":integrations")
-include(":patches")
-
+include(
+    ":integrations:app",
+    ":integrations:dummy",
+    ":integrations:extend",
+    ":integrations:ksp",
+    ":integrations",
+    ":patches"
+)
 rootProject.name = "BiliRoamingX"

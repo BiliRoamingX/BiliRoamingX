@@ -8,10 +8,11 @@ import android.widget.EditText
 import androidx.preference.Preference
 import app.revanced.bilibili.settings.Settings.prefs
 import app.revanced.bilibili.settings.dialog.SpeedTestDialog
+import app.revanced.bilibili.settings.search.annotation.SettingFragment
 import app.revanced.bilibili.utils.*
 
-class UnlockAreaLimitFragment :
-    BiliRoamingBaseSettingFragment("biliroaming_setting_unlock_area_limit") {
+@SettingFragment("biliroaming_setting_unlock_area_limit")
+class UnlockAreaLimitFragment : BiliRoamingBaseSettingFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
         findPreference<Preference>("custom_server")?.onClick {
@@ -48,7 +49,7 @@ class UnlockAreaLimitFragment :
             true
         }
         findPreference<Preference>("test_upos")?.onClick {
-            SpeedTestDialog(requireContext()) {
+            SpeedTestDialog(hostContext) {
                 if (!it) return@SpeedTestDialog
                 findPreference<Preference>("upos_host")?.runCatchingOrNull {
                     callMethod("notifyChanged")

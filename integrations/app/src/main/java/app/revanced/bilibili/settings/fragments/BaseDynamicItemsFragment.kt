@@ -10,10 +10,9 @@ import app.revanced.bilibili.utils.constraintSize
 import app.revanced.bilibili.widget.CheckBoxGroupPreference
 
 abstract class BaseDynamicItemsFragment(
-    prefsXmlName: String,
     private val setting: Settings,
     private val allItems: List<BottomItem>
-) : BiliRoamingBaseSettingFragment(prefsXmlName) {
+) : BiliRoamingBaseSettingFragment() {
     private var hintShown = false
 
     override fun onCreate(savedInstanceState: Bundle?) {

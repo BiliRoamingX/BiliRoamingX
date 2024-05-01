@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -55,13 +56,14 @@ android {
 }
 
 dependencies {
-    implementation(parent!!.childProjects["extend"]!!)
+    implementation(projects.integrations.extend)
     implementation(libs.hiddenapibypass)
     implementation(libs.truetypeparser)
     implementation(libs.androidx.documentfile) {
         exclude(libs.androidx.annotation.get().group)
     }
-    compileOnly(parent!!.childProjects["dummy"]!!)
+    ksp(projects.integrations.ksp)
+    compileOnly(projects.integrations.dummy)
     compileOnly(libs.androidx.annotation)
     compileOnly(libs.androidx.appcompat)
     compileOnly(libs.androidx.preference)
