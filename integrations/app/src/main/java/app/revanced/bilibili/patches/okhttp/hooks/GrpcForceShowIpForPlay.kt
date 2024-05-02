@@ -6,7 +6,7 @@ import app.revanced.bilibili.patches.protobuf.MossPatch
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Utils
 
-object ForceShowIpForPlay : BaseFakeClientGrpcHook() {
+object GrpcForceShowIpForPlay : BaseFakeClientGrpcHook() {
     override val fakeToClient: Client
         get() = Client.PINK
 

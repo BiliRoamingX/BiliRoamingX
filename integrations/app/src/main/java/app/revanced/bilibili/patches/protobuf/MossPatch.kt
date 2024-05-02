@@ -3,6 +3,7 @@ package app.revanced.bilibili.patches.protobuf
 import androidx.annotation.Keep
 import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.api.MossResponseHandlerProxy
+import app.revanced.bilibili.meta.Client
 import app.revanced.bilibili.meta.HookFlags
 import app.revanced.bilibili.patches.protobuf.hooks.*
 import app.revanced.bilibili.settings.Settings
@@ -58,7 +59,6 @@ object MossPatch {
     val fakeToPinkForUnlockAreaLimitApis = arrayOf(
         "bilibili.pgc.gateway.player.v2.PlayURL/PlayView",
         "bilibili.app.viewunite.v1.View/View",
-        PLAY_VIEW_UNITE_API,
     )
 
     val fakeToPinkForIPApis = arrayOf(
@@ -158,23 +158,35 @@ object MossPatch {
             && fakeToPinkForUnlockAreaLimitApis.any { url.endsWith(it) }
             || Settings.FORCE_SHOW_IP.boolean && Utils.isPlay()
             && fakeToPinkForIPApis.any { url.endsWith(it) }
-        ) {
-            headers.removeIf { (k, _) -> k == "x-bili-metadata-bin" || k == "x-bili-device-bin" }
-            headers.add(AbstractMap.SimpleImmutableEntry("x-bili-metadata-bin", pinkMetadataHeader))
-            headers.add(AbstractMap.SimpleImmutableEntry("x-bili-device-bin", pinkDeviceHeader))
-        } else if (Utils.isPink() && Settings.TRIAL_VIP_QUALITY.boolean
-            && !Accounts.isEffectiveVip && url.endsWith(PLAY_VIEW_UNITE_API)
-        ) {
-            val networkBinKey = "x-bili-network-bin"
-            val networkBinValue = headers.find { it.key == networkBinKey }?.value
-            if (!networkBinValue.isNullOrEmpty()) {
-                val newNetworkBin = Network.parseFrom(networkBinValue.base64Decode).apply {
-                    type = NetworkType.WIFI
-                }.toByteArray().base64
-                headers.removeIf { (k, _) -> k == networkBinKey }
-                headers.add(AbstractMap.SimpleImmutableEntry(networkBinKey, newNetworkBin))
-            }
+        ) fakeClient(Client.PINK, headers)
+        else if (url.endsWith(PLAY_VIEW_UNITE_API)) {
+            if (Settings.UNLOCK_PLAY_LIMIT.boolean && Utils.isPlay())
+                fakeClient(Client.PINK, headers)
+            if ((Utils.isPink() || Utils.isPlay()) && Settings.TRIAL_VIP_QUALITY.boolean && !Accounts.isEffectiveVip)
+                pinNetworkType(NetworkType.WIFI, headers)
         }
         return url
+    }
+
+    @Suppress("SameParameterValue")
+    private fun pinNetworkType(type: NetworkType, headers: ArrayList<Map.Entry<String, String>>) {
+        val networkBinKey = "x-bili-network-bin"
+        val networkBinValue = headers.find { it.key == networkBinKey }?.value
+        if (!networkBinValue.isNullOrEmpty()) {
+            val newNetworkBin = Network.parseFrom(networkBinValue.base64Decode).apply {
+                this.type = type
+            }.toByteArray().base64
+            headers.removeIf { (k, _) -> k == networkBinKey }
+            headers.add(AbstractMap.SimpleImmutableEntry(networkBinKey, newNetworkBin))
+        }
+    }
+
+    @Suppress("SameParameterValue")
+    private fun fakeClient(client: Client, headers: ArrayList<Map.Entry<String, String>>) {
+        headers.removeIf { (k, _) -> k == "x-bili-metadata-bin" || k == "x-bili-device-bin" }
+        val metadata = grpcMetadataHeader(client)
+        val device = grpcDeviceHeader(client)
+        headers.add(AbstractMap.SimpleImmutableEntry("x-bili-metadata-bin", metadata))
+        headers.add(AbstractMap.SimpleImmutableEntry("x-bili-device-bin", device))
     }
 }

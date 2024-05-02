@@ -561,12 +561,6 @@ fun grpcDeviceHeader(client: Client): String {
     }.toByteArray().base64
 }
 
-val pinkMetadataHeader: String
-    get() = grpcMetadataHeader(Client.PINK)
-
-val pinkDeviceHeader: String
-    get() = grpcDeviceHeader(Client.PINK)
-
 val isChinaEnv: Boolean
     get() = Utils.getContext().resources.configuration.locales[0].let {
         it.language == "zh" && (it.country == "CN" || it.script == "Hans")

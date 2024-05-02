@@ -226,7 +226,7 @@
     <string name="biliroaming_custom_theme_title">自定义主题色</string>
     <string name="biliroaming_custom_theme_summary">添加自定义主题颜色的功能（需从我的右上角调色盘图标进入）</string>
     <string name="biliroaming_trial_vip_quality_title">无限试用会员画质</string>
-    <string name="biliroaming_trial_vip_quality_summary">通过将视频流信息设置为限免达到无限试用会员画质目的，目前只对大部分UP主投稿视频有效，仅支持粉版，如不生效，尝试将播放器版本切换为旧版。</string>
+    <string name="biliroaming_trial_vip_quality_summary">只解决试用次数问题，能否试用取决于官方接口，仅支持粉版，如不生效，尝试将播放器版本切换为旧版。</string>
     <string name="biliroaming_unstable_feature_title">实验性</string>
     <string name="biliroaming_filter_story_title">过滤故事模式视频</string>
     <string name="biliroaming_filter_story_summary">过滤故事模式（竖屏）下的视频</string>

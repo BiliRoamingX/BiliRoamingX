@@ -8,7 +8,7 @@ import app.revanced.bilibili.utils.grpcMetadataHeader
 abstract class BaseFakeClientGrpcHook : ApiHook() {
     abstract val fakeToClient: Client
 
-    final override fun hookBefore(
+    override fun hookBefore(
         url: String,
         headers: Array<String>
     ): Pair<String, Array<String>> {
