@@ -1,10 +1,13 @@
 package app.revanced.bilibili.utils
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.settings.Settings
+import com.bilibili.lib.ui.garb.Garb
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -29,6 +32,38 @@ object ThemeApplier {
 
     val lastGarbConf: File
         get() = File(garbDir, "last.garb.conf")
+
+    private var cachedGarb: Garb? = null
+
+    @JvmStatic
+    fun registerGarbChangeObserver() = (object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val type = intent.getIntExtra("key_broadcast_data_type", 0)
+            if (type == 1) cachedGarb = null
+        }
+    }).let {
+        Utils.getContext().registerReceiverCompat(it, IntentFilter(garbChangeAction))
+    }
+
+    fun currentGarb() = cachedGarb ?: synchronized(this) {
+        val currentThemeKey = blkvPrefs.getInt("theme_entries_current_key", 0)
+        if (currentThemeKey != 1) {
+            garbConf.takeIf { it.isFile }?.runCatchingOrNull {
+                readText().toJSONObject().run {
+                    Garb().apply {
+                        id = optLong("id")
+                        name = optString("name")
+                        colorName = optString("colorName")
+                        fontColor = optInt("fontColor")
+                        secondaryPageColor = optInt("secondaryPageColor")
+                        isDarkMode = optBoolean("darkMode")
+                        mainFontColor = optInt("fontColor")
+                        isMainDarkMode = optBoolean("mainDarkMode")
+                    }
+                }
+            } ?: Garb().apply { id = 8; colorName = "white" }
+        } else Garb().apply { id = 1; colorName = "black" }
+    }.also { cachedGarb = it }
 
     fun customThemeId() = Settings.SKIN_JSON.string.runCatchingOrNull {
         val json = toJSONObject()

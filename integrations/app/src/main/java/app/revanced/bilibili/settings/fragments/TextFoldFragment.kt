@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Constants
+import app.revanced.bilibili.utils.onClick
 
 class TextFoldFragment : BaseWidgetSettingFragment() {
     override fun onCreateView(
@@ -31,7 +32,7 @@ class TextFoldFragment : BaseWidgetSettingFragment() {
             content.addView(it.first); it.second
         }
 
-        saveButton.setOnClickListener {
+        saveButton.onClick {
             Settings.TEXT_FOLD_COMMENT_MAX_LINES.saveValue(commentMaxLinesItem.progress.takeIf { it != 0 }
                 ?: Constants.DEF_COMMENT_MAX_LINES)
             Settings.TEXT_FOLD_DYN_MAX_LINES.saveValue(dynMaxLinesItem.progress.takeIf { it != 0 }

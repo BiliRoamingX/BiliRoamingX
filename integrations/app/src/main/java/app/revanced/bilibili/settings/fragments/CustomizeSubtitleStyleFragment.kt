@@ -108,7 +108,7 @@ class CustomizeSubtitleStyleFragment : BaseWidgetSettingFragment() {
             maxLength = 4,
         ).let { content.addView(it.first); it.second }
 
-        saveButton.setOnClickListener {
+        saveButton.onClick {
             Settings.SUBTITLE_STYLE_SWITCH.saveValue(styleSwitch.isChecked)
             Settings.SUBTITLE_REMOVE_BG.saveValue(removeBgSwitch.isChecked)
             Settings.SUBTITLE_BOLD_TEXT.saveValue(boldSwitch.isChecked)
@@ -230,7 +230,7 @@ class CustomizeSubtitleStyleFragment : BaseWidgetSettingFragment() {
         val resetButton = TintButton(context).apply {
             setBackgroundTintList(Utils.getResId("Wh0", "color"))
             text = string("biliroaming_custom_subtitle_reset")
-            setOnClickListener { onReset() }
+            onClick { onReset() }
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -239,7 +239,7 @@ class CustomizeSubtitleStyleFragment : BaseWidgetSettingFragment() {
         val importButton = TintButton(context).apply {
             setBackgroundTintList(Utils.getResId("Wh0", "color"))
             text = string("biliroaming_custom_subtitle_import")
-            setOnClickListener { onImport() }
+            onClick { onImport() }
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT

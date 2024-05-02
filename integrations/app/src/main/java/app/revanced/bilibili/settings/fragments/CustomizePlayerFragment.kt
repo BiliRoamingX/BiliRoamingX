@@ -34,13 +34,13 @@ class CustomizePlayerFragment : BiliRoamingBaseSettingFragment() {
             .setPositiveButton(android.R.string.ok, null)
             .setNegativeButton(android.R.string.cancel, null)
             .create().constraintSize().onShow {
-                getButton(Dialog.BUTTON_POSITIVE)?.setOnClickListener {
+                getButton(Dialog.BUTTON_POSITIVE)?.onClick {
                     val text = editText.text.toString().trim()
                     if (text.isEmpty()) {
                         settings.saveValue(0f)
                         dismiss()
                         Toasts.showShortWithId("biliroaming_speed_save_ok")
-                        return@setOnClickListener
+                        return@onClick
                     }
                     val speed = text.toFloatOrNull()
                     if (speed == null || speed <= 0f || !speed.isFinite()) {
@@ -66,13 +66,13 @@ class CustomizePlayerFragment : BiliRoamingBaseSettingFragment() {
             .setPositiveButton(android.R.string.ok, null)
             .setNegativeButton(android.R.string.cancel, null)
             .create().constraintSize().onShow {
-                getButton(Dialog.BUTTON_POSITIVE)?.setOnClickListener {
+                getButton(Dialog.BUTTON_POSITIVE)?.onClick {
                     val text = editText.text.toString().trim()
                     if (text.isEmpty()) {
                         Settings.OVERRIDE_PLAYBACK_SPEED.saveValue("")
                         dismiss()
                         Toasts.showShortWithId("biliroaming_speed_save_ok")
-                        return@setOnClickListener
+                        return@onClick
                     }
                     val speedList = text.runCatchingOrNull {
                         split(' ').filter { it.isNotBlank() }

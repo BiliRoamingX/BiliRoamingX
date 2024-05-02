@@ -69,7 +69,7 @@ object SubtitleImportSavePatch {
         val widgetService = widget.getObjectField(
             "widgetServiceForBiliRoaming"
         ) ?: return
-        importButton.setOnClickListener { button ->
+        importButton.onClick { button ->
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 type = "*/*"
                 putExtra(
@@ -110,9 +110,9 @@ object SubtitleImportSavePatch {
                 Toasts.showShortWithId("biliroaming_pls_install_file_manager")
             }
         }
-        saveButton.setOnClickListener { button ->
+        saveButton.onClick { button ->
             val dmViewReply = interactLayerService.callMethod(getDanmakuParamsMethod)
-                ?.callMethodAs<DmViewReply>(getDmViewReplyMethod) ?: return@setOnClickListener
+                ?.callMethodAs<DmViewReply>(getDmViewReplyMethod) ?: return@onClick
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
                 Utils.async { saveSubtitles(dmViewReply) }
             } else {

@@ -4,11 +4,14 @@ package app.revanced.bilibili.utils
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.os.Build
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.annotation.Px
 
@@ -49,6 +52,12 @@ inline fun View.hide() {
 inline fun View.show() {
     visibility = View.VISIBLE
 }
+
+inline var View.isVisible: Boolean
+    get() = visibility == View.VISIBLE
+    set(value) {
+        visibility = if (value) View.VISIBLE else View.GONE
+    }
 
 inline fun <T : View> View.findView(idName: String): T =
     findViewById(Utils.getResId(idName, "id"))
@@ -133,4 +142,21 @@ inline fun TextView.addTextChangedListener(
     }
     addTextChangedListener(textWatcher)
     return textWatcher
+}
+
+inline fun <T : View> T.onClick(crossinline action: (T) -> Unit) {
+    setOnClickListener { action(this) }
+}
+
+fun View.showKeyboard() = post {
+    requestFocus()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        windowInsetsController?.show(WindowInsets.Type.ime())
+    } else postDelayed(50) {
+        systemService<InputMethodManager>().showSoftInput(this, 0)
+    }
+}
+
+fun View.hideKeyboard() {
+    systemService<InputMethodManager>().hideSoftInputFromWindow(windowToken, 0)
 }

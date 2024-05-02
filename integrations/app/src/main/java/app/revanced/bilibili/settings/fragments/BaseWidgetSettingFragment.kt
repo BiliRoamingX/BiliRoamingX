@@ -128,14 +128,14 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
         val button = TintButton(context).apply {
             setBackgroundTintList(Utils.getResId("Wh0", "color"))
             this.text = buttonName
-            setOnClickListener { onButtonClick(editText) }
+            onClick { onButtonClick(editText) }
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
         if (buttonName.isEmpty())
-            button.visibility = View.GONE
+            button.hide()
         layout.addView(textView)
         layout.addView(editText)
         layout.addView(button)
@@ -176,7 +176,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
             )
             minWidth = 60.dp
             minimumWidth = 60.dp
-            setOnClickListener(onAdd)
+            onClick(onAdd)
         }
         val clearView = TintButton(context).apply {
             setBackgroundTintList(Utils.getResId("Wh0", "color"))
@@ -185,10 +185,10 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-            visibility = View.GONE
             minWidth = 60.dp
             minimumWidth = 60.dp
-            setOnClickListener { group.removeAllViews() }
+            onClick { group.removeAllViews() }
+            hide()
         }
         val regexModeView = tintView<TextView>().apply {
             text = string("biliroaming_regex_mode")
@@ -202,8 +202,8 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
             isHapticFeedbackEnabled = false
         }
         if (!showRegex) {
-            regexModeView.visibility = View.GONE
-            regexModeSwitch.visibility = View.GONE
+            regexModeView.hide()
+            regexModeSwitch.hide()
         }
         layout.addView(nameView)
         layout.addView(addView)
@@ -244,7 +244,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
             )
             minWidth = 60.dp
             minimumWidth = 60.dp
-            setOnClickListener { parent.removeView(layout) }
+            onClick { parent.removeView(layout) }
         }
         layout.addView(editText)
         layout.addView(button)
@@ -325,7 +325,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
-        layout.setOnClickListener { switcher.toggle() }
+        layout.onClick { switcher.toggle() }
         layout.setRippleBackground()
         layout.addView(titleView)
         layout.addView(switcher)

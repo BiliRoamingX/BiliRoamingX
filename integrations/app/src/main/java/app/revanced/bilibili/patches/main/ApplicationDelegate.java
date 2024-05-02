@@ -46,6 +46,7 @@ import app.revanced.bilibili.utils.PreferenceUpdater;
 import app.revanced.bilibili.utils.Reflex;
 import app.revanced.bilibili.utils.SettingsSyncHelper;
 import app.revanced.bilibili.utils.SubtitleParamsCache;
+import app.revanced.bilibili.utils.ThemeApplier;
 import app.revanced.bilibili.utils.UposReplacer;
 import app.revanced.bilibili.utils.Utils;
 import tv.danmaku.bili.MainActivityV2;
@@ -68,6 +69,7 @@ public class ApplicationDelegate {
             KtUtils.getCountryTask();
             UposReplacer.getBaseUposList();
             PreferenceUpdater.register();
+            ThemeApplier.registerGarbChangeObserver();
             Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypes));
             Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypesV2));
             Utils.runOnMainThread(2000L, () -> Utils.async(CouponAutoReceiver::check));

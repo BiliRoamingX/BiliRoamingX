@@ -65,10 +65,12 @@ object SettingsResourcePatch : ResourcePatch() {
         "biliroaming_dialog_argb_color_choose.xml",
         "biliroaming_dialog_color_choose.xml",
         "biliroaming_dialog_area_server.xml",
+        "biliroaming_search_bar.xml",
     )
     private val drawables = arrayOf(
         "biliroaming_bg_transparent.webp",
         "biliroaming_ic_search.xml",
+        "biliroaming_ic_clear.xml",
     )
 
     override fun execute(context: ResourceContext) {

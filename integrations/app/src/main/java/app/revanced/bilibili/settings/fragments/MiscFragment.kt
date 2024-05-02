@@ -138,17 +138,17 @@ class MiscFragment : BiliRoamingBaseSettingFragment() {
             .setNegativeButton(Utils.getString("biliroaming_skin_get"), null)
             .setNeutralButton(Utils.getString("biliroaming_skin_import_from_file"), null)
             .create().constraintSize(maxHeight = -1).onShow {
-                getButton(Dialog.BUTTON_POSITIVE)?.setOnClickListener {
+                getButton(Dialog.BUTTON_POSITIVE)?.onClick {
                     val text = view.text.toString().trim()
                     if (text.runCatchingOrNull { toJSONObject() } == null) {
                         Toasts.showShortWithId("biliroaming_skin_invalid")
-                        return@setOnClickListener
+                        return@onClick
                     }
                     Settings.SKIN_JSON.saveValue(text)
                     changeThemeState(true)
                     dismiss()
                 }
-                getButton(Dialog.BUTTON_NEUTRAL)?.setOnClickListener {
+                getButton(Dialog.BUTTON_NEUTRAL)?.onClick {
                     try {
                         startActivityForResult(
                             Intent.createChooser(Intent().apply {
@@ -162,7 +162,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment() {
                         Toasts.showShortWithId("biliroaming_pls_install_file_manager")
                     }
                 }
-                getButton(Dialog.BUTTON_NEGATIVE)?.setOnClickListener {
+                getButton(Dialog.BUTTON_NEGATIVE)?.onClick {
                     val uri = Uri.parse("https://github.com/Rovniced/bilibili-skin")
                     val intent = Intent(Intent.ACTION_VIEW, uri)
                     startActivity(intent)

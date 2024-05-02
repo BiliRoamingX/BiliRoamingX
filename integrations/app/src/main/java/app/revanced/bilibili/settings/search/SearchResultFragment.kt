@@ -1,22 +1,17 @@
 package app.revanced.bilibili.settings.search
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsets
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.fragment.app.FragmentTransaction
 import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
 import app.revanced.bilibili.settings.fragments.BiliRoamingBaseSettingFragment
 import app.revanced.bilibili.utils.*
+import app.revanced.bilibili.widget.SearchBar
 
 class SearchResultFragment : BiliRoamingBaseSettingFragment("biliroaming_search_result") {
-    private var editText: EditText? = null
     override val showSearchMenu: Boolean
         get() = false
 
@@ -27,37 +22,16 @@ class SearchResultFragment : BiliRoamingBaseSettingFragment("biliroaming_search_
     ): View {
         val rootView = super.onCreateView(inflater, container, savedInstanceState) as ViewGroup
         val insertIndex = if (Utils.isHd()) 1 else 0
-        val editText = EditText(context).apply {
-            layoutParams = ViewGroup.MarginLayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-        }
-        rootView.addView(editText, insertIndex)
-        this.editText = editText
-        editText.doOnTextChanged { text, _, _, _ ->
-            search(text?.toString().orEmpty().trim())
-        }
+        val searchBar = SearchBar(hostContext)
+        rootView.addView(searchBar, insertIndex)
+        searchBar.onSearch = { search(it) }
         return rootView
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        editText?.requestFocus()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            hostActivity.window?.decorView?.windowInsetsController?.show(WindowInsets.Type.ime())
-        } else {
-            editText?.postDelayed(50) {
-                systemService<InputMethodManager>().showSoftInput(editText, 0)
-            }
-        }
-    }
-
     private fun search(keyword: String) {
-        val category = findPreference<PreferenceCategory>("category_search_result")
-            ?: return
+        val root = preferenceScreen
         if (keyword.isEmpty()) {
-            category.removeAll()
+            root.removeAll()
             return
         }
         Utils.async {
@@ -79,9 +53,9 @@ class SearchResultFragment : BiliRoamingBaseSettingFragment("biliroaming_search_
                 }
             }.also { preferences ->
                 Utils.runOnMainThread {
-                    category.removeAll()
+                    root.removeAll()
                     preferences.forEach {
-                        category.addPreference(it)
+                        root.addPreference(it)
                     }
                 }
             }

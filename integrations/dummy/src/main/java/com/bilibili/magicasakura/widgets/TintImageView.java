@@ -18,4 +18,7 @@ public class TintImageView extends ImageView {
     public TintImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
+
+    public void setImageTintList(int i14) {
+    }
 }

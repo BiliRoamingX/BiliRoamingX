@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Toasts
 import app.revanced.bilibili.utils.dp
+import app.revanced.bilibili.utils.onClick
 
 class FilterDynamicByKeywordFragment : BaseWidgetSettingFragment() {
     override fun onCreateView(
@@ -41,12 +42,12 @@ class FilterDynamicByKeywordFragment : BaseWidgetSettingFragment() {
             topicGroup.addView(keywordInputItem(topicGroup, it).first)
         }
 
-        saveButton.setOnClickListener {
+        saveButton.onClick {
             val contents = contentGroup.getKeywords()
             val contentRegexMode = contentRegexSwitch.isChecked
             if (contentRegexMode && contents.runCatching { forEach { it.toRegex() } }.isFailure) {
                 Toasts.showShortWithId("biliroaming_invalid_regex")
-                return@setOnClickListener
+                return@onClick
             }
 
             Settings.DYNAMIC_PURIFY_CONTENT.saveValue(contents)

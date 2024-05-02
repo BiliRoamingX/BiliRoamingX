@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.RippleDrawable
 import android.os.Bundle
@@ -175,6 +176,7 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
         super.onResume()
         resumed = true
         searchMenu?.isVisible = showSearchMenu
+        if (!Utils.isHd()) tintSearchMenu()
         if (!located) {
             located = true
             val locationKey = arguments?.getString(EXTRA_LOCATION).orEmpty()
@@ -183,6 +185,18 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
             }.onFailure {
                 Logger.error(it) { "Failed to highlight preference, key: $locationKey" }
             }
+        }
+    }
+
+    private fun tintSearchMenu() {
+        val searchMenuIcon = searchMenu?.icon
+        val garb = ThemeApplier.currentGarb()
+        if (!garb.isPure) {
+            searchMenuIcon?.setTint(garb.fontColor)
+        } else if (garb.id.let { it != 1L && it != 8L }) {
+            searchMenuIcon?.setTint(Color.WHITE)
+        } else {
+            searchMenuIcon?.setTint(Utils.getColor(context, "theme_color_primary_tr_icon"))
         }
     }
 

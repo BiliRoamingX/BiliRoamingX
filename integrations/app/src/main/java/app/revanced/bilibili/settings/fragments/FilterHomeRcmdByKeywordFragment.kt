@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Toasts
+import app.revanced.bilibili.utils.onClick
 
 class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
     companion object {
@@ -84,7 +85,7 @@ class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
             channelGroup.addView(keywordInputItem(channelGroup, it).first)
         }
 
-        saveButton.setOnClickListener {
+        saveButton.onClick {
             val lowPlayCount = lowPlayCountInput.text.toString().toLongOrNull() ?: 0
             val shortDuration = shortDurationInput.text.toString().toIntOrNull() ?: 0
             val longDuration = longDurationInput.text.toString().toIntOrNull() ?: 0
@@ -93,19 +94,19 @@ class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
             val titleRegexMode = titleRegexModeSwitch.isChecked
             if (titleRegexMode && titles.runCatching { forEach { it.toRegex() } }.isFailure) {
                 Toasts.showShortWithId("biliroaming_invalid_regex")
-                return@setOnClickListener
+                return@onClick
             }
             val reasons = reasonGroup.getKeywords()
             val reasonRegexMode = reasonRegexModeSwitch.isChecked
             if (reasonRegexMode && reasons.runCatching { forEach { it.toRegex() } }.isFailure) {
                 Toasts.showShortWithId("biliroaming_invalid_regex")
-                return@setOnClickListener
+                return@onClick
             }
             val ups = upGroup.getKeywords()
             val upRegexMode = upRegexModeSwitch.isChecked
             if (upRegexMode && ups.runCatching { forEach { it.toRegex() } }.isFailure) {
                 Toasts.showShortWithId("biliroaming_invalid_regex")
-                return@setOnClickListener
+                return@onClick
             }
 
             Settings.LOW_PLAY_COUNT_LIMIT.saveValue(lowPlayCount)

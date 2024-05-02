@@ -1,18 +1,14 @@
 package app.revanced.bilibili.patches
 
 import android.view.ScaleGestureDetector
-import android.view.View
 import android.widget.TextView
 import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.utils.*
 import app.revanced.bilibili.utils.PlayerHookProvider.getAspectRatio
 import app.revanced.bilibili.utils.PlayerHookProvider.restore
 import app.revanced.bilibili.utils.PlayerHookProvider.setAspectRatio
 import app.revanced.bilibili.utils.PlayerHookProvider.showTextToast
-import app.revanced.bilibili.utils.Utils
-import app.revanced.bilibili.utils.callMethod
-import app.revanced.bilibili.utils.getObjectField
-import app.revanced.bilibili.utils.vibrate
 import tv.danmaku.videoplayer.core.videoview.AspectRatio
 
 object PlayerGestureDetectorPatch {
@@ -90,6 +86,6 @@ object PlayerGestureDetectorPatch {
     @JvmStatic
     fun onSetResizeTextVisibility(textView: TextView?) {
         if (scaleToSwitchRatio())
-            textView?.visibility = View.GONE
+            textView?.hide()
     }
 }
