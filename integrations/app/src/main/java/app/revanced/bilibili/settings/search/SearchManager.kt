@@ -20,8 +20,13 @@ data class PreferenceItem(
     private var routeCache = ""
 
     fun calScore(keyword: String): Int {
+        val keywords = keyword.split(' ')
         var score = 0
+        if (keywords.all { title.contains(it, ignoreCase = true) })
+            score += 8
         if (title.contains(keyword, ignoreCase = true))
+            score += 4
+        if (keywords.all { summary.contains(it, ignoreCase = true) })
             score += 2
         if (summary.contains(keyword, ignoreCase = true))
             score += 1
