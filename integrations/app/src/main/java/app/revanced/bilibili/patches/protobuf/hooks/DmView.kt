@@ -174,8 +174,7 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
                         || (it == "cn.friday" && replaceToFriday)
                     ) "zh-Hans" else it
                 }
-                lanDoc = subtitle.optString("title").replace("[非官方]", "")
-                    .replace("富睿字幕组", "").trim()
+                lanDoc = subtitle.optString("title")
             }.let { subList.add(it) }
         }
         return subList
