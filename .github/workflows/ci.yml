@@ -16,26 +16,36 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
           cache: 'gradle'
 
-      - name: Retrieve version
+      - name: Cache Gradle Wrapper
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/wrapper
+            ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build verCode and verNumber
         run: |
-          version=`awk -F "=" '$1 == "version" {print $2}' gradle.properties`
-          commit_count=`git rev-list main --count`
+          version=$(awk -F '=' '/^version/ { gsub(/ /, "", $2); print $2 }' gradle.properties)
+          commit_count=$(git rev-list --count HEAD)
           version="${version}.r${commit_count}"
           echo "VERSION=$version" >> $GITHUB_ENV
 
-      - name: Build with gradle
+      - name: Build with Gradle
+        run: ./gradlew --no-daemon -Pversion=${{ env.VERSION }} dist
         env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: ./gradlew --no-daemon -Pversion=$VERSION dist
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload integrations and patches
+      - name: Upload files #integrations and patches
         uses: actions/upload-artifact@v4
         if: success()
         with:
