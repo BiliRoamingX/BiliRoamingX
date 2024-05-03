@@ -105,14 +105,14 @@ class MiscFragment : BiliRoamingBaseSettingFragment() {
         onSuccess: () -> Unit = {}
     ) = Utils.async {
         if (enabled) runCatching {
-            ThemeApplier.applyCustomTheme(context)
+            Themes.applyCustomTheme(context)
         }.onFailure {
             Logger.error(it) { "download current theme failed" }
             Toasts.showShort("主题设置失败！")
         }.onSuccess {
             onSuccess()
         } else runCatching {
-            ThemeApplier.unloadTheme(context)
+            Themes.unloadTheme(context)
         }.onFailure {
             Logger.error(it) { "unload theme failed" }
         }.onSuccess {

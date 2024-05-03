@@ -14,7 +14,7 @@ import java.io.File
 import java.net.URL
 import java.util.zip.ZipInputStream
 
-object ThemeApplier {
+object Themes {
     private const val PURE_GARB_TEMPLATE =
         """{"animateLoop":false,"bottomIconsEmpty":true,"btnBgEndColor":0,"btnBgStartColor":0,"btnIconColor":0,"btnIconPath":"","btnIconSelectedPath":"","changeable":true,"colorName":"%s","darkMode":true,"fontColor":0,"force":false,"hasAnimate":false,"headBgPath":"","headMineBgAnimatorPath":"","headMineBgPath":"","headMineSquaredBgPath":"","headTabBgPath":"","id":%d,"loadAllFile":false,"mainDarkMode":true,"mainFontColor":0,"mineAnimateLoop":false,"name":"","op":false,"primaryOnly":false,"secondaryPageColor":0,"sideBgColor":0,"sideBgPath":"","sideBottomBgPath":"","sideLineColor":0,"tailBgPath":"","tailColor":0,"tailColorModel":false,"tailIconColor":0,"tailIconColorNight":0,"tailIconColorSelected":0,"tailIconColorSelectedNight":0,"tailIconPath":[],"tailIconSelectedPath":[],"tailSelectedColor":0,"ver":0}"""
 
@@ -33,34 +33,69 @@ object ThemeApplier {
     val lastGarbConf: File
         get() = File(garbDir, "last.garb.conf")
 
+    val currentThemeId get() = blkvPrefs.getInt("theme_entries_current_key", 0)
+    val isNightTheme get() = currentThemeId == 1
+    val isWhiteTheme get() = currentThemeId == 8
+
     private var cachedGarb: Garb? = null
 
-    @JvmStatic
-    fun registerGarbChangeObserver() = (object : BroadcastReceiver() {
+    private class GarbChangeReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val type = intent.getIntExtra("key_broadcast_data_type", 0)
-            if (type == 1) cachedGarb = null
+            val garbData = intent.getStringExtra("key_garb_data")
+            val syncFromMainProcess =
+                intent.getBooleanExtra("key_theme_change_sync_from_main_process", false)
+            val sync = intent.getBooleanExtra("key_theme_change_sync_garb", false)
+            if (type != 1) return
+            cachedGarb = null
+            if (garbData.isNullOrEmpty() || syncFromMainProcess) return
+            val garb = garbData.runCatchingOrNull { toGarb() } ?: return
+            val nightTheme = isNightTheme
+            val finalGarb = if (!garb.isPure && !sync && nightTheme) {
+                Garb().apply { id = 1; colorName = "black" }
+            } else garb
+            if (finalGarb.isPrimaryOnly) {
+                val fontColor = (if (nightTheme) "#A2A7AE" else "#61666D").toIntColor(0)
+                val pageColor = (if (nightTheme) "#17181A" else "#FFFFFF").toIntColor(0)
+                finalGarb.fontColor = fontColor
+                finalGarb.secondaryPageColor = pageColor
+                finalGarb.isDarkMode = !nightTheme
+            }
+            GarbWatcher.onChanged(finalGarb)
+            Logger.debug {
+                val name = finalGarb.name.orEmpty().ifEmpty { finalGarb.colorName }
+                "Themes, onGarbChanged, id: ${finalGarb.id}, name: $name"
+            }
         }
-    }).let {
-        Utils.getContext().registerReceiverCompat(it, IntentFilter(garbChangeAction))
+    }
+
+    @JvmStatic
+    fun registerGarbChangeObserver() {
+        Utils.getContext().registerReceiverCompat(
+            GarbChangeReceiver(),
+            IntentFilter(garbChangeAction).apply { priority = -100 }
+        )
+    }
+
+    private fun String.toGarb() = toJSONObject().run {
+        Garb().apply {
+            id = optLong("id")
+            name = optString("name")
+            colorName = optString("colorName")
+            isPrimaryOnly = optBoolean("primaryOnly")
+            fontColor = optInt("fontColor")
+            secondaryPageColor = optInt("secondaryPageColor")
+            isDarkMode = optBoolean("darkMode")
+            mainFontColor = optInt("fontColor")
+            isMainDarkMode = optBoolean("mainDarkMode")
+            // ignore other not needed fields
+        }
     }
 
     fun currentGarb() = cachedGarb ?: synchronized(this) {
-        val currentThemeKey = blkvPrefs.getInt("theme_entries_current_key", 0)
-        if (currentThemeKey != 1) {
+        if (!isNightTheme) {
             garbConf.takeIf { it.isFile }?.runCatchingOrNull {
-                readText().toJSONObject().run {
-                    Garb().apply {
-                        id = optLong("id")
-                        name = optString("name")
-                        colorName = optString("colorName")
-                        fontColor = optInt("fontColor")
-                        secondaryPageColor = optInt("secondaryPageColor")
-                        isDarkMode = optBoolean("darkMode")
-                        mainFontColor = optInt("fontColor")
-                        isMainDarkMode = optBoolean("mainDarkMode")
-                    }
-                }
+                readText().toGarb()
             } ?: Garb().apply { id = 8; colorName = "white" }
         } else Garb().apply { id = 1; colorName = "black" }
     }.also { cachedGarb = it }
@@ -217,7 +252,7 @@ object ThemeApplier {
             putExtra("key_broadcast_data_type", 1)
             putExtra("key_garb_data", garb)
             putExtra("key_theme_change_sync_garb", false)
-            putExtra("key_theme_change_should_report", true)
+            putExtra("key_theme_change_should_report", false)
             putExtra("key_theme_change_sync_from_main_process", false)
         }.let { context.sendBroadcast(it) }
     }

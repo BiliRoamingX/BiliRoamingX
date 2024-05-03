@@ -53,7 +53,7 @@ object RemoveVipSectionPatch {
             return 8
         if (currentResolvedThemeId != -1L)
             return currentResolvedThemeId
-        val confFile = ThemeApplier.garbConf
+        val confFile = Themes.garbConf
         return (if (confFile.isFile) runCatchingOrNull {
             confFile.readText().toJSONObject().optLong("id", 8)
         } ?: 8 else 8).also { currentResolvedThemeId = it }
@@ -65,7 +65,7 @@ object RemoveVipSectionPatch {
             return -1
         if (lastResolvedThemeId != -1L)
             return lastResolvedThemeId
-        val confFile = ThemeApplier.lastGarbConf
+        val confFile = Themes.lastGarbConf
         return (if (confFile.isFile) runCatchingOrNull {
             confFile.readText().toJSONObject().optLong("id", -1)
         } ?: -1 else -1).also { lastResolvedThemeId = it }

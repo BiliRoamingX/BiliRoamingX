@@ -23,10 +23,12 @@ import app.revanced.bilibili.settings.search.annotation.SettingFragment
 import app.revanced.bilibili.utils.*
 import app.revanced.bilibili.widget.HdBaseToolbar
 import com.bilibili.lib.ui.BasePreferenceFragment
+import com.bilibili.lib.ui.garb.Garb
 import java.lang.reflect.Field
 
 enum class PrefsDisableReason { APP_VERSION, OS_VERSION, NEW_PLAYER, OFFICIAL_SUPPORTED }
 
+@Suppress("DEPRECATION")
 abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String = "") :
     BasePreferenceFragment(), (Preference) -> Boolean {
 
@@ -41,8 +43,6 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
     private var located = false
     protected open val showSearchMenu: Boolean
         get() = true
-    protected var searchMenu: MenuItem? = null
-        private set
 
     protected val enterAnimResId by unsafeLazy {
         val windowAnimationStyleId = with(TypedValue()) {
@@ -66,14 +66,18 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         fixPreferenceManager()
-        val resId = Utils.getResId(prefsXmlName, "xml")
-        addPreferencesFromResource(resId)
+        if (prefsXmlName.isNotEmpty()) {
+            val resId = Utils.getResId(prefsXmlName, "xml")
+            addPreferencesFromResource(resId)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // make sure listening after setting changed
         Settings.registerPreferenceChangeListener(listener)
+        if (!Utils.isHd() && showSearchMenu)
+            setHasOptionsMenu(true)
     }
 
     override fun onDestroy() {
@@ -116,41 +120,33 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
         return rootView
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if (!Utils.isHd()) addSearchMenu()
+    @Deprecated("Deprecated in Java")
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        val menuId = Utils.getResId("biliroaming_menu_item_action_search", "id")
+        val menuTitle = Utils.getString("biliroaming_search")
+        val searchMenu = menu.add(Menu.NONE, menuId, Menu.NONE, menuTitle).apply {
+            icon = Utils.getDrawable(context, "biliroaming_ic_search")
+            setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        }
+        tintSearchMenu(searchMenu)
     }
 
-    @SuppressLint("CommitTransaction")
-    private fun addSearchMenu() {
-        val toolbar = hostActivity.findView<Toolbar>("nav_top_bar")
-        val menuId = Utils.getResId("biliroaming_menu_item_action_search", "id")
-        val menuItem = toolbar.menu.findItem(menuId)
-        if (menuItem == null) {
-            val menuTitle = Utils.getString("biliroaming_search")
-            searchMenu = toolbar.menu.add(Menu.NONE, menuId, Menu.NONE, menuTitle).apply {
-                icon = Utils.getDrawable(context, "biliroaming_ic_search")
-                setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-            }
-        } else {
-            searchMenu = menuItem
-        }
-        toolbar.onMenuItemClick {
-            if (it.itemId == menuId) {
-                val title = Utils.getString("biliroaming_search")
-                hostActivity.title = title
-                val contentId = Utils.getResId("content_layout", "id")
-                val tag = SearchResultFragment::class.java.name
-                parentFragmentManager.beginTransaction()
-                    .setCustomAnimations(enterAnimResId, 0, 0, 0)
-                    .replace(contentId, SearchResultFragment(), tag)
-                    .addToBackStack("stack:tag:biliPreferences")
-                    .setBreadCrumbTitle(title)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .commitAllowingStateLoss()
-                true
-            } else false
-        }
+    @Deprecated("Deprecated in Java")
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == Utils.getResId("biliroaming_menu_item_action_search", "id")) {
+            val title = Utils.getString("biliroaming_search")
+            hostActivity.title = title
+            val contentId = Utils.getResId("content_layout", "id")
+            val tag = SearchResultFragment::class.java.name
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(enterAnimResId, 0, 0, 0)
+                .replace(contentId, SearchResultFragment(), tag)
+                .addToBackStack("stack:tag:biliPreferences")
+                .setBreadCrumbTitle(title)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commitAllowingStateLoss()
+            true
+        } else false
     }
 
     @SuppressLint("CommitTransaction")
@@ -175,8 +171,6 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
     override fun onResume() {
         super.onResume()
         resumed = true
-        searchMenu?.isVisible = showSearchMenu
-        if (!Utils.isHd()) tintSearchMenu()
         if (!located) {
             located = true
             val locationKey = arguments?.getString(EXTRA_LOCATION).orEmpty()
@@ -188,16 +182,22 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
         }
     }
 
-    private fun tintSearchMenu() {
-        val searchMenuIcon = searchMenu?.icon
-        val garb = ThemeApplier.currentGarb()
-        if (!garb.isPure) {
-            searchMenuIcon?.setTint(garb.fontColor)
+    protected fun tintSearchMenu(menu: MenuItem? = null, garb: Garb = Themes.currentGarb()) {
+        val searchMenu = menu ?: run {
+            val toolbar = hostActivity.findView<Toolbar>("nav_top_bar")
+            val menuId = Utils.getResId("biliroaming_menu_item_action_search", "id")
+            toolbar.menu.findItem(menuId)
+        } ?: return
+        val searchMenuIcon = searchMenu.icon ?: return
+        val newIcon = searchMenuIcon.mutate()
+        if (!garb.isPure && !garb.isPrimaryOnly) {
+            newIcon.setTint(garb.fontColor)
         } else if (garb.id.let { it != 1L && it != 8L }) {
-            searchMenuIcon?.setTint(Color.WHITE)
+            newIcon.setTint(Color.WHITE)
         } else {
-            searchMenuIcon?.setTint(Utils.getColor(context, "theme_color_primary_tr_icon"))
+            newIcon.setTint(Utils.getColor(context, "theme_color_primary_tr_icon"))
         }
+        searchMenu.icon = newIcon
     }
 
     private fun highlight(key: String) {

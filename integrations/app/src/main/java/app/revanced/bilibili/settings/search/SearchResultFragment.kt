@@ -69,11 +69,14 @@ class SearchResultFragment : BiliRoamingBaseSettingFragment("biliroaming_search_
         val hostActivity = hostActivity
         val enterAnimResId = enterAnimResId
         // keep BiliRoamingSettingsFragment
-        repeat(fragmentManager.backStackEntryCount - 1) {
-            fragmentManager.popBackStack()
-        }
+        val moduleName = Utils.getString("biliroaming_settings_title")
+        val backStackEntryCount = fragmentManager.backStackEntryCount
+        val popCount = if (backStackEntryCount > 0
+            && fragmentManager.getBackStackEntryAt(0).breadCrumbTitle == moduleName
+        ) backStackEntryCount - 1 else backStackEntryCount
+        repeat(popCount) { fragmentManager.popBackStack() }
         fragmentManager.executePendingTransactions()
-        val title = item.parent?.title ?: Utils.getString("biliroaming_settings_title")
+        val title = item.parent?.title ?: moduleName
         hostActivity.title = title
         val contentId = Utils.getResId("content_layout", "id")
         val fragment = item.belongFragment.new().apply {

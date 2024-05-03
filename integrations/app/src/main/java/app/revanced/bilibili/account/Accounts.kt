@@ -12,6 +12,7 @@ import android.util.Base64
 import app.revanced.bilibili.account.model.*
 import app.revanced.bilibili.http.HttpClient
 import app.revanced.bilibili.patches.main.ApplicationDelegate
+import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import org.json.JSONObject
 import java.io.File
@@ -170,6 +171,7 @@ object Accounts {
     fun refresh(action: Int) {
         val isSignOut = action == PassportChangeReceiver.ACTION_SIGN_OUT
         val isUpdateAccount = action == PassportChangeReceiver.ACTION_UPDATE_ACCOUNT
+        val isSwitchAccount = action == PassportChangeReceiver.ACTION_SWITCH_ACCOUNT
         if (isSignOut) {
             accountCache = null
             accountInfoCache = null
@@ -184,6 +186,11 @@ object Accounts {
                 Utils.runOnMainThread(5000L) {
                     Utils.async { checkUserStatus() }
                 }
+        }
+        if ((isSignOut || isSwitchAccount) && Utils.isMainProcess() && Settings.SKIN.boolean) {
+            Settings.SKIN.saveValue(false)
+            Themes.unloadLoadEquip()
+            Toasts.showLong("检测到账号变动，已关闭自制主题")
         }
     }
 
@@ -259,6 +266,7 @@ class PassportChangeReceiver : BroadcastReceiver() {
         private const val ACTION = "com.bilibili.passport.ACTION_MSG"
         const val ACTION_SIGN_OUT = 2
         const val ACTION_UPDATE_ACCOUNT = 5
+        const val ACTION_SWITCH_ACCOUNT = 6
         private const val EXTRA_WHAT = "com.bilibili.passport.what"
         private const val EXTRA_PID = "com.bilibili.passport.pid"
         private const val EXTRA_UID = "com.bilibili.passport.uid"

@@ -9,9 +9,8 @@ import androidx.annotation.ColorInt
 import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.settings.dialog.ColorChooseDialog
-import app.revanced.bilibili.utils.ThemeApplier
+import app.revanced.bilibili.utils.Themes
 import app.revanced.bilibili.utils.Toasts
-import app.revanced.bilibili.utils.blkvPrefs
 import app.revanced.bilibili.widget.OnClickOriginListener
 import com.bilibili.compose.theme.ThemeDayNight
 import com.bilibili.lib.ui.garb.Garb
@@ -39,9 +38,6 @@ object CustomThemePatch {
                 refresh()
         }
     }
-
-    private val currentKey: Int
-        inline get() = blkvPrefs.getInt("theme_entries_current_key", 0)
 
     private var customColor: Int
         inline get() = Settings.CUSTOM_COLOR.int
@@ -114,7 +110,8 @@ object CustomThemePatch {
         val biliSkins = skinList.mList
         if (Settings.CUSTOM_THEME.boolean) {
             val skin = BiliSkin().apply {
-                mId = if (currentKey == CUSTOM_THEME_ID2) CUSTOM_THEME_ID2 else CUSTOM_THEME_ID1
+                val currentThemeId = Themes.currentThemeId
+                mId = if (currentThemeId == CUSTOM_THEME_ID2) CUSTOM_THEME_ID2 else CUSTOM_THEME_ID1
                 mName = "自选颜色"
                 mIsFree = true
             }
@@ -150,7 +147,7 @@ object CustomThemePatch {
     private fun closeCustomSkin() {
         if (Settings.SKIN.boolean) {
             Settings.SKIN.saveValue(false)
-            ThemeApplier.unloadLoadEquip()
+            Themes.unloadLoadEquip()
             Toasts.showShort("已关闭自制主题！")
         }
     }

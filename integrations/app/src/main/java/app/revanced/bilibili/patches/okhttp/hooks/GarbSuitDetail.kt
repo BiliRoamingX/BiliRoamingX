@@ -28,7 +28,7 @@ object GarbSuitDetail : ApiHook() {
         val loading = suitItems.optJSONArray("loading")?.optJSONObject(0)
         val playIcon = suitItems.optJSONArray("play_icon")?.optJSONObject(0)
         val spaceBg = suitItems.optJSONArray("space_bg")?.optJSONObject(0)
-        if (skin.optLong("item_id") == ThemeApplier.customThemeId())
+        if (skin.optLong("item_id") == Themes.customThemeId())
             return response
         Utils.runOnMainThread(1000L) {
             val topActivity = ApplicationDelegate.getTopActivity()
@@ -39,7 +39,7 @@ object GarbSuitDetail : ApiHook() {
                     .setPositiveButton(android.R.string.ok) { _, _ ->
                         Utils.async {
                             runCatching {
-                                ThemeApplier.applyTheme(
+                                Themes.applyTheme(
                                     id, name, skin, skinProps, loading, playIcon, spaceBg
                                 )
                             }.onFailure {
