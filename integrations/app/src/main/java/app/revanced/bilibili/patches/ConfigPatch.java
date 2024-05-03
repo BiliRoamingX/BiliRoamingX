@@ -15,7 +15,8 @@ public class ConfigPatch {
             "ff_switch_account_enable",
             "ff_player_use_remote_auto_threshold_qn",
             "ff_pegasus_setting_auto_refresh_display",
-            "player.volume.balance"
+            "player.volume.balance",
+            "ff_side_center_setting_entrance_visibility"
     );
 
     @Nullable

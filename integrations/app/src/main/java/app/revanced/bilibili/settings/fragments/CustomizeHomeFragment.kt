@@ -18,6 +18,10 @@ class CustomizeHomeFragment : BiliRoamingBaseSettingFragment() {
         disablePreference("customize_bottom", PrefsDisableReason.APP_VERSION) {
             Utils.isHd()
         }
+        disablePreference(
+            Settings.DISABLE_MAIN_PAGE_STORY.key,
+            PrefsDisableReason.OFFICIAL_SUPPORTED
+        ) { Versions.ge7_75_0() }
         disableAutoRefreshPreferenceIfNeeded()
     }
 
