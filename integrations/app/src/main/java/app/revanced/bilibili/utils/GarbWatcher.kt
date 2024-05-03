@@ -1,24 +1,37 @@
 package app.revanced.bilibili.utils
 
 import com.bilibili.lib.ui.garb.Garb
-import java.util.concurrent.CopyOnWriteArrayList
+import java.lang.ref.WeakReference
 
 object GarbWatcher {
     fun interface Observer {
-        fun onSkinChanged(garb: Garb): Unit
+        fun onSkinChanged(garb: Garb)
     }
 
-    private val observers = CopyOnWriteArrayList<Observer>()
+    private val observers = mutableListOf<WeakReference<Observer>>()
 
     fun onChanged(garb: Garb) {
-        observers.forEach { it.onSkinChanged(garb) }
+        synchronized(observers) {
+            observers.forEach { it.get()?.onSkinChanged(garb) }
+        }
     }
 
     fun subscribe(observer: Observer) {
-        observers.addIfAbsent(observer)
+        synchronized(observers) {
+            if (observers.none { it.get() === observer })
+                observers.add(WeakReference(observer))
+        }
     }
 
     fun unsubscribe(observer: Observer) {
-        observers.remove(observer)
+        synchronized(observers) {
+            val it = observers.iterator()
+            while (it.hasNext()) {
+                if (it.next().get() === observer) {
+                    it.remove()
+                    break
+                }
+            }
+        }
     }
 }

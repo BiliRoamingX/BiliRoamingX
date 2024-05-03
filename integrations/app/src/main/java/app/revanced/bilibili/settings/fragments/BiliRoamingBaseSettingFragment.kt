@@ -30,7 +30,7 @@ enum class PrefsDisableReason { APP_VERSION, OS_VERSION, NEW_PLAYER, OFFICIAL_SU
 
 @Suppress("DEPRECATION")
 abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String = "") :
-    BasePreferenceFragment(), (Preference) -> Boolean {
+    BasePreferenceFragment(), (Preference) -> Boolean, GarbWatcher.Observer {
 
     protected var resumed = false
         private set
@@ -120,6 +120,24 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
         return rootView
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        GarbWatcher.subscribe(this)
+    }
+
+    override fun onDestroyView() {
+        GarbWatcher.unsubscribe(this)
+        super.onDestroyView()
+    }
+
+    override fun onSkinChanged(garb: Garb) {
+        if (!Utils.isHd()) {
+            tintSearchMenu(garb = garb)
+        } else runCatchingOrNull {
+            refreshLine()
+        }
+    }
+
     @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         val menuId = Utils.getResId("biliroaming_menu_item_action_search", "id")
@@ -182,7 +200,7 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
         }
     }
 
-    protected fun tintSearchMenu(menu: MenuItem? = null, garb: Garb = Themes.currentGarb()) {
+    private fun tintSearchMenu(menu: MenuItem? = null, garb: Garb = Themes.currentGarb()) {
         val searchMenu = menu ?: run {
             val toolbar = hostActivity.findView<Toolbar>("nav_top_bar")
             val menuId = Utils.getResId("biliroaming_menu_item_action_search", "id")
