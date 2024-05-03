@@ -26,6 +26,7 @@ class BiliRoamingSettingsFragment : BiliRoamingBaseSettingFragment(), GarbWatche
     }
 
     override fun onSkinChanged(garb: Garb) {
-        tintSearchMenu(garb = garb)
+        if (!Utils.isHd())
+            tintSearchMenu(garb = garb)
     }
 }
