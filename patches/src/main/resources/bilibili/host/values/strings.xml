@@ -398,4 +398,6 @@
     <string name="biliroaming_force_show_ip_summary">Play版评论及个人空间页强制显示IP归属地</string>
     <string name="biliroaming_search">搜索</string>
     <string name="biliroaming_search_hint">搜索...</string>
+    <string name="biliroaming_disable_avif_title">禁用AVIF图像格式</string>
+    <string name="biliroaming_disable_avif_summary">当遇到保存的图片不能查看时可启用</string>
 </resources>

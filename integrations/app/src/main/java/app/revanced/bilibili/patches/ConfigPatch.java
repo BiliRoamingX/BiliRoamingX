@@ -35,6 +35,8 @@ public class ConfigPatch {
             return origin;
         } else if ("ff_channel_redirect_to_search".equals(key) && Settings.ADD_CHANNEL.getBoolean())
             return Boolean.FALSE;
+        else if ("ff_enable_image_avif".equals(key) && Settings.DISABLE_AVIF.getBoolean())
+            return Boolean.FALSE;
         return origin;
     }
 

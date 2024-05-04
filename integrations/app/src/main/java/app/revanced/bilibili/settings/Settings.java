@@ -217,6 +217,7 @@ public enum Settings {
     ENABLE_AV("enable_av", BOOLEAN, FALSE, true),
     ENABLE_DOC_PROVIDER("enable_doc_provider", BOOLEAN, FALSE),
     FORCE_SHOW_IP("force_show_ip", BOOLEAN, FALSE),
+    DISABLE_AVIF("disable_avif", BOOLEAN, FALSE, true),
 
     // 去广告杂项
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),
