@@ -216,7 +216,6 @@ public enum Settings {
     FORCE_HW_CODEC("force_hw_codec", BOOLEAN, FALSE),
     ENABLE_AV("enable_av", BOOLEAN, FALSE, true),
     ENABLE_DOC_PROVIDER("enable_doc_provider", BOOLEAN, FALSE),
-    FORCE_SHOW_IP("force_show_ip", BOOLEAN, FALSE),
     DISABLE_AVIF("disable_avif", BOOLEAN, FALSE, true),
 
     // 去广告杂项

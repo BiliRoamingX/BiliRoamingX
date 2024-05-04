@@ -19,7 +19,6 @@ object OkHttpPatch {
         BangumiMaterial,
         Eps,
         GarbSuitDetail,
-        GrpcForceShowIpForPlay,
         GrpcPlayViewUnite,
         GrpcUnlockAreaLimitForPlay,
         HistoryReport,

@@ -61,11 +61,6 @@ object MossPatch {
         "bilibili.app.viewunite.v1.View/View",
     )
 
-    val fakeToPinkForIPApis = arrayOf(
-        "bilibili.main.community.reply.v1.Reply/MainList",
-        "bilibili.main.community.reply.v1.Reply/DetailList",
-    )
-
     /**
      * @return [HookFlags.STOP_EXECUTION] to stop method execution and return null,
      * or null to not intercept method execution,
@@ -156,8 +151,6 @@ object MossPatch {
     fun hookBeforeRequest(url: String, headers: ArrayList<Map.Entry<String, String>>): String {
         if (Settings.UNLOCK_AREA_LIMIT.boolean && Utils.isPlay()
             && fakeToPinkForUnlockAreaLimitApis.any { url.endsWith(it) }
-            || Settings.FORCE_SHOW_IP.boolean && Utils.isPlay()
-            && fakeToPinkForIPApis.any { url.endsWith(it) }
         ) fakeClient(Client.PINK, headers)
         else if (url.endsWith(PLAY_VIEW_UNITE_API)) {
             if (Settings.UNLOCK_PLAY_LIMIT.boolean && Utils.isPlay())
