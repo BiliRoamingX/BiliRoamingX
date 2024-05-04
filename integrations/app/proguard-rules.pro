@@ -71,3 +71,7 @@
 -keepclasseswithmembers class * {
     @androidx.annotation.Keep <init>(...);
 }
+
+-keepclassmembers class app.revanced.bilibili.settings.search.SearchResultFragment {
+    public void onBackStack*(...);
+}

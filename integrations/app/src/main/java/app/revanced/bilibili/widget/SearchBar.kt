@@ -2,6 +2,8 @@ package app.revanced.bilibili.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.ViewGroup
@@ -10,6 +12,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import app.revanced.bilibili.utils.*
+import com.bilibili.lib.ui.garb.Garb
 
 @SuppressLint("SetTextI18n")
 class SearchBar(context: Context) : LinearLayout(context) {
@@ -20,8 +23,10 @@ class SearchBar(context: Context) : LinearLayout(context) {
 
     init {
         context.inflateLayout("biliroaming_search_bar", this)
-        layoutParams = MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 48.dp)
-        setPadding(12.dp, 8.dp, 12.dp, 8.dp)
+        layoutParams = MarginLayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT,
+        )
         gravity = Gravity.CENTER_VERTICAL
         orientation = HORIZONTAL
         keywordInput = findView("biliroaming_keyword")
@@ -36,6 +41,31 @@ class SearchBar(context: Context) : LinearLayout(context) {
                 v.hideKeyboard()
                 true
             } else false
+        }
+        tintKeywordInput()
+        tintClearButton()
+    }
+
+    fun tintKeywordInput(garb: Garb = Themes.currentGarb()) {
+        if (!garb.isPure && !garb.isPrimaryOnly) {
+            keywordInput.setTextColor(ColorStateList.valueOf(garb.fontColor))
+        } else if (garb.id.let { it != 1L && it != 8L }) {
+            keywordInput.setTextColor(ColorStateList.valueOf(Color.WHITE))
+        } else {
+            keywordInput.setTextColor(
+                Utils.getColorStateList(context, "theme_color_primary_tr_title")
+            )
+        }
+    }
+
+    fun tintClearButton(garb: Garb = Themes.currentGarb()) {
+        if (!garb.isPure && !garb.isPrimaryOnly) {
+            clearButton.imageTintList = ColorStateList.valueOf(garb.fontColor)
+        } else if (garb.id.let { it != 1L && it != 8L }) {
+            clearButton.imageTintList = ColorStateList.valueOf(Color.WHITE)
+        } else {
+            clearButton.imageTintList =
+                Utils.getColorStateList(context, "theme_color_primary_tr_icon")
         }
     }
 

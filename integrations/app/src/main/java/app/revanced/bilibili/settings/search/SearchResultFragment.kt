@@ -2,34 +2,71 @@ package app.revanced.bilibili.settings.search
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import app.revanced.bilibili.settings.fragments.BiliRoamingBaseSettingFragment
 import app.revanced.bilibili.utils.*
 import app.revanced.bilibili.widget.SearchBar
+import com.bilibili.lib.ui.garb.Garb
 
-class SearchResultFragment : BiliRoamingBaseSettingFragment("biliroaming_search_result") {
+class SearchResultFragment : BiliRoamingBaseSettingFragment("biliroaming_search_result"),
+    FragmentManager.OnBackStackChangedListener {
     override val showSearchMenu: Boolean
         get() = false
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val rootView = super.onCreateView(inflater, container, savedInstanceState) as ViewGroup
-        val insertIndex = if (Utils.isHd()) 1 else 0
-        val searchBar = SearchBar(hostContext)
-        rootView.addView(searchBar, insertIndex)
-        searchBar.onSearch = { search(it) }
-        return rootView
+    private val searchBar by unsafeLazy {
+        SearchBar(hostContext).apply { onSearch = { search(it) } }
+    }
+
+    override fun onBackStackChanged() {
+        val backStackEntryCount = parentFragmentManager.backStackEntryCount
+        if (backStackEntryCount > 0 && parentFragmentManager.getBackStackEntryAt(
+                backStackEntryCount - 1
+            ).breadCrumbTitle != Utils.getString("biliroaming_search")
+        ) {
+            searchBar.hideKeyboard()
+            val toolbar = hostActivity.findView<Toolbar>("nav_top_bar")
+            toolbar.removeView(searchBar)
+        }
+    }
+
+    @JvmSynthetic
+    fun onBackStackChangeCommitted(fragment: Fragment, pop: Boolean) {
+    }
+
+    @JvmSynthetic
+    fun onBackStackChangeStarted(fragment: Fragment, pop: Boolean) {
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val toolbar = hostActivity.findView<Toolbar>("nav_top_bar")
+        toolbar.addView(searchBar)
+        parentFragmentManager.addOnBackStackChangedListener(this)
+    }
+
+    override fun onDestroyView() {
+        searchBar.hideKeyboard()
+        val toolbar = hostActivity.findView<Toolbar>("nav_top_bar")
+        toolbar.removeView(searchBar)
+        parentFragmentManager.removeOnBackStackChangedListener(this)
+        super.onDestroyView()
+    }
+
+    override fun onSkinChanged(garb: Garb) {
+        super.onSkinChanged(garb)
+        searchBar.tintKeywordInput(garb)
+        searchBar.tintClearButton(garb)
     }
 
     private fun search(keyword: String) {
-        val root = preferenceScreen
+        val root = findPreference<PreferenceCategory>("category_search_result")
+            ?: return
         if (keyword.isEmpty()) {
             root.removeAll()
             return
