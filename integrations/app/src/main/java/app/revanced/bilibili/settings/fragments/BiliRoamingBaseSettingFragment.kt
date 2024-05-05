@@ -116,7 +116,7 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
         val title = arguments?.getString(EXTRA_TITLE).orEmpty()
             .ifEmpty { Utils.getString("biliroaming_settings_title") }
         val toolbar = HdBaseToolbar(inflater.context, title, showSearchMenu, showSearchBarForHd) {
-            parentFragmentManager.popBackStack()
+            onBackPressedHd()
         }.also { hdToolbar = it }
         toolbar.onSearchMenuClick = {
             onSearchMenuClickForHd()
@@ -128,6 +128,11 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
             )
         )
         return rootView
+    }
+
+    protected open fun onBackPressedHd() {
+        hdToolbar.hideKeyboard()
+        parentFragmentManager.popBackStack()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -13,6 +13,7 @@ import app.revanced.bilibili.utils.*
 import app.revanced.bilibili.widget.SearchBar
 import com.bilibili.lib.ui.garb.Garb
 
+@Suppress("DEPRECATION", "UNUSED", "UNUSED_PARAMETER")
 class SearchResultFragment : BiliRoamingBaseSettingFragment("biliroaming_search_result"),
     FragmentManager.OnBackStackChangedListener {
     override val showSearchBarForHd: Boolean

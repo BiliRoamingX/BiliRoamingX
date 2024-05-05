@@ -425,6 +425,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
                 showSearchMenu = false,
                 showSearchBar = false
             ) {
+                view?.hideKeyboard()
                 parentFragmentManager.popBackStack()
             }.apply {
                 layoutParams = LinearLayout.LayoutParams(
