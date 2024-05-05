@@ -25,6 +25,7 @@
             android:title="@string/biliroaming_debug_title" />
         <androidx.preference.Preference
             android:key="share_log"
+            android:summary="@string/biliroaming_share_log_summary"
             android:title="@string/biliroaming_share_log_title" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>
