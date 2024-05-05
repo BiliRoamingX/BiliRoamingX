@@ -38,10 +38,6 @@ object MainActivityDelegate {
     @Keep
     @JvmStatic
     fun onSaveInstanceState(activity: MainActivityV2, outState: Bundle) {
-        if (Utils.isHd()) {
-            outState.getBundle("androidx.lifecycle.BundlableSavedStateRegistry.key")
-                ?.remove("android:support:fragments")
-        }
     }
 
     private fun showHintIfNeeded(context: Context) {
