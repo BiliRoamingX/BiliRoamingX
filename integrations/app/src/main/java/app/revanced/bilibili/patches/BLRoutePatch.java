@@ -5,6 +5,10 @@ import android.text.TextUtils;
 
 import androidx.annotation.Keep;
 
+import com.bapis.bilibili.app.view.v1.Relate;
+import com.bapis.bilibili.app.viewunite.common.RelateCard;
+import com.bapis.bilibili.app.viewunite.common.RelateCardType;
+
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -16,6 +20,10 @@ public class BLRoutePatch {
     private static final String STORY_TYPE_QUERY = "&-Atype=story";
     private static final Pattern playerPreloadRegex = Pattern.compile("&player_preload=[^&]*");
 
+    private static boolean needRemovePayload() {
+        return VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.getMatchedFullScreenQuality() != 0 || Settings.DEFAULT_PLAYBACK_SPEED.getFloat() != 0f;
+    }
+
     @Keep
     public static Uri intercept(Uri uri) {
         if (uri == null) return null;
@@ -23,7 +31,7 @@ public class BLRoutePatch {
         String scheme = uri.getScheme();
         String url = uri.toString();
         if ("bilibili".equals(scheme)) {
-            boolean needRemovePayload = VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.getMatchedFullScreenQuality() != 0 || Settings.DEFAULT_PLAYBACK_SPEED.getFloat() != 0f;
+            boolean needRemovePayload = needRemovePayload();
             String authority = uri.getEncodedAuthority();
             if ("story".equals(authority) || "video".equals(authority)) {
                 Uri.Builder newUri = uri.buildUpon();
@@ -59,8 +67,7 @@ public class BLRoutePatch {
             }
         } else if ("https".equals(scheme)) {
             if (url.startsWith("https://www.bilibili.com/bangumi/play")) {
-                boolean needRemovePayload = VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.getMatchedFullScreenQuality() != 0 || Settings.DEFAULT_PLAYBACK_SPEED.getFloat() != 0f;
-                if (needRemovePayload)
+                if (needRemovePayload())
                     return Uri.parse(playerPreloadRegex.matcher(url).replaceAll(""));
             } else if (Settings.REPLACE_STORY_VIDEO.getBoolean() && url.startsWith("https://www.bilibili.com/video")) {
                 return Uri.parse(url.replace(STORY_ROUTER_QUERY, "").replace(STORY_TYPE_QUERY, ""));
@@ -80,5 +87,30 @@ public class BLRoutePatch {
             }
         }
         return uri;
+    }
+
+    public static void removePayloadIfNeeded(List<Relate> cards) {
+        if (!needRemovePayload()) return;
+        for (int i = 0; i < cards.size(); i++) {
+            var card = cards.get(i);
+            var aGoto = card.getGoto();
+            if ("av".equals(aGoto)) {
+                var newUri = playerPreloadRegex.matcher(card.getUri()).replaceAll("");
+                card.setUri(newUri);
+            }
+        }
+    }
+
+    public static void removePayloadUniteIfNeeded(List<RelateCard> cards) {
+        if (!needRemovePayload()) return;
+        for (int i = 0; i < cards.size(); i++) {
+            var card = cards.get(i);
+            var cardType = card.getRelateCardType();
+            if (cardType == RelateCardType.AV) {
+                var basicInfo = card.getBasicInfo();
+                var newUri = playerPreloadRegex.matcher(basicInfo.getUri()).replaceAll("");
+                basicInfo.setUri(newUri);
+            }
+        }
     }
 }

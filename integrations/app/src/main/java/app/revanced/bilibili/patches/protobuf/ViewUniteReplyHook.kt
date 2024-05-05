@@ -3,6 +3,7 @@ package app.revanced.bilibili.patches.protobuf
 import android.util.Pair
 import app.revanced.bilibili.api.BiliRoamingApi.getSeason
 import app.revanced.bilibili.patches.AutoLikePatch
+import app.revanced.bilibili.patches.BLRoutePatch
 import app.revanced.bilibili.patches.json.PegasusPatch
 import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.FAIL_CODE
@@ -119,6 +120,7 @@ object ViewUniteReplyHook {
                         module.sectionData.episodesList.forEach { it.unlock() }
                     } else if (module.hasRelates()) {
                         PegasusPatch.filterViewUniteRelates(module, viewReply.viewBase.bizType)
+                        BLRoutePatch.removePayloadUniteIfNeeded(module.relates.cardsList)
                     } else if (module.hasCovenanter()) {
                         if (Settings.BLOCK_FAN_GUIDE.boolean)
                             toRemoveIndexes.add(index)

@@ -3,6 +3,7 @@ package app.revanced.bilibili.patches.protobuf.hooks
 import android.util.Pair
 import app.revanced.bilibili.meta.VideoInfo
 import app.revanced.bilibili.patches.AutoLikePatch
+import app.revanced.bilibili.patches.BLRoutePatch
 import app.revanced.bilibili.patches.json.PegasusPatch
 import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.patches.protobuf.MossHook
@@ -53,6 +54,7 @@ object View : MossHook<ViewReq, ViewReply>() {
                 }
             }
             PegasusPatch.filterViewRelates(reply)
+            BLRoutePatch.removePayloadIfNeeded(reply.relatesList)
         }
         return super.hookAfter(req, reply, error)
     }
