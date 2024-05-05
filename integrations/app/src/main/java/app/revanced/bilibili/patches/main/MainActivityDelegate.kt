@@ -45,7 +45,7 @@ object MainActivityDelegate {
     }
 
     private fun showHintIfNeeded(context: Context) {
-        if (Settings.SHOW_HINT.boolean) return
+        if (Settings.SHOW_HINT.boolean || Utils.isHd()) return
         AlertDialog.Builder(context)
             .setTitle(Utils.getString("biliroaming_usage_hint_title"))
             .setMessage(Utils.getString("biliroaming_usage_hint_message"))

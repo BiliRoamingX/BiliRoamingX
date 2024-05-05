@@ -420,7 +420,11 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
         if (Utils.isHd()) {
             val title = arguments?.getString(BiliRoamingBaseSettingFragment.EXTRA_TITLE).orEmpty()
                 .ifEmpty { string("biliroaming_settings_title") }
-            val toolbar = HdBaseToolbar(hostContext, title) {
+            val toolbar = HdBaseToolbar(
+                hostContext, title,
+                showSearchMenu = false,
+                showSearchBar = false
+            ) {
                 parentFragmentManager.popBackStack()
             }.apply {
                 layoutParams = LinearLayout.LayoutParams(

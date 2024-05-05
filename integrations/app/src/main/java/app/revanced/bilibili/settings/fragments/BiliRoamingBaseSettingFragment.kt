@@ -1,6 +1,5 @@
 package app.revanced.bilibili.settings.fragments
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
@@ -11,6 +10,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.*
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
@@ -43,6 +43,13 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
     private var located = false
     protected open val showSearchMenu: Boolean
         get() = true
+
+    // region only used by hd
+    protected lateinit var hdToolbar: HdBaseToolbar
+        private set
+    protected open val showSearchBarForHd: Boolean
+        get() = false
+    // endregion
 
     protected val enterAnimResId by unsafeLazy {
         val windowAnimationStyleId = with(TypedValue()) {
@@ -108,8 +115,11 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
         if (!Utils.isHd()) return rootView
         val title = arguments?.getString(EXTRA_TITLE).orEmpty()
             .ifEmpty { Utils.getString("biliroaming_settings_title") }
-        val toolbar = HdBaseToolbar(inflater.context, title) {
+        val toolbar = HdBaseToolbar(inflater.context, title, showSearchMenu, showSearchBarForHd) {
             parentFragmentManager.popBackStack()
+        }.also { hdToolbar = it }
+        toolbar.onSearchMenuClick = {
+            onSearchMenuClickForHd()
         }
         rootView.addView(
             toolbar, 0, ViewGroup.LayoutParams(
@@ -134,6 +144,7 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
         if (!Utils.isHd()) {
             tintSearchMenu(garb = garb)
         } else runCatchingOrNull {
+            hdToolbar.tintSearchMenu(garb = garb)
             refreshLine()
         }
     }
@@ -167,19 +178,34 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
         } else false
     }
 
-    @SuppressLint("CommitTransaction")
+    private fun onSearchMenuClickForHd() {
+        val title = Utils.getString("biliroaming_search")
+        val tag = SearchResultFragment::class.java.name
+        val args = Bundle().apply {
+            putString(EXTRA_TITLE, title)
+        }
+        val fragment = SearchResultFragment()
+        fragment.arguments = args
+        parentFragmentManager.beginTransaction()
+            .replace((requireView().parent as View).id, fragment, tag)
+            .addToBackStack("stack:tag:biliPreferences")
+            .setBreadCrumbTitle(title)
+            .commitAllowingStateLoss()
+    }
+
     override fun invoke(preference: Preference): Boolean {
         preference.fragment?.let {
             val fragmentManager = parentFragmentManager
+            val title = preference.title?.toString().orEmpty()
             val args = preference.extras.apply {
-                putString(EXTRA_TITLE, preference.title?.toString().orEmpty())
+                putString(EXTRA_TITLE, title)
             }
-            val classLoader = Utils.getContext().classLoader
-            val fragment = fragmentManager.fragmentFactory.instantiate(classLoader, it)
+            val fragment = Class.forName(it).new() as Fragment
             fragment.arguments = args
             fragmentManager.beginTransaction()
                 .replace((requireView().parent as View).id, fragment, it)
                 .addToBackStack("stack:tag:biliPreferences")
+                .setBreadCrumbTitle(title)
                 .commitAllowingStateLoss()
             return true
         }

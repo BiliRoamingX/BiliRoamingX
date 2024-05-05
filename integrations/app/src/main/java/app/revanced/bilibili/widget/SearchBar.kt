@@ -14,8 +14,8 @@ import android.widget.LinearLayout
 import app.revanced.bilibili.utils.*
 import com.bilibili.lib.ui.garb.Garb
 
-@SuppressLint("SetTextI18n")
-class SearchBar(context: Context) : LinearLayout(context) {
+@SuppressLint("SetTextI18n", "ViewConstructor")
+class SearchBar(context: Context, hd: Boolean = false) : LinearLayout(context) {
     private val keywordInput: EditText
     private val clearButton: ImageView
 
@@ -44,6 +44,16 @@ class SearchBar(context: Context) : LinearLayout(context) {
         }
         tintKeywordInput()
         tintClearButton()
+        if (hd) {
+            clearButton.updateLayoutParams {
+                width = 34.dp
+                height = 34.dp
+            }
+            keywordInput.updateLayoutParams<MarginLayoutParams> {
+                topMargin = 2.dp
+                bottomMargin = 2.dp
+            }
+        }
     }
 
     fun tintKeywordInput(garb: Garb = Themes.currentGarb()) {

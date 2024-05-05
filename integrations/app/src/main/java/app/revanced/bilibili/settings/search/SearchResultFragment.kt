@@ -1,6 +1,5 @@
 package app.revanced.bilibili.settings.search
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
@@ -16,6 +15,8 @@ import com.bilibili.lib.ui.garb.Garb
 
 class SearchResultFragment : BiliRoamingBaseSettingFragment("biliroaming_search_result"),
     FragmentManager.OnBackStackChangedListener {
+    override val showSearchBarForHd: Boolean
+        get() = true
     override val showSearchMenu: Boolean
         get() = false
 
@@ -45,23 +46,33 @@ class SearchResultFragment : BiliRoamingBaseSettingFragment("biliroaming_search_
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val toolbar = hostActivity.findView<Toolbar>("nav_top_bar")
-        toolbar.addView(searchBar)
-        parentFragmentManager.addOnBackStackChangedListener(this)
+        if (!Utils.isHd()) {
+            val toolbar = hostActivity.findView<Toolbar>("nav_top_bar")
+            toolbar.addView(searchBar)
+            parentFragmentManager.addOnBackStackChangedListener(this)
+        } else {
+            hdToolbar.onSearch = { search(it) }
+        }
     }
 
     override fun onDestroyView() {
-        searchBar.hideKeyboard()
-        val toolbar = hostActivity.findView<Toolbar>("nav_top_bar")
-        toolbar.removeView(searchBar)
-        parentFragmentManager.removeOnBackStackChangedListener(this)
+        if (!Utils.isHd()) {
+            searchBar.hideKeyboard()
+            val toolbar = hostActivity.findView<Toolbar>("nav_top_bar")
+            toolbar.removeView(searchBar)
+            parentFragmentManager.removeOnBackStackChangedListener(this)
+        }
         super.onDestroyView()
     }
 
     override fun onSkinChanged(garb: Garb) {
         super.onSkinChanged(garb)
-        searchBar.tintKeywordInput(garb)
-        searchBar.tintClearButton(garb)
+        if (!Utils.isHd()) {
+            searchBar.tintKeywordInput(garb)
+            searchBar.tintClearButton(garb)
+        } else {
+            hdToolbar.tintSearchBar(garb)
+        }
     }
 
     private fun search(keyword: String) {
@@ -99,7 +110,6 @@ class SearchResultFragment : BiliRoamingBaseSettingFragment("biliroaming_search_
         }
     }
 
-    @SuppressLint("CommitTransaction")
     private fun navigation(preference: Preference, item: PreferenceItem) {
         val fragmentManager = parentFragmentManager
         // hold activity instance temporarily before popBackStack
@@ -107,6 +117,27 @@ class SearchResultFragment : BiliRoamingBaseSettingFragment("biliroaming_search_
         val enterAnimResId = enterAnimResId
         // keep BiliRoamingSettingsFragment
         val moduleName = Utils.getString("biliroaming_settings_title")
+        if (Utils.isHd()) {
+            hdToolbar.hideKeyboard()
+            val contentId = (requireView().parent as View).id
+            var topIndex = fragmentManager.backStackEntryCount - 1
+            while (topIndex >= 0 && !fragmentManager.getBackStackEntryAt(topIndex).breadCrumbTitle.isNullOrEmpty()) {
+                fragmentManager.popBackStackImmediate()
+                topIndex = fragmentManager.backStackEntryCount - 1
+            }
+            val title = item.parent?.title ?: moduleName
+            val args = preference.extras.apply {
+                putString(EXTRA_TITLE, title)
+            }
+            val fragment = item.belongFragment.new()
+            fragment.arguments = args
+            fragmentManager.beginTransaction()
+                .replace(contentId, fragment, item.belongFragment.name)
+                .addToBackStack("stack:tag:biliPreferences")
+                .setBreadCrumbTitle(title)
+                .commitAllowingStateLoss()
+            return
+        }
         val backStackEntryCount = fragmentManager.backStackEntryCount
         val popCount = if (backStackEntryCount > 0
             && fragmentManager.getBackStackEntryAt(0).breadCrumbTitle == moduleName
@@ -116,9 +147,8 @@ class SearchResultFragment : BiliRoamingBaseSettingFragment("biliroaming_search_
         val title = item.parent?.title ?: moduleName
         hostActivity.title = title
         val contentId = Utils.getResId("content_layout", "id")
-        val fragment = item.belongFragment.new().apply {
-            arguments = preference.peekExtras()
-        }
+        val fragment = item.belongFragment.new()
+        fragment.arguments = preference.peekExtras()
         fragmentManager.beginTransaction()
             .setCustomAnimations(enterAnimResId, 0, 0, 0)
             .replace(contentId, fragment, item.belongFragment.name)
