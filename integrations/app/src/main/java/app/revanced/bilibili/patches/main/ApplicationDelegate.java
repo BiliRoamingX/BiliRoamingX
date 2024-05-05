@@ -164,14 +164,11 @@ public class ApplicationDelegate {
         updateDpi(activity.getResources().getDisplayMetrics(), newDpi);
     }
 
-    @Keep
     static void updateDpi(DisplayMetrics dm, int newDpi) {
-        var systemDm = Resources.getSystem().getDisplayMetrics();
-        var scale = systemDm.scaledDensity / systemDm.density;
         var newDensity = newDpi / 160f;
         dm.densityDpi = newDpi;
         dm.density = newDensity;
-        dm.scaledDensity = scale * newDensity;
+        dm.scaledDensity = newDensity;
     }
 
     @Nullable
