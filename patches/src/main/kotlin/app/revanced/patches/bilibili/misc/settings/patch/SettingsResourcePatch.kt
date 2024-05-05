@@ -22,7 +22,8 @@ object SettingsResourcePatch : ResourcePatch() {
     var packageName = ""
         private set
 
-    private val extraPreferences = arrayOf(
+    private val xmls = arrayOf(
+        "biliroaming_locales_config.xml",
         "biliroaming_search_result.xml",
         "biliroaming_settings.xml",
         "biliroaming_setting_half_screen_quality.xml",
@@ -75,7 +76,7 @@ object SettingsResourcePatch : ResourcePatch() {
 
     override fun execute(context: ResourceContext) {
         arrayOf(
-            ResourceGroup("xml", *extraPreferences),
+            ResourceGroup("xml", *xmls),
             ResourceGroup("layout", *layouts),
             ResourceGroup("drawable", *drawables),
         ).forEach {

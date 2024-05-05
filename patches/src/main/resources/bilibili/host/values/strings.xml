@@ -274,9 +274,9 @@
     <string name="biliroaming_clear_app_icon_title">干净的APP图标</string>
     <string name="biliroaming_clear_app_icon_summary">始终替换APP图标为不带推广内容的干净图标</string>
     <string name="biliroaming_themed_icon_title">带主题的应用图标</string>
-    <string name="biliroaming_themed_icon_summary">适配 Android 13 开始的带主题的应用图标特性，需要启动器支持。</string>
+    <string name="biliroaming_themed_icon_summary">适配 Android 13 带主题的应用图标特性，需要启动器支持。</string>
     <string name="biliroaming_splash_follow_dark_title">开屏页背景色跟随深色模式</string>
-    <string name="biliroaming_splash_follow_dark_summary">同时适配 Android 12 开始的 SplashScreen 特性，需要在设置中开启“深色跟随系统”。</string>
+    <string name="biliroaming_splash_follow_dark_summary">同时适配 Android 12 SplashScreen 特性，需要在设置中开启“深色跟随系统”。</string>
     <string name="biliroaming_theme_title">主题</string>
     <string name="biliroaming_copy_title">复制</string>
     <string name="biliroaming_share_title">分享</string>
@@ -400,4 +400,6 @@
     <string name="biliroaming_search_hint">搜索...</string>
     <string name="biliroaming_disable_avif_title">禁用AVIF图像格式</string>
     <string name="biliroaming_disable_avif_summary">当遇到保存的图片不能查看时可启用</string>
+    <string name="biliroaming_per_app_language_title">按应用设定语言</string>
+    <string name="biliroaming_per_app_language_summary">适配 Android 13 按应用设定语言特性，允许在系统设置中单独设置本APP的语言偏好。</string>
 </resources>

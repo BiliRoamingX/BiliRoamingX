@@ -162,5 +162,10 @@
             android:summary="@string/biliroaming_splash_follow_dark_summary"
             android:title="@string/biliroaming_splash_follow_dark_title"
             android:widgetLayout="@null" />
+        <androidx.preference.Preference
+            android:key="prefs_per_app_language"
+            android:summary="@string/biliroaming_per_app_language_summary"
+            android:title="@string/biliroaming_per_app_language_title"
+            android:widgetLayout="@null" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>
