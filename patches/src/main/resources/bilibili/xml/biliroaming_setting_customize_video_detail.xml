@@ -108,5 +108,9 @@
         <androidx.preference.SwitchPreferenceCompat
             android:key="no_colorful_danmaku"
             android:title="@string/biliroaming_no_colorful_danmaku_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="fake_not_in_multi_window"
+            android:summary="@string/biliroaming_fake_not_in_multi_window_summary"
+            android:title="@string/biliroaming_fake_not_in_multi_window_title" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>
