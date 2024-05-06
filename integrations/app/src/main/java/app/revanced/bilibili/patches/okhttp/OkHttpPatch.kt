@@ -17,6 +17,7 @@ object OkHttpPatch {
     private val hooks = arrayOf(
         BangumiCards,
         BangumiMaterial,
+        DmAd,
         Eps,
         GarbSuitDetail,
         GrpcPlayViewUnite,
