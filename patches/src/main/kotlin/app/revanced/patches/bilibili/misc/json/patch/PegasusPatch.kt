@@ -11,10 +11,10 @@ import app.revanced.patcher.util.proxy.mutableTypes.MutableMethod
 import app.revanced.patches.bilibili.misc.json.fingerprints.CardClickProcessorFingerprint
 import app.revanced.patches.bilibili.misc.json.fingerprints.CardClickProcessorNewFingerprint
 import app.revanced.patches.bilibili.misc.json.fingerprints.PegasusParserFingerprint
+import app.revanced.patches.bilibili.utils.annotation
 import app.revanced.patches.bilibili.utils.cloneMutable
+import app.revanced.patches.bilibili.utils.value
 import app.revanced.util.exception
-import com.android.tools.smali.dexlib2.iface.ClassDef
-import com.android.tools.smali.dexlib2.iface.Field
 import com.android.tools.smali.dexlib2.iface.value.StringEncodedValue
 
 @Patch(
@@ -35,7 +35,9 @@ object PegasusPatch : BytecodePatch(
 ) {
     override fun execute(context: BytecodeContext) {
         PegasusParserFingerprint.result?.run {
-            val method = mutableClass.methods.first { it.returnType == "Lcom/bilibili/okretro/GeneralResponse;" }
+            val method = mutableClass.methods.first {
+                it.returnType == "Lcom/bilibili/okretro/GeneralResponse;"
+            }
             method.cloneMutable(registerCount = 2, clearImplementation = true).apply {
                 method.name += "_Origin"
                 addInstructions(
@@ -50,28 +52,12 @@ object PegasusPatch : BytecodePatch(
                 mutableClass.methods.add(it)
             }
         } ?: throw PegasusParserFingerprint.exception
-        var bannerItemFiled: Field? = null
-        var stockBannersItemClass: ClassDef? = null
-        for (classDef in context.classes) {
-            if (classDef.superclass == "Lcom/bilibili/pegasus/api/model/BasicIndexItem;") {
-                val field = classDef.fields.find { f ->
-                    f.annotations.find { a ->
-                        a.type == "Lcom/alibaba/fastjson/annotation/JSONField;" && a.elements.find { e ->
-                            e.name == "name" && e.value.let {
-                                it is StringEncodedValue && it.value == "banner_item"
-                            }
-                        } != null
-                    } != null
-                }
-                if (field != null) {
-                    stockBannersItemClass = classDef
-                    bannerItemFiled = field
-                    break
-                }
-            }
-        }
-        if (bannerItemFiled == null || stockBannersItemClass == null)
-            throw PatchException("not found banner item field")
+        val (stockBannersItemClass, bannerItemFiled) = context.classes.firstNotNullOfOrNull { c ->
+            if (c.superclass == "Lcom/bilibili/pegasus/api/model/BasicIndexItem;") c.fields.find {
+                it.annotation("Lcom/alibaba/fastjson/annotation/JSONField;")
+                    ?.value<StringEncodedValue>("name")?.value == "banner_item"
+            }?.let { c to it } else null
+        } ?: throw PatchException("not found banner item field")
         val myBannersItemClassName = "Lapp/revanced/bilibili/meta/pegasus/BannersItem;"
         val myBannersItemClass = context.findClass(myBannersItemClassName)!!
         context.proxy(stockBannersItemClass).mutableClass.setSuperClass(myBannersItemClassName)

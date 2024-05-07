@@ -5,9 +5,12 @@ import app.revanced.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMu
 import app.revanced.patches.bilibili.patcher.fingerprint.MultiMethodFingerprint
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.HiddenApiRestriction
-import com.android.tools.smali.dexlib2.iface.Method
-import com.android.tools.smali.dexlib2.iface.MethodParameter
+import com.android.tools.smali.dexlib2.iface.*
+import com.android.tools.smali.dexlib2.iface.Annotation
 import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
+import com.android.tools.smali.dexlib2.iface.value.ArrayEncodedValue
+import com.android.tools.smali.dexlib2.iface.value.EncodedValue
+import com.android.tools.smali.dexlib2.iface.value.TypeEncodedValue
 import com.android.tools.smali.dexlib2.immutable.*
 import com.android.tools.smali.dexlib2.immutable.debug.ImmutableDebugItem
 import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstruction
@@ -144,3 +147,12 @@ fun FiveRegisterInstruction.args(): String {
     return arrayOf(registerC, registerD, registerE, registerF, registerG)
         .take(registerCount).joinToString(",") { "v$it" }
 }
+
+fun Annotatable.annotation(type: String) = annotations.find { it.type == type }
+
+inline fun <reified T : EncodedValue> Annotation.value(name: String): T? =
+    elements.find { it.name == name }?.value as? T
+
+fun ClassDef.memberClasses() = annotation("Ldalvik/annotation/MemberClasses;")
+    ?.value<ArrayEncodedValue>("value")?.value
+    ?.filterIsInstance<TypeEncodedValue>()?.map { it.value }.orEmpty()

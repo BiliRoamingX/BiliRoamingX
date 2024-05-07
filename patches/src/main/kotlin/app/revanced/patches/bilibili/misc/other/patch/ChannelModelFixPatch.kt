@@ -7,8 +7,7 @@ import app.revanced.patcher.patch.PatchException
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
-import app.revanced.patches.bilibili.utils.Method
-import app.revanced.patches.bilibili.utils.MethodImplementation
+import app.revanced.patches.bilibili.utils.*
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.iface.value.StringEncodedValue
 
@@ -26,17 +25,12 @@ object ChannelModelFixPatch : BytecodePatch() {
         val fieldsNames = setOf("stick", "normal", "scaned", "config")
         val modelClassDef = context.classes.find { c ->
             c.fields.mapNotNull { f ->
-                f.annotations.find { it.type == "Lcom/alibaba/fastjson/annotation/JSONField;" }
-            }.mapNotNull {
-                it.elements.firstNotNullOfOrNull { e ->
-                    if (e.name == "name")
-                        (e.value as StringEncodedValue).value
-                    else null
-                }
+                f.annotation("Lcom/alibaba/fastjson/annotation/JSONField;")
+                    ?.value<StringEncodedValue>("name")?.value
             }.toSet() == fieldsNames
         } ?: throw PatchException("not found channel model class")
-        context.classes.filter {
-            it.type.startsWith("${modelClassDef.removeSuffix(";")}$")
+        modelClassDef.memberClasses().map { t ->
+            context.classes.first { it.type == t }
         }.forEach { c ->
             context.proxy(c).mutableClass.run {
                 if (methods.none { it.name == "<init>" && it.parameterTypes.isEmpty() }) {
