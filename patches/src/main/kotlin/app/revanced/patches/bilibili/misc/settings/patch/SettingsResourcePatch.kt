@@ -19,8 +19,11 @@ import app.revanced.util.*
     dependencies = [ResourceMappingPatch::class]
 )
 object SettingsResourcePatch : ResourcePatch() {
-    var packageName = ""
-        private set
+    private var packageName = ""
+
+    val isPink get() = packageName == "tv.danmaku.bili"
+    val isPlay get() = packageName == "com.bilibili.app.in"
+    val isHd get() = packageName == "tv.danmaku.bilibilihd"
 
     private val xmls = arrayOf(
         "biliroaming_locales_config.xml",

@@ -4,6 +4,7 @@ import app.revanced.patcher.data.ResourceContext
 import app.revanced.patcher.patch.ResourcePatch
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
+import app.revanced.patches.bilibili.misc.settings.patch.SettingsResourcePatch
 import app.revanced.util.ResourceGroup
 import app.revanced.util.copyResources
 
@@ -14,11 +15,14 @@ import app.revanced.util.copyResources
         CompatiblePackage(name = "tv.danmaku.bili"),
         CompatiblePackage(name = "tv.danmaku.bilibilihd"),
         CompatiblePackage(name = "com.bilibili.app.in")
-    ]
+    ],
+    dependencies = [SettingsResourcePatch::class]
 )
 object AppIconPatch : ResourcePatch() {
     override fun execute(context: ResourceContext) {
-        val iconFiles = arrayOf(
+        val iconFiles = if (SettingsResourcePatch.isHd) arrayOf(
+            "ic_launcher_monochrome.png"
+        ) else arrayOf(
             "ic_launcher.png",
             "ic_launcher_background.png",
             "ic_launcher_foreground.png",

@@ -29,8 +29,7 @@ object CacheRedirectPatch : MultiMethodBytecodePatch(
 ) {
     override fun execute(context: BytecodeContext) {
         super.execute(context)
-        val packageName = SettingsResourcePatch.packageName
-        val dialogMenuLayoutName = if (packageName == "tv.danmaku.bilibilihd") {
+        val dialogMenuLayoutName = if (SettingsResourcePatch.isHd) {
             "bili_app_list_item_super_menu_hd_right_dialog_menu"
         } else {
             "bili_app_list_item_super_menu_dialog_menu"
@@ -59,7 +58,10 @@ object CacheRedirectPatch : MultiMethodBytecodePatch(
                 val originOnClickMethod = methods.first {
                     it.name == "onClick" && it.parameterTypes == listOf("Landroid/view/View;") && it.returnType == "V"
                 }
-                originOnClickMethod.cloneMutable(registerCount = 2, clearImplementation = true).apply {
+                originOnClickMethod.cloneMutable(
+                    registerCount = 2,
+                    clearImplementation = true
+                ).apply {
                     originOnClickMethod.name += "_Origin"
                     addInstructions(
                         0, """
