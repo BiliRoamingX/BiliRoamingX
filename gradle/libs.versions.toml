@@ -11,7 +11,7 @@ protobuf = "3.25.3"
 kotlinx-serialization = "1.6.3"
 # patches
 revanced-patcher = "19.3.1"
-smali = "3.0.3"
+smali = "3.0.5"
 gson = "2.10.1"
 kotlin = "1.9.23"
 ksp = "1.9.23-1.0.20"
