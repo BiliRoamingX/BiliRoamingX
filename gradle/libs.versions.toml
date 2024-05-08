@@ -7,7 +7,7 @@ androidx-documentfile = "1.0.1"
 androidx-annotation = "1.7.1"
 androidx-appcompat = "1.7.0-alpha03"
 androidx-preference = "1.2.1"
-protobuf = "3.25.3"
+protobuf = "4.26.1"
 kotlinx-serialization = "1.6.3"
 # patches
 revanced-patcher = "19.3.1"
