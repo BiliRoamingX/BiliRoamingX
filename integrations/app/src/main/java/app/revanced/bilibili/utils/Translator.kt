@@ -1,7 +1,6 @@
 package app.revanced.bilibili.utils
 
 import android.net.Uri
-import android.util.Base64
 import app.revanced.bilibili.http.Encoding
 import app.revanced.bilibili.http.HttpClient
 import app.revanced.bilibili.http.RequestBody
@@ -214,7 +213,7 @@ object MicrosoftTranslator : Translator() {
         private fun getExpirationTime(token: String): Long {
             return try {
                 val payloadChunk = token.split('.')[1]
-                val payload = String(Base64.decode(payloadChunk, Base64.DEFAULT))
+                val payload = String(payloadChunk.base64Decode)
                 JSONObject(payload).getLong("exp") * 1000
             } catch (e: Throwable) {
                 System.currentTimeMillis() + DEFAULT_EXPIRATION

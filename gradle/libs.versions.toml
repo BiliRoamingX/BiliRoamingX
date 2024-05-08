@@ -8,6 +8,7 @@ androidx-annotation = "1.7.1"
 androidx-appcompat = "1.7.0-alpha03"
 androidx-preference = "1.2.1"
 protobuf = "3.25.3"
+kotlinx-serialization = "1.6.3"
 # patches
 revanced-patcher = "19.3.1"
 smali = "3.0.3"
@@ -27,6 +28,7 @@ androidx-preference = { module = "androidx.preference:preference", version.ref =
 protobuf = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
 ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet-ksp" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 # patches
 revanced-patcher = { module = "kofua.app.revanced:revanced-patcher", version.ref = "revanced-patcher" }
 smali = { module = "com.android.tools.smali:smali", version.ref = "smali" }
@@ -35,6 +37,7 @@ gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 [plugins]
 # integrations
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

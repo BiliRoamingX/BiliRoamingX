@@ -8,18 +8,15 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Process
-import android.util.Base64
 import app.revanced.bilibili.account.model.*
 import app.revanced.bilibili.http.HttpClient
 import app.revanced.bilibili.patches.main.ApplicationDelegate
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
-import org.json.JSONObject
 import java.io.File
 import java.io.RandomAccessFile
 import java.nio.channels.FileChannel
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.concurrent.TimeUnit
 
 object Accounts {
@@ -107,21 +104,10 @@ object Accounts {
                 cookieFile.fastReadToString()
             } else null
             if (!account.isNullOrEmpty() && !cookie.isNullOrEmpty()) {
-                val accountInfo = biliAesDecrypt(Base64.decode(account, Base64.NO_WRAP))
-                    .toString(Charsets.UTF_8).toJSONObject().run {
-                        AccessToken(
-                            optString("access_token"),
-                            optLong("expires"),
-                            optLong("expires_in"),
-                            optString("fast_login_token"),
-                            optLong("mid"),
-                            optString("refresh_token")
-                        )
-                    }
-                val cookieInfo = Base64.decode(cookie, Base64.NO_WRAP).toString(Charsets.UTF_8)
-                    .toJSONObject().optJSONArray("cookies")?.asSequence<JSONObject>().orEmpty()
-                    .map { CookieInfo.CookieBean(it.optString("name"), it.optString("value")) }
-                    .toList().let { CookieInfo(it) }
+                val accountInfo = biliAesDecrypt(account.base64Decode)
+                    .toString(Charsets.UTF_8).fromJson<AccessToken>()
+                val cookieInfo = cookie.base64Decode.toString(Charsets.UTF_8)
+                    .fromJson<CookieInfo>()
                 Account(accountInfo, cookieInfo)
             } else null
         }.onFailure {
@@ -153,16 +139,7 @@ object Accounts {
                 cursor.use { it.getString(0) }
             else null
         } ?: context.getSharedPreferences("bili.passport.auth", Context.MODE_PRIVATE)
-            .getString(infoKey, "")).toJSONObject().run {
-            AccountInfo().apply {
-                vipInfo = VipUserInfo().apply {
-                    optJSONObject("vip")?.run {
-                        vipStatus = optInt("status")
-                        vipType = optInt("type")
-                    }
-                }
-            }
-        }
+            .getString(infoKey, ""))?.fromJson<AccountInfo>()
     }.onFailure {
         Logger.error(it) { "Accounts, failed to read account info" }
     }.getOrNull()
@@ -209,18 +186,14 @@ object Accounts {
         if (lastCheckTime != 0L && current - lastCheckTime < checkInterval)
             return@runCatching
         cachePrefs.edit { putLong(key, current) }
-        val json = HttpClient.get("https://black.qimo.ink/api/users/$mid")?.json()
-        if (json == null || json.optInt("code", -1) != 0)
-            return@runCatching
-        val data = json.optJSONObject("data")
-        val blocked = data?.optBoolean("is_blacklist") ?: false
-        val banUntil = (data?.optLong("ban_until", 0L) ?: 0) * 1000L
+        val info = HttpClient.get("https://black.qimo.ink/api/users/$mid")
+            ?.data<BlacklistInfo>() ?: return@runCatching
         val blockedKey = "user_blocked_$mid"
-        if (blocked && banUntil > current) Utils.runOnMainThread {
+        if (info.isBlacklist && info.banUntil.time > current) Utils.runOnMainThread {
             cachePrefs.edit { putBoolean(blockedKey, true) }
             userBlocked = true
             val formatTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                .format(Date(banUntil))
+                .format(info.banUntil)
             val topActivity = ApplicationDelegate.getTopActivity()
             if (topActivity != null && !dialogShowing) {
                 AlertDialog.Builder(topActivity)

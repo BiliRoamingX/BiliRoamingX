@@ -9,6 +9,8 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import app.revanced.bilibili.api.BrotliInputStream
+import app.revanced.bilibili.model.BiliApiResponse
+import app.revanced.bilibili.model.dataOrNull
 import app.revanced.bilibili.utils.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -103,6 +105,7 @@ value class ResponseBody(val body: String) {
     inline fun plain() = body
     inline fun json() = JSONObject(body)
     inline fun jsonArray() = JSONArray(body)
+    inline fun <reified T> data() = body.fromJson<BiliApiResponse<T>>().dataOrNull()
 }
 
 class Proxy(

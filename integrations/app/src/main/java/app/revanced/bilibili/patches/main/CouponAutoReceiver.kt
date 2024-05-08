@@ -5,10 +5,12 @@ import app.revanced.bilibili.http.ContentType
 import app.revanced.bilibili.http.HttpClient
 import app.revanced.bilibili.http.RequestBody
 import app.revanced.bilibili.http.RequestBody.Companion.toRequestBody
-import app.revanced.bilibili.meta.CouponInfo
+import app.revanced.bilibili.model.CouponInfo
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.*
-import org.json.JSONObject
+import app.revanced.bilibili.utils.Logger
+import app.revanced.bilibili.utils.Toasts
+import app.revanced.bilibili.utils.Utils
+import app.revanced.bilibili.utils.signQuery
 
 object CouponAutoReceiver {
 
@@ -39,20 +41,7 @@ object CouponAutoReceiver {
     private fun getCouponInfo() = HttpClient.get(
         "https://api.bilibili.com/x/vip/privilege/my",
         headers = mapOf("Cookie" to "SESSDATA=${Accounts.cookieSESSDATA}")
-    )?.json()?.run {
-        Logger.debug { "CouponAutoReceiver.couponInfo: $this" }
-        if (optInt("code", -1) == 0) {
-            optJSONObject("data")?.optJSONArray("list")
-                .orEmpty().asSequence<JSONObject>().map {
-                    CouponInfo.Item(
-                        it.optInt("type"),
-                        it.optInt("state"),
-                        it.optLong("next_receive_days"),
-                        it.optInt("vip_type"),
-                    )
-                }.toList().let { CouponInfo(it) }
-        } else null
-    }
+    )?.data<CouponInfo>()
 
     private fun receiveCoupon(type: Int) = HttpClient.post(
         "https://api.bilibili.com/x/vip/privilege/receive",

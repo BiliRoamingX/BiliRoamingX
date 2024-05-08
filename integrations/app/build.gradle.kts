@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
 }
 
@@ -62,6 +63,7 @@ dependencies {
     implementation(libs.androidx.documentfile) {
         exclude(libs.androidx.annotation.get().group)
     }
+    implementation(libs.kotlinx.serialization.json)
     ksp(projects.integrations.ksp)
     compileOnly(projects.integrations.dummy)
     compileOnly(libs.androidx.annotation)
@@ -69,5 +71,3 @@ dependencies {
     compileOnly(libs.androidx.preference)
     compileOnly(libs.protobuf)
 }
-
-tasks.register("publish") { dependsOn("build") }

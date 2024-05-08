@@ -2,19 +2,19 @@
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-val gprUser = providers.gradleProperty("gpr.user")
-val gprKey = providers.gradleProperty("gpr.key")
-
 pluginManagement {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
         gradlePluginPortal()
     }
 }
 
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    val gprUser = settings.providers.gradleProperty("gpr.user")
+    val gprKey = settings.providers.gradleProperty("gpr.key")
     repositories {
         mavenCentral()
         mavenLocal()

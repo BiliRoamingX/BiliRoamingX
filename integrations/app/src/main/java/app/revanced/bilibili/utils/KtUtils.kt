@@ -36,11 +36,12 @@ import com.bapis.bilibili.metadata.Metadata
 import com.bapis.bilibili.metadata.device.Device
 import com.bilibili.lib.moss.api.BusinessException
 import com.google.protobuf.*
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
 import org.json.JSONObject
-import java.io.File
-import java.io.PrintWriter
-import java.io.Serializable
-import java.io.StringWriter
+import java.io.*
 import java.lang.reflect.Proxy
 import java.net.URL
 import java.net.URLDecoder
@@ -694,3 +695,18 @@ val Fragment.hostContext inline get() = context!!
 
 inline fun <T> unsafeLazy(noinline initializer: () -> T) =
     lazy(LazyThreadSafetyMode.NONE, initializer)
+
+val jsonFormat = Json {
+    ignoreUnknownKeys = true
+    coerceInputValues = true
+}
+
+inline fun <reified T> String.fromJson(json: Json = jsonFormat) =
+    json.decodeFromString<T>(this)
+
+@OptIn(ExperimentalSerializationApi::class)
+inline fun <reified T> InputStream.fromJson(json: Json = jsonFormat) =
+    json.decodeFromStream<T>(this)
+
+inline fun <reified T> T.toJson(json: Json = jsonFormat) =
+    json.encodeToString(this)

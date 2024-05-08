@@ -53,7 +53,7 @@ val ByteArray.base64: String
     get() = Base64.encodeToString(this, Base64.NO_WRAP)
 
 val String.base64Decode: ByteArray
-    get() = Base64.decode(this, 0)
+    get() = Base64.decode(this, Base64.DEFAULT)
 
 val String.urlencoded: String
     get() = URLEncoder.encode(this, "UTF-8")
