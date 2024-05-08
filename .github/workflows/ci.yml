@@ -33,7 +33,7 @@ jobs:
       - name: Build with gradle
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: ./gradlew --no-daemon -Pversion=$VERSION dist
+        run: ./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g -Pversion=$VERSION dist
 
       - name: Upload integrations and patches
         uses: actions/upload-artifact@v4
