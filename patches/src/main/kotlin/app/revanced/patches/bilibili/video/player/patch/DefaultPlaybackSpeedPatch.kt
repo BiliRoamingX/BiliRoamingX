@@ -6,6 +6,8 @@ import app.revanced.patcher.patch.BytecodePatch
 import app.revanced.patcher.patch.PatchException
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
+import app.revanced.patches.bilibili.misc.settings.patch.SettingsResourcePatch
+import app.revanced.patches.bilibili.video.player.fingerprints.PlaySpeedManagerImplFingerprint
 import app.revanced.patches.bilibili.video.player.fingerprints.PlayerOnPreparedFingerprint
 import app.revanced.util.exception
 import com.android.tools.smali.dexlib2.Opcode
@@ -19,12 +21,16 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
         CompatiblePackage(name = "tv.danmaku.bili"),
         CompatiblePackage(name = "tv.danmaku.bilibilihd"),
         CompatiblePackage(name = "com.bilibili.app.in")
-    ]
+    ],
+    dependencies = [SettingsResourcePatch::class]
 )
-object DefaultPlaybackSpeedPatch : BytecodePatch(setOf(PlayerOnPreparedFingerprint)) {
+object DefaultPlaybackSpeedPatch : BytecodePatch(
+    setOf(PlayerOnPreparedFingerprint, PlaySpeedManagerImplFingerprint)
+) {
     override fun execute(context: BytecodeContext) {
         PlayerOnPreparedFingerprint.result?.mutableMethod?.run {
-            val (index, register) = implementation!!.instructions.withIndex().firstNotNullOfOrNull { (index, inst) ->
+            val instructions = implementation!!.instructions
+            val (index, register) = instructions.withIndex().firstNotNullOfOrNull { (index, inst) ->
                 if (inst.opcode == Opcode.INVOKE_VIRTUAL && ((inst as BuilderInstruction35c).reference as MethodReference)
                         .let { it.parameterTypes == listOf("F") && it.returnType == "V" }
                 ) index to inst.registerD else null
@@ -36,5 +42,15 @@ object DefaultPlaybackSpeedPatch : BytecodePatch(setOf(PlayerOnPreparedFingerpri
             """.trimIndent()
             )
         } ?: throw PlayerOnPreparedFingerprint.exception
+        if (!SettingsResourcePatch.isHd) {
+            PlaySpeedManagerImplFingerprint.result?.mutableMethod?.run {
+                addInstructions(
+                    2, """
+                    invoke-static {v0}, Lapp/revanced/bilibili/patches/PlaybackSpeedPatch;->defaultSpeed(F)F
+                    move-result v0
+                """.trimIndent()
+                )
+            } ?: throw PlaySpeedManagerImplFingerprint.exception
+        }
     }
 }

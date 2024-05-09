@@ -66,12 +66,16 @@ object PlaybackSpeedPatch {
 
     @Keep
     @JvmStatic
-    fun defaultSpeed(player: IMediaPlayer, speed: Float): Float {
+    fun defaultSpeed(player: IMediaPlayer?, speed: Float): Float {
         // only apply to video, not apply to podcast
-        if (player.videoSarNum <= 0) return speed
+        if (player != null && player.videoSarNum <= 0) return speed
         val customSpeed = Settings.DEFAULT_PLAYBACK_SPEED.float
         return if (customSpeed != 0f) customSpeed else speed
     }
+
+    @Keep
+    @JvmStatic
+    fun defaultSpeed(speed: Float) = defaultSpeed(null, speed)
 
     @Keep
     @JvmStatic
