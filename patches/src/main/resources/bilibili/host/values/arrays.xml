@@ -125,23 +125,25 @@
         <item>直播</item>
         <item>内联视频</item>
         <item>PGC 内容</item>
+        <item>课堂</item>
         <item>大卡</item>
         <item>中卡</item>
         <item>小卡</item>
     </string-array>
     <string-array name="biliroaming_home_recommend_summaries">
         <item>包含轮播图的广告</item>
-        <item/>
-        <item/>
+        <item />
+        <item />
         <item>追番更新、活动提示</item>
-        <item/>
+        <item />
         <item>一般带有图文标签</item>
-        <item/>
-        <item/>
-        <item/>
+        <item />
+        <item />
+        <item />
         <item>番剧、电影、电视剧、纪录片……</item>
+        <item />
         <item>单列显示的</item>
-        <item/>
+        <item />
         <item>双列显示的</item>
     </string-array>
     <string-array name="biliroaming_home_recommend_values">
@@ -155,6 +157,7 @@
         <item>live</item>
         <item>inline</item>
         <item>bangumi</item>
+        <item>course</item>
         <item>large_cover</item>
         <item>middle_cover</item>
         <item>small_cover</item>
@@ -188,32 +191,32 @@
         <item>通知</item>
     </string-array>
     <string-array name="biliroaming_dynamic_type_summaries">
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
         <item>你可能感兴趣的UP主</item>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
-        <item/>
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
     </string-array>
     <string-array name="biliroaming_dynamic_type_values">
         <item>1</item>

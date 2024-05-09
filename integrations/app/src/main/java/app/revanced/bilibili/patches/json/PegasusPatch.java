@@ -98,6 +98,7 @@ public class PegasusPatch {
             Map.entry("live", List.of("live")),
             Map.entry("inline", List.of("inline")),
             Map.entry("notify", List.of("notify_tunnel")),
+            Map.entry("course", List.of("ketang")),
             Map.entry("large_cover", List.of("large_cover")),
             Map.entry("middle_cover", List.of("middle_cover")),
             Map.entry("small_cover", List.of("small_cover"))
