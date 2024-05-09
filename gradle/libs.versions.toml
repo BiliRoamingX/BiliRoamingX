@@ -9,6 +9,7 @@ androidx-appcompat = "1.7.0-beta01"
 androidx-preference = "1.2.1"
 protobuf = "3.25.3"
 kotlinx-serialization = "1.6.3"
+fastjson = "1.2.83"
 # patches
 revanced-patcher = "19.3.1"
 smali = "3.0.3"
@@ -29,6 +30,7 @@ protobuf = { module = "com.google.protobuf:protobuf-javalite", version.ref = "pr
 ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet-ksp" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+fastjson = { module = "com.alibaba:fastjson", version.ref = "fastjson" }
 # patches
 revanced-patcher = { module = "kofua.app.revanced:revanced-patcher", version.ref = "revanced-patcher" }
 smali = { module = "com.android.tools.smali:smali", version.ref = "smali" }

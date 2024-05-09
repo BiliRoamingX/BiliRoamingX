@@ -17,6 +17,8 @@ android {
 }
 
 dependencies {
+    api(files("libs/grpc_apis.jar"))
+    api(libs.fastjson)
     compileOnly(libs.androidx.preference)
     compileOnly(libs.protobuf)
 }

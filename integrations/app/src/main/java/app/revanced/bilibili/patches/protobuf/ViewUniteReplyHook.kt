@@ -16,6 +16,7 @@ import com.bapis.bilibili.app.viewunite.common.*
 import com.bapis.bilibili.app.viewunite.pgcanymodel.*
 import com.bapis.bilibili.app.viewunite.pgcanymodel.Rights
 import com.bapis.bilibili.app.viewunite.pgcanymodel.Stat
+import com.bapis.bilibili.app.viewunite.pgcanymodel.UserStatus
 import com.bapis.bilibili.app.viewunite.v1.*
 import com.bapis.bilibili.playershared.BizType
 import com.bilibili.lib.moss.api.MossException
