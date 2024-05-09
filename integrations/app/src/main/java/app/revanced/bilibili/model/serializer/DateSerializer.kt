@@ -9,12 +9,18 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import java.util.Date
 
-typealias DateAsSeconds = @Serializable(DateAsSecondsTimestampSerializer::class) Date
-typealias DateAsMilliseconds = @Serializable(DateAsMillisecondsTimestampSerializer::class) Date
+/**
+ * seconds timestamp as Date
+ */
+typealias SecondsAsDate = @Serializable(SecondsTimestampAsDateSerializer::class) Date
+/**
+ * milliseconds timestamp as Date
+ */
+typealias MillisecondsAsDate = @Serializable(MillisecondsTimestampAsDateSerializer::class) Date
 
-object DateAsSecondsTimestampSerializer : KSerializer<Date> {
+object SecondsTimestampAsDateSerializer : KSerializer<Date> {
     override val descriptor: SerialDescriptor
-        get() = PrimitiveSerialDescriptor("DateAsSeconds", PrimitiveKind.LONG)
+        get() = PrimitiveSerialDescriptor("SecondsAsDate", PrimitiveKind.LONG)
 
     override fun deserialize(decoder: Decoder): Date {
         val timestamp = decoder.decodeLong() * 1000
@@ -26,9 +32,9 @@ object DateAsSecondsTimestampSerializer : KSerializer<Date> {
     }
 }
 
-object DateAsMillisecondsTimestampSerializer : KSerializer<Date> {
+object MillisecondsTimestampAsDateSerializer : KSerializer<Date> {
     override val descriptor: SerialDescriptor
-        get() = PrimitiveSerialDescriptor("DateAsMilliseconds", PrimitiveKind.LONG)
+        get() = PrimitiveSerialDescriptor("MillisecondsAsDate", PrimitiveKind.LONG)
 
     override fun deserialize(decoder: Decoder): Date {
         val timestamp = decoder.decodeLong()

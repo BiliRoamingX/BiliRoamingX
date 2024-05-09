@@ -1,7 +1,7 @@
 package app.revanced.bilibili.account.model
 
 
-import app.revanced.bilibili.model.serializer.DateAsSeconds
+import app.revanced.bilibili.model.serializer.SecondsAsDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.Date
@@ -17,5 +17,5 @@ class BlacklistInfo(
     @SerialName("status")
     val status: Int = 0, // 0，正常，1 白名单，2 黑名单
     @SerialName("ban_until")
-    val banUntil: DateAsSeconds = Date(),
+    val banUntil: SecondsAsDate = Date(),
 )
