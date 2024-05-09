@@ -66,8 +66,4 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     ksp(projects.integrations.ksp)
     compileOnly(projects.integrations.dummy)
-    compileOnly(libs.androidx.annotation)
-    compileOnly(libs.androidx.appcompat)
-    compileOnly(libs.androidx.preference)
-    compileOnly(libs.protobuf)
 }

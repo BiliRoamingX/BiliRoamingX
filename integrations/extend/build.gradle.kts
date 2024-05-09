@@ -20,5 +20,4 @@ android {
 
 dependencies {
     compileOnly(projects.integrations.dummy)
-    compileOnly(libs.protobuf)
 }
