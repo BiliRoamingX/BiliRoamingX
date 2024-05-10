@@ -699,6 +699,7 @@ inline fun <T> unsafeLazy(noinline initializer: () -> T) =
 val jsonFormat = Json {
     ignoreUnknownKeys = true
     coerceInputValues = true
+    useAlternativeNames = false
 }
 
 inline fun <reified T> String.fromJson(json: Json = jsonFormat) =
