@@ -32,7 +32,13 @@ class BackupFragment : BiliRoamingBaseSettingFragment() {
                 type = "application/zip"
                 val time = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault())
                     .format(Date(System.currentTimeMillis()))
-                val title = "BiliRoamingX_backup_$time.zip"
+                val identifier = when (Utils.getMobiApp()) {
+                    "android_i" -> "Play"
+                    "android_hd" -> "HD"
+                    "android_b" -> "Blue"
+                    else -> "Pink"
+                }
+                val title = "BiliRoamingX_${identifier}_backup_$time.zip"
                 putExtra(Intent.EXTRA_TITLE, title)
                 addCategory(Intent.CATEGORY_OPENABLE)
             }
