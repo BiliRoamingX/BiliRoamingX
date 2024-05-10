@@ -102,6 +102,8 @@
     <string name="biliroaming_dynamic_rm_blocked_title">屏蔽无权查看动态(例如充电专属)</string>
     <string name="biliroaming_dynamic_rm_ad_link_title">屏蔽跳转广告动态(例如UP主的推荐)</string>
     <string name="biliroaming_dynamic_rm_up_reservation_title">屏蔽直播预约动态</string>
+    <string name="biliroaming_dynamic_rm_cm_title">屏蔽推广动态(一般没有投稿时间)</string>
+    <string name="biliroaming_dynamic_rm_story_title">屏蔽动态视频</string>
     <string name="biliroaming_save_success_and_refresh_dynamic">保存成功，刷新动态页生效</string>
     <string name="biliroaming_block_word_search_title">屏蔽评论关键词搜索功能</string>
     <string name="biliroaming_block_word_search_summary">屏蔽评论蓝色关键词点击触发跳转搜索功能</string>

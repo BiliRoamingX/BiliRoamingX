@@ -3,9 +3,8 @@ package app.revanced.bilibili.patches.protobuf.hooks
 import app.revanced.bilibili.patches.protobuf.MossHook
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.ArrayUtils
-import com.bapis.bilibili.app.dynamic.v2.AdditionalType
-import com.bapis.bilibili.app.dynamic.v2.DescType
-import com.bapis.bilibili.app.dynamic.v2.DynamicItem
+import com.bapis.bilibili.ad.v1.SourceContentDto
+import com.bapis.bilibili.app.dynamic.v2.*
 import com.google.protobuf.GeneratedMessageLite
 
 abstract class DynListBase<out Req : GeneratedMessageLite<*, *>, out Resp : GeneratedMessageLite<*, *>> :
@@ -31,6 +30,8 @@ abstract class DynListBase<out Req : GeneratedMessageLite<*, *>, out Resp : Gene
         val rmBlocked = Settings.DYNAMIC_RM_BLOCKED.boolean
         val rmAdLink = Settings.DYNAMIC_RM_AD_LINK.boolean
         val rmUpReservation = Settings.DYNAMIC_RM_UP_RESERVATION.boolean
+        val rmCm = Settings.DYNAMIC_RM_CM.boolean
+        val rmStory = Settings.DYNAMIC_RM_STORY.boolean
         val typeArray = ArrayUtils.toIntArray(typeSet)
         val uidArray = ArrayUtils.toLongArray(uidSet)
         val idxList = mutableListOf<Int>()
@@ -47,42 +48,33 @@ abstract class DynListBase<out Req : GeneratedMessageLite<*, *>, out Resp : Gene
                 idxList.add(idx)
                 continue
             }
-            if ((rmAdLink || rmUpReservation) && item.modulesList.asSequence()
-                    .filter { it.hasModuleAdditional() }
-                    .map { it.moduleAdditional }
-                    .any {
-                        val type = it.type
-                        rmAdLink && (type == AdditionalType.additional_type_goods || type == AdditionalType.additional_type_up_rcmd)
-                                || rmUpReservation && type == AdditionalType.additional_type_up_reservation
-                    }
-            ) {
+            if (rmAdLink && (extend.origDescList.any { it.type == DescType.desc_type_goods }
+                        || extend.descList.any { it.type == DescType.desc_type_goods })) {
                 idxList.add(idx)
                 continue
             }
-            if (rmAdLink || rmUpReservation) {
-                val moduleDynamic = item.modulesList.firstNotNullOfOrNull {
-                    if (it.hasModuleDynamic()) it.moduleDynamic else null
-                }
-                if (moduleDynamic != null && moduleDynamic.hasDynForward()) {
-                    val forwardItem = moduleDynamic.dynForward.item
-                    if (forwardItem.modulesList.asSequence()
-                            .filter { it.hasModuleAdditional() }
-                            .map { it.moduleAdditional }
-                            .any {
-                                val type = it.type
-                                rmAdLink && (type == AdditionalType.additional_type_goods || type == AdditionalType.additional_type_up_rcmd)
-                                        || rmUpReservation && type == AdditionalType.additional_type_up_reservation
-                            }
-                    ) {
-                        idxList.add(idx)
-                        continue
-                    }
-                }
-                if (rmAdLink && (extend.origDescList.any { it.type == DescType.desc_type_goods }
-                            || extend.descList.any { it.type == DescType.desc_type_goods })) {
-                    idxList.add(idx)
-                    continue
-                }
+            if ((rmAdLink || rmUpReservation) && item.withForward().any { i ->
+                    i.modulesList.find { it.hasModuleAdditional() }?.moduleAdditional?.type?.let { type ->
+                        rmAdLink && (type == AdditionalType.additional_type_goods || type == AdditionalType.additional_type_up_rcmd)
+                                || rmUpReservation && type == AdditionalType.additional_type_up_reservation
+                    } == true
+                }) {
+                idxList.add(idx)
+                continue
+            }
+            if (rmStory && item.cardType == DynamicType.av && item.withForward().any { i ->
+                    i.modulesList.find { it.hasModuleDynamic() }?.moduleDynamic?.dynArchive
+                        ?.stype == VideoType.video_type_story
+                }) {
+                idxList.add(idx)
+                continue
+            }
+            if (rmCm && extend.hasSourceContent()
+                && extend.sourceContent.typeUrl == "type.googleapis.com/bilibili.ad.v1.SourceContentDto"
+                && SourceContentDto.parseFrom(extend.sourceContent.value).isAdLoc
+            ) {
+                idxList.add(idx)
+                continue
             }
             if (contentSet.isNotEmpty()) {
                 val text = item.modulesList.firstNotNullOfOrNull {
@@ -128,6 +120,12 @@ abstract class DynListBase<out Req : GeneratedMessageLite<*, *>, out Resp : Gene
             }
         }
         return idxList
+    }
+
+    private fun DynamicItem.withForward(): Array<DynamicItem> {
+        val forwardItem = modulesList.find { it.hasModuleDynamic() }?.moduleDynamic
+            ?.takeIf { it.hasDynForward() }?.dynForward?.item
+        return if (forwardItem == null) arrayOf(this) else arrayOf(this, forwardItem)
     }
 
     private fun String?.shouldBlock(

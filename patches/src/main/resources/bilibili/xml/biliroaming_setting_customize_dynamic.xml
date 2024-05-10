@@ -41,6 +41,12 @@
         <androidx.preference.SwitchPreferenceCompat
             android:key="customize_dynamic_rm_up_reservation"
             android:title="@string/biliroaming_dynamic_rm_up_reservation_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="dynamic_rm_cm"
+            android:title="@string/biliroaming_dynamic_rm_cm_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="dynamic_rm_story"
+            android:title="@string/biliroaming_dynamic_rm_story_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.FilterDynamicByTypeFragment"
             android:key="filter_dynamic_by_type"
