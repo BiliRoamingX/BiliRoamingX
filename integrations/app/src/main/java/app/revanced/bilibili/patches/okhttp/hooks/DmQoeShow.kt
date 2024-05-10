@@ -3,7 +3,7 @@ package app.revanced.bilibili.patches.okhttp.hooks
 import app.revanced.bilibili.patches.okhttp.ApiHook
 import app.revanced.bilibili.settings.Settings
 
-object QoeShow : ApiHook() {
+object DmQoeShow : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
         return Settings.BLOCK_DM_FEEDBACK.boolean
                 && url.contains("/x/v2/dm/qoe/show")
