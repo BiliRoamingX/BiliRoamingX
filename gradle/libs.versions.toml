@@ -9,7 +9,7 @@ androidx-appcompat = "1.7.0-beta01"
 androidx-preference = "1.2.1"
 protobuf = "3.25.3"
 kotlinx-serialization = "1.6.3"
-fastjson = "1.2.83"
+fastjson = "2.0.49"
 # patches
 revanced-patcher = "19.3.1"
 smali = "3.0.3"
