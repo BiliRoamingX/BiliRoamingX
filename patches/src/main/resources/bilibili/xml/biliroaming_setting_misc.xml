@@ -167,5 +167,10 @@
             android:summary="@string/biliroaming_per_app_language_summary"
             android:title="@string/biliroaming_per_app_language_title"
             android:widgetLayout="@null" />
+        <androidx.preference.Preference
+            android:key="prefs_keep_data"
+            android:summary="@string/biliroaming_keep_data_summary"
+            android:title="@string/biliroaming_keep_data_title"
+            android:widgetLayout="@null" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

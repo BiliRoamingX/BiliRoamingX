@@ -407,4 +407,6 @@
     <string name="biliroaming_per_app_language_summary">适配 Android 13 按应用设定语言特性，允许在系统设置中单独设置本APP的语言偏好。</string>
     <string name="biliroaming_fake_not_in_multi_window_title">伪装未处于多窗口模式</string>
     <string name="biliroaming_fake_not_in_multi_window_summary">允许播放页小窗或分屏时全屏播放，可能导致UI错乱</string>
+    <string name="biliroaming_keep_data_title">APP卸载时保留数据</string>
+    <string name="biliroaming_keep_data_summary">适配 Android 10 APP卸载时保留应用数据特性。</string>
 </resources>
