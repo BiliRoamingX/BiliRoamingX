@@ -23,6 +23,8 @@ import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bapis.bilibili.app.distribution.setting.night.NightSettingsConfig;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -257,12 +259,6 @@ public class Utils {
 
     @Keep
     // codes will filled by patcher
-    public static boolean isNightFollowSystem() {
-        return false;
-    }
-
-    @Keep
-    // codes will filled by patcher
     public static boolean getAb(String key, boolean defValue) {
         return false;
     }
@@ -276,6 +272,15 @@ public class Utils {
 
     @Keep
     public static void routeTo(Uri uri, Context context) {
+    }
+
+    public static boolean isNightFollowSystem() {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O)
+            return false;
+        var setting = KtUtils.getDeviceSetting(NightSettingsConfig.class);
+        if (setting == null)
+            return false;
+        return setting.getIsNightFollowSystem().getValue();
     }
 
     public static String currentProcessName() {
