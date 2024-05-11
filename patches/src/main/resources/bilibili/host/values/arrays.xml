@@ -363,6 +363,7 @@
         <item>合集</item>
         <item>专栏</item>
         <item>动态</item>
+        <item>直播</item>
     </string-array>
     <string-array name="biliroaming_search_type_values">
         <item>hot_banner</item>
@@ -378,6 +379,7 @@
         <item>collection</item>
         <item>article</item>
         <item>twitter</item>
+        <item>live</item>
     </string-array>
     <string-array name="biliroaming_block_follow_button_entries">
         <item>评论</item>
