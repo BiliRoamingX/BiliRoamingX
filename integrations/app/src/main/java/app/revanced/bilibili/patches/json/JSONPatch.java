@@ -554,8 +554,10 @@ public class JSONPatch {
                 String aGoto = story.getGoto();
                 if (!TextUtils.isEmpty(aGoto))
                     for (String filter : filters)
-                        if (aGoto.contains(filter))
+                        if (aGoto.contains(filter)) {
                             it.remove();
+                            break;
+                        }
             }
         }
     }

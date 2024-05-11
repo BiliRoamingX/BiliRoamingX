@@ -5,6 +5,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.utils.Versions
 import app.revanced.bilibili.utils.saveImage as saveImageReal
 
 object WebViewPatch {
@@ -22,7 +23,7 @@ object WebViewPatch {
         webView.addJavascriptInterface(jsHooker, "hooker")
         webView.webViewClient = WebViewClientProxy(client, object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
-                if (!Settings.SAVE_COMMENT_IMAGE.boolean) return
+                if (!Settings.SAVE_COMMENT_IMAGE.boolean && !Versions.ge7_76_0()) return
                 if (url.startsWith("https://www.bilibili.com/h5/note-app/view")) {
                     view.evaluateJavascript(
                         """(function(){for(var i=0;i<document.images.length;++i){var image=document.images[i];if(image.className==='img-preview'||image.parentElement.className==='img-preview'){image.addEventListener("contextmenu",(e)=>{hooker.saveImage(e.target.currentSrc)})}}})()""",
