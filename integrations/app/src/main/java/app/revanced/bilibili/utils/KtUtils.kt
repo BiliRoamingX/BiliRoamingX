@@ -660,10 +660,14 @@ fun saveImage(url: String) {
 }
 
 inline fun <reified T : MessageLite> getDeviceSetting(): T? {
+    return getDeviceSetting(T::class.java)
+}
+
+@Suppress("UNCHECKED_CAST")
+fun <T : MessageLite> getDeviceSetting(typeClass: Class<T>): T? {
     val context = Utils.getContext()
     val callUri = "content://${context.packageName}.device.settings.DeviceSettingProvider/call"
     val cr = context.contentResolver
-    val typeClass = T::class.java
     val typeUrl = MessageLiteToStringEx.typeMap.entries.find {
         it.value == typeClass
     }?.key ?: return null

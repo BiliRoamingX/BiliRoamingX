@@ -6,6 +6,7 @@ import androidx.annotation.Keep;
 
 import com.bapis.bilibili.app.card.v1.Card;
 import com.bapis.bilibili.app.card.v1.SmallCoverV5;
+import com.bapis.bilibili.app.distribution.setting.pegasus.PegasusDeviceWithoutFplocalConfig;
 import com.bapis.bilibili.app.show.popular.v1.PopularReply;
 import com.bapis.bilibili.app.view.v1.Relate;
 import com.bapis.bilibili.app.view.v1.RelatesFeedReply;
@@ -56,8 +57,10 @@ import app.revanced.bilibili.meta.pegasus.BannersItem;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.ArrayUtils;
 import app.revanced.bilibili.utils.Jsons;
+import app.revanced.bilibili.utils.KtUtils;
 import app.revanced.bilibili.utils.Toasts;
 import app.revanced.bilibili.utils.Utils;
+import app.revanced.bilibili.utils.Versions;
 import kotlin.Unit;
 
 public class PegasusPatch {
@@ -737,8 +740,21 @@ public class PegasusPatch {
         return Unit.INSTANCE;
     }
 
+    private static boolean shouldDisableAutoRefresh() {
+        if (Settings.HOME_DISABLE_AUTO_REFRESH.getBoolean())
+            return true;
+        if (!Versions.ge7_76_0())
+            return false;
+        var setting = KtUtils.getDeviceSetting(PegasusDeviceWithoutFplocalConfig.class);
+        if (setting != null) {
+            long value = setting.getAutoRefreshState().getValue();
+            return value == 2L || value == 4L;
+        }
+        return false;
+    }
+
     private static void disableAutoRefresh(Config config) {
-        if (config == null || !Settings.HOME_DISABLE_AUTO_REFRESH.getBoolean())
+        if (config == null || !shouldDisableAutoRefresh())
             return;
         if (Utils.isPink() || Utils.isBlue() || Utils.isPlay()) {
             // only exist on android and android_i now
@@ -837,7 +853,7 @@ public class PegasusPatch {
 
     public static void pegasusHook(JSONObject data) throws JSONException {
         JSONObject config = data.optJSONObject("config");
-        if (config != null && Settings.HOME_DISABLE_AUTO_REFRESH.getBoolean()) {
+        if (config != null && shouldDisableAutoRefresh()) {
             config.put("auto_refresh_time", 0);
             config.put("auto_refresh_time_by_appear", -1L);
             config.put("auto_refresh_time_by_active", -1L);
