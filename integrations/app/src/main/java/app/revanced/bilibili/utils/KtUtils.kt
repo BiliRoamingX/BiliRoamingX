@@ -44,7 +44,6 @@ import org.json.JSONObject
 import java.io.*
 import java.lang.reflect.Proxy
 import java.net.URL
-import java.net.URLDecoder
 import java.util.TreeMap
 import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
@@ -86,7 +85,7 @@ inline fun Context.inflateLayout(
 }
 
 @JvmOverloads
-inline fun Int.toHexColor(alpha: Boolean = true) = if (alpha)
+inline fun @receiver:ColorInt Int.toHexColor(alpha: Boolean = true) = if (alpha)
     "%08X".format(0xFFFFFFFF.toInt() and this)
 else "%06X".format(0xFFFFFF and this)
 
@@ -387,7 +386,7 @@ fun decodeFormBody(body: String): Map<String, String> {
     return body.split('&')
         .map { it.split('=', limit = 2) }
         .filter { it.size == 2 }
-        .associate { (k, v) -> k to URLDecoder.decode(v, "UTF-8") }
+        .associate { (k, v) -> k to v.urlDecoded }
 }
 
 @Suppress("DEPRECATION")

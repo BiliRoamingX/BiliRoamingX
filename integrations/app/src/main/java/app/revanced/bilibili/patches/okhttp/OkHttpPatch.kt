@@ -4,6 +4,7 @@ import android.util.Pair
 import androidx.annotation.Keep
 import app.revanced.bilibili.api.BrotliInputStream
 import app.revanced.bilibili.patches.okhttp.hooks.*
+import app.revanced.bilibili.patches.protobuf.MossPatch
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Logger
 import app.revanced.bilibili.utils.Utils
@@ -18,6 +19,7 @@ object OkHttpPatch {
         BangumiCards,
         BangumiMaterial,
         DmAd,
+        DmPost,
         DmQoeShow,
         Eps,
         GarbSuitDetail,
@@ -25,6 +27,7 @@ object OkHttpPatch {
         GrpcUnlockAreaLimitForPlay,
         HistoryReport,
         Media,
+        ReplyAdd,
         RoomPlayInfo,
         SearchAll,
         SearchByType,
@@ -94,7 +97,14 @@ object OkHttpPatch {
             // too early, even application not attached, just let them go
             return Pair.create(url, headers)
         }
-        return hooks.find { it.shouldHookBefore(url, headers) }
-            ?.hookBefore(url, headers) ?: Pair.create(url, headers)
+        val tmpDisableAuthApiList = MossPatch.tmpDisableAuthApiList
+        val newHeaders = if (tmpDisableAuthApiList.isNotEmpty()
+            && tmpDisableAuthApiList.any { url.endsWith(it) }
+        ) {
+            tmpDisableAuthApiList.removeIf { url.endsWith(it) }
+            Utils.removeHeader(headers, "authorization")
+        } else headers
+        return hooks.find { it.shouldHookBefore(url, newHeaders) }
+            ?.hookBefore(url, newHeaders) ?: Pair.create(url, newHeaders)
     }
 }

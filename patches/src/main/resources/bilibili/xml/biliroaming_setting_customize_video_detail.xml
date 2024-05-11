@@ -71,6 +71,10 @@
         <androidx.preference.SwitchPreferenceCompat
             android:key="block_video_comment"
             android:title="@string/biliroaming_block_video_comment_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="check_comment"
+            android:summary="@string/biliroaming_check_comment_summary"
+            android:title="@string/biliroaming_check_comment_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.FilterCommentFragment"
             android:key="fragment_filter_comment"

@@ -220,6 +220,7 @@ public enum Settings {
     ENABLE_AV("enable_av", BOOLEAN, FALSE, true),
     ENABLE_DOC_PROVIDER("enable_doc_provider", BOOLEAN, FALSE),
     DISABLE_AVIF("disable_avif", BOOLEAN, FALSE, true),
+    CHECK_COMMENT("check_comment", BOOLEAN, FALSE),
 
     // 去广告杂项
     PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),

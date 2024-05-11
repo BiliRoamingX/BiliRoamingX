@@ -60,7 +60,7 @@ class RequestBody(val contentType: ContentType, val encoding: Encoding, val body
         @JvmStatic
         fun form(vararg params: Pair<Any, Any>, encoding: Encoding = Encoding.none): RequestBody {
             val body = params.joinToString("&") { (k, v) ->
-                "$k=${v.toString().urlencoded}"
+                "$k=${v.toString().urlEncoded}"
             }.toByteArray()
             return RequestBody(ContentType.form, encoding, body)
         }
@@ -68,7 +68,7 @@ class RequestBody(val contentType: ContentType, val encoding: Encoding, val body
         @JvmStatic
         fun form(params: List<Pair<Any, Any>>, encoding: Encoding = Encoding.none): RequestBody {
             val body = params.joinToString("&") { (k, v) ->
-                "$k=${v.toString().urlencoded}"
+                "$k=${v.toString().urlEncoded}"
             }.toByteArray()
             return RequestBody(ContentType.form, encoding, body)
         }
