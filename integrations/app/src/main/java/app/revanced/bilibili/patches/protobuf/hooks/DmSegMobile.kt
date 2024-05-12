@@ -12,10 +12,8 @@ import com.bapis.bilibili.community.service.dm.v1.DmSegMobileReply
 import com.bapis.bilibili.community.service.dm.v1.DmSegMobileReq
 import com.bilibili.lib.moss.api.MossException
 import com.google.protobuf.GeneratedMessageLite
-import java.util.concurrent.atomic.AtomicBoolean
 
 object DmSegMobile : MossHook<DmSegMobileReq, DmSegMobileReply>() {
-    var tempNotHook = AtomicBoolean(false)
 
     override fun shouldHook(req: GeneratedMessageLite<*, *>): Boolean {
         return req is DmSegMobileReq
@@ -26,8 +24,6 @@ object DmSegMobile : MossHook<DmSegMobileReq, DmSegMobileReply>() {
         reply: DmSegMobileReply?,
         error: MossException?
     ): DmSegMobileReply? {
-        if (tempNotHook.getAndSet(false))
-            return super.hookAfter(req, reply, error)
         if (reply != null && Settings.UNLOCK_AREA_LIMIT.boolean && Settings.TH_SERVER.string.isNotEmpty()) {
             val epId = req.oid.toString()
             val seasonId = req.pid.toString()

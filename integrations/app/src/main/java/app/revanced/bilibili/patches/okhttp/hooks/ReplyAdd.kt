@@ -17,13 +17,14 @@ object ReplyAdd : ApiHook() {
             return response
         val reply = data.optJSONObject("reply")
             ?: return response
+        val oid = reply.optLong("oid")
         val replyId = reply.optLong("rpid")
         val content = reply.optJSONObject("content")
             ?: return response
         val message = content.optString("message")
         val hasPicture = content.optJSONArray("pictures").orEmpty().length() > 0
         val finalMessage = "$message ${if (hasPicture) " [带图]" else ""}".trim()
-        CommentChecker.checkComment(replyId, finalMessage, hasPicture)
+        CommentChecker.checkComment(oid, replyId, finalMessage, hasPicture)
         return response
     }
 }

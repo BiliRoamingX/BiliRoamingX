@@ -14,7 +14,6 @@ import com.bilibili.lib.moss.api.MossException
 import com.bilibili.lib.moss.api.MossResponseHandler
 import com.google.protobuf.GeneratedMessageLite
 import java.util.AbstractMap
-import java.util.concurrent.CopyOnWriteArraySet
 
 object MossPatch {
     private val hooks = arrayOf(
@@ -55,11 +54,7 @@ object MossPatch {
         ViewUnite
     )
 
-    val tmpDisableAuthApiList = CopyOnWriteArraySet<String>()
-
     const val PLAY_VIEW_UNITE_API = "bilibili.app.playerunite.v1.Player/PlayViewUnite"
-    const val REPLY_INFO_API = "bilibili.main.community.reply.v1.Reply/ReplyInfo"
-    const val DM_SEG_MOBILE_API = "bilibili.community.service.dm.v1.DM/DmSegMobile"
 
     val fakeToPinkForUnlockAreaLimitApis = arrayOf(
         "bilibili.pgc.gateway.player.v2.PlayURL/PlayView",
@@ -162,10 +157,6 @@ object MossPatch {
                 fakeClient(Client.PINK, headers)
             if ((Utils.isPink() || Utils.isPlay()) && Settings.TRIAL_VIP_QUALITY.boolean && !Accounts.isEffectiveVip)
                 pinNetworkType(NetworkType.WIFI, headers)
-        }
-        if (tmpDisableAuthApiList.isNotEmpty() && tmpDisableAuthApiList.any { url.endsWith(it) }) {
-            tmpDisableAuthApiList.removeIf { url.endsWith(it) }
-            headers.removeIf { (k, _) -> k == "authorization" }
         }
         return url
     }

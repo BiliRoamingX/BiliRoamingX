@@ -93,7 +93,7 @@ public class Logger {
         log(logMessage, (m) -> Log.e(LOG_TAG, m));
     }
 
-    private static void log(String message, Consumer<String> logger) {
+    private static synchronized void log(String message, Consumer<String> logger) {
         if (message.length() <= MAX_LENGTH) {
             logger.accept(message);
             return;
