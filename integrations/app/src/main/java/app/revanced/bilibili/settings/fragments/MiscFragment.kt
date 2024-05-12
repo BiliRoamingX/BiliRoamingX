@@ -108,7 +108,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment() {
             Themes.applyCustomTheme(context)
         }.onFailure {
             Logger.error(it) { "download current theme failed" }
-            Toasts.showShort("主题设置失败！")
+            Toasts.showShortWithId("biliroaming_theme_apply_failed")
         }.onSuccess {
             onSuccess()
         } else runCatching {
@@ -195,11 +195,11 @@ class MiscFragment : BiliRoamingBaseSettingFragment() {
                 runCatching {
                     Utils.routeTo(uri, context)
                     if (editUrl.isEmpty()) Utils.runOnMainThread(300) {
-                        Toasts.showShort("你被骗啦")
+                        Toasts.showShortWithId("biliroaming_you_were_cheated")
                     }
                 }.onFailure {
                     Logger.error(it) { "route failed, uri: $uri" }
-                    Toasts.showShort("打开失败")
+                    Toasts.showShortWithId("biliroaming_open_failed")
                 }
             }.create().onShow {
                 getButton(DialogInterface.BUTTON_POSITIVE).isAllCaps = false

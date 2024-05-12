@@ -34,7 +34,7 @@ object GarbSuitDetail : ApiHook() {
             val topActivity = ApplicationDelegate.getTopActivity()
             if (topActivity != null) {
                 AlertDialog.Builder(topActivity)
-                    .setMessage("发现主题，是否保存为自制主题？")
+                    .setMessage(Utils.getString("biliroaming_found_theme"))
                     .setNegativeButton(android.R.string.cancel, null)
                     .setPositiveButton(android.R.string.ok) { _, _ ->
                         Utils.async {
@@ -43,8 +43,8 @@ object GarbSuitDetail : ApiHook() {
                                     id, name, skin, skinProps, loading, playIcon, spaceBg
                                 )
                             }.onFailure {
-                                Logger.error(it) { "theme set failed" }
-                                Toasts.showShort("主题设置失败！")
+                                Logger.error(it) { "theme apply failed" }
+                                Toasts.showShortWithId("biliroaming_theme_apply_failed")
                             }.onSuccess {
                                 Settings.SKIN_JSON.saveValue(it.toString())
                             }

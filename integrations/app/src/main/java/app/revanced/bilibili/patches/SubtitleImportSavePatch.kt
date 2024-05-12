@@ -7,6 +7,7 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.view.Gravity
 import android.view.View
 import androidx.annotation.Keep
 import androidx.documentfile.provider.DocumentFile
@@ -33,7 +34,8 @@ object SubtitleImportSavePatch {
             ?.bufferedReader()?.use { it.readText() } ?: error("read failed")
     }.onFailure {
         Utils.runOnMainThread(800L) {
-            Toasts.showShort("字幕导入失败，无法读取")
+            val gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+            Toasts.showShortWithId("biliroaming_subtitle_import_failed_read", gravity = gravity)
         }
         Logger.error(it) { "Failed to read subtitle, type: $type, uri: $uri" }
     }.mapCatching {
@@ -45,7 +47,8 @@ object SubtitleImportSavePatch {
         }
     }.onFailure {
         Utils.runOnMainThread(800L) {
-            Toasts.showShort("字幕导入失败，无法转换")
+            val gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+            Toasts.showShortWithId("biliroaming_subtitle_import_failed_convert", gravity = gravity)
         }
         Logger.error(it) { "Failed to convert subtitle, type: $type, uri: $uri" }
     }.getOrNull()
@@ -85,7 +88,11 @@ object SubtitleImportSavePatch {
                     ?: uri.toString()).substringAfterLast('.').lowercase()
                 if (!supportedSubExt.contains(type)) {
                     Utils.runOnMainThread(800L) {
-                        Toasts.showShort("字幕导入失败，格式不支持")
+                        val gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+                        Toasts.showShortWithId(
+                            "biliroaming_subtitle_import_failed_format",
+                            gravity = gravity
+                        )
                     }
                     return@launchCatching
                 }
@@ -104,10 +111,12 @@ object SubtitleImportSavePatch {
                 interactLayerService.callMethod(loadSubtitleMethod, newSubtitle, null)
                 widgetService.callMethod(hideWidgetMethod, widget.getObjectField(widgetTokenField))
                 Utils.runOnMainThread(800L) {
-                    Toasts.showShort("字幕导入成功")
+                    val gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+                    Toasts.showShortWithId("biliroaming_subtitle_import_success", gravity = gravity)
                 }
             }.onFailure {
-                Toasts.showShortWithId("biliroaming_pls_install_file_manager")
+                val gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+                Toasts.showShortWithId("biliroaming_pls_install_file_manager", gravity = gravity)
             }
         }
         saveButton.onClick { button ->
@@ -120,7 +129,11 @@ object SubtitleImportSavePatch {
                     if (granted) {
                         Utils.async { saveSubtitles(dmViewReply) }
                     } else if (shouldExplain) {
-                        Toasts.showShortWithId("biliroaming_write_storage_failed")
+                        val gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+                        Toasts.showShortWithId(
+                            "biliroaming_write_storage_failed",
+                            gravity = gravity
+                        )
                     }
                 }
             }
@@ -130,7 +143,8 @@ object SubtitleImportSavePatch {
 
     private fun saveSubtitles(dmViewReply: DmViewReply) {
         val (main, episode) = VideoInfoHolder.currentTitle() ?: return
-        Toasts.showShort("字幕保存中")
+        val gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+        Toasts.showShortWithId("biliroaming_subtitle_saving", gravity = gravity)
         val downloadDir =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val subtitleDir = File(downloadDir, "bilibili/subtitles")
@@ -171,11 +185,17 @@ object SubtitleImportSavePatch {
             null, null
         )
         if (failedCount != 0 && successCount == 0) {
-            Toasts.showShort("所有字幕保存失败")
+            Toasts.showShortWithId("biliroaming_subtitle_save_all_failed", gravity = gravity)
         } else if (failedCount != 0) {
-            Toasts.showLong("部分字幕成功保存至 ${saveDir.path}")
+            Toasts.showLongWithId(
+                "biliroaming_subtitle_save_partial_success",
+                saveDir.path, gravity = gravity
+            )
         } else {
-            Toasts.showLong("所有字幕成功保存至 ${saveDir.path}")
+            Toasts.showLongWithId(
+                "biliroaming_subtitle_save_all_success",
+                saveDir.path, gravity = gravity
+            )
         }
     }
 

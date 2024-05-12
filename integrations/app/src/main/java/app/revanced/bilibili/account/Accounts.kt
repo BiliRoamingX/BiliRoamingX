@@ -167,7 +167,7 @@ object Accounts {
         if ((isSignOut || isSwitchAccount) && Utils.isMainProcess() && Settings.SKIN.boolean) {
             Settings.SKIN.saveValue(false)
             Themes.unloadLoadEquip()
-            Toasts.showLong("检测到账号变动，已关闭自制主题")
+            Toasts.showLongWithId("biliroaming_theme_closed_by_account")
         }
     }
 
@@ -197,10 +197,10 @@ object Accounts {
             val topActivity = ApplicationDelegate.getTopActivity()
             if (topActivity != null && !dialogShowing) {
                 AlertDialog.Builder(topActivity)
-                    .setTitle("封禁说明")
-                    .setMessage("你因违反哔哩漫游X使用规则已被拉入黑名单，模块所有功能将不可用，解封时间：$formatTime。")
-                    .setNegativeButton("我知道了", null)
-                    .setPositiveButton("查看理由") { _, _ ->
+                    .setTitle(Utils.getString("biliroaming_blocked_title"))
+                    .setMessage(Utils.getString("biliroaming_blocked_description", formatTime))
+                    .setNegativeButton(Utils.getString("biliroaming_get_it"), null)
+                    .setPositiveButton(Utils.getString("biliroaming_view_reason")) { _, _ ->
                         val uri = Uri.parse("https://t.me/BiliRoamingServerBlacklistLog")
                         topActivity.startActivity(Intent(Intent.ACTION_VIEW, uri))
                     }.create().constraintSize().apply {
@@ -217,9 +217,9 @@ object Accounts {
                 val topActivity = ApplicationDelegate.getTopActivity()
                 if (topActivity != null && !dialogShowing) {
                     AlertDialog.Builder(topActivity)
-                        .setTitle("解禁说明")
-                        .setMessage("你的哔哩漫游X使用资格已恢复，重启生效。")
-                        .setPositiveButton("立即重启") { _, _ ->
+                        .setTitle(Utils.getString("biliroaming_unblocked_title"))
+                        .setMessage(Utils.getString("biliroaming_unblocked_description"))
+                        .setPositiveButton(Utils.getString("biliroaming_reboot_now")) { _, _ ->
                             Utils.reboot()
                         }.create().constraintSize().apply {
                             setCancelable(false)

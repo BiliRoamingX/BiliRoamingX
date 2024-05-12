@@ -23,7 +23,7 @@ object CommentChecker {
                             checkCommentInternal(id, message, quick = false)
                         }
                     }
-                    Toasts.showShort("评论审核结果将在${delay / 1000}秒后报告。")
+                    Toasts.showShortWithId("biliroaming_check_comment_toast", delay / 1000)
                 }
             }
         }
@@ -49,7 +49,7 @@ object CommentChecker {
                 showCheckResult(message, quick = false, danmaku = true, invalid = invalid)
             }
         }
-        Toasts.showShort("弹幕审核结果将在1分钟后报告。")
+        Toasts.showShortWithId("biliroaming_check_danmaku_toast", 1)
     }
 
     private fun checkCommentInternal(id: Long, message: String, quick: Boolean): Boolean {
@@ -73,16 +73,21 @@ object CommentChecker {
         invalid: Boolean
     ) = Utils.runOnMainThread {
         val activity = ApplicationDelegate.getTopActivity()
-        val type = if (danmaku) "弹幕" else "评论"
+        val type = if (danmaku) {
+            Utils.getString("biliroaming_check_type_danmaku")
+        } else {
+            Utils.getString("biliroaming_check_type_comment")
+        }
+        val title = Utils.getString("biliroaming_comment_check_result_title", type)
         if (invalid) {
             val tips = if (quick) {
-                "你发布的$type “$message” 被阿瓦隆自净系统秒删了喔！"
+                Utils.getString("biliroaming_comment_invalid_quick_message", type, message)
             } else {
-                "你发布的$type “$message” 疑似被阿瓦隆自净系统屏蔽或删除！"
+                Utils.getString("biliroaming_comment_invalid_normal_message", type, message)
             }
             if (activity != null) {
                 AlertDialog.Builder(activity)
-                    .setTitle("${type}检查结果")
+                    .setTitle(title)
                     .setMessage(tips)
                     .setPositiveButton(android.R.string.ok, null)
                     .create().constraintSize().apply {
@@ -91,10 +96,10 @@ object CommentChecker {
                     }.show()
             } else Toasts.showLong(tips)
         } else if (!quick) {
-            val tips = "你发布的$type “$message” 通过了叔叔的审核！"
+            val tips = Utils.getString("biliroaming_comment_valid_message", type, message)
             if (activity != null) {
                 AlertDialog.Builder(activity)
-                    .setTitle("${type}检查结果")
+                    .setTitle(title)
                     .setMessage(tips)
                     .setPositiveButton(android.R.string.ok, null)
                     .create().constraintSize().apply {

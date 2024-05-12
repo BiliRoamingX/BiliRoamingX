@@ -109,11 +109,11 @@ class AboutFragment : BiliRoamingBaseSettingFragment() {
                 putExtra(Intent.EXTRA_STREAM, uri)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 setType("application/zip")
-            }, "分享日志").also { startActivity(it) }
+            }, Utils.getString("biliroaming_share_log_title")).also { startActivity(it) }
         }
     }.onFailure {
         Logger.error(it) { "Failed to share log" }
-        Toasts.showShort("日志分享失败")
+        Toasts.showShortWithId("biliroaming_log_share_failed")
     }
 
     private fun onVersionClick() {

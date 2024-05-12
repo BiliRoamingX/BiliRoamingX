@@ -177,7 +177,7 @@ object Themes {
         loadEquip: JSONObject?,
         activity: Context?,
     ) {
-        Toasts.showShort("主题下载中")
+        Toasts.showShortWithId("biliroaming_theme_downloading")
         val skinId = userEquip.optLong("id")
         val skinVer = userEquip.optLong("ver")
         val skinPkgUrl = userEquip.optString("package_url")
@@ -207,11 +207,11 @@ object Themes {
                 putString("pref_key_target_garb_changeable", "true")
                 putString("pref_key_target_garb_type", "asset")
             }
-            Toasts.showLong("主题设置成功，回到首页生效！")
+            Toasts.showLongWithId("biliroaming_theme_apply_success_back_home")
         } else {
             lastGarbConf.delete()
             notifyGarbChanged(garb)
-            Toasts.showShort("主题设置成功！")
+            Toasts.showShortWithId("biliroaming_theme_apply_success")
             Utils.runOnMainThread(300L) {
                 if (activity is Activity)
                     activity.recreate()

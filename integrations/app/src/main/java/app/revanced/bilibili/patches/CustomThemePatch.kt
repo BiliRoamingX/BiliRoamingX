@@ -148,7 +148,7 @@ object CustomThemePatch {
         if (Settings.SKIN.boolean) {
             Settings.SKIN.saveValue(false)
             Themes.unloadLoadEquip()
-            Toasts.showShort("已关闭自制主题！")
+            Toasts.showShortWithId("biliroaming_theme_closed")
         }
     }
 

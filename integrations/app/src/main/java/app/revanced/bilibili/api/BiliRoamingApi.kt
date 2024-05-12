@@ -184,7 +184,7 @@ object BiliRoamingApi {
     fun getSeason(seasonId: Long = 0L, epId: Long = 0L): String? {
         val thUrl = Settings.TH_SERVER.string
         if (thUrl.isEmpty()) {
-            Toasts.showShort("请配置泰区解析服务器地址")
+            Toasts.showShortWithId("biliroaming_pls_configure_th_server")
             return null
         }
         val cache = seasonCache.get()
