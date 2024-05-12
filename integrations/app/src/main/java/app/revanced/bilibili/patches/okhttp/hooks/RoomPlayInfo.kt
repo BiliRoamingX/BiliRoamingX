@@ -51,7 +51,7 @@ object RoomPlayInfo : ApiHook() {
                         }.thenComparator { a, b ->
                             val aCodec = a.optString("codec_name")
                             val bCodec = b.optString("codec_name")
-                            if (aCodec == "hevc") 1 else if (bCodec == "hevc") -1 else 0
+                            if (aCodec == "hevc") -1 else if (bCodec == "hevc") 1 else 0
                         }).firstOrNull()?.let { best ->
                             Logger.debug { "RoomPlayInfo, best codec: $best" }
                             codecList?.removeIf { it != best }
