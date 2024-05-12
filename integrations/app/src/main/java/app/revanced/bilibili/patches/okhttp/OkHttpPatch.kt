@@ -19,7 +19,6 @@ object OkHttpPatch {
         BangumiCards,
         BangumiMaterial,
         DmAd,
-        DmPost,
         DmQoeShow,
         Eps,
         GarbSuitDetail,

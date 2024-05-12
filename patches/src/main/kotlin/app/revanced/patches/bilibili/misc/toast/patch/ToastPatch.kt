@@ -41,7 +41,7 @@ object ToastPatch : BytecodePatch() {
             ?: throw PatchException("Not found cancel toast method")
         myToastsClass.mutableClass.methods.run {
             first { it.name == "show" && it.parameterTypes.size == 4 }.also { remove(it) }
-                .cloneMutable(4, clearImplementation = true).apply {
+                .cloneMutable(registerCount = 4, clearImplementation = true).apply {
                     addInstructions(
                         """
                         invoke-static {p0, p1, p2, p3}, $showToastRef
