@@ -39,6 +39,9 @@ import javax.crypto.spec.IvParameterSpec;
 
 @SuppressWarnings("unused")
 public class Utils {
+    /**
+     * Note: don't use directly, instead of {@link Utils#getContext()}.
+     */
     @Keep
     @SuppressLint("StaticFieldLeak")
     public static Context context;
@@ -301,18 +304,6 @@ public class Utils {
 
     public static boolean isWebProcess() {
         return currentProcessName().endsWith(":web");
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void clearSplashConfigCache() {
-        // ad
-        new File(getContext().getFilesDir(), "splash2/splash.json").delete();
-        // event
-        Utils.blkvPrefsByName("splash.event.splash.name", true)
-                .edit().remove("splash.event.list.data.list").apply();
-        // brand
-        Utils.blkvPrefsByName("brand_splash_data", true)
-                .edit().remove("splash.brand_data").apply();
     }
 
     public static boolean newPlayerEnabled() {

@@ -9,7 +9,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.preference.Preference
-import app.revanced.bilibili.content.BiliDocumentsProvider
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.settings.search.annotation.SettingFragment
 import app.revanced.bilibili.utils.*
@@ -101,8 +100,8 @@ class BackupFragment : BiliRoamingBaseSettingFragment() {
                     Settings.reload()
                     restoring = false
                 }.onSuccess {
+                    Settings.entries.forEach { it.executeOnChangeAction(false) }
                     Utils.runOnMainThread {
-                        afterRestore()
                         showNeedRebootDialog()
                     }
                 }.onFailure {
@@ -122,23 +121,5 @@ class BackupFragment : BiliRoamingBaseSettingFragment() {
             .setNegativeButton(later, null)
             .setPositiveButton(confirm) { _, _ -> Utils.reboot() }
             .create().constraintSize().show()
-    }
-
-    /**
-     * do something after backup restore finished.
-     *
-     * notice: you can get a restored settings here.
-     */
-    private fun afterRestore() {
-        if (Settings.BLOCK_TOP_ACTIVITY.boolean)
-            blkvPrefs.edit {
-                putString("PREF_KEY_ENTRANCE_CACHE", "")
-            }
-        if (Settings.PURIFY_SPLASH.boolean)
-            Utils.clearSplashConfigCache()
-        changeComponentState(
-            BiliDocumentsProvider::class.java,
-            Settings.ENABLE_DOC_PROVIDER.boolean
-        )
     }
 }

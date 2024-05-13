@@ -19,9 +19,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
 import app.revanced.bilibili.account.Accounts;
+import app.revanced.bilibili.content.BiliDocumentsProvider;
 import app.revanced.bilibili.utils.Constants;
+import app.revanced.bilibili.utils.KtUtils;
 import app.revanced.bilibili.utils.Logger;
 import app.revanced.bilibili.utils.PreferenceUpdater;
 import app.revanced.bilibili.utils.SettingsSyncHelper;
@@ -84,7 +87,10 @@ public enum Settings {
     PURIFY_GAME("purify_game", BOOLEAN, FALSE, true),
     DRAWER("drawer", BOOLEAN, FALSE),
     DISABLE_MAIN_PAGE_STORY("disable_main_page_story", BOOLEAN, FALSE, true),
-    BLOCK_TOP_ACTIVITY("block_top_activity", BOOLEAN, FALSE, true),
+    BLOCK_TOP_ACTIVITY("block_top_activity", BOOLEAN, FALSE, true, (setting, async) -> {
+        if (setting.getBoolean())
+            KtUtils.deleteTopActivityEntrance();
+    }),
     BLOCK_RECOMMEND_GUIDANCE("block_recommend_guidance", BOOLEAN, FALSE, true),
     BLOCK_POPULAR_TOP_ENTRANCE("block_popular_top_entrance", BOOLEAN, FALSE),
     BLOCK_POPULAR_TOPIC_LIST("block_popular_topic_list", BOOLEAN, FALSE),
@@ -207,7 +213,13 @@ public enum Settings {
     TEXT_FOLD_COMMENT_MAX_LINES("text_fold_comment_max_lines", INTEGER, Constants.DEF_COMMENT_MAX_LINES),
     TEXT_FOLD_DYN_MAX_LINES("text_fold_dyn_max_lines", INTEGER, Constants.DEF_DYN_MAX_LINES),
     TEXT_FOLD_DYN_LINES_TO_ALL("text_fold_dyn_lines_to_all", INTEGER, Constants.DEF_DYN_LINES_TO_ALL),
-    BLOCK_MODULES("block_modules", BOOLEAN, FALSE),
+    BLOCK_MODULES("block_modules", BOOLEAN, FALSE, false, (setting, async) -> {
+        if (setting.getBoolean()) if (async) {
+            Utils.async(KtUtils::deleteModuleResources);
+        } else {
+            KtUtils.deleteModuleResources();
+        }
+    }),
     BLOCK_MODULES_EXCEPTION("block_modules_exception", STRING_SET, Collections.EMPTY_SET),
     MUSIC_NOTIFICATION("music_notification", BOOLEAN, FALSE, true),
     PURIFY_SHARE("purify_share", BOOLEAN, FALSE),
@@ -220,12 +232,20 @@ public enum Settings {
     FULL_SPLASH("full_splash", BOOLEAN, FALSE),
     FORCE_HW_CODEC("force_hw_codec", BOOLEAN, FALSE),
     ENABLE_AV("enable_av", BOOLEAN, FALSE, true),
-    ENABLE_DOC_PROVIDER("enable_doc_provider", BOOLEAN, FALSE),
+    ENABLE_DOC_PROVIDER("enable_doc_provider", BOOLEAN, FALSE, false, (setting, async) -> {
+        KtUtils.changeComponentState(BiliDocumentsProvider.class, setting.getBoolean());
+    }),
     DISABLE_AVIF("disable_avif", BOOLEAN, FALSE, true),
     CHECK_COMMENT("check_comment", BOOLEAN, FALSE),
 
     // 去广告杂项
-    PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE),
+    PURIFY_SPLASH("purify_splash", BOOLEAN, FALSE, false, (setting, async) -> {
+        if (setting.getBoolean()) if (async) {
+            Utils.async(KtUtils::clearSplashConfigCache);
+        } else {
+            KtUtils.clearSplashConfigCache();
+        }
+    }),
 
     // 非配置项
     LOSSLESS_ENABLED("lossless_enabled", BOOLEAN, FALSE),
@@ -251,6 +271,7 @@ public enum Settings {
      * If the app should be rebooted, if this setting is changed
      */
     public final boolean needReboot;
+    public final BiConsumer<Settings, Boolean> onChange;
 
     private Object value;
 
@@ -259,10 +280,15 @@ public enum Settings {
     }
 
     Settings(@NonNull String key, @NonNull ValueType valueType, @NonNull Object defValue, boolean needReboot) {
+        this(key, valueType, defValue, needReboot, null);
+    }
+
+    Settings(@NonNull String key, @NonNull ValueType valueType, @NonNull Object defValue, boolean needReboot, BiConsumer<Settings, Boolean> onChange) {
         this.key = key;
         this.valueType = valueType;
         this.defValue = defValue;
         this.needReboot = needReboot;
+        this.onChange = onChange;
     }
 
     static {
@@ -386,6 +412,11 @@ public enum Settings {
         return value;
     }
 
+    public void executeOnChangeAction(boolean async) {
+        if (onChange != null)
+            onChange.accept(this, async);
+    }
+
     @SuppressWarnings("unchecked")
     static void onPreferenceChanged(SharedPreferences preferences, String key) {
         Logger.debug(() -> "onPreferenceChanged, key: " + key);
@@ -425,6 +456,7 @@ public enum Settings {
                     default:
                         throw new IllegalStateException(settings.name());
                 }
+                settings.executeOnChangeAction(true);
                 break;
             }
         }

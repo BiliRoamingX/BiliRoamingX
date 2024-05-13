@@ -396,6 +396,7 @@ inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? {
     else getParcelable(key)
 }
 
+@JvmOverloads
 fun changeComponentState(
     component: Class<*>,
     enabled: Boolean,
@@ -714,3 +715,28 @@ inline fun <reified T> InputStream.fromJson(json: Json = jsonFormat) =
 
 inline fun <reified T> T.toJson(json: Json = jsonFormat) =
     json.encodeToString(this)
+
+fun clearSplashConfigCache() {
+    // ad
+    File(Utils.getContext().filesDir, "splash2/splash.json").delete()
+    // event
+    Utils.blkvPrefsByName("splash.event.splash.name", true)
+        .edit { remove("splash.event.list.data.list") }
+    // brand
+    Utils.blkvPrefsByName("brand_splash_data", true)
+        .edit { remove("splash.brand_data") }
+}
+
+fun deleteModuleResources() {
+    val dataDir = Utils.getContext().dataDir
+    val appModResourceDir = File(dataDir, "app_mod_resource")
+    try {
+        appModResourceDir.deleteRecursively()
+    } catch (t: Throwable) {
+        Logger.error(t) { "Failed to delete module resources." }
+    }
+}
+
+fun deleteTopActivityEntrance() {
+    blkvPrefs.edit { putString("PREF_KEY_ENTRANCE_CACHE", "") }
+}

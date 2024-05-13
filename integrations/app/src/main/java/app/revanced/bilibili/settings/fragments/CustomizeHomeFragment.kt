@@ -25,15 +25,6 @@ class CustomizeHomeFragment : BiliRoamingBaseSettingFragment() {
         disableAutoRefreshPreferenceIfNeeded()
     }
 
-    override fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
-        super.onPreferenceChanged(sharedPreferences, key)
-        if (resumed && Settings.BLOCK_TOP_ACTIVITY.key == key && Settings.BLOCK_TOP_ACTIVITY.boolean) {
-            blkvPrefs.edit {
-                putString("PREF_KEY_ENTRANCE_CACHE", "")
-            }
-        }
-    }
-
     private fun disableAutoRefreshPreferenceIfNeeded() {
         if (!Versions.ge7_76_0())
             return

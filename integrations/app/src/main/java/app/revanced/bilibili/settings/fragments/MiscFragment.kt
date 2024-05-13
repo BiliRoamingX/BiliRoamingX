@@ -15,7 +15,6 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ScrollView
 import androidx.preference.Preference
-import app.revanced.bilibili.content.BiliDocumentsProvider
 import app.revanced.bilibili.patches.SplashPatch
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.settings.search.annotation.SettingFragment
@@ -41,14 +40,6 @@ class MiscFragment : BiliRoamingBaseSettingFragment() {
         }
         findPreference<Preference>(Settings.CUSTOM_SPLASH_LOGO.key)?.onChange { _, newValue ->
             if (newValue == true) selectImage(SELECTION_LOGO)
-            true
-        }
-        findPreference<Preference>(Settings.PURIFY_SPLASH.key)?.onChange { _, newValue ->
-            if (newValue == true) Utils.clearSplashConfigCache()
-            true
-        }
-        findPreference<Preference>(Settings.ENABLE_DOC_PROVIDER.key)?.onChange { _, newValue ->
-            changeComponentState(BiliDocumentsProvider::class.java, newValue == true)
             true
         }
         findPreference<Preference>("route")?.onClick { route();true }
