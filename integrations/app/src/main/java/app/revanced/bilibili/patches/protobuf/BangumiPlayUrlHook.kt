@@ -14,8 +14,13 @@ import app.revanced.bilibili.utils.*
 import app.revanced.bilibili.utils.UposReplacer.isPCdnUpos
 import app.revanced.bilibili.utils.UposReplacer.replaceUpos
 import app.revanced.bilibili.utils.UposReplacer.uposBackups
+import com.bapis.bilibili.app.archive.middleware.v1.PlayerArgs
 import com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReply
 import com.bapis.bilibili.app.playerunite.v1.PlayViewUniteReq
+import com.bapis.bilibili.app.playerunite.v1.PlayerMoss
+import com.bapis.bilibili.app.viewunite.pgcanymodel.ViewPgcAny
+import com.bapis.bilibili.app.viewunite.v1.ViewMoss
+import com.bapis.bilibili.app.viewunite.v1.ViewReq
 import com.bapis.bilibili.pgc.gateway.player.v2.*
 import com.bapis.bilibili.pgc.gateway.player.v2.ButtonInfo
 import com.bapis.bilibili.pgc.gateway.player.v2.DashItem
@@ -31,6 +36,7 @@ import com.bapis.bilibili.playershared.Dimension
 import com.bapis.bilibili.playershared.LimitActionType
 import com.bapis.bilibili.playershared.TextInfo
 import com.bapis.bilibili.playershared.Toast
+import com.bilibili.lib.moss.api.BusinessException
 import com.bilibili.lib.moss.api.MossException
 import com.bilibili.lib.moss.api.NetworkException
 import org.json.JSONObject
@@ -174,12 +180,14 @@ object BangumiPlayUrlHook {
         if (error is NetworkException)
             throw error
         hookPlayViewUniteAfterExtraActions(reply)
-        val response = reply ?: PlayViewUniteReply()
+        var finalError = error
+        val response = reply ?: tryFixAidPGC(req, error)
+            ?.also { finalError = null } ?: PlayViewUniteReply()
         val supplementAny = response.supplement
         val typeUrl = supplementAny.typeUrl
         // Only handle pgc video
         if (reply != null && typeUrl != PGC_ANY_MODEL_TYPE_URL)
-            if (error != null) throw error else return reply
+            finalError?.let { throw it } ?: return reply
         val extraContent = req.extraContentMap
         val reqEpId = extraContent.getOrDefault("ep_id", "0").toLong()
         val seasonId = extraContent.getOrDefault("season_id", "0").toLong()
@@ -187,7 +195,7 @@ object BangumiPlayUrlHook {
             if (it.value.keys.contains(reqEpId)) it.key else null
         } ?: VideoInfoHolder.currentSeason()?.id ?: 0L
         if (seasonId == 0L && reqEpId == 0L)
-            if (error != null) throw error else return reply
+            finalError?.let { throw it } ?: return reply
         val supplement = PlayViewReply.parseFrom(supplementAny.value.toByteArray())
         if (Settings.UNLOCK_AREA_LIMIT.boolean && needProxyUnite(response, supplement)) {
             return try {
@@ -212,12 +220,67 @@ object BangumiPlayUrlHook {
                     response, supplement, "请求解析服务器发生错误\n${e.message}"
                 )
             }
-        } else if (error == null && allowDownloadUnite) {
+        } else if (finalError == null && allowDownloadUnite) {
             return fixDownloadProtoUnite(response)
-        } else if (error == null && (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean || Settings.REMOVE_CMD_DMS.boolean)) {
+        } else if (finalError == null && (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean || Settings.REMOVE_CMD_DMS.boolean)) {
             return purifyViewInfoUnite(response, supplement)
         }
-        if (error != null) throw error else return reply
+        finalError?.let { throw it } ?: return reply
+    }
+
+    private fun tryFixAidPGC(req: PlayViewUniteReq, error: MossException?): PlayViewUniteReply? {
+        if (!Settings.UNLOCK_AREA_LIMIT.boolean)
+            return null
+        if (error == null || error !is BusinessException || error.code != 6002003/* 抱歉您所在地区不可观看！*/)
+            return null
+        val aid = req.vod.aid
+        if (aid == 0L) return null
+        if (req.extraContentMap.any { it.key == "season_id" } || req.extraContentMap.any { it.key == "ep_id" })
+            return null
+        val viewReq = ViewReq().apply {
+            this.aid = aid
+            this.playerArgs = PlayerArgs().apply {
+                fnval = req.vod.fnval.toLong()
+                fnver = req.vod.fnver.toLong()
+                qn = req.vod.qn
+                forceHost = req.vod.forceHost.toLong()
+                voiceBalance = req.vod.voiceBalance
+            }
+        }
+        val viewReply = ViewMoss().runCatchingOrNull { view(viewReq) }
+            ?: return null
+        val supplement = viewReply.supplement
+        if (supplement.typeUrl != ViewUniteReplyHook.VIEW_PGC_ANY_TYPE_URL)
+            return null
+        val viewPgcAny = ViewPgcAny.parseFrom(supplement.value)
+        val seasonId = viewPgcAny.ogvData.seasonId
+        val epId = viewReply.tab.tabModuleList.find { it.hasIntroduction() }
+            ?.introduction?.modulesList?.asSequence()?.filter { it.hasSectionData() }
+            ?.flatMap { it.sectionData.episodesList }
+            ?.find { it.cid == viewReply.arc.cid }?.epId
+        req.mutableExtraContentMap["season_id"] = seasonId.toString()
+        epId?.let { req.mutableExtraContentMap["ep_id"] = it.toString() }
+        val newReq = PlayViewUniteReq().apply {
+            adExtra = req.adExtra
+            mutableExtraContentMap.apply {
+                this["is_need_view_info"] = "true"
+                this["security_level"] = "LEVEL_L1"
+                this["season_id"] = seasonId.toString()
+                epId?.let { this["ep_id"] = it.toString() }
+            }
+            fromSpmid = "normal"
+            fromSpmid = "0.0.0.0"
+            spmid = "united.player-video-detail.0.0"
+            vod = VideoVod().apply {
+                fnval = req.vod.fnval
+                fnver = req.vod.fnver
+                fourk = req.vod.fourk
+                preferCodecType = req.vod.preferCodecType
+                qn = req.vod.qn
+                voiceBalance = req.vod.voiceBalance
+            }
+        }
+        return PlayerMoss().runCatchingOrNull { playViewUnite(newReq) }
     }
 
     private fun hookPlayViewUniteAfterExtraActions(playReply: PlayViewUniteReply?) {
