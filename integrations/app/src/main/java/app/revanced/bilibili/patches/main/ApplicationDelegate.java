@@ -66,7 +66,7 @@ public class ApplicationDelegate {
             Utils.async(ApplicationDelegate::startLog);
             Utils.async(PlaybackSpeedPatch::refreshOverrideSpeedList);
             SubtitleParamsCache.updateFont();
-            KtUtils.getCountryTask();
+            KtUtils.getAreaTask();
             UposReplacer.getBaseUposList();
             PreferenceUpdater.register();
             Themes.registerGarbChangeObserver();

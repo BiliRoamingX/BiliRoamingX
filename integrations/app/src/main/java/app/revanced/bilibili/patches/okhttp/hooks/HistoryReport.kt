@@ -20,8 +20,8 @@ object HistoryReport : ApiHook() {
         val sid = form["sid"] ?: return response
         val epId = form["epid"] ?: return response
         val progress = form["progress"] ?: return response
-        if (Area.th == seasonAreasCache[sid] || (cachePrefs.contains(sid)
-                    && Area.th.value == cachePrefs.getString(sid, null))
+        if (Area.Thailand == seasonAreasCache[sid] || (cachePrefs.contains(sid)
+                    && Area.Thailand.value == cachePrefs.getString(sid, null))
         ) saveVideoHistory(sid.toInt(), epId.toInt(), progress.toLong())
         return response
     }

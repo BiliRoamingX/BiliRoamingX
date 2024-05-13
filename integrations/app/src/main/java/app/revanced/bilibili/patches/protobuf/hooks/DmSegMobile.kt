@@ -30,10 +30,10 @@ object DmSegMobile : MossHook<DmSegMobileReq, DmSegMobileReply>() {
             val seasonAreasCache = seasonAreasCache
             val sArea = seasonAreasCache[seasonId]
             val epArea = seasonAreasCache["ep$epId"]
-            if (Area.th.let { it == sArea || it == epArea } ||
-                (cachePrefs.contains(seasonId) && Area.th.value
+            if (Area.Thailand.let { it == sArea || it == epArea } ||
+                (cachePrefs.contains(seasonId) && Area.Thailand.value
                         == cachePrefs.getString(seasonId, null))
-                || (cachePrefs.contains("ep$epId") && Area.th.value
+                || (cachePrefs.contains("ep$epId") && Area.Thailand.value
                         == cachePrefs.getString("ep$epId", null))
             ) reply.clearElems()
         }

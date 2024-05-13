@@ -115,39 +115,39 @@ value class Area private constructor(val value: String) {
     override fun toString() = value
 
     companion object {
-        val cn = Area("cn")
-        val hk = Area("hk")
-        val tw = Area("tw")
-        val th = Area("th")
-        val global = Area("global")
+        val China = Area("cn")
+        val HongKong = Area("hk")
+        val TaiWan = Area("tw")
+        val Thailand = Area("th")
+        val Global = Area("global")
 
         @JvmStatic
         fun of(value: String?) = when (value) {
-            cn.value -> cn
-            hk.value -> hk
-            tw.value -> tw
-            th.value -> th
-            global.value -> global
+            China.value -> China
+            HongKong.value -> HongKong
+            TaiWan.value -> TaiWan
+            Thailand.value -> Thailand
+            Global.value -> Global
             else -> null
         }
     }
 }
 
-val countryTask: Future<Area> by lazy {
+val areaTask: Future<Area> by lazy {
     Utils.submitTask {
         when (fetchJson(Constants.ZONE_URL)?.optJSONObject("data")?.optInt("country_code") ?: 0) {
-            86 -> Area.cn
-            852, 853 -> Area.hk
-            886 -> Area.tw
-            else -> Area.global
+            86 -> Area.China
+            852, 853 -> Area.HongKong
+            886 -> Area.TaiWan
+            else -> Area.Global
         }.also { Logger.debug { "当前地区: $it" } }
     }
 }
 
 @get:WorkerThread
-val country: Area?
+val area: Area?
     get() = try {
-        countryTask.get(5L, TimeUnit.SECONDS)
+        areaTask.get(5L, TimeUnit.SECONDS)
     } catch (_: Throwable) {
         null
     }
@@ -485,7 +485,7 @@ fun isWifiConnected(): Boolean {
 
 @WorkerThread
 fun speedupGhUrl(url: String): String {
-    return if (country == Area.cn) "${Constants.GITHUB_SPEEDUP_URL}/$url" else url
+    return if (area == Area.China) "${Constants.GITHUB_SPEEDUP_URL}/$url" else url
 }
 
 val buvidPrefs by lazy {
@@ -545,10 +545,10 @@ val isChinaEnv: Boolean
 
 fun getServerByArea(area: Area): String {
     return when (area) {
-        Area.cn -> Settings.CN_SERVER.string
-        Area.hk -> Settings.HK_SERVER.string
-        Area.tw -> Settings.TW_SERVER.string
-        Area.th -> Settings.TH_SERVER.string
+        Area.China -> Settings.CN_SERVER.string
+        Area.HongKong -> Settings.HK_SERVER.string
+        Area.TaiWan -> Settings.TW_SERVER.string
+        Area.Thailand -> Settings.TH_SERVER.string
         else -> ""
     }
 }

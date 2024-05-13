@@ -63,20 +63,20 @@ object BiliRoamingApi {
 
         // reversely
         mapOf(
-            Area.tw to twUrl,
-            Area.hk to hkUrl,
-            Area.th to thUrl,
-            Area.cn to cnUrl
-        ).filter { (k, v) -> k != country && v.isNotEmpty() }.let { hostList.putAll(it) }
+            Area.TaiWan to twUrl,
+            Area.HongKong to hkUrl,
+            Area.Thailand to thUrl,
+            Area.China to cnUrl
+        ).filter { (k, v) -> k != area && v.isNotEmpty() }.let { hostList.putAll(it) }
         if (hostList.isEmpty()) return null
 
         val epId = query["ep_id"] ?: return null
         Logger.debug { "unlockBangumi, getPlayUrl, epId: $epId, seasonId: $seasonId, seasonTitle: $seasonTitle" }
 
         seasonTitle.run {
-            if (contains(hkRegex) && hkUrl.isNotEmpty()) hostList[Area.hk]
-            if (contains(twRegex) && twUrl.isNotEmpty()) hostList[Area.tw]
-            if (contains(thRegex) && thUrl.isNotEmpty()) hostList[Area.th]
+            if (contains(hkRegex) && hkUrl.isNotEmpty()) hostList[Area.HongKong]
+            if (contains(twRegex) && twUrl.isNotEmpty()) hostList[Area.TaiWan]
+            if (contains(thRegex) && thUrl.isNotEmpty()) hostList[Area.Thailand]
         }
 
         priorityArea?.forEach { area ->
@@ -97,7 +97,7 @@ object BiliRoamingApi {
 
         for ((area, host) in hostList.toList().asReversed()) {
             val accessKey = Accounts.accessKey
-            val extraMap = if (area == Area.th) mapOf(
+            val extraMap = if (area == Area.Thailand) mapOf(
                 "area" to area.value,
                 "appkey" to "7d089525d3611b1c",
                 "build" to "1001310",
@@ -108,7 +108,7 @@ object BiliRoamingApi {
                 "area" to area.value,
                 "access_key" to accessKey,
             )
-            val path = if (area == Area.th) THAILAND_PATH_PLAYURL else PATH_PLAYURL
+            val path = if (area == Area.Thailand) THAILAND_PATH_PLAYURL else PATH_PLAYURL
             val uri = Uri.Builder()
                 .scheme("https")
                 .encodedAuthority(host + path)
@@ -121,7 +121,7 @@ object BiliRoamingApi {
                     if (!cachePrefs.contains(cacheId)
                         || cachePrefs.getString(cacheId, null) != area.value
                     ) cachePrefs.edit { putString(cacheId, area.value) }
-                    return if (area == Area.th) fixThailandPlayurl(it) else it
+                    return if (area == Area.Thailand) fixThailandPlayurl(it) else it
                 }
                 val message = runCatchingOrNull { JSONObject(it) }?.optString("message")
                     .orEmpty().ifEmpty { "服务器不可用" }
@@ -133,7 +133,7 @@ object BiliRoamingApi {
 
     @JvmStatic
     fun getAreaSearchBangumi(query: Map<String, String>, area: Area, type: String): String? {
-        if (area == Area.th)
+        if (area == Area.Thailand)
             return getThailandSearchBangumi(query, type)
         val hostUrl = getServerByArea(area).ifEmpty { return null }
         val uri = Uri.Builder()

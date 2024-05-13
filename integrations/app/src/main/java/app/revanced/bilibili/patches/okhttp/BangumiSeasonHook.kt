@@ -54,13 +54,13 @@ object BangumiSeasonHook {
     private var invalidFragmentRef = WeakReference<Fragment>(null)
 
     private val searchTypes = mapOf(
-        931 to SearchType(Area.cn, "陆(影)", "8", "movie"),
-        364364 to SearchType(Area.hk, "港(影)", "8", "movie"),
-        889464 to SearchType(Area.tw, "台(影)", "8", "movie"),
-        114 to SearchType(Area.th, "泰", "7", "bangumi"),
-        514 to SearchType(Area.cn, "陆", "7", "bangumi"),
-        1919 to SearchType(Area.hk, "港", "7", "bangumi"),
-        810 to SearchType(Area.tw, "台", "7", "bangumi")
+        931 to SearchType(Area.China, "陆(影)", "8", "movie"),
+        364364 to SearchType(Area.HongKong, "港(影)", "8", "movie"),
+        889464 to SearchType(Area.TaiWan, "台(影)", "8", "movie"),
+        114 to SearchType(Area.Thailand, "泰", "7", "bangumi"),
+        514 to SearchType(Area.China, "陆", "7", "bangumi"),
+        1919 to SearchType(Area.HongKong, "港", "7", "bangumi"),
+        810 to SearchType(Area.TaiWan, "台", "7", "bangumi")
     )
 
     init {
@@ -511,7 +511,7 @@ object BangumiSeasonHook {
 
     private fun addAreaTags(reply: SearchAllResponse) {
         if (!Settings.SEARCH_BANGUMI.boolean && !Settings.SEARCH_MOVIE.boolean) return
-        val currentArea = country
+        val currentArea = area
         for (searchType in searchTypes) {
             val area = searchType.value.area
             val typeStr = searchType.value.typeStr
@@ -531,7 +531,7 @@ object BangumiSeasonHook {
 
     private fun addAreaTagsForHd(reply: JSONObject) {
         if (!Settings.SEARCH_BANGUMI.boolean && !Settings.SEARCH_MOVIE.boolean) return
-        val currentArea = country
+        val currentArea = area
         val navList = reply.optJSONArray("nav") ?: return
         val newNavList = JSONArray()
         newNavList.put(navList[0])

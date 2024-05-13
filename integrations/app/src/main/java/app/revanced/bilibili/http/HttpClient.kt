@@ -30,72 +30,72 @@ import java.util.zip.InflaterInputStream
 @JvmInline
 value class Method private constructor(val key: String) {
     companion object {
-        val get = Method("GET")
-        val post = Method("POST")
-        val put = Method("PUT")
-        val head = Method("HEAD")
-        val options = Method("OPTIONS")
+        val Get = Method("GET")
+        val Post = Method("POST")
+        val Put = Method("PUT")
+        val Head = Method("HEAD")
+        val Options = Method("OPTIONS")
     }
 }
 
 @JvmInline
 value class ContentType(val key: String) {
     companion object {
-        val json = ContentType("application/json")
-        val form = ContentType("application/x-www-form-urlencoded")
+        val Json = ContentType("application/json")
+        val Form = ContentType("application/x-www-form-urlencoded")
     }
 }
 
 @JvmInline
 value class Encoding(val key: String) {
     companion object {
-        val none = Encoding("")
-        val deflate = Encoding("deflate")
-        val gzip = Encoding("gzip")
+        val None = Encoding("")
+        val Deflate = Encoding("deflate")
+        val Gzip = Encoding("gzip")
     }
 }
 
 class RequestBody(val contentType: ContentType, val encoding: Encoding, val body: ByteArray) {
     companion object {
         @JvmStatic
-        fun form(vararg params: Pair<Any, Any>, encoding: Encoding = Encoding.none): RequestBody {
+        fun form(vararg params: Pair<Any, Any>, encoding: Encoding = Encoding.None): RequestBody {
             val body = params.joinToString("&") { (k, v) ->
                 "$k=${v.toString().urlEncoded}"
             }.toByteArray()
-            return RequestBody(ContentType.form, encoding, body)
+            return RequestBody(ContentType.Form, encoding, body)
         }
 
         @JvmStatic
-        fun form(params: List<Pair<Any, Any>>, encoding: Encoding = Encoding.none): RequestBody {
+        fun form(params: List<Pair<Any, Any>>, encoding: Encoding = Encoding.None): RequestBody {
             val body = params.joinToString("&") { (k, v) ->
                 "$k=${v.toString().urlEncoded}"
             }.toByteArray()
-            return RequestBody(ContentType.form, encoding, body)
+            return RequestBody(ContentType.Form, encoding, body)
         }
 
         @JvmStatic
-        fun json(json: String, encoding: Encoding = Encoding.none): RequestBody {
+        fun json(json: String, encoding: Encoding = Encoding.None): RequestBody {
             val body = json.toByteArray()
-            return RequestBody(ContentType.json, encoding, body)
+            return RequestBody(ContentType.Json, encoding, body)
         }
 
         @JvmStatic
-        inline fun json(json: JSONObject, encoding: Encoding = Encoding.none) =
+        inline fun json(json: JSONObject, encoding: Encoding = Encoding.None) =
             json(json.toString(), encoding)
 
         @JvmStatic
-        inline fun json(json: JSONArray, encoding: Encoding = Encoding.none) =
+        inline fun json(json: JSONArray, encoding: Encoding = Encoding.None) =
             json(json.toString(), encoding)
 
         @JvmStatic
-        inline fun json(params: Map<String, Any>, encoding: Encoding = Encoding.none) =
+        inline fun json(params: Map<String, Any>, encoding: Encoding = Encoding.None) =
             json(params.toJSONObject().toString(), encoding)
 
         @JvmStatic
         @JvmName("create")
         inline fun String.toRequestBody(
             contentType: ContentType,
-            encoding: Encoding = Encoding.none
+            encoding: Encoding = Encoding.None
         ) = RequestBody(contentType, encoding, toByteArray())
     }
 }
@@ -118,7 +118,7 @@ class Proxy(
 
     companion object {
         @JvmStatic
-        val direct = Proxy(Type.DIRECT, "", 0, "", "")
+        val Direct = Proxy(Type.DIRECT, "", 0, "", "")
 
         @JvmStatic
         @JvmName("fromUrl")
@@ -131,7 +131,7 @@ class Proxy(
             val type = when (scheme) {
                 "http" -> Type.HTTP
                 "socks4", "socks5" -> Type.SOCKS
-                "direct" -> return direct
+                "direct" -> return Direct
                 else -> error("invalid proxy, scheme only can be http,socks4,socks5,direct.")
             }
             val split = userInfo.orEmpty().split(',', limit = 2)
@@ -152,10 +152,10 @@ object HttpClient {
         auth: String? = null,
         referer: String? = null,
         timeout: Int = 10_000,
-        proxy: Proxy = Proxy.direct,
+        proxy: Proxy = Proxy.Direct,
     ) = request(
         url,
-        method = Method.get,
+        method = Method.Get,
         headers,
         body = null,
         ua, auth, referer, timeout, proxy
@@ -170,10 +170,10 @@ object HttpClient {
         auth: String? = null,
         referer: String? = null,
         timeout: Int = 10_000,
-        proxy: Proxy = Proxy.direct,
+        proxy: Proxy = Proxy.Direct,
     ) = request(
         url = url,
-        method = Method.post,
+        method = Method.Post,
         headers, body, ua, auth, referer, timeout, proxy
     )
 
@@ -186,7 +186,7 @@ object HttpClient {
             "platform-from-biliroaming" to Utils.getMobiApp(),
             "Build" to verCode,
         )
-        return request(url, method = Method.get, headers = headers)
+        return request(url, method = Method.Get, headers = headers)
     }
 
     @JvmStatic
@@ -199,10 +199,10 @@ object HttpClient {
         auth: String? = null,
         referer: String? = null,
         timeout: Int = 10_000,
-        proxy: Proxy = Proxy.direct,
+        proxy: Proxy = Proxy.Direct,
     ): ResponseBody? = runCatching {
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N
-            && method == Method.get
+            && method == Method.Get
             && url.startsWith("https")
             && !url.contains("bilibili.com")
         ) {
@@ -281,14 +281,14 @@ object HttpClient {
             if (body != null) {
                 val encoding = body.encoding
                 connection.setRequestProperty("Content-Type", body.contentType.key)
-                if (encoding != Encoding.none)
+                if (encoding != Encoding.None)
                     connection.setRequestProperty("Content-Encoding", encoding.key)
                 connection.doOutput = true
                 val outputStream = connection.outputStream
                 (when (encoding) {
-                    Encoding.gzip -> GZIPOutputStream(outputStream)
-                    Encoding.deflate -> DeflaterOutputStream(outputStream)
-                    Encoding.none -> outputStream
+                    Encoding.Gzip -> GZIPOutputStream(outputStream)
+                    Encoding.Deflate -> DeflaterOutputStream(outputStream)
+                    Encoding.None -> outputStream
                     else -> outputStream
                 }).use { it.write(body.body) }
             }

@@ -24,8 +24,8 @@ object Media : ApiHook() {
     override fun hook(url: String, code: Int, request: String, response: String): String {
         val mediaId = Uri.parse(url).getQueryParameter("media_id")
         if (JSONObject(response).optInt("code") != 0
-            && (Area.th == seasonAreasCache[mediaId] || (cachePrefs.contains(mediaId)
-                    && Area.th.value == cachePrefs.getString(mediaId, null)))
+            && (Area.Thailand == seasonAreasCache[mediaId] || (cachePrefs.contains(mediaId)
+                    && Area.Thailand.value == cachePrefs.getString(mediaId, null)))
         ) {
             val (newCode, newResult) = getSeason(seasonId = mediaId?.toLong() ?: 0L)
                 ?.toJSONObject()?.let {

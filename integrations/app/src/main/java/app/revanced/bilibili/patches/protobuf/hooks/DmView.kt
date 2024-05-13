@@ -49,10 +49,10 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
             val seasonAreasCache = seasonAreasCache
             val sArea = seasonAreasCache[cacheId]
             val epArea = seasonAreasCache["ep$epId"]
-            if (Area.th.let { it == sArea || it == epArea } ||
-                (cachePrefs.contains(cacheId) && Area.th.value
+            if (Area.Thailand.let { it == sArea || it == epArea } ||
+                (cachePrefs.contains(cacheId) && Area.Thailand.value
                         == cachePrefs.getString(cacheId, null))
-                || (cachePrefs.contains("ep$epId") && Area.th.value
+                || (cachePrefs.contains("ep$epId") && Area.Thailand.value
                         == cachePrefs.getString("ep$epId", null))) {
                 val subtitles = bangumiInfoCache[seasonId]?.get(epId)?.subtitles ?: run {
                     val res = getThailandSubtitles(epId)?.toJSONObject()

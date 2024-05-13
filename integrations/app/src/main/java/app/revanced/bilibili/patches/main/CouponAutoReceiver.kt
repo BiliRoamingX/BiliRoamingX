@@ -87,7 +87,7 @@ object CouponAutoReceiver {
         ).let { signQuery(it) }
         return HttpClient.post(
             "https://api.bilibili.com/x/share/finish",
-            body = body.toRequestBody(ContentType.form)
+            body = body.toRequestBody(ContentType.Form)
         )?.json()?.run {
             Logger.debug { "CouponAutoReceiver.receiveShareExperience, response: $this" }
             optInt("code", -1) == 0
