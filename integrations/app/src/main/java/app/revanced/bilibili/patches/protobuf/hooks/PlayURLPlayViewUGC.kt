@@ -1,16 +1,20 @@
 package app.revanced.bilibili.patches.protobuf.hooks
 
+import android.content.pm.ActivityInfo
 import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.meta.VideoInfo
 import app.revanced.bilibili.patches.TrialQualityPatch
 import app.revanced.bilibili.patches.VideoQualityPatch
+import app.revanced.bilibili.patches.main.ApplicationDelegate
 import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.patches.protobuf.MossHook
 import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.utils.Utils
 import com.bapis.bilibili.app.playurl.v1.PlayAbilityConf
 import com.bapis.bilibili.app.playurl.v1.PlayViewReply
 import com.bapis.bilibili.app.playurl.v1.PlayViewReq
 import com.bilibili.lib.moss.api.MossException
+import com.bilibili.video.videodetail.VideoDetailsActivity
 import com.google.protobuf.GeneratedMessageLite
 
 object PlayURLPlayViewUGC : MossHook<PlayViewReq, PlayViewReply>() {
@@ -54,6 +58,25 @@ object PlayURLPlayViewUGC : MossHook<PlayViewReq, PlayViewReply>() {
             if (req.download < 1 && !Accounts.isEffectiveVip
                 && Settings.TRIAL_VIP_QUALITY.boolean
             ) TrialQualityPatch.makeVipFree(reply)
+            if (Utils.isHd() && Settings.NOT_LOCK_ORIENTATION.boolean) {
+                val stream = reply.videoInfo.streamListList.firstOrNull()
+                if (stream != null && stream.hasDashVideo()) {
+                    val dashVideo = stream.dashVideo
+                    val width = dashVideo.width
+                    val height = dashVideo.height
+                    Utils.runOnMainThread {
+                        val topActivity = ApplicationDelegate.getTopActivity()
+                        if (topActivity is VideoDetailsActivity) {
+                            val orientation = if (height > width) {
+                                ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                            } else {
+                                ActivityInfo.SCREEN_ORIENTATION_BEHIND
+                            }
+                            topActivity.requestedOrientation = orientation
+                        }
+                    }
+                }
+            }
         }
         return super.hookAfter(req, reply, error)
     }

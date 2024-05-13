@@ -444,4 +444,6 @@
     <string name="biliroaming_unblocked_description">你的哔哩漫游X使用资格已恢复，重启生效。</string>
     <string name="biliroaming_reboot_now">立即重启</string>
     <string name="biliroaming_block_comment_feedback_title">屏蔽评论氛围反馈</string>
+    <string name="biliroaming_not_lock_orientation_title">不锁定屏幕旋转方向</string>
+    <string name="biliroaming_not_lock_orientation_summary">HD版在系统设置开启自动旋转屏幕方向时，播放竖屏视频不锁定屏幕旋转方向，允许竖屏全屏播放</string>
 </resources>

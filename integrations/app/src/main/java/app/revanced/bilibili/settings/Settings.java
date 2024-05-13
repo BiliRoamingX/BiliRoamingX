@@ -167,6 +167,7 @@ public enum Settings {
     NO_COLORFUL_DANMAKU("no_colorful_danmaku", BOOLEAN, FALSE),
     FAKE_NOT_IN_MULTI_WINDOW("fake_not_in_multi_window", BOOLEAN, FALSE),
     BLOCK_COMMENT_FEEDBACK("block_comment_feedback", BOOLEAN, FALSE),
+    NOT_LOCK_ORIENTATION("not_lock_orientation", BOOLEAN, FALSE),
 
     // 用户空间页
     FIX_SPACE("fix_space", BOOLEAN, TRUE),
