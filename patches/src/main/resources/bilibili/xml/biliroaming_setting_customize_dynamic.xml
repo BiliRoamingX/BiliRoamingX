@@ -34,15 +34,18 @@
             android:title="@string/biliroaming_dynamic_filter_apply_to_video" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="customize_dynamic_rm_blocked"
+            android:summary="@string/biliroaming_dynamic_rm_blocked_summary"
             android:title="@string/biliroaming_dynamic_rm_blocked_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="customize_dynamic_rm_ad_link"
+            android:summary="@string/biliroaming_dynamic_rm_ad_link_summary"
             android:title="@string/biliroaming_dynamic_rm_ad_link_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="customize_dynamic_rm_up_reservation"
             android:title="@string/biliroaming_dynamic_rm_up_reservation_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="dynamic_rm_cm"
+            android:summary="@string/biliroaming_dynamic_rm_cm_summary"
             android:title="@string/biliroaming_dynamic_rm_cm_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="dynamic_rm_story"
