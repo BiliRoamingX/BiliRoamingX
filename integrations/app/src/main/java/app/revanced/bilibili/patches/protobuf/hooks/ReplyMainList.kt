@@ -46,6 +46,8 @@ object ReplyMainList : ReplyListBase<MainListReq, MainListReply>() {
                 emptyPage.addTexts(text)
             }
         }
+        if (Settings.BLOCK_COMMENT_FEEDBACK.boolean && reply != null && reply.qoe.type == 3)
+            reply.clearQoe()
         if (reply != null)
             filterReplies(reply)
         return super.hookAfter(req, reply, error)

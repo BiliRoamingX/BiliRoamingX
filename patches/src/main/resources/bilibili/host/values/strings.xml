@@ -443,4 +443,5 @@
     <string name="biliroaming_unblocked_title">解禁说明</string>
     <string name="biliroaming_unblocked_description">你的哔哩漫游X使用资格已恢复，重启生效。</string>
     <string name="biliroaming_reboot_now">立即重启</string>
+    <string name="biliroaming_block_comment_feedback_title">屏蔽评论氛围反馈</string>
 </resources>
