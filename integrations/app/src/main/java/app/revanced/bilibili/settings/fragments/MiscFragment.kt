@@ -58,6 +58,9 @@ class MiscFragment : BiliRoamingBaseSettingFragment() {
         if (resumed && key == Settings.SKIN.key) {
             changeThemeState(Settings.SKIN.boolean)
         }
+        if (resumed && key == Settings.ENABLE_DOC_PROVIDER.key && Settings.ENABLE_DOC_PROVIDER.boolean) {
+            showRebootDialog()
+        }
     }
 
     @Deprecated("Deprecated in Java")

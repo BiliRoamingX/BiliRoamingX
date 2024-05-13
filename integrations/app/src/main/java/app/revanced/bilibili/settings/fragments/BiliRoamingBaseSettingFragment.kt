@@ -320,17 +320,21 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
         if (!resumed) return
         for (item in Settings.entries) {
             if (item.key == key && item.needReboot) {
-                val message = Utils.getString("biliroaming_need_reboot_dialog_message")
-                val confirm = Utils.getString("biliroaming_need_reboot_dialog_confirm")
-                val later = Utils.getString("biliroaming_need_reboot_dialog_later")
-                AlertDialog.Builder(context)
-                    .setMessage(message)
-                    .setNegativeButton(later, null)
-                    .setPositiveButton(confirm) { _, _ -> Utils.reboot() }
-                    .create().constraintSize().show()
+                showRebootDialog()
                 break
             }
         }
+    }
+
+    protected fun showRebootDialog() {
+        val message = Utils.getString("biliroaming_need_reboot_dialog_message")
+        val confirm = Utils.getString("biliroaming_need_reboot_dialog_confirm")
+        val later = Utils.getString("biliroaming_need_reboot_dialog_later")
+        AlertDialog.Builder(context)
+            .setMessage(message)
+            .setNegativeButton(later, null)
+            .setPositiveButton(confirm) { _, _ -> Utils.reboot() }
+            .create().constraintSize().show()
     }
 
     protected fun disablePreference(
