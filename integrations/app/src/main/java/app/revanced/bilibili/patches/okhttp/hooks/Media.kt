@@ -15,7 +15,7 @@ import org.json.JSONObject
 
 object Media : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
-        return Settings.UNLOCK_AREA_LIMIT.boolean
+        return Settings.UnlockAreaLimit()
                 && Versions.ge7_39_0()
                 && url.contains("/pgc/view/v2/app/media")
                 && code.isOk

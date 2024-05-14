@@ -15,14 +15,14 @@ object ShareClick : ApiHook() {
 
     override fun shouldHook(url: String, code: Int): Boolean {
         return code.isOk && url.contains("/x/share/click")
-                && (Settings.PURIFY_SHARE.boolean || Settings.FUCK_MINI_PROGRAM.boolean)
+                && (Settings.PurifyShare() || Settings.FuckMiniProgram())
     }
 
     override fun hook(url: String, code: Int, request: String, response: String): String {
         val json = response.toJSONObject()
         if (json.optInt("code") != 0) return response
         json.optJSONObject("data")?.run {
-            if (Settings.PURIFY_SHARE.boolean) {
+            if (Settings.PurifyShare()) {
                 val link = optString("link")
                 if (link.startsWith("http"))
                     put("link", purifyUrl(link))
@@ -33,7 +33,7 @@ object ShareClick : ApiHook() {
                         prefix + purifyUrl(cUrl) + postfix
                     })
             }
-            if (Settings.FUCK_MINI_PROGRAM.boolean) {
+            if (Settings.FuckMiniProgram()) {
                 // 7: mini_program, 3: web, 4: video
                 if (optInt("share_mode") == 7)
                     put("share_mode", 3)
@@ -45,7 +45,7 @@ object ShareClick : ApiHook() {
     private fun purifyUrl(url: String) = replaceBv2Av(resolveUrl(url))
 
     private fun replaceBv2Av(url: String): String {
-        if (!Settings.ENABLE_AV.boolean) return url
+        if (!Settings.EnableAv()) return url
         return url.replace("(.*)($bvPattern)(.*)".toRegex()) {
             val (_, prefix, bv, postfix) = it.groupValues
             "${prefix}av${bv2av(bv)}$postfix"

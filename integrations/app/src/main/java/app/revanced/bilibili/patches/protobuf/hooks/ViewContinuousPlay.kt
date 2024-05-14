@@ -17,7 +17,7 @@ object ViewContinuousPlay : MossHook<ContinuousPlayReq, ContinuousPlayReply>() {
         reply: ContinuousPlayReply?,
         error: MossException?
     ): ContinuousPlayReply? {
-        if (reply != null && Settings.DISABLE_AUTO_NEXT_PLAY.boolean)
+        if (reply != null && Settings.DisableAutoNextPlay())
             reply.clearRelates()
         return super.hookAfter(req, reply, error)
     }

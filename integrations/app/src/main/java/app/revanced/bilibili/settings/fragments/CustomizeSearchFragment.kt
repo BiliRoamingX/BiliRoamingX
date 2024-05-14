@@ -8,7 +8,7 @@ import app.revanced.bilibili.utils.Utils
 class CustomizeSearchFragment : BiliRoamingBaseSettingFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
-        disablePreference("search_type", PrefsDisableReason.APP_VERSION) {
+        disablePreference("search_type", PrefsDisableReason.AppVersion) {
             Utils.isHd()
         }
     }

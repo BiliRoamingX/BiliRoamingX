@@ -13,7 +13,7 @@ import tv.danmaku.bili.ui.main2.api.AccountMine
 object NumberFormatPatch {
     @JvmStatic
     fun onMineBindAccountState(fragment: Fragment, accountMine: AccountMine?) {
-        if (!Settings.NUMBER_FORMAT.boolean) return
+        if (!Settings.NumberFormat()) return
         val view = fragment.view ?: return
         if (accountMine == null || !Accounts.isLogin) return
 
@@ -28,7 +28,7 @@ object NumberFormatPatch {
 
     @JvmStatic
     fun onSpaceBindAccountState(fragment: Fragment, memberCard: BiliMemberCard?) {
-        if (!Settings.NUMBER_FORMAT.boolean) return
+        if (!Settings.NumberFormat()) return
         val view = fragment.view ?: return
         memberCard ?: return
 

@@ -39,14 +39,14 @@ object ViewUniteReplyHook {
             AutoLikePatch.detail = Pair.create(aid, like)
             if (viewReply.viewBase.bizType == BizType.BIZ_TYPE_UGC)
                 AutoLikePatch.autoLikeUnite()
-            if (Settings.REMOVE_ELEC_BUTTON.boolean)
+            if (Settings.RemoveChargeButton())
                 viewReply.reqUser.clearElecPlusBtn()
             hookArc(viewReply)
             hookTabModules(viewReply)
             hookSupplement(viewReply)
             hookViewConfig(viewReply.viewBase.config)
         }
-        if (Settings.UNLOCK_AREA_LIMIT.boolean
+        if (Settings.UnlockAreaLimit()
             && (viewReply == null || viewReply == ViewReply.getDefaultInstance())
             && viewReq.extraContentMap.let {
                 it.containsKey("season_id") || it.containsKey("ep_id")
@@ -57,11 +57,11 @@ object ViewUniteReplyHook {
 
     private fun hookViewConfig(config: Config) {
         val storyEntrance = config.storyEntrance
-        if (Settings.DISABLE_STORY_FULL.boolean)
+        if (Settings.DisableStoryFull())
             storyEntrance.arcLandscapeStory = false
-        if (config.playerIcon != PlayerIcon.getDefaultInstance() || !Settings.SKIN.boolean)
+        if (config.playerIcon != PlayerIcon.getDefaultInstance() || !Settings.Skin())
             return
-        val playIcon = Settings.SKIN_JSON.string.runCatchingOrNull {
+        val playIcon = Settings.SkinJson().runCatchingOrNull {
             toJSONObject()
         }?.optJSONObject("play_icon")
         if (playIcon != null) {
@@ -74,7 +74,7 @@ object ViewUniteReplyHook {
     }
 
     private fun hookArc(viewReply: ViewReply) {
-        if (Settings.ALLOW_DOWNLOAD.boolean) {
+        if (Settings.AllowDownload()) {
             viewReply.arc.right.run {
                 download = true
                 onlyVipDownload = false
@@ -90,12 +90,12 @@ object ViewUniteReplyHook {
         if (!viewPgcAny.hasOgvData()) return
         viewPgcAny.ogvData.run {
             rights.run {
-                if (Settings.UNLOCK_AREA_LIMIT.boolean) {
+                if (Settings.UnlockAreaLimit()) {
                     areaLimit = 0
                     banAreaShow = 1
                     canWatch = 1
                 }
-                if (Settings.ALLOW_DOWNLOAD.boolean) {
+                if (Settings.AllowDownload()) {
                     allowDownload = 1
                     newAllowDownload = 1
                     onlyVipDownload = 0
@@ -112,10 +112,10 @@ object ViewUniteReplyHook {
                 val toRemoveIndexes = mutableListOf<Int>()
                 tabModule.introduction.modulesList.forEachIndexed { index, module ->
                     if (module.hasLikeComment()) {
-                        if (Settings.BLOCK_COMMENT_GUIDE.boolean)
+                        if (Settings.BlockCommentGuide())
                             toRemoveIndexes.add(index)
                     } else if (module.hasActivityEntranceModule()) {
-                        if (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean)
+                        if (Settings.BlockBangumiPageAds())
                             toRemoveIndexes.add(index)
                     } else if (module.hasSectionData()) {
                         module.sectionData.episodesList.forEach { it.unlock() }
@@ -123,10 +123,10 @@ object ViewUniteReplyHook {
                         PegasusPatch.filterViewUniteRelates(module, viewReply.viewBase.bizType)
                         BLRoutePatch.removePayloadUniteIfNeeded(module.relates.cardsList)
                     } else if (module.hasCovenanter()) {
-                        if (Settings.BLOCK_FAN_GUIDE.boolean)
+                        if (Settings.BlockFanGuide())
                             toRemoveIndexes.add(index)
                     } else if (module.hasLiveOrder()) {
-                        if (Settings.BLOCK_LIVE_ORDER.boolean)
+                        if (Settings.BlockLiveOrder())
                             toRemoveIndexes.add(index)
                     }
                 }
@@ -134,16 +134,16 @@ object ViewUniteReplyHook {
                     tabModule.introduction.removeModules(it)
                 }
             } else if (tabModule.hasReply()) {
-                if (Settings.BLOCK_COMMENT_GUIDE.boolean)
+                if (Settings.BlockCommentGuide())
                     tabModule.reply.replyStyle.clearBadgeType()
             }
         }
-        if (Settings.BLOCK_VIDEO_COMMENT.boolean) {
+        if (Settings.BlockVideoComment()) {
             val replyTabIndex = viewReply.tab.tabModuleList.indexOfFirst { it.hasReply() }
             if (replyTabIndex != -1)
                 viewReply.tab.removeTabModule(replyTabIndex)
         }
-        if (Settings.BLOCK_ACTIVITY_TAB.boolean) {
+        if (Settings.BlockActivityTab()) {
             val activityTabIndex = viewReply.tab.tabModuleList.indexOfFirst { it.hasActivityTab() }
             if (activityTabIndex != -1)
                 viewReply.tab.removeTabModule(activityTabIndex)
@@ -159,12 +159,12 @@ object ViewUniteReplyHook {
             }
         }
         rights.run {
-            if (Settings.UNLOCK_AREA_LIMIT.boolean) {
+            if (Settings.UnlockAreaLimit()) {
                 areaLimit = 0
                 canWatch = 1
                 allowDm = 1
             }
-            if (Settings.ALLOW_DOWNLOAD.boolean) {
+            if (Settings.AllowDownload()) {
                 allowDownload = 1
             }
         }
@@ -193,7 +193,7 @@ object ViewUniteReplyHook {
                             tabType = TabType.TAB_INTRODUCTION
                             introduction = reconstructIntroduction(newResult, th)
                         }.let { addTabModule(it) }
-                        if (!th && !Settings.BLOCK_VIDEO_COMMENT.boolean) {
+                        if (!th && !Settings.BlockVideoComment()) {
                             TabModule().apply {
                                 tabType = TabType.TAB_REPLY
                                 reply = ReplyTab().apply { title = "评论" }
@@ -284,12 +284,12 @@ object ViewUniteReplyHook {
                 forbidPre = optInt("forbid_pre")
                 isPreview = optInt("is_preview")
                 onlyVipDownload = optInt("only_vip_download")
-                if (Settings.UNLOCK_AREA_LIMIT.boolean) {
+                if (Settings.UnlockAreaLimit()) {
                     areaLimit = 0
                     banAreaShow = 1
                     canWatch = 1
                 }
-                if (Settings.ALLOW_DOWNLOAD.boolean) {
+                if (Settings.AllowDownload()) {
                     allowDownload = 1
                     newAllowDownload = 1
                     onlyVipDownload = 0
@@ -513,9 +513,9 @@ object ViewUniteReplyHook {
                         allowDownload = optInt("allow_download")
                         areaLimit = optInt("area_limit")
                     }
-                    if (Settings.UNLOCK_AREA_LIMIT.boolean)
+                    if (Settings.UnlockAreaLimit())
                         areaLimit = 0
-                    if (Settings.ALLOW_DOWNLOAD.boolean)
+                    if (Settings.AllowDownload())
                         allowDownload = 1
                 }
                 sectionIndex = episode.optInt("section_index")

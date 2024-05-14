@@ -49,7 +49,7 @@ object OkHttpPatch {
             return false
         }
         Logger.debug { "OkHttpPatch.shouldHook, code: %d, url: %s".format(code, url) }
-        return (code == 200 && Settings.DEBUG.boolean) || hooks.any { it.shouldHook(url, code) }
+        return (code == 200 && Settings.Debug()) || hooks.any { it.shouldHook(url, code) }
     }
 
     @JvmStatic

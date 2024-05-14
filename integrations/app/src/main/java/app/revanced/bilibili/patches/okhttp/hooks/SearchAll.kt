@@ -10,7 +10,7 @@ import org.json.JSONObject
  */
 object SearchAll : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
-        return code.isOk && (Settings.SEARCH_BANGUMI.boolean || Settings.SEARCH_MOVIE.boolean)
+        return code.isOk && (Settings.SearchBangumi() || Settings.SearchMovie())
                 && url.contains("/x/v2/search?")
     }
 

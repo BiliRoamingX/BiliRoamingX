@@ -24,7 +24,7 @@ object DmSegMobile : MossHook<DmSegMobileReq, DmSegMobileReply>() {
         reply: DmSegMobileReply?,
         error: MossException?
     ): DmSegMobileReply? {
-        if (reply != null && Settings.UNLOCK_AREA_LIMIT.boolean && Settings.TH_SERVER.string.isNotEmpty()) {
+        if (reply != null && Settings.UnlockAreaLimit() && Settings.ThailandServer().isNotEmpty()) {
             val epId = req.oid.toString()
             val seasonId = req.pid.toString()
             val seasonAreasCache = seasonAreasCache
@@ -37,7 +37,7 @@ object DmSegMobile : MossHook<DmSegMobileReq, DmSegMobileReply>() {
                         == cachePrefs.getString("ep$epId", null))
             ) reply.clearElems()
         }
-        if (reply != null && Settings.NO_COLORFUL_DANMAKU.boolean) {
+        if (reply != null && Settings.NoColorfulDanmaku()) {
             reply.elemsList.forEach {
                 if (!Utils.isHd())
                     it.colorful = DmColorfulType.NoneType

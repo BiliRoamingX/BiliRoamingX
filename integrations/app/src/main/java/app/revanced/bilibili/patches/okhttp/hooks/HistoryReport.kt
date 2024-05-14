@@ -10,8 +10,8 @@ import app.revanced.bilibili.utils.saveVideoHistory
 
 object HistoryReport : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
-        return code.isOk && Settings.UNLOCK_AREA_LIMIT.boolean
-                && Settings.SAVE_TH_HISTORY.boolean
+        return code.isOk && Settings.UnlockAreaLimit()
+                && Settings.SaveThailandHistory()
                 && url.contains("/x/v2/history/report")
     }
 

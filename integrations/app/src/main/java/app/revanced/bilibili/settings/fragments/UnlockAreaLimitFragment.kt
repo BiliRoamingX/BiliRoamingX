@@ -6,7 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.EditText
 import androidx.preference.Preference
-import app.revanced.bilibili.settings.Settings.prefs
+import app.revanced.bilibili.settings.Setting.Companion.prefs
 import app.revanced.bilibili.settings.dialog.SpeedTestDialog
 import app.revanced.bilibili.settings.search.annotation.SettingFragment
 import app.revanced.bilibili.utils.*

@@ -7,7 +7,7 @@ import app.revanced.bilibili.settings.Settings;
 public class PublishToFollowingPatch {
     @Keep
     public static boolean shouldAutoSelectOnce(boolean original) {
-        if (Settings.DISABLE_AUTO_SELECT.getBoolean())
+        if (Settings.DisableAutoSelect.get())
             return false;
         return original;
     }

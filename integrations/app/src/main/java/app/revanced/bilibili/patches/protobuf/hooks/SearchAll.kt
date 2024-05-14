@@ -18,9 +18,9 @@ object SearchAll : MossHook<SearchAllRequest, SearchAllResponse>() {
         reply: SearchAllResponse?,
         error: MossException?
     ): SearchAllResponse? {
-        if ((Settings.SEARCH_BANGUMI.boolean
-                    || Settings.SEARCH_MOVIE.boolean
-                    || Settings.FILTER_SEARCH_TYPE.stringSet.isNotEmpty()) && reply != null
+        if ((Settings.SearchBangumi()
+                    || Settings.SearchMovie()
+                    || Settings.FilterSearchType().isNotEmpty()) && reply != null
         ) BangumiSeasonHook.searchAllResponseHook(reply)
         return super.hookAfter(req, reply, error)
     }

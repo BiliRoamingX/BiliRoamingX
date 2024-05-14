@@ -38,13 +38,13 @@ object Upgrade : ApiHook() {
     var fromSelf = false
 
     fun customUpdate(fromSelf: Boolean = false): Boolean {
-        return (fromSelf || Settings.CUSTOM_UPDATE.boolean)
+        return (fromSelf || Settings.CustomUpdate())
                 && Build.SUPPORTED_64_BIT_ABIS.isNotEmpty()
                 && sigMd5() == Constants.PRE_BUILD_SIG_MD5
     }
 
     override fun shouldHook(url: String, code: Int): Boolean {
-        return (Settings.BLOCK_UPDATE.boolean || customUpdate(fromSelf = fromSelf))
+        return (Settings.BlockUpdate() || customUpdate(fromSelf = fromSelf))
                 && url.contains("/x/v2/version/fawkes/upgrade")
     }
 
@@ -53,7 +53,7 @@ object Upgrade : ApiHook() {
             (runCatchingOrNull { checkUpgrade().toString() }
                 ?: """{"code":-1,"message":"检查更新失败，请稍后再试/(ㄒoㄒ)/~~""")
                 .also { fromSelf = false }
-        else if (Settings.BLOCK_UPDATE.boolean)
+        else if (Settings.BlockUpdate())
             """{"code":-1,"message":"哼，休想要我更新！<(￣︶￣)>"}"""
         else response
     }

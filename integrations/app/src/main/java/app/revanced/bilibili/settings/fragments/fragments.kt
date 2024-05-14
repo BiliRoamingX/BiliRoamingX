@@ -12,7 +12,7 @@ class BlockModuleFragment : BiliRoamingBaseSettingFragment()
 
 @SettingFragment("biliroaming_setting_customize_bottom")
 class CustomizeBottomFragment :
-    BaseDynamicItemsFragment(Settings.SHOWING_BOTTOM_ITEMS, JSONPatch.bottomItems)
+    BaseDynamicItemsFragment(Settings.ShowingBottomItems, JSONPatch.bottomItems)
 
 @SettingFragment("biliroaming_setting_customize_dynamic")
 class CustomizeDynamicFragment : BiliRoamingBaseSettingFragment()

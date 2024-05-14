@@ -19,11 +19,11 @@ object CacheRedirectPatch {
     @Keep
     @JvmStatic
     fun onMenuClick(menuView: View, originListener: OnClickOriginListener) {
-        if (!Settings.EXTERNAL_DOWNLOADER.boolean) {
+        if (!Settings.ExternalDownloader()) {
             originListener.onClick_Origin(menuView)
             return
         }
-        val packageName = Settings.EXTERNAL_DOWNLOADER_NAME.string.ifEmpty {
+        val packageName = Settings.ExternalDownloaderName().ifEmpty {
             originListener.onClick_Origin(menuView)
             return
         }
@@ -52,8 +52,8 @@ object CacheRedirectPatch {
     ): Boolean {
         if (cacheFromType.name != "FROM_ACTION_TYPE")
             return false
-        if (!Settings.EXTERNAL_DOWNLOADER.boolean) return false
-        val packageName = Settings.EXTERNAL_DOWNLOADER_NAME.string
+        if (!Settings.ExternalDownloader()) return false
+        val packageName = Settings.ExternalDownloaderName()
             .ifEmpty { return false }
         val videoUrl = VideoInfoHolder.currentVideoUrl() ?: return false
         showConfirmDialog(context, videoUrl, packageName) {

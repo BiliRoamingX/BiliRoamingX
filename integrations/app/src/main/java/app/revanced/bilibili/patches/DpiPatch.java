@@ -12,7 +12,7 @@ import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Versions;
 
 public class DpiPatch {
-    public static final float displayScale = Float.parseFloat(Settings.DISPLAY_SIZE.getString());
+    public static final float displayScale = Float.parseFloat(Settings.DisplaySize.get());
 
     @Keep
     public static float onCronSetDisplayDensity(float density) {

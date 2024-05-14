@@ -3,14 +3,14 @@ package app.revanced.bilibili.settings.fragments
 import android.app.AlertDialog
 import android.os.Bundle
 import app.revanced.bilibili.meta.BottomItem
-import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.settings.StringSetSetting
 import app.revanced.bilibili.utils.Constants
 import app.revanced.bilibili.utils.Utils
 import app.revanced.bilibili.utils.constraintSize
 import app.revanced.bilibili.widget.CheckBoxGroupPreference
 
 abstract class BaseDynamicItemsFragment(
-    private val setting: Settings,
+    private val setting: StringSetSetting,
     private val allItems: List<BottomItem>
 ) : BiliRoamingBaseSettingFragment() {
     private var hintShown = false
@@ -18,7 +18,7 @@ abstract class BaseDynamicItemsFragment(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val preference = findPreference<CheckBoxGroupPreference>(setting.key) ?: return
-        val showingItems = setting.stringSet
+        val showingItems = setting()
         val values = mutableListOf<String>()
         val entries = mutableListOf<String>()
         for (item in allItems) {

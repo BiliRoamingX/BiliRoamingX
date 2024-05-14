@@ -12,7 +12,7 @@ object RoomPlayInfo : ApiHook() {
     private const val API = "https://api.live.bilibili.com/xlive/app-room/v2/index/getRoomPlayInfo"
 
     override fun shouldHookBefore(url: String, headers: Array<String>): Boolean {
-        return Settings.DEFAULT_MAX_QN.boolean && url.startsWith(API)
+        return Settings.DefaultMaxQn() && url.startsWith(API)
     }
 
     override fun hookBefore(url: String, headers: Array<String>): Pair<String, Array<String>> {
@@ -30,7 +30,7 @@ object RoomPlayInfo : ApiHook() {
     }
 
     override fun shouldHook(url: String, code: Int): Boolean {
-        return Settings.DEFAULT_MAX_QN.boolean && code.isOk && url.startsWith(API)
+        return Settings.DefaultMaxQn() && code.isOk && url.startsWith(API)
     }
 
     override fun hook(url: String, code: Int, request: String, response: String): String {

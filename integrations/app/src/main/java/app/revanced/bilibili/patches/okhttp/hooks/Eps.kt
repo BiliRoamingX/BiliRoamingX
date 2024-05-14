@@ -14,14 +14,14 @@ import org.json.JSONObject
 
 object Eps : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
-        return Settings.UNLOCK_AREA_LIMIT.boolean
+        return Settings.UnlockAreaLimit()
                 && url.contains("/pgc/view/v2/app/eps")
                 && code.isOk
     }
 
     override fun hook(url: String, code: Int, request: String, response: String): String {
         val json = JSONObject(response)
-        if (!Settings.UNLOCK_AREA_LIMIT.boolean)
+        if (!Settings.UnlockAreaLimit())
             return response
         if (json.optInt("code", -1) == 0) {
             json.optJSONObject("data")?.optJSONArray("modules").orEmpty()
@@ -42,7 +42,7 @@ object Eps : ApiHook() {
                     .asSequence<JSONObject>().forEach {
                         it.optJSONObject("rights")?.run {
                             put("area_limit", 0)
-                            if (Settings.ALLOW_DOWNLOAD.boolean)
+                            if (Settings.AllowDownload())
                                 put("allow_download", 1)
                         }
                     }
@@ -82,7 +82,7 @@ object Eps : ApiHook() {
             put("allow_demand", 1)
             put("allow_dm", 1)
             put("area_limit", 0)
-            if (Settings.ALLOW_DOWNLOAD.boolean)
+            if (Settings.AllowDownload())
                 put("allow_download", 1)
         }
     }

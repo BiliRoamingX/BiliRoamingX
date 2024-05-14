@@ -16,13 +16,13 @@ object SplashPatch {
     @Keep
     @JvmStatic
     fun getMode(origin: String): String {
-        return if (Settings.FULL_SPLASH.boolean) "full" else origin
+        return if (Settings.FullSplash()) "full" else origin
     }
 
     @Keep
     @JvmStatic
     fun onBrandSplashFragmentViewCreated(view: View) {
-        if (Settings.CUSTOM_SPLASH.boolean) {
+        if (Settings.CustomSplash()) {
             val splash = view.findView<ImageView>("brand_splash")
             val fullSplash = view.findView<ImageView>("full_brand_splash")
             val splashImage = File(Utils.getContext().filesDir, SPLASH_IMAGE)
@@ -35,7 +35,7 @@ object SplashPatch {
                 fullSplash.alpha = 0f
             }
         }
-        if (Settings.CUSTOM_SPLASH_LOGO.boolean) {
+        if (Settings.CustomSplashLogo()) {
             val logo = view.findView<ImageView>("brand_logo")
             val logoImage = File(Utils.getContext().filesDir, LOGO_IMAGE)
             if (logoImage.isFile) {

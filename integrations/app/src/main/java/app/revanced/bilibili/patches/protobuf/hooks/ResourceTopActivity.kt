@@ -17,7 +17,7 @@ object ResourceTopActivity : MossHook<Empty, GeneratedMessageLite<*, *>>() {
         reply: GeneratedMessageLite<*, *>?,
         error: MossException?
     ): GeneratedMessageLite<*, *>? {
-        if (Settings.BLOCK_TOP_ACTIVITY.boolean && reply is TopActivityReply)
+        if (Settings.BlockTopActivity() && reply is TopActivityReply)
             return null
         return super.hookAfter(req, reply, error)
     }

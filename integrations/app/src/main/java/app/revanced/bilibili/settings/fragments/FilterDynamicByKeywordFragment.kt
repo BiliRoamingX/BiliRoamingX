@@ -20,7 +20,7 @@ class FilterDynamicByKeywordFragment : BaseWidgetSettingFragment() {
         val (contentGroup, contentRegexSwitch) = content.addKeywordGroup(
             string("biliroaming_keyword_group_name_content"), 40.dp, true
         )
-        contentRegexSwitch.isChecked = Settings.DYNAMIC_PURIFY_CONTENT_REGEX_MODE.boolean
+        contentRegexSwitch.isChecked = Settings.DynPurifyContentRegexMode()
         val upNameGroup =
             content.addKeywordGroup(string("biliroaming_keyword_group_name_up"), 40.dp).first
         val uidGroup = content.addKeywordGroup(
@@ -29,16 +29,16 @@ class FilterDynamicByKeywordFragment : BaseWidgetSettingFragment() {
         ).first
         val topicGroup =
             content.addKeywordGroup(string("biliroaming_keyword_group_name_topic"), 40.dp).first
-        Settings.DYNAMIC_PURIFY_CONTENT.stringSet.forEach {
+        Settings.DynPurifyContent().forEach {
             contentGroup.addView(keywordInputItem(contentGroup, it).first)
         }
-        Settings.DYNAMIC_PURIFY_UP.stringSet.forEach {
+        Settings.DynPurifyUp().forEach {
             upNameGroup.addView(keywordInputItem(upNameGroup, it).first)
         }
-        Settings.DYNAMIC_PURIFY_UID.stringSet.forEach {
+        Settings.DynPurifyUid().forEach {
             uidGroup.addView(keywordInputItem(uidGroup, it, EditorInfo.TYPE_CLASS_NUMBER).first)
         }
-        Settings.DYNAMIC_PURIFY_TOPIC.stringSet.forEach {
+        Settings.DynPurifyTopic().forEach {
             topicGroup.addView(keywordInputItem(topicGroup, it).first)
         }
 
@@ -50,11 +50,11 @@ class FilterDynamicByKeywordFragment : BaseWidgetSettingFragment() {
                 return@onClick
             }
 
-            Settings.DYNAMIC_PURIFY_CONTENT.saveValue(contents)
-            Settings.DYNAMIC_PURIFY_CONTENT_REGEX_MODE.saveValue(contentRegexMode)
-            Settings.DYNAMIC_PURIFY_UP.saveValue(upNameGroup.getKeywords())
-            Settings.DYNAMIC_PURIFY_UID.saveValue(uidGroup.getKeywords())
-            Settings.DYNAMIC_PURIFY_TOPIC.saveValue(topicGroup.getKeywords())
+            Settings.DynPurifyContent.save(contents)
+            Settings.DynPurifyContentRegexMode.save(contentRegexMode)
+            Settings.DynPurifyUp.save(upNameGroup.getKeywords())
+            Settings.DynPurifyUid.save(uidGroup.getKeywords())
+            Settings.DynPurifyTopic.save(topicGroup.getKeywords())
 
             Toasts.showShortWithId("biliroaming_save_success_and_refresh_dynamic")
             parentFragmentManager.popBackStack()

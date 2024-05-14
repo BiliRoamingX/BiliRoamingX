@@ -7,13 +7,13 @@ import app.revanced.bilibili.settings.Settings;
 @Keep
 public class BlockFollowButtonPatch {
     public static boolean shouldShowCommentFollow(boolean original) {
-        if (Settings.BLOCK_FOLLOW_BUTTON.getStringSet().contains("comment"))
+        if (Settings.BlockFollowButton.get().contains("comment"))
             return false;
         return original;
     }
 
     public static boolean shouldShowDynamicFollow(boolean original) {
-        if (Settings.BLOCK_FOLLOW_BUTTON.getStringSet().contains("dynamic"))
+        if (Settings.BlockFollowButton.get().contains("dynamic"))
             return false;
         return original;
     }

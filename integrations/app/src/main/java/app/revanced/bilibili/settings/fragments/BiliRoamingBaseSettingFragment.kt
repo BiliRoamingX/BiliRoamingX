@@ -17,7 +17,7 @@ import androidx.preference.PreferenceScreen
 import androidx.preference.TwoStatePreference
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.revanced.bilibili.settings.ModulePreferenceManager
-import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.settings.Setting
 import app.revanced.bilibili.settings.search.SearchResultFragment
 import app.revanced.bilibili.settings.search.annotation.SettingFragment
 import app.revanced.bilibili.utils.*
@@ -26,7 +26,13 @@ import com.bilibili.lib.ui.BasePreferenceFragment
 import com.bilibili.lib.ui.garb.Garb
 import java.lang.reflect.Field
 
-enum class PrefsDisableReason { APP_VERSION, OS_VERSION, NEW_PLAYER, OFFICIAL_SUPPORTED }
+@Suppress("ConvertObjectToDataObject")
+sealed class PrefsDisableReason {
+    object AppVersion : PrefsDisableReason()
+    object OSVersion : PrefsDisableReason()
+    object NewPlayer : PrefsDisableReason()
+    object OfficialSupported : PrefsDisableReason()
+}
 
 @Suppress("DEPRECATION")
 abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String = "") :
@@ -35,7 +41,7 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
     protected var resumed = false
         private set
     protected var restoring = false
-    private val preferenceManager = ModulePreferenceManager(Utils.getContext(), Settings.prefs)
+    private val preferenceManager = ModulePreferenceManager(Utils.getContext(), Setting.prefs)
     private val listener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
         if (!restoring)
             onPreferenceChanged(sharedPreferences, key)
@@ -82,14 +88,14 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // make sure listening after setting changed
-        Settings.registerPreferenceChangeListener(listener)
+        Setting.registerPreferenceChangeListener(listener)
         if (!Utils.isHd() && showSearchMenu)
             setHasOptionsMenu(true)
     }
 
     override fun onDestroy() {
         // make sure listening after setting changed
-        Settings.unregisterPreferenceChangeListener(listener)
+        Setting.unregisterPreferenceChangeListener(listener)
         located = false
         super.onDestroy()
     }
@@ -318,7 +324,7 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
 
     protected open fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
         if (!resumed) return
-        for (item in Settings.entries) {
+        for (item in Setting.all) {
             if (item.key == key && item.needReboot) {
                 showRebootDialog()
                 break
@@ -343,19 +349,19 @@ abstract class BiliRoamingBaseSettingFragment(private var prefsXmlName: String =
         condition: (Preference) -> Boolean
     ) {
         val reason = when (reasonType) {
-            PrefsDisableReason.APP_VERSION -> {
+            PrefsDisableReason.AppVersion -> {
                 { Utils.getString("biliroaming_app_not_support") }
             }
 
-            PrefsDisableReason.OS_VERSION -> {
+            PrefsDisableReason.OSVersion -> {
                 { Utils.getString("biliroaming_os_not_support") }
             }
 
-            PrefsDisableReason.NEW_PLAYER -> {
+            PrefsDisableReason.NewPlayer -> {
                 { Utils.getString("biliroaming_only_support_new_player") }
             }
 
-            PrefsDisableReason.OFFICIAL_SUPPORTED -> {
+            PrefsDisableReason.OfficialSupported -> {
                 { Utils.getString("biliroaming_official_supported") }
             }
         }

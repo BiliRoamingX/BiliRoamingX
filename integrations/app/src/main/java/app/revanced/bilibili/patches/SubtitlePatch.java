@@ -77,6 +77,6 @@ public class SubtitlePatch {
     public static Float offset(Float offset) {
         if (!SubtitleParamsCache.styleSwitch)
             return offset;
-        return Settings.SUBTITLE_OFFSET.getInt() + offset;
+        return Settings.SubtitleOffset.get() + offset;
     }
 }

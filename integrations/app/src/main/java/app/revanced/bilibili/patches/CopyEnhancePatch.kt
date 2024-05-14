@@ -33,8 +33,8 @@ object CopyEnhancePatch {
     @Keep
     @JvmStatic
     fun onCopyDesc(isBv: Boolean, desc: String): Boolean {
-        if (!Settings.COMMENT_COPY.boolean) return false
-        if (!Settings.COMMENT_COPY_ENHANCE.boolean) return true
+        if (!Settings.CommentCopy()) return false
+        if (!Settings.EnhanceCommentCopy()) return true
 
         fun SpannableStringBuilder.appendTitle(title: CharSequence) =
             relativeSize(proportion = 1.05f) { bold { appendLine(title) } }
@@ -124,8 +124,8 @@ object CopyEnhancePatch {
     @Keep
     @JvmStatic
     fun onDynamicLongClick(listener: OnLongClickOriginListener, view: View): Boolean {
-        if (!Settings.COMMENT_COPY.boolean) return false
-        if (!Settings.COMMENT_COPY_ENHANCE.boolean) return true
+        if (!Settings.CommentCopy()) return false
+        if (!Settings.EnhanceCommentCopy()) return true
         DYNAMIC_COPYABLE_IDS.asSequence().firstNotNullOfOrNull { id ->
             Utils.getResId(id, "id").takeIf { it > 0 }
                 ?.let { view.findViewById<TextView>(it) }
@@ -148,8 +148,8 @@ object CopyEnhancePatch {
         view: View,
         idName: String
     ): Boolean {
-        if (!Settings.COMMENT_COPY.boolean) return false
-        if (!Settings.COMMENT_COPY_ENHANCE.boolean) return true
+        if (!Settings.CommentCopy()) return false
+        if (!Settings.EnhanceCommentCopy()) return true
         val resId = Utils.getResId(idName, "id")
         val textView = view.findViewById<TextView>(resId) ?: return false
         val text = textView.getFirstFieldByExactType<CharSequence>()
@@ -162,7 +162,7 @@ object CopyEnhancePatch {
     @Keep
     @JvmStatic
     fun onCommentMenuItemClick(self: Any, action: Enum<*>, originMethod: String): Boolean {
-        if (!Settings.COMMENT_COPY_ENHANCE.boolean) return false
+        if (!Settings.EnhanceCommentCopy()) return false
         if (action.name != "COPY") return false
         val context = self.getFirstFieldByExactType<Context>()
         val toCopyText = self.getFirstFieldByExactType<String?>()
@@ -180,7 +180,7 @@ object CopyEnhancePatch {
         message: BaseTypedMessage<*>,
         popupWindow: PopupWindow
     ): Boolean {
-        if (!Settings.COMMENT_COPY_ENHANCE.boolean) return false
+        if (!Settings.EnhanceCommentCopy()) return false
         val text = message.contentString.toJSONObject().run {
             optString("content").ifEmpty {
                 buildString {

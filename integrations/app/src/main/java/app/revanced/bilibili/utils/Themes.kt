@@ -100,7 +100,7 @@ object Themes {
         } else Garb().apply { id = 1; colorName = "black" }
     }.also { cachedGarb = it }
 
-    fun customThemeId() = Settings.SKIN_JSON.string.runCatchingOrNull {
+    fun customThemeId() = Settings.SkinJson().runCatchingOrNull {
         val json = toJSONObject()
         if (json.has("user_equip")) {
             json.getJSONObject("user_equip").optLong("id", -1L)
@@ -110,7 +110,7 @@ object Themes {
     } ?: -1L
 
     fun applyCustomTheme(activity: Context? = null): Boolean {
-        val (userEquip, loadEquip) = Settings.SKIN_JSON.string.runCatchingOrNull {
+        val (userEquip, loadEquip) = Settings.SkinJson().runCatchingOrNull {
             val json = toJSONObject()
             if (json.has("user_equip")) {
                 json.getJSONObject("user_equip") to json.optJSONObject("load_equip")

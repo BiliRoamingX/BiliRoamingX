@@ -35,13 +35,13 @@ object PlayerGestureDetectorPatch {
     @Keep
     @JvmStatic
     fun disableLongPress(): Boolean {
-        return Settings.DISABLE_PLAYER_LONG_PRESS.boolean
+        return Settings.DisablePlayerLongPress()
     }
 
     @Keep
     @JvmStatic
     fun scaleToSwitchRatio(): Boolean {
-        return Settings.SCALE_TO_SWITCH_RATIO.boolean
+        return Settings.ScaleToSwitchRatio()
     }
 
     @Keep

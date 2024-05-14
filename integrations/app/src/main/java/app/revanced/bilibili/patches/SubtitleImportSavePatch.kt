@@ -59,7 +59,7 @@ object SubtitleImportSavePatch {
     fun onCreateSubtitleWidget(widget: Any, view: View) {
         val importButton = view.findView<View>("biliroaming_import_subtitle")
         val saveButton = view.findView<View>("biliroaming_save_subtitle")
-        if (!Settings.SUBTITLE_IMPORT_SAVE.boolean) {
+        if (!Settings.SubtitleImportSave()) {
             importButton.hide()
             saveButton.hide()
             return

@@ -17,7 +17,7 @@ object DynRed : MossHook<DynRedReq, DynRedReply>() {
         reply: DynRedReply?,
         error: MossException?
     ): DynRedReply? {
-        if (Settings.DYNAMIC_PREFER_VIDEO_TAB.boolean)
+        if (Settings.DynPreferVideoTab())
             reply?.defaultTab = "video"
         return super.hookAfter(req, reply, error)
     }

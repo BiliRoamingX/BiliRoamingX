@@ -16,7 +16,7 @@ object ListenRcmdPlaylist : ListenPlaylistBase<RcmdPlaylistReq, RcmdPlaylistResp
         reply: RcmdPlaylistResp?,
         error: MossException?
     ): RcmdPlaylistResp? {
-        if (Settings.UNLOCK_PLAY_LIMIT.boolean && reply != null)
+        if (Settings.UnlockPlayLimit() && reply != null)
             reconstruct(reply.listList)
         return super.hookAfter(req, reply, error)
     }

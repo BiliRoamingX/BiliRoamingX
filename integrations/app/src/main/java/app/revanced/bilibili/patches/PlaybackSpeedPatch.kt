@@ -8,6 +8,7 @@ import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.Keep
+import app.revanced.bilibili.settings.Setting
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import com.bilibili.music.podcast.view.PodcastSpeedSeekBar
@@ -15,8 +16,8 @@ import tv.danmaku.ijk.media.player.IMediaPlayer
 
 object PlaybackSpeedPatch {
     init {
-        Settings.registerPreferenceChangeListener { _, key ->
-            if (key == Settings.OVERRIDE_PLAYBACK_SPEED.key)
+        Setting.registerPreferenceChangeListener { _, key ->
+            if (key == Settings.OverridePlaybackSpeed.key)
                 refreshOverrideSpeedList()
         }
     }
@@ -38,10 +39,10 @@ object PlaybackSpeedPatch {
 
     @JvmStatic
     private val newSpeedArray: FloatArray
-        get() = if (cacheOverrideSpeed == Settings.OVERRIDE_PLAYBACK_SPEED.string) {
+        get() = if (cacheOverrideSpeed == Settings.OverridePlaybackSpeed()) {
             cacheSpeedArray
         } else {
-            cacheOverrideSpeed = Settings.OVERRIDE_PLAYBACK_SPEED.string
+            cacheOverrideSpeed = Settings.OverridePlaybackSpeed()
             cacheSpeedArray = cacheOverrideSpeed.let { v ->
                 if (v.isEmpty()) floatArrayOf()
                 else v.split(' ').map { it.toFloat() }.toFloatArray()
@@ -52,10 +53,10 @@ object PlaybackSpeedPatch {
 
     @JvmStatic
     private val newSpeedReversedArray: FloatArray
-        get() = if (cacheOverrideSpeed == Settings.OVERRIDE_PLAYBACK_SPEED.string) {
+        get() = if (cacheOverrideSpeed == Settings.OverridePlaybackSpeed()) {
             cacheReverseSpeedArray
         } else {
-            cacheOverrideSpeed = Settings.OVERRIDE_PLAYBACK_SPEED.string
+            cacheOverrideSpeed = Settings.OverridePlaybackSpeed()
             cacheSpeedArray = cacheOverrideSpeed.let { v ->
                 if (v.isEmpty()) floatArrayOf()
                 else v.split(' ').map { it.toFloat() }.toFloatArray()
@@ -69,7 +70,7 @@ object PlaybackSpeedPatch {
     fun defaultSpeed(player: IMediaPlayer?, speed: Float): Float {
         // only apply to video, not apply to podcast
         if (player != null && player.videoSarNum <= 0) return speed
-        val customSpeed = Settings.DEFAULT_PLAYBACK_SPEED.float
+        val customSpeed = Settings.DefaultPlaybackSpeed()
         return if (customSpeed != 0f) customSpeed else speed
     }
 
@@ -81,7 +82,7 @@ object PlaybackSpeedPatch {
     @JvmStatic
     fun longPressSpeed(speed: Float): Float {
         if (speed == 2.0f || speed == 3.0f) {
-            val customSpeed = Settings.LONG_PRESS_PLAYBACK_SPEED.float
+            val customSpeed = Settings.LongPressPlaybackSpeed()
             if (customSpeed != 0f) return customSpeed
         }
         return speed

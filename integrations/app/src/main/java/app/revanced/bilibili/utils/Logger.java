@@ -25,7 +25,7 @@ public class Logger {
     public static final String LOG_TAG = "BiliRoamingX";
 
     public static void debug(boolean trace, @NonNull LogMessage message) {
-        if (Settings.DEBUG.getBoolean()) {
+        if (Settings.Debug.get()) {
             var logMessage = message.build();
             if (trace) {
                 var builder = new StringBuilder(logMessage);

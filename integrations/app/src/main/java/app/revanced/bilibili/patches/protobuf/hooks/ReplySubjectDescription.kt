@@ -17,7 +17,7 @@ object ReplySubjectDescription : MossHook<SubjectDescriptionReq, SubjectDescript
     }
 
     override fun hookBefore(req: SubjectDescriptionReq): Any? {
-        if (Settings.BLOCK_VIDEO_COMMENT.boolean && req.subjectId.type == 1L)
+        if (Settings.BlockVideoComment() && req.subjectId.type == 1L)
             throw BusinessException(12061, "评论区已由漫游屏蔽")
         return null
     }
@@ -27,7 +27,7 @@ object ReplySubjectDescription : MossHook<SubjectDescriptionReq, SubjectDescript
         reply: SubjectDescriptionReply?,
         error: MossException?
     ): SubjectDescriptionReply? {
-        if (Settings.BLOCK_COMMENT_GUIDE.boolean && reply != null) {
+        if (Settings.BlockCommentGuide() && reply != null) {
             val emptyPage = reply.emptyPage
             emptyPage.clearLeftButton()
             emptyPage.clearRightButton()

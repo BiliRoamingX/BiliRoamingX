@@ -142,7 +142,7 @@ class SpeedTestDialog(context: Context, onDismiss: (Boolean) -> Unit) :
         view.setOnItemClickListener { _, _, pos, _ ->
             val (name, value, _) = adapter.getItem(pos - 1/*headerView*/)
                 ?: return@setOnItemClickListener
-            Settings.UPOS_HOST.saveValue(value)
+            Settings.UposHost.save(value)
             for (i in 0 until adapter.count) {
                 val item = adapter.getItem(i) ?: continue
                 item.selected = item.value == value
@@ -161,7 +161,7 @@ class SpeedTestDialog(context: Context, onDismiss: (Boolean) -> Unit) :
         val results = Utils.getStringArray("biliroaming_upos_entries")
             .zip(Utils.getStringArray("biliroaming_upos_values"))
             .map { (name, value) ->
-                SpeedTestResult(name, value, "...", value == Settings.UPOS_HOST.string)
+                SpeedTestResult(name, value, "...", value == Settings.UposHost())
             }.also { adapter.addAll(it) }
         speedTestExecutor.execute {
             val url = getTestUrl() ?: run {

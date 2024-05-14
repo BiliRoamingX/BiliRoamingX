@@ -21,7 +21,7 @@ public class BLRoutePatch {
     private static final Pattern playerPreloadRegex = Pattern.compile("&player_preload=[^&]*");
 
     private static boolean needRemovePayload() {
-        return VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.getMatchedFullScreenQuality() != 0 || Settings.DEFAULT_PLAYBACK_SPEED.getFloat() != 0f;
+        return VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.getMatchedFullScreenQuality() != 0 || Settings.DefaultPlaybackSpeed.get() != 0f;
     }
 
     @Keep
@@ -35,11 +35,11 @@ public class BLRoutePatch {
             String authority = uri.getEncodedAuthority();
             if ("story".equals(authority) || "video".equals(authority)) {
                 Uri.Builder newUri = uri.buildUpon();
-                if ("story".equals(authority) && Settings.REPLACE_STORY_VIDEO.getBoolean())
+                if ("story".equals(authority) && Settings.ReplaceStoryVideo.get())
                     newUri.authority("video");
                 String newQuery = uri.getEncodedQuery();
                 if (!TextUtils.isEmpty(newQuery)) {
-                    if (Settings.REPLACE_STORY_VIDEO.getBoolean())
+                    if (Settings.ReplaceStoryVideo.get())
                         newQuery = newQuery.replace(STORY_ROUTER_QUERY, "").replace(STORY_TYPE_QUERY, "");
                     if (needRemovePayload)
                         newQuery = playerPreloadRegex.matcher(newQuery).replaceAll("");
@@ -54,13 +54,13 @@ public class BLRoutePatch {
                     String newQuery = playerPreloadRegex.matcher(uri.getEncodedQuery()).replaceAll("");
                     newUri.encodedQuery(newQuery);
                 }
-                if ("1".equals(Settings.PLAYER_VERSION.getString())) {
+                if ("1".equals(Settings.PlayerVersion.get())) {
                     newUri.appendQueryParameter("force_old_playlist", "1");
                     if ("10".equals(pageType) && !TextUtils.isEmpty(aid))
                         newUri.encodedAuthority("video").encodedPath(aid);
                 }
                 return newUri.build();
-            } else if (Settings.ADD_CHANNEL.getBoolean() && url.startsWith("bilibili://pegasus/channel/v2")) {
+            } else if (Settings.AddChannel.get() && url.startsWith("bilibili://pegasus/channel/v2")) {
                 // for hd, consistent with the default behavior of selecting "select" tab before deleting the "topic" tab
                 if (TextUtils.isEmpty(uri.getQueryParameter("tab")))
                     return uri.buildUpon().appendQueryParameter("tab", "select").build();
@@ -69,9 +69,9 @@ public class BLRoutePatch {
             if (url.startsWith("https://www.bilibili.com/bangumi/play")) {
                 if (needRemovePayload())
                     return Uri.parse(playerPreloadRegex.matcher(url).replaceAll(""));
-            } else if (Settings.REPLACE_STORY_VIDEO.getBoolean() && url.startsWith("https://www.bilibili.com/video")) {
+            } else if (Settings.ReplaceStoryVideo.get() && url.startsWith("https://www.bilibili.com/video")) {
                 return Uri.parse(url.replace(STORY_ROUTER_QUERY, "").replace(STORY_TYPE_QUERY, ""));
-            } else if (Settings.DEFAULT_MAX_QN.getBoolean() && url.startsWith("https://live.bilibili.com")) {
+            } else if (Settings.DefaultMaxQn.get() && url.startsWith("https://live.bilibili.com")) {
                 List<String> pathSegments = uri.getPathSegments();
                 if (pathSegments.size() == 1 && TextUtils.isDigitsOnly(pathSegments.get(0))) {
                     Uri.Builder builder = uri.buildUpon().clearQuery();

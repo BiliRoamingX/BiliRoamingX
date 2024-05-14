@@ -19,7 +19,7 @@ object DistributionUserPreference : MossHook<UserPreferenceReq, UserPreferenceRe
         reply: UserPreferenceReply?,
         error: MossException?
     ): UserPreferenceReply? {
-        if (reply != null && Settings.DISABLE_MAIN_PAGE_STORY.boolean) {
+        if (reply != null && Settings.DisableHomeStory()) {
             val typeUrl =
                 "type.googleapis.com/bilibili.app.distribution.experimental.v1.MultipleTusConfig"
             val (index, config) = reply.preferenceList.withIndex().find { (_, config) ->

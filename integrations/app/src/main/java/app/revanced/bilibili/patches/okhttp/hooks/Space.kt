@@ -14,16 +14,16 @@ import org.json.JSONObject
 
 object Space : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
-        return (Settings.FIX_SPACE.boolean
-                || Settings.SKIN.boolean
-                || Settings.IGNORE_BLACKLIST.boolean)
+        return (Settings.FixSpace()
+                || Settings.Skin()
+                || Settings.IgnoreBlacklist())
                 && url.contains("/x/v2/space?") && code.isOk
     }
 
     override fun hook(url: String, code: Int, request: String, response: String): String {
         val respOk = response.contains("\"code\":0")
-        if (respOk && Settings.SKIN.boolean && url.contains("vmid=${Accounts.mid}")) {
-            val skinJson = Settings.SKIN_JSON.string.runCatchingOrNull {
+        if (respOk && Settings.Skin() && url.contains("vmid=${Accounts.mid}")) {
+            val skinJson = Settings.SkinJson().runCatchingOrNull {
                 toJSONObject()
             } ?: return response
             val spaceBg = skinJson.optJSONObject("space_bg")
@@ -33,12 +33,12 @@ object Space : ApiHook() {
                 ?: return response
             data.writeSpaceImages(skinJson, spaceBg)
             return respJson.toString()
-        } else if (respOk && Settings.IGNORE_BLACKLIST.boolean) {
+        } else if (respOk && Settings.IgnoreBlacklist()) {
             return response.toJSONObject().apply {
                 optJSONObject("data")?.remove("hidden_attribute")
             }.toString()
         }
-        if (!respOk && Settings.FIX_SPACE.boolean) {
+        if (!respOk && Settings.FixSpace()) {
             val vmid = Uri.parse(url).getQueryParameter("vmid")
             if (vmid.isNullOrEmpty()) return response
             val mid = vmid.toLong()

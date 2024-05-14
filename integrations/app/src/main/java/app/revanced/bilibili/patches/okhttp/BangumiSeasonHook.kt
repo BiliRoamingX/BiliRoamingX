@@ -12,6 +12,7 @@ import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.api.BiliRoamingApi.getAreaSearchBangumi
 import app.revanced.bilibili.api.BiliRoamingApi.getSeason
 import app.revanced.bilibili.patches.main.VideoInfoHolder
+import app.revanced.bilibili.settings.Setting
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import com.bapis.bilibili.pagination.PaginationReply
@@ -64,10 +65,10 @@ object BangumiSeasonHook {
     )
 
     init {
-        Settings.registerPreferenceChangeListener { _, key ->
-            if (key == Settings.SEARCH_BANGUMI.key || key == Settings.SEARCH_MOVIE.key
-                || key == Settings.CN_SERVER.key || key == Settings.HK_SERVER.key
-                || key == Settings.TW_SERVER.key || key == Settings.TH_SERVER.key
+        Setting.registerPreferenceChangeListener { _, key ->
+            if (key == Settings.SearchBangumi.key || key == Settings.SearchMovie.key
+                || key == Settings.ChinaServer.key || key == Settings.HongKongServer.key
+                || key == Settings.TaiWanServer.key || key == Settings.ThailandServer.key
             ) {
                 injectExtraSearchTypes()
                 injectExtraSearchTypesV2()
@@ -80,17 +81,17 @@ object BangumiSeasonHook {
         val jo = response.toJSONObject()
         val code = jo.optInt("code")
         val data = jo.optJSONObject("data")
-        if (Settings.UNLOCK_AREA_LIMIT.boolean && (code == FAIL_CODE || data == null)) {
+        if (Settings.UnlockAreaLimit() && (code == FAIL_CODE || data == null)) {
             return unlockThaiBangumi(url, response)
         } else if (data == null || code != 0) {
             return response
         }
-        if (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean)
+        if (Settings.BlockBangumiPageAds())
             data.put("activity_entrance", JSONArray())
-        if (Settings.BLOCK_ACTIVITY_TAB.boolean)
+        if (Settings.BlockActivityTab())
             data.remove("activity_tab")
-        if (Settings.SKIN.boolean && data.optJSONObject("player_icon") == null) {
-            val playIcon = Settings.SKIN_JSON.string.runCatchingOrNull {
+        if (Settings.Skin() && data.optJSONObject("player_icon") == null) {
+            val playIcon = Settings.SkinJson().runCatchingOrNull {
                 toJSONObject()
             }?.optJSONObject("play_icon")
             if (playIcon != null) {
@@ -101,11 +102,11 @@ object BangumiSeasonHook {
                 })
             }
         }
-        if (!Settings.UNLOCK_AREA_LIMIT.boolean)
+        if (!Settings.UnlockAreaLimit())
             return jo.toString()
         data.optJSONObject("rights")?.run {
             put("area_limit", 0)
-            if (Settings.ALLOW_DOWNLOAD.boolean) {
+            if (Settings.AllowDownload()) {
                 put("allow_download", 1)
                 put("only_vip_download", 0)
             }
@@ -130,7 +131,7 @@ object BangumiSeasonHook {
         episode.optJSONObject("rights")?.run {
             put("area_limit", 0)
             put("allow_dm", 1)
-            if (Settings.ALLOW_DOWNLOAD.boolean)
+            if (Settings.AllowDownload())
                 put("allow_download", 1)
         }
     }
@@ -159,7 +160,7 @@ object BangumiSeasonHook {
                 it.optJSONObject("data")?.optJSONArray("episodes").orEmpty()
                     .asSequence<JSONObject>()
             }.forEach { onEachThaiEpisode(it, sid) }
-            if (Settings.ALLOW_DOWNLOAD.boolean) {
+            if (Settings.AllowDownload()) {
                 newResult.optJSONObject("rights")?.run {
                     put("allow_download", 1)
                     put("only_vip_download", 0)
@@ -183,7 +184,7 @@ object BangumiSeasonHook {
     }
 
     private fun onEachThaiEpisode(episode: JSONObject, seasonId: Long) {
-        if (Settings.ALLOW_DOWNLOAD.boolean)
+        if (Settings.AllowDownload())
             episode.optJSONObject("rights")
                 ?.put("allow_download", 1)
         if (episode.has("ep_id")) {
@@ -210,7 +211,7 @@ object BangumiSeasonHook {
     @JvmStatic
     fun injectExtraSearchTypes() {
         if (Versions.ge7_64_0()) return
-        if (!Settings.SEARCH_BANGUMI.boolean && !Settings.SEARCH_MOVIE.boolean) {
+        if (!Settings.SearchBangumi() && !Settings.SearchMovie()) {
             PageTypes.`$VALUES` = originalPageTypes
             return
         }
@@ -233,7 +234,7 @@ object BangumiSeasonHook {
     @JvmStatic
     fun injectExtraSearchTypesV2() {
         if (!Versions.ge7_39_0()) return
-        if (!Settings.SEARCH_BANGUMI.boolean && !Settings.SEARCH_MOVIE.boolean) {
+        if (!Settings.SearchBangumi() && !Settings.SearchMovie()) {
             BiliMainSearchResultPage.PageTypes.`$VALUES` = originalPageTypesV2
             return
         }
@@ -510,7 +511,7 @@ object BangumiSeasonHook {
     }
 
     private fun addAreaTags(reply: SearchAllResponse) {
-        if (!Settings.SEARCH_BANGUMI.boolean && !Settings.SEARCH_MOVIE.boolean) return
+        if (!Settings.SearchBangumi() && !Settings.SearchMovie()) return
         val currentArea = area
         for (searchType in searchTypes) {
             val area = searchType.value.area
@@ -530,7 +531,7 @@ object BangumiSeasonHook {
     }
 
     private fun addAreaTagsForHd(reply: JSONObject) {
-        if (!Settings.SEARCH_BANGUMI.boolean && !Settings.SEARCH_MOVIE.boolean) return
+        if (!Settings.SearchBangumi() && !Settings.SearchMovie()) return
         val currentArea = area
         val navList = reply.optJSONArray("nav") ?: return
         val newNavList = JSONArray()
@@ -557,7 +558,7 @@ object BangumiSeasonHook {
     }
 
     private fun filterSearchResult(reply: SearchAllResponse) {
-        val set = Settings.FILTER_SEARCH_TYPE.stringSet
+        val set = Settings.FilterSearchType()
             .takeUnless { it.isEmpty() } ?: return
         val filterTypes = set.toMutableList()
         if (filterTypes.contains("bangumi")) {

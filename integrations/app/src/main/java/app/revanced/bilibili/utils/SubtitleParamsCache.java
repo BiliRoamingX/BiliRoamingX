@@ -25,14 +25,14 @@ public class SubtitleParamsCache {
     }
 
     public static void update() {
-        styleSwitch = Settings.SUBTITLE_STYLE_SWITCH.getBoolean();
-        removeBg = Settings.SUBTITLE_REMOVE_BG.getBoolean();
-        strokeWidth = Settings.SUBTITLE_STROKE_WIDTH.getFloat();
-        boldText = Settings.SUBTITLE_BOLD_TEXT.getBoolean();
-        fontSizePortrait = KtUtils.sp2px(Settings.SUBTITLE_FONT_SIZE_PORTRAIT.getInt());
-        fontSizeLandscape = KtUtils.sp2px(Settings.SUBTITLE_FONT_SIZE_LANDSCAPE.getInt());
-        fillColor = KtUtils.toIntColor(Settings.SUBTITLE_FILL_COLOR.getString(), Color.WHITE);
-        strokeColor = KtUtils.toIntColor(Settings.SUBTITLE_STROKE_COLOR.getString(), Color.BLACK);
+        styleSwitch = Settings.EnableCustomSubtitleStyle.get();
+        removeBg = Settings.RemoveSubtitleBg.get();
+        strokeWidth = Settings.SubtitleStrokeWidth.get();
+        boldText = Settings.BoldSubtitleText.get();
+        fontSizePortrait = KtUtils.sp2px(Settings.SubtitleFontSizePortrait.get());
+        fontSizeLandscape = KtUtils.sp2px(Settings.SubtitleFontSizeLandscape.get());
+        fillColor = KtUtils.toIntColor(Settings.SubtitleFillColor.get(), Color.WHITE);
+        strokeColor = KtUtils.toIntColor(Settings.SubtitleStrokeColor.get(), Color.BLACK);
     }
 
     public static void updateFont() {

@@ -7,6 +7,6 @@ import app.revanced.bilibili.settings.Settings;
 public class UpRcmdAdsPatch {
     @Keep
     public static boolean blockUpRcmdAds() {
-        return Settings.BLOCK_UP_RCMD_ADS.getBoolean();
+        return Settings.BlockUpRcmdAds.get();
     }
 }

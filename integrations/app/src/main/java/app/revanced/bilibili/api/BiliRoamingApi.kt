@@ -54,10 +54,10 @@ object BiliRoamingApi {
         seasonId: Long = 0L,
         seasonTitle: String = "",
     ): String? {
-        val twUrl = Settings.TW_SERVER.string
-        val hkUrl = Settings.HK_SERVER.string
-        val cnUrl = Settings.CN_SERVER.string
-        val thUrl = Settings.TH_SERVER.string
+        val twUrl = Settings.TaiWanServer()
+        val hkUrl = Settings.HongKongServer()
+        val cnUrl = Settings.ChinaServer()
+        val thUrl = Settings.ThailandServer()
 
         val hostList = LinkedHashMap<Area, String>(4, 1f, true)
 
@@ -154,7 +154,7 @@ object BiliRoamingApi {
 
     @JvmStatic
     fun getThailandSearchBangumi(query: Map<String, String>, type: String): String? {
-        val thUrl = Settings.TH_SERVER.string.ifEmpty { return null }
+        val thUrl = Settings.ThailandServer().ifEmpty { return null }
         val uri = Uri.Builder()
             .scheme("https")
             .encodedAuthority(thUrl + THAILAND_PATH_SEARCH)
@@ -182,7 +182,7 @@ object BiliRoamingApi {
 
     @JvmStatic
     fun getSeason(seasonId: Long = 0L, epId: Long = 0L): String? {
-        val thUrl = Settings.TH_SERVER.string
+        val thUrl = Settings.ThailandServer()
         if (thUrl.isEmpty()) {
             Toasts.showShortWithId("biliroaming_pls_configure_th_server")
             return null
@@ -444,7 +444,7 @@ object BiliRoamingApi {
     fun getThailandSubtitles(epId: Long): String? {
         Logger.debug { "Getting subtitle $epId form thailand" }
         epId.takeIf { it != 0L } ?: return null
-        val thUrl = Settings.TH_SERVER.string.ifEmpty { return null }
+        val thUrl = Settings.ThailandServer().ifEmpty { return null }
         val uri = Uri.Builder()
             .scheme("https")
             .encodedAuthority(thUrl + THAILAND_PATH_SUBTITLES)

@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.settings.Setting
 
 /**
  * update module settings from vice processes
@@ -21,7 +21,7 @@ class PreferenceUpdater : BroadcastReceiver() {
         }
 
         @JvmStatic
-        fun update(vararg prefs: Pair<String, Any?>) {
+        fun update(vararg prefs: Pair<String, Any>) {
             val context = Utils.getContext()
             context.sendBroadcast(Intent(ACTION).apply {
                 `package` = context.packageName
@@ -31,10 +31,10 @@ class PreferenceUpdater : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        val prefs = intent.serializableExtra<ArrayList<Pair<String, Any?>>>(EXTRA_PREFS)
+        val prefs = intent.serializableExtra<ArrayList<Pair<String, Any>>>(EXTRA_PREFS)
         Logger.debug { "PreferenceUpdater, received update preferences request, prefs: $prefs" }
         prefs?.forEach { (k, v) ->
-            Settings.entries.find { it.key == k }?.saveValue(v)
+            Setting.all.find { it.key == k }?.save(v)
         }
     }
 }

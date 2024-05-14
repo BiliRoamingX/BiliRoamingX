@@ -13,10 +13,10 @@ object UnlockEpisodesForPlay : BaseFakeClientRestHook() {
     )
 
     override val fakeToClient: Client
-        get() = Client.PINK
+        get() = Client.Pink
 
     override fun shouldHookBefore(url: String, headers: Array<String>): Boolean {
-        return Settings.UNLOCK_AREA_LIMIT.boolean && Utils.isPlay()
+        return Settings.UnlockAreaLimit() && Utils.isPlay()
                 && apis.any { url.contains(it) }
     }
 }

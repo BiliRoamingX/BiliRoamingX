@@ -545,10 +545,10 @@ val isChinaEnv: Boolean
 
 fun getServerByArea(area: Area): String {
     return when (area) {
-        Area.China -> Settings.CN_SERVER.string
-        Area.HongKong -> Settings.HK_SERVER.string
-        Area.TaiWan -> Settings.TW_SERVER.string
-        Area.Thailand -> Settings.TH_SERVER.string
+        Area.China -> Settings.ChinaServer()
+        Area.HongKong -> Settings.HongKongServer()
+        Area.TaiWan -> Settings.TaiWanServer()
+        Area.Thailand -> Settings.ThailandServer()
         else -> ""
     }
 }
@@ -557,9 +557,9 @@ fun getExtraSearchByType(type: String): Boolean {
     if (type.isEmpty())
         return false
     if ("bangumi" == type)
-        return Settings.SEARCH_BANGUMI.boolean
+        return Settings.SearchBangumi()
     if ("movie" == type)
-        return Settings.SEARCH_MOVIE.boolean
+        return Settings.SearchMovie()
     return false
 }
 

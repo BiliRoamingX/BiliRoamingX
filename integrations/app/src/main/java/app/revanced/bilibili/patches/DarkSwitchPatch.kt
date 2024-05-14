@@ -12,7 +12,7 @@ object DarkSwitchPatch {
     @Keep
     @JvmStatic
     fun switchDarkMode(listener: OnSwitchDarkModeOriginListener, report: Boolean) {
-        if (!Settings.SWITCH_DARK_DIALOG.boolean) {
+        if (!Settings.SwitchDarkTipsDialog()) {
             listener.switchDarkMode_Origin(report)
             return
         }

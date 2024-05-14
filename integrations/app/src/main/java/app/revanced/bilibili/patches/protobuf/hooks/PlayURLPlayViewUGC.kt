@@ -38,14 +38,14 @@ object PlayURLPlayViewUGC : MossHook<PlayViewReq, PlayViewReply>() {
                     videoInfo?.apply { cid = req.cid } ?: VideoInfo(req.cid, null)
                 }
             }
-            if (Settings.REMEMBER_LOSSLESS_SETTING.boolean)
+            if (Settings.RememberLosslessSetting())
                 reply.playConf.takeIf(PlayAbilityConf::hasLossLessConf)?.run {
-                    lossLessConf.confValue.switchVal = Settings.LOSSLESS_ENABLED.boolean
+                    lossLessConf.confValue.switchVal = Settings.LosslessEnabled()
                 }
-            if (Settings.UNLOCK_PLAY_LIMIT.boolean) {
+            if (Settings.UnlockPlayLimit()) {
                 if (reply.playArc.backgroundPlayConf.disabled) {
                     reply.playConf.takeIf(PlayAbilityConf::hasBackgroundPlayConf)?.run {
-                        backgroundPlayConf.confValue.switchVal = Settings.BG_PLAYING_ENABLED.boolean
+                        backgroundPlayConf.confValue.switchVal = Settings.BgPlayingEnabled()
                     }
                 }
                 reply.playArc.run {
@@ -56,9 +56,9 @@ object PlayURLPlayViewUGC : MossHook<PlayViewReq, PlayViewReply>() {
                 }
             }
             if (req.download < 1 && !Accounts.isEffectiveVip
-                && Settings.TRIAL_VIP_QUALITY.boolean
+                && Settings.TrialVipQuality()
             ) TrialQualityPatch.makeVipFree(reply)
-            if (Utils.isHd() && Settings.NOT_LOCK_ORIENTATION.boolean) {
+            if (Utils.isHd() && Settings.NotLockOrientation()) {
                 val stream = reply.videoInfo.streamListList.firstOrNull()
                 if (stream != null && stream.hasDashVideo()) {
                     val dashVideo = stream.dashVideo

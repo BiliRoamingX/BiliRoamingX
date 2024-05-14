@@ -16,7 +16,7 @@ object ListenPlaylist : ListenPlaylistBase<PlaylistReq, PlaylistResp>() {
         reply: PlaylistResp?,
         error: MossException?
     ): PlaylistResp? {
-        if (Settings.UNLOCK_PLAY_LIMIT.boolean && reply != null)
+        if (Settings.UnlockPlayLimit() && reply != null)
             reconstruct(reply.listList)
         return super.hookAfter(req, reply, error)
     }

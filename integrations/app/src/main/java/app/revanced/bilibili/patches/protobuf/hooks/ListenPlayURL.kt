@@ -22,7 +22,7 @@ object ListenPlayURL : MossHook<PlayURLReq, PlayURLResp>() {
         reply: PlayURLResp?,
         error: MossException?
     ): PlayURLResp? {
-        if (Settings.UNLOCK_PLAY_LIMIT.boolean && reply != null)
+        if (Settings.UnlockPlayLimit() && reply != null)
             return reconstruct(req, reply)
         return super.hookAfter(req, reply, error)
     }

@@ -18,7 +18,7 @@ object ListFavoriteTab : MossHook<FavoriteTabReq, FavoriteTabReply>() {
         reply: FavoriteTabReply?,
         error: MossException?
     ): FavoriteTabReply? {
-        if (reply != null && Settings.ADD_CHANNEL.boolean) {
+        if (reply != null && Settings.AddChannel()) {
             val channelUrl = "bilibili://main/favorite/channel"
             if (reply.itemsList.none { it.uri == channelUrl }) {
                 reply.addItems(FavoriteTabItem().apply {

@@ -7,7 +7,7 @@ import app.revanced.bilibili.settings.Settings;
 public class FavFolderDialogPatch {
     @Keep
     public static boolean shouldChecked(boolean original) {
-        if (Settings.DISABLE_AUTO_SUBSCRIBE.getBoolean())
+        if (Settings.DisableAutoSubscribe.get())
             return false;
         return original;
     }

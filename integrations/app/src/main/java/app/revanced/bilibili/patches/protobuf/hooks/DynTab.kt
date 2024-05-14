@@ -22,7 +22,7 @@ object DynTab : MossHook<DynTabReq, DynTabReply>() {
     }
 
     private fun modifyTabs(reply: DynTabReply) {
-        if (Settings.DYNAMIC_FORCE_OLD_TAB.boolean
+        if (Settings.DynForceOldTabStyle()
             && reply.dynTabList.none { it.anchor == "video" }
             && reply.screenTabList.map { it.name }.containsAll(listOf("all", "video"))
         ) {
@@ -33,16 +33,16 @@ object DynTab : MossHook<DynTabReq, DynTabReply>() {
                 uri = "bilibili://following/index/8"
             })
         }
-        if (Settings.DYNAMIC_PURIFY_CITY.boolean || Settings.DYNAMIC_PURIFY_CAMPUS.boolean) {
+        if (Settings.DynPurifyCity() || Settings.DynPurifyCampus()) {
             val idxList = mutableListOf<Int>()
             reply.dynTabList.withIndex().forEach { (index, tab) ->
-                if (Settings.DYNAMIC_PURIFY_CITY.boolean && tab.cityId != 0L
-                    || Settings.DYNAMIC_PURIFY_CAMPUS.boolean && tab.anchor == "campus"
+                if (Settings.DynPurifyCity() && tab.cityId != 0L
+                    || Settings.DynPurifyCampus() && tab.anchor == "campus"
                 ) idxList.add(index)
             }
             idxList.asReversed().forEach { reply.removeDynTab(it) }
         }
-        if (Settings.DYNAMIC_PREFER_VIDEO_TAB.boolean) {
+        if (Settings.DynPreferVideoTab()) {
             val screenTabList = reply.screenTabList
             if (screenTabList.any { it.name == "video" })
                 screenTabList.forEach { it.defaultTab = it.name == "video" }

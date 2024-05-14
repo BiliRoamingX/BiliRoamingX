@@ -8,7 +8,7 @@ import app.revanced.bilibili.utils.*
 
 object GarbSuitDetail : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
-        return Settings.SKIN.boolean && url.contains("/x/garb/v2/mall/suit/detail") && code.isOk
+        return Settings.Skin() && url.contains("/x/garb/v2/mall/suit/detail") && code.isOk
     }
 
     override fun hook(url: String, code: Int, request: String, response: String): String {
@@ -46,7 +46,7 @@ object GarbSuitDetail : ApiHook() {
                                 Logger.error(it) { "theme apply failed" }
                                 Toasts.showShortWithId("biliroaming_theme_apply_failed")
                             }.onSuccess {
-                                Settings.SKIN_JSON.saveValue(it.toString())
+                                Settings.SkinJson.save(it.toString())
                             }
                         }
                     }.create().constraintSize().show()

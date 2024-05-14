@@ -17,8 +17,8 @@ object PlayURLPlayConf : MossHook<PlayConfReq, PlayConfReply>() {
         reply: PlayConfReply?,
         error: MossException?
     ): PlayConfReply? {
-        if (Settings.REMEMBER_LOSSLESS_SETTING.boolean && reply != null)
-            reply.playConf.lossLessConf.confValue.switchVal = Settings.LOSSLESS_ENABLED.boolean
+        if (Settings.RememberLosslessSetting() && reply != null)
+            reply.playConf.lossLessConf.confValue.switchVal = Settings.LosslessEnabled()
         return super.hookAfter(req, reply, error)
     }
 }

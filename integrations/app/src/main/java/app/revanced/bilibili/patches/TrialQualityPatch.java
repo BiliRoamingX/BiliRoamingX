@@ -45,7 +45,7 @@ public class TrialQualityPatch {
 
     @Keep
     public static void onBindOnline(boolean selected, TextView strokeBadge, TextView solidBadge) {
-        if (Settings.TRIAL_VIP_QUALITY.getBoolean() && !Accounts.isEffectiveVip()
+        if (Settings.TrialVipQuality.get() && !Accounts.isEffectiveVip()
                 && Utils.getString("try_listening_tips") // 限免中
                 .equals(solidBadge.getText().toString())) {
             solidBadge.setVisibility(View.GONE);

@@ -16,9 +16,9 @@ object DynAll : DynListBase<DynAllReq, DynAllReply>() {
         reply: DynAllReply?,
         error: MossException?
     ): DynAllReply? {
-        if (Settings.DYNAMIC_RM_TOPIC_OF_ALL.boolean)
+        if (Settings.DynRmTopicOfAll())
             reply?.clearTopicList()
-        if (Settings.DYNAMIC_RM_UP_OF_ALL.boolean)
+        if (Settings.DynRmUpOfAll())
             reply?.clearUpList()
         reply?.dynamicList?.run {
             listList.getToRemoveIdxList().asReversed().forEach { removeList(it) }

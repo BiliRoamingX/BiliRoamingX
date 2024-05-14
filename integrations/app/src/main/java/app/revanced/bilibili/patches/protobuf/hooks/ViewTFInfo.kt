@@ -14,7 +14,7 @@ object ViewTFInfo : MossHook<TFInfoReq, TFInfoReply>() {
     }
 
     override fun hookBefore(req: TFInfoReq): Any? {
-        if (Settings.REMOVE_CMD_DMS.boolean)
+        if (Settings.RemoveCmdDms())
             return HookFlags.STOP_EXECUTION
         return null
     }

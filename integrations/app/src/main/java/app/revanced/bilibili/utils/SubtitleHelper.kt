@@ -263,7 +263,7 @@ object SubtitleHelper {
         var subBody = subJson.optJSONArray("body") ?: return json
         val texts = subBody.asSequence<JSONObject>()
             .map { it.optString("content").format() }.toList()
-        val server = Settings.SUBTITLE_TRANSLATE_SERVER.string
+        val server = Settings.SubtitleTranslateServer()
         val translator = if (server == "microsoft") MicrosoftTranslator else GoogleTranslator
         val trans = translator.translate(texts).ifEmpty {
             return errorResponse("字幕翻译失败，请检查网络是否可以访问翻译服务提供商")

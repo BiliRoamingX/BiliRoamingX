@@ -27,22 +27,22 @@ object View : MossHook<ViewReq, ViewReply>() {
                 videoInfo?.apply { view = reply } ?: VideoInfo(0, reply)
             }
             AutoLikePatch.detail = Pair.create(reply.arc.aid, reply.reqUser.like)
-            if (Settings.REMOVE_ELEC_BUTTON.boolean)
+            if (Settings.RemoveChargeButton())
                 reply.reqUser.clearElecPlusBtn()
-            if (Settings.UNLOCK_PLAY_LIMIT.boolean)
+            if (Settings.UnlockPlayLimit())
                 reply.config.showListenButton = true
-            if (Settings.BLOCK_LIVE_ORDER.boolean)
+            if (Settings.BlockLiveOrder())
                 reply.clearLiveOrderInfo()
-            if (Settings.BLOCK_COMMENT_GUIDE.boolean) {
+            if (Settings.BlockCommentGuide()) {
                 reply.likeCustom.clearLikeComment()
                 reply.replyPreface.clearBadgeType()
             }
-            if (Settings.BLOCK_VIDEO_COMMENT.boolean)
+            if (Settings.BlockVideoComment())
                 reply.arc.stat.reply = 0
-            if (Settings.DISABLE_STORY_FULL.boolean)
+            if (Settings.DisableStoryFull())
                 reply.config.arcLandscapeStory = false
-            if (reply.playerIcon == PlayerIcon.getDefaultInstance() && Settings.SKIN.boolean) {
-                val playIcon = Settings.SKIN_JSON.string.runCatchingOrNull {
+            if (reply.playerIcon == PlayerIcon.getDefaultInstance() && Settings.Skin()) {
+                val playIcon = Settings.SkinJson().runCatchingOrNull {
                     toJSONObject()
                 }?.optJSONObject("play_icon")
                 if (playIcon != null) {

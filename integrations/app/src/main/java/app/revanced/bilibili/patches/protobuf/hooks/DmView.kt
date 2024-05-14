@@ -25,7 +25,7 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
         reply: DmViewReply?,
         error: MossException?
     ): DmViewReply? {
-        if (Settings.REMOVE_CMD_DMS.boolean && reply != null) {
+        if (Settings.RemoveCmdDms() && reply != null) {
             reply.clearActivityMeta()
             runCatchingOrNull {
                 reply.clearCommand()
@@ -41,7 +41,7 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
     private fun addSubtitles(dmViewReq: DmViewReq, dmViewReply: DmViewReply?): DmViewReply {
         val result = dmViewReply ?: DmViewReply()
         val extraSubtitles = ArrayList<SubtitleItem>()
-        if (Settings.UNLOCK_AREA_LIMIT.boolean && Settings.TH_SERVER.string.isNotEmpty()) {
+        if (Settings.UnlockAreaLimit() && Settings.ThailandServer().isNotEmpty()) {
             // when thailand, epId equals oid(cid), seasonId equals pid(aid)
             val epId = dmViewReq.oid
             val seasonId = dmViewReq.pid
@@ -66,7 +66,7 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
                 result.inputPlaceholder = "泰区禁止弹幕"
             }
         }
-        if (Settings.SUBTITLE_AUTO_GENERATE.boolean) {
+        if (Settings.AutoGenerateSubtitle()) {
             val subtitles = result.subtitle.subtitlesList + extraSubtitles
             if (subtitles.map { it.lan }.let { "zh-Hant" in it && "zh-CN" !in it }) {
                 val hantSub = subtitles.first { it.lan == "zh-Hant" }
@@ -87,7 +87,7 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
                 }
             }
         }
-        if (Settings.SUBTITLE_AUTO_GENERATE.boolean) {
+        if (Settings.AutoGenerateSubtitle()) {
             val subtitles = result.subtitle.subtitlesList + extraSubtitles
             if (subtitles.map { it.lan }.let {
                     "zh-Hans" !in it && "zh-CN" !in it && "ai-zh" !in it && "en" in it

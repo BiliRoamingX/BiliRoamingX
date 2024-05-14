@@ -18,7 +18,7 @@ public class CommentImagePatch {
 
     @Keep
     public static void bindClickListener(ImageFragment fragment) {
-        if (!Settings.SAVE_COMMENT_IMAGE.getBoolean()) return;
+        if (!Settings.SaveCommentImage.get()) return;
         var arguments = fragment.getArguments();
         if (arguments == null || arguments.isEmpty()) return;
         var imageItem = arguments.getParcelable("image_item");

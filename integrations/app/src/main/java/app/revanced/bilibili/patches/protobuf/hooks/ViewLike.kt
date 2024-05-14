@@ -13,7 +13,7 @@ object ViewLike : MossHook<LikeReq, LikeReply>() {
     }
 
     override fun hookAfter(req: LikeReq, reply: LikeReply?, error: MossException?): LikeReply? {
-        if (Settings.AUTO_LIKE.boolean)
+        if (Settings.AutoLike())
             reply?.clearToast()
         return super.hookAfter(req, reply, error)
     }

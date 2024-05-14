@@ -186,7 +186,7 @@ public class ApplicationDelegate {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     static void startLog() {
-        if (!Settings.DEBUG.getBoolean())
+        if (!Settings.Debug.get())
             return;
         try {
             File logFile = KtUtils.getLogFile();
@@ -327,7 +327,7 @@ public class ApplicationDelegate {
         }
 
         static void printLifecycle(Activity activity, String name, boolean printIntent) {
-            if (!Settings.DEBUG.getBoolean()) return;
+            if (!Settings.Debug.get()) return;
             Logger.debug(() -> name + ", activity: " + activity.getClass().getName());
             if (!printIntent) return;
             var extras = activity.getIntent().getExtras();

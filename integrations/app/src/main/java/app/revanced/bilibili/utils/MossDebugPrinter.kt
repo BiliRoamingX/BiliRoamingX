@@ -24,7 +24,7 @@ object MossDebugPrinter {
         reply: GeneratedMessageLite<*, *>?,
         error: MossException?
     ) {
-        if (!Settings.DEBUG.boolean) return
+        if (!Settings.Debug()) return
         var mossMethod = ""
         val stackTrace = Thread.currentThread().stackTrace
         stackTrace.forEachIndexed { index, element ->
@@ -48,7 +48,7 @@ object MossDebugPrinter {
         req: GeneratedMessageLite<*, *>,
         handler: MossResponseHandler<V>
     ): MossResponseHandler<V> {
-        if (!Settings.DEBUG.boolean) return handler
+        if (!Settings.Debug()) return handler
         var mossMethod = ""
         val stackTrace = Thread.currentThread().stackTrace
         stackTrace.forEachIndexed { index, element ->

@@ -41,19 +41,19 @@ object MainActivityDelegate {
     }
 
     private fun showHintIfNeeded(context: Context) {
-        if (Settings.SHOW_HINT.boolean || Utils.isHd()) return
+        if (Settings.ShowHint() || Utils.isHd()) return
         AlertDialog.Builder(context)
             .setTitle(Utils.getString("biliroaming_usage_hint_title"))
             .setMessage(Utils.getString("biliroaming_usage_hint_message"))
             .setPositiveButton(Utils.getString("biliroaming_jump_settings")) { _, _ ->
-                Settings.SHOW_HINT.saveValue(true)
+                Settings.ShowHint.save(true)
                 val intent = Intent(context, BiliPreferencesActivity::class.java)
                 intent.putExtra("extra:key:fragment", BiliRoamingSettingsFragment::class.java.name)
                 intent.putExtra("extra:key:title", Utils.getString("biliroaming_settings_title"))
                 context.startActivity(intent)
             }
             .setNegativeButton(Utils.getString("biliroaming_get_it")) { _, _ ->
-                Settings.SHOW_HINT.saveValue(true)
+                Settings.ShowHint.save(true)
             }.create().constraintSize().show()
     }
 }

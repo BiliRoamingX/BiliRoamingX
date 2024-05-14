@@ -10,13 +10,13 @@ import app.revanced.bilibili.utils.toJson
 object HwCodecPatch {
     @JvmStatic
     fun printOptionBundle(bundle: Bundle) {
-        if (!Settings.DEBUG.boolean) return
+        if (!Settings.Debug()) return
         Logger.debug { "Player options, ${bundle.toJson()}" }
     }
 
     @JvmStatic
     fun enableHwCodec(origin: Boolean): Boolean {
         Logger.debug { "Forcing enable hw codec: $origin" }
-        return if (Settings.FORCE_HW_CODEC.boolean) true else origin
+        return if (Settings.ForceHwCodec()) true else origin
     }
 }

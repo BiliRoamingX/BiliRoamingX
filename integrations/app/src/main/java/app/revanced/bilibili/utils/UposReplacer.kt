@@ -19,7 +19,7 @@ object UposReplacer {
     private val isLocatedInCn by lazy { area.let { it == null || it == Area.China } }
 
     val uposBase: String
-        get() = Settings.UPOS_HOST.string.ifEmpty {
+        get() = Settings.UposHost().ifEmpty {
             if (isLocatedInCn) hwHost else aliovHost
         }
 

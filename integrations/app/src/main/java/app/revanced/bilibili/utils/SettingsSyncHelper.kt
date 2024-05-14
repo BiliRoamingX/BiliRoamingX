@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.settings.Setting
 
 /**
  * sync module settings to vice processes
@@ -20,7 +20,7 @@ class SettingsSyncHelper : BroadcastReceiver() {
         }
 
         @JvmStatic
-        fun sync(vararg prefs: Pair<String, Any?>) {
+        fun sync(vararg prefs: Pair<String, Any>) {
             val context = Utils.getContext()
             context.sendBroadcast(Intent(ACTION).apply {
                 `package` = context.packageName
@@ -30,10 +30,10 @@ class SettingsSyncHelper : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        val settings = intent.serializableExtra<ArrayList<Pair<String, Any?>>>(EXTRA_SETTINGS)
+        val settings = intent.serializableExtra<ArrayList<Pair<String, Any>>>(EXTRA_SETTINGS)
         Logger.debug { "SettingsSyncHelper, received sync settings request, pname: ${Utils.currentProcessName()}, settings: $settings" }
         settings?.forEach { (k, v) ->
-            Settings.notifySettingsChangedForViceProcess(k, v)
+            Setting.notifySettingsChangedForViceProcess(k, v)
         }
     }
 }

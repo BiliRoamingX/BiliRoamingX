@@ -14,17 +14,17 @@ import com.bapis.bilibili.metadata.network.NetworkType
 
 object GrpcPlayViewUnite : BaseFakeClientGrpcHook() {
     override val fakeToClient: Client
-        get() = Client.PINK
+        get() = Client.Pink
 
     override fun shouldHookBefore(url: String, headers: Array<String>): Boolean {
         return url.endsWith(MossPatch.PLAY_VIEW_UNITE_API)
     }
 
     override fun hookBefore(url: String, headers: Array<String>): Pair<String, Array<String>> {
-        val newHeaders = if (Settings.UNLOCK_AREA_LIMIT.boolean && Utils.isPlay()) {
+        val newHeaders = if (Settings.UnlockPlayLimit() && Utils.isPlay()) {
             super.hookBefore(url, headers).second
         } else headers
-        if ((Utils.isPink() || Utils.isPlay()) && Settings.TRIAL_VIP_QUALITY.boolean && !Accounts.isEffectiveVip) {
+        if ((Utils.isPink() || Utils.isPlay()) && Settings.TrialVipQuality() && !Accounts.isEffectiveVip) {
             val keyIndex = newHeaders.indexOfFirst { it == "x-bili-network-bin" }
             if (keyIndex == -1)
                 return Pair.create(url, newHeaders)

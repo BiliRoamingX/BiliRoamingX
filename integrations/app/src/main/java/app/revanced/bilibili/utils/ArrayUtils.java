@@ -8,7 +8,7 @@ public class ArrayUtils {
         return false;
     }
 
-    public static long[] toLongArray(Collection<String> collection) {
+    public static long[] toLongArray(Collection<? extends String> collection) {
         var result = new long[collection.size()];
         var i = 0;
         for (String s : collection)

@@ -34,31 +34,31 @@ class MiscFragment : BiliRoamingBaseSettingFragment() {
             onSkinClick()
             true
         }
-        findPreference<Preference>(Settings.CUSTOM_SPLASH.key)?.onChange { _, newValue ->
+        findPreference<Preference>(Settings.CustomSplash.key)?.onChange { _, newValue ->
             if (newValue == true) selectImage(SELECTION_SPLASH)
             true
         }
-        findPreference<Preference>(Settings.CUSTOM_SPLASH_LOGO.key)?.onChange { _, newValue ->
+        findPreference<Preference>(Settings.CustomSplashLogo.key)?.onChange { _, newValue ->
             if (newValue == true) selectImage(SELECTION_LOGO)
             true
         }
         findPreference<Preference>("route")?.onClick { route();true }
         disablePreference(
-            key = Settings.CUSTOM_UPDATE.key,
+            key = Settings.CustomUpdate.key,
             { Utils.getString("biliroaming_custom_update_only_64") } to { Build.SUPPORTED_64_BIT_ABIS.isEmpty() },
             { Utils.getString("biliroaming_custom_update_invalid_sig") } to { sigMd5() != Constants.PRE_BUILD_SIG_MD5 }
         )
-        disablePreference(Settings.SKIN.key, PrefsDisableReason.APP_VERSION) {
+        disablePreference(Settings.Skin.key, PrefsDisableReason.AppVersion) {
             Utils.isHd()
         }
     }
 
     override fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
         super.onPreferenceChanged(sharedPreferences, key)
-        if (resumed && key == Settings.SKIN.key) {
-            changeThemeState(Settings.SKIN.boolean)
+        if (resumed && key == Settings.Skin.key) {
+            changeThemeState(Settings.Skin())
         }
-        if (resumed && key == Settings.ENABLE_DOC_PROVIDER.key && Settings.ENABLE_DOC_PROVIDER.boolean) {
+        if (resumed && key == Settings.EnableDocProvider.key && Settings.EnableDocProvider()) {
             showRebootDialog()
         }
     }
@@ -124,7 +124,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment() {
         val wrapper = ScrollView(context)
         wrapper.addView(view, layoutParams)
         skinInput = view
-        view.setText(Settings.SKIN_JSON.string)
+        view.setText(Settings.SkinJson())
         AlertDialog.Builder(context)
             .setView(wrapper)
             .setTitle(Utils.getString("biliroaming_skin_json_pref_title"))
@@ -138,7 +138,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment() {
                         Toasts.showShortWithId("biliroaming_skin_invalid")
                         return@onClick
                     }
-                    Settings.SKIN_JSON.saveValue(text)
+                    Settings.SkinJson.save(text)
                     changeThemeState(true)
                     dismiss()
                 }

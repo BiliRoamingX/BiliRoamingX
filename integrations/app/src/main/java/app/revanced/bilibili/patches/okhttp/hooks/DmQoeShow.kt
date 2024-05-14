@@ -5,7 +5,7 @@ import app.revanced.bilibili.settings.Settings
 
 object DmQoeShow : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
-        return Settings.BLOCK_DM_FEEDBACK.boolean
+        return Settings.BlockDmFeedback()
                 && url.contains("/x/v2/dm/qoe/show")
                 && code.isOk
     }

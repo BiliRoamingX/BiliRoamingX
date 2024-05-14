@@ -10,13 +10,13 @@ import app.revanced.bilibili.utils.Utils
 
 @SettingFragment("biliroaming_setting_customize_drawer")
 class CustomizeDrawerFragment : BaseDynamicItemsFragment(
-    Settings.SHOWING_DRAWER_ITEMS,
+    Settings.ShowingDrawerItems,
     JSONPatch.drawerItems
 ) {
     override fun onPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
         super.onPreferenceChanged(sharedPreferences, key)
-        if (resumed && !Utils.isHd() && key == Settings.SHOWING_DRAWER_ITEMS.key
-            && Settings.SHOWING_DRAWER_ITEMS.stringSet.let {
+        if (resumed && !Utils.isHd() && key == Settings.ShowingDrawerItems.key
+            && Settings.ShowingDrawerItems().let {
                 !it.contains(Constants.ALL_VALUE) && !it.contains("更多服务")
             }
         ) Toasts.showLongWithId("biliroaming_hide_more_category_warning")

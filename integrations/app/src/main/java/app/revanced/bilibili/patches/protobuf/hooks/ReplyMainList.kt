@@ -14,7 +14,7 @@ object ReplyMainList : ReplyListBase<MainListReq, MainListReply>() {
     }
 
     override fun hookBefore(req: MainListReq): Any? {
-        if (Settings.BLOCK_VIDEO_COMMENT.boolean && req.type == 1L)
+        if (Settings.BlockVideoComment() && req.type == 1L)
             throw BusinessException(12061, "评论区已由漫游屏蔽")
         return null
     }
@@ -24,7 +24,7 @@ object ReplyMainList : ReplyListBase<MainListReq, MainListReply>() {
         reply: MainListReply?,
         error: MossException?
     ): MainListReply? {
-        if (Settings.BLOCK_COMMENT_GUIDE.boolean && reply != null) {
+        if (Settings.BlockCommentGuide() && reply != null) {
             val subjectControl = reply.subjectControl
             subjectControl.clearEmptyBackgroundTextPlain()
             subjectControl.clearEmptyBackgroundTextHighlight()
@@ -46,7 +46,7 @@ object ReplyMainList : ReplyListBase<MainListReq, MainListReply>() {
                 emptyPage.addTexts(text)
             }
         }
-        if (Settings.BLOCK_COMMENT_FEEDBACK.boolean && reply != null && reply.qoe.type == 3)
+        if (Settings.BlockCommentFeedback() && reply != null && reply.qoe.type == 3)
             reply.clearQoe()
         if (reply != null)
             filterReplies(reply)
@@ -54,16 +54,16 @@ object ReplyMainList : ReplyListBase<MainListReq, MainListReply>() {
     }
 
     private fun filterReplies(reply: MainListReply) {
-        val onlyAt = Settings.BLOCK_ONLY_AT_COMMENT.boolean
-        val goods = Settings.BLOCK_COMMENT_GOODS.boolean
-        val upLevel = Settings.BLOCK_COMMENT_UP_LEVEL.int
-        val uidSet = Settings.BLOCK_COMMENT_UID.stringSet
+        val onlyAt = Settings.BlockOnlyAtComment()
+        val goods = Settings.BlockCommentGoods()
+        val upLevel = Settings.BlockCommentUpLevel()
+        val uidSet = Settings.BlockCommentUid()
         val uids = ArrayUtils.toLongArray(uidSet)
-        val upRegexMode = Settings.BLOCK_COMMENT_UP_REGEX_MODE.boolean
-        val ups = Settings.BLOCK_COMMENT_UP.stringSet
+        val upRegexMode = Settings.BlockCommentUpRegexMode()
+        val ups = Settings.BlockCommentUp()
         val upRegexes = upRegexes()
-        val contentRegexMode = Settings.BLOCK_COMMENT_CONTENT_REGEX_MODE.boolean
-        val contents = Settings.BLOCK_COMMENT_CONTENT.stringSet
+        val contentRegexMode = Settings.BlockCommentContentRegexMode()
+        val contents = Settings.BlockCommentContent()
         val contentRegexes = contentRegexes()
 
         if (!onlyAt && !goods && upLevel == 0 && uids.isEmpty() && ups.isEmpty() && contents.isEmpty())

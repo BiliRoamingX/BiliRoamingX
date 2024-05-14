@@ -7,6 +7,6 @@ import app.revanced.bilibili.settings.Settings;
 public class TeenagerModePatch {
     @Keep
     public static boolean shouldDisable() {
-        return Settings.TEENAGER_MODE_DIALOG.getBoolean();
+        return Settings.DisableTeenagerDialog.get();
     }
 }

@@ -17,8 +17,8 @@ abstract class ReplyListBase<out Req : GeneratedMessageLite<*, *>, out Resp : Ge
     }
 
     protected fun upRegexes(): List<Regex> {
-        val upRegexMode = Settings.BLOCK_COMMENT_UP_REGEX_MODE.boolean
-        val ups = Settings.BLOCK_COMMENT_UP.stringSet
+        val upRegexMode = Settings.BlockCommentUpRegexMode()
+        val ups = Settings.BlockCommentUp()
         return if (upRegexMode && cachedUpSet == ups) {
             cachedUpRegexes
         } else if (upRegexMode) {
@@ -28,8 +28,8 @@ abstract class ReplyListBase<out Req : GeneratedMessageLite<*, *>, out Resp : Ge
     }
 
     protected fun contentRegexes(): List<Regex> {
-        val contentRegexMode = Settings.BLOCK_COMMENT_CONTENT_REGEX_MODE.boolean
-        val contents = Settings.BLOCK_COMMENT_CONTENT.stringSet
+        val contentRegexMode = Settings.BlockCommentContentRegexMode()
+        val contents = Settings.BlockCommentContent()
         return if (contentRegexMode && cachedContentSet == contents) {
             cachedContentRegexes
         } else if (contentRegexMode) {

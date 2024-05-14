@@ -9,7 +9,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.preference.Preference
-import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.settings.Setting
 import app.revanced.bilibili.settings.search.annotation.SettingFragment
 import app.revanced.bilibili.utils.*
 import org.lsposed.hiddenapibypass.HiddenApiBypass
@@ -97,10 +97,10 @@ class BackupFragment : BiliRoamingBaseSettingFragment() {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                         HiddenApiBypass.addHiddenApiExemptions("Landroid/content/Context;")
                     Utils.getContext().callMethod("reloadSharedPreferences")
-                    Settings.reload()
+                    Setting.reload()
                     restoring = false
                 }.onSuccess {
-                    Settings.entries.forEach { it.executeOnChangeAction(false) }
+                    Setting.all.forEach { it.executeOnChangeAction(false) }
                     Utils.runOnMainThread {
                         showNeedRebootDialog()
                     }

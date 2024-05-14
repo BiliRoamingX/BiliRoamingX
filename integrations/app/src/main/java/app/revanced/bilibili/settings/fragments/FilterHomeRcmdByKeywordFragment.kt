@@ -24,15 +24,15 @@ class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
         val (root, content, saveButton) = rootViewTemplate()
         val applyToRelateSwitch = switchPrefsItem(string("biliroaming_apply_to_relate_title"))
             .let { content.addView(it.first); it.second }
-        applyToRelateSwitch.isChecked = Settings.HOME_FILTER_APPLY_TO_VIDEO.boolean
+        applyToRelateSwitch.isChecked = Settings.HomeFilterApplyToVideo()
         val applyToPopularSwitch = switchPrefsItem(string("biliroaming_apply_to_popular_title"))
             .let { content.addView(it.first); it.second }
-        applyToPopularSwitch.isChecked = Settings.HOME_FILTER_APPLY_TO_POPULAR.boolean
+        applyToPopularSwitch.isChecked = Settings.HomeFilterApplyToPopular()
 
         content.addView(textInputTitle(string("biliroaming_low_play_count_summary")))
         val lowPlayCountInput = textInputItem(string("biliroaming_low_play_count_title"))
             .let { content.addView(it.first); it.second }
-        Settings.LOW_PLAY_COUNT_LIMIT.long.takeIf { it > 0 }
+        Settings.LowPlayCountLimit().takeIf { it > 0 }
             ?.let { lowPlayCountInput.setText(it.toString()) }
 
         content.addView(textInputTitle(string("biliroaming_hide_duration_summary")))
@@ -40,20 +40,20 @@ class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
             .let { content.addView(it.first); it.second }
         val longDurationInput = textInputItem(string("biliroaming_long_duration_title"))
             .let { content.addView(it.first); it.second }
-        Settings.SHORT_DURATION_LIMIT.int.takeIf { it > 0 }
+        Settings.ShortDurationLimit().takeIf { it > 0 }
             ?.let { shortDurationInput.setText(it.toString()) }
-        Settings.LONG_DURATION_LIMIT.int.takeIf { it > 0 }
+        Settings.LongDurationLimit().takeIf { it > 0 }
             ?.let { longDurationInput.setText(it.toString()) }
 
         content.addView(textInputTitle(string("biliroaming_keywords_filter_summary")))
         val (titleGroup, titleRegexModeSwitch) = content.addKeywordGroup(
             string("biliroaming_keyword_group_name_title"), showRegex = true
         )
-        titleRegexModeSwitch.isChecked = Settings.HOME_RCMD_FILTER_TITLE_REGEX_MODE.boolean
+        titleRegexModeSwitch.isChecked = Settings.HomeRcmdFilterTitleRegexMode()
         val (reasonGroup, reasonRegexModeSwitch) = content.addKeywordGroup(
             string("biliroaming_keyword_group_name_rcmd_reason"), showRegex = true
         )
-        reasonRegexModeSwitch.isChecked = Settings.HOME_RCMD_FILTER_REASON_REGEX_MODE.boolean
+        reasonRegexModeSwitch.isChecked = Settings.HomeRcmdFilterReasonRegexMode()
         val uidGroup = content.addKeywordGroup(
             string("biliroaming_keyword_group_name_uid"),
             inputType = EditorInfo.TYPE_CLASS_NUMBER
@@ -61,27 +61,27 @@ class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
         val (upGroup, upRegexModeSwitch) = content.addKeywordGroup(
             string("biliroaming_keyword_group_name_up"), showRegex = true
         )
-        upRegexModeSwitch.isChecked = Settings.HOME_RCMD_FILTER_UP_REGEX_MODE.boolean
+        upRegexModeSwitch.isChecked = Settings.HomeRcmdFilterUpRegexMode()
         val categoryGroup =
             content.addKeywordGroup(string("biliroaming_keyword_group_name_category")).first
         val channelGroup =
             content.addKeywordGroup(string("biliroaming_keyword_group_name_channel")).first
-        Settings.HOME_RCMD_FILTER_TITLE.stringSet?.forEach {
+        Settings.HomeRcmdFilterTitle().forEach {
             titleGroup.addView(keywordInputItem(titleGroup, it).first)
         }
-        Settings.HOME_RCMD_FILTER_REASON.stringSet?.forEach {
+        Settings.HomeRcmdFilterReason().forEach {
             reasonGroup.addView(keywordInputItem(reasonGroup, it).first)
         }
-        Settings.HOME_RCMD_FILTER_UID.stringSet?.forEach {
+        Settings.HomeRcmdFilterUid().forEach {
             uidGroup.addView(keywordInputItem(uidGroup, it, EditorInfo.TYPE_CLASS_NUMBER).first)
         }
-        Settings.HOME_RCMD_FILTER_UP.stringSet?.forEach {
+        Settings.HomeRcmdFilterUp().forEach {
             upGroup.addView(keywordInputItem(upGroup, it).first)
         }
-        Settings.HOME_RCMD_FILTER_CATEGORY.stringSet?.forEach {
+        Settings.HomeRcmdFilterCategory().forEach {
             categoryGroup.addView(keywordInputItem(categoryGroup, it).first)
         }
-        Settings.HOME_RCMD_FILTER_CHANNEL.stringSet?.forEach {
+        Settings.HomeRcmdFilterChannel().forEach {
             channelGroup.addView(keywordInputItem(channelGroup, it).first)
         }
 
@@ -109,20 +109,20 @@ class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
                 return@onClick
             }
 
-            Settings.LOW_PLAY_COUNT_LIMIT.saveValue(lowPlayCount)
-            Settings.SHORT_DURATION_LIMIT.saveValue(shortDuration)
-            Settings.LONG_DURATION_LIMIT.saveValue(longDuration)
-            Settings.HOME_RCMD_FILTER_TITLE.saveValue(titles)
-            Settings.HOME_RCMD_FILTER_REASON.saveValue(reasons)
-            Settings.HOME_RCMD_FILTER_UID.saveValue(uidGroup.getKeywords())
-            Settings.HOME_RCMD_FILTER_UP.saveValue(ups)
-            Settings.HOME_RCMD_FILTER_CATEGORY.saveValue(categoryGroup.getKeywords())
-            Settings.HOME_RCMD_FILTER_CHANNEL.saveValue(channelGroup.getKeywords())
-            Settings.HOME_RCMD_FILTER_TITLE_REGEX_MODE.saveValue(titleRegexMode)
-            Settings.HOME_RCMD_FILTER_REASON_REGEX_MODE.saveValue(reasonRegexMode)
-            Settings.HOME_RCMD_FILTER_UP_REGEX_MODE.saveValue(upRegexMode)
-            Settings.HOME_FILTER_APPLY_TO_VIDEO.saveValue(applyToRelateSwitch.isChecked)
-            Settings.HOME_FILTER_APPLY_TO_POPULAR.saveValue(applyToPopularSwitch.isChecked)
+            Settings.LowPlayCountLimit.save(lowPlayCount)
+            Settings.ShortDurationLimit.save(shortDuration)
+            Settings.LongDurationLimit.save(longDuration)
+            Settings.HomeRcmdFilterTitle.save(titles)
+            Settings.HomeRcmdFilterReason.save(reasons)
+            Settings.HomeRcmdFilterUid.save(uidGroup.getKeywords())
+            Settings.HomeRcmdFilterUp.save(ups)
+            Settings.HomeRcmdFilterCategory.save(categoryGroup.getKeywords())
+            Settings.HomeRcmdFilterChannel.save(channelGroup.getKeywords())
+            Settings.HomeRcmdFilterTitleRegexMode.save(titleRegexMode)
+            Settings.HomeRcmdFilterReasonRegexMode.save(reasonRegexMode)
+            Settings.HomeRcmdFilterUpRegexMode.save(upRegexMode)
+            Settings.HomeFilterApplyToVideo.save(applyToRelateSwitch.isChecked)
+            Settings.HomeFilterApplyToPopular.save(applyToPopularSwitch.isChecked)
 
             if (from == "home")
                 Toasts.showShortWithId("biliroaming_save_success_and_refresh_home")

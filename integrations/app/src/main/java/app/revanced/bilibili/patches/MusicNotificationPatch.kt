@@ -87,7 +87,7 @@ object MusicNotificationPatch {
 
     @Keep
     @JvmStatic
-    inline fun enabled() = Settings.MUSIC_NOTIFICATION.boolean
+    inline fun enabled() = Settings.MusicNotification()
 
     @JvmStatic
     inline fun needAdaptForTiramisu(): Boolean {

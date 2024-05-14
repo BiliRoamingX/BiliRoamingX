@@ -15,23 +15,23 @@ abstract class DynListBase<out Req : GeneratedMessageLite<*, *>, out Resp : Gene
     }
 
     protected fun List<DynamicItem>.getToRemoveIdxList(): List<Int> {
-        val contentSet = Settings.DYNAMIC_PURIFY_CONTENT.stringSet
-        val contentRegexMode = Settings.DYNAMIC_PURIFY_CONTENT_REGEX_MODE.boolean
+        val contentSet = Settings.DynPurifyContent()
+        val contentRegexMode = Settings.DynPurifyContentRegexMode()
         val contentRegexes = if (contentRegexMode && cachedContentSet == contentSet) {
             cachedContentRegexes
         } else if (contentRegexMode) {
             cachedContentSet = HashSet(contentSet)
             contentSet.map { it.toRegex() }.also { cachedContentRegexes = it }
         } else listOf()
-        val typeSet = Settings.DYNAMIC_PURIFY_TYPE.stringSet
-        val ups = Settings.DYNAMIC_PURIFY_UP.stringSet
-        val uidSet = Settings.DYNAMIC_PURIFY_UID.stringSet
-        val topics = Settings.DYNAMIC_PURIFY_TOPIC.stringSet
-        val rmBlocked = Settings.DYNAMIC_RM_BLOCKED.boolean
-        val rmAdLink = Settings.DYNAMIC_RM_AD_LINK.boolean
-        val rmUpReservation = Settings.DYNAMIC_RM_UP_RESERVATION.boolean
-        val rmCm = Settings.DYNAMIC_RM_CM.boolean
-        val rmStory = Settings.DYNAMIC_RM_STORY.boolean
+        val typeSet = Settings.DynPurifyType()
+        val ups = Settings.DynPurifyUp()
+        val uidSet = Settings.DynPurifyUid()
+        val topics = Settings.DynPurifyTopic()
+        val rmBlocked = Settings.DynRmBlocked()
+        val rmAdLink = Settings.DynRmAdLink()
+        val rmUpReservation = Settings.DynRmUpReservation()
+        val rmCm = Settings.DynRmCm()
+        val rmStory = Settings.DynRmStory()
         val typeArray = ArrayUtils.toIntArray(typeSet)
         val uidArray = ArrayUtils.toLongArray(uidSet)
         val idxList = mutableListOf<Int>()

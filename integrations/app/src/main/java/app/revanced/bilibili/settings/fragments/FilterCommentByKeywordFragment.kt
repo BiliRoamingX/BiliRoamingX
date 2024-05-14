@@ -18,7 +18,7 @@ class FilterCommentByKeywordFragment : BaseWidgetSettingFragment() {
         savedInstanceState: Bundle?
     ): View {
         val (root, content, saveButton) = rootViewTemplate()
-        val upLevel = Settings.BLOCK_COMMENT_UP_LEVEL.int
+        val upLevel = Settings.BlockCommentUpLevel()
         val upLevelTitle = string("biliroaming_block_comment_up_level_title")
         val upLevelIndicator = string("biliroaming_up_level")
         val upLevelIndicatorZero = string("biliroaming_disabled")
@@ -32,22 +32,22 @@ class FilterCommentByKeywordFragment : BaseWidgetSettingFragment() {
         val (contentGroup, contentRegexSwitch) = content.addKeywordGroup(
             string("biliroaming_keyword_group_name_content"), 40.dp, true
         )
-        contentRegexSwitch.isChecked = Settings.BLOCK_COMMENT_CONTENT_REGEX_MODE.boolean
+        contentRegexSwitch.isChecked = Settings.BlockCommentContentRegexMode()
         val (upNameGroup, upNameRegexSwitch) = content.addKeywordGroup(
             string("biliroaming_keyword_group_name_up"), 40.dp, true
         )
-        upNameRegexSwitch.isChecked = Settings.BLOCK_COMMENT_UP_REGEX_MODE.boolean
+        upNameRegexSwitch.isChecked = Settings.BlockCommentUpRegexMode()
         val uidGroup = content.addKeywordGroup(
             string("biliroaming_keyword_group_name_uid"),
             40.dp, inputType = EditorInfo.TYPE_CLASS_NUMBER
         ).first
-        Settings.BLOCK_COMMENT_CONTENT.stringSet.forEach {
+        Settings.BlockCommentContent().forEach {
             contentGroup.addView(keywordInputItem(contentGroup, it).first)
         }
-        Settings.BLOCK_COMMENT_UP.stringSet.forEach {
+        Settings.BlockCommentUp().forEach {
             upNameGroup.addView(keywordInputItem(upNameGroup, it).first)
         }
-        Settings.BLOCK_COMMENT_UID.stringSet.forEach {
+        Settings.BlockCommentUid().forEach {
             uidGroup.addView(keywordInputItem(uidGroup, it, EditorInfo.TYPE_CLASS_NUMBER).first)
         }
 
@@ -65,12 +65,12 @@ class FilterCommentByKeywordFragment : BaseWidgetSettingFragment() {
                 return@onClick
             }
 
-            Settings.BLOCK_COMMENT_UP_LEVEL.saveValue(upLevelItem.progress)
-            Settings.BLOCK_COMMENT_CONTENT.saveValue(contents)
-            Settings.BLOCK_COMMENT_CONTENT_REGEX_MODE.saveValue(contentRegexMode)
-            Settings.BLOCK_COMMENT_UP.saveValue(upNames)
-            Settings.BLOCK_COMMENT_UP_REGEX_MODE.saveValue(upNameRegexMode)
-            Settings.BLOCK_COMMENT_UID.saveValue(uidGroup.getKeywords())
+            Settings.BlockCommentUpLevel.save(upLevelItem.progress)
+            Settings.BlockCommentContent.save(contents)
+            Settings.BlockCommentContentRegexMode.save(contentRegexMode)
+            Settings.BlockCommentUp.save(upNames)
+            Settings.BlockCommentUpRegexMode.save(upNameRegexMode)
+            Settings.BlockCommentUid.save(uidGroup.getKeywords())
 
             parentFragmentManager.popBackStack()
         }

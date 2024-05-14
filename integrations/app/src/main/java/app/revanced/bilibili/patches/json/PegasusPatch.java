@@ -109,7 +109,7 @@ public class PegasusPatch {
     );
 
     private static List<String> getFilterTypes() {
-        var filterSet = Settings.FILTER_HOME_RECOMMEND.getStringSet();
+        var filterSet = Settings.FilterHomeRecommend.get();
         return filterSet.stream().flatMap(s -> {
             var types = filterTypesMap.get(s);
             return types != null ? types.stream() : Stream.empty();
@@ -224,17 +224,17 @@ public class PegasusPatch {
     private static boolean isContainsBlockKwdVideo(
             BasicIndexItem item,
             boolean titleRegexMode,
-            Set<String> titleSet,
+            Set<? extends String> titleSet,
             List<Pattern> titleRegexes,
             boolean reasonRegexMode,
-            Set<String> reasonSet,
+            Set<? extends String> reasonSet,
             List<Pattern> reasonRegexes,
             boolean upRegexMode,
-            Set<String> upSet,
+            Set<? extends String> upSet,
             List<Pattern> upRegexes,
             long[] uidArray,
-            Set<String> categorySet,
-            Set<String> channelSet
+            Set<? extends String> categorySet,
+            Set<? extends String> channelSet
     ) {
         if (!titleSet.isEmpty()) {
             String title = item.title;
@@ -304,17 +304,17 @@ public class PegasusPatch {
     private static boolean isContainsBlockKwdVideo(
             JSONObject item,
             boolean titleRegexMode,
-            Set<String> titleSet,
+            Set<? extends String> titleSet,
             List<Pattern> titleRegexes,
             boolean reasonRegexMode,
-            Set<String> reasonSet,
+            Set<? extends String> reasonSet,
             List<Pattern> reasonRegexes,
             boolean upRegexMode,
-            Set<String> upSet,
+            Set<? extends String> upSet,
             List<Pattern> upRegexes,
             long[] uidArray,
-            Set<String> categorySet,
-            Set<String> channelSet
+            Set<? extends String> categorySet,
+            Set<? extends String> channelSet
     ) {
         if (!titleSet.isEmpty()) {
             String title = item.optString("title");
@@ -407,13 +407,13 @@ public class PegasusPatch {
     private static boolean isContainsBlockKwdRelate(
             Relate item,
             boolean titleRegexMode,
-            Set<String> titleSet,
+            Set<? extends String> titleSet,
             List<Pattern> titleRegexes,
             boolean reasonRegexMode,
-            Set<String> reasonSet,
+            Set<? extends String> reasonSet,
             List<Pattern> reasonRegexes,
             boolean upRegexMode,
-            Set<String> upSet,
+            Set<? extends String> upSet,
             List<Pattern> upRegexes,
             long[] uidArray
     ) {
@@ -505,13 +505,13 @@ public class PegasusPatch {
     private static boolean isContainsBlockKwdRelateUnite(
             RelateCard item,
             boolean titleRegexMode,
-            Set<String> titleSet,
+            Set<? extends String> titleSet,
             List<Pattern> titleRegexes,
             boolean reasonRegexMode,
-            Set<String> reasonSet,
+            Set<? extends String> reasonSet,
             List<Pattern> reasonRegexes,
             boolean upRegexMode,
-            Set<String> upSet,
+            Set<? extends String> upSet,
             List<Pattern> upRegexes,
             long[] uidArray
     ) {
@@ -741,7 +741,7 @@ public class PegasusPatch {
     }
 
     private static boolean shouldDisableAutoRefresh() {
-        if (Settings.HOME_DISABLE_AUTO_REFRESH.getBoolean())
+        if (Settings.HomeDisableAutoRefresh.get())
             return true;
         if (!Versions.ge7_76_0())
             return false;
@@ -779,11 +779,11 @@ public class PegasusPatch {
         disableAutoRefresh(data.config);
         var items = data.items;
         if (items == null || items.isEmpty()) return;
-        long playCountLimit = Settings.LOW_PLAY_COUNT_LIMIT.getLong();
-        var shortDurationLimit = Settings.SHORT_DURATION_LIMIT.getInt();
-        int longDurationLimit = Settings.LONG_DURATION_LIMIT.getInt();
-        Set<String> titleSet = Settings.HOME_RCMD_FILTER_TITLE.getStringSet();
-        boolean titleRegexMode = Settings.HOME_RCMD_FILTER_TITLE_REGEX_MODE.getBoolean();
+        long playCountLimit = Settings.LowPlayCountLimit.get();
+        var shortDurationLimit = Settings.ShortDurationLimit.get();
+        int longDurationLimit = Settings.LongDurationLimit.get();
+        Set<? extends String> titleSet = Settings.HomeRcmdFilterTitle.get();
+        boolean titleRegexMode = Settings.HomeRcmdFilterTitleRegexMode.get();
         List<Pattern> titleRegexes;
         if (titleRegexMode && cachedTitileSet.equals(titleSet))
             titleRegexes = cachedTitleRegexes;
@@ -794,8 +794,8 @@ public class PegasusPatch {
         } else {
             titleRegexes = Collections.emptyList();
         }
-        Set<String> reasonSet = Settings.HOME_RCMD_FILTER_REASON.getStringSet();
-        boolean reasonRegexMode = Settings.HOME_RCMD_FILTER_REASON_REGEX_MODE.getBoolean();
+        Set<? extends String> reasonSet = Settings.HomeRcmdFilterReason.get();
+        boolean reasonRegexMode = Settings.HomeRcmdFilterReasonRegexMode.get();
         List<Pattern> reasonRegexes;
         if (reasonRegexMode && cachedReasonSet.equals(reasonSet))
             reasonRegexes = cachedReasonRegexes;
@@ -806,8 +806,8 @@ public class PegasusPatch {
         } else {
             reasonRegexes = Collections.emptyList();
         }
-        Set<String> upSet = Settings.HOME_RCMD_FILTER_UP.getStringSet();
-        boolean upRegexMode = Settings.HOME_RCMD_FILTER_UP_REGEX_MODE.getBoolean();
+        Set<? extends String> upSet = Settings.HomeRcmdFilterUp.get();
+        boolean upRegexMode = Settings.HomeRcmdFilterUpRegexMode.get();
         List<Pattern> upRegexes;
         if (upRegexMode && cachedUpSet.equals(upSet))
             upRegexes = cachedUpRegexes;
@@ -818,10 +818,10 @@ public class PegasusPatch {
         } else {
             upRegexes = Collections.emptyList();
         }
-        Set<String> uidSet = Settings.HOME_RCMD_FILTER_UID.getStringSet();
+        Set<? extends String> uidSet = Settings.HomeRcmdFilterUid.get();
         long[] uidArray = ArrayUtils.toLongArray(uidSet);
-        Set<String> categorySet = Settings.HOME_RCMD_FILTER_CATEGORY.getStringSet();
-        Set<String> channelSet = Settings.HOME_RCMD_FILTER_CHANNEL.getStringSet();
+        Set<? extends String> categorySet = Settings.HomeRcmdFilterCategory.get();
+        Set<? extends String> channelSet = Settings.HomeRcmdFilterChannel.get();
         items.removeIf(item -> {
             var cardGoto = item.cardGoto;
             var cardType = item.cardType;
@@ -862,11 +862,11 @@ public class PegasusPatch {
         }
         JSONArray items = data.optJSONArray("items");
         if (items == null || items.length() == 0) return;
-        long playCountLimit = Settings.LOW_PLAY_COUNT_LIMIT.getLong();
-        var shortDurationLimit = Settings.SHORT_DURATION_LIMIT.getInt();
-        int longDurationLimit = Settings.LONG_DURATION_LIMIT.getInt();
-        Set<String> titleSet = Settings.HOME_RCMD_FILTER_TITLE.getStringSet();
-        boolean titleRegexMode = Settings.HOME_RCMD_FILTER_TITLE_REGEX_MODE.getBoolean();
+        long playCountLimit = Settings.LowPlayCountLimit.get();
+        var shortDurationLimit = Settings.ShortDurationLimit.get();
+        int longDurationLimit = Settings.LongDurationLimit.get();
+        Set<? extends String> titleSet = Settings.HomeRcmdFilterTitle.get();
+        boolean titleRegexMode = Settings.HomeRcmdFilterTitleRegexMode.get();
         List<Pattern> titleRegexes;
         if (titleRegexMode && cachedTitileSet.equals(titleSet))
             titleRegexes = cachedTitleRegexes;
@@ -877,8 +877,8 @@ public class PegasusPatch {
         } else {
             titleRegexes = Collections.emptyList();
         }
-        Set<String> reasonSet = Settings.HOME_RCMD_FILTER_REASON.getStringSet();
-        boolean reasonRegexMode = Settings.HOME_RCMD_FILTER_REASON_REGEX_MODE.getBoolean();
+        Set<? extends String> reasonSet = Settings.HomeRcmdFilterReason.get();
+        boolean reasonRegexMode = Settings.HomeRcmdFilterReasonRegexMode.get();
         List<Pattern> reasonRegexes;
         if (reasonRegexMode && cachedReasonSet.equals(reasonSet))
             reasonRegexes = cachedReasonRegexes;
@@ -889,8 +889,8 @@ public class PegasusPatch {
         } else {
             reasonRegexes = Collections.emptyList();
         }
-        Set<String> upSet = Settings.HOME_RCMD_FILTER_UP.getStringSet();
-        boolean upRegexMode = Settings.HOME_RCMD_FILTER_UP_REGEX_MODE.getBoolean();
+        Set<? extends String> upSet = Settings.HomeRcmdFilterUp.get();
+        boolean upRegexMode = Settings.HomeRcmdFilterUpRegexMode.get();
         List<Pattern> upRegexes;
         if (upRegexMode && cachedUpSet.equals(upSet))
             upRegexes = cachedUpRegexes;
@@ -901,10 +901,10 @@ public class PegasusPatch {
         } else {
             upRegexes = Collections.emptyList();
         }
-        Set<String> uidSet = Settings.HOME_RCMD_FILTER_UID.getStringSet();
+        Set<? extends String> uidSet = Settings.HomeRcmdFilterUid.get();
         long[] uidArray = ArrayUtils.toLongArray(uidSet);
-        Set<String> categorySet = Settings.HOME_RCMD_FILTER_CATEGORY.getStringSet();
-        Set<String> channelSet = Settings.HOME_RCMD_FILTER_CHANNEL.getStringSet();
+        Set<? extends String> categorySet = Settings.HomeRcmdFilterCategory.get();
+        Set<? extends String> channelSet = Settings.HomeRcmdFilterChannel.get();
         Jsons.removeIf(items, (item) -> {
             var cardType = item.optString("card_type");
             var cardGoto = item.optString("card_goto");
@@ -938,9 +938,9 @@ public class PegasusPatch {
     }
 
     public static void filterViewRelates(ViewReply viewReply) {
-        if (Settings.REMOVE_RELATE_PROMOTE.getBoolean()
-                && Settings.REMOVE_RELATE_ONLY_AV.getBoolean()
-                && Settings.REMOVE_RELATE_NOTHING.getBoolean()) {
+        if (Settings.RemoveRelatePromote.get()
+                && Settings.RemoveRelateOnlyAv.get()
+                && Settings.RemoveRelateNothing.get()) {
             viewReply.clearRelates();
             viewReply.clearPagination();
             return;
@@ -951,9 +951,9 @@ public class PegasusPatch {
     }
 
     public static void filterViewUniteRelates(Module module, BizType bizType) {
-        if (Settings.REMOVE_RELATE_PROMOTE.getBoolean()
-                && Settings.REMOVE_RELATE_ONLY_AV.getBoolean()
-                && Settings.REMOVE_RELATE_NOTHING.getBoolean()) {
+        if (Settings.RemoveRelatePromote.get()
+                && Settings.RemoveRelateOnlyAv.get()
+                && Settings.RemoveRelateNothing.get()) {
             module.clearRelates();
             return;
         }
@@ -982,14 +982,14 @@ public class PegasusPatch {
     }
 
     public static List<Integer> getToRemoveRelateIndexes(List<Relate> relates) {
-        boolean removeRelatePromote = Settings.REMOVE_RELATE_PROMOTE.getBoolean();
-        boolean removeRelateOnlyAv = Settings.REMOVE_RELATE_ONLY_AV.getBoolean();
-        boolean applyToVideo = Settings.HOME_FILTER_APPLY_TO_VIDEO.getBoolean();
-        long playCountLimit = Settings.LOW_PLAY_COUNT_LIMIT.getLong();
-        var shortDurationLimit = Settings.SHORT_DURATION_LIMIT.getInt();
-        int longDurationLimit = Settings.LONG_DURATION_LIMIT.getInt();
-        Set<String> titleSet = Settings.HOME_RCMD_FILTER_TITLE.getStringSet();
-        boolean titleRegexMode = Settings.HOME_RCMD_FILTER_TITLE_REGEX_MODE.getBoolean();
+        boolean removeRelatePromote = Settings.RemoveRelatePromote.get();
+        boolean removeRelateOnlyAv = Settings.RemoveRelateOnlyAv.get();
+        boolean applyToVideo = Settings.HomeFilterApplyToVideo.get();
+        long playCountLimit = Settings.LowPlayCountLimit.get();
+        int shortDurationLimit = Settings.ShortDurationLimit.get();
+        int longDurationLimit = Settings.LongDurationLimit.get();
+        Set<? extends String> titleSet = Settings.HomeRcmdFilterTitle.get();
+        boolean titleRegexMode = Settings.HomeRcmdFilterTitleRegexMode.get();
         List<Pattern> titleRegexes;
         if (titleRegexMode && cachedTitileSet.equals(titleSet))
             titleRegexes = cachedTitleRegexes;
@@ -1000,8 +1000,8 @@ public class PegasusPatch {
         } else {
             titleRegexes = Collections.emptyList();
         }
-        Set<String> reasonSet = Settings.HOME_RCMD_FILTER_REASON.getStringSet();
-        boolean reasonRegexMode = Settings.HOME_RCMD_FILTER_REASON_REGEX_MODE.getBoolean();
+        Set<? extends String> reasonSet = Settings.HomeRcmdFilterReason.get();
+        boolean reasonRegexMode = Settings.HomeRcmdFilterReasonRegexMode.get();
         List<Pattern> reasonRegexes;
         if (reasonRegexMode && cachedReasonSet.equals(reasonSet))
             reasonRegexes = cachedReasonRegexes;
@@ -1012,8 +1012,8 @@ public class PegasusPatch {
         } else {
             reasonRegexes = Collections.emptyList();
         }
-        Set<String> upSet = Settings.HOME_RCMD_FILTER_UP.getStringSet();
-        boolean upRegexMode = Settings.HOME_RCMD_FILTER_UP_REGEX_MODE.getBoolean();
+        Set<? extends String> upSet = Settings.HomeRcmdFilterUp.get();
+        boolean upRegexMode = Settings.HomeRcmdFilterUpRegexMode.get();
         List<Pattern> upRegexes;
         if (upRegexMode && cachedUpSet.equals(upSet))
             upRegexes = cachedUpRegexes;
@@ -1024,7 +1024,7 @@ public class PegasusPatch {
         } else {
             upRegexes = Collections.emptyList();
         }
-        Set<String> uidSet = Settings.HOME_RCMD_FILTER_UID.getStringSet();
+        Set<? extends String> uidSet = Settings.HomeRcmdFilterUid.get();
         long[] uidArray = ArrayUtils.toLongArray(uidSet);
         List<Integer> idxList = new ArrayList<>();
         for (int i = 0; i < relates.size(); i++) {
@@ -1040,14 +1040,14 @@ public class PegasusPatch {
     }
 
     public static List<Integer> getToRemoveRelateCardIndexes(List<RelateCard> relateCards, BizType bizType) {
-        boolean removeRelatePromote = Settings.REMOVE_RELATE_PROMOTE.getBoolean();
-        boolean removeRelateOnlyAv = Settings.REMOVE_RELATE_ONLY_AV.getBoolean();
-        boolean applyToVideo = Settings.HOME_FILTER_APPLY_TO_VIDEO.getBoolean();
-        long playCountLimit = Settings.LOW_PLAY_COUNT_LIMIT.getLong();
-        var shortDurationLimit = Settings.SHORT_DURATION_LIMIT.getInt();
-        int longDurationLimit = Settings.LONG_DURATION_LIMIT.getInt();
-        Set<String> titleSet = Settings.HOME_RCMD_FILTER_TITLE.getStringSet();
-        boolean titleRegexMode = Settings.HOME_RCMD_FILTER_TITLE_REGEX_MODE.getBoolean();
+        boolean removeRelatePromote = Settings.RemoveRelatePromote.get();
+        boolean removeRelateOnlyAv = Settings.RemoveRelateOnlyAv.get();
+        boolean applyToVideo = Settings.HomeFilterApplyToVideo.get();
+        long playCountLimit = Settings.LowPlayCountLimit.get();
+        int shortDurationLimit = Settings.ShortDurationLimit.get();
+        int longDurationLimit = Settings.LongDurationLimit.get();
+        Set<? extends String> titleSet = Settings.HomeRcmdFilterTitle.get();
+        boolean titleRegexMode = Settings.HomeRcmdFilterTitleRegexMode.get();
         List<Pattern> titleRegexes;
         if (titleRegexMode && cachedTitileSet.equals(titleSet))
             titleRegexes = cachedTitleRegexes;
@@ -1058,8 +1058,8 @@ public class PegasusPatch {
         } else {
             titleRegexes = Collections.emptyList();
         }
-        Set<String> reasonSet = Settings.HOME_RCMD_FILTER_REASON.getStringSet();
-        boolean reasonRegexMode = Settings.HOME_RCMD_FILTER_REASON_REGEX_MODE.getBoolean();
+        Set<? extends String> reasonSet = Settings.HomeRcmdFilterReason.get();
+        boolean reasonRegexMode = Settings.HomeRcmdFilterReasonRegexMode.get();
         List<Pattern> reasonRegexes;
         if (reasonRegexMode && cachedReasonSet.equals(reasonSet))
             reasonRegexes = cachedReasonRegexes;
@@ -1070,8 +1070,8 @@ public class PegasusPatch {
         } else {
             reasonRegexes = Collections.emptyList();
         }
-        Set<String> upSet = Settings.HOME_RCMD_FILTER_UP.getStringSet();
-        boolean upRegexMode = Settings.HOME_RCMD_FILTER_UP_REGEX_MODE.getBoolean();
+        Set<? extends String> upSet = Settings.HomeRcmdFilterUp.get();
+        boolean upRegexMode = Settings.HomeRcmdFilterUpRegexMode.get();
         List<Pattern> upRegexes;
         if (upRegexMode && cachedUpSet.equals(upSet))
             upRegexes = cachedUpRegexes;
@@ -1082,7 +1082,7 @@ public class PegasusPatch {
         } else {
             upRegexes = Collections.emptyList();
         }
-        Set<String> uidSet = Settings.HOME_RCMD_FILTER_UID.getStringSet();
+        Set<? extends String> uidSet = Settings.HomeRcmdFilterUid.get();
         long[] uidArray = ArrayUtils.toLongArray(uidSet);
         List<Integer> idxList = new ArrayList<>();
         for (int i = 0; i < relateCards.size(); i++) {
@@ -1098,16 +1098,16 @@ public class PegasusPatch {
     }
 
     public static List<Integer> getToRemovePopularIndexes(List<Card> cards) {
-        boolean blockTopEntrance = Settings.BLOCK_POPULAR_TOP_ENTRANCE.getBoolean();
-        boolean blockTopicList = Settings.BLOCK_POPULAR_TOPIC_LIST.getBoolean();
-        boolean blockRcmdUp = Settings.BLOCK_POPULAR_RCMD_UP.getBoolean();
-        boolean blockLive = Settings.BLOCK_POPULAR_LIVE.getBoolean();
-        boolean filterApplyToPopular = Settings.HOME_FILTER_APPLY_TO_POPULAR.getBoolean();
-        long playCountLimit = Settings.LOW_PLAY_COUNT_LIMIT.getLong();
-        var shortDurationLimit = Settings.SHORT_DURATION_LIMIT.getInt();
-        int longDurationLimit = Settings.LONG_DURATION_LIMIT.getInt();
-        Set<String> titleSet = Settings.HOME_RCMD_FILTER_TITLE.getStringSet();
-        boolean titleRegexMode = Settings.HOME_RCMD_FILTER_TITLE_REGEX_MODE.getBoolean();
+        boolean blockTopEntrance = Settings.BlockPopularTopEntrance.get();
+        boolean blockTopicList = Settings.BlockPopularTopicList.get();
+        boolean blockRcmdUp = Settings.BlockPopularRcmdUp.get();
+        boolean blockLive = Settings.BlockPopularLive.get();
+        boolean filterApplyToPopular = Settings.HomeFilterApplyToPopular.get();
+        long playCountLimit = Settings.LowPlayCountLimit.get();
+        int shortDurationLimit = Settings.ShortDurationLimit.get();
+        int longDurationLimit = Settings.LongDurationLimit.get();
+        Set<? extends String> titleSet = Settings.HomeRcmdFilterTitle.get();
+        boolean titleRegexMode = Settings.HomeRcmdFilterTitleRegexMode.get();
         List<Pattern> titleRegexes;
         if (titleRegexMode && cachedTitileSet.equals(titleSet))
             titleRegexes = cachedTitleRegexes;
@@ -1118,8 +1118,8 @@ public class PegasusPatch {
         } else {
             titleRegexes = Collections.emptyList();
         }
-        Set<String> reasonSet = Settings.HOME_RCMD_FILTER_REASON.getStringSet();
-        boolean reasonRegexMode = Settings.HOME_RCMD_FILTER_REASON_REGEX_MODE.getBoolean();
+        Set<? extends String> reasonSet = Settings.HomeRcmdFilterReason.get();
+        boolean reasonRegexMode = Settings.HomeRcmdFilterReasonRegexMode.get();
         List<Pattern> reasonRegexes;
         if (reasonRegexMode && cachedReasonSet.equals(reasonSet))
             reasonRegexes = cachedReasonRegexes;
@@ -1130,8 +1130,8 @@ public class PegasusPatch {
         } else {
             reasonRegexes = Collections.emptyList();
         }
-        Set<String> upSet = Settings.HOME_RCMD_FILTER_UP.getStringSet();
-        boolean upRegexMode = Settings.HOME_RCMD_FILTER_UP_REGEX_MODE.getBoolean();
+        Set<? extends String> upSet = Settings.HomeRcmdFilterUp.get();
+        boolean upRegexMode = Settings.HomeRcmdFilterUpRegexMode.get();
         List<Pattern> upRegexes;
         if (upRegexMode && cachedUpSet.equals(upSet))
             upRegexes = cachedUpRegexes;
@@ -1142,7 +1142,7 @@ public class PegasusPatch {
         } else {
             upRegexes = Collections.emptyList();
         }
-        Set<String> uidSet = Settings.HOME_RCMD_FILTER_UID.getStringSet();
+        Set<? extends String> uidSet = Settings.HomeRcmdFilterUid.get();
         long[] uidArray = ArrayUtils.toLongArray(uidSet);
         List<Integer> idxList = new ArrayList<>();
         for (int i = 0; i < cards.size(); i++) {
@@ -1204,13 +1204,13 @@ public class PegasusPatch {
     public static boolean isContainsBlockKwdPopular(
             SmallCoverV5 cover,
             boolean titleRegexMode,
-            Set<String> titleSet,
+            Set<? extends String> titleSet,
             List<Pattern> titleRegexes,
             boolean reasonRegexMode,
-            Set<String> reasonSet,
+            Set<? extends String> reasonSet,
             List<Pattern> reasonRegexes,
             boolean upRegexMode,
-            Set<String> upSet,
+            Set<? extends String> upSet,
             List<Pattern> upRegexes,
             long[] uidArray) {
         if (!titleSet.isEmpty()) {
@@ -1270,23 +1270,23 @@ public class PegasusPatch {
         String value = name.split(":", 2)[1];
         String validValue;
         if (id == REASON_ID_TITLE) {
-            validValue = Settings.HOME_RCMD_FILTER_TITLE_REGEX_MODE.getBoolean()
+            validValue = Settings.HomeRcmdFilterTitleRegexMode.get()
                     ? Pattern.quote(value) : value;
-            Settings.HOME_RCMD_FILTER_TITLE.appendValue(validValue);
+            Settings.HomeRcmdFilterTitle.append(validValue);
         } else if (id == REASON_ID_RCMD_REASON) {
-            validValue = Settings.HOME_RCMD_FILTER_REASON_REGEX_MODE.getBoolean()
+            validValue = Settings.HomeRcmdFilterReasonRegexMode.get()
                     ? Pattern.quote(value) : value;
-            Settings.HOME_RCMD_FILTER_REASON.appendValue(validValue);
+            Settings.HomeRcmdFilterReason.append(validValue);
         } else if (id == REASON_ID_UP_ID) {
-            Settings.HOME_RCMD_FILTER_UID.appendValue(value);
+            Settings.HomeRcmdFilterUid.append(value);
         } else if (id == REASON_ID_UP_NAME) {
-            validValue = Settings.HOME_RCMD_FILTER_UP_REGEX_MODE.getBoolean()
+            validValue = Settings.HomeRcmdFilterUpRegexMode.get()
                     ? Pattern.quote(value) : value;
-            Settings.HOME_RCMD_FILTER_UP.appendValue(validValue);
+            Settings.HomeRcmdFilterUp.append(validValue);
         } else if (id == REASON_ID_CATEGORY_NAME) {
-            Settings.HOME_RCMD_FILTER_CATEGORY.appendValue(value);
+            Settings.HomeRcmdFilterCategory.append(value);
         } else if (id == REASON_ID_CHANNEL_NAME) {
-            Settings.HOME_RCMD_FILTER_CHANNEL.appendValue(value);
+            Settings.HomeRcmdFilterChannel.append(value);
         }
         // 添加成功
         Toasts.showShortWithId("biliroaming_add_success");

@@ -2,7 +2,7 @@ package app.revanced.bilibili.utils
 
 import android.content.Context
 import app.revanced.bilibili.patches.SplashPatch
-import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.settings.Setting
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -65,7 +65,7 @@ object BackupHelper {
             }
         }
 
-        backupPrefsIfExist(Settings.PREFS_NAME, false)
+        backupPrefsIfExist(Setting.PREFS_NAME, false)
         backupPrefsIfExist(Constants.PREFS_VH, false)
         backupFileIfExist(SubtitleParamsCache.FONT_FILE)
         backupFileIfExist(File(Utils.getContext().filesDir, SplashPatch.SPLASH_IMAGE))

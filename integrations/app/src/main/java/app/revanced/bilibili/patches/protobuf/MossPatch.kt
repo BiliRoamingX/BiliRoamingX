@@ -104,7 +104,7 @@ object MossPatch {
         if (handler == null) return null
         val finalHandler = MossDebugPrinter.printAsync(req, handler)
         val hook = hooks.firstOrNull { it.shouldHook(req) }
-            ?: return if (Settings.DEBUG.boolean) finalHandler else null
+            ?: return if (Settings.Debug()) finalHandler else null
         if (hook.async) {
             Utils.async {
                 try {
@@ -149,13 +149,13 @@ object MossPatch {
     @Keep
     @JvmStatic
     fun hookBeforeRequest(url: String, headers: ArrayList<Map.Entry<String, String>>): String {
-        if (Settings.UNLOCK_AREA_LIMIT.boolean && Utils.isPlay()
+        if (Settings.UnlockAreaLimit() && Utils.isPlay()
             && fakeToPinkForUnlockAreaLimitApis.any { url.endsWith(it) }
-        ) fakeClient(Client.PINK, headers)
+        ) fakeClient(Client.Pink, headers)
         else if (url.endsWith(PLAY_VIEW_UNITE_API)) {
-            if (Settings.UNLOCK_PLAY_LIMIT.boolean && Utils.isPlay())
-                fakeClient(Client.PINK, headers)
-            if ((Utils.isPink() || Utils.isPlay()) && Settings.TRIAL_VIP_QUALITY.boolean && !Accounts.isEffectiveVip)
+            if (Settings.UnlockAreaLimit() && Utils.isPlay())
+                fakeClient(Client.Pink, headers)
+            if ((Utils.isPink() || Utils.isPlay()) && Settings.TrialVipQuality() && !Accounts.isEffectiveVip)
                 pinNetworkType(NetworkType.WIFI, headers)
         }
         return url

@@ -16,9 +16,9 @@ object DynVideo : DynListBase<DynVideoReq, DynVideoReply>() {
         reply: DynVideoReply?,
         error: MossException?
     ): DynVideoReply? {
-        if (Settings.DYNAMIC_RM_UP_OF_VIDEO.boolean)
+        if (Settings.DynRmUpOfVideo())
             reply?.clearVideoUpList()
-        if (Settings.DYNAMIC_FILTER_APPLY_TO_VIDEO.boolean)
+        if (Settings.DynFilterApplyTopVideo())
             reply?.dynamicList?.run {
                 listList.getToRemoveIdxList().asReversed().forEach { removeList(it) }
             }

@@ -11,11 +11,11 @@ import app.revanced.bilibili.utils.Reflex;
 @Keep
 public class LiveRoomPatch {
     public static boolean forbidSwitchLiveRoom() {
-        return Settings.FORBID_SWITCH_LIVE_ROOM.getBoolean();
+        return Settings.ForbidSwitchLiveRoom.get();
     }
 
     public static boolean disableLiveRoomDoubleClick() {
-        return Settings.DISABLE_LIVE_ROOM_DOUBLE_CLICK.getBoolean();
+        return Settings.DisableLiveRoomDoubleClick.get();
     }
 
     public static boolean onDoubleTap(LiveRoomPlayerContainerView playerView) {
@@ -35,10 +35,10 @@ public class LiveRoomPatch {
     }
 
     public static boolean disableSlideLeft() {
-        return Settings.DISABLE_SLIDE_LEFT.getBoolean();
+        return Settings.DisableSlideLeft.get();
     }
 
     public static boolean disableAutoFloat() {
-        return Settings.DISABLE_AUTO_FLOAT.getBoolean();
+        return Settings.DisableAutoFloat.get();
     }
 }

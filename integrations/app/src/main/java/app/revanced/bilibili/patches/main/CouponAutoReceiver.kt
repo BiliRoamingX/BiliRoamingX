@@ -15,7 +15,7 @@ import app.revanced.bilibili.utils.signQuery
 object CouponAutoReceiver {
 
     @JvmStatic
-    fun check() = if (Settings.AUTO_RECEIVE_COUPON.boolean) Utils.async {
+    fun check() = if (Settings.AutoReceiveCoupon()) Utils.async {
         val couponInfo = getCouponInfo()
         val couponSuccessCount = couponInfo?.list?.count { item ->
             if (item.type <= 7 && item.state != 1 && item.nextReceiveDays != 0L)

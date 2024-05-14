@@ -5,7 +5,7 @@ import app.revanced.bilibili.settings.Settings
 
 object BangumiMaterial : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
-        return Settings.BLOCK_BANGUMI_PAGE_ADS.boolean
+        return Settings.BlockBangumiPageAds()
                 && (url.contains("/pgc/activity/deliver/material/receive")
                 || url.contains("/pgc/activity/deliver/material/receive-activity"))
                 && code.isOk

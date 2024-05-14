@@ -8,15 +8,15 @@ import org.json.JSONObject
 
 object Skin : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
-        return Settings.SKIN.boolean
-                && Settings.SKIN_JSON.string.isNotEmpty()
+        return Settings.Skin()
+                && Settings.SkinJson().isNotEmpty()
                 && url.contains("/x/resource/show/skin")
                 && code.isOk
     }
 
     override fun hook(url: String, code: Int, request: String, response: String): String {
         val skin = try {
-            JSONObject(Settings.SKIN_JSON.string)
+            JSONObject(Settings.SkinJson())
         } catch (_: JSONException) {
             return response
         }

@@ -8,7 +8,7 @@ import androidx.annotation.Keep
 import androidx.preference.Preference
 import app.revanced.bilibili.integrations.BuildConfig
 import app.revanced.bilibili.patches.okhttp.hooks.Upgrade
-import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.settings.Setting
 import app.revanced.bilibili.settings.search.annotation.SettingFragment
 import app.revanced.bilibili.utils.*
 import java.io.File
@@ -92,7 +92,7 @@ class AboutFragment : BiliRoamingBaseSettingFragment() {
                 "app_arch64" to appArch64,
                 "module_ver_name" to BuildConfig.VERSION_NAME,
                 "module_ver_code" to BuildConfig.VERSION_CODE,
-                "module_settings" to Settings.entries.associate { it.key to it.value }
+                "module_settings" to Setting.all.associate { it.key to it() }
             ).toJSONObject().toString(2).run {
                 zipOutput.putNextEntry(ZipEntry("info.json"))
                 zipOutput.write(toByteArray())

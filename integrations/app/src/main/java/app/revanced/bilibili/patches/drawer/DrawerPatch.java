@@ -22,7 +22,7 @@ public class DrawerPatch {
     private static WeakReference<View> navViewRef = new WeakReference<>(null);
 
     public static void onMainActivityCreate(MainActivityV2 activity) {
-        if (Utils.isHd() || !Settings.DRAWER.getBoolean()) return;
+        if (Utils.isHd() || !Settings.Drawer.get()) return;
         ViewGroup contentView = activity.findViewById(Window.ID_ANDROID_CONTENT);
         View view = contentView.getChildAt(0);
         contentView.removeViewInLayout(view);
@@ -39,7 +39,7 @@ public class DrawerPatch {
     }
 
     public static void onMainActivityStart(MainActivityV2 activity) {
-        if (Utils.isHd() || !Settings.DRAWER.getBoolean()) return;
+        if (Utils.isHd() || !Settings.Drawer.get()) return;
         DrawerLayoutEx drawerLayout = drawerLayoutRef.get();
         if (drawerLayout == null) return;
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
@@ -58,7 +58,7 @@ public class DrawerPatch {
     }
 
     public static boolean onMainActivityBackPressed(MainActivityV2 activity) {
-        if (Utils.isHd() || !Settings.DRAWER.getBoolean()) return false;
+        if (Utils.isHd() || !Settings.Drawer.get()) return false;
         DrawerLayoutEx drawerLayout = drawerLayoutRef.get();
         View navView = navViewRef.get();
         if (drawerLayout == null || navView == null) return false;
@@ -71,7 +71,7 @@ public class DrawerPatch {
 
     @Keep
     public static void onMainFrameFragmentViewCreated(View view) {
-        if (Utils.isHd() || !Settings.DRAWER.getBoolean()) return;
+        if (Utils.isHd() || !Settings.Drawer.get()) return;
         int id = Utils.getResId("avatar_layout", "id");
         View avatarView = view.findViewById(id);
         if (avatarView == null) return;

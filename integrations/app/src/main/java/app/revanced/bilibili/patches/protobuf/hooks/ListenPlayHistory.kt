@@ -16,7 +16,7 @@ object ListenPlayHistory : ListenPlaylistBase<PlayHistoryReq, PlayHistoryResp>()
         reply: PlayHistoryResp?,
         error: MossException?
     ): PlayHistoryResp? {
-        if (Settings.UNLOCK_PLAY_LIMIT.boolean && reply != null)
+        if (Settings.UnlockPlayLimit() && reply != null)
             reconstruct(reply.listList)
         return super.hookAfter(req, reply, error)
     }

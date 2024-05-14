@@ -77,34 +77,34 @@ public class JSONPatch {
     public static Object parseObjectHook(Object obj) {
         Object data = (obj instanceof GeneralResponse<?> resp) ? resp.data : obj;
         if (data instanceof SplashData splashData) {
-            if (Settings.PURIFY_SPLASH.getBoolean()) {
+            if (Settings.PurifySplash.get()) {
                 splashData.splashList.clear();
                 splashData.strategyList.clear();
             }
         } else if (data instanceof SplashShowData showData) {
-            if (Settings.PURIFY_SPLASH.getBoolean())
+            if (Settings.PurifySplash.get())
                 showData.strategyList.clear();
         } else if (data instanceof EventEntranceModel) {
-            if (Settings.PURIFY_GAME.getBoolean()) {
+            if (Settings.PurifyGame.get()) {
                 // no problem, see com.bilibili.okretro.BiliApiDataCallback
                 return null;
             }
         } else if (data instanceof DmAdvert dmAdvert) {
-            if (Settings.BLOCK_UP_RCMD_ADS.getBoolean()) {
+            if (Settings.BlockUpRcmdAds.get()) {
                 List<Dm> ads = dmAdvert.getAds();
                 if (ads != null)
                     ads.clear();
             }
         } else if (data instanceof LiveShoppingInfo info) {
-            if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("shoppingCard")) {
+            if (Settings.PurifyLivePopups.get().contains("shoppingCard")) {
                 info.shoppingCardDetail = null;
                 info.recommendCardDetail = null;
             }
         } else if (data instanceof LiveGoodsCardInfo || data instanceof LiveShoppingRecommendCardGoodsDetail) {
-            if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("shoppingCard"))
+            if (Settings.PurifyLivePopups.get().contains("shoppingCard"))
                 return null;
         } else if (data instanceof BiliLiveRoomInfo roomInfo) {
-            Set<String> keys = Settings.PURIFY_LIVE_POPUPS.getStringSet();
+            Set<? extends String> keys = Settings.PurifyLivePopups.get();
             if (keys.contains("follow")) {
                 BiliLiveRoomInfo.FunctionCard card = roomInfo.functionCard;
                 if (card != null)
@@ -117,18 +117,18 @@ public class JSONPatch {
                 if (pendantInfo != null)
                     pendantInfo.liveGiftStarPendantInfo = null;
             }
-            if (Settings.REMOVE_LIVE_MASK.getBoolean()) try {
+            if (Settings.RemoveLiveMask.get()) try {
                 roomInfo.areaMaskInfo = null;
             } catch (Throwable ignored) {
             }
         } else if (data instanceof LiveRoomRecommendCard) {
-            if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("follow"))
+            if (Settings.PurifyLivePopups.get().contains("follow"))
                 return null;
         } else if (data instanceof LiveRoomReserveInfo info) {
-            if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("reserve"))
+            if (Settings.PurifyLivePopups.get().contains("reserve"))
                 info.showReserveDetail = false;
         } else if (data instanceof BiliLiveRoomUserInfo info) {
-            Set<String> keys = Settings.PURIFY_LIVE_POPUPS.getStringSet();
+            Set<? extends String> keys = Settings.PurifyLivePopups.get();
             if (keys.contains("gift")) {
                 FunctionCard card = info.functionCard;
                 if (card != null)
@@ -144,7 +144,7 @@ public class JSONPatch {
                 }
             }
         } else if (data instanceof LiveShoppingGotoBuyInfo) {
-            if (Settings.PURIFY_LIVE_POPUPS.getStringSet().contains("gotoBuy"))
+            if (Settings.PurifyLivePopups.get().contains("gotoBuy"))
                 return null;
         } else if (data instanceof AccountMine accountMine) {
             customizeMine(accountMine);
@@ -159,26 +159,26 @@ public class JSONPatch {
         } else if (data instanceof StoryFeedResponse feedResponse) {
             filterStory(feedResponse);
         } else if ((!Versions.ge7_64_0() && (data instanceof SearchReferral || data instanceof DefaultKeyword)) || (Versions.ge7_39_0() && data instanceof com.bilibili.search2.api.SearchReferral)) {
-            if (Settings.PURIFY_SEARCH.getBoolean())
+            if (Settings.PurifySplash.get())
                 return null;
         } else if (data instanceof EventSplashDataList splashList) {
-            if (Settings.PURIFY_SPLASH.getBoolean()) {
+            if (Settings.PurifySplash.get()) {
                 List<EventSplashData> eventList = splashList.getEventList();
                 if (eventList != null && !eventList.isEmpty())
                     eventList.removeIf(splash -> !splash.isBirthdayData());
             }
         } else if (data instanceof RecommendModeGuidanceConfig) {
-            if (Settings.BLOCK_RECOMMEND_GUIDANCE.getBoolean())
+            if (Settings.BlockRecommendGuidance.get())
                 return null;
         } else if (data instanceof BrandSplashData brandSplashData) {
-            if (Settings.PURIFY_SPLASH.getBoolean()) {
+            if (Settings.PurifySplash.get()) {
                 brandSplashData.setBrandList(null);
                 brandSplashData.setPreloadList(null);
                 brandSplashData.setQueryList(null);
                 brandSplashData.setShowList(null);
             }
         } else if (data instanceof ChannelV2 channelV2) {
-            if (Settings.ADD_CHANNEL.getBoolean()) {
+            if (Settings.AddChannel.get()) {
                 var tabs = channelV2.tabs;
                 // topic was deprecated by official
                 if (tabs != null) try {
@@ -201,21 +201,21 @@ public class JSONPatch {
     public static void parseArrayHook(Class<?> type, ArrayList<?> list) {
         if ((!Versions.ge7_64_0() && (type == SearchRank.class || type == SearchReferral.Guess.class))
                 || (Versions.ge7_39_0() && (type == com.bilibili.search2.api.SearchRank.class || type == com.bilibili.search2.api.SearchReferral.Guess.class))) {
-            if (Settings.PURIFY_SEARCH.getBoolean())
+            if (Settings.PurifySplash.get())
                 list.clear();
         }
     }
 
-    public static boolean shouldShowing(Set<String> items, String item) {
+    public static boolean shouldShowing(Set<? extends String> items, String item) {
         if (items.contains(item)) return true;
         return items.size() == 1 && items.contains(Constants.ALL_VALUE);
     }
 
     private static void customizeMine(AccountMine mine) {
         drawerItems.clear();
-        Set<String> items = Settings.SHOWING_DRAWER_ITEMS.getStringSet();
-        boolean purifyRedDot = Settings.PURIFY_DRAWER_RED_DOT.getBoolean();
-        int drawerStyle = Integer.parseInt(Settings.DRAWER_STYLE.getString());
+        Set<? extends String> items = Settings.ShowingDrawerItems.get();
+        boolean purifyRedDot = Settings.PurifyDrawerRedDot.get();
+        int drawerStyle = Integer.parseInt(Settings.DrawerStyle.get());
         if (Utils.isHd()) {
             var menuGroups = Arrays.asList(mine.padSectionList, mine.recommendSectionList, mine.moreSectionList);
             for (int i = 0; i < menuGroups.size(); i++) {
@@ -237,7 +237,7 @@ public class JSONPatch {
                     return !"设置".equals(itemTitle) && !showing;
                 });
             }
-            if (Settings.ADD_CHANNEL.getBoolean()) {
+            if (Settings.AddChannel.get()) {
                 var channelItem = new MenuGroup.Item();
                 channelItem.id = 114514;
                 channelItem.title = "频道中心";
@@ -286,7 +286,7 @@ public class JSONPatch {
                 if (drawerStyle != 0)
                     section.style = drawerStyle;
 
-                if (Utils.isPlay() && Settings.ADD_PODCAST.getBoolean() && "更多服务".equals(title)
+                if (Utils.isPlay() && Settings.AddPodcast.get() && "更多服务".equals(title)
                         && itemList.stream().noneMatch(item -> "bilibili://podcast".equals(item.uri))) {
                     var podcastItem = new MenuGroup.Item();
                     podcastItem.id = 811;
@@ -295,7 +295,7 @@ public class JSONPatch {
                     podcastItem.icon = "http://i0.hdslb.com/bfs/feed-admin/97276c5df099e516946682edf4ef10dc6b18c7dc.png";
                     itemList.add(0, podcastItem);
                 }
-                if ("更多服务".equals(title) && Settings.ADD_CHANNEL.getBoolean()) {
+                if ("更多服务".equals(title) && Settings.AddChannel.get()) {
                     var channelItem = new MenuGroup.Item();
                     channelItem.id = 114514;
                     channelItem.title = "频道中心";
@@ -315,7 +315,7 @@ public class JSONPatch {
             }
             sectionListV2.removeIf(section -> !TextUtils.isEmpty(section.title) && !shouldShowing(items, section.title));
         }
-        if (Settings.CUSTOM_THEME.getBoolean()) {
+        if (Settings.CustomTheme.get()) {
             if (Versions.ge7_48_0()) {
                 var garbEntrance = new AccountMine.GarbEntrance();
                 garbEntrance.uri = "activity://navigation/theme/";
@@ -328,7 +328,7 @@ public class JSONPatch {
 
     private static void customizeHomeTab(MainResourceManager.TabData data) {
         bottomItems.clear();
-        Set<String> items = Settings.SHOWING_BOTTOM_ITEMS.getStringSet();
+        Set<? extends String> items = Settings.ShowingBottomItems.get();
         if (!Utils.isHd()) data.bottom.removeIf(tab -> {
             var uri = tab.uri;
             var id = tab.tabId;
@@ -337,21 +337,21 @@ public class JSONPatch {
             return !showing;
         });
 
-        if (!Utils.isHd() && Settings.DRAWER.getBoolean()) {
+        if (!Utils.isHd() && Settings.Drawer.get()) {
             data.bottom.removeIf(tab -> {
                 String uri = tab.uri;
                 return !TextUtils.isEmpty(uri) && uri.startsWith("bilibili://user_center/mine");
             });
         }
 
-        if (Settings.PURIFY_GAME.getBoolean() && data.top != null) {
+        if (Settings.PurifyGame.get() && data.top != null) {
             data.top.removeIf(tab -> {
                 String uri = tab.uri;
                 return !TextUtils.isEmpty(uri) && uri.startsWith("bilibili://game_center/home");
             });
         }
 
-        if (Settings.DISABLE_MAIN_PAGE_STORY.getBoolean()) try {
+        if (Settings.DisableHomeStory.get()) try {
             var topLeftInfo = data.topLeftInfo;
             if (topLeftInfo != null && topLeftInfo.url != null && topLeftInfo.url.startsWith("bilibili://videoshortcut"))
                 data.topLeftInfo = null;
@@ -393,7 +393,7 @@ public class JSONPatch {
                 case "bilibili://following/home_activity_tab/95636" -> hasKoreaTW = true;
             }
         }
-        if (Settings.ADD_BANGUMI.getBoolean()) {
+        if (Settings.AddBangumi.get()) {
             if (!hasBangumiCN) {
                 var name = KtUtils.isChinaEnv() ? "追番" : "追番（大陸）";
                 var tab = newTab("50", name, "bilibili://pgc/home", "bangumi", 50);
@@ -404,7 +404,7 @@ public class JSONPatch {
                 tabs.add(tab);
             }
         }
-        if (Settings.ADD_MOVIE.getBoolean()) {
+        if (Settings.AddMovie.get()) {
             if (!hasMovieCN) {
                 var name = KtUtils.isChinaEnv() ? "影视" : "影視（大陸）";
                 var tab = newTab("70", name, "bilibili://pgc/home?home_flow_type=2", "film", 70);
@@ -415,7 +415,7 @@ public class JSONPatch {
                 tabs.add(tab);
             }
         }
-        if (Settings.ADD_KOREA.getBoolean()) {
+        if (Settings.AddKorea.get()) {
             if (!hasKoreaHK) {
                 var tab = newTab("803", "韩综（港澳）", "bilibili://following/home_activity_tab/163541", "koreavhk", 803);
                 tabs.add(tab);
@@ -425,7 +425,7 @@ public class JSONPatch {
                 tabs.add(tab);
             }
         }
-        Set<String> tabSet = Settings.HIDED_HOME_TAB.getStringSet();
+        Set<? extends String> tabSet = Settings.HidedHomeTab.get();
         if (tabSet.isEmpty()) return;
         tabs.removeIf(tab -> switch (tab.uri) {
             case "bilibili://live/home" -> tabSet.contains("live");
@@ -458,7 +458,7 @@ public class JSONPatch {
     }
 
     private static void customizeSpace(BiliSpace space) {
-        Set<String> values = Settings.CUSTOMIZE_SPACE.getStringSet();
+        Set<? extends String> values = Settings.CustomizeSpace.get();
         if (values.isEmpty()) return;
         if (space.tab != null && !space.tab.isEmpty())
             space.tab.removeIf(tab -> {
@@ -466,7 +466,7 @@ public class JSONPatch {
                 if (TextUtils.isEmpty(param))
                     return false;
                 var subTabs = tab.items;
-                if ("contribute".equals(param) && subTabs != null && !subTabs.isEmpty() && Settings.ADD_ARTICLE_TAB.getBoolean()) {
+                if ("contribute".equals(param) && subTabs != null && !subTabs.isEmpty() && Settings.AddArticleTab.get()) {
                     var hasArticle = false;
                     var opusIndex = -1;
                     for (int i = 0; i < subTabs.size(); i++) {
@@ -517,7 +517,7 @@ public class JSONPatch {
     }
 
     private static void unlockOgvResponse(OgvApiResponse<?> response) {
-        if (!Settings.ALLOW_DOWNLOAD.getBoolean()) return;
+        if (!Settings.AllowDownload.get()) return;
         if (!(response.result instanceof List<?> items)) return;
         for (int i = 0; i < items.size(); i++) {
             Object item = items.get(i);
@@ -527,7 +527,7 @@ public class JSONPatch {
     }
 
     private static void unlockOgvResponseV2(OgvApiResponseV2 response) {
-        if (!Settings.ALLOW_DOWNLOAD.getBoolean()) return;
+        if (!Settings.AllowDownload.get()) return;
         var data = response.getData();
         if (data == null) return;
         var params = data.getEpPlayableParams();
@@ -537,13 +537,13 @@ public class JSONPatch {
     }
 
     private static void filterStory(StoryFeedResponse storyFeedResponse) {
-        Set<String> filters = Settings.FILTER_STORY.getStringSet();
+        Set<? extends String> filters = Settings.FilterStory.get();
         List<StoryDetail> items;
         if (!filters.isEmpty() && (items = storyFeedResponse.getItems()) != null) {
             Iterator<StoryDetail> it = items.iterator();
             while (it.hasNext()) {
                 StoryDetail story = it.next();
-                if (Settings.REMOVE_ELEC_BUTTON.getBoolean()) {
+                if (Settings.RemoveChargeButton.get()) {
                     StoryDetail.Owner owner = story.getOwner();
                     if (owner != null) {
                         StoryDetail.Charge charge = owner.getCharge();

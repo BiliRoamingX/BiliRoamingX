@@ -10,12 +10,17 @@ import com.bilibili.lib.moss.api.BusinessException
 
 object CommentChecker {
 
-    enum class CheckResult { VALID, BLOCKED, DELETED }
+    @Suppress("ConvertObjectToDataObject")
+    sealed class CheckResult {
+        object Valid : CheckResult()
+        object Blocked : CheckResult()
+        object Deleted : CheckResult()
+    }
 
     fun checkComment(oid: Long, id: Long, message: String, hasPicture: Boolean) {
         Utils.runOnMainThread(500) {
             Utils.async {
-                if (checkCommentInternal(oid, id, message, quick = true) == CheckResult.VALID) {
+                if (checkCommentInternal(oid, id, message, quick = true) == CheckResult.Valid) {
                     val delay = if (hasPicture) 15_000L else 8_000L
                     Utils.runOnMainThread(delay) {
                         Utils.async {
@@ -54,8 +59,8 @@ object CommentChecker {
                 if (it is BusinessException)
                     deleted = it.code == 12006
             }
-            if (deleted) CheckResult.DELETED else CheckResult.BLOCKED
-        } else CheckResult.VALID
+            if (deleted) CheckResult.Deleted else CheckResult.Blocked
+        } else CheckResult.Valid
         showCheckResult(message, quick, checkResult)
         return checkResult
     }
@@ -67,15 +72,15 @@ object CommentChecker {
     ) = Utils.runOnMainThread {
         val activity = ApplicationDelegate.getTopActivity()
         val title = Utils.getString("biliroaming_comment_check_result_title")
-        if (result != CheckResult.VALID) {
+        if (result != CheckResult.Valid) {
             val tips = if (quick) {
-                if (result == CheckResult.BLOCKED) {
+                if (result == CheckResult.Blocked) {
                     Utils.getString("biliroaming_comment_invalid_quick_blocked", message)
                 } else {
                     Utils.getString("biliroaming_comment_invalid_quick_deleted", message)
                 }
             } else {
-                if (result == CheckResult.BLOCKED) {
+                if (result == CheckResult.Blocked) {
                     Utils.getString("biliroaming_comment_invalid_normal_blocked", message)
                 } else {
                     Utils.getString("biliroaming_comment_invalid_normal_deleted", message)

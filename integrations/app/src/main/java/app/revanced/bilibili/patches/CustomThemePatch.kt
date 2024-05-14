@@ -7,6 +7,7 @@ import android.util.SparseArray
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.Keep
+import app.revanced.bilibili.settings.Setting
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.settings.dialog.ColorChooseDialog
 import app.revanced.bilibili.utils.Themes
@@ -33,15 +34,15 @@ object CustomThemePatch {
             this[CUSTOM_THEME_ID1] = CUSTOM_THEME_ID1
             this[CUSTOM_THEME_ID2] = CUSTOM_THEME_ID2
         }
-        Settings.registerPreferenceChangeListener { _, key ->
-            if (key == Settings.CUSTOM_THEME.key || key == Settings.CUSTOM_COLOR.key)
+        Setting.registerPreferenceChangeListener { _, key ->
+            if (key == Settings.CustomTheme.key || key == Settings.CustomColor.key)
                 refresh()
         }
     }
 
     private var customColor: Int
-        inline get() = Settings.CUSTOM_COLOR.int
-        inline set(value) = Settings.CUSTOM_COLOR.saveValue(value)
+        inline get() = Settings.CustomColor()
+        inline set(value) = Settings.CustomColor.save(value)
 
     @JvmStatic
     fun refresh() {
@@ -108,7 +109,7 @@ object CustomThemePatch {
     @JvmStatic
     fun onSetSkinList(skinList: BiliSkinList) {
         val biliSkins = skinList.mList
-        if (Settings.CUSTOM_THEME.boolean) {
+        if (Settings.CustomTheme()) {
             val skin = BiliSkin().apply {
                 val currentThemeId = Themes.currentThemeId
                 mId = if (currentThemeId == CUSTOM_THEME_ID2) CUSTOM_THEME_ID2 else CUSTOM_THEME_ID1
@@ -145,8 +146,8 @@ object CustomThemePatch {
 
     @JvmStatic
     private fun closeCustomSkin() {
-        if (Settings.SKIN.boolean) {
-            Settings.SKIN.saveValue(false)
+        if (Settings.Skin()) {
+            Settings.Skin.save(false)
             Themes.unloadLoadEquip()
             Toasts.showShortWithId("biliroaming_theme_closed")
         }

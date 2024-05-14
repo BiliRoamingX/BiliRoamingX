@@ -9,7 +9,7 @@ object SharePatch {
     @Keep
     @JvmStatic
     fun disableAppendTrackingInfo(): Boolean {
-        return Settings.PURIFY_SHARE.boolean
+        return Settings.PurifyShare()
     }
 
     @Keep

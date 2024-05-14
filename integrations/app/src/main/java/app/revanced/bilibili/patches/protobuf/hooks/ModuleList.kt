@@ -17,8 +17,8 @@ object ModuleList : MossHook<ListReq, ListReply>() {
     }
 
     override fun hookAfter(req: ListReq, reply: ListReply?, error: MossException?): ListReply? {
-        if (Settings.BLOCK_MODULES.boolean && reply != null) {
-            if (Settings.BLOCK_MODULES_EXCEPTION.stringSet
+        if (Settings.BlockModules() && reply != null) {
+            if (Settings.BlockModulesException()
                     .flatMap { exceptionsMap[it].orEmpty() }
                     .none { req.moduleName.startsWith(it) }
             ) reply.clearPools()

@@ -8,7 +8,7 @@ import app.revanced.bilibili.utils.toJSONObject
 
 object ReplyAdd : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
-        return Settings.CHECK_COMMENT.boolean && url.contains("/x/v2/reply/add") && code.isOk
+        return Settings.CheckComment() && url.contains("/x/v2/reply/add") && code.isOk
     }
 
     override fun hook(url: String, code: Int, request: String, response: String): String {

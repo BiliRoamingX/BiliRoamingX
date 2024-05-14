@@ -10,16 +10,16 @@ import app.revanced.bilibili.utils.Versions
 class CustomizeVideoDetailFragment : BiliRoamingBaseSettingFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
-        disablePreference(Settings.BLOCK_FAN_GUIDE.key, PrefsDisableReason.NEW_PLAYER) {
+        disablePreference(Settings.BlockFanGuide.key, PrefsDisableReason.NewPlayer) {
             !Utils.newPlayerEnabled()
         }
-        disablePreference(Settings.DISABLE_AUTO_SELECT.key, PrefsDisableReason.APP_VERSION) {
+        disablePreference(Settings.DisableAutoSelect.key, PrefsDisableReason.NewPlayer) {
             Versions.ge7_62_0()
         }
-        disablePreference(Settings.DISABLE_AUTO_SUBSCRIBE.key, PrefsDisableReason.APP_VERSION) {
+        disablePreference(Settings.DisableAutoSubscribe.key, PrefsDisableReason.NewPlayer) {
             Versions.ge7_62_0()
         }
-        disablePreference(Settings.SAVE_COMMENT_IMAGE.key, PrefsDisableReason.OFFICIAL_SUPPORTED) {
+        disablePreference(Settings.SaveCommentImage.key, PrefsDisableReason.OfficialSupported) {
             Versions.ge7_76_0()
         }
     }

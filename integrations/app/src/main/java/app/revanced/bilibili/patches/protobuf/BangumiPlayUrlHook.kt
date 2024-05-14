@@ -93,8 +93,8 @@ object BangumiPlayUrlHook {
     fun hookPlayViewPGCBefore(req: PlayViewReq) {
         VideoQualityPatch.unlockLimit(req)
         isDownloadPGC = req.download >= 1
-        if (!Settings.UNLOCK_AREA_LIMIT.boolean) return
-        allowDownloadPGC = Settings.ALLOW_DOWNLOAD.boolean && isDownloadPGC
+        if (!Settings.UnlockAreaLimit()) return
+        allowDownloadPGC = Settings.AllowDownload() && isDownloadPGC
         if (allowDownloadPGC) {
             req.fnval = Constants.MAX_FNVAL
             req.fourk = true
@@ -105,7 +105,7 @@ object BangumiPlayUrlHook {
     @JvmStatic
     fun hookPlayViewUniteBefore(req: PlayViewUniteReq) {
         VideoQualityPatch.unlockLimit(req)
-        if (Settings.TRIAL_VIP_QUALITY.boolean && !Accounts.isEffectiveVip) {
+        if (Settings.TrialVipQuality() && !Accounts.isEffectiveVip) {
             runCatching {
                 req.vod.isNeedTrial = true
             }.recoverCatching {
@@ -117,8 +117,8 @@ object BangumiPlayUrlHook {
             }
         }
         isDownloadUnite = req.vod.download >= 1
-        if (!Settings.UNLOCK_AREA_LIMIT.boolean) return
-        allowDownloadUnite = Settings.ALLOW_DOWNLOAD.boolean && isDownloadUnite
+        if (!Settings.UnlockAreaLimit()) return
+        allowDownloadUnite = Settings.AllowDownload() && isDownloadUnite
         if (allowDownloadUnite) {
             req.vod.run {
                 fnval = Constants.MAX_FNVAL
@@ -138,7 +138,7 @@ object BangumiPlayUrlHook {
             throw error
         reply?.playExtConf?.allowCloseSubtitle = true
         val response = reply ?: PlayViewReply()
-        if (Settings.UNLOCK_AREA_LIMIT.boolean && needProxy(response)) {
+        if (Settings.UnlockAreaLimit() && needProxy(response)) {
             return try {
                 val seasonId = req.seasonId.takeIf { it != 0L }
                     ?: bangumiInfoCache.firstNotNullOfOrNull {
@@ -165,7 +165,7 @@ object BangumiPlayUrlHook {
             }
         } else if (error == null && allowDownloadPGC) {
             return fixDownloadProto(response)
-        } else if (error == null && (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean || Settings.REMOVE_CMD_DMS.boolean)) {
+        } else if (error == null && (Settings.BlockBangumiPageAds() || Settings.RemoveCmdDms())) {
             return purifyViewInfo(response)
         }
         if (error != null) throw error else return reply
@@ -197,7 +197,7 @@ object BangumiPlayUrlHook {
         if (seasonId == 0L && reqEpId == 0L)
             finalError?.let { throw it } ?: return reply
         val supplement = PlayViewReply.parseFrom(supplementAny.value.toByteArray())
-        if (Settings.UNLOCK_AREA_LIMIT.boolean && needProxyUnite(response, supplement)) {
+        if (Settings.UnlockAreaLimit() && needProxyUnite(response, supplement)) {
             return try {
                 val (thaiSeason, thaiEp) = getThaiSeason(seasonId, reqEpId)
                 val seasonTitle = supplement.business.episodeInfo.seasonInfo.title.ifEmpty {
@@ -222,14 +222,14 @@ object BangumiPlayUrlHook {
             }
         } else if (finalError == null && allowDownloadUnite) {
             return fixDownloadProtoUnite(response)
-        } else if (finalError == null && (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean || Settings.REMOVE_CMD_DMS.boolean)) {
+        } else if (finalError == null && (Settings.BlockBangumiPageAds() || Settings.RemoveCmdDms())) {
             return purifyViewInfoUnite(response, supplement)
         }
         finalError?.let { throw it } ?: return reply
     }
 
     private fun tryFixAidPGC(req: PlayViewUniteReq, error: MossException?): PlayViewUniteReply? {
-        if (!Settings.UNLOCK_AREA_LIMIT.boolean)
+        if (!Settings.UnlockAreaLimit())
             return null
         if (error == null || error !is BusinessException || error.code != 6002003/* 抱歉您所在地区不可观看！*/)
             return null
@@ -285,18 +285,18 @@ object BangumiPlayUrlHook {
 
     private fun hookPlayViewUniteAfterExtraActions(playReply: PlayViewUniteReply?) {
         if (playReply == null) return
-        if (Settings.REMEMBER_LOSSLESS_SETTING.boolean) {
+        if (Settings.RememberLosslessSetting()) {
             playReply.playDeviceConf.deviceConfsMap.asSequence().find {
                 it.key == ConfType.LOSSLESS.number
-            }?.value?.confValue?.switchVal = Settings.LOSSLESS_ENABLED.boolean
+            }?.value?.confValue?.switchVal = Settings.LosslessEnabled()
         }
-        if (Settings.UNLOCK_PLAY_LIMIT.boolean) {
+        if (Settings.UnlockPlayLimit()) {
             if (playReply.playArcConf.arcConfsMap.asSequence().find {
                     it.key == ConfType.BACKGROUNDPLAY.number
                 }?.value?.disabled == true) {
                 playReply.playDeviceConf.deviceConfsMap.asSequence().find {
                     it.key == ConfType.BACKGROUNDPLAY.number
-                }?.value?.confValue?.switchVal = Settings.BG_PLAYING_ENABLED.boolean
+                }?.value?.confValue?.switchVal = Settings.BgPlayingEnabled()
             }
             val supportedConf = ArcConf().apply {
                 isSupport = true
@@ -311,9 +311,9 @@ object BangumiPlayUrlHook {
             )) arcConfs[key] = supportedConf
         }
         if (!isDownloadUnite && !Accounts.isEffectiveVip
-            && Settings.TRIAL_VIP_QUALITY.boolean
+            && Settings.TrialVipQuality()
         ) TrialQualityPatch.makeVipFree(playReply)
-        if (Settings.REMOVE_CMD_DMS.boolean) {
+        if (Settings.RemoveCmdDms()) {
             playReply.viewInfo.toastsList.withIndex().filter { (_, toast) ->
                 toast.type == ToastType.VIP_DEFINITION_REMIND || toast.type == ToastType.VIP_CONTENT_REMIND
             }.map { it.index }.asReversed().forEach {
@@ -371,7 +371,7 @@ object BangumiPlayUrlHook {
             } else {
                 val (lastEpId, histories) = getVideoHistory(s.optInt("season_id"))
                 val last = histories.find { it.epId == lastEpId }
-                if (Settings.SAVE_TH_HISTORY.boolean && last != null && last.progress == -1L) {
+                if (Settings.SaveThailandHistory() && last != null && last.progress == -1L) {
                     val lastEpIdx = allEps.indexOfFirst {
                         it.optInt("ep_id") == last.epId
                     }
@@ -385,7 +385,7 @@ object BangumiPlayUrlHook {
                     }
                 }
                 // try located to the last watching episode
-                if (Settings.SAVE_TH_HISTORY.boolean && episode == null && last != null)
+                if (Settings.SaveThailandHistory() && episode == null && last != null)
                     episode = allEps.firstOrNull { it.optInt("ep_id") == last.epId }
                 // fallback located to the first episode
                 if (episode == null)
@@ -406,7 +406,7 @@ object BangumiPlayUrlHook {
     }
 
     private fun purifyViewInfo(response: PlayViewReply) = response.apply {
-        if (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean) {
+        if (Settings.BlockBangumiPageAds()) {
             playExtConf.clearFreyaConfig()
             viewInfo.run {
                 clearAnimation()
@@ -424,7 +424,7 @@ object BangumiPlayUrlHook {
                 mutableExtToastMap.clear()
             }
         }
-        if (Settings.REMOVE_CMD_DMS.boolean)
+        if (Settings.RemoveCmdDms())
             business.clearRecordInfo()
     }
 
@@ -433,7 +433,7 @@ object BangumiPlayUrlHook {
         supplement: PlayViewReply
     ) = response.apply {
         this.supplement = newAny(PGC_ANY_MODEL_TYPE_URL, purifyViewInfo(supplement))
-        if (Settings.BLOCK_BANGUMI_PAGE_ADS.boolean) {
+        if (Settings.BlockBangumiPageAds()) {
             if (viewInfo.promptBar.buttonList.any { it.actionType == ButtonAction.VIP })
                 viewInfo.clearPromptBar()
         }
@@ -658,7 +658,7 @@ object BangumiPlayUrlHook {
             }
             if (thai) {
                 history = History().apply {
-                    if (Settings.SAVE_TH_HISTORY.boolean) {
+                    if (Settings.SaveThailandHistory()) {
                         val season = thaiSeason.value
                         val seasonId = season.optInt("season_id")
                         val episode = thaiEp.value
@@ -936,7 +936,7 @@ object BangumiPlayUrlHook {
             business.run {
                 isPreview = jsonContent.optInt("is_preview", 0) == 1
                 episodeInfo.seasonInfo.rights = Rights().apply { canWatch = 1 }
-                if (Settings.ALLOW_MINI_PLAY.boolean)
+                if (Settings.AllowMiniPlay())
                     inlineType = InlineType.TYPE_WHOLE
             }
         } else {
@@ -975,7 +975,7 @@ object BangumiPlayUrlHook {
                 runCatchingOrNull {
                     watchTimeLength = timeLength.toLong()
                 }
-                if (Settings.ALLOW_MINI_PLAY.boolean)
+                if (Settings.AllowMiniPlay())
                     inlineType = InlineType.TYPE_WHOLE
                 val clipInfo = bangumiInfoCache[seasonId.toLong()]
                     ?.get(epId.toLong())?.clipInfo
@@ -998,7 +998,7 @@ object BangumiPlayUrlHook {
                     }
                 }
                 userStatus = UserStatus().apply {
-                    if (Settings.SAVE_TH_HISTORY.boolean) {
+                    if (Settings.SaveThailandHistory()) {
                         val (current, last) = getWatchProgress(season, seasonId, epId)
                         current?.let { aidWatchProgress = it }
                         last?.let { watchProgress = it }

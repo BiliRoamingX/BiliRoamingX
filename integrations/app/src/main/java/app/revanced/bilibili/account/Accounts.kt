@@ -164,8 +164,8 @@ object Accounts {
                     Utils.async { checkUserStatus() }
                 }
         }
-        if ((isSignOut || isSwitchAccount) && Utils.isMainProcess() && Settings.SKIN.boolean) {
-            Settings.SKIN.saveValue(false)
+        if ((isSignOut || isSwitchAccount) && Utils.isMainProcess() && Settings.Skin()) {
+            Settings.Skin.save(false)
             Themes.unloadLoadEquip()
             Toasts.showLongWithId("biliroaming_theme_closed_by_account")
         }

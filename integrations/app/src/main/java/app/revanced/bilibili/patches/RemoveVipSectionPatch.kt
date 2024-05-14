@@ -22,7 +22,7 @@ object RemoveVipSectionPatch {
         val vipLayout = view.findView<ViewGroup>("mine_vip_layout")
         val mineRecycle = view.findView<ViewGroup>("mine_recycle")
         mineRecycle.clipToPadding = false
-        if (Settings.REMOVE_VIP_SECTION.boolean) {
+        if (Settings.RemoveVipSection()) {
             vipLayout.children.forEach { it.hide() }
             val currentThemeId = currentThemeId()
             val lastThemeId = lastThemeId()

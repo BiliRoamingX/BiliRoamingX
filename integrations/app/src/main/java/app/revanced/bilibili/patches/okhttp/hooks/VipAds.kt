@@ -8,7 +8,7 @@ import org.json.JSONArray
 
 object VipAds : ApiHook() {
     override fun shouldHook(url: String, code: Int): Boolean {
-        return Utils.isHd() && Settings.REMOVE_VIP_SECTION.boolean && code.isOk
+        return Utils.isHd() && Settings.RemoveVipSection() && code.isOk
                 && url.contains("/x/vip/ads/materials")
                 && url.contains("position=3")
     }

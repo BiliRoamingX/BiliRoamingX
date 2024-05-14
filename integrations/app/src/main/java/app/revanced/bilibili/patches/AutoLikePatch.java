@@ -26,7 +26,7 @@ public class AutoLikePatch {
 
     @Keep
     public static void autoLike(Object viewHolder) {
-        if (!Settings.AUTO_LIKE.getBoolean()) return;
+        if (!Settings.AutoLike.get()) return;
         if (detail == null) return;
         Long aid = detail.first;
         Integer like = detail.second;
@@ -50,7 +50,7 @@ public class AutoLikePatch {
     }
 
     public static void autoLikeUnite() {
-        if (!Settings.AUTO_LIKE.getBoolean()) return;
+        if (!Settings.AutoLike.get()) return;
         if (detail == null) return;
         Long aid = detail.first;
         Integer like = detail.second;

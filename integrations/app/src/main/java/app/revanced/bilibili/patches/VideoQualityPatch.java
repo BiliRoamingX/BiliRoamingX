@@ -12,17 +12,17 @@ import app.revanced.bilibili.utils.KtUtils;
 public class VideoQualityPatch {
 
     public static int halfScreenQuality() {
-        String qualityStr = Settings.HALF_SCREEN_QUALITY.getString();
+        String qualityStr = Settings.HalfScreenQuality.get();
         return Integer.parseInt(qualityStr);
     }
 
     public static int fullScreenQuality() {
-        String qualityStr = Settings.FULL_SCREEN_QUALITY.getString();
+        String qualityStr = Settings.FullScreenQuality.get();
         return Integer.parseInt(qualityStr);
     }
 
     public static int mobileFullScreenQuality() {
-        String qualityStr = Settings.MOBILE_FULL_SCREEN_QUALITY.getString();
+        String qualityStr = Settings.MobileFullScreenQuality.get();
         return Integer.parseInt(qualityStr);
     }
 

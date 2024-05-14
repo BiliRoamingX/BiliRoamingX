@@ -21,14 +21,14 @@ class ExternalDownloaderFragment : BiliRoamingBaseSettingFragment() {
             val editText = EditText(context)
             editText.inputType = EditorInfo.TYPE_CLASS_TEXT
             editText.imeOptions = EditorInfo.IME_ACTION_DONE
-            editText.setText(Settings.EXTERNAL_DOWNLOADER_NAME.string)
+            editText.setText(Settings.ExternalDownloaderName())
             val dialog = AlertDialog.Builder(context)
                 .setView(editText)
                 .setTitle(it.title)
                 .setNegativeButton(android.R.string.cancel, null)
                 .setPositiveButton(android.R.string.ok) { _, _ ->
                     val newName = editText.text.toString().trim()
-                    Settings.EXTERNAL_DOWNLOADER_NAME.saveValue(newName)
+                    Settings.ExternalDownloaderName.save(newName)
                 }.create().constraintSize().onShow {
                     editText.setSelection(editText.text.length)
                     editText.showKeyboard()
@@ -36,7 +36,7 @@ class ExternalDownloaderFragment : BiliRoamingBaseSettingFragment() {
             editText.setOnEditorActionListener { v, actionId, event ->
                 if (actionId == EditorInfo.IME_ACTION_DONE || event.keyCode == KeyEvent.KEYCODE_ENTER) {
                     val newName = v.text.toString().trim()
-                    Settings.EXTERNAL_DOWNLOADER_NAME.saveValue(newName)
+                    Settings.ExternalDownloaderName.save(newName)
                     dialog.dismiss()
                     true
                 } else false
