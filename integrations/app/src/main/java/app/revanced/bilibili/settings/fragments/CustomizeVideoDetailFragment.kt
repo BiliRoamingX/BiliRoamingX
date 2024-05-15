@@ -13,10 +13,10 @@ class CustomizeVideoDetailFragment : BiliRoamingBaseSettingFragment() {
         disablePreference(Settings.BlockFanGuide.key, PrefsDisableReason.NewPlayer) {
             !Utils.newPlayerEnabled()
         }
-        disablePreference(Settings.DisableAutoSelect.key, PrefsDisableReason.NewPlayer) {
+        disablePreference(Settings.DisableAutoSelect.key, PrefsDisableReason.AppVersion) {
             Versions.ge7_62_0()
         }
-        disablePreference(Settings.DisableAutoSubscribe.key, PrefsDisableReason.NewPlayer) {
+        disablePreference(Settings.DisableAutoSubscribe.key, PrefsDisableReason.AppVersion) {
             Versions.ge7_62_0()
         }
         disablePreference(Settings.SaveCommentImage.key, PrefsDisableReason.OfficialSupported) {
