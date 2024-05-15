@@ -9,9 +9,9 @@ import java.lang.ref.WeakReference
 
 @Suppress("LeakingThis", "NOTHING_TO_INLINE")
 sealed class Setting<out T : Any>(
-    val key: String,
-    val defValue: T,
-    val needReboot: Boolean = false,
+    @JvmField val key: String,
+    @JvmField val defValue: T,
+    @JvmField val needReboot: Boolean = false,
     private val onChange: ((value: T, async: Boolean) -> Unit)? = null
 ) {
     protected var value: @UnsafeVariance T = defValue
@@ -21,6 +21,7 @@ sealed class Setting<out T : Any>(
         load()
     }
 
+    @JvmSynthetic
     inline operator fun invoke(): T = get()
 
     protected abstract fun load()
@@ -59,8 +60,8 @@ sealed class Setting<out T : Any>(
 
     companion object {
 
-        private val _all = mutableSetOf<Setting<*>>()
-        val all: Set<Setting<*>> = _all
+        private val _all = mutableSetOf<Setting<Any>>()
+        val all: Set<Setting<Any>> = _all
 
         const val PREFS_NAME = "biliroaming"
 
