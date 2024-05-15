@@ -38,6 +38,7 @@ object Settings {
     @JvmField val DisablePlayerLongPress = BooleanSetting(key = "disable_player_long_press")
     @JvmField val ScaleToSwitchRatio = BooleanSetting(key = "scale_to_switch_ratio")
     @JvmField val ForceHwCodec = BooleanSetting(key = "force_hw_codec")
+    @JvmField val DisableP2PUpload = BooleanSetting(key = "disable_p2p_upload", needReboot = true)
     // endregion
 
 

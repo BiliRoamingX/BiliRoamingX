@@ -108,6 +108,10 @@
             android:key="scale_to_switch_ratio"
             android:summary="@string/biliroaming_scale_to_switch_ratio_summary"
             android:title="@string/biliroaming_scale_to_switch_ratio_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="disable_p2p_upload"
+            android:summary="@string/biliroaming_disable_p2p_upload_summary"
+            android:title="@string/biliroaming_disable_p2p_upload_title" />
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
