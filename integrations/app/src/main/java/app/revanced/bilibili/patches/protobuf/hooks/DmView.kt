@@ -16,6 +16,8 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 object DmView : MossHook<DmViewReq, DmViewReply>() {
+    private val furrySubNameExtRegex = Regex("""[\[(](非官方|富睿字幕组)[])]""")
+
     override fun shouldHook(req: GeneratedMessageLite<*, *>): Boolean {
         return req is DmViewReq
     }
@@ -174,7 +176,7 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
                         || (it == "cn.friday" && replaceToFriday)
                     ) "zh-Hans" else it
                 }
-                lanDoc = subtitle.optString("title")
+                lanDoc = subtitle.optString("title").replace(furrySubNameExtRegex, "")
             }.let { subList.add(it) }
         }
         return subList
