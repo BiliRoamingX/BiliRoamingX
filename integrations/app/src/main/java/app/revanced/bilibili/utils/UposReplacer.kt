@@ -40,13 +40,14 @@ object UposReplacer {
             else/* oversea */ -> listOf(aliHost, hkBcacheHost)
         }
 
-    private val ipPCdnRegex by lazy { Regex("""^https?://\d{1,3}\.\d{1,3}""") }
+    private val ipPCdnRegex by lazy { Regex("""^https?://\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}""") }
+    private val bCacheRegex by lazy { Regex("""^https?://cn-.*\.bilivideo""") }
     private val urlBwRegex by lazy { Regex("""(bw=[^&]*)""") }
+    private val gotchaRegex by lazy { Regex("""https?://\w*--\w*-gotcha[\d-]*\.bilivideo""") }
 
     @JvmStatic
     val baseUposList: Future<List<String>> by lazy {
         Utils.submitTask {
-            val bCacheRegex = Regex("""cn-.*\.bilivideo""")
             // https://b23.tv/BV1XX4y1k7U2 FOREVER1
             val playViewReq = PlayViewReq().apply {
                 aid = 354638380L
@@ -71,13 +72,19 @@ object UposReplacer {
                 }
             }?.mapNotNull { Uri.parse(it).encodedAuthority }?.distinct()
                 ?.filterNot { it.isPCdnUpos() }.orEmpty()
-            officialList.filterNot { it.contains(bCacheRegex) }
+            officialList.filterNot { it.isBCacheUpos() }
                 .ifEmpty { officialList }
         }
     }
 
+    fun String.isGotchaLiveCdn() = contains(gotchaRegex)
+
     fun String.isPCdnUpos() =
         contains("szbdyd.com") || contains(".mcdn.bilivideo") || contains(ipPCdnRegex)
+
+    fun String.isBCacheUpos() = contains(bCacheRegex)
+
+    fun String.isOssUpos() = Uri.parse(this).encodedAuthority.orEmpty().contains("oss")
 
     fun String.replaceUpos(upos: String = uposBase, needReplace: Boolean = true): String {
         fun String.replaceUposBw() = replace(urlBwRegex, "bw=1280000")

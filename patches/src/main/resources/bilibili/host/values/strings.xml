@@ -451,4 +451,6 @@
     <string name="biliroaming_not_lock_orientation_summary">HD版在系统设置开启自动旋转屏幕方向时，播放竖屏视频不锁定屏幕旋转方向，允许竖屏全屏播放</string>
     <string name="biliroaming_disable_p2p_upload_title">禁止直播及视频P2P上传</string>
     <string name="biliroaming_disable_p2p_upload_summary">有助于减少网络带宽占用，同时避免运营商针对PCDN可能的限速</string>
+    <string name="biliroaming_prefer_stable_cdn_title">优选稳定CDN</string>
+    <string name="biliroaming_prefer_stable_cdn_summary">观看直播或视频时，优先选择大厂稳定的CDN节点播放，如若遇到直播或视频经常卡顿问题，可启用此选项。</string>
 </resources>

@@ -112,6 +112,10 @@
             android:key="disable_p2p_upload"
             android:summary="@string/biliroaming_disable_p2p_upload_summary"
             android:title="@string/biliroaming_disable_p2p_upload_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="prefer_stable_cdn"
+            android:summary="@string/biliroaming_prefer_stable_cdn_summary"
+            android:title="@string/biliroaming_prefer_stable_cdn_title" />
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory

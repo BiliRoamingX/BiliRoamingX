@@ -5,6 +5,7 @@ import android.util.Pair
 import app.revanced.bilibili.patches.okhttp.ApiHook
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
+import app.revanced.bilibili.utils.UposReplacer.isGotchaLiveCdn
 import org.json.JSONObject
 import kotlin.math.abs
 
@@ -30,16 +31,27 @@ object RoomPlayInfo : ApiHook() {
     }
 
     override fun shouldHook(url: String, code: Int): Boolean {
-        return Settings.DefaultMaxQn() && code.isOk && url.startsWith(API)
+        return (Settings.DefaultMaxQn() || Settings.PreferStableCdn())
+                && code.isOk && url.startsWith(API)
     }
 
     override fun hook(url: String, code: Int, request: String, response: String): String {
         val jo = JSONObject(response)
         if (jo.optInt("code") != 0)
             return response
-        val requestQn = Uri.parse(url).getQueryParameter("qn")
-            ?.toInt() ?: return response
-        jo.optJSONObject("data")?.optJSONObject("playurl_info")
+        if (Settings.DefaultMaxQn()) {
+            val requestQn = Uri.parse(url).getQueryParameter("qn")?.toInt()
+            if (requestQn != null)
+                preferBestCodec(jo, requestQn)
+        }
+        if (Settings.PreferStableCdn())
+            preferStableCdn(jo)
+        Logger.debug { "RoomPlayInfo, new room play info: $jo" }
+        return jo.toString()
+    }
+
+    private fun preferBestCodec(json: JSONObject, requestQn: Int) {
+        json.optJSONObject("data")?.optJSONObject("playurl_info")
             ?.optJSONObject("playurl")?.optJSONArray("stream")?.forEach { s ->
                 s.optJSONArray("format")?.forEach { f ->
                     val codecList = f.optJSONArray("codec")
@@ -58,7 +70,33 @@ object RoomPlayInfo : ApiHook() {
                         }
                 }
             }
-        Logger.debug { "RoomPlayInfo, new room play info: $jo" }
-        return jo.toString()
+    }
+
+    private fun preferStableCdn(json: JSONObject) {
+        json.optJSONObject("data")?.optJSONObject("playurl_info")
+            ?.optJSONObject("playurl")?.optJSONArray("stream")
+            .orEmpty().asSequence<JSONObject>().flatMap { s ->
+                s.optJSONArray("format").orEmpty().asSequence<JSONObject>().flatMap { f ->
+                    f.optJSONArray("codec").orEmpty().asSequence<JSONObject>()
+                }
+            }.forEach { codec ->
+                val urlInfoList = codec.optJSONArray("url_info")
+                if (!urlInfoList.isNullOrEmpty() && urlInfoList.length() > 1) {
+                    val first = urlInfoList.optJSONObject(0)
+                    val firstHost = first?.optString("host").orEmpty()
+                    if (!firstHost.isGotchaLiveCdn()) {
+                        urlInfoList.asSequence<JSONObject>().firstNotNullOfOrNull { info ->
+                            val host = info.optString("host")
+                            if (host.isGotchaLiveCdn()) {
+                                info to host
+                            } else null
+                        }?.let { (gotchaInfo, gotchaHost) ->
+                            first.put("host", gotchaHost)
+                            gotchaInfo.put("host", firstHost)
+                            Logger.debug { "RoomPlayInfo, prefer gotcha cdn: $gotchaHost" }
+                        }
+                    }
+                }
+            }
     }
 }

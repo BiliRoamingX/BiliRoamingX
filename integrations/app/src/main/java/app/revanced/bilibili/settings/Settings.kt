@@ -39,6 +39,7 @@ object Settings {
     @JvmField val ScaleToSwitchRatio = BooleanSetting(key = "scale_to_switch_ratio")
     @JvmField val ForceHwCodec = BooleanSetting(key = "force_hw_codec")
     @JvmField val DisableP2PUpload = BooleanSetting(key = "disable_p2p_upload", needReboot = true)
+    @JvmField val PreferStableCdn = BooleanSetting(key = "prefer_stable_cdn")
     // endregion
 
 
