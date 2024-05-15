@@ -449,6 +449,6 @@
     <string name="biliroaming_block_comment_feedback_title">屏蔽评论氛围反馈</string>
     <string name="biliroaming_not_lock_orientation_title">不锁定屏幕旋转方向</string>
     <string name="biliroaming_not_lock_orientation_summary">HD版在系统设置开启自动旋转屏幕方向时，播放竖屏视频不锁定屏幕旋转方向，允许竖屏全屏播放</string>
-    <string name="biliroaming_disable_p2p_upload_title">禁止直播间及视频P2P上传</string>
-    <string name="biliroaming_disable_p2p_upload_summary">有助于减少带宽占用，同时避免运营商针对PCDN可能的限速</string>
+    <string name="biliroaming_disable_p2p_upload_title">禁止直播及视频P2P上传</string>
+    <string name="biliroaming_disable_p2p_upload_summary">有助于减少网络带宽占用，同时避免运营商针对PCDN可能的限速</string>
 </resources>
