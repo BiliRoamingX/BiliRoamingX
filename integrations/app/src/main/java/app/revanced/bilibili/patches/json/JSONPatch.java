@@ -159,7 +159,7 @@ public class JSONPatch {
         } else if (data instanceof StoryFeedResponse feedResponse) {
             filterStory(feedResponse);
         } else if ((!Versions.ge7_64_0() && (data instanceof SearchReferral || data instanceof DefaultKeyword)) || (Versions.ge7_39_0() && data instanceof com.bilibili.search2.api.SearchReferral)) {
-            if (Settings.PurifySplash.get())
+            if (Settings.PurifySearch.get())
                 return null;
         } else if (data instanceof EventSplashDataList splashList) {
             if (Settings.PurifySplash.get()) {
@@ -201,7 +201,7 @@ public class JSONPatch {
     public static void parseArrayHook(Class<?> type, ArrayList<?> list) {
         if ((!Versions.ge7_64_0() && (type == SearchRank.class || type == SearchReferral.Guess.class))
                 || (Versions.ge7_39_0() && (type == com.bilibili.search2.api.SearchRank.class || type == com.bilibili.search2.api.SearchReferral.Guess.class))) {
-            if (Settings.PurifySplash.get())
+            if (Settings.PurifySearch.get())
                 list.clear();
         }
     }
