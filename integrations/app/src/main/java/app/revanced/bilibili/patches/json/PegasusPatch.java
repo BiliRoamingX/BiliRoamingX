@@ -772,6 +772,7 @@ public class PegasusPatch {
         }
     }
 
+    // Only called when ab test `ff_key_use_new_pegasus` not hit
     @Keep
     public static void pegasusHook(GeneralResponse<PegasusFeedResponse> response) {
         var data = response.data;

@@ -20,6 +20,7 @@ object OkHttpPatch {
         DmAd,
         DmQoeShow,
         Eps,
+        FeedIndex,
         GarbSuitDetail,
         GrpcPlayViewUnite,
         GrpcUnlockAreaLimitForPlay,
