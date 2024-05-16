@@ -127,7 +127,8 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
 
     private fun JSONArray.toSubtitles(): List<SubtitleItem> {
         val subList = mutableListOf<SubtitleItem>()
-        val lanCodes = asSequence<JSONObject>().map { it.optString("key") }.toList()
+        val distinct = asSequence<JSONObject>().distinctBy { it.optString("key") }.toList()
+        val lanCodes = distinct.map { it.optString("key") }
         // prefer select furry cn subtitle if official hans subtitle not exist,
         // then consider kktv, iqiyi, mewatch, catchplay, friday
         var replaceable = true
@@ -162,7 +163,7 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
             replaceable && !replaceToFurry && !replaceToKKTV && !replaceToIqiyi && !replaceToMeWatch && hasCnCatchPlay
         val replaceToFriday =
             replaceable && !replaceToFurry && !replaceToKKTV && !replaceToIqiyi && !replaceToMeWatch && !replaceToCatchPlay && hasCnFriday
-        for (subtitle in this) {
+        for (subtitle in distinct) {
             SubtitleItem().apply {
                 id = subtitle.optLong("id")
                 idStr = subtitle.optLong("id").toString()
