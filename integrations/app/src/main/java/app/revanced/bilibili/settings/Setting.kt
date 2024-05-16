@@ -56,6 +56,14 @@ sealed class Setting<out T : Any>(
         onChange?.invoke(value, async)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Setting<*>) return false
+        return key == other.key
+    }
+
+    override fun hashCode() = key.hashCode()
+
     override fun toString() = "$key: $value"
 
     companion object {

@@ -101,7 +101,7 @@ inline fun String.toIntColor(error: Int = Color.BLACK): Int = try {
 inline fun SharedPreferences.edit(
     commit: Boolean = false,
     action: SharedPreferences.Editor.() -> Unit
-) = edit().apply(action).run { if (commit) commit() else apply() }
+): Unit = edit().apply(action).run { if (commit) commit() else apply() }
 
 fun fetchJson(url: String) = try {
     JSONObject(URL(url).readText())
