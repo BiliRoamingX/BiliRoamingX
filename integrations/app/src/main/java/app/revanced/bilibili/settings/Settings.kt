@@ -178,7 +178,7 @@ object Settings {
 
 
     // region Group: 用户空间页
-    @JvmField val FixSpace = BooleanSetting(key = "fix_space")
+    @JvmField val FixSpace = BooleanSetting(key = "fix_space", defValue = true)
     @JvmField val CustomizeSpace = StringSetSetting(key = "customize_space")
     @JvmField val AddArticleTab = BooleanSetting(key = "add_article_tab")
     @JvmField val IgnoreBlacklist = BooleanSetting(key = "ignore_blacklist")
@@ -217,7 +217,7 @@ object Settings {
     @JvmField val CommentCopy = BooleanSetting(key = "comment_copy")
     @JvmField val EnhanceCommentCopy = BooleanSetting(key = "comment_copy_enhance")
     @JvmField val BlockUpdate = BooleanSetting(key = "block_update")
-    @JvmField val CustomUpdate = BooleanSetting(key = "custom_update")
+    @JvmField val CustomUpdate = BooleanSetting(key = "custom_update", defValue = true)
     @JvmField val BlockFollowButton = StringSetSetting(key = "block_follow_button")
     @JvmField val CustomTheme = BooleanSetting(key = "custom_theme")
     @JvmField val Skin = BooleanSetting(key = "skin")
