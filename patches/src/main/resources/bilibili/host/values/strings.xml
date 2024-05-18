@@ -214,7 +214,7 @@
     <string name="biliroaming_block_update_title">禁止APP检查官方更新</string>
     <string name="biliroaming_custom_update_title">允许检查预构建包更新</string>
     <string name="biliroaming_custom_update_summary">允许APP检查作者官方项目提供的预构建漫游X集成包更新</string>
-    <string name="biliroaming_custom_update_only_64">仅支持64位系统</string>
+    <string name="biliroaming_custom_update_only_64">仅支持Arm 64位系统</string>
     <string name="biliroaming_custom_update_invalid_sig">当前APP非漫游X作者预构建</string>
     <string name="biliroaming_video_detail_other_category_title">其它</string>
     <string name="biliroaming_disable_auto_select_title">禁止自动转到动态</string>
@@ -454,4 +454,6 @@
     <string name="biliroaming_disable_p2p_upload_summary">有助于减少网络带宽占用，同时避免运营商针对PCDN可能的限速</string>
     <string name="biliroaming_prefer_stable_cdn_title">优选稳定CDN</string>
     <string name="biliroaming_prefer_stable_cdn_summary">观看直播或视频时，优先选择大厂稳定的CDN节点播放，如若遇到直播或视频经常卡顿问题，可启用此选项。</string>
+    <string name="biliroaming_view">查看</string>
+    <string name="biliroaming_found_new_version">（发现新版本%s）</string>
 </resources>

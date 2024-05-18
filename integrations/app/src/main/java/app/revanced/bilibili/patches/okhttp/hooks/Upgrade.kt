@@ -1,7 +1,6 @@
 package app.revanced.bilibili.patches.okhttp.hooks
 
 import android.content.pm.PackageManager
-import android.os.Build
 import app.revanced.bilibili.integrations.BuildConfig
 import app.revanced.bilibili.patches.okhttp.ApiHook
 import app.revanced.bilibili.settings.Settings
@@ -38,9 +37,7 @@ object Upgrade : ApiHook() {
     var fromSelf = false
 
     fun customUpdate(fromSelf: Boolean = false): Boolean {
-        return (fromSelf || Settings.CustomUpdate())
-                && Build.SUPPORTED_64_BIT_ABIS.isNotEmpty()
-                && sigMd5() == Constants.PRE_BUILD_SIG_MD5
+        return (fromSelf || Settings.CustomUpdate()) && isOsArchArm64 && isPrebuilt
     }
 
     override fun shouldHook(url: String, code: Int): Boolean {

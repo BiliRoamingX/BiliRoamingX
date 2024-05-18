@@ -341,7 +341,6 @@ val defaultUA = "Mozilla/5.0 BiliDroid/$versionName (bbcallen@gmail.com)"
 val browserUA =
     "Mozilla/5.0 (Linux; Android ${Build.VERSION.RELEASE}; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
-@JvmOverloads
 @Suppress("DEPRECATION")
 fun sigMd5(packageName: String = Utils.getContext().packageName): String {
     return Utils.getContext().packageManager
@@ -740,3 +739,13 @@ fun deleteModuleResources() {
 fun deleteTopActivityEntrance() {
     blkvPrefs.edit { putString("PREF_KEY_ENTRANCE_CACHE", "") }
 }
+
+val isOsArch64 inline get() = Build.SUPPORTED_64_BIT_ABIS.isNotEmpty()
+
+val isOsArchArm64 inline get() = Build.SUPPORTED_64_BIT_ABIS.any { it.contains("arm64") }
+
+val isAppArch64: Boolean
+    inline get() = Utils.getContext().applicationInfo.nativeLibraryDir.substringAfterLast('/')
+        .let { it == "arm64" || it == "x86_64" }
+
+val isPrebuilt inline get() = sigMd5() == Constants.PRE_BUILD_SIG_MD5

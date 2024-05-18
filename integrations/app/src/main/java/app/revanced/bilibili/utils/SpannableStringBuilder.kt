@@ -18,6 +18,7 @@ package app.revanced.bilibili.utils
 
 import android.graphics.Typeface.BOLD
 import android.graphics.Typeface.ITALIC
+import android.text.Layout.Alignment
 import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
 import android.text.SpannedString
@@ -181,3 +182,8 @@ inline fun SpannableStringBuilder.absoluteSize(
     dp: Boolean = false,
     builderAction: SpannableStringBuilder.() -> Unit
 ): SpannableStringBuilder = inSpans(AbsoluteSizeSpan(size, dp), builderAction = builderAction)
+
+inline fun SpannableStringBuilder.align(
+    align: Alignment,
+    builderAction: SpannableStringBuilder.() -> Unit
+): SpannableStringBuilder = inSpans(AlignmentSpan.Standard(align), builderAction = builderAction)

@@ -8,7 +8,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.widget.EditText
@@ -45,8 +44,8 @@ class MiscFragment : BiliRoamingBaseSettingFragment() {
         findPreference<Preference>("route")?.onClick { route();true }
         disablePreference(
             key = Settings.CustomUpdate.key,
-            { Utils.getString("biliroaming_custom_update_only_64") } to { Build.SUPPORTED_64_BIT_ABIS.isEmpty() },
-            { Utils.getString("biliroaming_custom_update_invalid_sig") } to { sigMd5() != Constants.PRE_BUILD_SIG_MD5 }
+            { Utils.getString("biliroaming_custom_update_only_64") } to { !isOsArchArm64 },
+            { Utils.getString("biliroaming_custom_update_invalid_sig") } to { !isPrebuilt }
         )
         disablePreference(Settings.Skin.key, PrefsDisableReason.AppVersion) {
             Utils.isHd()
