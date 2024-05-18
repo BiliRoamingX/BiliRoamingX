@@ -72,20 +72,22 @@ object CommentChecker {
     ) = Utils.runOnMainThread {
         val activity = ApplicationDelegate.getTopActivity()
         val title = Utils.getString("biliroaming_comment_check_result_title")
+        val contentTitle = Utils.getString("biliroaming_comment_content")
         if (result != CheckResult.Valid) {
-            val tips = if (quick) {
+            var tips = if (quick) {
                 if (result == CheckResult.Blocked) {
-                    Utils.getString("biliroaming_comment_invalid_quick_blocked", message)
+                    Utils.getString("biliroaming_comment_invalid_quick_blocked")
                 } else {
-                    Utils.getString("biliroaming_comment_invalid_quick_deleted", message)
+                    Utils.getString("biliroaming_comment_invalid_quick_deleted")
                 }
             } else {
                 if (result == CheckResult.Blocked) {
-                    Utils.getString("biliroaming_comment_invalid_normal_blocked", message)
+                    Utils.getString("biliroaming_comment_invalid_normal_blocked")
                 } else {
-                    Utils.getString("biliroaming_comment_invalid_normal_deleted", message)
+                    Utils.getString("biliroaming_comment_invalid_normal_deleted")
                 }
             }
+            tips += "\n\n$contentTitle\n$message"
             if (activity != null) {
                 AlertDialog.Builder(activity)
                     .setTitle(title)
@@ -97,7 +99,8 @@ object CommentChecker {
                     }.show()
             } else Toasts.showLong(tips)
         } else if (!quick) {
-            val tips = Utils.getString("biliroaming_comment_valid_message", message)
+            var tips = Utils.getString("biliroaming_comment_valid_message")
+            tips += "\n\n$contentTitle\n$message"
             if (activity != null) {
                 AlertDialog.Builder(activity)
                     .setTitle(title)
