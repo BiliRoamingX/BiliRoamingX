@@ -80,6 +80,8 @@ public class ApplicationDelegate {
 
     @Keep
     public static Resources getResources(Resources resources) {
+        if (Utils.getContext() == null)
+            return resources;
         int newDpi = getCustomDpi();
         if (newDpi != 0) {
             updateDpi(resources.getDisplayMetrics(), newDpi);
