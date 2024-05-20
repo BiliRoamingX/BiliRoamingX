@@ -37,10 +37,14 @@ public class ConfigPatch {
             return Boolean.FALSE;
         else if ("ff_enable_image_avif".equals(key) && Settings.DisableAvif.get())
             return Boolean.FALSE;
-        else if (("ijkplayer.p2p-disable-whitelist".equals(key)
-                || "ff_live_room_player_close_p2p".equals(key)
-        ) && Settings.DisableP2PUpload.get())
+        else if ("ff_live_room_player_close_p2p".equals(key) && Settings.DisableP2PUpload.get())
             return Boolean.TRUE;
+        else if (("ijkplayer.p2p_hot_push".equals(key)
+                || "ijkplayer.p2p_upload".equals(key)
+        ) && Settings.DisableP2PUpload.get())
+            return Boolean.FALSE;
+        else if ("ijkplayer.p2p_download".equals(key) && Settings.PreferStableCdn.get())
+            return Boolean.FALSE;
         return origin;
     }
 
