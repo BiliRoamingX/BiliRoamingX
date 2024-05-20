@@ -13,7 +13,7 @@ object FeedIndex : ApiHook() {
     }
 
     override fun shouldHook(url: String, code: Int): Boolean {
-        return code.isOk && Versions.ge7_62_0() && url.contains("/x/v2/feed/index?")
+        return code.isOk && Versions.ge7_76_0() && url.contains("/x/v2/feed/index?")
                 && newPegasusEnabled
     }
 
