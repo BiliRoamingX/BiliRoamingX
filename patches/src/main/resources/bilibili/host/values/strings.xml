@@ -453,7 +453,7 @@
     <string name="biliroaming_disable_p2p_upload_title">禁止直播及视频P2P上传</string>
     <string name="biliroaming_disable_p2p_upload_summary">有助于减少网络带宽占用，同时避免运营商针对PCDN可能的限速</string>
     <string name="biliroaming_prefer_stable_cdn_title">优选稳定CDN</string>
-    <string name="biliroaming_prefer_stable_cdn_summary">观看直播或视频时，优先选择大厂稳定的CDN节点播放，如若遇到直播或视频经常卡顿问题，可启用此选项。</string>
+    <string name="biliroaming_prefer_stable_cdn_summary">观看直播或视频时，优先选择大厂稳定的CDN节点播放，如若遇到直播或视频经常卡顿问题，可启用此选项。目前由于官方播放器的缺陷，启用后会导致AV号大于2147483647的视频无法播放。</string>
     <string name="biliroaming_view">查看</string>
     <string name="biliroaming_found_new_version">（发现新版本%s）</string>
 </resources>
