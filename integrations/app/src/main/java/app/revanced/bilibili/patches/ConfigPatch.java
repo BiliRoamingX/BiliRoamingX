@@ -35,8 +35,8 @@ public class ConfigPatch {
             return origin;
         } else if ("ff_channel_redirect_to_search".equals(key) && Settings.AddChannel.get())
             return Boolean.FALSE;
-        else if ("ff_enable_image_avif".equals(key) && Settings.DisableAvif.get())
-            return Boolean.FALSE;
+        else if (("ff.image.avif_degrade".equals(key) || "ff_noavif_enable".equals(key)) && Settings.DisableAvif.get())
+            return Boolean.TRUE;
         else if ("ff_live_room_player_close_p2p".equals(key) && Settings.DisableP2PUpload.get())
             return Boolean.TRUE;
         else if (("ijkplayer.p2p_hot_push".equals(key)
