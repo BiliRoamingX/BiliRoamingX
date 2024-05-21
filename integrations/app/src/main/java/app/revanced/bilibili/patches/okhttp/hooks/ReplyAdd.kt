@@ -7,11 +7,11 @@ import app.revanced.bilibili.utils.orEmpty
 import app.revanced.bilibili.utils.toJSONObject
 
 object ReplyAdd : ApiHook() {
-    override fun shouldHook(url: String, code: Int): Boolean {
-        return Settings.CheckComment() && url.contains("/x/v2/reply/add") && code.isOk
+    override fun shouldHook(url: String, status: Int): Boolean {
+        return Settings.CheckComment() && url.contains("/x/v2/reply/add") && status.isOk
     }
 
-    override fun hook(url: String, code: Int, request: String, response: String): String {
+    override fun hook(url: String, status: Int, request: String, response: String): String {
         val data = response.toJSONObject().optJSONObject("data")
         if (data?.optInt("success_action", -1) != 0)
             return response

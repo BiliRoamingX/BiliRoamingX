@@ -14,14 +14,14 @@ import app.revanced.bilibili.utils.toJSONObject
 import org.json.JSONObject
 
 object Media : ApiHook() {
-    override fun shouldHook(url: String, code: Int): Boolean {
+    override fun shouldHook(url: String, status: Int): Boolean {
         return Settings.UnlockAreaLimit()
                 && Versions.ge7_39_0()
                 && url.contains("/pgc/view/v2/app/media")
-                && code.isOk
+                && status.isOk
     }
 
-    override fun hook(url: String, code: Int, request: String, response: String): String {
+    override fun hook(url: String, status: Int, request: String, response: String): String {
         val mediaId = Uri.parse(url).getQueryParameter("media_id")
         if (JSONObject(response).optInt("code") != 0
             && (Area.Thailand == seasonAreasCache[mediaId] || (cachePrefs.contains(mediaId)

@@ -12,12 +12,12 @@ object FeedIndex : ApiHook() {
         Utils.getAb("ff_key_use_new_pegasus", false)
     }
 
-    override fun shouldHook(url: String, code: Int): Boolean {
-        return code.isOk && Versions.ge7_76_0() && url.contains("/x/v2/feed/index?")
+    override fun shouldHook(url: String, status: Int): Boolean {
+        return status.isOk && Versions.ge7_76_0() && url.contains("/x/v2/feed/index?")
                 && newPegasusEnabled
     }
 
-    override fun hook(url: String, code: Int, request: String, response: String): String {
+    override fun hook(url: String, status: Int, request: String, response: String): String {
         val resp = response.toJSONObject()
         if (resp.optInt("code", -1) == 0) {
             val data = resp.optJSONObject("data")

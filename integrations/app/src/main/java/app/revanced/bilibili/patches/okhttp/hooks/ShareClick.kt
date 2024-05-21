@@ -13,12 +13,12 @@ import java.net.URL
 object ShareClick : ApiHook() {
     private val contentRegex = Regex("(.*)(http\\S*)(.*)")
 
-    override fun shouldHook(url: String, code: Int): Boolean {
-        return code.isOk && url.contains("/x/share/click")
+    override fun shouldHook(url: String, status: Int): Boolean {
+        return status.isOk && url.contains("/x/share/click")
                 && (Settings.PurifyShare() || Settings.FuckMiniProgram())
     }
 
-    override fun hook(url: String, code: Int, request: String, response: String): String {
+    override fun hook(url: String, status: Int, request: String, response: String): String {
         val json = response.toJSONObject()
         if (json.optInt("code") != 0) return response
         json.optJSONObject("data")?.run {

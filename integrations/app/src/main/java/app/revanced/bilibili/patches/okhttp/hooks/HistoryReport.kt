@@ -9,13 +9,13 @@ import app.revanced.bilibili.utils.decodeFormBody
 import app.revanced.bilibili.utils.saveVideoHistory
 
 object HistoryReport : ApiHook() {
-    override fun shouldHook(url: String, code: Int): Boolean {
-        return code.isOk && Settings.UnlockAreaLimit()
+    override fun shouldHook(url: String, status: Int): Boolean {
+        return status.isOk && Settings.UnlockAreaLimit()
                 && Settings.SaveThailandHistory()
                 && url.contains("/x/v2/history/report")
     }
 
-    override fun hook(url: String, code: Int, request: String, response: String): String {
+    override fun hook(url: String, status: Int, request: String, response: String): String {
         val form = decodeFormBody(request)
         val sid = form["sid"] ?: return response
         val epId = form["epid"] ?: return response

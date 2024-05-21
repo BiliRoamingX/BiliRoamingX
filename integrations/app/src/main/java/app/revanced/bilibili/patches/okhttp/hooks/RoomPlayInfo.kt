@@ -30,12 +30,12 @@ object RoomPlayInfo : ApiHook() {
         }
     }
 
-    override fun shouldHook(url: String, code: Int): Boolean {
+    override fun shouldHook(url: String, status: Int): Boolean {
         return (Settings.DefaultMaxQn() || Settings.PreferStableCdn())
-                && code.isOk && url.startsWith(API)
+                && status.isOk && url.startsWith(API)
     }
 
-    override fun hook(url: String, code: Int, request: String, response: String): String {
+    override fun hook(url: String, status: Int, request: String, response: String): String {
         val jo = JSONObject(response)
         if (jo.optInt("code") != 0)
             return response

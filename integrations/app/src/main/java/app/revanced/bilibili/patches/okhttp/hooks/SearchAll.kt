@@ -9,12 +9,12 @@ import org.json.JSONObject
  * for hd
  */
 object SearchAll : ApiHook() {
-    override fun shouldHook(url: String, code: Int): Boolean {
-        return code.isOk && (Settings.SearchBangumi() || Settings.SearchMovie())
+    override fun shouldHook(url: String, status: Int): Boolean {
+        return status.isOk && (Settings.SearchBangumi() || Settings.SearchMovie())
                 && url.contains("/x/v2/search?")
     }
 
-    override fun hook(url: String, code: Int, request: String, response: String): String {
+    override fun hook(url: String, status: Int, request: String, response: String): String {
         val jsonObject = JSONObject(response)
         if (jsonObject.optInt("code") == 0) {
             val data = jsonObject.optJSONObject("data")

@@ -7,11 +7,11 @@ import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 
 object GarbSuitDetail : ApiHook() {
-    override fun shouldHook(url: String, code: Int): Boolean {
-        return Settings.Skin() && url.contains("/x/garb/v2/mall/suit/detail") && code.isOk
+    override fun shouldHook(url: String, status: Int): Boolean {
+        return Settings.Skin() && url.contains("/x/garb/v2/mall/suit/detail") && status.isOk
     }
 
-    override fun hook(url: String, code: Int, request: String, response: String): String {
+    override fun hook(url: String, status: Int, request: String, response: String): String {
         val json = response.toJSONObject()
         if (json.optInt("code", -1) != 0)
             return response

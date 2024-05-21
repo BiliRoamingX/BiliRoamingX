@@ -6,11 +6,11 @@ import app.revanced.bilibili.utils.toJSONObject
 import org.json.JSONArray
 
 object DmAd : ApiHook() {
-    override fun shouldHook(url: String, code: Int): Boolean {
-        return Settings.BlockUpRcmdAds() && url.contains("/x/v2/dm/ad") && code.isOk
+    override fun shouldHook(url: String, status: Int): Boolean {
+        return Settings.BlockUpRcmdAds() && url.contains("/x/v2/dm/ad") && status.isOk
     }
 
-    override fun hook(url: String, code: Int, request: String, response: String): String {
+    override fun hook(url: String, status: Int, request: String, response: String): String {
         val json = response.toJSONObject()
         json.optJSONObject("data")?.put("ads", JSONArray())
         return json.toString()

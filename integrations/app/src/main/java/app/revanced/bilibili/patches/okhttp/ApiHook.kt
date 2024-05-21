@@ -15,11 +15,11 @@ abstract class ApiHook {
         return Pair.create(url, headers)
     }
 
-    open fun shouldHook(url: String, code: Int): Boolean {
+    open fun shouldHook(url: String, status: Int): Boolean {
         return false
     }
 
-    open fun hook(url: String, code: Int, request: String, response: String): String {
+    open fun hook(url: String, status: Int, request: String, response: String): String {
         return response
     }
 }

@@ -11,12 +11,12 @@ import java.util.concurrent.TimeUnit
 object Subtitle : ApiHook() {
     var importedSubtitles = Pair<Long, MutableList<String>>(0L, mutableListOf())
 
-    override fun shouldHook(url: String, code: Int): Boolean {
-        return code.isOk && (url.contains("zh_converter")
+    override fun shouldHook(url: String, status: Int): Boolean {
+        return status.isOk && (url.contains("zh_converter")
                 || url.substringBefore('?').endsWith(".ass"))
     }
 
-    override fun hook(url: String, code: Int, request: String, response: String): String {
+    override fun hook(url: String, status: Int, request: String, response: String): String {
         var uri = Uri.parse(url)
         if (!uri.getQueryParameter("url").isNullOrEmpty())
             uri = Uri.parse(uri.getQueryParameter("url"))

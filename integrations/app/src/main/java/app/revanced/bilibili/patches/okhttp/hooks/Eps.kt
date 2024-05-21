@@ -13,13 +13,13 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 object Eps : ApiHook() {
-    override fun shouldHook(url: String, code: Int): Boolean {
+    override fun shouldHook(url: String, status: Int): Boolean {
         return Settings.UnlockAreaLimit()
                 && url.contains("/pgc/view/v2/app/eps")
-                && code.isOk
+                && status.isOk
     }
 
-    override fun hook(url: String, code: Int, request: String, response: String): String {
+    override fun hook(url: String, status: Int, request: String, response: String): String {
         val json = JSONObject(response)
         if (!Settings.UnlockAreaLimit())
             return response

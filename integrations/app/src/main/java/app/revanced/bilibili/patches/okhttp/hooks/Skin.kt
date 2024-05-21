@@ -7,14 +7,14 @@ import org.json.JSONException
 import org.json.JSONObject
 
 object Skin : ApiHook() {
-    override fun shouldHook(url: String, code: Int): Boolean {
+    override fun shouldHook(url: String, status: Int): Boolean {
         return Settings.Skin()
                 && Settings.SkinJson().isNotEmpty()
                 && url.contains("/x/resource/show/skin")
-                && code.isOk
+                && status.isOk
     }
 
-    override fun hook(url: String, code: Int, request: String, response: String): String {
+    override fun hook(url: String, status: Int, request: String, response: String): String {
         val skin = try {
             JSONObject(Settings.SkinJson())
         } catch (_: JSONException) {

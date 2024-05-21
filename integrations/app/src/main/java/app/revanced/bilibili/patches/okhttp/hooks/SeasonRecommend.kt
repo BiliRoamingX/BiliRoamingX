@@ -7,13 +7,13 @@ import app.revanced.bilibili.utils.iterator
 import app.revanced.bilibili.utils.toJSONObject
 
 object SeasonRecommend : ApiHook() {
-    override fun shouldHook(url: String, code: Int): Boolean {
+    override fun shouldHook(url: String, status: Int): Boolean {
         return Settings.RemoveRelatePromote()
                 && url.contains("/pgc/season/app/related/recommend")
-                && code.isOk
+                && status.isOk
     }
 
-    override fun hook(url: String, code: Int, request: String, response: String): String {
+    override fun hook(url: String, status: Int, request: String, response: String): String {
         val json = response.toJSONObject()
         val result = json.optJSONObject("result")
             ?: return response

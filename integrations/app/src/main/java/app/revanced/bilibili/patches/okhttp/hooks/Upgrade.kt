@@ -40,12 +40,12 @@ object Upgrade : ApiHook() {
         return (fromSelf || Settings.CustomUpdate()) && isOsArchArm64 && isPrebuilt
     }
 
-    override fun shouldHook(url: String, code: Int): Boolean {
+    override fun shouldHook(url: String, status: Int): Boolean {
         return (Settings.BlockUpdate() || customUpdate(fromSelf = fromSelf))
                 && url.contains("/x/v2/version/fawkes/upgrade")
     }
 
-    override fun hook(url: String, code: Int, request: String, response: String): String {
+    override fun hook(url: String, status: Int, request: String, response: String): String {
         return if (customUpdate(fromSelf = fromSelf))
             (runCatchingOrNull { checkUpgrade().toString() }
                 ?: """{"code":-1,"message":"检查更新失败，请稍后再试/(ㄒoㄒ)/~~""")

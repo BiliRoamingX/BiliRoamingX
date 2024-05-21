@@ -6,13 +6,13 @@ import app.revanced.bilibili.patches.okhttp.ApiHook
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook
 
 object Season : ApiHook() {
-    override fun shouldHook(url: String, code: Int): Boolean {
+    override fun shouldHook(url: String, status: Int): Boolean {
         return (url.contains("/pgc/view/v2/app/season")
                 || url.contains("/pgc/view/v2/app/fav/season"))
-                && code.isOk
+                && status.isOk
     }
 
-    override fun hook(url: String, code: Int, request: String, response: String): String {
+    override fun hook(url: String, status: Int, request: String, response: String): String {
         val newResponse = BangumiSeasonHook.unlockBangumi(url, response)
         VideoInfoHolder.updateCurrent { videoInfo ->
             videoInfo?.apply { view = newResponse } ?: VideoInfo(0, newResponse)
