@@ -15,14 +15,14 @@ import org.json.JSONObject
 object Space : ApiHook() {
     override fun shouldHook(url: String, status: Int): Boolean {
         return (Settings.FixSpace()
-                || Settings.Skin()
+                || Settings.SkinJson().isNotEmpty()
                 || Settings.IgnoreBlacklist())
                 && url.contains("/x/v2/space?") && status.isOk
     }
 
     override fun hook(url: String, status: Int, request: String, response: String): String {
         val respOk = response.contains("\"code\":0")
-        if (respOk && Settings.Skin() && url.contains("vmid=${Accounts.mid}")) {
+        if (respOk && Settings.SkinJson().isNotEmpty() && url.contains("vmid=${Accounts.mid}")) {
             val skinJson = Settings.SkinJson().runCatchingOrNull {
                 toJSONObject()
             } ?: return response

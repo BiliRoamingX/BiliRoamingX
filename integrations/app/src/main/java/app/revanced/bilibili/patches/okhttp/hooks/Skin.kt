@@ -8,8 +8,7 @@ import org.json.JSONObject
 
 object Skin : ApiHook() {
     override fun shouldHook(url: String, status: Int): Boolean {
-        return Settings.Skin()
-                && Settings.SkinJson().isNotEmpty()
+        return Settings.SkinJson().isNotEmpty()
                 && url.contains("/x/resource/show/skin")
                 && status.isOk
     }

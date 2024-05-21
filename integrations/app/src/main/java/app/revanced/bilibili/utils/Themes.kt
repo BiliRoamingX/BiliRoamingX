@@ -15,8 +15,8 @@ import java.net.URL
 import java.util.zip.ZipInputStream
 
 object Themes {
-    private const val PURE_GARB_TEMPLATE =
-        """{"animateLoop":false,"bottomIconsEmpty":true,"btnBgEndColor":0,"btnBgStartColor":0,"btnIconColor":0,"btnIconPath":"","btnIconSelectedPath":"","changeable":true,"colorName":"%s","darkMode":true,"fontColor":0,"force":false,"hasAnimate":false,"headBgPath":"","headMineBgAnimatorPath":"","headMineBgPath":"","headMineSquaredBgPath":"","headTabBgPath":"","id":%d,"loadAllFile":false,"mainDarkMode":true,"mainFontColor":0,"mineAnimateLoop":false,"name":"","op":false,"primaryOnly":false,"secondaryPageColor":0,"sideBgColor":0,"sideBgPath":"","sideBottomBgPath":"","sideLineColor":0,"tailBgPath":"","tailColor":0,"tailColorModel":false,"tailIconColor":0,"tailIconColorNight":0,"tailIconColorSelected":0,"tailIconColorSelectedNight":0,"tailIconPath":[],"tailIconSelectedPath":[],"tailSelectedColor":0,"ver":0}"""
+    private val pureGarbTemplate: String
+        get() = """{"animateLoop":false,"bottomIconsEmpty":true,"btnBgEndColor":0,"btnBgStartColor":0,"btnIconColor":0,"btnIconPath":"","btnIconSelectedPath":"","changeable":true,"colorName":"%s","darkMode":true,"fontColor":0,"force":false,"hasAnimate":false,"headBgPath":"","headMineBgAnimatorPath":"","headMineBgPath":"","headMineSquaredBgPath":"","headTabBgPath":"","id":%d,"loadAllFile":false,"mainDarkMode":true,"mainFontColor":0,"mineAnimateLoop":false,"name":"","op":false,"primaryOnly":false,"secondaryPageColor":0,"sideBgColor":0,"sideBgPath":"","sideBottomBgPath":"","sideLineColor":0,"tailBgPath":"","tailColor":0,"tailColorModel":false,"tailIconColor":0,"tailIconColorNight":0,"tailIconColorSelected":0,"tailIconColorSelectedNight":0,"tailIconPath":[],"tailIconSelectedPath":[],"tailSelectedColor":0,"ver":0}"""
 
     private val garbChangeAction: String
         get() = "${Utils.getContext().packageName}.garb.GARB_CHANGE"
@@ -221,7 +221,7 @@ object Themes {
 
     fun unloadTheme(activity: Context? = null) {
         val (name, id) = "white" to 8
-        val garb = PURE_GARB_TEMPLATE.format(name, id)
+        val garb = pureGarbTemplate.format(name, id)
         garbConf.writeText(garb)
         if (Utils.isWebProcess()) {
             blkvPrefs.edit {

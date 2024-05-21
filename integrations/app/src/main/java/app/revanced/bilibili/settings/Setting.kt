@@ -12,6 +12,7 @@ sealed class Setting<out T : Any>(
     @JvmField val key: String,
     @JvmField val defValue: T,
     @JvmField val needReboot: Boolean = false,
+    @JvmField val dependency: BooleanSetting? = null,
     private val onChange: ((value: T, async: Boolean) -> Unit)? = null
 ) {
     protected var value: @UnsafeVariance T = defValue
@@ -49,7 +50,7 @@ sealed class Setting<out T : Any>(
     }
 
     fun get(): T {
-        return if (Accounts.userBlocked) defValue else value
+        return if (Accounts.userBlocked || (dependency != null && !dependency.get())) defValue else value
     }
 
     fun executeOnChangeAction(async: Boolean) {
@@ -129,8 +130,9 @@ class BooleanSetting(
     key: String,
     defValue: Boolean = false,
     needReboot: Boolean = false,
+    dependency: BooleanSetting? = null,
     onChange: ((value: Boolean, async: Boolean) -> Unit)? = null
-) : Setting<Boolean>(key, defValue, needReboot, onChange) {
+) : Setting<Boolean>(key, defValue, needReboot, dependency, onChange) {
     override fun load() {
         value = prefs.getBoolean(key, defValue)
     }
@@ -145,8 +147,9 @@ class IntSetting(
     key: String,
     defValue: Int = 0,
     needReboot: Boolean = false,
+    dependency: BooleanSetting? = null,
     onChange: ((value: Int, async: Boolean) -> Unit)? = null
-) : Setting<Int>(key, defValue, needReboot, onChange) {
+) : Setting<Int>(key, defValue, needReboot, dependency, onChange) {
     override fun load() {
         value = prefs.getInt(key, defValue)
     }
@@ -161,8 +164,9 @@ class LongSetting(
     key: String,
     defValue: Long = 0L,
     needReboot: Boolean = false,
+    dependency: BooleanSetting? = null,
     onChange: ((value: Long, async: Boolean) -> Unit)? = null
-) : Setting<Long>(key, defValue, needReboot, onChange) {
+) : Setting<Long>(key, defValue, needReboot, dependency, onChange) {
     override fun load() {
         value = prefs.getLong(key, defValue)
     }
@@ -177,8 +181,9 @@ class FloatSetting(
     key: String,
     defValue: Float = 0.0f,
     needReboot: Boolean = false,
+    dependency: BooleanSetting? = null,
     onChange: ((value: Float, async: Boolean) -> Unit)? = null
-) : Setting<Float>(key, defValue, needReboot, onChange) {
+) : Setting<Float>(key, defValue, needReboot, dependency, onChange) {
     override fun load() {
         value = prefs.getFloat(key, defValue)
     }
@@ -193,8 +198,9 @@ class StringSetting(
     key: String,
     defValue: String = "",
     needReboot: Boolean = false,
+    dependency: BooleanSetting? = null,
     onChange: ((value: String, async: Boolean) -> Unit)? = null
-) : Setting<String>(key, defValue, needReboot, onChange) {
+) : Setting<String>(key, defValue, needReboot, dependency, onChange) {
     override fun load() {
         value = prefs.getString(key, defValue).orEmpty()
     }
@@ -209,8 +215,9 @@ class StringSetSetting(
     key: String,
     defValue: Set<String> = setOf(),
     needReboot: Boolean = false,
+    dependency: BooleanSetting? = null,
     onChange: ((value: Set<String>, async: Boolean) -> Unit)? = null
-) : Setting<Set<String>>(key, defValue, needReboot, onChange) {
+) : Setting<Set<String>>(key, defValue, needReboot, dependency, onChange) {
     override fun load() {
         value = prefs.getStringSet(key, defValue).orEmpty()
     }

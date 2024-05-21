@@ -90,7 +90,7 @@ object BangumiSeasonHook {
             data.put("activity_entrance", JSONArray())
         if (Settings.BlockActivityTab())
             data.remove("activity_tab")
-        if (Settings.Skin() && data.optJSONObject("player_icon") == null) {
+        if (Settings.SkinJson().isNotEmpty() && data.optJSONObject("player_icon") == null) {
             val playIcon = Settings.SkinJson().runCatchingOrNull {
                 toJSONObject()
             }?.optJSONObject("play_icon")

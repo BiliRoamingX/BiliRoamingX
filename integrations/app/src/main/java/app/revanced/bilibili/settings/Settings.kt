@@ -147,8 +147,10 @@ object Settings {
     @JvmField val BlockUpRcmdAds = BooleanSetting(key = "block_up_rcmd_ads")
     @JvmField val BlockBangumiPageAds = BooleanSetting(key = "block_bangumi_page_ads")
     @JvmField val RemoveRelatePromote = BooleanSetting(key = "remove_video_relate_promote")
-    @JvmField val RemoveRelateOnlyAv = BooleanSetting(key = "remove_video_relate_only_av")
-    @JvmField val RemoveRelateNothing = BooleanSetting(key = "remove_video_relate_nothing")
+    @JvmField val RemoveRelateOnlyAv =
+        BooleanSetting(key = "remove_video_relate_only_av", dependency = RemoveRelatePromote)
+    @JvmField val RemoveRelateNothing =
+        BooleanSetting(key = "remove_video_relate_nothing", dependency = RemoveRelateOnlyAv)
     @JvmField val DisableAutoSelect = BooleanSetting(key = "disable_auto_select")
     @JvmField val DisableAutoSubscribe = BooleanSetting(key = "disable_auto_subscribe")
     @JvmField val FilterStory = StringSetSetting(key = "filter_story")
@@ -216,7 +218,7 @@ object Settings {
     // region Group: 杂项
     @JvmField val DisableTeenagerDialog = BooleanSetting(key = "teenagers_mode_dialog")
     @JvmField val CommentCopy = BooleanSetting(key = "comment_copy")
-    @JvmField val EnhanceCommentCopy = BooleanSetting(key = "comment_copy_enhance")
+    @JvmField val EnhanceCommentCopy = BooleanSetting(key = "comment_copy_enhance", dependency = CommentCopy)
     @JvmField val BlockUpdate = BooleanSetting(key = "block_update")
     @JvmField val CustomUpdate = BooleanSetting(key = "custom_update", defValue = true)
     @JvmField val BlockFollowButton = StringSetSetting(key = "block_follow_button")
@@ -235,7 +237,7 @@ object Settings {
             deleteModuleResources()
         }
     })
-    @JvmField val BlockModulesException = StringSetSetting(key = "block_modules_exception")
+    @JvmField val BlockModulesException = StringSetSetting(key = "block_modules_exception", dependency = BlockModules)
     @JvmField val MusicNotification = BooleanSetting(key = "music_notification", needReboot = true)
     @JvmField val PurifyShare = BooleanSetting(key = "purify_share")
     @JvmField val FuckMiniProgram = BooleanSetting(key = "mini_program")
@@ -266,6 +268,6 @@ object Settings {
     @JvmField val LosslessEnabled = BooleanSetting(key = "lossless_enabled")
     @JvmField val BgPlayingEnabled = BooleanSetting(key = "bg_playing_enabled")
     @JvmField val CustomColor = IntSetting(key = "biliroaming_custom_color", defValue = -0xe6b7d)
-    @JvmField val SkinJson = StringSetting(key = "skin_json")
+    @JvmField val SkinJson = StringSetting(key = "skin_json", dependency = Skin)
     // endregion
 }

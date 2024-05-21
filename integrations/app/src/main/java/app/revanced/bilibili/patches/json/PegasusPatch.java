@@ -383,8 +383,8 @@ public class PegasusPatch {
         return removeRelatePromote && (relate.getFromSourceType()) == 2L || "cm".equals(relate.getGoto());
     }
 
-    private static boolean isNotAvRelate(Relate relate, boolean removeRelatePromote, boolean removeRelateOnlyAv) {
-        return removeRelatePromote && removeRelateOnlyAv && !"av".equals(relate.getGoto());
+    private static boolean isNotAvRelate(Relate relate, boolean removeRelateOnlyAv) {
+        return removeRelateOnlyAv && !"av".equals(relate.getGoto());
     }
 
     private static boolean isLowPlayCountRelate(Relate relate, long playCountLimit) {
@@ -468,9 +468,9 @@ public class PegasusPatch {
         return removeRelatePromote && (cardType == RelateCardType.RESOURCE || cardType == RelateCardType.CM || cardType == RelateCardType.GAME || cardType == RelateCardType.LIVE);
     }
 
-    private static boolean isNotAvRelateUnite(RelateCard relate, boolean removeRelatePromote, boolean removeRelateOnlyAv, BizType bizType) {
+    private static boolean isNotAvRelateUnite(RelateCard relate, boolean removeRelateOnlyAv, BizType bizType) {
         RelateCardType cardType = relate.getRelateCardType();
-        return removeRelatePromote && removeRelateOnlyAv && (bizType == BizType.BIZ_TYPE_UGC && cardType != RelateCardType.AV);
+        return removeRelateOnlyAv && (bizType == BizType.BIZ_TYPE_UGC && cardType != RelateCardType.AV);
     }
 
     private static boolean isWideAvCard(RelateCard relate) {
@@ -939,9 +939,7 @@ public class PegasusPatch {
     }
 
     public static void filterViewRelates(ViewReply viewReply) {
-        if (Settings.RemoveRelatePromote.get()
-                && Settings.RemoveRelateOnlyAv.get()
-                && Settings.RemoveRelateNothing.get()) {
+        if (Settings.RemoveRelateNothing.get()) {
             viewReply.clearRelates();
             viewReply.clearPagination();
             return;
@@ -952,9 +950,7 @@ public class PegasusPatch {
     }
 
     public static void filterViewUniteRelates(Module module, BizType bizType) {
-        if (Settings.RemoveRelatePromote.get()
-                && Settings.RemoveRelateOnlyAv.get()
-                && Settings.RemoveRelateNothing.get()) {
+        if (Settings.RemoveRelateNothing.get()) {
             module.clearRelates();
             return;
         }
@@ -1031,7 +1027,7 @@ public class PegasusPatch {
         for (int i = 0; i < relates.size(); i++) {
             Relate relate = relates.get(i);
             if (isPromoteRelate(relate, removeRelatePromote)
-                    || isNotAvRelate(relate, removeRelatePromote, removeRelateOnlyAv)
+                    || isNotAvRelate(relate, removeRelateOnlyAv)
                     || (applyToVideo && (isLowPlayCountRelate(relate, playCountLimit)
                     || isDurationInvalidRelate(relate, shortDurationLimit, longDurationLimit)
                     || isContainsBlockKwdRelate(relate, titleRegexMode, titleSet, titleRegexes, reasonRegexMode, reasonSet, reasonRegexes, upRegexMode, upSet, upRegexes, uidArray))))
@@ -1089,7 +1085,7 @@ public class PegasusPatch {
         for (int i = 0; i < relateCards.size(); i++) {
             RelateCard relate = relateCards.get(i);
             if (isPromoteRelateUnite(relate, removeRelatePromote)
-                    || isNotAvRelateUnite(relate, removeRelatePromote, removeRelateOnlyAv, bizType)
+                    || isNotAvRelateUnite(relate, removeRelateOnlyAv, bizType)
                     || (applyToVideo && (isLowPlayCountRelateUnite(relate, playCountLimit)
                     || isDurationInvalidRelateUnite(relate, shortDurationLimit, longDurationLimit)
                     || isContainsBlockKwdRelateUnite(relate, titleRegexMode, titleSet, titleRegexes, reasonRegexMode, reasonSet, reasonRegexes, upRegexMode, upSet, upRegexes, uidArray))))
