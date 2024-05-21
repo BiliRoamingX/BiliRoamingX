@@ -56,5 +56,9 @@
             android:key="disable_main_page_story"
             android:summary="@string/biliroaming_disable_main_page_story_summary"
             android:title="@string/biliroaming_disable_main_page_story_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="block_home_recent_used"
+            android:summary="@string/biliroaming_block_home_recent_used_summary"
+            android:title="@string/biliroaming_block_home_recent_used_title" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

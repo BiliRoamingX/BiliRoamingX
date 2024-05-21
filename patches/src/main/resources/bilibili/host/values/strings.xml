@@ -456,4 +456,6 @@
     <string name="biliroaming_prefer_stable_cdn_summary">观看直播或视频时，优先选择大厂稳定的CDN节点播放，如若遇到直播或视频经常卡顿问题，可启用此选项。目前由于官方播放器的缺陷，启用后会导致AV号大于2147483647的视频无法播放。</string>
     <string name="biliroaming_view">查看</string>
     <string name="biliroaming_found_new_version">（发现新版本%s）</string>
+    <string name="biliroaming_block_home_recent_used_title">屏蔽最近使用</string>
+    <string name="biliroaming_block_home_recent_used_summary">屏蔽最近页面的最近使用，例如最近使用的小程序</string>
 </resources>

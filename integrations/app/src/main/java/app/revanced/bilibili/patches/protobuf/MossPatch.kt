@@ -24,6 +24,7 @@ object MossPatch {
         DynRed,
         DynTab,
         DynVideo,
+        HomeRecent,
         ListenPlayHistory,
         ListenPlaylist,
         ListenPlayURL,

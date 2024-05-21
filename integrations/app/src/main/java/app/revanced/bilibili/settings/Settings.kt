@@ -82,6 +82,7 @@ object Settings {
     @JvmField val BlockPopularTopicList = BooleanSetting(key = "block_popular_topic_list")
     @JvmField val BlockPopularRcmdUp = BooleanSetting(key = "block_popular_rcmd_up")
     @JvmField val BlockPopularLive = BooleanSetting(key = "block_popular_live")
+    @JvmField val BlockHomeRecentUsed = BooleanSetting(key = "block_home_recent_used")
     // endregion
 
 
