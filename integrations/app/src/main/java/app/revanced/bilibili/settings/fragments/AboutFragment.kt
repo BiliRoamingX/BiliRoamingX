@@ -145,7 +145,7 @@ class AboutFragment : BiliRoamingBaseSettingFragment() {
         val (tag, _, _) = latestRelease()
             ?: return@async
         val version = tag.removePrefix("v")
-        if (version == BuildConfig.VERSION_NAME)
+        if (!isNewVersion(version))
             return@async
         Utils.runOnMainThread {
             if (isRemoving || isDetached)
@@ -158,13 +158,24 @@ class AboutFragment : BiliRoamingBaseSettingFragment() {
         }
     }
 
+    private fun isNewVersion(version: String): Boolean {
+        val parts = version.split('.')
+        val mVersion = BuildConfig.VERSION_NAME
+        val mParts = mVersion.split('.')
+        if (mParts.size <= 3)
+            return mVersion != version
+        if (parts.size >= 3 && parts[0] == mParts[0] && parts[1] == mParts[1] && parts[2] == mParts[2])
+            return false
+        return true
+    }
+
     private fun checkLatestRelease() = Utils.async {
         val (tag, title, changelog) = latestRelease() ?: run {
             Toasts.showShort("检查更新失败，请稍后再试/(ㄒoㄒ)/~~")
             return@async
         }
         val version = tag.removePrefix("v")
-        if (version == BuildConfig.VERSION_NAME) {
+        if (!isNewVersion(version)) {
             Toasts.showShort("未发现新版本")
             return@async
         }
