@@ -57,7 +57,7 @@ cd BiliRoamingX
 
 ## ⬇️ 下载使用
 
-- 前往 [BiliRoamingX-PreBuilds Release](https://github.com/BiliRoamingX/BiliRoamingX-PreBuilds/releases) 下载
+- 前往 [BiliRoamingX-PreBuilds Release](https://github.com/BiliRoamingX/BiliRoamingX-PreBuilds/releases/latest) 下载
 - 参照 [revanced-cli](https://github.com/ReVanced/revanced-cli/tree/main/docs) 文档打包
   1. 下载定制版 [revanced-cli.jar](https://github.com/zjns/revanced-cli/releases/latest)
   2. 从 [releases](https://github.com/BiliRoamingX/BiliRoamingX/releases/latest) 下载 `integrations.apk` 和 `patches.jar`
