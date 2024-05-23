@@ -58,7 +58,7 @@ object SearchManager {
     private const val NS_APP = "http://schemas.android.com/apk/res-auto"
 
     @JvmStatic
-    private val ignoreNodes
+    private val ignoreNodes: Array<String>
         get() = arrayOf(
             "androidx.preference.PreferenceScreen",
             "androidx.preference.PreferenceCategory",
@@ -111,6 +111,10 @@ object SearchManager {
         allPreferencesCache.clear()
         allPreferencesCache.addAll(items)
         return allPreferencesCache
+    }
+
+    fun clearPreferencesCache() {
+        allPreferencesCache.clear()
     }
 
     private fun XmlPullParser.readPreference(belongFragment: Class<out Fragment>): Pair<String, PreferenceItem> {
