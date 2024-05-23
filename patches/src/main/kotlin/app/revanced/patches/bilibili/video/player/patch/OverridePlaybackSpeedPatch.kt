@@ -46,10 +46,10 @@ object OverridePlaybackSpeedPatch : MultiMethodBytecodePatch(
         super.execute(context)
         SpeedFunctionWidgetFingerprint.result.mapNotNull { r ->
             r.classDef.fields.firstNotNullOfOrNull { f ->
-                context.classes.find { it.type == f.type }?.takeIf {
+                f.type.toClassDefOrNull(context)?.takeIf {
                     it.interfaces == listOf("Landroid/view/View\$OnClickListener;")
-                }?.let { c ->
-                    context.proxy(c).mutableClass.methods.first { it.name == "<init>" }
+                }?.let {
+                    it.proxy(context).methods.first { it.name == "<init>" }
                 }
             }
         }.ifEmpty {

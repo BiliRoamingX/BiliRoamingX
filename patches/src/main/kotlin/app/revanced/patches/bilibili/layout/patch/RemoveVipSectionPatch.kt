@@ -7,6 +7,7 @@ import app.revanced.patcher.patch.PatchException
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patches.bilibili.utils.cloneMutable
+import app.revanced.patches.bilibili.utils.toClassDefOrNull
 import app.revanced.util.findMutableMethodOf
 
 @Patch(
@@ -32,7 +33,7 @@ object RemoveVipSectionPatch : BytecodePatch() {
                 )
             }.also { methods.add(it) }
             val iOnSkinChangeMethod = interfaces.firstNotNullOf { c ->
-                context.classes.find { it.type == c }?.methods?.singleOrNull()?.takeIf {
+                c.toClassDefOrNull(context)?.methods?.singleOrNull()?.takeIf {
                     it.parameterTypes == listOf("Lcom/bilibili/lib/ui/garb/Garb;") && it.returnType == "V"
                 }
             }

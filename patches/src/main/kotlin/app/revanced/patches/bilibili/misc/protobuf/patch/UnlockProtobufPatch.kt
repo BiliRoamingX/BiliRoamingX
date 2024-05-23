@@ -5,9 +5,7 @@ import app.revanced.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.revanced.patcher.patch.BytecodePatch
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
-import app.revanced.patches.bilibili.utils.args
-import app.revanced.patches.bilibili.utils.toPublic
-import com.android.tools.smali.dexlib2.AccessFlags
+import app.revanced.patches.bilibili.utils.*
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction35c
 
@@ -24,13 +22,13 @@ object UnlockProtobufPatch : BytecodePatch() {
     override fun execute(context: BytecodeContext) {
         val methodNameRegex = Regex("""^((set|add|remove|clear|merge|getMutable)\w+)|<init>$""")
         context.classes.filter { it.superclass == "Lcom/google/protobuf/GeneratedMessageLite;" }
-            .flatMap { context.proxy(it).mutableClass.methods }.forEach { m ->
+            .flatMap { it.proxy(context).methods }.forEach { m ->
                 // step 1, private to public
-                if (AccessFlags.PRIVATE.isSet(m.accessFlags)
-                    && !AccessFlags.STATIC.isSet(m.accessFlags)
+                if (m.accessFlags.isPrivate()
+                    && !m.accessFlags.isStatic()
                     && m.name.matches(methodNameRegex)
                 ) m.accessFlags = m.accessFlags.toPublic()
-                else if (AccessFlags.SYNTHETIC.isSet(m.accessFlags) && m.returnType.let { it == "V" || it == "Ljava/util/Map;" }) {
+                else if (m.accessFlags.isSynthetic() && m.returnType.let { it == "V" || it == "Ljava/util/Map;" }) {
                     val inst = m.implementation!!.instructions[0]
                     // step 2, invoke-direct to invoke-virtual
                     if (inst.opcode == Opcode.INVOKE_DIRECT) {

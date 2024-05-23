@@ -9,6 +9,7 @@ import app.revanced.patcher.util.proxy.mutableTypes.MutableClass
 import app.revanced.patches.bilibili.misc.config.fingerprints.ABSourceFingerprint
 import app.revanced.patches.bilibili.misc.config.fingerprints.ConfigSourceFingerprint
 import app.revanced.patches.bilibili.utils.cloneMutable
+import app.revanced.patches.bilibili.utils.proxy
 import app.revanced.util.exception
 import com.android.tools.smali.dexlib2.iface.Method
 import app.revanced.patches.bilibili.misc.integrations.patch.ConfigPatch as IntegrationConfigPatch
@@ -73,7 +74,7 @@ object ConfigPatch : BytecodePatch(fingerprints = setOf(ABSourceFingerprint, Con
             cl.interfaces.size == 1 && cl.interfaces.first().startsWith("${configManagerType.removeSuffix(";")}$")
                     && cl.methods.any { it.isAb() } && cl.methods.any { it.isConfig() }
         }.forEach {
-            context.proxy(it).mutableClass.run {
+            it.proxy(context).run {
                 patchAb()
                 patchConfig()
             }

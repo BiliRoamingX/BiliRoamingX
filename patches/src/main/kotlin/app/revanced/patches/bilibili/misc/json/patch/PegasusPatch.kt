@@ -13,6 +13,7 @@ import app.revanced.patches.bilibili.misc.json.fingerprints.CardClickProcessorNe
 import app.revanced.patches.bilibili.misc.json.fingerprints.PegasusParserFingerprint
 import app.revanced.patches.bilibili.utils.annotation
 import app.revanced.patches.bilibili.utils.cloneMutable
+import app.revanced.patches.bilibili.utils.proxy
 import app.revanced.patches.bilibili.utils.value
 import app.revanced.util.exception
 import com.android.tools.smali.dexlib2.iface.value.StringEncodedValue
@@ -60,7 +61,7 @@ object PegasusPatch : BytecodePatch(
         } ?: throw PatchException("not found banner item field")
         val myBannersItemClassName = "Lapp/revanced/bilibili/meta/pegasus/BannersItem;"
         val myBannersItemClass = context.findClass(myBannersItemClassName)!!
-        context.proxy(stockBannersItemClass).mutableClass.setSuperClass(myBannersItemClassName)
+        stockBannersItemClass.proxy(context).setSuperClass(myBannersItemClassName)
         myBannersItemClass.mutableClass.methods.run {
             find { it.name == "getBanners" }?.also { remove(it) }
                 ?.cloneMutable(3, clearImplementation = true)

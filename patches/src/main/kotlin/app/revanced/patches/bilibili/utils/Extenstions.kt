@@ -1,6 +1,8 @@
 package app.revanced.patches.bilibili.utils
 
+import app.revanced.patcher.data.BytecodeContext
 import app.revanced.patcher.patch.PatchException
+import app.revanced.patcher.util.proxy.mutableTypes.MutableClass
 import app.revanced.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
 import app.revanced.patches.bilibili.patcher.fingerprint.MultiMethodFingerprint
 import com.android.tools.smali.dexlib2.AccessFlags
@@ -61,6 +63,7 @@ fun Int.isNative() = AccessFlags.NATIVE.isSet(this)
 fun Int.isStatic() = AccessFlags.STATIC.isSet(this)
 fun Int.isPublic() = AccessFlags.PUBLIC.isSet(this)
 fun Int.isPrivate() = AccessFlags.PRIVATE.isSet(this)
+fun Int.isSynthetic() = AccessFlags.SYNTHETIC.isSet(this)
 
 fun Method(
     definingClass: String,
@@ -156,3 +159,15 @@ inline fun <reified T : EncodedValue> Annotation.value(name: String): T? =
 fun ClassDef.memberClasses() = annotation("Ldalvik/annotation/MemberClasses;")
     ?.value<ArrayEncodedValue>("value")?.value
     ?.filterIsInstance<TypeEncodedValue>()?.map { it.value }.orEmpty()
+
+fun String.toClassDef(context: BytecodeContext): ClassDef {
+    return context.classes.first { it.type == this }
+}
+
+fun String.toClassDefOrNull(context: BytecodeContext): ClassDef? {
+    return context.classes.find { it.type == this }
+}
+
+fun ClassDef.proxy(context: BytecodeContext): MutableClass {
+    return context.proxy(this).mutableClass
+}

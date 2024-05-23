@@ -7,6 +7,7 @@ import app.revanced.patcher.patch.PatchException
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patches.bilibili.utils.cloneMutable
+import app.revanced.patches.bilibili.utils.toClassDef
 import app.revanced.util.getReference
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
@@ -22,9 +23,8 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 )
 object ToastPatch : BytecodePatch() {
     override fun execute(context: BytecodeContext) {
-        val onBackPressedMethod = context.classes.find {
-            it.type == "Ltv/danmaku/bili/MainActivityV2;"
-        }?.methods?.find { it.name == "onBackPressed" }
+        val onBackPressedMethod = "Ltv/danmaku/bili/MainActivityV2;".toClassDef(context)
+            .methods.find { it.name == "onBackPressed" }
             ?: throw PatchException("Not found MainActivityV2#onBackPressed method")
         val showToastRef = onBackPressedMethod.implementation
             ?.instructions?.firstNotNullOfOrNull { s ->
@@ -36,7 +36,7 @@ object ToastPatch : BytecodePatch() {
                 }
             } ?: throw PatchException("Not found show toast method reference")
         val myToastsClass = context.findClass("Lapp/revanced/bilibili/utils/Toasts;")!!
-        val cancelMethod = context.classes.find { it.type == showToastRef.definingClass }!!.methods
+        val cancelMethod = showToastRef.definingClass.toClassDef(context).methods
             .find { it.parameterTypes.isEmpty() && it.name != "<init>" }
             ?: throw PatchException("Not found cancel toast method")
         myToastsClass.mutableClass.methods.run {

@@ -11,6 +11,7 @@ import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patches.bilibili.misc.integrations.fingerprints.AppCompatActivityFingerprint
 import app.revanced.patches.bilibili.utils.isAbstract
 import app.revanced.patches.bilibili.utils.isNative
+import app.revanced.patches.bilibili.utils.proxy
 import app.revanced.util.exception
 import app.revanced.util.findMutableMethodOf
 import app.revanced.util.getReference
@@ -70,7 +71,7 @@ object DpiPatch : BytecodePatch(setOf(AppCompatActivityFingerprint)) {
                             && instructions[index + 1].opcode == Opcode.MOVE_RESULT_OBJECT
                 }
                 if (instIndex != -1) {
-                    context.proxy(c).mutableClass.findMutableMethodOf(m).replaceInstruction(
+                    c.proxy(context).findMutableMethodOf(m).replaceInstruction(
                         instIndex, """
                         invoke-static {}, Lapp/revanced/bilibili/utils/Utils;->getResources()Landroid/content/res/Resources;
                     """.trimIndent()

@@ -9,6 +9,7 @@ import app.revanced.patches.bilibili.misc.copy.fingerprints.*
 import app.revanced.patches.bilibili.patcher.patch.MultiMethodBytecodePatch
 import app.revanced.patches.bilibili.utils.cloneMutable
 import app.revanced.patches.bilibili.utils.exception
+import app.revanced.patches.bilibili.utils.proxy
 import app.revanced.util.exception
 
 @Patch(
@@ -52,8 +53,8 @@ object CopyEnhancePatch : MultiMethodBytecodePatch(
             it.type.startsWith("Lcom/bilibili/bplus/followinglist/module/item")
                     && it.interfaces.contains("Landroid/view/View\$OnLongClickListener;")
         }.forEach { c ->
-            context.proxy(c).mutableClass.interfaces.add(onLongClickOriginListenerType)
-            context.proxy(c).mutableClass.methods.run {
+            c.proxy(context).interfaces.add(onLongClickOriginListenerType)
+            c.proxy(context).methods.run {
                 first { it.name == "onLongClick" }.also { m ->
                     m.cloneMutable(name = "onLongClick_Origin").also { add(it) }
                 }.addInstructionsWithLabels(

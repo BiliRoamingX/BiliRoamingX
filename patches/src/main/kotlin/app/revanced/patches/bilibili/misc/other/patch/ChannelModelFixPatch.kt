@@ -54,14 +54,12 @@ object ChannelModelFixPatch : BytecodePatch() {
 
         val channelClassDef = context.findJSONFieldAnnotationMatchedClass(setOf("stick", "normal", "scaned", "config"))
             ?: throw PatchException("not found channel model class")
-        channelClassDef.memberClasses().map { t ->
-            context.classes.first { it.type == t }
-        }.forEach { c ->
-            context.proxy(c).mutableClass.addDefaultConstructorIfNeeded()
+        channelClassDef.memberClasses().map { it.toClassDef(context) }.forEach {
+            it.proxy(context).addDefaultConstructorIfNeeded()
         }
 
         val extendClassDef = context.findJSONFieldAnnotationMatchedClass(setOf("label", "model_type", "items"))
             ?: throw PatchException("not found extend model class")
-        context.proxy(extendClassDef).mutableClass.addDefaultConstructorIfNeeded()
+        extendClassDef.proxy(context).addDefaultConstructorIfNeeded()
     }
 }

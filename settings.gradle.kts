@@ -12,7 +12,7 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
     val gprUser = settings.providers.gradleProperty("gpr.user")
     val gprKey = settings.providers.gradleProperty("gpr.key")
     repositories {

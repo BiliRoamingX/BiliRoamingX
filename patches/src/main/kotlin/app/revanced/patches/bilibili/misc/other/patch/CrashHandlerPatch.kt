@@ -7,6 +7,7 @@ import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patches.bilibili.utils.isAbstract
 import app.revanced.patches.bilibili.utils.isNative
+import app.revanced.patches.bilibili.utils.proxy
 
 @Patch(
     name = "Crash handler",
@@ -20,7 +21,7 @@ import app.revanced.patches.bilibili.utils.isNative
 object CrashHandlerPatch : BytecodePatch() {
     override fun execute(context: BytecodeContext) {
         context.classes.filter { it.interfaces.contains("Ljava/lang/Thread\$UncaughtExceptionHandler;") }
-            .map { context.proxy(it).mutableClass }.flatMap { it.methods }
+            .map { it.proxy(context) }.flatMap { it.methods }
             .filter {
                 it.name == "uncaughtException" && !it.accessFlags.isAbstract() && !it.accessFlags.isNative()
             }.forEach {

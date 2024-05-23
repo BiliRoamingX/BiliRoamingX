@@ -8,6 +8,7 @@ import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patches.bilibili.utils.args
 import app.revanced.patches.bilibili.utils.cloneMutable
+import app.revanced.patches.bilibili.utils.toClassDef
 import app.revanced.util.getReference
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
@@ -25,10 +26,8 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 object ProtoBufPrintPatch : BytecodePatch() {
     override fun execute(context: BytecodeContext) {
         val toStringClass = context.findClass("Lcom/google/protobuf/MessageLiteToString;")!!
-        val toStringExClass =
-            context.classes.first { it.type == "Lcom/google/protobuf/MessageLiteToStringEx;" }
-        val unknownFieldSetLiteClass =
-            context.findClass("Lcom/google/protobuf/UnknownFieldSetLite;")!!
+        val toStringExClass = "Lcom/google/protobuf/MessageLiteToStringEx;".toClassDef(context)
+        val unknownFieldSetLiteClass = context.findClass("Lcom/google/protobuf/UnknownFieldSetLite;")!!
         val exToStringMethod = toStringExClass.methods.first { it.name == "toString" }
         val exPrintFieldMethod = toStringExClass.methods.first { it.name == "printField" }
         toStringClass.mutableClass.methods.run {

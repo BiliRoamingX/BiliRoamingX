@@ -8,14 +8,13 @@ import app.revanced.patcher.patch.BytecodePatch
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patcher.util.proxy.mutableTypes.MutableMethod
-import app.revanced.patches.bilibili.utils.cloneMutable
-import app.revanced.patches.bilibili.utils.isInterface
-import app.revanced.patches.bilibili.utils.isPrivate
+import app.revanced.patches.bilibili.utils.*
 import app.revanced.patches.bilibili.video.player.fingerprints.PlayerGestureListenerFingerprint
 import app.revanced.patches.bilibili.video.player.fingerprints.PlayerGestureRotateFingerprint
 import app.revanced.patches.bilibili.video.player.fingerprints.PlayerResizableGestureListenerFingerprint
 import app.revanced.patches.bilibili.video.player.fingerprints.ResetResizeFunctionWidgetFingerprint
 import app.revanced.util.exception
+import app.revanced.util.getReference
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction22c
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction35c
@@ -104,14 +103,14 @@ object PlayerGestureDetectorPatch : BytecodePatch(
                 }
             val (getRenderServiceMethodName, renderServiceType) = onScaleMethodInstructions.firstNotNullOf { inst ->
                 if (inst.opcode == Opcode.INVOKE_INTERFACE || inst.opcode == Opcode.INVOKE_VIRTUAL) {
-                    ((inst as BuilderInstruction35c).reference as MethodReference).let { ref ->
-                        if (ref.parameterTypes.isEmpty() && context.classes.find { it.type == ref.returnType }?.accessFlags?.isInterface() == true)
-                            ref.name to ref.returnType
+                    inst.getReference<MethodReference>().let {
+                        if (it.parameterTypes.isEmpty() && it.returnType.toClassDefOrNull(context)?.accessFlags?.isInterface() == true)
+                            it.name to it.returnType
                         else null
                     }
                 } else null
             }
-            val renderServiceClass = context.classes.first { it.type == renderServiceType }
+            val renderServiceClass = renderServiceType.toClassDef(context)
             val getAspectRatioMethodName = renderServiceClass.methods.first {
                 it.returnType == "Ltv/danmaku/videoplayer/core/videoview/AspectRatio;"
             }.name
@@ -121,9 +120,9 @@ object PlayerGestureDetectorPatch : BytecodePatch(
             val restoreMethodName = renderServiceClass.methods.first {
                 it.parameterTypes == listOf("Z", "Landroid/animation/AnimatorListenerAdapter;")
             }.name
-            val playerInterfaceClass = context.classes.first { it.type == playerClassName }.run {
+            val playerInterfaceClass = playerClassName.toClassDef(context).run {
                 if (superclass == "Ljava/lang/Object;") this else context.classes.first { it.type == superclass }
-            }.interfaces.first().let { type -> context.classes.first { it.type == type } }
+            }.interfaces.first().toClassDef(context)
             val getToastServiceMethodName = playerInterfaceClass.methods.first {
                 it.returnType == PlayerToastPatch.toastServiceInterfaceName
             }.name

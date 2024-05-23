@@ -7,10 +7,7 @@ import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patcher.util.proxy.mutableTypes.MutableField.Companion.toMutable
 import app.revanced.patches.bilibili.patcher.patch.MultiMethodBytecodePatch
-import app.revanced.patches.bilibili.utils.Annotation
-import app.revanced.patches.bilibili.utils.Field
-import app.revanced.patches.bilibili.utils.cloneMutable
-import app.revanced.patches.bilibili.utils.exception
+import app.revanced.patches.bilibili.utils.*
 import app.revanced.patches.bilibili.video.subtitle.fingerprints.FunctionWidgetServiceFingerprint
 import app.revanced.patches.bilibili.video.subtitle.fingerprints.FunctionWidgetTokenFingerprint
 import app.revanced.patches.bilibili.video.subtitle.fingerprints.PlayerSubtitleFunctionWidgetFingerprint
@@ -71,7 +68,7 @@ object SubtitleImportSavePatch : MultiMethodBytecodePatch(
                 } else null
             } else null
         } ?: throw PatchException("not found getDanmakuParams method")
-        val getDmViewReplyMethod = context.classes.first { it.type == danmakuParamsClass }.methods.first {
+        val getDmViewReplyMethod = danmakuParamsClass.toClassDef(context).methods.first {
             it.parameterTypes.isEmpty() && it.returnType == "Lcom/bapis/bilibili/community/service/dm/v1/DmViewReply;"
         }.name
         val loadSubtitleMethod = setDmResult.classDef.methods.first {

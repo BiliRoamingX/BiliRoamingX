@@ -53,7 +53,7 @@ object CacheRedirectPatch : MultiMethodBytecodePatch(
                 }) c else null
         }.let { c ->
             val onClickOriginListenerType = "Lapp/revanced/bilibili/widget/OnClickOriginListener;"
-            context.proxy(c).mutableClass.run {
+            c.proxy(context).run {
                 interfaces.add(onClickOriginListenerType)
                 val originOnClickMethod = methods.first {
                     it.name == "onClick" && it.parameterTypes == listOf("Landroid/view/View;") && it.returnType == "V"

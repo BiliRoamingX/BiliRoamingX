@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
 }
@@ -8,7 +10,9 @@ dependencies {
 }
 
 kotlin {
-    jvmToolchain(JavaVersion.VERSION_17.toString().toInt())
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
+    }
 }
 
 java {
