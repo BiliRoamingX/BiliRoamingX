@@ -79,6 +79,7 @@ object BangumiPlayUrlHook {
         ConfType.COLORFILTER.number,
         ConfType.SKIPOPED.number,
         ConfType.RECORDSCREEN.number,
+        ConfType.LISTEN.number,
     )
 
     var isDownloadPGC = false
@@ -654,6 +655,10 @@ object BangumiPlayUrlHook {
                     } else false
                 }.associateWith { supportedConf }.let {
                     mutableArcConfsMap.putAll(it)
+                }
+                runCatchingOrNull {
+                    // introduced in 7.80.0
+                    mutableArcConfsMap.put(ConfType.WATCH_LATER.number, supportedConf)
                 }
             }
             if (thai) {

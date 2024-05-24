@@ -31,6 +31,7 @@ object MossPatch {
         ListenRcmdPlaylist,
         ListFavoriteTab,
         ModuleList,
+        PlayHalfChannels,
         PlayURLPlayConf,
         PlayURLPlayConfEdit,
         PlayURLPlayViewPGC,

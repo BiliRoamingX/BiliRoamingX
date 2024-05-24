@@ -1,12 +1,11 @@
 package app.revanced.bilibili.patches.okhttp.hooks
 
 import android.net.Uri
+import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.patches.okhttp.ApiHook
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.bv2av
-import app.revanced.bilibili.utils.bvPattern
-import app.revanced.bilibili.utils.runCatchingOrNull
-import app.revanced.bilibili.utils.toJSONObject
+import app.revanced.bilibili.utils.*
+import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -15,12 +14,49 @@ object ShareClick : ApiHook() {
 
     override fun shouldHook(url: String, status: Int): Boolean {
         return status.isOk && url.contains("/x/share/click")
-                && (Settings.PurifyShare() || Settings.FuckMiniProgram())
+                && (Settings.UnlockAreaLimit() || Settings.PurifyShare() || Settings.FuckMiniProgram())
     }
 
     override fun hook(url: String, status: Int, request: String, response: String): String {
         val json = response.toJSONObject()
-        if (json.optInt("code") != 0) return response
+        val code = json.optInt("code", -1)
+        if (Settings.UnlockAreaLimit() && code != 0) {
+            val formBody = decodeFormBody(request)
+            val shareOrigin = formBody["share_origin"]
+            val shareChannel = formBody["share_channel"]
+            if (shareOrigin != "new_ogv")
+                return response
+            val newData = JSONObject()
+            val newJson = JSONObject().apply {
+                put("code", 0)
+                put("data", newData)
+            }
+            if (shareChannel == "COPY") {
+                val videoUrl = VideoInfoHolder.currentVideoUrl()
+                if (videoUrl.isNullOrEmpty())
+                    return response
+                newData.put("content", videoUrl)
+                newData.put("count", 0)
+                return newJson.toString()
+            } else if (shareChannel == "GENERIC") {
+                val (mainTitle, _) = VideoInfoHolder.currentTitle()
+                    ?: return response
+                val videoUrl = VideoInfoHolder.currentVideoUrl()
+                if (videoUrl.isNullOrEmpty())
+                    return response
+                newData.apply {
+                    put("title", mainTitle)
+                    put("content", "$mainTitle $videoUrl")
+                    put("link", videoUrl)
+                    put("share_mode", 4)
+                    put("header", "哔哩哔哩")
+                    put("count", 0)
+                }
+                return newJson.toString()
+            }
+        }
+        if (code != 0 || (!Settings.PurifyShare() && !Settings.FuckMiniProgram()))
+            return response
         json.optJSONObject("data")?.run {
             if (Settings.PurifyShare()) {
                 val link = optString("link")
