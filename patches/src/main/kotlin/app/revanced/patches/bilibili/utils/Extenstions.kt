@@ -174,20 +174,20 @@ fun ClassDef.proxy(context: BytecodeContext): MutableClass {
 }
 
 fun MutableClass.addDefaultConstructorIfNeeded() {
-    if (methods.none { it.name == "<init>" && it.parameterTypes.isEmpty() }) {
-        Method(
-            definingClass = type,
-            name = "<init>",
-            returnType = "V",
-            accessFlags = AccessFlags.PUBLIC.value or AccessFlags.CONSTRUCTOR.value,
-            implementation = MethodImplementation(registerCount = 1),
-        ).toMutable().apply {
-            addInstructions(
-                0, """
-                            invoke-direct {p0}, Ljava/lang/Object;-><init>()V
-                            return-void
-                        """.trimIndent()
-            )
-        }.also { methods.add(it) }
-    }
+    if (methods.any { it.name == "<init>" && it.parameterTypes.isEmpty() })
+        return
+    Method(
+        definingClass = type,
+        name = "<init>",
+        returnType = "V",
+        accessFlags = AccessFlags.PUBLIC.value or AccessFlags.CONSTRUCTOR.value,
+        implementation = MethodImplementation(registerCount = 1),
+    ).toMutable().apply {
+        addInstructions(
+            0, """
+            invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+            return-void
+        """.trimIndent()
+        )
+    }.also { methods.add(it) }
 }
