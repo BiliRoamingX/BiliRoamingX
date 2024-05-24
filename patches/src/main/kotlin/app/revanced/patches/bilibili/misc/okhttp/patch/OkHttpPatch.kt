@@ -43,47 +43,60 @@ object OkHttpPatch : MultiMethodBytecodePatch(
         requestClass.fields.forEach {
             it.accessFlags = it.accessFlags.toPublic().removeFinal()
         }
+        // println(0)
         val urlField = requestClass.fields.first { it.type == httpUrlClass.type }
+        // println(1)
         val requestHeaderMethod = requestClass.methods.first {
             it.returnType == "Ljava/lang/String;" && it.parameterTypes == listOf("Ljava/lang/String;")
         }
+        // println(2)
         val requestBodyField = requestClass.fields.first { f ->
             context.findClass { it.type == f.type }?.immutableClass?.accessFlags?.isAbstract() ?: false
         }
+        // println(3)
         val requestBodyClass = context.findClass { it.type == requestBodyField.type }!!.immutableClass
         val writeToMethod = requestBodyClass.methods.first { m ->
             m.accessFlags.isAbstract() && m.returnType == "V" && m.parameterTypes.size == 1
         }
+        // println(4)
         val bufferClass = BufferFingerprint.result?.classDef
             ?: throw BufferFingerprint.exception
         val bufferInStreamMethod = bufferClass.methods.first {
             it.returnType == "Ljava/io/InputStream;" && it.parameterTypes.isEmpty()
         }
+        // println(5)
         val responseClass = ResponseFingerprint.result?.mutableClass
             ?: throw ResponseFingerprint.exception
         responseClass.fields.forEach { it.accessFlags = it.accessFlags.removeFinal().toPublic() }
         val responseHeaderMethod = responseClass.methods.first {
             it.returnType == "Ljava/lang/String;" && it.parameterTypes == listOf("Ljava/lang/String;")
         }
+        // println(6)
         val requestField = responseClass.fields.first { it.type == requestClass.type }
+        // println(7)
         val codeField = responseClass.fields.first { it.type == "I" }
+        // println(8)
         val responseBodyClass = ResponseBodyFingerprint.result?.classDef
             ?: throw ResponseBodyFingerprint.exception
         val bodyStreamMethod = responseBodyClass.methods.first {
             it.returnType == "Ljava/io/InputStream;" && it.parameterTypes.isEmpty()
         }
+        // println(9)
         val responseBodyField = responseClass.fields.first { it.type == responseBodyClass.type }
         val mediaTypeGetMethod = MediaTypeGetFingerprint.result?.method
             ?: throw MediaTypeGetFingerprint.exception
+        // println(10)
         val mediaTypeType = mediaTypeGetMethod.definingClass
         val createMethod = responseBodyClass.methods.first { m ->
             AccessFlags.STATIC.isSet(m.accessFlags) && m.parameterTypes.let { ts ->
                 ts.size == 2 && ts[0] == mediaTypeType && ts[1] == "Ljava/lang/String;"
             }
         }
+        // println(11)
         val requestBodyTypeMethod = requestBodyClass.methods.first {
             it.returnType == mediaTypeType && it.parameterTypes.isEmpty()
         }
+        // println(12)
         val bodyWrapperClasses = BodyWrapperFingerprint.result.map { it.mutableClass }
             .onEach { it.accessFlags = it.accessFlags.toPublic() }
         val headersClass = HeadersFingerprint.result?.mutableClass
@@ -91,14 +104,18 @@ object OkHttpPatch : MultiMethodBytecodePatch(
         val headersConstructor = headersClass.methods.first {
             it.name == "<init>" && it.parameterTypes == listOf("[Ljava/lang/String;")
         }.also { it.accessFlags = it.accessFlags.toPublic() }
+        // println(13)
         val headersValueField = headersClass.fields.first {
             it.type == "[Ljava/lang/String;"
         }.also { it.accessFlags = it.accessFlags.toPublic() }
+        // println(14)
         val responseHeadersField = responseClass.fields.first {
             it.type == headersClass.type
         }
+        // println(15)
         val removeHeaderMethod = context.findClass("Lapp/revanced/bilibili/utils/Utils;")!!
             .immutableClass.methods.first { it.name == "removeHeader" }
+        // println(16)
         val realCallResult = RealCallFingerprint.result
             ?: throw RealCallFingerprint.exception
         val realCallClass = realCallResult.mutableClass
@@ -106,15 +123,18 @@ object OkHttpPatch : MultiMethodBytecodePatch(
         val realCallRequestField = realCallClass.fields.first {
             it.type == requestClass.type
         }
+        // println(17)
         val requestHeadersField = requestClass.fields.first {
             it.type == headersClass.type
         }
+        // println(18)
         val httpUrlGetMethod = httpUrlClass.methods.first {
             it.parameterTypes == listOf("Ljava/lang/String;")
                     && it.returnType == httpUrlClass.type
                     && AccessFlags.STATIC.isSet(it.accessFlags)
                     && it.implementation!!.tryBlocks.isEmpty()
         }
+        // println(19)
         val hookMethod = Method(
             definingClass = realCallClass.type,
             name = "hook",

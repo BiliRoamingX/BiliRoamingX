@@ -7,12 +7,9 @@ import app.revanced.patcher.patch.BytecodePatch
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patches.bilibili.misc.theme.fingerprints.*
-import app.revanced.patches.bilibili.utils.cloneMutable
-import app.revanced.patches.bilibili.utils.removeFinal
-import app.revanced.patches.bilibili.utils.toPublic
+import app.revanced.patches.bilibili.utils.*
 import app.revanced.util.exception
 import app.revanced.util.getReference
-import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 
@@ -28,6 +25,7 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 object CustomThemePatch : BytecodePatch(
     setOf(
         BuiltInThemesFingerprint,
+        BuiltInThemesFingerprint2,
         SkinListFingerprint,
         ThemeClickFingerprint,
         ThemeColorsFingerprint,
@@ -76,7 +74,7 @@ object CustomThemePatch : BytecodePatch(
             }
         } ?: throw ThemeHelperFingerprint.exception
 
-        BuiltInThemesFingerprint.result?.mutableClass?.fields?.first {
+        (BuiltInThemesFingerprint.result ?: BuiltInThemesFingerprint2.result)?.mutableClass?.fields?.first {
             it.type == "Ljava/util/Map;"
         }?.let { field ->
             field.accessFlags = field.accessFlags.toPublic().removeFinal()
@@ -95,27 +93,30 @@ object CustomThemePatch : BytecodePatch(
         } ?: throw BuiltInThemesFingerprint.exception
 
         ThemeColorsFingerprint.result?.mutableClass?.methods?.first {
-            it.name == "<init>" && AccessFlags.PRIVATE.isSet(it.accessFlags)
+            it.name == "<init>" && it.accessFlags.isPrivate()
         }?.let { method ->
             method.accessFlags = method.accessFlags.toPublic()
+            val garbType = method.parameterTypes[0].toString()
+            garbType.toClassDef(context).proxy(context).addDefaultConstructorIfNeeded()
             patchClass.methods.run {
                 first { it.name == "newTheme" }.also { remove(it) }.cloneMutable(
-                    registerCount = 36, clearImplementation = true
+                    registerCount = 35, clearImplementation = true
                 ).apply {
                     addInstructions(
                         """
                         new-instance v0, ${method.definingClass}
                         move-object v1, v0
-                        move-wide/from16 v4, p2
-                        move-wide/from16 v6, p4
-                        move-wide/from16 v8, p6
-                        move-wide/from16 v10, p8
-                        move-wide/from16 v12, p10
-                        move-wide/from16 v14, p12
-                        move-wide/from16 v16, p14
-                        move/from16 v18, p16
-                        move-object/from16 v2, p0
-                        move-object/from16 v3, p1
+                        new-instance v2, $garbType
+                        invoke-direct {v2}, $garbType-><init>()V
+                        move-object/from16 v3, p0
+                        move-wide/from16 v4, p1
+                        move-wide/from16 v6, p3
+                        move-wide/from16 v8, p5
+                        move-wide/from16 v10, p7
+                        move-wide/from16 v12, p9
+                        move-wide/from16 v14, p11
+                        move-wide/from16 v16, p13
+                        move/from16 v18, p15
                         invoke-direct/range {v1 .. v18}, $method
                         return-object v0
                     """.trimIndent()

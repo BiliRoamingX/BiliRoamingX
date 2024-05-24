@@ -1,6 +1,7 @@
 package app.revanced.patches.bilibili.utils
 
 import app.revanced.patcher.data.BytecodeContext
+import app.revanced.patcher.extensions.InstructionExtensions.addInstructions
 import app.revanced.patcher.patch.PatchException
 import app.revanced.patcher.util.proxy.mutableTypes.MutableClass
 import app.revanced.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
@@ -170,4 +171,23 @@ fun String.toClassDefOrNull(context: BytecodeContext): ClassDef? {
 
 fun ClassDef.proxy(context: BytecodeContext): MutableClass {
     return context.proxy(this).mutableClass
+}
+
+fun MutableClass.addDefaultConstructorIfNeeded() {
+    if (methods.none { it.name == "<init>" && it.parameterTypes.isEmpty() }) {
+        Method(
+            definingClass = type,
+            name = "<init>",
+            returnType = "V",
+            accessFlags = AccessFlags.PUBLIC.value or AccessFlags.CONSTRUCTOR.value,
+            implementation = MethodImplementation(registerCount = 1),
+        ).toMutable().apply {
+            addInstructions(
+                0, """
+                            invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+                            return-void
+                        """.trimIndent()
+            )
+        }.also { methods.add(it) }
+    }
 }

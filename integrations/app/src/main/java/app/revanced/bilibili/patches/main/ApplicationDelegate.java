@@ -60,8 +60,9 @@ public class ApplicationDelegate {
         app.registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
         app.registerComponentCallbacks(new ComponentCallbacks());
         updateBitmapDefaultDensity();
-        CustomThemePatch.refresh();
         PassportChangeReceiver.register();
+        CustomThemePatch.refresh();
+        Utils.runOnMainThread(500L, CustomThemePatch::delayRefresh);
         if (Utils.isMainProcess()) {
             Utils.async(ApplicationDelegate::startLog);
             Utils.async(PlaybackSpeedPatch::refreshOverrideSpeedList);

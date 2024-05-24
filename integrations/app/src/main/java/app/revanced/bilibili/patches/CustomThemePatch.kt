@@ -14,7 +14,6 @@ import app.revanced.bilibili.utils.Themes
 import app.revanced.bilibili.utils.Toasts
 import app.revanced.bilibili.widget.OnClickOriginListener
 import com.bilibili.compose.theme.ThemeDayNight
-import com.bilibili.lib.ui.garb.Garb
 import tv.danmaku.bili.ui.theme.api.BiliSkin
 import tv.danmaku.bili.ui.theme.api.BiliSkinList
 
@@ -35,8 +34,10 @@ object CustomThemePatch {
             this[CUSTOM_THEME_ID2] = CUSTOM_THEME_ID2
         }
         Setting.registerPreferenceChangeListener { _, key ->
-            if (key == Settings.CustomTheme.key || key == Settings.CustomColor.key)
+            if (key == Settings.CustomTheme.key || key == Settings.CustomColor.key) {
                 refresh()
+                delayRefresh()
+            }
         }
     }
 
@@ -53,6 +54,10 @@ object CustomThemePatch {
                 put(CUSTOM_THEME_ID2, colors)
             }
         }
+    }
+
+    @JvmStatic
+    fun delayRefresh() {
         getAllThemes().run {
             customColor.toTheme().let { theme ->
                 put(CUSTOM_THEME_ID1.toLong(), theme)
@@ -93,7 +98,6 @@ object CustomThemePatch {
     @Keep
     @JvmStatic
     fun newTheme(
-        garb: Garb,
         currentDayNight: ThemeDayNight,
         primary: Long,      // !!important
         secondary: Long,    // !!important
@@ -132,6 +136,7 @@ object CustomThemePatch {
             ColorChooseDialog(view.context, customColor) { color ->
                 customColor = color
                 refresh()
+                delayRefresh()
                 val newId = if (mId == CUSTOM_THEME_ID1) CUSTOM_THEME_ID2 else CUSTOM_THEME_ID1
                 biliSkin.mId = newId
                 closeCustomSkin()
@@ -189,7 +194,6 @@ object CustomThemePatch {
 
     @JvmStatic
     private fun @receiver:ColorInt Int.toTheme() = newTheme(
-        Garb(),                 // garb
         ThemeDayNight.Day,      // currentDayNight ThemeDayNight#Day
         pack(),                 // primary !!important
         pack(),                 // secondary !!important
