@@ -12,11 +12,12 @@ import app.revanced.bilibili.utils.BVUtils;
 @Keep
 public class ConfigPatch {
     private static final List<String> alwaysEnabledAbKeys = Arrays.asList(
-            "ff_switch_account_enable",
-            "ff_player_use_remote_auto_threshold_qn",
-            "ff_pegasus_setting_auto_refresh_display",
-            "player.volume.balance",
-            "ff_side_center_setting_entrance_visibility"
+            "ff_switch_account_enable",                     // 切换账号
+            "ff_player_use_remote_auto_threshold_qn",       // 画质接口控制
+            "ff_pegasus_setting_auto_refresh_display",      // 首页自动刷新设置
+            "player.volume.balance",                        // 音量均衡设置
+            "ff_side_center_setting_entrance_visibility",   // 首页头像入口设置
+            "ff_united_video_setting"                       // 新版三点菜单
     );
 
     @Nullable
