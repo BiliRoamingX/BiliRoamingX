@@ -148,18 +148,28 @@ object HttpClient {
     fun get(
         url: String,
         headers: Map<String, String> = emptyMap(),
+        params: Map<String, Any> = emptyMap(),
         ua: String = defaultUA,
         auth: String? = null,
         referer: String? = null,
         timeout: Int = 10_000,
         proxy: Proxy = Proxy.Direct,
-    ) = request(
-        url,
-        method = Method.Get,
-        headers,
-        body = null,
-        ua, auth, referer, timeout, proxy
-    )
+    ): ResponseBody? {
+        val newUrl = if (params.isEmpty()) url else run {
+            Uri.parse(url).buildUpon().apply {
+                params.forEach { (k, v) ->
+                    appendQueryParameter(k, v.toString())
+                }
+            }.toString()
+        }
+        return request(
+            newUrl,
+            method = Method.Get,
+            headers,
+            body = null,
+            ua, auth, referer, timeout, proxy
+        )
+    }
 
     @JvmStatic
     fun post(

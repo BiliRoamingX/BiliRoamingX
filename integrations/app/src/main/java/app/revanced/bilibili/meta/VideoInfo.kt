@@ -1,3 +1,3 @@
 package app.revanced.bilibili.meta
 
-class VideoInfo(var cid: Long, var view: Any?)
+data class VideoInfo(var cid: Long, var view: Any?)

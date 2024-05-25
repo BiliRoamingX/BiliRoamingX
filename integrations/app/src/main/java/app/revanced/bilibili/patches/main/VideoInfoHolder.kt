@@ -40,9 +40,7 @@ object VideoInfoHolder {
 
     @JvmStatic
     fun currentTitle(): Pair<String, String>? {
-        val videoInfo = current ?: return null
-        val cid = videoInfo.cid
-        val view = videoInfo.view
+        val (cid, view) = current ?: return null
         if (cid == 0L || view == null)
             return null
         when (view) {
@@ -129,9 +127,7 @@ object VideoInfoHolder {
 
     @JvmStatic
     fun currentVideoUrl(): String? {
-        val videoInfo = current ?: return null
-        val cid = videoInfo.cid
-        val view = videoInfo.view
+        val (cid, view) = current ?: return null
         if (cid == 0L || view == null)
             return null
         return when (view) {

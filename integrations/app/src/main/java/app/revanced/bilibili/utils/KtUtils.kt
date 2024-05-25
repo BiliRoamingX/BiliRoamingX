@@ -372,12 +372,12 @@ fun Long.cnCountFormat(invalid: String = "-"): String {
 
 fun Long.secondFormat(): String {
     val seconds = this % 60
-    val minute = this / 60 % 60
-    val hour = this / 60 / 60
-    return if (hour > 0)
-        "%d:%02d:%02d".format(hour, minute, seconds)
+    val minutes = this / 60 % 60
+    val hours = this / 60 / 60
+    return if (hours > 0)
+        "%d:%02d:%02d".format(hours, minutes, seconds)
     else
-        "%02d:%02d".format(minute, seconds)
+        "%02d:%02d".format(minutes, seconds)
 }
 
 fun decodeFormBody(body: String): Map<String, String> {

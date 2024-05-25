@@ -10,6 +10,8 @@ import android.view.View
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.annotation.Keep
+import app.revanced.bilibili.http.HttpClient
+import app.revanced.bilibili.model.AIConclusion
 import app.revanced.bilibili.patches.main.ApplicationDelegate
 import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.settings.Settings
@@ -53,6 +55,11 @@ object CopyEnhancePatch {
                     saveImage(view.arc.pic)
                 }) { append("点我保存") }
                 appendLine().appendLine()
+                appendTitle("AI总结：")
+                clickable(0xFF2196F3.toInt(), onClick = {
+                    viewAiConclusion()
+                }) { append("点我查看") }
+                appendLine().appendLine()
                 val introDesc = view.arc.desc
                 if (desc.isNotEmpty()) {
                     appendTitle("简介：")
@@ -89,6 +96,11 @@ object CopyEnhancePatch {
                         clickable(0xFF2196F3.toInt(), onClick = {
                             saveImage(view.arc.cover)
                         }) { append("点我保存") }
+                        appendLine().appendLine()
+                        appendTitle("AI总结：")
+                        clickable(0xFF2196F3.toInt(), onClick = {
+                            viewAiConclusion()
+                        }) { append("点我查看") }
                         appendLine().appendLine()
                         val introDesc = intro.descList.joinToString("") {
                             if (it.type == DescType.DescTypeAt) "@${it.text}" else it.text
@@ -225,10 +237,78 @@ object CopyEnhancePatch {
             }
             .setNeutralButton(neuButton) { _, _ -> onCopyAll(text) }
             .setNegativeButton(android.R.string.cancel, null)
-            .create().apply { constraintSize();show() }
+            .create().constraintSize()
+            .apply { show() }
         (alertDialog.findViewById<TextView>(android.R.id.message)).run {
             setTextIsSelectable(true)
             movementMethod = LinkMovementMethod.getInstance()
+        }
+    }
+
+    private fun viewAiConclusion() {
+        val (cid, view) = VideoInfoHolder.current
+            ?: return
+        if (cid == 0L) return
+        var aid = 0L
+        var mid = 0L
+        if (view is com.bapis.bilibili.app.view.v1.ViewReply) {
+            aid = view.arc.aid
+            mid = view.arc.author.mid
+        } else if (view is ViewReply) {
+            aid = view.arc.aid
+            mid = view.owner.mid
+        }
+        if (aid == 0L || mid == 0L) return
+        Utils.async {
+            val params = Wbi.sign(mapOf("aid" to aid, "cid" to cid, "up_mid" to mid))
+            val aiConclusion = HttpClient.get(
+                "https://api.bilibili.com/x/web-interface/view/conclusion/get",
+                params = params
+            )?.data<AIConclusion>()
+            if (aiConclusion != null) Utils.runOnMainThread {
+                showAiConclusion(aiConclusion)
+            }
+        }
+    }
+
+    private fun showAiConclusion(aiConclusion: AIConclusion) {
+        if (aiConclusion.code != 0) {
+            Toasts.showShort("当前视频暂不支持AI总结")
+            return
+        }
+        val topActivity = ApplicationDelegate.getTopActivity() ?: return
+        val modelResult = aiConclusion.modelResult
+        fun String.canonicalize() = replace(",", "，")
+        val message = buildSpannedString {
+            absoluteSize(15.sp) {
+                bold { appendLine(modelResult.summary.canonicalize()) }
+            }
+            appendLine()
+            modelResult.outline.forEach { line ->
+                val title = line.title
+                absoluteSize(15.sp) {
+                    bold { appendLine(title.canonicalize()) }
+                }
+                line.partOutline.forEach { partLine ->
+                    val timestamp = partLine.timestamp.toLong().secondFormat()
+                    val content = partLine.content
+                    absoluteSize(14.sp) {
+                        color(0xFF2196F3.toInt()) { append(timestamp) }
+                        append(' ')
+                        appendLine(content.canonicalize())
+                    }
+                }
+                appendLine()
+            }
+        }.trimEnd()
+        val alertDialog = AlertDialog.Builder(topActivity)
+            .setTitle("AI总结")
+            .setMessage(message)
+            .setPositiveButton(android.R.string.ok, null)
+            .create().constraintSize()
+            .apply { show() }
+        (alertDialog.findViewById<TextView>(android.R.id.message)).run {
+            setTextIsSelectable(true)
         }
     }
 }
