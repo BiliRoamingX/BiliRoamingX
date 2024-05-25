@@ -16,7 +16,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 object DmView : MossHook<DmViewReq, DmViewReply>() {
-    private val furrySubNameExtRegex = Regex("""[\[(](非官方|富睿字幕组)[])]""")
+    private val furrySubNameExtRegex = Regex("""[\[(\s]*(非官方|富睿字幕组)[])\s]*""")
 
     override fun shouldHook(req: GeneratedMessageLite<*, *>): Boolean {
         return req is DmViewReq
