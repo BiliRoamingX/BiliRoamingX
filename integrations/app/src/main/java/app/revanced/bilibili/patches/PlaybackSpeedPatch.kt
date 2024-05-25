@@ -199,4 +199,13 @@ object PlaybackSpeedPatch {
         seekBar.setSpeedArrayForBiliRoaming(newSpeedReversedArray)
         seekBar.max = newSpeedReversedArray.lastIndex.coerceAtLeast(0) * 100
     }
+
+    @Keep
+    @JvmStatic
+    fun onUnitePlayerSetSpeedMenu(original: Array<String>): Array<String> {
+        val speeds = newSpeedReversedArray
+        return if (speeds.isNotEmpty())
+            speeds.map { it.toString() }.toTypedArray()
+        else original
+    }
 }

@@ -18,6 +18,7 @@ import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction21ih
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction22c
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction31i
+import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 
 @Patch(
@@ -34,12 +35,13 @@ object OverridePlaybackSpeedPatch : MultiMethodBytecodePatch(
         StoryMenuFingerprint,
         MenuFuncSegmentFingerprint,
         NewShareServiceFingerprint,
-        MusicPlayerPanelFingerprint
+        MusicPlayerPanelFingerprint,
     ),
     multiFingerprints = setOf(
         SpeedFunctionWidgetFingerprint,
         PlaybackSpeedSettingFingerprint,
-        PlayerSpeedWidgetFingerprint
+        PlayerSpeedWidgetFingerprint,
+        UnitePlayerSetSpeedMenuFingerprint,
     )
 ) {
     override fun execute(context: BytecodeContext) {
@@ -228,6 +230,20 @@ object OverridePlaybackSpeedPatch : MultiMethodBytecodePatch(
             """.trimIndent(),
                 ExternalLabel("cmp_one", m.getInstruction(oneIndex))
             )
+        }
+        // start from 7.80.0
+        UnitePlayerSetSpeedMenuFingerprint.result.forEach { r ->
+            val lastIndex = r.scanResult.stringsScanResult!!.matches.last().index
+            val instructions = r.mutableMethod.implementation!!.instructions
+            if (instructions[lastIndex + 1].opcode == Opcode.FILLED_NEW_ARRAY_RANGE && instructions[lastIndex + 2].opcode == Opcode.MOVE_RESULT_OBJECT) {
+                val register = (instructions[lastIndex + 2] as OneRegisterInstruction).registerA
+                r.mutableMethod.addInstructions(
+                    lastIndex + 3, """
+                    invoke-static {v$register}, Lapp/revanced/bilibili/patches/PlaybackSpeedPatch;->onUnitePlayerSetSpeedMenu([Ljava/lang/String;)[Ljava/lang/String;
+                    move-result-object v$register
+                """.trimIndent()
+                )
+            }
         }
     }
 }
