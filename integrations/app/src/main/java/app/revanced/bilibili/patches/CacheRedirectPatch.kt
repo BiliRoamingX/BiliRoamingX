@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import androidx.annotation.Keep
+import app.revanced.bilibili.patches.main.ApplicationDelegate
 import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
@@ -58,6 +59,20 @@ object CacheRedirectPatch {
         val videoUrl = VideoInfoHolder.currentVideoUrl() ?: return false
         showConfirmDialog(context, videoUrl, packageName) {
             service.callMethod(originMethod, context, cacheFromType)
+        }
+        return true
+    }
+
+    @Keep
+    @JvmStatic
+    fun onUniteDownloadMenuClick(self: Any, originMethod: String): Boolean {
+        if (!Settings.ExternalDownloader()) return false
+        val packageName = Settings.ExternalDownloaderName()
+            .ifEmpty { return false }
+        val videoUrl = VideoInfoHolder.currentVideoUrl() ?: return false
+        val topActivity = ApplicationDelegate.getTopActivity() ?: return false
+        showConfirmDialog(topActivity, videoUrl, packageName) {
+            self.callMethod(originMethod)
         }
         return true
     }
