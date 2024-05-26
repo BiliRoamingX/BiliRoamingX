@@ -278,7 +278,9 @@ object CopyEnhancePatch {
         }
         val topActivity = ApplicationDelegate.getTopActivity() ?: return
         val modelResult = aiConclusion.modelResult
-        fun String.canonicalize() = replace(",", "，")
+        fun String.canonicalize() = replace(", ", "，")
+            .replace(',', '，')
+
         val message = buildSpannedString {
             absoluteSize(15.sp) {
                 bold { appendLine(modelResult.summary.canonicalize()) }
