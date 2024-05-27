@@ -49,9 +49,9 @@ public class DrawerPatch {
         if (navView == null) return;
         navViewRef = new WeakReference<>(navView);
         if (navView.getParent() != null) return; // attached
+        var navViewWidth = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.9);
         var layoutParams = new DrawerLayoutEx.LayoutParamsEx(
-                ViewGroup.MarginLayoutParams.MATCH_PARENT,
-                ViewGroup.MarginLayoutParams.MATCH_PARENT
+                navViewWidth, ViewGroup.MarginLayoutParams.MATCH_PARENT
         );
         layoutParams.setGravityEx(Gravity.START);
         drawerLayout.addView(navView, 1, layoutParams);
