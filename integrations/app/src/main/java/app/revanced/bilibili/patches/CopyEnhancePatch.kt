@@ -273,7 +273,11 @@ object CopyEnhancePatch {
 
     private fun showAiConclusion(aiConclusion: AIConclusion) {
         if (aiConclusion.code != 0) {
-            Toasts.showShort("当前视频暂不支持AI总结")
+            if (aiConclusion.code == 1) {
+                Toasts.showLong("当前视频由你首次尝试AI总结，系统正在处理中，请稍后再次查看是否支持AI总结。")
+            } else {
+                Toasts.showShort("当前视频暂不支持AI总结")
+            }
             return
         }
         val topActivity = ApplicationDelegate.getTopActivity() ?: return
