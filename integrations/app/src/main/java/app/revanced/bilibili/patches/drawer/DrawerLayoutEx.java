@@ -39,5 +39,10 @@ public class DrawerLayoutEx extends DrawerLayout {
         // codes will filled by patcher
         public void setGravityEx(@GravityInt int gravity) {
         }
+
+        // codes will filled by patcher
+        public int getOpenStateEx() {
+            return 0;
+        }
     }
 }

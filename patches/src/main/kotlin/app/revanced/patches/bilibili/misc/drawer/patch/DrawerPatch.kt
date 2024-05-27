@@ -13,7 +13,9 @@ import app.revanced.patches.bilibili.misc.drawer.fingerprints.DrawerIsOpenFinger
 import app.revanced.patches.bilibili.misc.drawer.fingerprints.DrawerLayoutParamsFingerprint
 import app.revanced.patches.bilibili.misc.drawer.fingerprints.OpenDrawerControlFingerprint
 import app.revanced.patches.bilibili.utils.cloneMutable
-import com.android.tools.smali.dexlib2.AccessFlags
+import app.revanced.patches.bilibili.utils.isPublic
+import app.revanced.patches.bilibili.utils.toPublic
+import app.revanced.util.exception
 
 @Patch(
     name = "Drawer",
@@ -33,14 +35,14 @@ object DrawerPatch : BytecodePatch(
     )
 ) {
     override fun execute(context: BytecodeContext) {
-        val drawerExClass = context.findClass("Lapp/revanced/bilibili/patches/drawer/DrawerLayoutEx;")
+        val drawerExClass = context.findClass("Lapp/revanced/bilibili/patches/drawer/DrawerLayoutEx;")!!
         val openMethod = OpenDrawerControlFingerprint.result?.method
             ?: throw PatchException("not found openDrawer method")
         val closeMethod = CloseDrawerControlFingerprint.result?.method
             ?: throw PatchException("not found closeDrawer method")
         val isOpenMethod = DrawerIsOpenFingerprint.result?.method
             ?: throw PatchException("not found isDrawerOpen method")
-        drawerExClass!!.mutableClass.methods.run {
+        drawerExClass.mutableClass.methods.run {
             first { it.name == "openDrawerEx" }.addInstruction(
                 0, "invoke-virtual {p0, p1, p2}, $openMethod"
             )
@@ -60,9 +62,14 @@ object DrawerPatch : BytecodePatch(
         }
         val layoutParamsExClass =
             context.findClass("Lapp/revanced/bilibili/patches/drawer/DrawerLayoutEx\$LayoutParamsEx;")!!
-        val gravityField = DrawerLayoutParamsFingerprint.result?.classDef?.fields?.first {
-            it.type == "I" && it.accessFlags == AccessFlags.PUBLIC.value
-        } ?: throw PatchException("not found gravity field")
+        val result = DrawerLayoutParamsFingerprint.result
+            ?: throw DrawerLayoutParamsFingerprint.exception
+        val gravityField = result.mutableClass.fields.first {
+            it.type == "I" && it.accessFlags.isPublic()
+        }
+        val openStateField = result.mutableClass.fields.first {
+            it.type == "I" && it.accessFlags == 0
+        }.also { it.accessFlags = it.accessFlags.toPublic() }
         layoutParamsExClass.mutableClass.setSuperClass(gravityField.definingClass)
         layoutParamsExClass.mutableClass.methods.run {
             first { it.name == "<init>" }.replaceInstruction(
@@ -75,15 +82,24 @@ object DrawerPatch : BytecodePatch(
                 iput p1, p0, $gravityField
             """.trimIndent()
             )
+            first { it.name == "getOpenStateEx" }.also { remove(it) }
+                .cloneMutable(registerCount = 2, clearImplementation = true).apply {
+                    addInstructions(
+                        0, """
+                        iget v0, p0, $openStateField
+                        return v0
+                    """.trimIndent()
+                    )
+                }.also { add(it) }
         }
         context.findClass("Ltv/danmaku/bili/ui/main2/basic/BaseMainFrameFragment;")
             ?.mutableClass?.methods?.find { it.name == "onViewCreated" }?.run {
                 val insertIdx = implementation!!.instructions.size - 1
                 addInstructions(
                     insertIdx, """
-                invoke-virtual {p0}, Landroidx/fragment/app/Fragment;->getView()Landroid/view/View;
-                move-result-object p1
-                invoke-static {p1}, Lapp/revanced/bilibili/patches/drawer/DrawerPatch;->onMainFrameFragmentViewCreated(Landroid/view/View;)V
+                    invoke-virtual {p0}, Landroidx/fragment/app/Fragment;->getView()Landroid/view/View;
+                    move-result-object p1
+                    invoke-static {p1}, Lapp/revanced/bilibili/patches/drawer/DrawerPatch;->onMainFrameFragmentViewCreated(Landroid/view/View;)V
                 """.trimIndent()
                 )
             } ?: throw PatchException("can not found BaseMainFrameFragment")

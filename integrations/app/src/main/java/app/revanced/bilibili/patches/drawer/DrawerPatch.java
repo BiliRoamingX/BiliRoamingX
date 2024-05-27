@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 
 import java.lang.ref.WeakReference;
 
+import app.revanced.bilibili.patches.DpiPatch;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.Utils;
 import tv.danmaku.bili.MainActivityV2;
@@ -49,9 +50,12 @@ public class DrawerPatch {
         if (navView == null) return;
         navViewRef = new WeakReference<>(navView);
         if (navView.getParent() != null) return; // attached
-        var navViewWidth = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.9);
+        var displayScale = DpiPatch.displayScale;
+        var ratio = displayScale > 0.5f ? 1.0f : (displayScale > 0f ? 0.9f : 0f);
+        var availableWidth = activity.getResources().getDisplayMetrics().widthPixels;
+        var navViewWidth = ratio != 0f ? (int) (availableWidth * ratio) : ViewGroup.LayoutParams.MATCH_PARENT;
         var layoutParams = new DrawerLayoutEx.LayoutParamsEx(
-                navViewWidth, ViewGroup.MarginLayoutParams.MATCH_PARENT
+                navViewWidth, ViewGroup.LayoutParams.MATCH_PARENT
         );
         layoutParams.setGravityEx(Gravity.START);
         drawerLayout.addView(navView, 1, layoutParams);
@@ -62,7 +66,8 @@ public class DrawerPatch {
         DrawerLayoutEx drawerLayout = drawerLayoutRef.get();
         View navView = navViewRef.get();
         if (drawerLayout == null || navView == null) return false;
-        if (drawerLayout.isDrawerOpenEx(navView)) {
+        int openState = ((DrawerLayoutEx.LayoutParamsEx) navView.getLayoutParams()).getOpenStateEx();
+        if ((openState & 0x1/*FLAG_IS_OPENED*/) == 1 || (openState & 0x2)/*FLAG_IS_OPENING*/ == 2) {
             drawerLayout.closeDrawerEx(navView, true);
             return true;
         }
