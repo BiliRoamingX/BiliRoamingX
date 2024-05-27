@@ -57,6 +57,7 @@ public class ApplicationDelegate {
 
     @Keep
     public static void onCreate(Application app) {
+        long start = System.currentTimeMillis();
         app.registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
         app.registerComponentCallbacks(new ComponentCallbacks());
         updateBitmapDefaultDensity();
@@ -77,6 +78,8 @@ public class ApplicationDelegate {
         } else {
             SettingsSyncHelper.register();
         }
+        long end = System.currentTimeMillis();
+        Logger.debug(() -> String.format("Initializing BiliRoamingX on process %s cost %s ms", Utils.currentProcessName(), end - start));
     }
 
     @Keep
