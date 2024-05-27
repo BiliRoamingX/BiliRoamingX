@@ -1,9 +1,7 @@
-name: CI
+name: PR Check
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
     paths-ignore:
       - '**.md'
       - '.github/**'
@@ -36,21 +34,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Retrieve version
-        run: |
-          version=`awk -F "=" '$1 == "version" {print $2}' gradle.properties`
-          commit_count=`git rev-list HEAD --count`
-          version="${version}.r${commit_count}"
-          echo "VERSION=$version" >> $GITHUB_ENV
-
       - name: Build with gradle
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: ./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g -Pversion=$VERSION dist
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        if: success()
-        with:
-          name: BiliRoamingX-${{ env.VERSION }}
-          path: 'build'
+        run: ./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx2g dist
