@@ -31,6 +31,7 @@ object CopyEnhancePatch {
         "dy_opus_copy_right_id",
         "dy_opus_paragraph_text"
     )
+    private val canonicalizeRegex = Regex("""([,;])\s?""")
 
     @Keep
     @JvmStatic
@@ -282,8 +283,15 @@ object CopyEnhancePatch {
         }
         val topActivity = ApplicationDelegate.getTopActivity() ?: return
         val modelResult = aiConclusion.modelResult
-        fun String.canonicalize() = replace(", ", "，")
-            .replace(',', '，')
+
+        fun String.canonicalize() = replace(canonicalizeRegex) {
+            val (_, symbol) = it.groupValues
+            when (symbol) {
+                "," -> "，"
+                ";" -> "；"
+                else -> symbol
+            }
+        }
 
         val message = buildSpannedString {
             if (modelResult.summary.isNotEmpty()) {
