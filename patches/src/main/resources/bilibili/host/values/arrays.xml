@@ -413,6 +413,11 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="biliroaming_player_version_summaries">
+        <item />
+        <item>较高版本中由于缺少官方维护，存在不能查看评论区图片等问题，不建议使用</item>
+        <item />
+    </string-array>
     <string-array name="biliroaming_display_size_entries">
         <item>更小</item>
         <item>较小</item>

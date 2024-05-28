@@ -7,5 +7,6 @@
         app:migration_settings_type="none"
         app:radioDefaultValue="0"
         app:radioEntries="@array/biliroaming_player_version_entries"
+        app:radioEntrySummaries="@array/biliroaming_player_version_summaries"
         app:radioEntryValues="@array/biliroaming_player_version_values" />
 </androidx.preference.PreferenceScreen>
