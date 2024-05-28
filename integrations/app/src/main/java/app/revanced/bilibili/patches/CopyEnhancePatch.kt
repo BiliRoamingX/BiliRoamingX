@@ -286,10 +286,12 @@ object CopyEnhancePatch {
             .replace(',', '，')
 
         val message = buildSpannedString {
-            absoluteSize(15.sp) {
-                bold { appendLine(modelResult.summary.canonicalize()) }
+            if (modelResult.summary.isNotEmpty()) {
+                absoluteSize(15.sp) {
+                    bold { appendLine(modelResult.summary.canonicalize()) }
+                }
+                appendLine()
             }
-            appendLine()
             modelResult.outline.forEach { line ->
                 val title = line.title
                 absoluteSize(15.sp) {
