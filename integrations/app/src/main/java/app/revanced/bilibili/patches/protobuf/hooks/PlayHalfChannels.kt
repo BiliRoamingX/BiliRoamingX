@@ -40,8 +40,30 @@ object PlayHalfChannels : MossHook<PlayHalfChannelsReq, PlayHalfChannelsReply>()
         error: MossException?
     ): PlayHalfChannelsReply? {
         val (reconstruct, thailand) = shouldReconstruct(req, reply)
-        if (!reconstruct)
+        if (!reconstruct) {
+            if (reply != null && (Settings.UnlockPlayLimit() || Settings.AllowDownload())) {
+                reply.groupsList.asSequence().flatMap { it.itemsList }.forEach {
+                    val type = it.base.type
+                    if (Settings.UnlockPlayLimit()) {
+                        if (type == SettingItemType.SETTING_SMALL_WINDOW
+                            || type == SettingItemType.SETTING_BACKGROUND_PLAY
+                            || type == SettingItemType.SETTING_LISTEN
+                            || type == SettingItemType.SETTING_PROJECT
+                        ) {
+                            it.base.control = SettingControl()
+                            it.clearMore()
+                            if (type == SettingItemType.SETTING_BACKGROUND_PLAY)
+                                it.style = SettingItemStyle.SETTING_STYLE_SWITCH
+                        }
+                    }
+                    if (Settings.AllowDownload() && type == SettingItemType.SETTING_DOWNlOAD) {
+                        it.base.control = SettingControl()
+                        it.clearMore()
+                    }
+                }
+            }
             return super.hookAfter(req, reply, error)
+        }
 
         fun newSettingItem(
             icon: String,

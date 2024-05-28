@@ -10,14 +10,15 @@ object Settings {
 
     // region Group: 解锁番剧限制
     @JvmField val UnlockAreaLimit = BooleanSetting(key = "main_func")
-    @JvmField val AllowDownload = BooleanSetting(key = "allow_download")
+    @JvmField val AllowDownload = BooleanSetting(key = "allow_download", dependency = UnlockAreaLimit)
     @JvmField val AllowMiniPlay = BooleanSetting(key = "allow_mini_play")
     @JvmField val TaiWanServer = StringSetting(key = "tw_server")
     @JvmField val HongKongServer = StringSetting(key = "hk_server")
     @JvmField val ChinaServer = StringSetting(key = "cn_server")
     @JvmField val ThailandServer = StringSetting(key = "th_server")
     @JvmField val UposHost = StringSetting(key = "upos_host")
-    @JvmField val SaveThailandHistory = BooleanSetting(key = "save_th_history", defValue = true)
+    @JvmField val SaveThailandHistory =
+        BooleanSetting(key = "save_th_history", defValue = true, dependency = UnlockAreaLimit)
     // endregion
 
 

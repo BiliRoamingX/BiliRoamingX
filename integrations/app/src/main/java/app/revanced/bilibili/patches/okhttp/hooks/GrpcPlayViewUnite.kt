@@ -21,7 +21,7 @@ object GrpcPlayViewUnite : BaseFakeClientGrpcHook() {
     }
 
     override fun hookBefore(url: String, headers: Array<String>): Pair<String, Array<String>> {
-        val newHeaders = if (Settings.UnlockPlayLimit() && Utils.isPlay()) {
+        val newHeaders = if (Settings.UnlockAreaLimit() && Utils.isPlay()) {
             super.hookBefore(url, headers).second
         } else headers
         if ((Utils.isPink() || Utils.isPlay()) && Settings.TrialVipQuality() && !Accounts.isEffectiveVip) {
