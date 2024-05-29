@@ -47,6 +47,14 @@ operator fun Document.get(tagName: String): Element {
 fun Node.children(): Sequence<Element> =
     childNodes.iterator().asSequence().filterIsInstance<Element>()
 
+fun Node.walk(action: (Element) -> Unit) {
+    if (this is Element)
+        action(this)
+    children().forEach {
+        it.walk(action)
+    }
+}
+
 operator fun NodeList.iterator(): Iterator<Node> = object : Iterator<Node> {
     private var index = 0
     override fun hasNext(): Boolean = index < length
