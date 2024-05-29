@@ -1,16 +1,16 @@
 package app.revanced.patches.bilibili.misc.other.patch
 
-import app.revanced.patcher.data.ResourceContext
-import app.revanced.patcher.patch.ResourcePatch
+import app.revanced.patcher.data.BytecodeContext
+import app.revanced.patcher.extensions.InstructionExtensions.replaceInstruction
+import app.revanced.patcher.patch.BytecodePatch
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
-import app.revanced.util.children
-import app.revanced.util.get
-import app.revanced.util.set
-import app.revanced.util.walk
+import app.revanced.patches.bilibili.misc.other.fingerprints.SetUnitedTabLayoutFingerprint
+import com.android.tools.smali.dexlib2.Opcode
+import com.android.tools.smali.dexlib2.iface.instruction.formats.Instruction21s
 
 @Patch(
-    name = "Bili adjust layout",
+    name = "Bili adjust layout (codes)",
     description = "调整部分布局UI",
     compatiblePackages = [
         CompatiblePackage(name = "tv.danmaku.bili"),
@@ -18,28 +18,21 @@ import app.revanced.util.walk
         CompatiblePackage(name = "com.bilibili.app.in")
     ]
 )
-object BiliLayoutAdjustPatch : ResourcePatch() {
-    override fun execute(context: ResourceContext) {
-        runCatching {
-            context.document["res/layout/bili_player_video_setting_select.xml"].use { dom ->
-                dom.walk { node ->
-                    if (node["android:id"].let { it == "@id/recycler_container" || it == "@id/recycler_view" || it == "@id/recycler_gradient" }) {
-                        node["android:layout_height"] = "match_parent"
-                    }
-                }
+object BiliLayoutAdjustPatch : BytecodePatch(setOf(SetUnitedTabLayoutFingerprint)) {
+    override fun execute(context: BytecodeContext) {
+        SetUnitedTabLayoutFingerprint.result?.mutableMethod?.run {
+            val (index1, register1) = implementation!!.instructions.withIndex().firstNotNullOf { (index, inst) ->
+                if (inst.opcode == Opcode.CONST_16 && inst is Instruction21s && inst.wideLiteral == 0x19L) {
+                    index to inst.registerA
+                } else null
             }
-            context.document["res/layout/bili_player_video_setting_select_item.xml"].use { dom ->
-                dom.children().first()["android:layout_height"] = "match_parent"
-                dom.walk {
-                    if (it["android:id"] == "@id/divider") {
-                        it["android:layout_height"] = "12dp"
-                        it["app:layout_constraintTop_toTopOf"] = "parent"
-                        it["app:layout_constraintBottom_toBottomOf"] = "parent"
-                        it.removeAttribute("android:layout_marginTop")
-                        it.removeAttribute("android:layout_marginBottom")
-                    }
-                }
+            val (index2, register2) = implementation!!.instructions.withIndex().firstNotNullOf { (index, inst) ->
+                if (inst.opcode == Opcode.CONST_16 && inst is Instruction21s && inst.wideLiteral == 0xcL) {
+                    index to inst.registerA
+                } else null
             }
+            replaceInstruction(index1, "const/16 v$register1, 0xc")
+            replaceInstruction(index2, "const/16 v$register2, 0x8")
         }
     }
 }

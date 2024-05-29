@@ -14,7 +14,7 @@ import com.android.tools.smali.dexlib2.iface.instruction.formats.Instruction35c
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 
 @Patch(
-    name = "Config",
+    name = "Config integration",
     description = "集成获取Config方法",
     compatiblePackages = [
         CompatiblePackage(name = "tv.danmaku.bili"),
