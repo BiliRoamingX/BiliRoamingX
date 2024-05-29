@@ -58,5 +58,19 @@ object BiliLayoutAdjustResourcesPatch : ResourcePatch() {
                 }
             }
         }
+        context.document["res/layout/bili_app_fragment_author_space_header.xml"].use { dom ->
+            dom.walk { node ->
+                if (node["android:id"] == "@id/desc_layout") {
+                    node.children().first()["android:layout_marginLeft"] = "100dp"
+                }
+            }
+        }
+        context.document["res/layout/space_follow_and_charge_plus_view.xml"].use { dom ->
+            dom.walk { node ->
+                if (node["android:id"] == "@id/charge_plus_button") {
+                    node["android:layout_width"] = "70dp"
+                }
+            }
+        }
     }
 }
