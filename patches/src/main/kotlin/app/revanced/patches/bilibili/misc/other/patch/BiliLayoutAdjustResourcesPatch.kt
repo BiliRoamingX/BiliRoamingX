@@ -4,10 +4,7 @@ import app.revanced.patcher.data.ResourceContext
 import app.revanced.patcher.patch.ResourcePatch
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
-import app.revanced.util.children
-import app.revanced.util.get
-import app.revanced.util.set
-import app.revanced.util.walk
+import app.revanced.util.*
 
 @Patch(
     name = "Bili adjust layout (resources)",
@@ -69,6 +66,20 @@ object BiliLayoutAdjustResourcesPatch : ResourcePatch() {
             dom.walk { node ->
                 if (node["android:id"] == "@id/charge_plus_button") {
                     node["android:layout_width"] = "70dp"
+                }
+            }
+        }
+        runCatching {
+            arrayOf(
+                "res/layout/bili_app_list_item_super_menu_view_group.xml",
+                "res/layout/bili_player_video_setting_select.xml",
+            ).forEach {
+                context.document[it].use { dom ->
+                    dom.walk { node ->
+                        if (node.tag == "androidx.recyclerview.widget.RecyclerView") {
+                            node.tag = "app.revanced.bilibili.widget.ConsumeTouchRecyclerView"
+                        }
+                    }
                 }
             }
         }

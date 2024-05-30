@@ -23,4 +23,5 @@ dependencies {
     api(libs.androidx.annotation)
     api(libs.androidx.appcompat)
     api(libs.androidx.preference)
+    api(libs.androidx.recyclerview)
 }
