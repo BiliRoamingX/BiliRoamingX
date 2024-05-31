@@ -21,12 +21,12 @@ object BiliLayoutAdjustResourcesPatch : ResourcePatch() {
             context.document["res/layout/bili_player_video_setting_select.xml"].use { dom ->
                 dom.walk { node ->
                     if (node["android:id"].let { it == "@id/recycler_container" || it == "@id/recycler_view" || it == "@id/recycler_gradient" }) {
-                        node["android:layout_height"] = "match_parent"
+                        node["android:layout_height"] = "36dp"
                     }
                 }
             }
             context.document["res/layout/bili_player_video_setting_select_item.xml"].use { dom ->
-                dom.children().first()["android:layout_height"] = "match_parent"
+                dom.children().first()["android:layout_height"] = "36dp"
                 dom.walk {
                     if (it["android:id"] == "@id/divider") {
                         it["android:layout_height"] = "12dp"
