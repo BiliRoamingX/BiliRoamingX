@@ -19,7 +19,8 @@ import app.revanced.util.*
     dependencies = [ResourceMappingPatch::class]
 )
 object SettingsResourcePatch : ResourcePatch() {
-    private var packageName = ""
+    var packageName = ""
+        private set
 
     val isPink get() = packageName == "tv.danmaku.bili"
     val isPlay get() = packageName == "com.bilibili.app.in"
