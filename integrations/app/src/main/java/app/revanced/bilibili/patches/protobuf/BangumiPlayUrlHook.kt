@@ -172,6 +172,18 @@ object BangumiPlayUrlHook {
         if (error != null) throw error else return reply
     }
 
+    private fun fixDefaultQuality(error: MossException?, req: PlayViewUniteReq, response: PlayViewUniteReply) {
+        if (error == null && !isDownloadUnite && (VideoQualityPatch.halfScreenQuality() != 0 || VideoQualityPatch.getMatchedFullScreenQuality() != 0)) {
+            val requestQn = req.vod.qn
+            if (requestQn > 0 && response.hasVodInfo() && response.vodInfo.quality.toLong() != requestQn) {
+                response.vodInfo.streamListList.filter { it.hasDashVideo() || it.hasSegmentVideo() }
+                    .minByOrNull { abs(requestQn - it.streamInfo.quality) }?.let {
+                        response.vodInfo.quality = it.streamInfo.quality
+                    }
+            }
+        }
+    }
+
     @JvmStatic
     fun hookPlayViewUniteAfter(
         req: PlayViewUniteReq,
@@ -184,6 +196,7 @@ object BangumiPlayUrlHook {
         var finalError = error
         val response = reply ?: tryFixAidPGC(req, error)
             ?.also { finalError = null } ?: PlayViewUniteReply()
+        fixDefaultQuality(finalError, req, response)
         val supplementAny = response.supplement
         val typeUrl = supplementAny.typeUrl
         // Only handle pgc video
@@ -221,10 +234,13 @@ object BangumiPlayUrlHook {
                     response, supplement, "请求解析服务器发生错误\n${e.message}"
                 )
             }
-        } else if (finalError == null && allowDownloadUnite) {
-            return fixDownloadProtoUnite(response)
-        } else if (finalError == null && (Settings.BlockBangumiPageAds() || Settings.RemoveCmdDms())) {
-            return purifyViewInfoUnite(response, supplement)
+        } else if (finalError == null) {
+            if (allowDownloadUnite)
+                return fixDownloadProtoUnite(response)
+            var newReply = response
+            if (Settings.BlockBangumiPageAds() || Settings.RemoveCmdDms())
+                newReply = purifyViewInfoUnite(newReply, supplement)
+            return newReply
         }
         finalError?.let { throw it } ?: return reply
     }
