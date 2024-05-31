@@ -61,7 +61,7 @@ cd BiliRoamingX
 - 参照 [revanced-cli](https://github.com/ReVanced/revanced-cli/tree/main/docs) 文档打包
   1. 下载定制版 [revanced-cli.jar](https://github.com/zjns/revanced-cli/releases/latest)
   2. 从 [releases](https://github.com/BiliRoamingX/BiliRoamingX/releases/latest) 下载 `integrations.apk` 和 `patches.jar`
-  3. 执行终端命令 `java -jar revanced-cli.jar patch --merge integrations.apk --patch-bundle patches.jar --signing-levels 2,3 bilibili.apk`
+  3. 执行终端命令 `java -jar revanced-cli.jar patch --merge integrations.apk --patch-bundle patches.jar --signing-levels 1,2,3 bilibili.apk`
 
 ## ⭐ Star History
 
