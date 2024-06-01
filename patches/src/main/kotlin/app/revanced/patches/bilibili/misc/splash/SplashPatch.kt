@@ -23,10 +23,11 @@ object SplashPatch : ResourcePatch() {
 
     private const val BLACK_COLOR = "@android:color/black"
     private const val WHITE_COLOR = "@android:color/white"
+    private const val STOCK_BG_COLOR = "@color/Wh0"
 
     private val darkThemeBackgroundColor by stringPatchOption(
         key = "darkThemeBackgroundColor",
-        default = BLACK_COLOR,
+        default = STOCK_BG_COLOR,
         values = mapOf(
             "Amoled black" to BLACK_COLOR,
             "Material You" to "@android:color/system_neutral1_900",
@@ -45,7 +46,7 @@ object SplashPatch : ResourcePatch() {
 
     private val lightThemeBackgroundColor by stringPatchOption(
         key = "lightThemeBackgroundColor",
-        default = WHITE_COLOR,
+        default = STOCK_BG_COLOR,
         values = mapOf(
             "White" to WHITE_COLOR,
             "Material You" to "@android:color/system_neutral1_50",
