@@ -2,65 +2,65 @@
 <resources>
     <string-array name="biliroaming_full_screen_quality_entries">
         <item>默认</item>
-        <item>240P</item>
-        <item>360P</item>
-        <item>480P</item>
-        <item>720P</item>
-        <item>720P 60帧</item>
-        <item>1080P</item>
-        <item>1080P 高码率</item>
-        <item>1080P 60帧</item>
-        <item>4K</item>
-        <item>HDR</item>
+        <item>8K 超高清</item>
         <item>杜比视界</item>
-        <item>8K</item>
+        <item>HDR 真彩</item>
+        <item>4K 超清</item>
+        <item>1080P 60帧</item>
+        <item>1080P 高码率</item>
+        <item>1080P 高清</item>
+        <item>720P 60帧</item>
+        <item>720P 高清</item>
+        <item>480P 清晰</item>
+        <item>360P 流畅</item>
+        <item>240P 极速</item>
     </string-array>
     <string-array name="biliroaming_full_screen_quality_values">
         <item>0</item>
-        <item>6</item>
-        <item>16</item>
-        <item>32</item>
-        <item>64</item>
-        <item>74</item>
-        <item>80</item>
-        <item>112</item>
-        <item>116</item>
-        <item>120</item>
-        <item>125</item>
-        <item>126</item>
         <item>127</item>
+        <item>126</item>
+        <item>125</item>
+        <item>120</item>
+        <item>116</item>
+        <item>112</item>
+        <item>80</item>
+        <item>74</item>
+        <item>64</item>
+        <item>32</item>
+        <item>16</item>
+        <item>6</item>
     </string-array>
     <string-array name="biliroaming_half_screen_quality_entries">
         <item>默认</item>
         <item>跟随全屏清晰度</item>
-        <item>240P</item>
-        <item>360P</item>
-        <item>480P</item>
-        <item>720P</item>
-        <item>720P 60帧</item>
-        <item>1080P</item>
-        <item>1080P 高码率</item>
-        <item>1080P 60帧</item>
-        <item>4K</item>
-        <item>HDR</item>
+        <item>8K 超高清</item>
         <item>杜比视界</item>
-        <item>8K</item>
+        <item>HDR 真彩</item>
+        <item>4K 超清</item>
+        <item>1080P 60帧</item>
+        <item>1080P 高码率</item>
+        <item>1080P 高清</item>
+        <item>720P 60帧</item>
+        <item>720P 高清</item>
+        <item>480P 清晰</item>
+        <item>360P 流畅</item>
+        <item>240P 极速</item>
     </string-array>
     <string-array name="biliroaming_half_screen_quality_values">
         <item>0</item>
         <item>1</item>
-        <item>6</item>
-        <item>16</item>
-        <item>32</item>
-        <item>64</item>
-        <item>74</item>
-        <item>80</item>
-        <item>112</item>
-        <item>116</item>
-        <item>120</item>
-        <item>125</item>
-        <item>126</item>
         <item>127</item>
+        <item>126</item>
+        <item>125</item>
+        <item>120</item>
+        <item>116</item>
+        <item>112</item>
+        <item>80</item>
+        <item>74</item>
+        <item>64</item>
+        <item>32</item>
+        <item>16</item>
+        <item>6</item>
     </string-array>
     <string-array name="biliroaming_live_popup_entries">
         <item>购物卡片</item>
