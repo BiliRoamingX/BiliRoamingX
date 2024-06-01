@@ -26,8 +26,9 @@ object SplashPatch : ResourcePatch() {
 
     private val darkThemeBackgroundColor by stringPatchOption(
         key = "darkThemeBackgroundColor",
-        default = BLACK_COLOR,
+        default = "#FF17181A",
         values = mapOf(
+            "Black" to "#FF17181A",
             "Amoled black" to BLACK_COLOR,
             "Material You" to "@android:color/system_neutral1_900",
             "Classic (old YouTube)" to "#FF212121",
