@@ -76,8 +76,7 @@ public class BLRoutePatch {
                 if (pathSegments.size() == 1 && TextUtils.isDigitsOnly(pathSegments.get(0))) {
                     Uri.Builder builder = uri.buildUpon().clearQuery();
                     for (String name : uri.getQueryParameterNames()) {
-                        if (!"current_qn".equals(name) && !"current_quality".equals(name)
-                                && !"playurl_h264".equals(name) && !"playurl_h265".equals(name)) {
+                        if (!"current_quality".equals(name) && !name.contains("current_qn") && !name.contains("playurl")) {
                             String value = uri.getQueryParameter(name);
                             builder.appendQueryParameter(name, value);
                         }

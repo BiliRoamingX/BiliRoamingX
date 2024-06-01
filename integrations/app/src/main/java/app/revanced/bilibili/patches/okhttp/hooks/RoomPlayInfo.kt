@@ -31,8 +31,7 @@ object RoomPlayInfo : ApiHook() {
     }
 
     override fun shouldHook(url: String, status: Int): Boolean {
-        return (Settings.DefaultMaxQn() || Settings.PreferStableCdn())
-                && status.isOk && url.startsWith(API)
+        return Settings.DefaultMaxQn() && status.isOk && url.startsWith(API)
     }
 
     override fun hook(url: String, status: Int, request: String, response: String): String {
@@ -44,8 +43,6 @@ object RoomPlayInfo : ApiHook() {
             if (requestQn != null)
                 preferBestCodec(jo, requestQn)
         }
-        if (Settings.PreferStableCdn())
-            preferStableCdn(jo)
         Logger.debug { "RoomPlayInfo, new room play info: $jo" }
         return jo.toString()
     }

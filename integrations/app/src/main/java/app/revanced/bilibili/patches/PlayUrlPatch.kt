@@ -33,6 +33,7 @@ object PlayUrlPatch {
                 asset.url = stableCdn
                 asset.backupUrls.remove(stableCdn)
                 asset.backupUrls.add(url)
+                Logger.debug { "PlayUrlPatch, replace url: $url" }
                 Logger.debug {
                     val originUrl = Uri.parse(url).buildUpon().clearQuery().toString()
                     val stableUrl = Uri.parse(stableCdn).buildUpon().clearQuery().toString()
@@ -40,8 +41,7 @@ object PlayUrlPatch {
                 }
             }
         } else Logger.debug {
-            val originUrl = Uri.parse(url).buildUpon().clearQuery().toString()
-            "PlayUrlPatch, keep cdn: $originUrl"
+            "PlayUrlPatch, keep url: $url"
         }
     }
 }
