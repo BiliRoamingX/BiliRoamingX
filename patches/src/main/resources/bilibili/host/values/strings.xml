@@ -458,4 +458,6 @@
     <string name="biliroaming_found_new_version">（发现新版本%s）</string>
     <string name="biliroaming_block_home_recent_used_title">屏蔽最近使用</string>
     <string name="biliroaming_block_home_recent_used_summary">屏蔽最近页面的最近使用，例如最近使用的小程序</string>
+    <string name="biliroaming_remove_live_watermark_title">移除水印</string>
+    <string name="biliroaming_remove_live_watermark_summary">移除左上角直播和房间号水印</string>
 </resources>

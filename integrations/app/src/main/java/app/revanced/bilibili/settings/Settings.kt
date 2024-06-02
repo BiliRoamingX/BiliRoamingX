@@ -132,6 +132,7 @@ object Settings {
     @JvmField val DefaultMaxQn = BooleanSetting(key = "default_max_qn")
     @JvmField val DisableSlideLeft = BooleanSetting(key = "disable_slide_left")
     @JvmField val DisableAutoFloat = BooleanSetting(key = "disable_auto_float")
+    @JvmField val RemoveLiveWatermark = BooleanSetting(key = "remove_live_watermark")
     // endregion
 
 

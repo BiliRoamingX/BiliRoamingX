@@ -6,6 +6,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.bilibili.bililive.videoliveplayer.net.beans.giftpendant.LiveGiftPendantInfo;
 import com.bilibili.bililive.videoliveplayer.net.beans.mask.LiveAreaMaskInfo;
 
+import java.util.Map;
+
 public class BiliLiveRoomInfo {
     @Nullable
     public BiliLiveRoomBanner bannerInfo;
@@ -17,6 +19,9 @@ public class BiliLiveRoomInfo {
     @JSONField(name = "area_mask_info")
     @Nullable
     public LiveAreaMaskInfo areaMaskInfo;
+    @JSONField(name = "new_switch_info")
+    @Nullable
+    public Map<String, Object> newSwitchInfo;
 
     public static class FunctionCard {
         @Nullable

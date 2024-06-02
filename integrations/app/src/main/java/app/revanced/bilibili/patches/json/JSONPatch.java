@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import app.revanced.bilibili.meta.BottomItem;
@@ -120,6 +121,11 @@ public class JSONPatch {
             if (Settings.RemoveLiveMask.get()) try {
                 roomInfo.areaMaskInfo = null;
             } catch (Throwable ignored) {
+            }
+            if (Settings.RemoveLiveWatermark.get()) {
+                Map<String, Object> newSwitchInfo = roomInfo.newSwitchInfo;
+                if (newSwitchInfo != null)
+                    newSwitchInfo.put("room-player-watermark", 0);
             }
         } else if (data instanceof LiveRoomRecommendCard) {
             if (Settings.PurifyLivePopups.get().contains("follow"))

@@ -4,32 +4,36 @@
     <androidx.preference.PreferenceCategory>
         <androidx.preference.SwitchPreferenceCompat
             android:key="forbid_switch_live_room"
-            android:title="@string/biliroaming_forbid_switch_live_room_title"
-            android:summary="@string/biliroaming_forbid_switch_live_room_summary" />
+            android:summary="@string/biliroaming_forbid_switch_live_room_summary"
+            android:title="@string/biliroaming_forbid_switch_live_room_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="disable_live_room_double_click"
-            android:title="@string/biliroaming_disable_live_room_double_click_title"
-            android:summary="@string/biliroaming_disable_live_room_double_click_summary" />
+            android:summary="@string/biliroaming_disable_live_room_double_click_summary"
+            android:title="@string/biliroaming_disable_live_room_double_click_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.PurifyLivePopupsFragment"
             android:key="purify_live_popups"
-            android:title="@string/biliroaming_purify_live_popups_title"
-            android:summary="@string/biliroaming_purify_live_popups_summary" />
+            android:summary="@string/biliroaming_purify_live_popups_summary"
+            android:title="@string/biliroaming_purify_live_popups_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="remove_live_mask"
-            android:title="@string/biliroaming_remove_live_mask_title"
-            android:summary="@string/biliroaming_remove_live_mask_summary" />
+            android:summary="@string/biliroaming_remove_live_mask_summary"
+            android:title="@string/biliroaming_remove_live_mask_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="default_max_qn"
-            android:title="@string/biliroaming_default_max_qn_title"
-            android:summary="@string/biliroaming_default_max_qn_summary" />
+            android:summary="@string/biliroaming_default_max_qn_summary"
+            android:title="@string/biliroaming_default_max_qn_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="disable_slide_left"
-            android:title="@string/biliroaming_disable_slide_left_title"
-            android:summary="@string/biliroaming_disable_slide_left_summary" />
+            android:summary="@string/biliroaming_disable_slide_left_summary"
+            android:title="@string/biliroaming_disable_slide_left_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="disable_auto_float"
-            android:title="@string/biliroaming_disable_auto_float_title"
-            android:summary="@string/biliroaming_disable_auto_float_summary" />
+            android:summary="@string/biliroaming_disable_auto_float_summary"
+            android:title="@string/biliroaming_disable_auto_float_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="remove_live_watermark"
+            android:summary="@string/biliroaming_remove_live_watermark_summary"
+            android:title="@string/biliroaming_remove_live_watermark_title" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>
