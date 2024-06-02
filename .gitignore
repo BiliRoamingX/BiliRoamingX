@@ -7,3 +7,5 @@
 .cxx
 /.vscode
 /*.log
+/.idea/*
+!/.idea/codeStyles
