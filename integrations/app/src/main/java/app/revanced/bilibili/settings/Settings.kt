@@ -25,10 +25,8 @@ object Settings {
     // region Group: 播放器
     @JvmField val HalfScreenQuality = StringSetting(key = "half_screen_quality", defValue = "0")
     @JvmField val FullScreenQuality = StringSetting(key = "full_screen_quality", defValue = "0")
-    @JvmField val MobileFullScreenQuality =
-        StringSetting(key = "full_screen_quality_mobile", defValue = "0")
-    @JvmField val PlayerVersion =
-        StringSetting(key = "player_version", defValue = "0", needReboot = true)
+    @JvmField val MobileFullScreenQuality = StringSetting(key = "full_screen_quality_mobile", defValue = "0")
+    @JvmField val PlayerVersion = StringSetting(key = "player_version", defValue = "0", needReboot = true)
     @JvmField val RememberLosslessSetting = BooleanSetting(key = "remember_lossless_setting")
     @JvmField val DefaultPlaybackSpeed = FloatSetting(key = "default_playback_speed")
     @JvmField val LongPressPlaybackSpeed = FloatSetting(key = "long_press_playback_speed")
@@ -55,11 +53,9 @@ object Settings {
     @JvmField val ShortDurationLimit = IntSetting(key = "hide_short_duration_recommend_limit")
     @JvmField val LongDurationLimit = IntSetting(key = "hide_long_duration_recommend_limit")
     @JvmField val HomeRcmdFilterTitle = StringSetSetting(key = "home_filter_keywords_title")
-    @JvmField val HomeRcmdFilterTitleRegexMode =
-        BooleanSetting(key = "home_filter_title_regex_mode")
+    @JvmField val HomeRcmdFilterTitleRegexMode = BooleanSetting(key = "home_filter_title_regex_mode")
     @JvmField val HomeRcmdFilterReason = StringSetSetting(key = "home_filter_keywords_reason")
-    @JvmField val HomeRcmdFilterReasonRegexMode =
-        BooleanSetting(key = "home_filter_reason_regex_mode")
+    @JvmField val HomeRcmdFilterReasonRegexMode = BooleanSetting(key = "home_filter_reason_regex_mode")
     @JvmField val HomeRcmdFilterUid = StringSetSetting(key = "home_filter_keywords_uid")
     @JvmField val HomeRcmdFilterUp = StringSetSetting(key = "home_filter_keywords_up")
     @JvmField val HomeRcmdFilterUpRegexMode = BooleanSetting(key = "home_filter_up_regex_mode")
@@ -71,14 +67,12 @@ object Settings {
     @JvmField val AddKorea = BooleanSetting(key = "add_korea", needReboot = true)
     @JvmField val PurifyGame = BooleanSetting(key = "purify_game", needReboot = true)
     @JvmField val Drawer = BooleanSetting(key = "drawer")
-    @JvmField val DisableHomeStory =
-        BooleanSetting(key = "disable_main_page_story", needReboot = true)
+    @JvmField val DisableHomeStory = BooleanSetting(key = "disable_main_page_story", needReboot = true)
     @JvmField val BlockTopActivity =
         BooleanSetting(key = "block_top_activity", needReboot = true, onChange = { value, _ ->
             if (value) deleteTopActivityEntrance()
         })
-    @JvmField val BlockRecommendGuidance =
-        BooleanSetting(key = "block_recommend_guidance", needReboot = true)
+    @JvmField val BlockRecommendGuidance = BooleanSetting(key = "block_recommend_guidance", needReboot = true)
     @JvmField val BlockPopularTopEntrance = BooleanSetting(key = "block_popular_top_entrance")
     @JvmField val BlockPopularTopicList = BooleanSetting(key = "block_popular_topic_list")
     @JvmField val BlockPopularRcmdUp = BooleanSetting(key = "block_popular_rcmd_up")
@@ -104,8 +98,7 @@ object Settings {
     @JvmField val DynPurifyUp = StringSetSetting(key = "customize_dynamic_keyword_upname")
     @JvmField val DynPurifyUid = StringSetSetting(key = "customize_dynamic_keyword_uid")
     @JvmField val DynPurifyTopic = StringSetSetting(key = "customize_dynamic_keyword_topic")
-    @JvmField val DynForceOldTabStyle =
-        BooleanSetting(key = "dynamic_force_old_tab", needReboot = true)
+    @JvmField val DynForceOldTabStyle = BooleanSetting(key = "dynamic_force_old_tab", needReboot = true)
     @JvmField val DynRmCm = BooleanSetting(key = "dynamic_rm_cm")
     @JvmField val DynRmStory = BooleanSetting(key = "dynamic_rm_story")
     // endregion
@@ -125,8 +118,7 @@ object Settings {
 
     // region Group: 直播间
     @JvmField val ForbidSwitchLiveRoom = BooleanSetting(key = "forbid_switch_live_room")
-    @JvmField val DisableLiveRoomDoubleClick =
-        BooleanSetting(key = "disable_live_room_double_click")
+    @JvmField val DisableLiveRoomDoubleClick = BooleanSetting(key = "disable_live_room_double_click")
     @JvmField val PurifyLivePopups = StringSetSetting(key = "purify_live_popups")
     @JvmField val RemoveLiveMask = BooleanSetting(key = "remove_live_mask")
     @JvmField val DefaultMaxQn = BooleanSetting(key = "default_max_qn")
@@ -168,8 +160,7 @@ object Settings {
     @JvmField val BlockCommentUp = StringSetSetting(key = "block_comment_up")
     @JvmField val BlockCommentUpRegexMode = BooleanSetting(key = "block_comment_up_regex_mode")
     @JvmField val BlockCommentContent = StringSetSetting(key = "block_comment_content")
-    @JvmField val BlockCommentContentRegexMode =
-        BooleanSetting(key = "block_comment_content_regex_mode")
+    @JvmField val BlockCommentContentRegexMode = BooleanSetting(key = "block_comment_content_regex_mode")
     @JvmField val BlockCommentUpLevel = IntSetting(key = "block_comment_up_level")
     @JvmField val ExternalDownloader = BooleanSetting(key = "external_downloader")
     @JvmField val ExternalDownloaderName =
@@ -205,14 +196,11 @@ object Settings {
     @JvmField val BoldSubtitleText = BooleanSetting(key = "subtitle_bold", defValue = true)
     @JvmField val SubtitleFontSizePortrait = IntSetting(key = "subtitle_font_size_portrait")
     @JvmField val SubtitleFontSizeLandscape = IntSetting(key = "subtitle_font_size_landscape")
-    @JvmField val SubtitleFillColor =
-        StringSetting(key = "subtitle_font_color2", defValue = "FFFFFFFF")
-    @JvmField val SubtitleStrokeColor =
-        StringSetting(key = "subtitle_stroke_color", defValue = "FF000000")
+    @JvmField val SubtitleFillColor = StringSetting(key = "subtitle_font_color2", defValue = "FFFFFFFF")
+    @JvmField val SubtitleStrokeColor = StringSetting(key = "subtitle_stroke_color", defValue = "FF000000")
     @JvmField val SubtitleStrokeWidth = FloatSetting(key = "subtitle_stroke_width", defValue = 5.0f)
     @JvmField val SubtitleOffset = IntSetting(key = "subtitle_offset")
-    @JvmField val SubtitleTranslateServer =
-        StringSetting(key = "subtitle_translate_server", defValue = "microsoft")
+    @JvmField val SubtitleTranslateServer = StringSetting(key = "subtitle_translate_server", defValue = "microsoft")
     @JvmField val SubtitleImportSave = BooleanSetting(key = "subtitle_import_save")
     // endregion
 
@@ -245,16 +233,14 @@ object Settings {
     @JvmField val FuckMiniProgram = BooleanSetting(key = "mini_program")
     @JvmField val NumberFormat = BooleanSetting(key = "number_format")
     @JvmField val AutoReceiveCoupon = BooleanSetting(key = "auto_receive_coupon")
-    @JvmField val DisplaySize =
-        StringSetting(key = "display_size", defValue = "0", needReboot = true)
+    @JvmField val DisplaySize = StringSetting(key = "display_size", defValue = "0", needReboot = true)
     @JvmField val CustomSplash = BooleanSetting(key = "custom_splash")
     @JvmField val CustomSplashLogo = BooleanSetting(key = "custom_splash_logo")
     @JvmField val FullSplash = BooleanSetting(key = "full_splash")
     @JvmField val EnableAv = BooleanSetting(key = "enable_av", needReboot = true)
-    @JvmField val EnableDocProvider =
-        BooleanSetting(key = "enable_doc_provider", onChange = { value, _ ->
-            changeComponentState(BiliDocumentsProvider::class.java, value)
-        })
+    @JvmField val EnableDocProvider = BooleanSetting(key = "enable_doc_provider", onChange = { value, _ ->
+        changeComponentState(BiliDocumentsProvider::class.java, value)
+    })
     @JvmField val DisableAvif = BooleanSetting(key = "disable_avif", needReboot = true)
     @JvmField val PurifySplash = BooleanSetting(key = "purify_splash", onChange = { value, async ->
         if (value) if (async) {
