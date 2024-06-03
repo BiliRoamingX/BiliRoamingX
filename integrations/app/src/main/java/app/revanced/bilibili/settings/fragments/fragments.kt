@@ -70,3 +70,6 @@ class SubtitleTranslateServerFragment : BiliRoamingBaseSettingFragment()
 
 @SettingFragment("biliroaming_setting_upos")
 class UposSettingFragment : BiliRoamingBaseSettingFragment()
+
+@SettingFragment("biliroaming_setting_story_ui_style")
+class StoryUIStyleFragment : BiliRoamingBaseSettingFragment()

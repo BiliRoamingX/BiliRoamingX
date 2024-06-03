@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <tv.danmaku.bili.widget.RadioGroupPreference
+        android:key="story_ui_style"
+        android:persistent="true"
+        app:migration_settings_type="none"
+        app:radioDefaultValue="0"
+        app:radioEntries="@array/biliroaming_story_ui_style_entries"
+        app:radioEntrySummaries="@array/biliroaming_story_ui_style_summaries"
+        app:radioEntryValues="@array/biliroaming_story_ui_style_values" />
+</androidx.preference.PreferenceScreen>

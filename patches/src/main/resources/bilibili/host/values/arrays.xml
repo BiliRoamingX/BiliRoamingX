@@ -446,4 +446,22 @@
         <item>microsoft</item>
         <item>google</item>
     </string-array>
+    <string-array name="biliroaming_story_ui_style_entries">
+        <item>默认</item>
+        <item>样式1</item>
+        <item>样式2</item>
+        <item>样式3</item>
+    </string-array>
+    <string-array name="biliroaming_story_ui_style_summaries">
+        <item />
+        <item>操作按钮在右侧，左滑展示UP主投稿视频</item>
+        <item>操作按钮在底部，左滑展示UP主投稿视频</item>
+        <item>操作按钮在底部，左滑展示评论</item>
+    </string-array>
+    <string-array name="biliroaming_story_ui_style_values">
+        <item>0</item>
+        <item>4</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array>
 </resources>

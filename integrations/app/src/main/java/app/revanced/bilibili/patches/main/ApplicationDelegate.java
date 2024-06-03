@@ -3,6 +3,7 @@ package app.revanced.bilibili.patches.main;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -28,6 +29,7 @@ import com.bilibili.bplus.im.setting.MessageTipItemActivity;
 import com.bilibili.magicasakura.widgets.TintCheckBox;
 import com.bilibili.magicasakura.widgets.TintRadioButton;
 import com.bilibili.magicasakura.widgets.TintSwitchCompat;
+import com.bilibili.video.story.StoryVideoActivity;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -288,6 +290,16 @@ public class ApplicationDelegate {
                 LayoutInflater layoutInflater = activity.getLayoutInflater();
                 LayoutInflater.Factory2 factory2 = layoutInflater.getFactory2();
                 Reflex.setObjectField(layoutInflater, "mFactory2", new SettingsLayoutFactory(factory2));
+            } else if (activity instanceof StoryVideoActivity) {
+                int storyUIStyle = Integer.parseInt(Settings.StoryUIStyle.get());
+                if (storyUIStyle != 0) {
+                    SharedPreferences storyPrefs = KtUtils.getStoryPrefs();
+                    if (storyPrefs.getInt("pref_story_ui_exp_style", 0) != storyUIStyle) {
+                        SharedPreferences.Editor editor = storyPrefs.edit();
+                        editor.putInt("pref_story_ui_exp_style", storyUIStyle);
+                        editor.apply();
+                    }
+                }
             }
         }
 

@@ -55,6 +55,15 @@
             android:key="fragment_filter_story"
             android:summary="@string/biliroaming_filter_story_summary"
             android:title="@string/biliroaming_filter_story_title" />
+        <tv.danmaku.bili.widget.preference.BLRadioGroupEntrancePreference
+            android:fragment="app.revanced.bilibili.settings.fragments.StoryUIStyleFragment"
+            android:key="story_ui_style"
+            android:persistent="true"
+            android:title="@string/biliroaming_story_ui_style_title"
+            app:migration_settings_type="none"
+            app:radioDefaultValue="0"
+            app:radioEntries="@array/biliroaming_story_ui_style_entries"
+            app:radioEntryValues="@array/biliroaming_story_ui_style_values" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.ExternalDownloaderFragment"
             android:key="fragment_external_downloader"

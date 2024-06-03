@@ -277,6 +277,10 @@ val blkvPrefs by lazy {
     Utils.blkvPrefsByName("instance.bili_preference", true)
 }
 
+val storyPrefs by lazy {
+    Utils.blkvPrefsByName("bilistory", true)
+}
+
 private val vhPrefs: SharedPreferences by lazy {
     Utils.getContext().getSharedPreferences(Constants.PREFS_VH, Context.MODE_PRIVATE)
 }
