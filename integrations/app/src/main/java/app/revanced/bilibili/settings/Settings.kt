@@ -1,5 +1,6 @@
 package app.revanced.bilibili.settings
 
+import android.graphics.Color
 import app.revanced.bilibili.content.BiliDocumentsProvider
 import app.revanced.bilibili.utils.*
 
@@ -256,7 +257,7 @@ object Settings {
     // region Group: 非配置项
     @JvmField val LosslessEnabled = BooleanSetting(key = "lossless_enabled")
     @JvmField val BgPlayingEnabled = BooleanSetting(key = "bg_playing_enabled")
-    @JvmField val CustomColor = IntSetting(key = "biliroaming_custom_color", defValue = -0xe6b7d)
+    @JvmField val CustomColor = IntSetting(key = "biliroaming_custom_color", defValue = Color.WHITE)
     @JvmField val SkinJson = StringSetting(key = "skin_json", dependency = Skin)
     // endregion
 }
