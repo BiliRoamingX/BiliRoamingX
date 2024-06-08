@@ -21,6 +21,7 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -149,7 +150,8 @@ public class ApplicationDelegate {
         };
         try {
             Reflex.setStaticObjectField(PackageInfo.class, "CREATOR", newCreator);
-        } catch (Throwable ignored) {
+        } catch (Throwable t) {
+            Log.e(Logger.LOG_TAG, "Failed to set PackageInfo.CREATOR", t);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             HiddenApiBypass.addHiddenApiExemptions("Landroid/os/Parcel;", "Landroid/content/pm/PackageManager;", "Landroid/app/PropertyInvalidatedCache;");
@@ -157,11 +159,23 @@ public class ApplicationDelegate {
         try {
             Object cache = Reflex.getStaticObjectField(PackageManager.class, "sPackageInfoCache");
             Reflex.callMethod(cache, "clear");
+        } catch (NoSuchFieldError ignored) {
+        } catch (Throwable t) {
+            Log.e(Logger.LOG_TAG, "Failed to clear PackageManager.sPackageInfoCache", t);
+        }
+        try {
             Map<?, ?> mCreators = (Map<?, ?>) Reflex.getStaticObjectField(Parcel.class, "mCreators");
             mCreators.clear();
+        } catch (NoSuchFieldError ignored) {
+        } catch (Throwable t) {
+            Log.e(Logger.LOG_TAG, "Failed to clear Parcel.mCreators", t);
+        }
+        try {
             Map<?, ?> sPairedCreators = (Map<?, ?>) Reflex.getStaticObjectField(Parcel.class, "sPairedCreators");
             sPairedCreators.clear();
-        } catch (Throwable ignored) {
+        } catch (NoSuchFieldError ignored) {
+        } catch (Throwable t) {
+            Log.e(Logger.LOG_TAG, "Failed to clear Parcel.sPairedCreators", t);
         }
     }
 
