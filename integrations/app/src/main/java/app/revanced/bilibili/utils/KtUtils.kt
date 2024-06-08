@@ -13,10 +13,7 @@ import android.media.MediaScannerConnection
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.*
-import android.util.Size
-import android.util.SizeF
-import android.util.SparseArray
-import android.util.TypedValue
+import android.util.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.MeasureSpec
@@ -51,6 +48,7 @@ import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 import kotlin.Any
 import kotlin.Boolean
+import kotlin.Pair
 import kotlin.math.roundToInt
 import com.google.protobuf.Any as ProtoBufAny
 
@@ -346,10 +344,19 @@ val browserUA =
     "Mozilla/5.0 (Linux; Android ${Build.VERSION.RELEASE}; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
 @Suppress("DEPRECATION")
-fun sigMd5(packageName: String = Utils.getContext().packageName): String {
-    return Utils.getContext().packageManager
-        .getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
-        .signatures.first().toByteArray().md5Hex
+fun sigMd5(packageName: String = Utils.getContext().packageName, preferOriginal: Boolean = true): String {
+    val signBase64 = if (preferOriginal) {
+        val sign = ApplicationDelegate.originalSignatures[packageName]
+        if (sign == null)
+            Utils.getContext().packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+        ApplicationDelegate.originalSignatures[packageName]
+    } else null
+    return if (signBase64 == null) {
+        Utils.getContext().packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+            .signatures.first().toByteArray().md5Hex
+    } else {
+        Base64.decode(signBase64, Base64.DEFAULT).md5Hex
+    }
 }
 
 fun Long.cnCountFormat(invalid: String = "-"): String {

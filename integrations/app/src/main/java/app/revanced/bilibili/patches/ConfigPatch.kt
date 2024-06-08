@@ -15,10 +15,17 @@ object ConfigPatch {
         "ff_united_video_setting",                    // 新版三点菜单
     )
 
+    @JvmStatic
+    private val alwaysDisabledAbKeys = arrayOf(
+        "security_defend_enabled",                    // 禁用安全防御，LibBili#d(long,com.bilibili.nativelibrary.Rt)V 定期检查，会通过 java API 获取签名等信息
+    )
+
     @Keep
     @JvmStatic
     fun getAb(key: String, defValue: Boolean?, origin: Boolean?): Boolean? {
         //Logger.debug { "ConfigPatch, ab of $key: $origin, default: $defValue" }
+        if (alwaysDisabledAbKeys.contains(key))
+            return false
         if (alwaysEnabledAbKeys.contains(key))
             return true
         else if ("ff_player_fav_new" == key && Settings.ForceOldFav())

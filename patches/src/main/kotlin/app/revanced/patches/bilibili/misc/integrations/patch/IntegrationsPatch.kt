@@ -35,6 +35,25 @@ object IntegrationsPatch : BaseIntegrationsPatch(
         """.trimIndent()
         )
         val clazz = result.mutableClass
+        if (clazz.methods.any { it.name == "<clinit>" }) {
+            clazz.methods.first { it.name == "<clinit>" }.addInstructions(
+                0, """
+                invoke-static {}, Lapp/revanced/bilibili/patches/main/ApplicationDelegate;->onClassInit()V
+            """.trimIndent()
+            )
+        } else Method(
+            definingClass = clazz.type,
+            name = "<clinit>",
+            returnType = "V",
+            accessFlags = AccessFlags.STATIC.value or AccessFlags.CONSTRUCTOR.value,
+            implementation = MethodImplementation(registerCount = 0)
+        ).toMutable().apply {
+            addInstructions(
+                0, """
+                invoke-static {}, Lapp/revanced/bilibili/patches/main/ApplicationDelegate;->onClassInit()V
+            """.trimIndent()
+            )
+        }.also { clazz.methods.add(it) }
         if (clazz.methods.any { it.name == "getResources" && it.parameters.isEmpty() })
             throw PatchException("Application#getResources method existed, need rewrite logic!")
         Method(

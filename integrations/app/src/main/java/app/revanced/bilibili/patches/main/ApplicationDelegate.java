@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -11,8 +14,12 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -31,9 +38,13 @@ import com.bilibili.magicasakura.widgets.TintRadioButton;
 import com.bilibili.magicasakura.widgets.TintSwitchCompat;
 import com.bilibili.video.story.StoryVideoActivity;
 
+import org.lsposed.hiddenapibypass.HiddenApiBypass;
+
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import app.revanced.bilibili.account.PassportChangeReceiver;
@@ -42,6 +53,7 @@ import app.revanced.bilibili.patches.DpiPatch;
 import app.revanced.bilibili.patches.PlaybackSpeedPatch;
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.settings.Settings;
+import app.revanced.bilibili.utils.Constants;
 import app.revanced.bilibili.utils.KtUtils;
 import app.revanced.bilibili.utils.Logger;
 import app.revanced.bilibili.utils.PreferenceUpdater;
@@ -56,6 +68,7 @@ import tv.danmaku.bili.MainActivityV2;
 public class ApplicationDelegate {
     private static final ArrayDeque<WeakReference<Activity>> activityRefs = new ArrayDeque<>();
     private static final Point screenSize = new Point();
+    public static final Map<String, String> originalSignatures = new HashMap<>();
 
     @Keep
     public static void onCreate(Application app) {
@@ -82,6 +95,74 @@ public class ApplicationDelegate {
         }
         long end = System.currentTimeMillis();
         Logger.debug(() -> String.format("Initializing BiliRoamingX on process %s cost %s ms", Utils.currentProcessName(), end - start));
+    }
+
+    @Keep
+    public static void onClassInit() {
+        String officialSignature = "MIICVzCCAcCgAwIBAgIETzuw7DANBgkqhkiG9w0BAQUFADBvMQswCQYDVQQGEwJDTjESMBAGA1UECBMJR3Vhbmdkb25nMQ8wDQYDVQQHEwZaaHVoYWkxEzARBgNVBAoTCmRhbm1ha3UudHYxEzARBgNVBAsTCmRhbm1ha3UudHYxETAPBgNVBAMTCEJiY2FsbGVuMCAXDTEyMDIxNTEzMTk0MFoYDzIwNjYxMTE4MTMxOTQwWjBvMQswCQYDVQQGEwJDTjESMBAGA1UECBMJR3Vhbmdkb25nMQ8wDQYDVQQHEwZaaHVoYWkxEzARBgNVBAoTCmRhbm1ha3UudHYxEzARBgNVBAsTCmRhbm1ha3UudHYxETAPBgNVBAMTCEJiY2FsbGVuMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/yXoLdjq+kkrwvAanfPzULANSIYvflMMGnuAEbXOazIDymmNXaUPTEL3Jn9+Ssxiyvrgqpu18HaK4MJtzaj1ajUU3BMXdtCL83POUW37sFWhOiYbKW+K87VYq/utk+ZIplrXtWKB4P3Ll1sUNsfsxQmrR9kpVWkhUMUNgH2wcEQIDAQABMA0GCSqGSIb3DQEBBQUAA4GBAAC3ZtZ7Mw69jZSmcEH8TNxjM36q5V9rsntK+o92nW1wIKoSoQRMN4SfJumqqrou4T4aAcRDMkKNeYMiE+GCOJQMy5WnhvpMhgLkmajgBo4tTIQnNzqeDUt429HxpcpBBpjM+YrYdGhKb+xUd4lzvJFPRKp7DmPt6c5SwM6ZtiB/";
+        fakeSignatures(
+                Pair.create(Constants.PINK_PACKAGE_NAME, officialSignature),
+                Pair.create(Constants.PLAY_PACKAGE_NAME, officialSignature),
+                Pair.create(Constants.HD_PACKAGE_NAME, officialSignature),
+                Pair.create(Constants.BLUE_PACKAGE_NAME, officialSignature)
+        );
+    }
+
+    @SafeVarargs
+    private static void fakeSignatures(Pair<String, String>... pairs) {
+        Parcelable.Creator<PackageInfo> originalCreator = PackageInfo.CREATOR;
+        Parcelable.Creator<PackageInfo> newCreator = new Parcelable.Creator<>() {
+            @Override
+            public PackageInfo createFromParcel(Parcel source) {
+                PackageInfo packageInfo = originalCreator.createFromParcel(source);
+                if (!originalSignatures.containsKey(packageInfo.packageName) && packageInfo.signatures != null && packageInfo.signatures.length > 0) {
+                    Signature signature = packageInfo.signatures[0];
+                    String signatureBase64 = Base64.encodeToString(signature.toByteArray(), Base64.NO_WRAP);
+                    originalSignatures.put(packageInfo.packageName, signatureBase64);
+                }
+                for (Pair<String, String> pair : pairs) {
+                    String packageName = pair.first;
+                    String signatureData = pair.second;
+                    if (packageInfo.packageName.equals(packageName)) {
+                        Signature fakeSignature = new Signature(Base64.decode(signatureData, Base64.DEFAULT));
+                        if (packageInfo.signatures != null && packageInfo.signatures.length > 0) {
+                            packageInfo.signatures[0] = fakeSignature;
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                            if (packageInfo.signingInfo != null) {
+                                Signature[] signaturesArray = packageInfo.signingInfo.getApkContentsSigners();
+                                if (signaturesArray != null && signaturesArray.length > 0) {
+                                    signaturesArray[0] = fakeSignature;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+                return packageInfo;
+            }
+
+            @Override
+            public PackageInfo[] newArray(int size) {
+                return originalCreator.newArray(size);
+            }
+        };
+        try {
+            Reflex.setStaticObjectField(PackageInfo.class, "CREATOR", newCreator);
+        } catch (Throwable ignored) {
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            HiddenApiBypass.addHiddenApiExemptions("Landroid/os/Parcel;", "Landroid/content/pm/PackageManager;", "Landroid/app/PropertyInvalidatedCache;");
+        }
+        try {
+            Object cache = Reflex.getStaticObjectField(PackageManager.class, "sPackageInfoCache");
+            Reflex.callMethod(cache, "clear");
+            Map<?, ?> mCreators = (Map<?, ?>) Reflex.getStaticObjectField(Parcel.class, "mCreators");
+            mCreators.clear();
+            Map<?, ?> sPairedCreators = (Map<?, ?>) Reflex.getStaticObjectField(Parcel.class, "sPairedCreators");
+            sPairedCreators.clear();
+        } catch (Throwable ignored) {
+        }
     }
 
     @Keep
