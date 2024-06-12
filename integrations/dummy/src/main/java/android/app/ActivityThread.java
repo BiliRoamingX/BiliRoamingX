@@ -11,6 +11,10 @@ public class ActivityThread {
         throw new UnsupportedOperationException("Stub");
     }
 
+    public static String currentPackageName() {
+        throw new UnsupportedOperationException("Stub");
+    }
+
     @Nullable
     public Application getApplication() {
         throw new UnsupportedOperationException("Stub");

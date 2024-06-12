@@ -297,6 +297,18 @@ public class Utils {
         return name;
     }
 
+    public static String currentPackageName() {
+        String name = "";
+        Context context = getContext();
+        if (context != null) {
+            name = context.getPackageName();
+        } else try {
+            name = ActivityThread.currentPackageName();
+        } catch (Throwable ignored) {
+        }
+        return name;
+    }
+
     public static boolean isMainProcess() {
         String name = currentProcessName();
         return !name.isEmpty() && !name.contains(":");
