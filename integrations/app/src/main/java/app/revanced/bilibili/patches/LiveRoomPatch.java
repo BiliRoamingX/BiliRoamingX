@@ -22,7 +22,7 @@ public class LiveRoomPatch {
         if (!disableLiveRoomDoubleClick()) return false;
         try {
             var playerBridge = Reflex.callMethod(playerView, "getPlayerCommonBridge");
-            if ((Boolean) Reflex.callMethod(playerBridge, "isPlaying")) {
+            if (Reflex.callMethod(playerBridge, "isPlaying")) {
                 Reflex.callMethod(playerBridge, "pause");
             } else {
                 Reflex.callMethod(playerBridge, "resume");

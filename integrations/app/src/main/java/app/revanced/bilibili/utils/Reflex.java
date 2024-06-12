@@ -834,9 +834,9 @@ public class Reflex {
     /**
      * Returns the value of an object field in the given object instance. A class reference is not sufficient! See also {@link #findField}.
      */
-    public static Object getObjectField(Object obj, String fieldName) {
+    public static <T> T getObjectField(Object obj, String fieldName) {
         try {
-            return findField(obj.getClass(), fieldName).get(obj);
+            return (T) findField(obj.getClass(), fieldName).get(obj);
         } catch (IllegalAccessException e) {
             // should not happen
             throw new IllegalAccessError(e.getMessage());
@@ -1098,9 +1098,9 @@ public class Reflex {
     /**
      * Returns the value of a static object field in the given class. See also {@link #findField}.
      */
-    public static Object getStaticObjectField(Class<?> clazz, String fieldName) {
+    public static <T> T getStaticObjectField(Class<?> clazz, String fieldName) {
         try {
-            return findField(clazz, fieldName).get(null);
+            return (T) findField(clazz, fieldName).get(null);
         } catch (IllegalAccessException e) {
             // should not happen
             throw new IllegalAccessError(e.getMessage());
@@ -1233,9 +1233,9 @@ public class Reflex {
      * @throws NoSuchMethodError     In case no suitable method was found.
      * @throws InvocationTargetError In case an exception was thrown by the invoked method.
      */
-    public static Object callMethod(Object obj, String methodName, Object... args) {
+    public static <T> T callMethod(Object obj, String methodName, Object... args) {
         try {
-            return findMethodBestMatch(obj.getClass(), methodName, args).invoke(obj, args);
+            return (T) findMethodBestMatch(obj.getClass(), methodName, args).invoke(obj, args);
         } catch (IllegalAccessException e) {
             // should not happen
             throw new IllegalAccessError(e.getMessage());
@@ -1253,9 +1253,9 @@ public class Reflex {
      * <p>This variant allows you to specify parameter types, which can help in case there are multiple
      * methods with the same name, especially if you call it with {@code null} parameters.
      */
-    public static Object callMethod(Object obj, String methodName, Class<?>[] parameterTypes, Object... args) {
+    public static <T> T callMethod(Object obj, String methodName, Class<?>[] parameterTypes, Object... args) {
         try {
-            return findMethodBestMatch(obj.getClass(), methodName, parameterTypes, args).invoke(obj, args);
+            return (T) findMethodBestMatch(obj.getClass(), methodName, parameterTypes, args).invoke(obj, args);
         } catch (IllegalAccessException e) {
             // should not happen
             throw new IllegalAccessError(e.getMessage());
@@ -1276,9 +1276,9 @@ public class Reflex {
      * @throws NoSuchMethodError     In case no suitable method was found.
      * @throws InvocationTargetError In case an exception was thrown by the invoked method.
      */
-    public static Object callStaticMethod(Class<?> clazz, String methodName, Object... args) {
+    public static <T> T callStaticMethod(Class<?> clazz, String methodName, Object... args) {
         try {
-            return findMethodBestMatch(clazz, methodName, args).invoke(null, args);
+            return (T) findMethodBestMatch(clazz, methodName, args).invoke(null, args);
         } catch (IllegalAccessException e) {
             // should not happen
             throw new IllegalAccessError(e.getMessage());
@@ -1296,9 +1296,9 @@ public class Reflex {
      * <p>This variant allows you to specify parameter types, which can help in case there are multiple
      * methods with the same name, especially if you call it with {@code null} parameters.
      */
-    public static Object callStaticMethod(Class<?> clazz, String methodName, Class<?>[] parameterTypes, Object... args) {
+    public static <T> T callStaticMethod(Class<?> clazz, String methodName, Class<?>[] parameterTypes, Object... args) {
         try {
-            return findMethodBestMatch(clazz, methodName, parameterTypes, args).invoke(null, args);
+            return (T) findMethodBestMatch(clazz, methodName, parameterTypes, args).invoke(null, args);
         } catch (IllegalAccessException e) {
             // should not happen
             throw new IllegalAccessError(e.getMessage());
@@ -1378,26 +1378,26 @@ public class Reflex {
 
     //#################################################################################################
 
-    public static Object getFirstFieldByExactType(Object obj, Class<?> type) {
+    public static <T> T getFirstFieldByExactType(Object obj, Class<?> type) {
         try {
-            return findFirstFieldByExactType(obj.getClass(), type).get(obj);
+            return (T) findFirstFieldByExactType(obj.getClass(), type).get(obj);
         } catch (IllegalAccessException e) {
             // should not happen
             throw new IllegalAccessError(e.getMessage());
         }
     }
 
-    public static Object getFirstFieldByExactTypeOrNull(Object obj, Class<?> type) {
+    public static <T> T getFirstFieldByExactTypeOrNull(Object obj, Class<?> type) {
         try {
-            return getFirstFieldByExactType(obj, type);
+            return (T) getFirstFieldByExactType(obj, type);
         } catch (NoSuchFieldError e) {
             return null;
         }
     }
 
-    public static Object getFieldValue(Object obj, Field field) {
+    public static <T> T getFieldValue(Object obj, Field field) {
         try {
-            return field.get(obj);
+            return (T) field.get(obj);
         } catch (IllegalAccessException e) {
             throw new IllegalAccessError(e.getMessage());
         }

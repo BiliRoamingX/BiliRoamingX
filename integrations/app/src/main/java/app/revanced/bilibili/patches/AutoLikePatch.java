@@ -35,7 +35,7 @@ public class AutoLikePatch {
         if (cachedFieldName == null) {
             for (Field field : viewHolder.getClass().getDeclaredFields()) {
                 if (!View.class.isAssignableFrom(field.getType())) continue;
-                View view = (View) Reflex.getObjectField(viewHolder, field.getName());
+                View view = Reflex.getObjectField(viewHolder, field.getName());
                 if (view != null && (view.getId() == likeId || view.getId() == like2Id)) {
                     cachedFieldName = field.getName();
                     break;
@@ -44,7 +44,7 @@ public class AutoLikePatch {
         }
         if (cachedFieldName == null) return;
         if (like == 0) {
-            View likeView = (View) Reflex.getObjectField(viewHolder, cachedFieldName);
+            View likeView = Reflex.getObjectField(viewHolder, cachedFieldName);
             likeView.callOnClick();
         }
     }

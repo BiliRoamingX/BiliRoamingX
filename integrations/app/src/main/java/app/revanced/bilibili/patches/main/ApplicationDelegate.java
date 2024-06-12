@@ -164,14 +164,14 @@ public class ApplicationDelegate {
             Log.e(Logger.LOG_TAG, "Failed to clear PackageManager.sPackageInfoCache", t);
         }
         try {
-            Map<?, ?> mCreators = (Map<?, ?>) Reflex.getStaticObjectField(Parcel.class, "mCreators");
+            Map<?, ?> mCreators = Reflex.getStaticObjectField(Parcel.class, "mCreators");
             mCreators.clear();
         } catch (NoSuchFieldError ignored) {
         } catch (Throwable t) {
             Log.e(Logger.LOG_TAG, "Failed to clear Parcel.mCreators", t);
         }
         try {
-            Map<?, ?> sPairedCreators = (Map<?, ?>) Reflex.getStaticObjectField(Parcel.class, "sPairedCreators");
+            Map<?, ?> sPairedCreators = Reflex.getStaticObjectField(Parcel.class, "sPairedCreators");
             sPairedCreators.clear();
         } catch (NoSuchFieldError ignored) {
         } catch (Throwable t) {

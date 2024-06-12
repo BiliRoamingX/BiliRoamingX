@@ -127,6 +127,13 @@ object BangumiPlayUrlHook {
                 download = 0
             }
         }
+        val extraContent = req.extraContentMap
+        val epId = extraContent.getOrDefault("ep_id", "0").toLong()
+        val seasonId = extraContent.getOrDefault("season_id", "0").toLong()
+        if (epId != 0L && epId == req.vod.cid || seasonId != 0L && seasonId == req.vod.aid) {
+            req.vod.cid = 0L
+            req.vod.aid = 0L
+        }
     }
 
     @JvmStatic
