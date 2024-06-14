@@ -313,6 +313,7 @@ object SubtitleHelper {
     }
 
     fun ass2Bcc(ass: String): String {
+        var layerIndex = -1
         var startIndex = -1
         var endIndex = -1
         var textIndex = -1
@@ -328,8 +329,11 @@ object SubtitleHelper {
             .replace("\\h", " ")
             .replace("\\N", "\n")
 
+        class Timeline(val layer: Int, val from: Float, val to: Float, val text: String, var handled: Boolean = false)
+
         val lines = ass.lines()
         var formatParsed = false
+        val timelines = mutableListOf<Timeline>()
         lines.withIndex().forEach { (index, line) ->
             if (!formatParsed && line.startsWith("[Events]")) {
                 val eventFormat = lines[index + 1]
@@ -337,23 +341,33 @@ object SubtitleHelper {
                     error("invalid ass subtitle")
                 val names = eventFormat.removePrefix("Format:")
                     .split(',', limit = 10).map(String::trim)
+                layerIndex = names.indexOf("Layer")
                 startIndex = names.indexOf("Start")
                 endIndex = names.indexOf("End")
                 textIndex = names.indexOf("Text")
-                if (startIndex == -1 || endIndex == -1 || textIndex == -1)
+                if (layerIndex == -1 || startIndex == -1 || endIndex == -1 || textIndex == -1)
                     error("invalid ass subtitle")
                 formatParsed = true
             } else if (line.startsWith("Dialogue:")) {
                 val values = line.removePrefix("Dialogue:")
                     .trim().split(',', limit = 10)
+                val layer = values[layerIndex]
                 val start = values[startIndex]
                 val end = values[endIndex]
                 val text = values[textIndex]
+                timelines.add(Timeline(layer.toInt(), start.toSeconds(), end.toSeconds(), text.format()))
+            }
+        }
+        timelines.forEach { timeline ->
+            if (!timeline.handled) {
+                val bestTimeline = timelines.filter {
+                    it.from == timeline.from && it.to == timeline.to
+                }.onEach { it.handled = true }.maxBy { it.layer }
                 JSONObject().apply {
-                    put("from", start.toSeconds())
-                    put("to", end.toSeconds())
+                    put("from", bestTimeline.from)
+                    put("to", bestTimeline.to)
                     put("location", 2)
-                    put("content", text.format())
+                    put("content", bestTimeline.text)
                 }.let { body.put(it) }
             }
         }
@@ -425,12 +439,12 @@ object SubtitleHelper {
         return result.toString()
     }
 
-    fun formatBcc(bcc: String) = bcc.toJSONObject().run {
+    fun formatBcc(bcc: String): String = bcc.toJSONObject().run {
         optJSONArray("body").orEmpty()
             .removeAppendedInfo().reSort().let {
                 put("body", it)
             }
-    }.toString()
+    }.toString(2)
 
     fun bccToSrt(bcc: String): String {
         val lines = bcc.toJSONObject().optJSONArray("body").orEmpty()
