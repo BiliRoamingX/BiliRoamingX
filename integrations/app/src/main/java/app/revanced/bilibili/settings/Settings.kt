@@ -102,6 +102,7 @@ object Settings {
     @JvmField val DynForceOldTabStyle = BooleanSetting(key = "dynamic_force_old_tab", needReboot = true)
     @JvmField val DynRmCm = BooleanSetting(key = "dynamic_rm_cm")
     @JvmField val DynRmStory = BooleanSetting(key = "dynamic_rm_story")
+    @JvmField val DynNoUpRecall = BooleanSetting(key = "dynamic_no_up_recall", needReboot = true)
     // endregion
 
 

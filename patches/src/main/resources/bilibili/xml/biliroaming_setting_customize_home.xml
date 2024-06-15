@@ -60,5 +60,9 @@
             android:key="block_home_recent_used"
             android:summary="@string/biliroaming_block_home_recent_used_summary"
             android:title="@string/biliroaming_block_home_recent_used_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="dynamic_no_up_recall"
+            android:summary="@string/biliroaming_dynamic_no_up_recall_summary"
+            android:title="@string/biliroaming_dynamic_no_up_recall_title" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>
