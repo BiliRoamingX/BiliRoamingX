@@ -360,14 +360,15 @@ object SubtitleHelper {
         }
         timelines.forEach { timeline ->
             if (!timeline.handled) {
-                val bestTimeline = timelines.filter {
+                val mergedText = timelines.filter {
                     it.from == timeline.from && it.to == timeline.to
-                }.onEach { it.handled = true }.maxBy { it.layer }
+                }.onEach { it.handled = true }.sortedByDescending { it.layer }
+                    .joinToString("\n") { it.text }
                 JSONObject().apply {
-                    put("from", bestTimeline.from)
-                    put("to", bestTimeline.to)
+                    put("from", timeline.from)
+                    put("to", timeline.to)
                     put("location", 2)
-                    put("content", bestTimeline.text)
+                    put("content", mergedText)
                 }.let { body.put(it) }
             }
         }
