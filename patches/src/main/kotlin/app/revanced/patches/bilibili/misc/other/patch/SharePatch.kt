@@ -53,15 +53,17 @@ object SharePatch : BytecodePatch(setOf(ShareToFingerprint, AppendTrackingInfoFi
                 }
             }
         }
-        AppendTrackingInfoFingerprint.result?.mutableMethod?.addInstructionsWithLabels(
-            0, """
+        AppendTrackingInfoFingerprint.result?.mutableMethod?.run {
+            addInstructionsWithLabels(
+                0, """
                 invoke-static {}, Lapp/revanced/bilibili/patches/SharePatch;->disableAppendTrackingInfo()Z
                 move-result v0
                 if-eqz v0, :jump
-                return-object p1
+                return-object v${implementation!!.registerCount - 1}
                 :jump
                 nop
             """.trimIndent()
-        ) ?: throw AppendTrackingInfoFingerprint.exception
+            )
+        } ?: throw AppendTrackingInfoFingerprint.exception
     }
 }
