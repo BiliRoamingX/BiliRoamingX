@@ -3,6 +3,7 @@ package app.revanced.bilibili.patches.main
 import android.app.Activity
 import app.revanced.bilibili.meta.Season
 import app.revanced.bilibili.meta.VideoInfo
+import app.revanced.bilibili.patches.CopyEnhancePatch
 import app.revanced.bilibili.patches.protobuf.ViewUniteReplyHook
 import app.revanced.bilibili.utils.asSequence
 import app.revanced.bilibili.utils.orEmpty
@@ -10,6 +11,7 @@ import app.revanced.bilibili.utils.toJSONObject
 import com.bapis.bilibili.app.viewunite.pgcanymodel.ViewPgcAny
 import com.bapis.bilibili.app.viewunite.ugcanymodel.ViewUgcAny
 import com.bapis.bilibili.app.viewunite.v1.ViewReply
+import com.bapis.bilibili.playershared.BizType
 import org.json.JSONObject
 import java.util.concurrent.ConcurrentHashMap
 
@@ -35,7 +37,24 @@ object VideoInfoHolder {
     fun updateCurrent(savedInfo: (VideoInfo?) -> VideoInfo) {
         val topActivity = ApplicationDelegate.getTopActivity()
         if (topActivity != null)
-            cache.compute(topActivity.hashCode()) { _, v -> savedInfo(v) }
+            cache.compute(topActivity.hashCode()) { _, v ->
+                savedInfo(v).also { judgeAiConclusionIfNeeded(it) }
+            }
+    }
+
+    @JvmStatic
+    private fun judgeAiConclusionIfNeeded(info: VideoInfo) {
+        val (cid, view) = info
+        if (cid == 0L) return
+        if (view is com.bapis.bilibili.app.view.v1.ViewReply) {
+            val aid = view.arc.aid
+            val mid = view.arc.author.mid
+            CopyEnhancePatch.judgeAiConclusion(aid, mid, cid)
+        } else if (view is ViewReply && view.viewBase.bizType == BizType.BIZ_TYPE_UGC) {
+            val aid = view.arc.aid
+            val mid = view.owner.mid
+            CopyEnhancePatch.judgeAiConclusion(aid, mid, cid)
+        }
     }
 
     @JvmStatic

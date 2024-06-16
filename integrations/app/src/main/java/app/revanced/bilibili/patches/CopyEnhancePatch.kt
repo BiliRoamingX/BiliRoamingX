@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.annotation.Keep
 import app.revanced.bilibili.http.HttpClient
 import app.revanced.bilibili.model.AIConclusion
+import app.revanced.bilibili.model.AIConclusionJudge
 import app.revanced.bilibili.patches.main.ApplicationDelegate
 import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.settings.Settings
@@ -32,6 +33,11 @@ object CopyEnhancePatch {
         "dy_opus_paragraph_text"
     )
     private val canonicalizeRegex = Regex("""([,;])\s?""")
+    private val aiConclusionAvailableCache = object : LinkedHashMap<Long, Boolean>() {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<Long, Boolean>): Boolean {
+            return size > 6
+        }
+    }
 
     @Keep
     @JvmStatic
@@ -57,12 +63,17 @@ object CopyEnhancePatch {
                 }) { append("点我保存") }
                 appendLine().appendLine()
                 appendTitle("AI总结：")
-                clickable(0xFF2196F3.toInt(), onClick = {
-                    viewAiConclusion()
-                }) { append("点我查看") }
-                appendLine().appendLine()
+                val cid = VideoInfoHolder.current?.cid
+                if (cid != null && cid != 0L && aiConclusionAvailableCache[cid] == false) {
+                    appendLine("当前视频暂不支持AI总结").appendLine()
+                } else {
+                    clickable(0xFF2196F3.toInt(), onClick = {
+                        viewAiConclusion()
+                    }) { append("点我查看") }
+                    appendLine().appendLine()
+                }
                 val introDesc = view.arc.desc
-                if (desc.isNotEmpty()) {
+                if (introDesc.isNotEmpty()) {
                     appendTitle("简介：")
                     appendLine(introDesc).appendLine()
                 }
@@ -99,10 +110,15 @@ object CopyEnhancePatch {
                         }) { append("点我保存") }
                         appendLine().appendLine()
                         appendTitle("AI总结：")
-                        clickable(0xFF2196F3.toInt(), onClick = {
-                            viewAiConclusion()
-                        }) { append("点我查看") }
-                        appendLine().appendLine()
+                        val cid = VideoInfoHolder.current?.cid
+                        if (cid != null && cid != 0L && aiConclusionAvailableCache[cid] == false) {
+                            appendLine("当前视频暂不支持AI总结").appendLine()
+                        } else {
+                            clickable(0xFF2196F3.toInt(), onClick = {
+                                viewAiConclusion()
+                            }) { append("点我查看") }
+                            appendLine().appendLine()
+                        }
                         val introDesc = intro.descList.joinToString("") {
                             if (it.type == DescType.DescTypeAt) "@${it.text}" else it.text
                         }
@@ -246,6 +262,20 @@ object CopyEnhancePatch {
         }
     }
 
+    fun judgeAiConclusion(aid: Long, mid: Long, cid: Long) {
+        if (aiConclusionAvailableCache.contains(cid))
+            return
+        Utils.async {
+            val params = Wbi.sign(mapOf("aid" to aid, "cid" to cid, "up_mid" to mid))
+            HttpClient.get(
+                "https://api.bilibili.com/x/web-interface/view/conclusion/judge",
+                params = params
+            )?.data<AIConclusionJudge>()?.let {
+                aiConclusionAvailableCache[cid] = it.available
+            }
+        }
+    }
+
     private fun viewAiConclusion() {
         val (cid, view) = VideoInfoHolder.current
             ?: return
@@ -267,20 +297,23 @@ object CopyEnhancePatch {
                 params = params
             )?.data<AIConclusion>()
             if (aiConclusion != null) Utils.runOnMainThread {
-                showAiConclusion(aiConclusion)
+                showAiConclusion(aiConclusion, cid)
             }
         }
     }
 
-    private fun showAiConclusion(aiConclusion: AIConclusion) {
+    private fun showAiConclusion(aiConclusion: AIConclusion, cid: Long) {
         if (aiConclusion.code != 0) {
             if (aiConclusion.code == 1) {
+                aiConclusionAvailableCache[cid] = true
                 Toasts.showLong("当前视频由你首次尝试AI总结，系统正在处理中，请稍后再次查看是否支持AI总结。")
             } else {
+                aiConclusionAvailableCache[cid] = false
                 Toasts.showShort("当前视频暂不支持AI总结")
             }
             return
         }
+        aiConclusionAvailableCache[cid] = true
         val topActivity = ApplicationDelegate.getTopActivity() ?: return
         val modelResult = aiConclusion.modelResult
 

@@ -1,6 +1,7 @@
 package app.revanced.bilibili.model
 
 
+import app.revanced.bilibili.model.serializer.IntAsBoolean
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -48,3 +49,6 @@ class AIConclusion(
         }
     }
 }
+
+@Serializable
+class AIConclusionJudge(@SerialName("judge") val available: IntAsBoolean)
