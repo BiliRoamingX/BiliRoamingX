@@ -117,6 +117,13 @@ object MusicNotificationPatch {
         return playbackState
     }
 
+    private inline fun <T> Any.getObjectFieldAsX(field: String) = try {
+        getObjectFieldAs<T>(field)
+    } catch (_: NoSuchFieldError) {
+        val mFiled = "m${field.replaceFirstChar { it.uppercaseChar() }}"
+        getObjectFieldAs(mFiled)
+    }
+
     @Keep
     @JvmStatic
     fun onCreateNotification(self: Any, old: Notification?): Notification? {
@@ -160,23 +167,23 @@ object MusicNotificationPatch {
             setCategory(old.category)
 
             for (action in actions) {
-                val viewId = action.getIntField("viewId")
+                val viewId = action.getObjectFieldAsX<Int>("viewId")
                 when (action.javaClass) {
                     bitmapActionClass -> when (viewId) {
                         liveNotificationIconId ->
-                            setLargeIcon(action.getObjectFieldAs<Bitmap>("bitmap"))
+                            setLargeIcon(action.getObjectFieldAsX<Bitmap>("bitmap"))
                     }
 
-                    reflectionActionClass -> when (action.getObjectFieldAs<String>("methodName")) {
+                    reflectionActionClass -> when (action.getObjectFieldAsX<String>("methodName")) {
                         "setText" -> when (viewId) {
                             liveNotificationTitleId ->
-                                setContentTitle(action.getObjectFieldAs<CharSequence>("value"))
+                                setContentTitle(action.getObjectFieldAsX<CharSequence>("value"))
 
                             liveNotificationSubtitleId ->
-                                setContentText(action.getObjectFieldAs<CharSequence>("value"))
+                                setContentText(action.getObjectFieldAsX<CharSequence>("value"))
 
                             liveNotificationUpNameId ->
-                                setSubText(action.getObjectFieldAs<CharSequence>("value"))
+                                setSubText(action.getObjectFieldAsX<CharSequence>("value"))
                         }
                     }
 
