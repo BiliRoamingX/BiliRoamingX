@@ -53,6 +53,10 @@
             android:key="disable_avif"
             android:summary="@string/biliroaming_disable_avif_summary"
             android:title="@string/biliroaming_disable_avif_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="disallow_collect_privacy_info"
+            android:summary="@string/biliroaming_disallow_collect_privacy_info_summary"
+            android:title="@string/biliroaming_disallow_collect_privacy_info_title" />
         <androidx.preference.Preference
             android:key="route"
             android:title="@string/biliroaming_route_title" />

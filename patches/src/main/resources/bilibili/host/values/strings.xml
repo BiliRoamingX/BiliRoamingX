@@ -463,4 +463,6 @@
     <string name="biliroaming_story_ui_style_title">竖屏模式页面样式</string>
     <string name="biliroaming_dynamic_no_up_recall_title">动态标签不显示最新UP主头像</string>
     <string name="biliroaming_dynamic_no_up_recall_summary">仅在动态标签角标上显示未读动态数</string>
+    <string name="biliroaming_disallow_collect_privacy_info_title">禁止采集隐私信息</string>
+    <string name="biliroaming_disallow_collect_privacy_info_summary">例如已安装应用列表，Wi-Fi ssid，DeviceId等</string>
 </resources>

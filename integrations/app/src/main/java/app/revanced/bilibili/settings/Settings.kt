@@ -252,6 +252,7 @@ object Settings {
             clearSplashConfigCache()
         }
     })
+    @JvmField val DisallowCollectPrivacyInfo = BooleanSetting(key = "disallow_collect_privacy_info", needReboot = true)
     // endregion
 
 
