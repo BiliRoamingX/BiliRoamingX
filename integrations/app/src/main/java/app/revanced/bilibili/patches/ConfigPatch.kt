@@ -22,7 +22,6 @@ object ConfigPatch {
 
     @JvmStatic
     private val privacyInfoKeys = arrayOf(
-        // region 隐私信息采集开关
         "ff_open_privacy.applist.info",
         "ff_open_bssid",
         "ff_open_imei_all",
@@ -33,8 +32,6 @@ object ConfigPatch {
         "ff_open_meid_all",
         "ff_open_ssid",
         "ff_open_device_id_all",
-        // endregion
-        "ticket_enable",
     )
 
     @Keep
