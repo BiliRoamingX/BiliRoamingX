@@ -194,6 +194,7 @@ object Settings {
 
     // region Group: 字幕
     @JvmField val AutoGenerateSubtitle = BooleanSetting(key = "auto_generate_subtitle")
+    @JvmField val AutoSelectAISubtitle = BooleanSetting(key = "auto_select_ai_subtitle")
     @JvmField val EnableCustomSubtitleStyle = BooleanSetting(key = "custom_subtitle")
     @JvmField val RemoveSubtitleBg = BooleanSetting(key = "subtitle_remove_bg", defValue = true)
     @JvmField val BoldSubtitleText = BooleanSetting(key = "subtitle_bold", defValue = true)

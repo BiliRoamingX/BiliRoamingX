@@ -122,6 +122,14 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
         } else if (cid != dmViewReq.oid) {
             Subtitle.importedSubtitles = dmViewReq.oid to mutableListOf()
         }
+        val subtitlesList = result.subtitle.subtitlesList
+        if (Settings.AutoSelectAISubtitle() && subtitlesList.map { it.lan }
+                .none { it == "zh-Hans" || it == "zh-CN" }) {
+            subtitlesList.find { it.lan == "ai-zh" }?.run {
+                lan = "zh-Hans"
+                type = SubtitleType.CC
+            }
+        }
         return result
     }
 

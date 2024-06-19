@@ -465,4 +465,6 @@
     <string name="biliroaming_dynamic_no_up_recall_summary">仅在动态标签角标上显示未读动态数</string>
     <string name="biliroaming_disallow_collect_privacy_info_title">禁止采集隐私信息</string>
     <string name="biliroaming_disallow_collect_privacy_info_summary">例如已安装应用列表，Wi-Fi ssid，DeviceId等</string>
+    <string name="biliroaming_auto_select_ai_subtitle_title">自动选择AI中文字幕</string>
+    <string name="biliroaming_auto_select_ai_subtitle_summary">当视频没有CC中文字幕时，自动选择可用的AI中文字幕</string>
 </resources>
