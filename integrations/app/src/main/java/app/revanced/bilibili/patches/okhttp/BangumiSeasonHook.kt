@@ -512,6 +512,7 @@ object BangumiSeasonHook {
 
     private fun addAreaTags(reply: SearchAllResponse) {
         if (!Settings.SearchBangumi() && !Settings.SearchMovie()) return
+        if (reply.navList.isEmpty()) return
         val currentArea = area
         for (searchType in searchTypes) {
             val area = searchType.value.area
