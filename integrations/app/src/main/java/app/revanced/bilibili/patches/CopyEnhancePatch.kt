@@ -263,7 +263,7 @@ object CopyEnhancePatch {
     }
 
     fun judgeAiConclusion(aid: Long, mid: Long, cid: Long) {
-        if (aiConclusionAvailableCache.contains(cid))
+        if (aiConclusionAvailableCache[cid] == false)
             return
         Utils.async {
             val params = Wbi.sign(mapOf("aid" to aid, "cid" to cid, "up_mid" to mid))
