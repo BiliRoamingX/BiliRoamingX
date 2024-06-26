@@ -22,7 +22,7 @@ object PublishToFollowingPatch : BytecodePatch(setOf(PublishToFollowingConfigFin
             m.name == "<init>" && m.parameterTypes.let { ts -> ts.size == 4 && ts.all { it == "Z" } }
         }?.addInstructions(
             0, """
-            invoke-static {p3}, Lapp/revanced/bilibili/patches/PublishToFollowingPatch;->shouldAutoSelectOnce(Z)Z
+            invoke-static {p3}, Lapp/revanced/bilibili/patches/SettingsTransfer;->shouldAutoSelectOnce(Z)Z
             move-result p3
         """.trimIndent()
         )

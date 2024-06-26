@@ -26,7 +26,7 @@ object BLogPatch : BytecodePatch(setOf(LogcatAdapterFingerprint)) {
                 origMethod.name += "_Origin"
                 addInstructionsWithLabels(
                     0, """
-                    invoke-static {}, Lapp/revanced/bilibili/patches/BLogPatch;->debuggable()Z
+                    invoke-static {}, Lapp/revanced/bilibili/patches/SettingsTransfer;->debuggable()Z
                     move-result v0
                     if-eqz v0, :jump
                     goto :return

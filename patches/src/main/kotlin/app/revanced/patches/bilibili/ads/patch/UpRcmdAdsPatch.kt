@@ -20,7 +20,7 @@ object UpRcmdAdsPatch : BytecodePatch() {
         context.findClass("Lcom/bapis/bilibili/ad/v1/SourceContentDto;")?.let { c ->
             c.mutableClass.methods.find { it.name == "getAdContent" }?.addInstructionsWithLabels(
                 0, """
-                invoke-static {}, Lapp/revanced/bilibili/patches/UpRcmdAdsPatch;->blockUpRcmdAds()Z
+                invoke-static {}, Lapp/revanced/bilibili/patches/SettingsTransfer;->blockUpRcmdAds()Z
                 move-result v0
                 if-eqz v0, :jump
                 const/4 v0, 0x0

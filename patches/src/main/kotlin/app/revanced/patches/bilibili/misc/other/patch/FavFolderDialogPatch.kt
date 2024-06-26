@@ -39,7 +39,7 @@ object FavFolderDialogPatch : BytecodePatch(
                     } ?: return@run
                 addInstructions(
                     insertIndex, """
-                    invoke-static {v$register}, Lapp/revanced/bilibili/patches/FavFolderDialogPatch;->shouldChecked(Z)Z
+                    invoke-static {v$register}, Lapp/revanced/bilibili/patches/SettingsTransfer;->shouldAutoSubscribe(Z)Z
                     move-result v$register
                 """.trimIndent()
                 )

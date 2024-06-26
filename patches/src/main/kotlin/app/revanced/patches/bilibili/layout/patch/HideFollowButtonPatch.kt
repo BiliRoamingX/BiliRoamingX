@@ -21,7 +21,7 @@ object HideFollowButtonPatch : BytecodePatch() {
             ?.mutableClass?.methods?.find { it.name == "getShowFollowBtn" }?.run {
                 addInstructions(
                     implementation!!.instructions.size - 1, """
-                        invoke-static {v0}, Lapp/revanced/bilibili/patches/BlockFollowButtonPatch;->shouldShowCommentFollow(Z)Z
+                        invoke-static {v0}, Lapp/revanced/bilibili/patches/SettingsTransfer;->shouldShowCommentFollow(Z)Z
                         move-result v0
                     """.trimIndent()
                 )
@@ -33,7 +33,7 @@ object HideFollowButtonPatch : BytecodePatch() {
             context.findClass(name)?.mutableClass?.methods?.find { it.name == "getShowFollow" }?.run {
                 addInstructions(
                     implementation!!.instructions.size - 1, """
-                        invoke-static {v0}, Lapp/revanced/bilibili/patches/BlockFollowButtonPatch;->shouldShowDynamicFollow(Z)Z
+                        invoke-static {v0}, Lapp/revanced/bilibili/patches/SettingsTransfer;->shouldShowDynamicFollow(Z)Z
                         move-result v0
                     """.trimIndent()
                 )

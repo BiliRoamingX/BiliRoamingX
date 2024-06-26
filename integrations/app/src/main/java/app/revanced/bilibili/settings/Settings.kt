@@ -181,6 +181,7 @@ object Settings {
     @JvmField val CustomizeSpace = StringSetSetting(key = "customize_space")
     @JvmField val AddArticleTab = BooleanSetting(key = "add_article_tab")
     @JvmField val IgnoreBlacklist = BooleanSetting(key = "ignore_blacklist")
+    @JvmField val UidCopyNoPrefix = BooleanSetting(key = "uid_copy_no_prefix")
     // endregion
 
 

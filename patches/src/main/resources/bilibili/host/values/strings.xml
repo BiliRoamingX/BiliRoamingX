@@ -467,4 +467,5 @@
     <string name="biliroaming_disallow_collect_privacy_info_summary">例如已安装应用列表，Wi-Fi ssid，DeviceId等</string>
     <string name="biliroaming_auto_select_ai_subtitle_title">自动选择AI中文字幕</string>
     <string name="biliroaming_auto_select_ai_subtitle_summary">当视频没有CC中文字幕时，自动选择可用的AI中文字幕</string>
+    <string name="biliroaming_uid_copy_no_prefix_title">复制UID时去掉“UID:”前缀</string>
 </resources>

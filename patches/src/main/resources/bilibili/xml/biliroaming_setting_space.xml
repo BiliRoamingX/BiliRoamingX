@@ -14,6 +14,9 @@
         <androidx.preference.SwitchPreferenceCompat
             android:key="ignore_blacklist"
             android:title="@string/biliroaming_ignore_blacklist_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="uid_copy_no_prefix"
+            android:title="@string/biliroaming_uid_copy_no_prefix_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.CustomizeSpaceFragment"
             android:key="fragment_customize_space"
