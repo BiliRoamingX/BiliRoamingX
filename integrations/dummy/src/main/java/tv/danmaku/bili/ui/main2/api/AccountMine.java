@@ -6,6 +6,7 @@ import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.bilibili.lib.homepage.MenuItemTip;
 import com.bilibili.lib.homepage.mine.MenuGroup;
 
 import java.text.SimpleDateFormat;
@@ -47,6 +48,9 @@ public class AccountMine {
     public long follower;
     @JSONField(name = "following")
     public long following;
+    @Nullable
+    @JSONField(name = "game_tip")
+    public List<MenuItemTip> gameTips;
     @Nullable
     @JSONField(name = "mall_home")
     public GarbEntrance garbEntrance;

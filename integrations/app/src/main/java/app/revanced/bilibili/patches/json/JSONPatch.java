@@ -330,6 +330,10 @@ public class JSONPatch {
                 mine.garbEntrance = null;
             }
         }
+        if (Settings.BlockTips.get()) {
+            mine.liveTip = null;
+            mine.gameTips = null;
+        }
     }
 
     private static void customizeHomeTab(MainResourceManager.TabData data) {

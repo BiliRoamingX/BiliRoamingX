@@ -18,24 +18,27 @@
         <androidx.preference.SwitchPreferenceCompat
             android:key="remove_vip_section"
             android:title="@string/biliroaming_remove_vip_section_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="block_tips"
+            android:title="@string/biliroaming_block_tips_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.CustomizeDrawerFragment"
             android:key="customize_drawer"
             android:title="@string/biliroaming_customize_drawer_title" />
         <androidx.preference.SwitchPreferenceCompat
-          android:key="add_channel"
-          android:title="@string/biliroaming_add_channel_title"
-          android:summary="@string/biliroaming_add_channel_summary" />
+            android:key="add_channel"
+            android:summary="@string/biliroaming_add_channel_summary"
+            android:title="@string/biliroaming_add_channel_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="add_podcast"
-            android:title="@string/biliroaming_add_podcast_title"
-            android:summary="@string/biliroaming_add_podcast_summary" />
+            android:summary="@string/biliroaming_add_podcast_summary"
+            android:title="@string/biliroaming_add_podcast_title" />
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory>
         <androidx.preference.SwitchPreferenceCompat
             android:key="switch_dark_dialog"
-            android:title="@string/biliroaming_switch_dark_dialog_title"
-            android:summary="@string/biliroaming_switch_dark_dialog_summary" />
+            android:summary="@string/biliroaming_switch_dark_dialog_summary"
+            android:title="@string/biliroaming_switch_dark_dialog_title" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

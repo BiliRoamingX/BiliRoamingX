@@ -468,4 +468,5 @@
     <string name="biliroaming_auto_select_ai_subtitle_title">自动选择AI中文字幕</string>
     <string name="biliroaming_auto_select_ai_subtitle_summary">当视频没有CC中文字幕时，自动选择可用的AI中文字幕</string>
     <string name="biliroaming_uid_copy_no_prefix_title">复制UID时去掉“UID:”前缀</string>
+    <string name="biliroaming_block_tips_title">屏蔽活动条</string>
 </resources>

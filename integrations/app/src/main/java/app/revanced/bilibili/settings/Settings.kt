@@ -115,6 +115,7 @@ object Settings {
     @JvmField val SwitchDarkTipsDialog = BooleanSetting(key = "switch_dark_dialog")
     @JvmField val AddChannel = BooleanSetting(key = "add_channel", needReboot = true)
     @JvmField val AddPodcast = BooleanSetting(key = "add_podcast")
+    @JvmField val BlockTips = BooleanSetting(key = "block_tips")
     // endregion
 
 
