@@ -20,8 +20,8 @@ object CommentReplyUrlPatch : BytecodePatch() {
     override fun execute(context: BytecodeContext) {
         context.findClass("Lcom/bapis/bilibili/main/community/reply/v1/Content;")
             ?.mutableClass?.methods?.find { it.name == "internalGetUrls" }?.addInstruction(
-                1, """
-                invoke-static {v0}, Lapp/revanced/bilibili/patches/CommentReplyUrlPatch;->filterUrls(Lcom/google/protobuf/MapFieldLite;)V
+                0, """
+                invoke-static {p0}, Lapp/revanced/bilibili/patches/CommentReplyUrlPatch;->filterUrls(Lcom/bapis/bilibili/main/community/reply/v1/Content;)V
             """.trimIndent()
             ) ?: throw PatchException("can not found internalGetUrls method")
     }
