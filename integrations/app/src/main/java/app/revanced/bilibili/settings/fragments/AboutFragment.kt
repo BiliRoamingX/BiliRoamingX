@@ -13,6 +13,7 @@ import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.annotation.Keep
 import androidx.preference.Preference
+import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.http.HttpClient
 import app.revanced.bilibili.integrations.BuildConfig
 import app.revanced.bilibili.patches.okhttp.hooks.Upgrade
@@ -58,6 +59,11 @@ class AboutFragment : BiliRoamingBaseSettingFragment() {
         }
         findPreference<Preference>("share_log")?.run {
             onClick { Utils.async { shareLog() }; true }
+        }
+        findPreference<Preference>("export_access_key")?.onClick {
+            setClipboardContent(content = Accounts.accessKey)
+            Toasts.showShortWithId("biliroaming_access_key_copied")
+            true
         }
         checkVersion()
     }
