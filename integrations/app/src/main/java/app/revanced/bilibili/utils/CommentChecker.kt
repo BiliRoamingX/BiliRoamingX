@@ -2,6 +2,7 @@ package app.revanced.bilibili.utils
 
 import android.app.AlertDialog
 import app.revanced.bilibili.patches.main.ApplicationDelegate
+import app.revanced.bilibili.settings.Settings
 import com.bapis.bilibili.main.community.reply.v1.DetailListReq
 import com.bapis.bilibili.main.community.reply.v1.ReplyInfoReply
 import com.bapis.bilibili.main.community.reply.v1.ReplyInfoReq
@@ -18,18 +19,26 @@ object CommentChecker {
     }
 
     fun checkComment(oid: Long, id: Long, message: String, hasPicture: Boolean) {
-        Utils.runOnMainThread(500) {
-            Utils.async {
-                if (checkCommentInternal(oid, id, message, quick = true) == CheckResult.Valid) {
-                    val delay = if (hasPicture) 15_000L else 8_000L
-                    Utils.runOnMainThread(delay) {
-                        Utils.async {
-                            checkCommentInternal(oid, id, message, quick = false)
+        if (Settings.CheckComment()) {
+            Utils.runOnMainThread(500) {
+                Utils.async {
+                    if (checkCommentInternal(oid, id, message, quick = true) == CheckResult.Valid) {
+                        val delay = if (hasPicture) 15_000L else 8_000L
+                        Utils.runOnMainThread(delay) {
+                            Utils.async {
+                                checkCommentInternal(oid, id, message, quick = false)
+                            }
                         }
+                        Toasts.showShortWithId("biliroaming_check_comment_toast", delay / 1000)
                     }
-                    Toasts.showShortWithId("biliroaming_check_comment_toast", delay / 1000)
                 }
             }
+        }
+        Utils.runOnMainThread(300) {
+            val moduleKeywords = arrayOf("漫游", "漫y", "roaming")
+            val lowerMessage = message.replace(" ", "").lowercase()
+            if (moduleKeywords.any { lowerMessage.contains(it) })
+                Toasts.showLong("你貌似正在站内发表违反模块使用规则的言论，请考虑删除，否则将被拉黑")
         }
     }
 

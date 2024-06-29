@@ -55,7 +55,6 @@ object Toasts {
         val prefixMessage = Utils.getString("biliroaming_toast_prefix")
         val finalMessage = prefixMessage + message
         Utils.runOnMainThread {
-            cancel()
             show(Utils.getContext(), finalMessage, duration, gravity)
         }
     }

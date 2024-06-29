@@ -1,14 +1,13 @@
 package app.revanced.bilibili.patches.okhttp.hooks
 
 import app.revanced.bilibili.patches.okhttp.ApiHook
-import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.CommentChecker
 import app.revanced.bilibili.utils.orEmpty
 import app.revanced.bilibili.utils.toJSONObject
 
 object ReplyAdd : ApiHook() {
     override fun shouldHook(url: String, status: Int): Boolean {
-        return Settings.CheckComment() && url.contains("/x/v2/reply/add") && status.isOk
+        return url.contains("/x/v2/reply/add") && status.isOk
     }
 
     override fun hook(url: String, status: Int, request: String, response: String): String {
