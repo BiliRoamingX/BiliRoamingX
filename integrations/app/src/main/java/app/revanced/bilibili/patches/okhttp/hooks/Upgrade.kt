@@ -31,8 +31,7 @@ class BUpgradeInfo(
 }
 
 object Upgrade : ApiHook() {
-    private const val UPGRADE_CHECK_API =
-        "https://api.github.com/repos/BiliRoamingX/BiliRoamingX-PreBuilds/releases?per_page=100&page=1"
+    private const val UPGRADE_CHECK_API = "https://api.github.com/repos/BiliRoamingX/BiliRoamingX-PreBuilds/releases"
     private val changelogRegex = Regex("""版本信息：(.*?)\n(.*)""", RegexOption.DOT_MATCHES_ALL)
     var fromSelf = false
 
@@ -56,18 +55,26 @@ object Upgrade : ApiHook() {
     }
 
     private fun checkUpgrade(): JSONObject {
+        var page = 1
+        var result: JSONObject?
+        do {
+            result = pagingCheck(page++)
+        } while (result == null)
+        return result
+    }
+
+    private fun pagingCheck(page: Int): JSONObject? {
         val context = Utils.getContext()
         val sn = context.packageManager.getApplicationInfo(
             context.packageName, PackageManager.GET_META_DATA
         ).metaData.getInt("BUILD_SN").toLong()
         val patchVersion = BuildConfig.VERSION_NAME
         val patchVersionCode = BuildConfig.VERSION_CODE
-        val response = JSONArray(URL(UPGRADE_CHECK_API).readText())
+        val pageUrl = "$UPGRADE_CHECK_API?page=$page&per_page=100"
+        val response = JSONArray(URL(pageUrl).readText())
         val mobiApp = Utils.getMobiApp()
         for (data in response) {
             if (!data.optString("tag_name").startsWith("$mobiApp-"))
-                continue
-            if (data.optBoolean("draft", true))
                 continue
             val body = data.optString("body").replace("\r\n", "\n")
             val values = changelogRegex.matchEntire(body)?.groupValues ?: break
@@ -113,9 +120,10 @@ object Upgrade : ApiHook() {
                 ).toJSONObject().also {
                     Logger.debug { "Upgrade check result: $it" }
                 }
+            } else {
+                return mapOf("code" to -1, "message" to "未发现新版漫游X集成包！").toJSONObject()
             }
-            break
         }
-        return mapOf("code" to -1, "message" to "未发现新版漫游X集成包！").toJSONObject()
+        return null
     }
 }
