@@ -58,7 +58,7 @@ public class AutoLikePatch {
         likedVideos.add(aid);
         if (like != 0) return;
         // delay 500 ms to make sure view standby
-        Utils.runOnMainThread(500L, () -> Utils.async(() -> {
+        Utils.async(500L, () -> {
             // async search like button, to improve performance
             Activity activity = ApplicationDelegate.getTopActivity();
             if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
@@ -68,6 +68,6 @@ public class AutoLikePatch {
                     Utils.runOnMainThread(view::callOnClick);
                 }
             }
-        }));
+        });
     }
 }

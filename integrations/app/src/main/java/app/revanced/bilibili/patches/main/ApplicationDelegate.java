@@ -78,7 +78,7 @@ public class ApplicationDelegate {
         updateBitmapDefaultDensity();
         PassportChangeReceiver.register();
         CustomThemePatch.refresh();
-        Utils.runOnMainThread(500L, CustomThemePatch::delayRefresh);
+        Utils.async(500L, CustomThemePatch::delayRefresh);
         if (Utils.isMainProcess()) {
             Utils.async(ApplicationDelegate::startLog);
             Utils.async(PlaybackSpeedPatch::refreshOverrideSpeedList);
@@ -87,9 +87,9 @@ public class ApplicationDelegate {
             UposReplacer.getBaseUposList();
             PreferenceUpdater.register();
             Themes.registerGarbChangeObserver();
-            Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypes));
-            Utils.runOnMainThread(500L, () -> Utils.async(BangumiSeasonHook::injectExtraSearchTypesV2));
-            Utils.runOnMainThread(2000L, () -> Utils.async(CouponAutoReceiver::check));
+            Utils.async(500L, BangumiSeasonHook::injectExtraSearchTypes);
+            Utils.async(500L, BangumiSeasonHook::injectExtraSearchTypesV2);
+            Utils.async(2000L, CouponAutoReceiver::check);
         } else {
             SettingsSyncHelper.register();
         }

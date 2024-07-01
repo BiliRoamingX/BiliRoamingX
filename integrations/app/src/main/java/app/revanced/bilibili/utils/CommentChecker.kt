@@ -19,19 +19,13 @@ object CommentChecker {
     }
 
     fun checkComment(oid: Long, id: Long, message: String, hasPicture: Boolean) {
-        if (Settings.CheckComment()) {
-            Utils.runOnMainThread(500) {
-                Utils.async {
-                    if (checkCommentInternal(oid, id, message, quick = true) == CheckResult.Valid) {
-                        val delay = if (hasPicture) 15_000L else 8_000L
-                        Utils.runOnMainThread(delay) {
-                            Utils.async {
-                                checkCommentInternal(oid, id, message, quick = false)
-                            }
-                        }
-                        Toasts.showShortWithId("biliroaming_check_comment_toast", delay / 1000)
-                    }
+        if (Settings.CheckComment()) Utils.async(500) {
+            if (checkCommentInternal(oid, id, message, quick = true) == CheckResult.Valid) {
+                val delay = if (hasPicture) 15_000L else 8_000L
+                Utils.async(delay) {
+                    checkCommentInternal(oid, id, message, quick = false)
                 }
+                Toasts.showShortWithId("biliroaming_check_comment_toast", delay / 1000)
             }
         }
         Utils.runOnMainThread(300) {

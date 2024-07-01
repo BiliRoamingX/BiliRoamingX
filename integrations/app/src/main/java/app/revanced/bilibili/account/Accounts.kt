@@ -160,9 +160,7 @@ object Accounts {
             accountInfoCache = null
             Utils.async { getInfo() }
             if (Utils.isMainProcess())
-                Utils.runOnMainThread(5000L) {
-                    Utils.async { checkUserStatus() }
-                }
+                Utils.async(5000L) { checkUserStatus() }
         }
         if ((isSignOut || isSwitchAccount) && Utils.isMainProcess() && Settings.Skin()) {
             Settings.Skin.save(false)
