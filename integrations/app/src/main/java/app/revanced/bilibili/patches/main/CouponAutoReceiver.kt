@@ -9,16 +9,15 @@ import app.revanced.bilibili.model.CouponInfo
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Logger
 import app.revanced.bilibili.utils.Toasts
-import app.revanced.bilibili.utils.Utils
 import app.revanced.bilibili.utils.signQuery
 
 object CouponAutoReceiver {
 
     @JvmStatic
-    fun check() = if (Settings.AutoReceiveCoupon()) Utils.async {
+    fun check() = if (Settings.AutoReceiveCoupon()) run {
         val couponInfo = getCouponInfo()
         val couponSuccessCount = couponInfo?.list?.count { item ->
-            if (item.type <= 7 && item.state != 1 && item.nextReceiveDays != 0L)
+            if (item.type <= 7 && item.state != 1 && item.vipType > 0)
                 receiveCoupon(item.type)
             else false
         } ?: 0
