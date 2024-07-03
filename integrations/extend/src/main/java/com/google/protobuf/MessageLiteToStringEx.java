@@ -34,6 +34,7 @@ import com.bapis.bilibili.app.distribution.setting.download.DownloadSettingsConf
 import com.bapis.bilibili.app.distribution.setting.dynamic.DynamicDeviceConfig;
 import com.bapis.bilibili.app.distribution.setting.experimental.ExperimentalConfig;
 import com.bapis.bilibili.app.distribution.setting.experimental.MultipleTusConfig;
+import com.bapis.bilibili.app.distribution.setting.home.MidHomeConfig;
 import com.bapis.bilibili.app.distribution.setting.night.NightSettingsConfig;
 import com.bapis.bilibili.app.distribution.setting.other.OtherSettingsConfig;
 import com.bapis.bilibili.app.distribution.setting.pegasus.PegasusDeviceConfig;
@@ -97,6 +98,7 @@ public final class MessageLiteToStringEx {
             typeMap.put("type.googleapis.com/bilibili.app.distribution.story.v1.StoryConfig", StoryConfig.class);
             typeMap.put("type.googleapis.com/bilibili.app.distribution.pegasus.v1.PegasusDeviceWithoutFplocalConfig", PegasusDeviceWithoutFplocalConfig.class);
             typeMap.put("type.googleapis.com/bilibili.app.distribution.play.v1.MidPlayConfig", MidPlayConfig.class);
+            typeMap.put("type.googleapis.com/bilibili.app.distribution.home.v1.MidHomeConfig", MidHomeConfig.class);
         } catch (Throwable ignored) {
         }
     }
