@@ -79,4 +79,14 @@ abstract class ReplyListBase<out Req : GeneratedMessageLite<*, *>, out Resp : Ge
                 return true
         return false
     }
+
+    protected fun ReplyInfo.unlockGif(scale: Boolean = true) {
+        content.apply {
+            pictureScale = if (scale) 1.5 else 1.0
+            picturesList.forEach {
+                it.playGifThumbnail = true
+                it.clearTopRightIcon()
+            }
+        }
+    }
 }

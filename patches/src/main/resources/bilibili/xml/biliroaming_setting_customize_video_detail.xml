@@ -91,6 +91,10 @@
             android:key="check_comment"
             android:summary="@string/biliroaming_check_comment_summary"
             android:title="@string/biliroaming_check_comment_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="unlock_gif"
+            android:summary="@string/biliroaming_unlock_gif_summary"
+            android:title="@string/biliroaming_unlock_gif_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.FilterCommentFragment"
             android:key="fragment_filter_comment"

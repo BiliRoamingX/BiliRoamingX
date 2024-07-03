@@ -472,4 +472,6 @@
     <string name="biliroaming_export_access_key_title">复制访问密钥</string>
     <string name="biliroaming_export_access_key_summary">复制当前账号访问密钥，即access_key</string>
     <string name="biliroaming_access_key_copied">已复制到剪贴板</string>
+    <string name="biliroaming_unlock_gif_title">允许非会员用户上传GIF动图</string>
+    <string name="biliroaming_unlock_gif_summary">同时图片显示一视同仁，统一去掉右上角大专属图标，放大1.5倍</string>
 </resources>

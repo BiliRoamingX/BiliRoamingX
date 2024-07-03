@@ -174,6 +174,7 @@ object Settings {
     @JvmField val NotLockOrientation = BooleanSetting(key = "not_lock_orientation")
     @JvmField val CheckComment = BooleanSetting(key = "check_comment")
     @JvmField val StoryUIStyle = StringSetting(key = "story_ui_style", defValue = "0")
+    @JvmField val UnlockGif = BooleanSetting(key = "unlock_gif")
     // endregion
 
 

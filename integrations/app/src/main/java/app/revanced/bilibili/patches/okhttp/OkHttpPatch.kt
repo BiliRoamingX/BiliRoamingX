@@ -41,6 +41,7 @@ object OkHttpPatch {
         UnlockEpisodesForPlay,
         Upgrade,
         VipAds,
+        VipPrivilegeInfo,
     )
 
     @Keep

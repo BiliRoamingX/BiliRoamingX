@@ -2,6 +2,7 @@ package app.revanced.bilibili.patches.protobuf.hooks
 
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.ArrayUtils
+import app.revanced.bilibili.utils.Utils
 import com.bapis.bilibili.main.community.reply.v1.DetailListReply
 import com.bapis.bilibili.main.community.reply.v1.DetailListReq
 import com.bapis.bilibili.main.community.reply.v1.ReplyInfo
@@ -20,6 +21,8 @@ object ReplyDetailList : ReplyListBase<DetailListReq, DetailListReply>() {
     ): DetailListReply? {
         if (reply != null)
             filterReply(reply)
+        if (reply != null && !Utils.isHd() && Settings.UnlockGif())
+            reply.root.unlockGif(scale = false)
         return super.hookAfter(req, reply, error)
     }
 

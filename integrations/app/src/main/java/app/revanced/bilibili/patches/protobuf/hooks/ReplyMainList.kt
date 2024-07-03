@@ -3,6 +3,7 @@ package app.revanced.bilibili.patches.protobuf.hooks
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.ArrayUtils
 import app.revanced.bilibili.utils.BusinessException
+import app.revanced.bilibili.utils.Utils
 import com.bapis.bilibili.main.community.reply.v1.*
 import com.bilibili.lib.moss.api.MossException
 import com.google.protobuf.GeneratedMessageLite
@@ -50,7 +51,17 @@ object ReplyMainList : ReplyListBase<MainListReq, MainListReply>() {
             reply.clearQoe()
         if (reply != null)
             filterReplies(reply)
+        if (reply != null && !Utils.isHd() && Settings.UnlockGif())
+            unlockGif(reply)
         return super.hookAfter(req, reply, error)
+    }
+
+    private fun unlockGif(reply: MainListReply) {
+        reply.upTop.unlockGif()
+        reply.adminTop.unlockGif()
+        reply.voteTop.unlockGif()
+        reply.topRepliesList.forEach { it.unlockGif() }
+        reply.repliesList.forEach { it.unlockGif() }
     }
 
     private fun filterReplies(reply: MainListReply) {
