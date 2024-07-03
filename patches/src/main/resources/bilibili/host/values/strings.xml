@@ -269,7 +269,7 @@
     <string name="biliroaming_toast_backup_success">备份成功</string>
     <string name="biliroaming_dialog_msg_restore_success">恢复成功，需要重启才能生效</string>
     <string name="biliroaming_usage_hint_title">使用说明</string>
-    <string name="biliroaming_usage_hint_message">欢迎使用基于Revanced方案的修改版哔哩哔哩。以下几点说明请仔细阅读：\n\n1. 本修改方案完全开源免费，谨防被骗。\n2. 本修改版不使用Xposed框架，追求极致性能。\n3. 请勿在B站任何地方暗示/提及/宣传本修改版。\n4. 设置入口：我的 -> 设置 -> 哔哩漫游X。</string>
+    <string name="biliroaming_usage_hint_message">欢迎使用基于ReVanced方案的修改版哔哩哔哩。以下几点说明请仔细阅读：\n\n1. 本修改方案完全开源免费，谨防被骗。\n2. 本修改版不使用Xposed框架，追求极致性能。\n3. 请勿在B站任何地方暗示/提及/宣传本修改版。\n4. 设置入口：我的 -> 设置 -> 哔哩漫游X。</string>
     <string name="biliroaming_get_it">我知道了</string>
     <string name="biliroaming_jump_settings">前往设置</string>
     <string name="biliroaming_hint_open_from_mine">请最好在登录状态下通过我的页面设置入口进入本页面以获取所有项目</string>
