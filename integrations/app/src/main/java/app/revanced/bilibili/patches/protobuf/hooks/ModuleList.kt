@@ -9,7 +9,17 @@ import com.google.protobuf.GeneratedMessageLite
 
 object ModuleList : MossHook<ListReq, ListReply>() {
     private val exceptionsMap = mapOf(
-        "dynamic" to listOf("android_meicam_lic", "android_nvs_")
+        "dynamic" to setOf(
+            "android_meicam_lic",
+            "android_nvs_",
+            "android_cv_",
+            "byteeffect_so_",
+            "android_byteeffect_license",
+            "android_byteeffect_model",
+            "android_aurora_resources",
+            "android_bmm_",
+            "android_mon_",
+        ),
     )
 
     override fun shouldHook(req: GeneratedMessageLite<*, *>): Boolean {
