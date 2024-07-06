@@ -32,6 +32,9 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
             runCatchingOrNull {
                 reply.clearCommand()
                 reply.clearQoe()
+                reply.dmMaskWallList.mapIndexedNotNull { index, wall ->
+                    if (wall.bizType == DmMaskWallBizType.AIGC) index else null
+                }.asReversed().forEach { reply.removeDmMaskWall(it) }
             }
             reply.clearUnknownFields()
         }
