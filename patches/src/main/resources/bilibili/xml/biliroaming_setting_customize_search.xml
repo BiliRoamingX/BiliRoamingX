@@ -4,19 +4,23 @@
     <androidx.preference.PreferenceCategory>
         <androidx.preference.SwitchPreferenceCompat
             android:key="search_area_bangumi"
-            android:title="@string/biliroaming_search_area_title"
-            android:summary="@string/biliroaming_search_area_summary" />
+            android:summary="@string/biliroaming_search_area_summary"
+            android:title="@string/biliroaming_search_area_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="search_area_movie"
-            android:title="@string/biliroaming_search_area_movie_title"
-            android:summary="@string/biliroaming_search_area_movie_summary" />
+            android:summary="@string/biliroaming_search_area_movie_summary"
+            android:title="@string/biliroaming_search_area_movie_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="purify_search"
-            android:title="@string/biliroaming_purify_search_title"
-            android:summary="@string/biliroaming_purify_search_summary" />
+            android:summary="@string/biliroaming_purify_search_summary"
+            android:title="@string/biliroaming_purify_search_title" />
         <androidx.preference.Preference
-            android:key="search_type"
             android:fragment="app.revanced.bilibili.settings.fragments.FilterSearchTypeFragment"
+            android:key="search_type"
             android:title="@string/biliroaming_filter_search_type_title" />
+        <androidx.preference.Preference
+            android:fragment="app.revanced.bilibili.settings.fragments.FilterSearchKeywordsFragment"
+            android:key="search_keywords"
+            android:title="@string/biliroaming_filter_search_keywords_title" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

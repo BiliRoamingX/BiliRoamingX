@@ -25,8 +25,9 @@
     <string name="biliroaming_search_category_title">搜索页</string>
     <string name="biliroaming_purify_search_title">净化搜索页面</string>
     <string name="biliroaming_purify_search_summary">去除热搜和推荐</string>
-    <string name="biliroaming_filter_search_type_title">净化搜索结果</string>
+    <string name="biliroaming_filter_search_type_title">按类型净化搜索结果</string>
     <string name="biliroaming_filter_search_type_summary">选择需要屏蔽的搜索结果类型</string>
+    <string name="biliroaming_filter_search_keywords_title">按关键词净化搜索结果</string>
     <string name="biliroaming_search_area_title">开启其它地区番剧搜索</string>
     <string name="biliroaming_search_area_summary">添加其它地区番剧搜索结果，需要解析服务器支持</string>
     <string name="biliroaming_search_area_movie_title">开启其它地区影剧搜索</string>

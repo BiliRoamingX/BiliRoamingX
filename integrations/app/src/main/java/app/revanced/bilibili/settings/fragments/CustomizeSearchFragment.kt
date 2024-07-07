@@ -11,5 +11,8 @@ class CustomizeSearchFragment : BiliRoamingBaseSettingFragment() {
         disablePreference("search_type", PrefsDisableReason.AppVersion) {
             Utils.isHd()
         }
+        disablePreference("search_keywords", PrefsDisableReason.AppVersion) {
+            Utils.isHd()
+        }
     }
 }

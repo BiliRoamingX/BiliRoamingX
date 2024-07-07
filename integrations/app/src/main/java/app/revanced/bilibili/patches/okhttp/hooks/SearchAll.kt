@@ -19,7 +19,7 @@ object SearchAll : ApiHook() {
         if (jsonObject.optInt("code") == 0) {
             val data = jsonObject.optJSONObject("data")
                 ?: return response
-            BangumiSeasonHook.searchAllResponseHookForHd(data)
+            BangumiSeasonHook.addAreaTagsForHd(data)
             return jsonObject.toString()
         }
         return response

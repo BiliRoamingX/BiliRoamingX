@@ -189,9 +189,14 @@ object Settings {
 
     // region Group: 搜索页
     @JvmField val PurifySearch = BooleanSetting(key = "purify_search")
-    @JvmField val FilterSearchType = StringSetSetting(key = "filter_search_type")
     @JvmField val SearchBangumi = BooleanSetting(key = "search_area_bangumi")
     @JvmField val SearchMovie = BooleanSetting(key = "search_area_movie")
+    @JvmField val FilterSearchType = StringSetSetting(key = "filter_search_type")
+    @JvmField val FilterSearchContent = StringSetSetting(key = "filter_search_content")
+    @JvmField val FilterSearchContentRegexMode = BooleanSetting(key = "filter_search_content_regex")
+    @JvmField val FilterSearchUp = StringSetSetting(key = "filter_search_up")
+    @JvmField val FilterSearchUpRegexMode = BooleanSetting(key = "filter_search_up_regex")
+    @JvmField val FilterSearchUid = StringSetSetting(key = "filter_search_uid")
     // endregion
 
 

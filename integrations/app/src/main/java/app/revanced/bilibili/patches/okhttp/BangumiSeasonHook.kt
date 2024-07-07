@@ -198,17 +198,6 @@ object BangumiSeasonHook {
     }
 
     @JvmStatic
-    fun searchAllResponseHook(reply: SearchAllResponse) {
-        addAreaTags(reply)
-        filterSearchResult(reply)
-    }
-
-    @JvmStatic
-    fun searchAllResponseHookForHd(reply: JSONObject) {
-        addAreaTagsForHd(reply)
-    }
-
-    @JvmStatic
     fun injectExtraSearchTypes() {
         if (Versions.ge7_64_0()) return
         if (!Settings.SearchBangumi() && !Settings.SearchMovie()) {
@@ -510,7 +499,8 @@ object BangumiSeasonHook {
         return true
     }
 
-    private fun addAreaTags(reply: SearchAllResponse) {
+    @JvmStatic
+    fun addAreaTags(reply: SearchAllResponse) {
         if (!Settings.SearchBangumi() && !Settings.SearchMovie()) return
         if (reply.navList.isEmpty()) return
         val currentArea = area
@@ -531,7 +521,8 @@ object BangumiSeasonHook {
         }
     }
 
-    private fun addAreaTagsForHd(reply: JSONObject) {
+    @JvmStatic
+    fun addAreaTagsForHd(reply: JSONObject) {
         if (!Settings.SearchBangumi() && !Settings.SearchMovie()) return
         val currentArea = area
         val navList = reply.optJSONArray("nav") ?: return
@@ -556,26 +547,5 @@ object BangumiSeasonHook {
             if (index > 0) newNavList.put(item)
         }
         reply.put("nav", newNavList)
-    }
-
-    private fun filterSearchResult(reply: SearchAllResponse) {
-        val set = Settings.FilterSearchType()
-            .takeUnless { it.isEmpty() } ?: return
-        val filterTypes = set.toMutableList()
-        if (filterTypes.contains("bangumi")) {
-            filterTypes.remove("bangumi")
-            filterTypes.add("ogv_pgc")
-            filterTypes.add("bgm_media")
-        }
-        if (filterTypes.contains("ad"))
-            filterTypes.add("product")
-        val toRemoveIndexes = mutableListOf<Int>()
-        reply.itemList.forEachIndexed { index, item ->
-            if (filterTypes.any { item.linktype.contains(it) })
-                toRemoveIndexes.add(index)
-        }
-        toRemoveIndexes.asReversed().forEach {
-            reply.removeItem(it)
-        }
     }
 }
