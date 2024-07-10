@@ -43,6 +43,7 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.math.abs
+import kotlin.math.ceil
 
 object BangumiPlayUrlHook {
     private const val PGC_ANY_MODEL_TYPE_URL =
@@ -648,11 +649,12 @@ object BangumiPlayUrlHook {
                         }
                     }
                     val timeLength = jsonContent.optLong("timelength")
+                    val durationS = ceil(timeLength / 1000.0).toLong()
                     runCatchingOrNull {
-                        watchTimeLength = timeLength
-                        durationMs = timeLength % 1000
+                        watchTimeLength = durationS * 1000
+                        durationMs = timeLength
                     }
-                    duration = timeLength / 1000
+                    duration = durationS
                 }
             }
             val newSupplement = supplement.apply {
@@ -995,9 +997,10 @@ object BangumiPlayUrlHook {
                     }
                 }
                 val timeLength = jsonContent.optInt("timelength")
-                epWholeDuration = timeLength
+                val durationMs = ceil(timeLength / 1000.0).toInt() * 1000
+                epWholeDuration = durationMs
                 runCatchingOrNull {
-                    watchTimeLength = timeLength.toLong()
+                    watchTimeLength = durationMs.toLong()
                 }
                 if (Settings.AllowMiniPlay())
                     inlineType = InlineType.TYPE_WHOLE
