@@ -40,6 +40,7 @@ object MossPatch {
         Popular,
         ReplyDetailList,
         ReplyMainList,
+        ReplyShareReplyMaterial,
         ReplySubjectDescription,
         ResourceTopActivity,
         SearchAll,

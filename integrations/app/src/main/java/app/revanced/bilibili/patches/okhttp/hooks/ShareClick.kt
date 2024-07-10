@@ -78,7 +78,7 @@ object ShareClick : ApiHook() {
         return json.toString()
     }
 
-    private fun purifyUrl(url: String) = replaceBv2Av(resolveUrl(url))
+    fun purifyUrl(url: String) = replaceBv2Av(resolveUrl(url))
 
     private fun replaceBv2Av(url: String): String {
         if (!Settings.EnableAv()) return url
@@ -92,23 +92,37 @@ object ShareClick : ApiHook() {
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
         connection.instanceFollowRedirects = false
+        connection.connectTimeout = 3000
+        connection.readTimeout = 3000
         connection.connect()
         var newUrl = url
         if (connection.responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
             val realUrl = connection.getHeaderField("Location")
             if (!realUrl.isNullOrEmpty()) {
                 val uri = Uri.parse(realUrl)
-                val startProgress = uri.getQueryParameter("start_progress")
-                val p = uri.getQueryParameter("p")
-                val topicId = uri.getQueryParameter("topic_id")
+                val whitelistQueryNames = arrayOf(
+                    "start_progress",
+                    "p",
+                    "topic_id",
+                    "comment_on",
+                    "comment_root_id",
+                    "type",
+                )
+                val whitelistQueries = whitelistQueryNames.associateWith {
+                    uri.getQueryParameter(it)
+                }
                 newUrl = uri.buildUpon()
                     .clearQuery().encodedFragment(null).apply {
-                        if (!startProgress.isNullOrEmpty())
-                            appendQueryParameter("start_progress", startProgress)
-                        if (!p.isNullOrEmpty() && p != "1")
-                            appendQueryParameter("p", p)
-                        if (!topicId.isNullOrEmpty())
-                            appendQueryParameter("topic_id", topicId)
+                        for ((k, v) in whitelistQueries) {
+                            if (v.isNullOrEmpty())
+                                continue
+                            if (k == "p") {
+                                if (v != "1")
+                                    appendQueryParameter(k, v)
+                            } else {
+                                appendQueryParameter(k, v)
+                            }
+                        }
                     }.build().toString()
             }
         }
