@@ -105,7 +105,7 @@ object SubtitleHelper {
         "https://archive.biliimg.com/bfs/archive/566adec17e127bf92aed21832db0206ccecc8caa.png"
     private const val CHECK_INTERVAL = 60 * 1000
 
-    private val assTextStyleRegex = Regex("""\{\\.*?\}""")
+    private val assTextStyleRegex = Regex("""\{.*?\}""")
     private val needMergeRegex = Regex(".*(,|[a-z]|[A-Z])$")
     private val vttOrSrtTimeLineRegex =
         Regex("""((?<fromH>\d{2,4}):)?(?<fromM>\d{2}):(?<fromS>\d{2}[.,]\d{2,3})\s-->\s((?<toH>\d{2,4}):)?(?<toM>\d{2}):(?<toS>\d{2}[.,]\d{2,3})""")
