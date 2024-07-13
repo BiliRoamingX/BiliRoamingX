@@ -425,11 +425,11 @@
     <string name="biliroaming_check_comment_summary">检测评论是否正常发布并公开，带图评论结果仅供参考</string>
     <string name="biliroaming_check_comment_toast">评论审核结果将在%1$s秒后报告。</string>
     <string name="biliroaming_comment_check_result_title">评论检查结果</string>
-    <string name="biliroaming_comment_invalid_quick_blocked">你发布的评论瞬间被阿瓦隆自净系统屏蔽，仅本人可见。</string>
-    <string name="biliroaming_comment_invalid_quick_deleted">你发布的评论瞬间被阿瓦隆自净系统删除。</string>
-    <string name="biliroaming_comment_invalid_normal_blocked">你发布的评论被阿瓦隆自净系统屏蔽，仅本人可见。</string>
-    <string name="biliroaming_comment_invalid_normal_deleted">你发布的评论被阿瓦隆自净系统删除。</string>
-    <string name="biliroaming_comment_valid_message">你发布的评论通过了叔叔的审核！将对所有人可见。</string>
+    <string name="biliroaming_comment_invalid_quick_blocked">⚠️你发布的评论瞬间被阿瓦隆自净系统屏蔽，仅本人可见。</string>
+    <string name="biliroaming_comment_invalid_quick_deleted">❌你发布的评论瞬间被阿瓦隆自净系统删除。</string>
+    <string name="biliroaming_comment_invalid_normal_blocked">⚠️你发布的评论被阿瓦隆自净系统屏蔽，仅本人可见。</string>
+    <string name="biliroaming_comment_invalid_normal_deleted">❌你发布的评论被阿瓦隆自净系统删除。</string>
+    <string name="biliroaming_comment_valid_message">✅你发布的评论通过了叔叔的审核！将对所有人可见。</string>
     <string name="biliroaming_comment_content">评论内容：</string>
     <string name="biliroaming_pls_configure_th_server">请配置泰区解析服务器地址</string>
     <string name="biliroaming_theme_apply_failed">主题设置失败！</string>
