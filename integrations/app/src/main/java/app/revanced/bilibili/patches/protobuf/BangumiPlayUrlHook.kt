@@ -9,6 +9,7 @@ import app.revanced.bilibili.patches.TrialQualityPatch
 import app.revanced.bilibili.patches.VideoQualityPatch
 import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.bangumiInfoCache
+import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import app.revanced.bilibili.utils.UposReplacer.isPCdnUpos
@@ -135,6 +136,8 @@ object BangumiPlayUrlHook {
             req.vod.cid = 0L
             req.vod.aid = 0L
         }
+        if (isDownloadUnite)
+            tryFixAidThailandRequest(req)
     }
 
     @JvmStatic
@@ -202,14 +205,18 @@ object BangumiPlayUrlHook {
             throw error
         hookPlayViewUniteAfterExtraActions(reply)
         var finalError = error
-        val response = reply ?: tryFixAidPGC(req, error)
+        val response = reply ?: tryFixAidPGC(isDownloadUnite, req, error)
             ?.also { finalError = null } ?: PlayViewUniteReply()
         fixDefaultQuality(finalError, req, response)
         val supplementAny = response.supplement
         val typeUrl = supplementAny.typeUrl
         // Only handle pgc video
         if (reply != null && typeUrl != PGC_ANY_MODEL_TYPE_URL)
-            finalError?.let { throw it } ?: return reply
+            finalError?.let { throw it } ?: run {
+                if (allowDownloadUnite)
+                    return fixDownloadProtoUnite(response)
+                return reply
+            }
         val extraContent = req.extraContentMap
         val reqEpId = extraContent.getOrDefault("ep_id", "0").toLong()
         val seasonId = extraContent.getOrDefault("season_id", "0").toLong()
@@ -217,7 +224,11 @@ object BangumiPlayUrlHook {
             if (it.value.keys.contains(reqEpId)) it.key else null
         } ?: VideoInfoHolder.currentSeason()?.id ?: 0L
         if (seasonId == 0L && reqEpId == 0L)
-            finalError?.let { throw it } ?: return reply
+            finalError?.let { throw it } ?: run {
+                if (allowDownloadUnite)
+                    return fixDownloadProtoUnite(response)
+                return reply
+            }
         val supplement = PlayViewReply.parseFrom(supplementAny.value.toByteArray())
         if (Settings.UnlockAreaLimit() && needProxyUnite(response, supplement)) {
             return try {
@@ -253,7 +264,38 @@ object BangumiPlayUrlHook {
         finalError?.let { throw it } ?: return reply
     }
 
-    private fun tryFixAidPGC(req: PlayViewUniteReq, error: MossException?): PlayViewUniteReply? {
+    // 主要用于修复8.4.0+版本泰区番剧下载
+    private fun tryFixAidThailandRequest(req: PlayViewUniteReq) {
+        if (!Settings.UnlockAreaLimit())
+            return
+        if (req.extraContentMap.any { it.key == "season_id" } || req.extraContentMap.any { it.key == "ep_id" })
+            return
+        val reqAid = req.vod.aid.toString()
+        val reqCid = req.vod.cid.toString()
+        if (reqAid == "0" && reqCid == "0")
+            return
+        val seasonAreasCache = seasonAreasCache
+        val sArea = seasonAreasCache[reqAid]
+        val epArea = seasonAreasCache["ep$reqCid"]
+        if (Area.Thailand.let { it == sArea || it == epArea } ||
+            (cachePrefs.contains(reqAid) && Area.Thailand.value
+                    == cachePrefs.getString(reqAid, null))
+            || (cachePrefs.contains("ep$reqCid") && Area.Thailand.value
+                    == cachePrefs.getString("ep$reqCid", null))) {
+            req.vod.aid = 0L
+            req.vod.cid = 0L
+            req.mutableExtraContentMap.apply {
+                put("season_id", reqAid)
+                put("ep_id", reqCid)
+            }
+        }
+    }
+
+    private fun tryFixAidPGC(
+        isDownload: Boolean,
+        req: PlayViewUniteReq,
+        error: MossException?
+    ): PlayViewUniteReply? {
         if (!Settings.UnlockAreaLimit())
             return null
         if (error == null || error !is BusinessException || error.code != 6002003/* 抱歉您所在地区不可观看！*/)
@@ -279,10 +321,11 @@ object BangumiPlayUrlHook {
             return null
         val viewPgcAny = ViewPgcAny.parseFrom(supplement.value)
         val seasonId = viewPgcAny.ogvData.seasonId
+        val reqCid = req.vod.cid.let { if (it == 0L) viewReply.arc.cid else it }
         val epId = viewReply.tab.tabModuleList.find { it.hasIntroduction() }
             ?.introduction?.modulesList?.asSequence()?.filter { it.hasSectionData() }
             ?.flatMap { it.sectionData.episodesList }
-            ?.find { it.cid == viewReply.arc.cid }?.epId
+            ?.find { it.cid == reqCid }?.epId
         req.mutableExtraContentMap["season_id"] = seasonId.toString()
         epId?.let { req.mutableExtraContentMap["ep_id"] = it.toString() }
         val newReq = PlayViewUniteReq().apply {
@@ -303,6 +346,8 @@ object BangumiPlayUrlHook {
                 preferCodecType = req.vod.preferCodecType
                 qn = req.vod.qn
                 voiceBalance = req.vod.voiceBalance
+                if (isDownload)
+                    download = 1
             }
         }
         return PlayerMoss().runCatchingOrNull { playViewUnite(newReq) }
@@ -426,7 +471,7 @@ object BangumiPlayUrlHook {
     }
 
     private fun fixDownloadProtoUnite(response: PlayViewUniteReply) = response.apply {
-        val videoInfo = VideoInfo.parseFrom(response.toByteArray()).apply { fixDownloadProto() }
+        val videoInfo = VideoInfo.parseFrom(response.vodInfo.toByteArray()).apply { fixDownloadProto() }
         vodInfo = VodInfo.parseFrom(videoInfo.toByteArray())
     }
 
