@@ -1,6 +1,6 @@
 name: ⭐ 功能请求
 description: 描述你想要请求的功能
-title: 'feat: '
+title: '[Feature] '
 labels: [enhancement]
 body:
   - type: markdown

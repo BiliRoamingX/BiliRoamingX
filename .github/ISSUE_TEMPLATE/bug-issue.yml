@@ -1,6 +1,6 @@
 name: 🐞 Bug 反馈
 description: 反馈遇到的问题
-title: 'bug: '
+title: '[BUG] '
 labels: [bug]
 body:
   - type: markdown
