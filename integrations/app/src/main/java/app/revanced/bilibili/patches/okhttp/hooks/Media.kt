@@ -5,11 +5,9 @@ import app.revanced.bilibili.api.BiliRoamingApi.getSeason
 import app.revanced.bilibili.patches.okhttp.ApiHook
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.FAIL_CODE
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.isBangumiWithWatchPermission
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.Area
 import app.revanced.bilibili.utils.Versions
-import app.revanced.bilibili.utils.cachePrefs
+import app.revanced.bilibili.utils.maybeThailand
 import app.revanced.bilibili.utils.toJSONObject
 import org.json.JSONObject
 
@@ -22,12 +20,9 @@ object Media : ApiHook() {
     }
 
     override fun hook(url: String, status: Int, request: String, response: String): String {
-        val mediaId = Uri.parse(url).getQueryParameter("media_id")
-        if (JSONObject(response).optInt("code") != 0
-            && (Area.Thailand == seasonAreasCache[mediaId] || (cachePrefs.contains(mediaId)
-                    && Area.Thailand.value == cachePrefs.getString(mediaId, null)))
-        ) {
-            val (newCode, newResult) = getSeason(seasonId = mediaId?.toLong() ?: 0L)
+        val mediaId = Uri.parse(url).getQueryParameter("media_id").orEmpty()
+        if (JSONObject(response).optInt("code") != 0 && maybeThailand(mediaId)) {
+            val (newCode, newResult) = getSeason(seasonId = mediaId.ifEmpty { "0" }.toLong())
                 ?.toJSONObject()?.let {
                     it.optInt("code", FAIL_CODE) to it.optJSONObject("result")
                 } ?: (FAIL_CODE to null)

@@ -9,7 +9,6 @@ import app.revanced.bilibili.patches.TrialQualityPatch
 import app.revanced.bilibili.patches.VideoQualityPatch
 import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.bangumiInfoCache
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import app.revanced.bilibili.utils.UposReplacer.isPCdnUpos
@@ -274,14 +273,7 @@ object BangumiPlayUrlHook {
         val reqCid = req.vod.cid.toString()
         if (reqAid == "0" && reqCid == "0")
             return
-        val seasonAreasCache = seasonAreasCache
-        val sArea = seasonAreasCache[reqAid]
-        val epArea = seasonAreasCache["ep$reqCid"]
-        if (Area.Thailand.let { it == sArea || it == epArea } ||
-            (cachePrefs.contains(reqAid) && Area.Thailand.value
-                    == cachePrefs.getString(reqAid, null))
-            || (cachePrefs.contains("ep$reqCid") && Area.Thailand.value
-                    == cachePrefs.getString("ep$reqCid", null))) {
+        if (maybeThailand(reqAid, reqCid)) {
             req.vod.aid = 0L
             req.vod.cid = 0L
             req.mutableExtraContentMap.apply {

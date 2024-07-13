@@ -27,6 +27,7 @@ import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.meta.Client
 import app.revanced.bilibili.meta.VideoHistory
 import app.revanced.bilibili.patches.main.ApplicationDelegate
+import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
 import app.revanced.bilibili.settings.ModulePreferenceManager
 import app.revanced.bilibili.settings.Settings
 import com.bapis.bilibili.metadata.Metadata
@@ -760,3 +761,11 @@ val isAppArch64: Boolean
         .let { it == "arm64" || it == "x86_64" }
 
 val isPrebuilt inline get() = sigMd5() == Constants.PRE_BUILD_SIG_MD5
+
+fun maybeThailand(sid: String, epId: String = ""): Boolean {
+    val seasonAreasCache = seasonAreasCache
+    val epCacheId = "ep$epId"
+    return Area.Thailand.let { it == seasonAreasCache[sid] || it == seasonAreasCache[epCacheId] }
+            || cachePrefs.contains(sid) && Area.Thailand.value == cachePrefs.getString(sid, null)
+            || cachePrefs.contains(epCacheId) && Area.Thailand.value == cachePrefs.getString(epCacheId, null)
+}

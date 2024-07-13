@@ -3,7 +3,6 @@ package app.revanced.bilibili.patches.protobuf.hooks
 import android.net.Uri
 import app.revanced.bilibili.api.BiliRoamingApi.getThailandSubtitles
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.bangumiInfoCache
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
 import app.revanced.bilibili.patches.okhttp.hooks.Subtitle
 import app.revanced.bilibili.patches.protobuf.MossHook
 import app.revanced.bilibili.settings.Settings
@@ -50,15 +49,7 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
             // when thailand, epId equals oid(cid), seasonId equals pid(aid)
             val epId = dmViewReq.oid
             val seasonId = dmViewReq.pid
-            val cacheId = seasonId.toString()
-            val seasonAreasCache = seasonAreasCache
-            val sArea = seasonAreasCache[cacheId]
-            val epArea = seasonAreasCache["ep$epId"]
-            if (Area.Thailand.let { it == sArea || it == epArea } ||
-                (cachePrefs.contains(cacheId) && Area.Thailand.value
-                        == cachePrefs.getString(cacheId, null))
-                || (cachePrefs.contains("ep$epId") && Area.Thailand.value
-                        == cachePrefs.getString("ep$epId", null))) {
+            if (maybeThailand(seasonId.toString(), epId.toString())) {
                 val subtitles = bangumiInfoCache[seasonId]?.get(epId)?.subtitles ?: run {
                     val res = getThailandSubtitles(epId)?.toJSONObject()
                     if (res != null && res.optInt("code") == 0) {

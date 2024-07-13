@@ -1,11 +1,9 @@
 package app.revanced.bilibili.patches.protobuf.hooks
 
-import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook.seasonAreasCache
 import app.revanced.bilibili.patches.protobuf.MossHook
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.Area
 import app.revanced.bilibili.utils.Versions
-import app.revanced.bilibili.utils.cachePrefs
+import app.revanced.bilibili.utils.maybeThailand
 import com.bapis.bilibili.app.playerunite.v1.PlayHalfChannelsReply
 import com.bapis.bilibili.app.playerunite.v1.PlayHalfChannelsReq
 import com.bapis.bilibili.playershared.*
@@ -23,11 +21,7 @@ object PlayHalfChannels : MossHook<PlayHalfChannelsReq, PlayHalfChannelsReply>()
         val epId = req.extraContentMap["epid"]
             ?: return false to false
         val seasonId = req.aid.toString()
-        val thailand = seasonAreasCache[seasonId] == Area.Thailand
-                || seasonAreasCache["ep$epId"] == Area.Thailand
-                || cachePrefs.contains(seasonId) && cachePrefs.getString(seasonId, null) == Area.Thailand.value
-                || cachePrefs.contains("ep$epId") && cachePrefs.getString("ep$epId", null) == Area.Thailand.value
-        if (thailand)
+        if (maybeThailand(seasonId, epId))
             return true to true
         else if (reply == null || reply == PlayHalfChannelsReply.getDefaultInstance())
             return true to false
