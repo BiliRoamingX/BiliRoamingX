@@ -12,6 +12,17 @@ import java.net.URL
 object ShareClick : ApiHook() {
     private val contentRegex = Regex("(.*)(http\\S*)(.*)")
 
+    private val whitelistQueryNames
+        get() = arrayOf(
+            "start_progress",
+            "p",
+            "topic_id",
+            "comment_on",
+            "comment_root_id",
+            "comment_secondary_id",
+            "type",
+        )
+
     override fun shouldHook(url: String, status: Int): Boolean {
         return status.isOk && url.contains("/x/share/click")
                 && (Settings.UnlockAreaLimit() || Settings.PurifyShare() || Settings.FuckMiniProgram())
@@ -100,14 +111,6 @@ object ShareClick : ApiHook() {
             val realUrl = connection.getHeaderField("Location")
             if (!realUrl.isNullOrEmpty()) {
                 val uri = Uri.parse(realUrl)
-                val whitelistQueryNames = arrayOf(
-                    "start_progress",
-                    "p",
-                    "topic_id",
-                    "comment_on",
-                    "comment_root_id",
-                    "type",
-                )
                 val whitelistQueries = whitelistQueryNames.associateWith {
                     uri.getQueryParameter(it)
                 }
