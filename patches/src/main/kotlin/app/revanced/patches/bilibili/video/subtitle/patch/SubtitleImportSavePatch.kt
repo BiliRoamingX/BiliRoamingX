@@ -8,10 +8,7 @@ import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patcher.util.proxy.mutableTypes.MutableField.Companion.toMutable
 import app.revanced.patches.bilibili.patcher.patch.MultiMethodBytecodePatch
 import app.revanced.patches.bilibili.utils.*
-import app.revanced.patches.bilibili.video.subtitle.fingerprints.FunctionWidgetServiceFingerprint
-import app.revanced.patches.bilibili.video.subtitle.fingerprints.FunctionWidgetTokenFingerprint
-import app.revanced.patches.bilibili.video.subtitle.fingerprints.PlayerSubtitleFunctionWidgetFingerprint
-import app.revanced.patches.bilibili.video.subtitle.fingerprints.SetDmViewReplyFingerprint
+import app.revanced.patches.bilibili.video.subtitle.fingerprints.*
 import app.revanced.util.exception
 import app.revanced.util.getReference
 import com.android.tools.smali.dexlib2.AccessFlags
@@ -35,6 +32,7 @@ object SubtitleImportSavePatch : MultiMethodBytecodePatch(
         FunctionWidgetServiceFingerprint,
         SetDmViewReplyFingerprint,
         FunctionWidgetTokenFingerprint,
+        RecordSelectedSubtitleFingerprint,
     ),
     multiFingerprints = setOf(PlayerSubtitleFunctionWidgetFingerprint)
 ) {
@@ -118,6 +116,8 @@ object SubtitleImportSavePatch : MultiMethodBytecodePatch(
         val widgetTokenField = context.classes.first { it.type == absWidgetClass }.fields.first {
             it.type == widgetTokenClass
         }.name
+        val recordSelectedSubtitleMethod = RecordSelectedSubtitleFingerprint.result?.method
+            ?.name ?: throw RecordSelectedSubtitleFingerprint.exception
         val hookInfoProviderClass = context.findClass(
             "Lapp/revanced/bilibili/patches/SubtitleImportSavePatch\$HookInfo;"
         )!!.mutableClass
@@ -138,6 +138,9 @@ object SubtitleImportSavePatch : MultiMethodBytecodePatch(
         }
         val widgetTokenFieldHook = hookInfoProviderClass.fields.first {
             it.name == "widgetTokenField"
+        }
+        val recordSelectedSubtitleMethodHook = hookInfoProviderClass.fields.first {
+            it.name == "recordSelectedSubtitleMethod"
         }
         hookInfoProviderClass.methods.first { it.name == "init" }.also { hookInfoProviderClass.methods.remove(it) }
             .cloneMutable(registerCount = 1, clearImplementation = true).apply {
@@ -160,6 +163,9 @@ object SubtitleImportSavePatch : MultiMethodBytecodePatch(
                     
                     const-string v0, "$widgetTokenField"
                     sput-object v0, $widgetTokenFieldHook
+                    
+                    const-string v0, "$recordSelectedSubtitleMethod"
+                    sput-object v0, $recordSelectedSubtitleMethodHook
                     
                     return-void
                 """.trimIndent()

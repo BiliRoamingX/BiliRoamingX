@@ -15,6 +15,7 @@ import app.revanced.bilibili.patches.SubtitleImportSavePatch.HookInfo.getDanmaku
 import app.revanced.bilibili.patches.SubtitleImportSavePatch.HookInfo.getDmViewReplyMethod
 import app.revanced.bilibili.patches.SubtitleImportSavePatch.HookInfo.hideWidgetMethod
 import app.revanced.bilibili.patches.SubtitleImportSavePatch.HookInfo.loadSubtitleMethod
+import app.revanced.bilibili.patches.SubtitleImportSavePatch.HookInfo.recordSelectedSubtitleMethod
 import app.revanced.bilibili.patches.SubtitleImportSavePatch.HookInfo.setDmViewReplyMethod
 import app.revanced.bilibili.patches.SubtitleImportSavePatch.HookInfo.widgetTokenField
 import app.revanced.bilibili.patches.main.VideoInfoHolder
@@ -109,6 +110,7 @@ object SubtitleImportSavePatch {
                 subtitle.addSubtitles(newSubtitle)
                 interactLayerService.callMethod(setDmViewReplyMethod, newDmViewReply)
                 interactLayerService.callMethod(loadSubtitleMethod, newSubtitle, null)
+                interactLayerService.callMethod(recordSelectedSubtitleMethod, false)
                 widgetService.callMethod(hideWidgetMethod, widget.getObjectField(widgetTokenField))
                 Utils.runOnMainThread(800L) {
                     val gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
@@ -215,6 +217,10 @@ object SubtitleImportSavePatch {
         @Keep
         @JvmStatic
         var loadSubtitleMethod = ""
+
+        @Keep
+        @JvmStatic
+        var recordSelectedSubtitleMethod = ""
 
         @Keep
         @JvmStatic
