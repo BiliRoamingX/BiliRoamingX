@@ -12,15 +12,17 @@ import java.net.URL
 object ShareClick : ApiHook() {
     private val contentRegex = Regex("(.*)(http\\S*)(.*)")
 
-    private val whitelistQueryNames
-        get() = arrayOf(
-            "start_progress",
-            "p",
-            "topic_id",
-            "comment_on",
-            "comment_root_id",
-            "comment_secondary_id",
-            "type",
+    private class WhitelistQuery(val name: String, vararg val ignoredValues: String)
+
+    private val whitelistQueries
+        get() = listOf(
+            WhitelistQuery("start_progress"),
+            WhitelistQuery("p", "1"),
+            WhitelistQuery("topic_id"),
+            WhitelistQuery("comment_on"),
+            WhitelistQuery("comment_root_id"),
+            WhitelistQuery("comment_secondary_id"),
+            WhitelistQuery("type"),
         )
 
     override fun shouldHook(url: String, status: Int): Boolean {
@@ -111,22 +113,18 @@ object ShareClick : ApiHook() {
             val realUrl = connection.getHeaderField("Location")
             if (!realUrl.isNullOrEmpty()) {
                 val uri = Uri.parse(realUrl)
-                val whitelistQueries = whitelistQueryNames.associateWith {
-                    uri.getQueryParameter(it)
-                }
-                newUrl = uri.buildUpon()
-                    .clearQuery().encodedFragment(null).apply {
-                        for ((k, v) in whitelistQueries) {
-                            if (v.isNullOrEmpty())
-                                continue
-                            if (k == "p") {
-                                if (v != "1")
-                                    appendQueryParameter(k, v)
-                            } else {
-                                appendQueryParameter(k, v)
-                            }
-                        }
-                    }.build().toString()
+                newUrl = uri.buildUpon().clearQuery().apply {
+                    if (uri.fragment.orEmpty().startsWith("reply")) {
+                        fragment(uri.fragment)
+                    } else {
+                        encodedFragment(null)
+                    }
+                    for (q in whitelistQueries) {
+                        val v = uri.getQueryParameter(q.name)
+                        if (!v.isNullOrEmpty() && !q.ignoredValues.contains(v))
+                            appendQueryParameter(q.name, v)
+                    }
+                }.toString()
             }
         }
         newUrl
