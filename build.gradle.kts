@@ -1,3 +1,5 @@
+import com.android.tools.build.apkzlib.zip.ZFile
+
 plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.android) apply false
@@ -27,4 +29,18 @@ tasks.register<Sync>("dist") {
         include("patches.json")
     }
     into(layout.buildDirectory)
+    doLast {
+        val apkFile = layout.buildDirectory.asFileTree.first { it.extension == "apk" }
+        val jarFile = layout.buildDirectory.asFileTree.first { it.extension == "jar" }
+        ZFile.openReadWrite(jarFile).use { jar ->
+            ZFile.openReadOnly(apkFile).use { apk ->
+                apk.entries().filter {
+                    it.centralDirectoryHeader.name.startsWith("lib")
+                }.forEach { entry ->
+                    val name = entry.centralDirectoryHeader.name
+                    jar.add("bilibili/$name", entry.open())
+                }
+            }
+        }
+    }
 }

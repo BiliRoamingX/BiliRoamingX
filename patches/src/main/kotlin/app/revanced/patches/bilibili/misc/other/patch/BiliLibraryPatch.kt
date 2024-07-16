@@ -6,6 +6,7 @@ import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patches.bilibili.misc.settings.patch.SettingsResourcePatch
 import app.revanced.util.bundledResource
+import java.io.File
 
 @Patch(
     name = "Bili library patch",
@@ -19,16 +20,14 @@ import app.revanced.util.bundledResource
 )
 object BiliLibraryPatch : RawResourcePatch() {
     override fun execute(context: ResourceContext) {
-        mapOf(
-            "tv.danmaku.bili" to "libbili-pink.so",
-            "com.bilibili.app.in" to "libbili-play.so",
-            "tv.danmaku.bilibilihd" to "libbili-hd.so",
-        ).asSequence().find { (k, _) -> k == SettingsResourcePatch.packageName }?.value?.let { soName ->
-            val soFile = context["lib/arm64-v8a/libbili.so", true].takeIf { it.isFile }
-            soFile?.delete()
-            soFile?.outputStream()?.use { output ->
-                bundledResource("bilibili/libs/arm64-v8a/$soName").use { input ->
-                    input.copyTo(output)
+        listOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64").forEach { arch ->
+            val soDir = context["lib/$arch/libbili.so", true].takeIf { it.isFile }?.parentFile
+            if (soDir != null) {
+                val soName = "libbiliroamingx.so"
+                File(soDir, soName).outputStream().use { output ->
+                    bundledResource("bilibili/lib/$arch/$soName").use { input ->
+                        input.copyTo(output)
+                    }
                 }
             }
         }
