@@ -2,6 +2,7 @@ package com.bilibili.pegasus.api.model;
 
 import android.net.Uri;
 
+import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
 import com.bilibili.app.comm.list.common.api.model.PlayerArgs;
@@ -13,6 +14,7 @@ import com.bilibili.pegasus.api.modelv2.UpArgs;
 import java.util.HashMap;
 import java.util.List;
 
+@Keep
 public class BasicIndexItem {
     public long adIndex;
     @Nullable

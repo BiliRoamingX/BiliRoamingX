@@ -23,6 +23,7 @@ import com.bilibili.okretro.GeneralResponse;
 import com.bilibili.pegasus.api.model.BasicIndexItem;
 import com.bilibili.pegasus.api.modelv2.Args;
 import com.bilibili.pegasus.api.modelv2.BannerItemV2;
+import com.bilibili.pegasus.api.modelv2.BasePlayerItem;
 import com.bilibili.pegasus.api.modelv2.Config;
 import com.bilibili.pegasus.api.modelv2.LargeCoverSingleV7Item;
 import com.bilibili.pegasus.api.modelv2.LargeCoverSingleV8Item;
@@ -103,6 +104,7 @@ public class PegasusPatch {
             Map.entry("notify", List.of("notify_tunnel")),
             Map.entry("course", List.of("ketang")),
             Map.entry("comic", List.of("comic")),
+            Map.entry("cannot_play", List.of("cannot_play")),
             Map.entry("large_cover", List.of("large_cover")),
             Map.entry("middle_cover", List.of("middle_cover")),
             Map.entry("small_cover", List.of("small_cover"))
@@ -838,6 +840,10 @@ public class PegasusPatch {
                         || (!TextUtils.isEmpty(goTo) && goTo.contains(type))) {
                     typeMatched = true;
                     break;
+                } else if ("av".equals(cardGoto) && "cannot_play".equals(type)
+                        && (item instanceof BasePlayerItem playerItem) && playerItem.canPlay != 1) {
+                    typeMatched = true;
+                    break;
                 }
             }
             return typeMatched || isLowPlayCountVideo(item, playCountLimit)
@@ -922,6 +928,9 @@ public class PegasusPatch {
                 if ((!TextUtils.isEmpty(cardGoto) && cardGoto.contains(type))
                         || (!TextUtils.isEmpty(cardType) && cardType.contains(type))
                         || (!TextUtils.isEmpty(goTo) && goTo.contains(type))) {
+                    typeMatched = true;
+                    break;
+                } else if ("av".equals(cardGoto) && "cannot_play".equals(type) && item.optInt("can_play") != 1) {
                     typeMatched = true;
                     break;
                 }

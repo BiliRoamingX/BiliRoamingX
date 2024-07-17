@@ -127,6 +127,7 @@
         <item>PGC 内容</item>
         <item>课堂</item>
         <item>漫画</item>
+        <item>无权查看视频</item>
         <item>大卡</item>
         <item>中卡</item>
         <item>小卡</item>
@@ -144,6 +145,7 @@
         <item>番剧、电影、电视剧、纪录片……</item>
         <item />
         <item />
+        <item>例如充电专属</item>
         <item>单列显示的</item>
         <item />
         <item>双列显示的</item>
@@ -161,6 +163,7 @@
         <item>bangumi</item>
         <item>course</item>
         <item>comic</item>
+        <item>cannot_play</item>
         <item>large_cover</item>
         <item>middle_cover</item>
         <item>small_cover</item>
