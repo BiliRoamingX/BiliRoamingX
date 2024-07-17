@@ -48,7 +48,7 @@
 ## 💻 源码构建
 
 ```shell
-git clone https://github.com/BiliRoamingX/BiliRoamingX.git
+git clone --recurse-submodules https://github.com/BiliRoamingX/BiliRoamingX.git
 cd BiliRoamingX
 ./gradlew dist
 ```
