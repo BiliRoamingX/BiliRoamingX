@@ -12,6 +12,7 @@ import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.settings.dialog.ColorChooseDialog
 import app.revanced.bilibili.utils.Themes
 import app.revanced.bilibili.utils.Toasts
+import app.revanced.bilibili.utils.runCatchingOrNull
 import app.revanced.bilibili.widget.OnClickOriginListener
 import com.bilibili.compose.theme.ThemeDayNight
 import tv.danmaku.bili.ui.theme.api.BiliSkin
@@ -57,7 +58,7 @@ object CustomThemePatch {
     }
 
     @JvmStatic
-    fun delayRefresh() {
+    fun delayRefresh() = runCatchingOrNull {
         getAllThemes().run {
             customColor.toTheme().let { theme ->
                 put(CUSTOM_THEME_ID1.toLong(), theme)

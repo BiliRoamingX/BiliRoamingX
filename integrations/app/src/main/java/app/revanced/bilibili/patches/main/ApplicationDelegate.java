@@ -78,7 +78,7 @@ public class ApplicationDelegate {
         updateBitmapDefaultDensity();
         PassportChangeReceiver.register();
         CustomThemePatch.refresh();
-        Utils.async(500L, CustomThemePatch::delayRefresh);
+        Utils.async(2000L, CustomThemePatch::delayRefresh);
         if (Utils.isMainProcess()) {
             Utils.async(ApplicationDelegate::startLog);
             Utils.async(PlaybackSpeedPatch::refreshOverrideSpeedList);
