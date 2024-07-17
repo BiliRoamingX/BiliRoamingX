@@ -53,6 +53,14 @@ object InjectMoreSchemePatch : ResourcePatch() {
                     this["android:host"] = "m.bilibili.com"
                 }
                 //endregion
+                appendChild("data") {
+                    this["android:scheme"] = "http"
+                    this["android:host"] = "www.bilibili.com"
+                }
+                appendChild("data") {
+                    this["android:scheme"] = "https"
+                    this["android:host"] = "www.bilibili.com"
+                }
             }
         }
     }
