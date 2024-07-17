@@ -1,3 +1,3 @@
-[submodule "integrations/app/src/main/jni/Dobby"]
-	path = integrations/app/src/main/jni/Dobby
+[submodule "integrations/libs/Dobby"]
+	path = integrations/libs/Dobby
 	url = https://github.com/LSPosed/Dobby.git

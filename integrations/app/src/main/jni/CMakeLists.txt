@@ -9,9 +9,11 @@ macro(SET_OPTION option value)
     set(${option} ${value} CACHE INTERNAL "" FORCE)
 endmacro()
 
+set(LIBS_DIR ../../../../libs)
+
 SET_OPTION(DOBBY_DEBUG OFF)
 SET_OPTION(DOBBY_GENERATE_SHARED OFF)
-add_subdirectory(Dobby dobby)
+add_subdirectory(${LIBS_DIR}/Dobby dobby)
 
 add_library(${PROJECT_NAME} SHARED biliroamingx.cc)
 find_library(log-lib log)
