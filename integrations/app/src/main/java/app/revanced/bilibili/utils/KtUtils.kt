@@ -151,9 +151,8 @@ val area: Area?
         null
     }
 
-@Suppress("DEPRECATION")
 val versionName: String by lazy {
-    Utils.getContext().packageManager.getPackageInfo(Utils.getContext().packageName, 0).versionName
+    Utils.getContext().packageManager.getPackageInfo(Utils.getContext().packageName, 0).versionName.orEmpty()
 }
 
 @Suppress("DEPRECATION")
@@ -354,7 +353,7 @@ fun sigMd5(packageName: String = Utils.getContext().packageName, preferOriginal:
     } else null
     return if (signBase64 == null) {
         Utils.getContext().packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
-            .signatures.first().toByteArray().md5Hex
+            .signatures.orEmpty().first().toByteArray().md5Hex
     } else {
         Base64.decode(signBase64, Base64.DEFAULT).md5Hex
     }
@@ -674,7 +673,6 @@ inline fun <reified T : MessageLite> getDeviceSetting(): T? {
     return getDeviceSetting(T::class.java)
 }
 
-@Suppress("UNCHECKED_CAST")
 fun <T : MessageLite> getDeviceSetting(typeClass: Class<T>): T? {
     val context = Utils.getContext()
     val callUri = "content://${context.packageName}.device.settings.DeviceSettingProvider/call"

@@ -5,6 +5,19 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
+    id("build-logic") apply false
+}
+
+allprojects {
+    plugins.withType<JavaBasePlugin>().configureEach {
+        extensions.configure<JavaPluginExtension> {
+            if (name == "patches") {
+                toolchain.languageVersion = JavaLanguageVersion.of(Versions.JVM_TARGET_PATCHES)
+            } else {
+                toolchain.languageVersion = JavaLanguageVersion.of(Versions.JVM_TARGET)
+            }
+        }
+    }
 }
 
 tasks.register<Delete>("clean") {

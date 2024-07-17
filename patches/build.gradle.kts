@@ -1,5 +1,4 @@
 import org.gradle.kotlin.dsl.support.listFilesOrdered
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -14,17 +13,6 @@ dependencies {
     implementation(libs.smali)
     // Used in JsonGenerator.
     implementation(libs.gson)
-}
-
-kotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.JVM_11
-    }
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
 }
 
 tasks.jar {

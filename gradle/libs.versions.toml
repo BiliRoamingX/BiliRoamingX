@@ -20,6 +20,8 @@ ksp = "2.0.0-1.0.23"
 kotlinpoet-ksp = "1.18.1"
 
 [libraries]
+gradle-plugin-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+gradle-plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 # integrations
 hiddenapibypass = { module = "org.lsposed.hiddenapibypass:hiddenapibypass", version.ref = "hiddenapibypass" }
 truetypeparser = { module = "io.github.yubyf:truetypeparser-light", version.ref = "truetypeparser" }

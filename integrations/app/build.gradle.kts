@@ -1,7 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -9,17 +7,14 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-android {
-    compileSdk = 34
+setupAppModule {
     namespace = "app.revanced.bilibili.integrations"
-    ndkVersion = "26.3.11579264"
 
     defaultConfig {
         applicationId = "app.revanced.bilibili.integrations"
-        minSdk = 24
-        targetSdk = 34
         multiDexEnabled = false
-        val verName = project.version as String
+
+        val verName = version as String
         versionName = verName
         versionCode = verName.split('.').let { (m, s, f) ->
             m.toInt() * 1000000 + s.toInt() * 1000 + f.toInt()
@@ -88,14 +83,12 @@ android {
             }
         }
     }
+
     buildFeatures {
         buildConfig = true
         resValues = false
     }
-    compileOptions {
-        sourceCompatibility(JavaVersion.VERSION_17)
-        targetCompatibility(JavaVersion.VERSION_17)
-    }
+
     packaging {
         // since it's already packaged in host client
         jniLibs.excludes += "**/libc++_shared.so"
@@ -105,17 +98,11 @@ android {
             "kotlin-tooling-metadata.json",
         )
     }
+
     externalNativeBuild {
         cmake {
             path = file("src/main/jni/CMakeLists.txt")
-            version = "3.22.1"
         }
-    }
-}
-
-kotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.JVM_17
     }
 }
 
