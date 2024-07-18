@@ -18,4 +18,4 @@ add_subdirectory(${LIBS_DIR}/Dobby dobby)
 add_library(${PROJECT_NAME} SHARED biliroamingx.cc)
 find_library(log-lib log)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC dobby log)
+target_link_libraries(${PROJECT_NAME} PUBLIC dobby ${log-lib})
