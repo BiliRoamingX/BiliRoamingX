@@ -61,6 +61,14 @@ object InjectMoreSchemePatch : ResourcePatch() {
                     this["android:scheme"] = "https"
                     this["android:host"] = "www.bilibili.com"
                 }
+                appendChild("data") {
+                    this["android:scheme"] = "http"
+                    this["android:host"] = "t.bilibili.com"
+                }
+                appendChild("data") {
+                    this["android:scheme"] = "https"
+                    this["android:host"] = "t.bilibili.com"
+                }
             }
         }
     }
