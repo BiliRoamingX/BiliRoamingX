@@ -39,8 +39,10 @@ object BLRoutePatch {
                             appendQueryParameter(name, uri.getQueryParameter(name))
                         val commentId = uri.fragment.orEmpty().removePrefix("reply")
                         if (commentId.isNotEmpty() && commentId.all { it.isDigit() }) {
-                            appendQueryParameter("comment_on", "1")
-                            appendQueryParameter("comment_root_id", commentId)
+                            if (!uri.queryParameterNames.contains("comment_on"))
+                                appendQueryParameter("comment_on", "1")
+                            if (!uri.queryParameterNames.contains("comment_root_id"))
+                                appendQueryParameter("comment_root_id", commentId)
                         }
                     }.build()
         }

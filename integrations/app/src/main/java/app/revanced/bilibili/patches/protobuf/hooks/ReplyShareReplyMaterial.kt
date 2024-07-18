@@ -1,5 +1,6 @@
 package app.revanced.bilibili.patches.protobuf.hooks
 
+import android.net.Uri
 import app.revanced.bilibili.patches.okhttp.hooks.ShareClick
 import app.revanced.bilibili.patches.protobuf.MossHook
 import app.revanced.bilibili.settings.Settings
@@ -23,7 +24,14 @@ object ReplyShareReplyMaterial : MossHook<ShareReplyMaterialReq, ShareReplyMater
     ): ShareReplyMaterialResp? {
         if (reply != null && Settings.PurifyShare()) {
             val purifyUrl = ShareClick.purifyUrl(reply.qrcodeUrl)
-            reply.qrcodeUrl = purifyUrl
+            val uri = Uri.parse(purifyUrl)
+            reply.qrcodeUrl = uri.buildUpon().apply {
+                encodedFragment(null)
+                if (!uri.queryParameterNames.contains("comment_on"))
+                    appendQueryParameter("comment_on", "1")
+                if (!uri.queryParameterNames.contains("comment_root_id"))
+                    appendQueryParameter("comment_root_id", req.rpid.toString())
+            }.toString()
         }
         if (reply != null) {
             setClipboardContent(content = reply.qrcodeUrl)
