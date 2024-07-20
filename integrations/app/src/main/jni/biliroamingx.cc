@@ -1,7 +1,7 @@
 #include <jni.h>
 #include <cstdlib>
 #include <android/log.h>
-#include <bits/sysconf.h>
+#include <unistd.h>
 #include <sys/mman.h>
 #include "dobby.h"
 
@@ -27,7 +27,7 @@ jint JNI_OnLoad(JavaVM *vm, void *) {
     JNIEnv *env;
     if (vm->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK)
         return JNI_ERR;
-    const auto page_size = sysconf(_SC_PAGE_SIZE);
+    const auto page_size = getpagesize();
     const auto aligned = PAGE_ALIGN((uintptr_t) exit, page_size);
     mprotect((void *) aligned, page_size, PROT_READ | PROT_WRITE | PROT_EXEC);
     if (DobbyHook((void *) exit,
