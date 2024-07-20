@@ -21,7 +21,6 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Base64;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,7 +73,7 @@ public abstract class ApplicationDelegate extends Application {
         try {
             System.loadLibrary("biliroamingx");
         } catch (Throwable t) {
-            Log.e(Logger.LOG_TAG, "Failed to load biliroamingx library", t);
+            Logger.error(t, () -> "Failed to load biliroamingx library");
         }
         String officialSignature = "MIICVzCCAcCgAwIBAgIETzuw7DANBgkqhkiG9w0BAQUFADBvMQswCQYDVQQGEwJDTjESMBAGA1UECBMJR3Vhbmdkb25nMQ8wDQYDVQQHEwZaaHVoYWkxEzARBgNVBAoTCmRhbm1ha3UudHYxEzARBgNVBAsTCmRhbm1ha3UudHYxETAPBgNVBAMTCEJiY2FsbGVuMCAXDTEyMDIxNTEzMTk0MFoYDzIwNjYxMTE4MTMxOTQwWjBvMQswCQYDVQQGEwJDTjESMBAGA1UECBMJR3Vhbmdkb25nMQ8wDQYDVQQHEwZaaHVoYWkxEzARBgNVBAoTCmRhbm1ha3UudHYxEzARBgNVBAsTCmRhbm1ha3UudHYxETAPBgNVBAMTCEJiY2FsbGVuMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/yXoLdjq+kkrwvAanfPzULANSIYvflMMGnuAEbXOazIDymmNXaUPTEL3Jn9+Ssxiyvrgqpu18HaK4MJtzaj1ajUU3BMXdtCL83POUW37sFWhOiYbKW+K87VYq/utk+ZIplrXtWKB4P3Ll1sUNsfsxQmrR9kpVWkhUMUNgH2wcEQIDAQABMA0GCSqGSIb3DQEBBQUAA4GBAAC3ZtZ7Mw69jZSmcEH8TNxjM36q5V9rsntK+o92nW1wIKoSoQRMN4SfJumqqrou4T4aAcRDMkKNeYMiE+GCOJQMy5WnhvpMhgLkmajgBo4tTIQnNzqeDUt429HxpcpBBpjM+YrYdGhKb+xUd4lzvJFPRKp7DmPt6c5SwM6ZtiB/";
         fakeSignatures(Pair.create(Utils.currentPackageName(), officialSignature));
@@ -152,7 +151,7 @@ public abstract class ApplicationDelegate extends Application {
         try {
             Reflex.setStaticObjectField(PackageInfo.class, "CREATOR", newCreator);
         } catch (Throwable t) {
-            Log.e(Logger.LOG_TAG, "Failed to set PackageInfo.CREATOR", t);
+            Logger.error(t, () -> "Failed to set PackageInfo.CREATOR");
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             HiddenApiBypass.addHiddenApiExemptions("Landroid/os/Parcel;", "Landroid/content/pm/PackageManager;", "Landroid/app/PropertyInvalidatedCache;");
@@ -162,21 +161,21 @@ public abstract class ApplicationDelegate extends Application {
             Reflex.callMethod(cache, "clear");
         } catch (NoSuchFieldError ignored) {
         } catch (Throwable t) {
-            Log.e(Logger.LOG_TAG, "Failed to clear PackageManager.sPackageInfoCache", t);
+            Logger.error(t, () -> "Failed to clear PackageManager.sPackageInfoCache");
         }
         try {
             Map<?, ?> mCreators = Reflex.getStaticObjectField(Parcel.class, "mCreators");
             mCreators.clear();
         } catch (NoSuchFieldError ignored) {
         } catch (Throwable t) {
-            Log.e(Logger.LOG_TAG, "Failed to clear Parcel.mCreators", t);
+            Logger.error(t, () -> "Failed to clear Parcel.mCreators");
         }
         try {
             Map<?, ?> sPairedCreators = Reflex.getStaticObjectField(Parcel.class, "sPairedCreators");
             sPairedCreators.clear();
         } catch (NoSuchFieldError ignored) {
         } catch (Throwable t) {
-            Log.e(Logger.LOG_TAG, "Failed to clear Parcel.sPairedCreators", t);
+            Logger.error(t, () -> "Failed to clear Parcel.sPairedCreators");
         }
     }
 
