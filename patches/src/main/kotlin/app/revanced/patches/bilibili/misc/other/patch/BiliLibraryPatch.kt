@@ -21,7 +21,7 @@ import java.io.File
 object BiliLibraryPatch : RawResourcePatch() {
     override fun execute(context: ResourceContext) {
         listOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64").forEach { arch ->
-            val soDir = context["lib/$arch/libimagepipeline.so", true].takeIf { it.isFile }?.parentFile
+            val soDir = context["lib/$arch/libc++_shared.so", true].takeIf { it.isFile }?.parentFile
             if (soDir != null) {
                 val soName = "libbiliroamingx.so"
                 File(soDir, soName).outputStream().use { output ->
