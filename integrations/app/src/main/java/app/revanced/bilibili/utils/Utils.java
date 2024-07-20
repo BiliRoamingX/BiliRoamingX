@@ -45,7 +45,6 @@ public class Utils {
     /**
      * Note: don't use directly, instead of {@link Utils#getContext()}.
      */
-    @Keep
     @SuppressLint("StaticFieldLeak")
     public static Context context;
     public static Handler mainHandler = new Handler(Looper.getMainLooper());

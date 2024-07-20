@@ -65,16 +65,29 @@ import app.revanced.bilibili.utils.UposReplacer;
 import app.revanced.bilibili.utils.Utils;
 import tv.danmaku.bili.MainActivityV2;
 
-public class ApplicationDelegate {
+public abstract class ApplicationDelegate extends Application {
     private static final ArrayDeque<WeakReference<Activity>> activityRefs = new ArrayDeque<>();
     private static final Point screenSize = new Point();
     public static final Map<String, String> originalSignatures = new HashMap<>();
 
-    @Keep
-    public static void onCreate(Application app) {
+    static {
+        try {
+            System.loadLibrary("biliroamingx");
+        } catch (Throwable t) {
+            Log.e(Logger.LOG_TAG, "Failed to load biliroamingx library", t);
+        }
+        String officialSignature = "MIICVzCCAcCgAwIBAgIETzuw7DANBgkqhkiG9w0BAQUFADBvMQswCQYDVQQGEwJDTjESMBAGA1UECBMJR3Vhbmdkb25nMQ8wDQYDVQQHEwZaaHVoYWkxEzARBgNVBAoTCmRhbm1ha3UudHYxEzARBgNVBAsTCmRhbm1ha3UudHYxETAPBgNVBAMTCEJiY2FsbGVuMCAXDTEyMDIxNTEzMTk0MFoYDzIwNjYxMTE4MTMxOTQwWjBvMQswCQYDVQQGEwJDTjESMBAGA1UECBMJR3Vhbmdkb25nMQ8wDQYDVQQHEwZaaHVoYWkxEzARBgNVBAoTCmRhbm1ha3UudHYxEzARBgNVBAsTCmRhbm1ha3UudHYxETAPBgNVBAMTCEJiY2FsbGVuMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/yXoLdjq+kkrwvAanfPzULANSIYvflMMGnuAEbXOazIDymmNXaUPTEL3Jn9+Ssxiyvrgqpu18HaK4MJtzaj1ajUU3BMXdtCL83POUW37sFWhOiYbKW+K87VYq/utk+ZIplrXtWKB4P3Ll1sUNsfsxQmrR9kpVWkhUMUNgH2wcEQIDAQABMA0GCSqGSIb3DQEBBQUAA4GBAAC3ZtZ7Mw69jZSmcEH8TNxjM36q5V9rsntK+o92nW1wIKoSoQRMN4SfJumqqrou4T4aAcRDMkKNeYMiE+GCOJQMy5WnhvpMhgLkmajgBo4tTIQnNzqeDUt429HxpcpBBpjM+YrYdGhKb+xUd4lzvJFPRKp7DmPt6c5SwM6ZtiB/";
+        fakeSignatures(Pair.create(Utils.currentPackageName(), officialSignature));
+    }
+
+    @Keep // anti R8 virtual method auto final, see https://issuetracker.google.com/issues/329541426
+    @Override
+    public void onCreate() {
+        Utils.context = this;
+        super.onCreate();
         long start = System.currentTimeMillis();
-        app.registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
-        app.registerComponentCallbacks(new ComponentCallbacks());
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
+        registerComponentCallbacks(new ComponentCallbacks());
         updateBitmapDefaultDensity();
         PassportChangeReceiver.register();
         CustomThemePatch.refresh();
@@ -95,17 +108,6 @@ public class ApplicationDelegate {
         }
         long end = System.currentTimeMillis();
         Logger.debug(() -> String.format("Initializing BiliRoamingX on process %s cost %s ms", Utils.currentProcessName(), end - start));
-    }
-
-    @Keep
-    public static void onClassInit() {
-        try {
-            System.loadLibrary("biliroamingx");
-        } catch (Throwable t) {
-            Log.e(Logger.LOG_TAG, "Failed to load biliroamingx library", t);
-        }
-        String officialSignature = "MIICVzCCAcCgAwIBAgIETzuw7DANBgkqhkiG9w0BAQUFADBvMQswCQYDVQQGEwJDTjESMBAGA1UECBMJR3Vhbmdkb25nMQ8wDQYDVQQHEwZaaHVoYWkxEzARBgNVBAoTCmRhbm1ha3UudHYxEzARBgNVBAsTCmRhbm1ha3UudHYxETAPBgNVBAMTCEJiY2FsbGVuMCAXDTEyMDIxNTEzMTk0MFoYDzIwNjYxMTE4MTMxOTQwWjBvMQswCQYDVQQGEwJDTjESMBAGA1UECBMJR3Vhbmdkb25nMQ8wDQYDVQQHEwZaaHVoYWkxEzARBgNVBAoTCmRhbm1ha3UudHYxEzARBgNVBAsTCmRhbm1ha3UudHYxETAPBgNVBAMTCEJiY2FsbGVuMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/yXoLdjq+kkrwvAanfPzULANSIYvflMMGnuAEbXOazIDymmNXaUPTEL3Jn9+Ssxiyvrgqpu18HaK4MJtzaj1ajUU3BMXdtCL83POUW37sFWhOiYbKW+K87VYq/utk+ZIplrXtWKB4P3Ll1sUNsfsxQmrR9kpVWkhUMUNgH2wcEQIDAQABMA0GCSqGSIb3DQEBBQUAA4GBAAC3ZtZ7Mw69jZSmcEH8TNxjM36q5V9rsntK+o92nW1wIKoSoQRMN4SfJumqqrou4T4aAcRDMkKNeYMiE+GCOJQMy5WnhvpMhgLkmajgBo4tTIQnNzqeDUt429HxpcpBBpjM+YrYdGhKb+xUd4lzvJFPRKp7DmPt6c5SwM6ZtiB/";
-        fakeSignatures(Pair.create(Utils.currentPackageName(), officialSignature));
     }
 
     @SafeVarargs
@@ -178,8 +180,10 @@ public class ApplicationDelegate {
         }
     }
 
-    @Keep
-    public static Resources getResources(Resources resources) {
+    @Keep // anti R8 virtual method auto final, see https://issuetracker.google.com/issues/329541426
+    @Override
+    public Resources getResources() {
+        var resources = super.getResources();
         if (Utils.getContext() == null)
             return resources;
         int newDpi = getCustomDpi();
