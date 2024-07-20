@@ -338,7 +338,7 @@ inline fun SparseArray<Any>.toUnknownFields(original: UnknownFieldSetLite? = nul
     return GeneratedMessageLiteEx.newUnknownFields(original, this)
 }
 
-val defaultUA = "Mozilla/5.0 BiliDroid/$versionName (bbcallen@gmail.com)"
+val defaultUA by lazy { "Mozilla/5.0 BiliDroid/$versionName (bbcallen@gmail.com)" }
 
 val browserUA =
     "Mozilla/5.0 (Linux; Android ${Build.VERSION.RELEASE}; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
@@ -709,10 +709,12 @@ val Fragment.hostContext inline get() = context!!
 inline fun <T> unsafeLazy(noinline initializer: () -> T) =
     lazy(LazyThreadSafetyMode.NONE, initializer)
 
-val jsonFormat = Json {
-    ignoreUnknownKeys = true
-    coerceInputValues = true
-    useAlternativeNames = false
+val jsonFormat by lazy {
+    Json {
+        ignoreUnknownKeys = true
+        coerceInputValues = true
+        useAlternativeNames = false
+    }
 }
 
 inline fun <reified T> String.fromJson(json: Json = jsonFormat) =
