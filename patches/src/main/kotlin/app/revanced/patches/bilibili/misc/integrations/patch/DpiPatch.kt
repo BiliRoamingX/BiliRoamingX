@@ -73,7 +73,7 @@ object DpiPatch : BytecodePatch(setOf(AppCompatActivityFingerprint)) {
                 if (instIndex != -1) {
                     c.proxy(context).findMutableMethodOf(m).replaceInstruction(
                         instIndex, """
-                        invoke-static {}, Lapp/revanced/bilibili/utils/Utils;->getResources()Landroid/content/res/Resources;
+                        invoke-static {}, Lapp/revanced/bilibili/patches/main/ApplicationDelegate;->getAppResources()Landroid/content/res/Resources;
                     """.trimIndent()
                     )
                 }

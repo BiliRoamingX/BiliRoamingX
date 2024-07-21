@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -68,16 +67,10 @@ public class Utils {
     @Keep
     public static Context getContext() {
         if (context == null) {
+            Logger.error(() -> "Context is null");
             context = ActivityThread.currentActivityThread().getApplication();
-            if (context == null)
-                Logger.error(() -> "Context is null");
         }
         return context;
-    }
-
-    @Keep
-    public static Resources getResources() {
-        return getContext().getResources();
     }
 
     @SuppressLint("DiscouragedApi")
@@ -315,10 +308,7 @@ public class Utils {
 
     public static String currentPackageName() {
         String name = "";
-        Context context = getContext();
-        if (context != null) {
-            name = context.getPackageName();
-        } else try {
+        try {
             name = ActivityThread.currentPackageName();
         } catch (Throwable ignored) {
         }

@@ -1,14 +1,14 @@
 package app.revanced.bilibili.patches
 
 import androidx.annotation.Keep
+import app.revanced.bilibili.patches.main.ApplicationDelegate
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.Utils
 
 object SettingsTransfer {
     @Keep
     @JvmStatic
     fun debuggable(): Boolean {
-        if (Utils.getContext() == null)
+        if (!ApplicationDelegate.attached)
             return false
         return Settings.Debug()
     }

@@ -68,6 +68,7 @@ public abstract class ApplicationDelegate extends Application {
     private static final ArrayDeque<WeakReference<Activity>> activityRefs = new ArrayDeque<>();
     private static final Point screenSize = new Point();
     public static final Map<String, String> originalSignatures = new HashMap<>();
+    public static boolean attached = false;
 
     static {
         try {
@@ -82,7 +83,6 @@ public abstract class ApplicationDelegate extends Application {
     @Keep // anti R8 virtual method auto final, see https://issuetracker.google.com/issues/329541426
     @Override
     public void onCreate() {
-        Utils.context = this;
         super.onCreate();
         long start = System.currentTimeMillis();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallback());
@@ -107,6 +107,23 @@ public abstract class ApplicationDelegate extends Application {
         }
         long end = System.currentTimeMillis();
         Logger.debug(() -> String.format("Initializing BiliRoamingX on process %s cost %s ms", Utils.currentProcessName(), end - start));
+    }
+
+    @Keep // anti R8 virtual method auto final, see https://issuetracker.google.com/issues/329541426
+    @Override
+    protected void attachBaseContext(Context base) {
+        Utils.context = this;
+        super.attachBaseContext(base);
+        attached = true;
+    }
+
+    @Keep
+    public static Resources getAppResources() {
+        if (!attached) {
+            return Resources.getSystem();
+        } else {
+            return Utils.getContext().getResources();
+        }
     }
 
     @SafeVarargs
@@ -183,8 +200,7 @@ public abstract class ApplicationDelegate extends Application {
     @Override
     public Resources getResources() {
         var resources = super.getResources();
-        if (Utils.getContext() == null)
-            return resources;
+        if (!attached) return resources;
         int newDpi = getCustomDpi();
         if (newDpi != 0) {
             updateDpi(resources.getDisplayMetrics(), newDpi);
