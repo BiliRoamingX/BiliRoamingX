@@ -297,7 +297,7 @@
     <string name="biliroaming_app_not_support">当前客户端版本不支持此功能</string>
     <string name="biliroaming_os_not_support">当前系统版本不支持此功能</string>
     <string name="biliroaming_only_support_new_player">仅新版播放器支持此功能</string>
-    <string name="biliroaming_block_fan_guide_title">屏蔽成为UP主老粉引导</string>
+    <string name="biliroaming_block_fan_guide_title">屏蔽关注UP主引导</string>
     <string name="biliroaming_need_old_player_message">需要强制启用旧版播放器才能生效，是否立即启用？</string>
     <string name="biliroaming_y">是</string>
     <string name="biliroaming_n">否</string>

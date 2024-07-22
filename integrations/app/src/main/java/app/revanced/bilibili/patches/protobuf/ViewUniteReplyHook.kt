@@ -17,6 +17,7 @@ import com.bapis.bilibili.app.viewunite.pgcanymodel.*
 import com.bapis.bilibili.app.viewunite.pgcanymodel.Rights
 import com.bapis.bilibili.app.viewunite.pgcanymodel.Stat
 import com.bapis.bilibili.app.viewunite.pgcanymodel.UserStatus
+import com.bapis.bilibili.app.viewunite.ugcanymodel.ViewUgcAny
 import com.bapis.bilibili.app.viewunite.v1.*
 import com.bapis.bilibili.playershared.BizType
 import com.bilibili.lib.moss.api.MossException
@@ -84,6 +85,17 @@ object ViewUniteReplyHook {
 
     private fun hookSupplement(viewReply: ViewReply) {
         val supplementAny = viewReply.supplement
+        if (supplementAny.typeUrl == VIEW_UGC_ANY_TYPE_URL) {
+            val viewUgcAny = ViewUgcAny.parseFrom(supplementAny.value)
+            runCatchingOrNull {
+                viewUgcAny.experiment.run {
+                    if (Settings.BlockFanGuide())
+                        clearFollowGuide()
+                }
+            }
+            viewReply.supplement = newAny(VIEW_UGC_ANY_TYPE_URL, viewUgcAny)
+            return
+        }
         if (supplementAny.typeUrl != VIEW_PGC_ANY_TYPE_URL)
             return
         val viewPgcAny = ViewPgcAny.parseFrom(supplementAny.value)
