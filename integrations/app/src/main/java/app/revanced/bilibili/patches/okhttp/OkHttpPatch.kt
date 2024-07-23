@@ -47,7 +47,7 @@ object OkHttpPatch {
     @Keep
     @JvmStatic
     fun shouldHook(url: String, code: Int): Boolean {
-        if (!ApplicationDelegate.attached)
+        if (!ApplicationDelegate.attached())
             return false
         Logger.debug { "OkHttpPatch.shouldHook, code: %d, url: %s".format(code, url) }
         return (code == 200 && Settings.Debug()) || hooks.any { it.shouldHook(url, code) }
@@ -92,7 +92,7 @@ object OkHttpPatch {
     @Keep
     @JvmStatic
     fun hookBefore(url: String, headers: Array<String>): Pair<String, Array<String>> {
-        if (!ApplicationDelegate.attached)
+        if (!ApplicationDelegate.attached())
             return Pair.create(url, headers)
         return hooks.find { it.shouldHookBefore(url, headers) }
             ?.hookBefore(url, headers) ?: Pair.create(url, headers)

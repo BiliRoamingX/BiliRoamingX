@@ -42,6 +42,9 @@ import org.json.JSONObject
 import java.io.*
 import java.lang.reflect.Proxy
 import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.TreeMap
 import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
@@ -279,7 +282,7 @@ val storyPrefs by lazy {
     Utils.blkvPrefsByName("bilistory", true)
 }
 
-private val vhPrefs: SharedPreferences by lazy {
+val vhPrefs: SharedPreferences by lazy {
     Utils.getContext().getSharedPreferences(Constants.PREFS_VH, Context.MODE_PRIVATE)
 }
 
@@ -346,10 +349,10 @@ val browserUA =
 @Suppress("DEPRECATION")
 fun sigMd5(packageName: String = Utils.getContext().packageName, preferOriginal: Boolean = true): String {
     val signBase64 = if (preferOriginal) {
-        val sign = ApplicationDelegate.originalSignatures[packageName]
+        val sign = ApplicationDelegate.originalSignatures()[packageName]
         if (sign == null)
             Utils.getContext().packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
-        ApplicationDelegate.originalSignatures[packageName]
+        ApplicationDelegate.originalSignatures()[packageName]
     } else null
     return if (signBase64 == null) {
         Utils.getContext().packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
@@ -768,4 +771,8 @@ fun maybeThailand(sid: String, epId: String = ""): Boolean {
     return Area.Thailand.let { it == seasonAreasCache[sid] || it == seasonAreasCache[epCacheId] }
             || cachePrefs.contains(sid) && Area.Thailand.value == cachePrefs.getString(sid, null)
             || cachePrefs.contains(epCacheId) && Area.Thailand.value == cachePrefs.getString(epCacheId, null)
+}
+
+fun Date.format(pattern: String = "yyyy-MM-dd HH:mm:ss"): String {
+    return SimpleDateFormat(pattern, Locale.getDefault()).format(this)
 }
