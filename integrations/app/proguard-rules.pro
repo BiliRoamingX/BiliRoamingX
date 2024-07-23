@@ -79,3 +79,6 @@
 -keepclassmembers,allowobfuscation class app.revanced.bilibili.settings.Setting {
     static android.content.SharedPreferences$OnSharedPreferenceChangeListener *;
 }
+-keepclassmembers,allowobfuscation class app.revanced.bilibili.utils.CrossProcessPreferences {
+    android.content.SharedPreferences$OnSharedPreferenceChangeListener *;
+}

@@ -1,11 +1,9 @@
 package app.revanced.bilibili.settings
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import app.revanced.bilibili.account.Accounts
 import app.revanced.bilibili.utils.*
-import java.lang.ref.WeakReference
 
 @Suppress("LeakingThis", "NOTHING_TO_INLINE")
 sealed class Setting<out T : Any>(
@@ -30,11 +28,7 @@ sealed class Setting<out T : Any>(
     protected abstract fun saveInternal(newValue: @UnsafeVariance T)
 
     fun save(newValue: @UnsafeVariance T) {
-        if (Utils.isMainProcess()) {
-            saveInternal(newValue)
-        } else {
-            PreferenceUpdater.update(key to newValue)
-        }
+        saveInternal(newValue)
     }
 
     fun set(newValue: @UnsafeVariance T) {
@@ -72,14 +66,10 @@ sealed class Setting<out T : Any>(
         private val _all = mutableSetOf<Setting<Any>>()
         val all: Set<Setting<Any>> = _all
 
-        val prefs: SharedPreferences =
-            Utils.getContext().getSharedPreferences(Constants.PREFS_SETTING, Context.MODE_PRIVATE)
+        val prefs: SharedPreferences = CrossProcessPreferences.get(Constants.PREFS_SETTING)
 
-        private val preferenceChangeListeners =
-            mutableListOf<WeakReference<OnSharedPreferenceChangeListener>>()
-
-        private val innerListener = OnSharedPreferenceChangeListener { preferences, key ->
-            onPreferenceChanged(preferences, key.orEmpty())
+        private val innerListener = OnSharedPreferenceChangeListener { _, key ->
+            onPreferenceChanged(key.orEmpty())
         }
 
         private var async = true
@@ -92,33 +82,21 @@ sealed class Setting<out T : Any>(
             this.async = async
         }
 
-        private fun onPreferenceChanged(preferences: SharedPreferences, key: String) {
+        private fun onPreferenceChanged(key: String) {
             Logger.debug { "onPreferenceChanged, key: $key" }
             all.find { it.key == key }?.run {
                 load()
-                SettingsSyncHelper.sync(key to get())
-                executeOnChangeAction(async)
-            }
-            preferenceChangeListeners.forEach {
-                it.get()?.onSharedPreferenceChanged(preferences, key)
-            }
-        }
-
-        fun notifySettingsChangedForViceProcess(key: String, value: Any) {
-            all.find { it.key == key }?.run {
-                set(value)
-                preferenceChangeListeners.forEach {
-                    it.get()?.onSharedPreferenceChanged(prefs, key)
-                }
+                if (Utils.isMainProcess())
+                    executeOnChangeAction(async)
             }
         }
 
         fun registerPreferenceChangeListener(listener: OnSharedPreferenceChangeListener) {
-            preferenceChangeListeners.add(WeakReference(listener))
+            prefs.registerOnSharedPreferenceChangeListener(listener)
         }
 
         fun unregisterPreferenceChangeListener(listener: OnSharedPreferenceChangeListener) {
-            preferenceChangeListeners.removeIf { it.get() === listener }
+            prefs.unregisterOnSharedPreferenceChangeListener(listener)
         }
     }
 }

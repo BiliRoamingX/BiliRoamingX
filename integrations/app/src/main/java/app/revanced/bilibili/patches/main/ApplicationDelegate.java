@@ -54,11 +54,10 @@ import app.revanced.bilibili.patches.DpiPatch;
 import app.revanced.bilibili.patches.PlaybackSpeedPatch;
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.settings.Settings;
+import app.revanced.bilibili.utils.CrossProcessPreferences;
 import app.revanced.bilibili.utils.KtUtils;
 import app.revanced.bilibili.utils.Logger;
-import app.revanced.bilibili.utils.PreferenceUpdater;
 import app.revanced.bilibili.utils.Reflex;
-import app.revanced.bilibili.utils.SettingsSyncHelper;
 import app.revanced.bilibili.utils.SubtitleParamsCache;
 import app.revanced.bilibili.utils.Themes;
 import app.revanced.bilibili.utils.UposReplacer;
@@ -106,13 +105,10 @@ public abstract class ApplicationDelegate extends Application {
             SubtitleParamsCache.updateFont();
             KtUtils.getAreaTask();
             UposReplacer.getBaseUposList();
-            PreferenceUpdater.register();
             Themes.registerGarbChangeObserver();
             Utils.async(500L, BangumiSeasonHook::injectExtraSearchTypes);
             Utils.async(500L, BangumiSeasonHook::injectExtraSearchTypesV2);
             Utils.async(2000L, CouponAutoReceiver::check);
-        } else {
-            SettingsSyncHelper.register();
         }
         long end = System.currentTimeMillis();
         Logger.debug(() -> String.format("Initializing BiliRoamingX on process %s cost %s ms", Utils.currentProcessName(), end - start));
@@ -123,6 +119,7 @@ public abstract class ApplicationDelegate extends Application {
     protected void attachBaseContext(Context base) {
         Utils.context = this;
         super.attachBaseContext(base);
+        CrossProcessPreferences.init(this);
         attached = true;
     }
 
