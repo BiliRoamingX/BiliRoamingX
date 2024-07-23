@@ -72,11 +72,8 @@ sealed class Setting<out T : Any>(
         private val _all = mutableSetOf<Setting<Any>>()
         val all: Set<Setting<Any>> = _all
 
-        const val PREFS_NAME = "biliroaming"
-
-        var prefs: SharedPreferences =
-            Utils.getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            private set
+        val prefs: SharedPreferences =
+            Utils.getContext().getSharedPreferences(Constants.PREFS_SETTING, Context.MODE_PRIVATE)
 
         private val preferenceChangeListeners =
             mutableListOf<WeakReference<OnSharedPreferenceChangeListener>>()
@@ -85,14 +82,14 @@ sealed class Setting<out T : Any>(
             onPreferenceChanged(preferences, key.orEmpty())
         }
 
+        private var async = true
+
         init {
             prefs.registerOnSharedPreferenceChangeListener(innerListener)
         }
 
-        fun reload() {
-            prefs = Utils.getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            all.forEach { it.load() }
-            prefs.registerOnSharedPreferenceChangeListener(innerListener)
+        fun asyncExecuteOnChangeAction(async: Boolean) {
+            this.async = async
         }
 
         private fun onPreferenceChanged(preferences: SharedPreferences, key: String) {
@@ -100,7 +97,7 @@ sealed class Setting<out T : Any>(
             all.find { it.key == key }?.run {
                 load()
                 SettingsSyncHelper.sync(key to get())
-                executeOnChangeAction(true)
+                executeOnChangeAction(async)
             }
             preferenceChangeListeners.forEach {
                 it.get()?.onSharedPreferenceChanged(preferences, key)

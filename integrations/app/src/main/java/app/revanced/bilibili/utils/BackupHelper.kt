@@ -1,16 +1,19 @@
 package app.revanced.bilibili.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
+import android.net.Uri
+import androidx.documentfile.provider.DocumentFile
 import app.revanced.bilibili.patches.SplashPatch
-import app.revanced.bilibili.settings.Setting
+import app.revanced.bilibili.settings.*
+import com.android.internal.util.XmlUtils
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
-import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 import java.util.zip.ZipOutputStream
@@ -29,15 +32,40 @@ object BackupHelper {
     private val tempFile: File
         get() = File(Utils.getContext().getExternalFilesDir(null), "biliroaming_backup.tmp")
 
+    private val Any?.typeDescriptor: String
+        get() = when (this) {
+            is Boolean -> "Z"
+            is Int -> "I"
+            is Long -> "J"
+            is Float -> "F"
+            is String -> "LS"
+            is Set<*> -> "LSS"
+            else -> ""
+        }
+
     fun backup(output: OutputStream) {
         val zipOut = ZipOutputStream(output)
         zipOut.setLevel(5)
         val metaInfo = JSONObject()
-        metaInfo.put("version", 1)
+        metaInfo.put("version", 2)
         metaInfo.put("time", System.currentTimeMillis())
         val items = JSONArray()
         metaInfo.put("items", items)
 
+        fun JSONArray.mergeFrom(prefs: SharedPreferences) = prefs.all.forEach { (k, v) ->
+            put(JSONObject().apply {
+                put("k", k)
+                put("v", if (v is Set<*>) JSONArray(v) else v)
+                put("t", v.typeDescriptor)
+            })
+        }
+
+        val settings = JSONArray().apply { mergeFrom(Setting.prefs) }
+        metaInfo.put("settings", settings)
+        val videoHistory = JSONArray().apply { mergeFrom(vhPrefs) }
+        metaInfo.put("video_history", videoHistory)
+
+        @Suppress("UNUSED_VARIABLE")
         val backupPrefsIfExist = { name: String, blkv: Boolean ->
             val prefsFile = prefsPath(name, blkv)
             if (prefsFile.isFile) {
@@ -65,18 +93,64 @@ object BackupHelper {
             }
         }
 
-        backupPrefsIfExist(Setting.PREFS_NAME, false)
-        backupPrefsIfExist(Constants.PREFS_VH, false)
         backupFileIfExist(SubtitleParamsCache.FONT_FILE)
         backupFileIfExist(File(Utils.getContext().filesDir, SplashPatch.SPLASH_IMAGE))
         backupFileIfExist(File(Utils.getContext().filesDir, SplashPatch.LOGO_IMAGE))
 
         zipOut.putNextEntry(ZipEntry("backup.json"))
-        zipOut.write(metaInfo.toString().toByteArray())
+        zipOut.write(metaInfo.toString(2).toByteArray())
         zipOut.finish()
     }
 
-    fun restore(input: InputStream) {
+    @Suppress("UNCHECKED_CAST")
+    private fun SharedPreferences.Editor.mergePrefsItem(key: String, value: Any?, isSetting: Boolean = true) {
+        val setting = if (isSetting) Setting.all.find { it.key == key } else null
+        if (value is Boolean && (!isSetting || setting is BooleanSetting)) {
+            putBoolean(key, value)
+        } else if (value is Int && (!isSetting || setting is IntSetting)) {
+            putInt(key, value)
+        } else if (value is Long && (!isSetting || setting is LongSetting)) {
+            putLong(key, value)
+        } else if (value is Float && (!isSetting || setting is FloatSetting)) {
+            putFloat(key, value)
+        } else if (value is String && (!isSetting || setting is StringSetting)) {
+            putString(key, value)
+        } else if (value is Set<*> && (!isSetting || setting is StringSetSetting)) {
+            putStringSet(key, value as Set<String>)
+        } else if (value != null) {
+            Logger.warn { "Invalid prefs item ignored, key: $key, value: $value" }
+        }
+    }
+
+    private fun SharedPreferences.Editor.mergeJsonItem(key: String, value: Any?, type: String) {
+        if (value is Boolean && type == "Z") {
+            putBoolean(key, value)
+        } else if (value is Number && type == "I") {
+            putInt(key, value.toInt())
+        } else if (value is Number && type == "J") {
+            putLong(key, value.toLong())
+        } else if (value is Number && type == "F") {
+            putFloat(key, value.toFloat())
+        } else if (value is String && type == "LS") {
+            putString(key, value)
+        } else if (value is JSONArray && type == "LSS") {
+            putStringSet(key, value.asSequence<String>().toSet())
+        } else if (value != null) {
+            Logger.warn { "Invalid json item ignored, key: $key, value: $value, type: $type" }
+        }
+    }
+
+    @SuppressLint("ApplySharedPref")
+    fun restore(input: InputStream, uri: Uri) {
+        val backupType = (DocumentFile.fromSingleUri(Utils.getContext(), uri)?.name
+            ?: uri.toString()).substringAfterLast('.').lowercase()
+        if (backupType == "xml") {
+            val map = XmlUtils.readMapXml(input)
+            Setting.prefs.edit(commit = true) {
+                map.forEach { (k, v) -> mergePrefsItem(k, v) }
+            }
+            return
+        }
         val tempFile = tempFile.apply { delete() }
         tempFile.outputStream().use { input.copyTo(it) }
         val zipFile = ZipFile(tempFile)
@@ -87,14 +161,23 @@ object BackupHelper {
         Logger.debug { "backup version: $version" }
 
         val time = metaInfo.optLong("time")
-        Logger.debug {
-            val formatTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                .format(Date(time))
-            "backup time: $formatTime"
-        }
+        Logger.debug { "backup time: ${Date(time).format()}" }
 
         val items = metaInfo.optJSONArray("items")
         Logger.debug { "backup items: ${items?.toString(2)}" }
+
+        val settingPrefs = Setting.prefs.edit()
+        val vhPrefs = vhPrefs.edit()
+
+        fun JSONArray.exportTo(prefs: SharedPreferences.Editor) = forEach {
+            val key = it.optString("k")
+            val value = it.opt("v")
+            val type = it.optString("t")
+            prefs.mergeJsonItem(key, value, type)
+        }
+
+        metaInfo.optJSONArray("settings")?.exportTo(settingPrefs)
+        metaInfo.optJSONArray("video_history")?.exportTo(vhPrefs)
 
         items?.forEach { item ->
             when (val type = item.optString("type")) {
@@ -102,10 +185,25 @@ object BackupHelper {
                     val name = item.optString("name")
                     val blkv = type == TYPE_BLKV
                     val entryName = if (blkv) "$TYPE_BLKV/$name.blkv" else "$TYPE_PREFS/$name.xml"
-                    val prefsPath = prefsPath(name, blkv)
-                    zipFile.entry(entryName).use { input ->
-                        prefsPath.outputStream().use { output ->
-                            input.copyTo(output)
+                    @Suppress("CascadeIf")
+                    if (name == Constants.PREFS_SETTING) {
+                        zipFile.entry(entryName).use { input ->
+                            XmlUtils.readMapXml(input).forEach { (k, v) ->
+                                settingPrefs.mergePrefsItem(k, v)
+                            }
+                        }
+                    } else if (name == Constants.PREFS_VH) {
+                        zipFile.entry(entryName).use { input ->
+                            XmlUtils.readMapXml(input).forEach { (k, v) ->
+                                vhPrefs.mergePrefsItem(k, v, isSetting = false)
+                            }
+                        }
+                    } else {
+                        val prefsPath = prefsPath(name, blkv)
+                        zipFile.entry(entryName).use { input ->
+                            prefsPath.outputStream().use { output ->
+                                input.copyTo(output)
+                            }
                         }
                     }
                 }
@@ -123,6 +221,9 @@ object BackupHelper {
                 else -> Logger.warn { "not supported backup item type: $type" }
             }
         }
+
+        settingPrefs.commit()
+        vhPrefs.commit()
 
         tempFile.delete()
     }

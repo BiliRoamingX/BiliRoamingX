@@ -15,8 +15,6 @@ import app.revanced.bilibili.utils.*
 import java.io.File
 import java.io.RandomAccessFile
 import java.nio.channels.FileChannel
-import java.text.SimpleDateFormat
-import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 object Accounts {
@@ -189,13 +187,12 @@ object Accounts {
         if (info.isBlacklist && info.banUntil.time > current) Utils.runOnMainThread {
             cachePrefs.edit { putBoolean(blockedKey, true) }
             userBlocked = true
-            val formatTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                .format(info.banUntil)
+            val banUntil = info.banUntil.format()
             val topActivity = ApplicationDelegate.getTopActivity()
             if (topActivity != null && !dialogShowing) {
                 AlertDialog.Builder(topActivity)
                     .setTitle(Utils.getString("biliroaming_blocked_title"))
-                    .setMessage(Utils.getString("biliroaming_blocked_description", formatTime))
+                    .setMessage(Utils.getString("biliroaming_blocked_description", banUntil))
                     .setNegativeButton(Utils.getString("biliroaming_get_it"), null)
                     .setPositiveButton(Utils.getString("biliroaming_view_reason")) { _, _ ->
                         val uri = Uri.parse("https://t.me/BiliRoamingServerBlacklistLog")

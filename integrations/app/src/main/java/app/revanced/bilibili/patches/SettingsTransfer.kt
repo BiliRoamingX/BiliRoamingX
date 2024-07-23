@@ -8,7 +8,7 @@ object SettingsTransfer {
     @Keep
     @JvmStatic
     fun debuggable(): Boolean {
-        if (!ApplicationDelegate.attached)
+        if (!ApplicationDelegate.attached())
             return false
         return Settings.Debug()
     }

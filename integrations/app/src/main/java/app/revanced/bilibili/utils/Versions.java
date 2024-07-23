@@ -44,4 +44,14 @@ public class Versions {
     public static boolean ge8_5_0() {
         return KtUtils.getVersionCode() >= 8050000;
     }
+
+    public static boolean atLeast(String version) {
+        String[] split = version.split("\\.");
+        if (split.length != 3)
+            return false;
+        int versionCode = Integer.parseInt(split[0]) * 1000_000
+                + Integer.parseInt(split[1]) * 10_000
+                + Integer.parseInt(split[2]) * 1_000;
+        return KtUtils.getVersionCode() >= versionCode;
+    }
 }

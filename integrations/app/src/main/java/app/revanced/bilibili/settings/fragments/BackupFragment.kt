@@ -6,16 +6,12 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import androidx.preference.Preference
 import app.revanced.bilibili.settings.Setting
 import app.revanced.bilibili.settings.search.annotation.SettingFragment
 import app.revanced.bilibili.utils.*
-import org.lsposed.hiddenapibypass.HiddenApiBypass
-import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 
 @SettingFragment("biliroaming_setting_backup")
 class BackupFragment : BiliRoamingBaseSettingFragment() {
@@ -29,8 +25,7 @@ class BackupFragment : BiliRoamingBaseSettingFragment() {
         findPreference<Preference>("backup")?.onClick {
             val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                 type = "application/zip"
-                val time = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault())
-                    .format(Date(System.currentTimeMillis()))
+                val time = Date(System.currentTimeMillis()).format("yyyyMMddHHmmss")
                 val identifier = when (Utils.getMobiApp()) {
                     "android_i" -> "Play"
                     "android_hd" -> "HD"
@@ -51,8 +46,9 @@ class BackupFragment : BiliRoamingBaseSettingFragment() {
             true
         }
         findPreference<Preference>("restore")?.onClick {
-            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-                type = "application/zip"
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                type = "*/*"
+                putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/zip", "text/xml"))
                 addCategory(Intent.CATEGORY_OPENABLE)
             }
             try {
@@ -87,26 +83,24 @@ class BackupFragment : BiliRoamingBaseSettingFragment() {
             }
         } else if (requestCode == REQ_CODE_RESTORE) {
             Utils.async {
+                restoring = true
+                Setting.asyncExecuteOnChangeAction(false)
                 runCatching {
                     (resolver.openInputStream(uri)
                         ?: error("stream open failed, uri: $uri")).use { input ->
-                        BackupHelper.restore(input)
+                        BackupHelper.restore(input, uri)
                     }
-                }.mapCatching {
-                    restoring = true
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                        HiddenApiBypass.addHiddenApiExemptions("Landroid/content/Context;")
-                    Utils.getContext().callMethod("reloadSharedPreferences")
-                    Setting.reload()
-                    restoring = false
                 }.onSuccess {
-                    Setting.all.forEach { it.executeOnChangeAction(false) }
                     Utils.runOnMainThread {
                         showNeedRebootDialog()
                     }
                 }.onFailure {
                     Logger.error(it) { "restore failed" }
                     Toasts.showShortWithId("biliroaming_toast_restore_failed")
+                }
+                Utils.runOnMainThread {
+                    Setting.asyncExecuteOnChangeAction(true)
+                    restoring = false
                 }
             }
         }

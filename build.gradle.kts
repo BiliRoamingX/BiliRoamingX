@@ -26,13 +26,26 @@ tasks.register<Delete>("clean") {
 }
 
 tasks.register<Sync>("dist") {
+    distTask(true)
+}
+
+tasks.register<Sync>("distDev") {
+    distTask(false)
+}
+
+fun Sync.distTask(release: Boolean) {
     group = "build"
-    dependsOn(":integrations:app:assembleRelease")
+    if (release) {
+        dependsOn(":integrations:app:assembleRelease")
+    } else {
+        dependsOn(":integrations:app:assembleDev")
+    }
     dependsOn(":patches:dist")
-    from(project(":integrations:app").layout.buildDirectory.dir("outputs/apk/release")) {
+    val path = if (release) "release" else "dev"
+    from(project(":integrations:app").layout.buildDirectory.dir("outputs/apk/$path")) {
         include("*-$version.apk")
     }
-    from(project(":integrations:app").layout.buildDirectory.dir("outputs/mapping/release")) {
+    from(project(":integrations:app").layout.buildDirectory.dir("outputs/mapping/$path")) {
         include("mapping.txt")
     }
     from(project(":patches").layout.buildDirectory.dir("libs")) {

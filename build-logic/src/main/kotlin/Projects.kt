@@ -42,6 +42,9 @@ private inline fun <reified T : BaseExtension> Project.setupBaseModule(crossinli
             minSdk = Versions.MIN_SDK
             targetSdk = Versions.TARGET_SDK
         }
+        buildTypes {
+            create("dev")
+        }
         (this as T).block()
     }
 }

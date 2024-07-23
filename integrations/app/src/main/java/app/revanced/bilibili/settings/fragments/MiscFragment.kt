@@ -64,6 +64,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment() {
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
         val uri = data?.data
         if (requestCode == SELECTION_SPLASH || requestCode == SELECTION_LOGO) {
@@ -143,6 +144,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment() {
                 }
                 getButton(Dialog.BUTTON_NEUTRAL)?.onClick {
                     try {
+                        @Suppress("DEPRECATION")
                         startActivityForResult(
                             Intent.createChooser(Intent().apply {
                                 action = Intent.ACTION_GET_CONTENT
@@ -164,6 +166,7 @@ class MiscFragment : BiliRoamingBaseSettingFragment() {
     }
 
     private fun selectImage(request: Int) = try {
+        @Suppress("DEPRECATION")
         startActivityForResult(Intent.createChooser(Intent().apply {
             action = Intent.ACTION_GET_CONTENT
             type = "image/*"

@@ -15,6 +15,7 @@ public class Constants {
     public static final int DEF_DYN_LINES_TO_ALL = 10;
     public static final String OFFICIAL_SIG_MD5 = "7194d531cbe7960a22007b9f6bdaa38b";
     public static final String PRE_BUILD_SIG_MD5 = "d6cd98a96eee91706e8689ddffb9bf68";
+    public static final String PREFS_SETTING = "biliroaming";
     public static final String PREFS_VH = "biliroaming_vh";
     public static final String GITHUB_SPEEDUP_URL = "https://mirror.ghproxy.com";
 }

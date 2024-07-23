@@ -1,5 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
+import com.android.build.gradle.internal.tasks.R8Task
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -46,13 +48,7 @@ setupAppModule {
     }
 
     buildTypes {
-        release {
-            isMinifyEnabled = true
-            signingConfig = signingConfigs.getByName("debug")
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+        all {
             val flags = arrayOf(
                 "-Wl,--gc-sections",
                 "-flto",
@@ -74,6 +70,22 @@ setupAppModule {
                 cppFlags += flags
                 arguments += args
             }
+        }
+        getByName("dev") {
+            isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("debug")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android.txt"),
+                "proguard-rules-dev.pro"
+            )
+        }
+        release {
+            isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("debug")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
         applicationVariants.all {
             outputs.all {
@@ -102,6 +114,15 @@ setupAppModule {
     externalNativeBuild {
         cmake {
             path = file("src/main/jni/CMakeLists.txt")
+        }
+    }
+}
+
+gradle.taskGraph.whenReady {
+    if (gradle.taskGraph.allTasks.any { it.name == "distDev" }) {
+        tasks.withType<R8Task> {
+            useFullR8.allowChanges()
+            useFullR8 = false
         }
     }
 }
