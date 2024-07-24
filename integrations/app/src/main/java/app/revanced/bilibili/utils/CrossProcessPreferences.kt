@@ -15,10 +15,9 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
         listeners.forEach {
             it.get()?.onSharedPreferenceChanged(sharedPreferences, key)
         }
-        val op = if (sharedPreferences.contains(key)) 0 else 1
-        val value = if (op == 1) null else sharedPreferences.all[key]
+        val value = sharedPreferences.all[key]
         val clear = key == null
-        PreferenceSyncer.sync(name, clear, arrayListOf(PrefsOp(key.orEmpty(), value, op)))
+        PreferenceSyncer.sync(name, clear, arrayListOf(PrefsPair(key.orEmpty(), value)))
     }
     private val listeners = mutableListOf<WeakReference<SharedPreferences.OnSharedPreferenceChangeListener>>()
 
@@ -37,25 +36,18 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
         }
     }
 
-    private class PrefsOp(
+    private class PrefsPair(
         val key: String,
-        val value: Any?,
-        /**
-         * 0 put, 1 remove
-         */
-        val op: Int = 0,
+        val value: Any?, // should serializable, null to remove
     ) : Serializable {
+        override fun toString() = "$key=$value"
         override fun hashCode() = key.hashCode()
         override fun equals(other: Any?): Boolean {
             if (this === other)
                 return true
-            if (other !is PrefsOp)
+            if (other !is PrefsPair)
                 return false
             return key == other.key
-        }
-
-        override fun toString(): String {
-            return "PrefsOp{key: $key, value: $value, op: $op}"
         }
     }
 
@@ -98,7 +90,7 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
                 context.registerReceiverCompat(PreferenceUpdater(), IntentFilter(ACTION))
             }
 
-            fun update(prefsName: String, clear: Boolean, commit: Boolean, prefsPairs: ArrayList<PrefsOp>) {
+            fun update(prefsName: String, clear: Boolean, commit: Boolean, prefsPairs: ArrayList<PrefsPair>) {
                 context.sendBroadcast(Intent(ACTION).apply {
                     `package` = context.packageName
                     putExtra(EXTRA_PREFS_NAME, prefsName)
@@ -113,7 +105,7 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
         @SuppressLint("ApplySharedPref")
         override fun onReceive(context: Context, intent: Intent) {
             val prefsName = intent.getStringExtra(EXTRA_PREFS_NAME).orEmpty()
-            val prefsPairs = intent.serializableExtra<ArrayList<PrefsOp>>(EXTRA_PREFS_PAIRS)
+            val prefsPairs = intent.serializableExtra<ArrayList<PrefsPair>>(EXTRA_PREFS_PAIRS)
             val clear = intent.getBooleanExtra(EXTRA_PREFS_CLEAR, false)
             val commit = intent.getBooleanExtra(EXTRA_PREFS_COMMIT, false)
             Logger.debug { "PreferenceUpdater, received update preferences request, prefsName: $prefsName, clear:$clear, commit: $commit, prefsPairs: $prefsPairs" }
@@ -129,8 +121,7 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
             prefsPairs?.forEach { p ->
                 val key = p.key
                 val value = p.value
-                val op = p.op
-                if (op == 1) {
+                if (value == null) {
                     prefs.remove(key)
                 } else when (value) {
                     is Boolean -> prefs.putBoolean(key, value)
@@ -157,7 +148,7 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
                 context.registerReceiverCompat(PreferenceSyncer(), IntentFilter(ACTION))
             }
 
-            fun sync(prefsName: String, clear: Boolean, prefsPairs: ArrayList<PrefsOp>) {
+            fun sync(prefsName: String, clear: Boolean, prefsPairs: ArrayList<PrefsPair>) {
                 context.sendBroadcast(Intent(ACTION).apply {
                     `package` = context.packageName
                     putExtra(EXTRA_PREFS_NAME, prefsName)
@@ -169,7 +160,7 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
 
         override fun onReceive(context: Context, intent: Intent) {
             val prefsName = intent.getStringExtra(EXTRA_PREFS_NAME)
-            val prefsPairs = intent.serializableExtra<ArrayList<PrefsOp>>(EXTRA_PREFS_PAIRS)
+            val prefsPairs = intent.serializableExtra<ArrayList<PrefsPair>>(EXTRA_PREFS_PAIRS)
             val clear = intent.getBooleanExtra(EXTRA_PREFS_CLEAR, false)
             Logger.debug { "PreferenceSyncer, received sync preference request, pname: ${Utils.currentProcessName()}, prefsName: $prefsName, clear: $clear, prefsPairs: $prefsPairs" }
             val prefs = prefsCache.find { it.name == prefsName } ?: return
@@ -186,8 +177,7 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
                 prefsPairs?.forEach { p ->
                     val key = p.key
                     val value = p.value
-                    val op = p.op
-                    if (op == 1) {
+                    if (value == null) {
                         values.remove(key)
                     } else {
                         values[key] = value
@@ -200,7 +190,7 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
         }
     }
 
-    override fun getAll(): MutableMap<String, *> {
+    override fun getAll(): Map<String, *> {
         return if (Utils.isMainProcess()) {
             prefs.all
         } else synchronized(lock) {
@@ -284,7 +274,7 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
         private val editorLock = Any()
 
         @GuardedBy("editorLock")
-        private val editOps = hashMapOf<String, PrefsOp>()
+        private val editPairs = hashMapOf<String, PrefsPair>()
 
         @GuardedBy("editorLock")
         private var clear = false
@@ -293,16 +283,17 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
             if (Utils.isMainProcess()) {
                 delegate.putString(key, value)
             } else synchronized(editorLock) {
-                editOps.compute(key) { _, _ -> PrefsOp(key, value) }
+                editPairs[key] = PrefsPair(key, value)
             }
             return this
         }
 
-        override fun putStringSet(key: String, values: MutableSet<String>?): SharedPreferences.Editor {
+        override fun putStringSet(key: String, values: Set<String>?): SharedPreferences.Editor {
             if (Utils.isMainProcess()) {
                 delegate.putStringSet(key, values)
             } else synchronized(editorLock) {
-                editOps.compute(key) { _, _ -> PrefsOp(key, values) }
+                val value = values?.let { HashSet(it) }
+                editPairs[key] = PrefsPair(key, value)
             }
             return this
         }
@@ -311,7 +302,7 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
             if (Utils.isMainProcess()) {
                 delegate.putInt(key, value)
             } else synchronized(editorLock) {
-                editOps.compute(key) { _, _ -> PrefsOp(key, value) }
+                editPairs[key] = PrefsPair(key, value)
             }
             return this
         }
@@ -320,7 +311,7 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
             if (Utils.isMainProcess()) {
                 delegate.putLong(key, value)
             } else synchronized(editorLock) {
-                editOps.compute(key) { _, _ -> PrefsOp(key, value) }
+                editPairs[key] = PrefsPair(key, value)
             }
             return this
         }
@@ -329,7 +320,7 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
             if (Utils.isMainProcess()) {
                 delegate.putFloat(key, value)
             } else synchronized(editorLock) {
-                editOps.compute(key) { _, _ -> PrefsOp(key, value) }
+                editPairs[key] = PrefsPair(key, value)
             }
             return this
         }
@@ -338,7 +329,7 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
             if (Utils.isMainProcess()) {
                 delegate.putBoolean(key, value)
             } else synchronized(editorLock) {
-                editOps.compute(key) { _, _ -> PrefsOp(key, value) }
+                editPairs[key] = PrefsPair(key, value)
             }
             return this
         }
@@ -347,7 +338,7 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
             if (Utils.isMainProcess()) {
                 delegate.remove(key)
             } else synchronized(editorLock) {
-                editOps.compute(key) { _, _ -> PrefsOp(key, null, op = 1) }
+                editPairs[key] = PrefsPair(key, null)
             }
             return this
         }
@@ -365,7 +356,7 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
             return if (Utils.isMainProcess()) {
                 delegate.commit()
             } else synchronized(editorLock) {
-                PreferenceUpdater.update(prefsName, clear, true, ArrayList(editOps.values))
+                PreferenceUpdater.update(prefsName, clear, true, ArrayList(editPairs.values))
                 true
             }
         }
@@ -374,7 +365,7 @@ class CrossProcessPreferences(private val name: String) : SharedPreferences {
             if (Utils.isMainProcess()) {
                 delegate.apply()
             } else synchronized(editorLock) {
-                PreferenceUpdater.update(prefsName, clear, false, ArrayList(editOps.values))
+                PreferenceUpdater.update(prefsName, clear, false, ArrayList(editPairs.values))
             }
         }
     }
