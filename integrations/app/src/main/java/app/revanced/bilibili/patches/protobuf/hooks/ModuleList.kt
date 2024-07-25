@@ -17,6 +17,7 @@ object ModuleList : MossHook<ListReq, ListReply>() {
             "android_byteeffect_license",
             "android_byteeffect_model",
             "android_aurora_resources",
+            "android_aurora_thirdparty",
             "android_bmm_",
             "android_mon_",
         ),
