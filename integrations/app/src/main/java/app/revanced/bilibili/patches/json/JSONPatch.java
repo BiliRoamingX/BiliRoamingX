@@ -26,13 +26,11 @@ import com.bilibili.pegasus.api.model.ChannelV2;
 import com.bilibili.search.api.DefaultKeyword;
 import com.bilibili.search.api.SearchRank;
 import com.bilibili.search.api.SearchReferral;
-import com.bilibili.video.story.StoryDetail;
 import com.bilibili.video.story.api.StoryFeedResponse;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -163,7 +161,7 @@ public class JSONPatch {
         } else if (!Utils.isHd() && data instanceof OgvApiResponseV2 ogvApiResponseV2) {
             unlockOgvResponseV2(ogvApiResponseV2);
         } else if (data instanceof StoryFeedResponse feedResponse) {
-            filterStory(feedResponse);
+            PegasusPatch.filterStory(feedResponse);
         } else if ((!Versions.ge7_64_0() && (data instanceof SearchReferral || data instanceof DefaultKeyword)) || (Versions.ge7_39_0() && data instanceof com.bilibili.search2.api.SearchReferral)) {
             if (Settings.PurifySearch.get())
                 return null;
@@ -544,31 +542,5 @@ public class JSONPatch {
         if (params == null || params.isEmpty()) return;
         for (int i = 0; i < params.size(); i++)
             params.get(i).setPlayableType(0);
-    }
-
-    private static void filterStory(StoryFeedResponse storyFeedResponse) {
-        Set<? extends String> filters = Settings.FilterStory.get();
-        List<StoryDetail> items;
-        if (!filters.isEmpty() && (items = storyFeedResponse.getItems()) != null) {
-            Iterator<StoryDetail> it = items.iterator();
-            while (it.hasNext()) {
-                StoryDetail story = it.next();
-                if (Settings.RemoveChargeButton.get()) {
-                    StoryDetail.Owner owner = story.getOwner();
-                    if (owner != null) {
-                        StoryDetail.Charge charge = owner.getCharge();
-                        if (charge != null)
-                            charge.setShow(false);
-                    }
-                }
-                String aGoto = story.getGoto();
-                if (!TextUtils.isEmpty(aGoto))
-                    for (String filter : filters)
-                        if (aGoto.contains(filter)) {
-                            it.remove();
-                            break;
-                        }
-            }
-        }
     }
 }

@@ -19,7 +19,7 @@
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.FilterHomeRcmdByKeywordFragment"
             android:key="relate_keyword_filter"
-            android:title="@string/biliroaming_video_relate_filter_title"
-            android:summary="@string/biliroaming_video_relate_filter_summary" />
+            android:title="@string/biliroaming_filter_by_keyword_title"
+            android:summary="@string/biliroaming_reapply_home_filter_summary" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

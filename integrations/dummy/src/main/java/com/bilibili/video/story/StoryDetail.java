@@ -14,9 +14,21 @@ public final class StoryDetail {
     @JSONField(name = "goto")
     @Nullable
     private String goto1;
+
     @JSONField(name = "owner")
     @Nullable
     private Owner owner;
+
+    @JSONField(name = "stat")
+    @Nullable
+    private Stat stat;
+
+    @JSONField(name = "title")
+    @Nullable
+    private String title;
+
+    @JSONField(name = "duration")
+    private long duration;
 
     @Nullable
     public final String getGoto() {
@@ -36,12 +48,33 @@ public final class StoryDetail {
         this.owner = owner;
     }
 
+    @Nullable
+    public final Stat getStat() {
+        return this.stat;
+    }
+
+    @Nullable
+    public final String getTitle() {
+        return this.title;
+    }
+
+    public final long getDuration() {
+        return this.duration;
+    }
+
     @Keep
     /* loaded from: classes12.dex */
     public static final class Owner {
         @JSONField(name = "upower")
         @Nullable
         private Charge charge;
+
+        @JSONField(name = "mid")
+        private long mid;
+
+        @JSONField(name = "name")
+        @Nullable
+        private String name;
 
         @Nullable
         public final Charge getCharge() {
@@ -50,6 +83,15 @@ public final class StoryDetail {
 
         public final void setCharge(@Nullable Charge charge) {
             this.charge = charge;
+        }
+
+        public final long getMid() {
+            return this.mid;
+        }
+
+        @Nullable
+        public final String getName() {
+            return this.name;
         }
     }
 
@@ -130,6 +172,134 @@ public final class StoryDetail {
 
         public final void setVersion(int i2) {
             this.version = i2;
+        }
+    }
+
+    @Keep
+    /* loaded from: classes15.dex */
+    public static final class Stat {
+        public static final int $stable = 8;
+
+        @JSONField(name = "aid")
+        private long aid;
+
+        @JSONField(name = "coin")
+        private int coin;
+
+        @JSONField(name = "danmaku")
+        private long danmaku;
+
+        @JSONField(name = "favorite")
+        private int favorite;
+
+        @JSONField(name = "his_rank")
+        private int hisRank;
+
+        @JSONField(name = "like")
+        private long like;
+
+        @JSONField(name = "now_rank")
+        private int rank;
+
+        @JSONField(name = "reply")
+        private int reply;
+
+        @JSONField(name = "follow")
+        private long seasonFollow;
+
+        @JSONField(name = "share")
+        private int share;
+
+        /* renamed from: view, reason: collision with root package name */
+        @JSONField(name = "view")
+        private long f188885view;
+
+        public final long getAid() {
+            return this.aid;
+        }
+
+        public final int getCoin() {
+            return this.coin;
+        }
+
+        public final long getDanmaku() {
+            return this.danmaku;
+        }
+
+        public final int getFavorite() {
+            return this.favorite;
+        }
+
+        public final int getHisRank() {
+            return this.hisRank;
+        }
+
+        public final long getLike() {
+            return this.like;
+        }
+
+        public final int getRank() {
+            return this.rank;
+        }
+
+        public final int getReply() {
+            return this.reply;
+        }
+
+        public final long getSeasonFollow() {
+            return this.seasonFollow;
+        }
+
+        public final int getShare() {
+            return this.share;
+        }
+
+        public final long getView() {
+            return this.f188885view;
+        }
+
+        public final void setAid(long j14) {
+            this.aid = j14;
+        }
+
+        public final void setCoin(int i14) {
+            this.coin = i14;
+        }
+
+        public final void setDanmaku(long j14) {
+            this.danmaku = j14;
+        }
+
+        public final void setFavorite(int i14) {
+            this.favorite = i14;
+        }
+
+        public final void setHisRank(int i14) {
+            this.hisRank = i14;
+        }
+
+        public final void setLike(long j14) {
+            this.like = j14;
+        }
+
+        public final void setRank(int i14) {
+            this.rank = i14;
+        }
+
+        public final void setReply(int i14) {
+            this.reply = i14;
+        }
+
+        public final void setSeasonFollow(long j14) {
+            this.seasonFollow = j14;
+        }
+
+        public final void setShare(int i14) {
+            this.share = i14;
+        }
+
+        public final void setView(long j14) {
+            this.f188885view = j14;
         }
     }
 }

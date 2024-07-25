@@ -28,6 +28,9 @@ class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
         val applyToPopularSwitch = switchPrefsItem(string("biliroaming_apply_to_popular_title"))
             .let { content.addView(it.first); it.second }
         applyToPopularSwitch.isChecked = Settings.HomeFilterApplyToPopular()
+        val applyToStorySwitch = switchPrefsItem(string("biliroaming_apply_to_story_title"))
+            .let { content.addView(it.first); it.second }
+        applyToStorySwitch.isChecked = Settings.HomeFilterApplyToStory()
 
         content.addView(textInputTitle(string("biliroaming_low_play_count_summary")))
         val lowPlayCountInput = textInputItem(string("biliroaming_low_play_count_title"))
@@ -44,6 +47,16 @@ class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
             ?.let { shortDurationInput.setText(it.toString()) }
         Settings.LongDurationLimit().takeIf { it > 0 }
             ?.let { longDurationInput.setText(it.toString()) }
+
+        content.addView(textInputTitle(string("biliroaming_hide_duration_story_summary")))
+        val shortDurationInputStory = textInputItem(string("biliroaming_short_duration_story_title"))
+            .let { content.addView(it.first); it.second }
+        val longDurationInputStory = textInputItem(string("biliroaming_long_duration_story_title"))
+            .let { content.addView(it.first); it.second }
+        Settings.ShortDurationLimitStory().takeIf { it > 0 }
+            ?.let { shortDurationInputStory.setText(it.toString()) }
+        Settings.LongDurationLimitStory().takeIf { it > 0 }
+            ?.let { longDurationInputStory.setText(it.toString()) }
 
         content.addView(textInputTitle(string("biliroaming_keywords_filter_summary")))
         val (titleGroup, titleRegexModeSwitch) = content.addKeywordGroup(
@@ -89,6 +102,8 @@ class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
             val lowPlayCount = lowPlayCountInput.text.toString().toLongOrNull() ?: 0
             val shortDuration = shortDurationInput.text.toString().toIntOrNull() ?: 0
             val longDuration = longDurationInput.text.toString().toIntOrNull() ?: 0
+            val shortDurationStory = shortDurationInputStory.text.toString().toIntOrNull() ?: 0
+            val longDurationStory = longDurationInputStory.text.toString().toIntOrNull() ?: 0
 
             val titles = titleGroup.getKeywords()
             val titleRegexMode = titleRegexModeSwitch.isChecked
@@ -112,6 +127,8 @@ class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
             Settings.LowPlayCountLimit.save(lowPlayCount)
             Settings.ShortDurationLimit.save(shortDuration)
             Settings.LongDurationLimit.save(longDuration)
+            Settings.ShortDurationLimitStory.save(shortDurationStory)
+            Settings.LongDurationLimitStory.save(longDurationStory)
             Settings.HomeRcmdFilterTitle.save(titles)
             Settings.HomeRcmdFilterReason.save(reasons)
             Settings.HomeRcmdFilterUid.save(uidGroup.getKeywords())
@@ -123,11 +140,13 @@ class FilterHomeRcmdByKeywordFragment : BaseWidgetSettingFragment() {
             Settings.HomeRcmdFilterUpRegexMode.save(upRegexMode)
             Settings.HomeFilterApplyToVideo.save(applyToRelateSwitch.isChecked)
             Settings.HomeFilterApplyToPopular.save(applyToPopularSwitch.isChecked)
+            Settings.HomeFilterApplyToStory.save(applyToStorySwitch.isChecked)
 
-            if (from == "home")
-                Toasts.showShortWithId("biliroaming_save_success_and_refresh_home")
-            else if (from == "popular")
-                Toasts.showShortWithId("biliroaming_save_success_and_refresh_popular")
+            when (from) {
+                "home" -> Toasts.showShortWithId("biliroaming_save_success_and_refresh_home")
+                "popular" -> Toasts.showShortWithId("biliroaming_save_success_and_refresh_popular")
+                "story" -> Toasts.showShortWithId("biliroaming_save_ok")
+            }
             parentFragmentManager.popBackStack()
         }
 

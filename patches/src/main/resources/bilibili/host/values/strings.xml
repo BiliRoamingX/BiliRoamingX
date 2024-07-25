@@ -58,8 +58,9 @@
     <string name="biliroaming_drawer_summary">移动后，可以点击首页的头像打开侧边栏。关闭时，需要重启两次客户端才能复原。如果无法还原，请重启手机。</string>
     <string name="biliroaming_purify_game_title">隐藏游戏中心</string>
     <string name="biliroaming_filter_home_recommend_title">过滤推荐内容</string>
-    <string name="biliroaming_filter_home_recommend_by_type_title">按类型过滤</string>
-    <string name="biliroaming_filter_home_recommend_by_type_hint">选择需要移除的类型</string>
+    <string name="biliroaming_filter_by_type_title">按类型过滤</string>
+    <string name="biliroaming_filter_by_type_hint">选择需要移除的类型</string>
+    <string name="biliroaming_filter_by_keyword_title">按关键词过滤</string>
     <string name="biliroaming_disable_auto_refresh_title">禁止自动刷新</string>
     <string name="biliroaming_disable_auto_refresh_summary">禁止在退至后台、切换其他页面一段时间后返回或热重启时自动刷新页面</string>
     <string name="biliroaming_toast_prefix">哔哩漫游X：</string>
@@ -68,14 +69,17 @@
     <string name="biliroaming_keyword_group_delete">删除</string>
     <string name="biliroaming_keyword_group_clear">清空</string>
     <string name="biliroaming_regex_mode">正则模式</string>
-    <string name="biliroaming_filter_home_recommend_by_keyword_title">按关键词过滤</string>
     <string name="biliroaming_apply_to_relate_title">同时应用于视频下方推荐</string>
     <string name="biliroaming_apply_to_popular_title">同时应用于首页热门</string>
+    <string name="biliroaming_apply_to_story_title">同时应用于竖屏模式视频</string>
     <string name="biliroaming_low_play_count_summary">隐藏首页推送低于指定播放量的视频</string>
     <string name="biliroaming_low_play_count_title">隐藏首页低播放量视频</string>
     <string name="biliroaming_hide_duration_summary">隐藏首页推送指定时长的视频（秒）</string>
     <string name="biliroaming_long_duration_title">隐藏首页视频时长大于</string>
     <string name="biliroaming_short_duration_title">隐藏首页视频时长小于</string>
+    <string name="biliroaming_hide_duration_story_summary">隐藏竖屏模式指定时长的视频（秒）</string>
+    <string name="biliroaming_long_duration_story_title">隐藏竖屏模式视频时长大于</string>
+    <string name="biliroaming_short_duration_story_title">隐藏竖屏模式视频时长小于</string>
     <string name="biliroaming_keywords_filter_summary">过滤首页推送中包含指定关键词的内容</string>
     <string name="biliroaming_keyword_group_name_content">内容</string>
     <string name="biliroaming_keyword_group_name_up">UP主</string>
@@ -90,9 +94,6 @@
     <string name="biliroaming_save_success_and_refresh_home">保存成功，刷新首页生效</string>
     <string name="biliroaming_customize_dynamic_title">动态页</string>
     <string name="biliroaming_filter_dynamic_category_title">动态过滤</string>
-    <string name="biliroaming_filter_dynamic_by_type_title">按类型过滤</string>
-    <string name="biliroaming_filter_dynamic_by_type_hint">选择需要移除的类型</string>
-    <string name="biliroaming_filter_dynamic_by_keyword_title">按关键词过滤</string>
     <string name="biliroaming_dynamic_prefer_video_tab">首选视频标签</string>
     <string name="biliroaming_dynamic_purify_city_title">移除同城标签</string>
     <string name="biliroaming_dynamic_purify_campus_title">移除校园标签</string>
@@ -198,8 +199,7 @@
     <string name="biliroaming_rm_video_relate_nothing_title">移除所有内容</string>
     <string name="biliroaming_rm_video_relate_nothing_summary">上个选项的基础上，将UP主投稿视频也移除</string>
     <string name="biliroaming_video_relate_title">视频下方推荐过滤</string>
-    <string name="biliroaming_video_relate_filter_title">按关键词过滤</string>
-    <string name="biliroaming_video_relate_filter_summary">复用首页推荐关键词过滤</string>
+    <string name="biliroaming_reapply_home_filter_summary">复用首页推荐关键词过滤</string>
     <string name="biliroaming_speed_override_title">自定义播放速度列表</string>
     <string name="biliroaming_speed_override_summary">同时应用到视频及听视频播放速度列表</string>
     <string name="biliroaming_speed_override_hint">空格分隔，例如：2 1.5 1，留空表示默认</string>
@@ -210,7 +210,7 @@
     <string name="biliroaming_default_speed_hint">例如：1.5，留空表示默认</string>
     <string name="biliroaming_long_press_speed_title">长按播放速度</string>
     <string name="biliroaming_long_press_speed_summary">自定义播放器长按播放速度</string>
-    <string name="biliroaming_speed_save_ok">保存成功，立即生效</string>
+    <string name="biliroaming_save_ok">保存成功，立即生效</string>
     <string name="biliroaming_update_title">更新</string>
     <string name="biliroaming_block_update_title">禁止APP检查官方更新</string>
     <string name="biliroaming_custom_update_title">允许检查预构建包更新</string>
@@ -234,8 +234,7 @@
     <string name="biliroaming_trial_vip_quality_title">无限试用会员画质</string>
     <string name="biliroaming_trial_vip_quality_summary">只解决试用次数问题，能否试用取决于官方接口，仅支持粉版，如不生效，尝试将播放器版本切换为旧版。</string>
     <string name="biliroaming_unstable_feature_title">实验性</string>
-    <string name="biliroaming_filter_story_title">过滤故事模式视频</string>
-    <string name="biliroaming_filter_story_summary">过滤故事模式（竖屏）下的视频</string>
+    <string name="biliroaming_filter_story_title">过滤竖屏模式视频</string>
     <string name="biliroaming_skin_title">启用自制主题</string>
     <string name="biliroaming_skin_json_pref_title">导入自制主题配置</string>
     <string name="biliroaming_skin_import_from_file">从json文件导入</string>
@@ -320,8 +319,6 @@
     <string name="biliroaming_block_popular_topic_list_title">移除热门话题列表</string>
     <string name="biliroaming_block_popular_rcmd_up_title">过滤推荐的UP主</string>
     <string name="biliroaming_block_popular_live_title">过滤推荐的直播</string>
-    <string name="biliroaming_filter_popular_by_keyword_title">按关键词过滤</string>
-    <string name="biliroaming_filter_popular_by_keyword_summary">复用首页推荐关键词过滤</string>
     <string name="biliroaming_save_success_and_refresh_popular">保存成功，刷新热门生效</string>
     <string name="biliroaming_splash_title">启动图</string>
     <string name="biliroaming_custom_splash_title">替换启动图</string>
@@ -338,7 +335,6 @@
     <string name="biliroaming_filter_comment_title">评论过滤</string>
     <string name="biliroaming_block_comment_only_at_title">屏蔽仅“@xxx”评论</string>
     <string name="biliroaming_block_comment_goods_title">屏蔽UP主带货评论</string>
-    <string name="biliroaming_filter_comment_by_keyword_title">按关键词过滤</string>
     <string name="biliroaming_block_comment_up_level_title">屏蔽用户等级过低的评论</string>
     <string name="biliroaming_up_level">%1$s级</string>
     <string name="biliroaming_disabled">禁用</string>

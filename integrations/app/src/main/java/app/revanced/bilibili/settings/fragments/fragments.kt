@@ -44,8 +44,8 @@ class FilterHomeRcmdByTypeFragment : BiliRoamingBaseSettingFragment()
 @SettingFragment("biliroaming_setting_filter_search_type")
 class FilterSearchTypeFragment : BiliRoamingBaseSettingFragment()
 
-@SettingFragment("biliroaming_setting_filter_story")
-class FilterStoryFragment : BiliRoamingBaseSettingFragment()
+@SettingFragment("biliroaming_setting_filter_story_by_type")
+class FilterStoryByTypeFragment : BiliRoamingBaseSettingFragment()
 
 @SettingFragment("biliroaming_setting_full_screen_quality_mobile")
 class FullScreenQualityMobileSettingFragment : BiliRoamingBaseSettingFragment()

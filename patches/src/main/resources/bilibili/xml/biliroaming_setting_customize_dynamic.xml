@@ -53,10 +53,10 @@
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.FilterDynamicByTypeFragment"
             android:key="filter_dynamic_by_type"
-            android:title="@string/biliroaming_filter_dynamic_by_type_title" />
+            android:title="@string/biliroaming_filter_by_type_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.FilterDynamicByKeywordFragment"
             android:key="filter_dynamic_by_keyword"
-            android:title="@string/biliroaming_filter_dynamic_by_keyword_title" />
+            android:title="@string/biliroaming_filter_by_keyword_title" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

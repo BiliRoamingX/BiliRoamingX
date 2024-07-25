@@ -38,6 +38,8 @@ import com.bilibili.pegasus.api.modelv2.SmallCoverV10Item;
 import com.bilibili.pegasus.api.modelv2.SmallCoverV2Item;
 import com.bilibili.pegasus.api.modelv2.SmallCoverV9Item;
 import com.bilibili.pegasus.api.modelv2.Tag;
+import com.bilibili.video.story.StoryDetail;
+import com.bilibili.video.story.api.StoryFeedResponse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -1262,6 +1264,133 @@ public class PegasusPatch {
             }
         }
 
+        return false;
+    }
+
+    public static void filterStory(StoryFeedResponse storyFeedResponse) {
+        Set<? extends String> filterTypes = Settings.FilterStory.get();
+        boolean applyToStory = Settings.HomeFilterApplyToStory.get();
+        boolean removeChargeButton = Settings.RemoveChargeButton.get();
+        if (filterTypes.isEmpty() && !applyToStory && !removeChargeButton)
+            return;
+        long playCountLimit = Settings.LowPlayCountLimit.get();
+        int shortDurationLimit = Settings.ShortDurationLimitStory.get();
+        int longDurationLimit = Settings.LongDurationLimitStory.get();
+        Set<? extends String> titleSet = Settings.HomeRcmdFilterTitle.get();
+        boolean titleRegexMode = Settings.HomeRcmdFilterTitleRegexMode.get();
+        List<Pattern> titleRegexes;
+        if (titleRegexMode && cachedTitileSet.equals(titleSet))
+            titleRegexes = cachedTitleRegexes;
+        else if (titleRegexMode) {
+            cachedTitileSet = new HashSet<>(titleSet);
+            titleRegexes = titleSet.stream().map(Pattern::compile).collect(Collectors.toList());
+            cachedTitleRegexes = titleRegexes;
+        } else {
+            titleRegexes = Collections.emptyList();
+        }
+        Set<? extends String> upSet = Settings.HomeRcmdFilterUp.get();
+        boolean upRegexMode = Settings.HomeRcmdFilterUpRegexMode.get();
+        List<Pattern> upRegexes;
+        if (upRegexMode && cachedUpSet.equals(upSet))
+            upRegexes = cachedUpRegexes;
+        else if (upRegexMode) {
+            cachedUpSet = new HashSet<>(upSet);
+            upRegexes = upSet.stream().map(Pattern::compile).collect(Collectors.toList());
+            cachedUpRegexes = upRegexes;
+        } else {
+            upRegexes = Collections.emptyList();
+        }
+        Set<? extends String> uidSet = Settings.HomeRcmdFilterUid.get();
+        long[] uidArray = ArrayUtils.toLongArray(uidSet);
+        List<StoryDetail> items = storyFeedResponse.getItems();
+        if (items == null || items.isEmpty()) return;
+        items.removeIf(story -> {
+            if (removeChargeButton) {
+                StoryDetail.Owner owner = story.getOwner();
+                if (owner != null) {
+                    StoryDetail.Charge charge = owner.getCharge();
+                    if (charge != null)
+                        charge.setShow(false);
+                }
+            }
+            return isTypeMatchedStory(story, filterTypes)
+                    || (applyToStory && (isLowPlayCountStory(story, playCountLimit)
+                    || isDurationInvalidStory(story, shortDurationLimit, longDurationLimit)
+                    || isUidBlockedStory(story, uidArray)
+                    || isUpBlockedStory(story, upSet, upRegexes, upRegexMode)
+                    || isTitleBlockedStory(story, titleSet, titleRegexes, titleRegexMode)));
+        });
+    }
+
+    private static boolean isTypeMatchedStory(StoryDetail story, Set<? extends String> filterTypes) {
+        if (filterTypes.isEmpty()) return false;
+        String aGoto = story.getGoto();
+        if (TextUtils.isEmpty(aGoto)) return false;
+        for (String type : filterTypes)
+            if (aGoto.contains(type))
+                return true;
+        return false;
+    }
+
+    private static boolean isLowPlayCountStory(StoryDetail story, long playCountLimit) {
+        if (playCountLimit == 0) return false;
+        StoryDetail.Stat stat = story.getStat();
+        return stat != null && stat.getView() < playCountLimit;
+    }
+
+    private static boolean isDurationInvalidStory(StoryDetail story, int shortDuration, int longDuration) {
+        if (shortDuration == 0 && longDuration == 0)
+            return false;
+        long duration = story.getDuration();
+        if (shortDuration != 0 && duration < shortDuration)
+            return true;
+        return longDuration != 0 && duration > longDuration;
+    }
+
+    private static boolean isTitleBlockedStory(StoryDetail story, Set<? extends String> titles, List<Pattern> titleRegexes, boolean regexMode) {
+        if (titles.isEmpty()) return false;
+        String title = story.getTitle();
+        if (TextUtils.isEmpty(title)) return false;
+        if (regexMode) {
+            for (int i = 0; i < titleRegexes.size(); i++) {
+                if (titleRegexes.get(i).matcher(title).find())
+                    return true;
+            }
+        } else {
+            for (String s : titles) {
+                if (title.contains(s))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isUidBlockedStory(StoryDetail story, long[] uids) {
+        if (uids.length == 0) return false;
+        StoryDetail.Owner owner = story.getOwner();
+        if (owner == null) return false;
+        long mid = owner.getMid();
+        if (mid <= 0) return false;
+        return ArrayUtils.contains(uids, mid);
+    }
+
+    private static boolean isUpBlockedStory(StoryDetail story, Set<? extends String> ups, List<Pattern> upRegexes, boolean regexMode) {
+        if (ups.isEmpty()) return false;
+        StoryDetail.Owner owner = story.getOwner();
+        if (owner == null) return false;
+        String name = owner.getName();
+        if (TextUtils.isEmpty(name)) return false;
+        if (regexMode) {
+            for (int i = 0; i < upRegexes.size(); i++) {
+                if (upRegexes.get(i).matcher(name).find())
+                    return true;
+            }
+        } else {
+            for (String s : ups) {
+                if (name.contains(s))
+                    return true;
+            }
+        }
         return false;
     }
 

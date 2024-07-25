@@ -39,7 +39,7 @@ class CustomizePlayerFragment : BiliRoamingBaseSettingFragment() {
                     if (text.isEmpty()) {
                         setting.restoreToDefault()
                         dismiss()
-                        Toasts.showShortWithId("biliroaming_speed_save_ok")
+                        Toasts.showShortWithId("biliroaming_save_ok")
                         return@onClick
                     }
                     val speed = text.toFloatOrNull()
@@ -47,7 +47,7 @@ class CustomizePlayerFragment : BiliRoamingBaseSettingFragment() {
                         Toasts.showShortWithId("biliroaming_speed_invalid")
                     } else {
                         setting.save(speed)
-                        Toasts.showShortWithId("biliroaming_speed_save_ok")
+                        Toasts.showShortWithId("biliroaming_save_ok")
                         dismiss()
                     }
                 }
@@ -71,7 +71,7 @@ class CustomizePlayerFragment : BiliRoamingBaseSettingFragment() {
                     if (text.isEmpty()) {
                         Settings.OverridePlaybackSpeed.restoreToDefault()
                         dismiss()
-                        Toasts.showShortWithId("biliroaming_speed_save_ok")
+                        Toasts.showShortWithId("biliroaming_save_ok")
                         return@onClick
                     }
                     val speedList = text.runCatchingOrNull {
@@ -86,7 +86,7 @@ class CustomizePlayerFragment : BiliRoamingBaseSettingFragment() {
                         val formatSpeedText = speedList.joinToString(" ")
                         Settings.OverridePlaybackSpeed.save(formatSpeedText)
                         dismiss()
-                        Toasts.showShortWithId("biliroaming_speed_save_ok")
+                        Toasts.showShortWithId("biliroaming_save_ok")
                     }
                 }
             }.show()
