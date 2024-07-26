@@ -236,7 +236,9 @@ object SubtitleImportSavePatch {
 
         @Keep
         @JvmStatic
-        private fun init() {
+        private fun init(): Int {
+            // keep one register
+            return 0
         }
     }
 }

@@ -43,7 +43,7 @@ object PlayerGestureDetectorPatch : BytecodePatch(
         val patchClass =
             context.findClass("Lapp/revanced/bilibili/patches/PlayerGestureDetectorPatch;")!!.mutableClass
         val hookProviderClass =
-            context.findClass("Lapp/revanced/bilibili/utils/PlayerHookProvider")!!.mutableClass
+            context.findClass("Lapp/revanced/bilibili/utils/PlayerHookProvider;")!!.mutableClass
         PlayerGestureListenerFingerprint.result?.mutableMethod?.addInstructionsWithLabels(
             0, """
             invoke-static {}, $patchClass->disableLongPress()Z
@@ -143,39 +143,30 @@ object PlayerGestureDetectorPatch : BytecodePatch(
                 hookProviderClass.fields.first { it.name == "getToastServiceMethodName" }
             val showToastMethodNameField =
                 hookProviderClass.fields.first { it.name == "showToastMethodName" }
-            patchClass.methods.first { it.name == "init" }.also { patchClass.methods.remove(it) }
-                .cloneMutable(registerCount = 1, clearImplementation = true).apply {
-                    addInstructions(
-                        0, """
-                        const-string v0, "$gestureServiceFieldName"
-                        sput-object v0, $gestureServiceFieldNameField
-                        const-string v0, "$getPlayerMethodName"
-                        sput-object v0, $getPlayerMethodNameField
-                        return-void
-                    """.trimIndent()
-                    )
-                }.also { patchClass.methods.add(it) }
-            hookProviderClass.methods.first { it.name == "init" }
-                .also { hookProviderClass.methods.remove(it) }
-                .cloneMutable(registerCount = 1, clearImplementation = true).apply {
-                    addInstructions(
-                        0, """
-                        const-string v0, "$getRenderServiceMethodName"
-                        sput-object v0, $getRenderServiceMethodNameField
-                        const-string v0, "$getAspectRatioMethodName"
-                        sput-object v0, $getAspectRatioMethodNameField
-                        const-string v0, "$setAspectRatioMethodName"
-                        sput-object v0, $setAspectRatioMethodNameField
-                        const-string v0, "$restoreMethodName"
-                        sput-object v0, $restoreMethodNameField
-                        const-string v0, "$getToastServiceMethodName"
-                        sput-object v0, $getToastServiceMethodNameField
-                        const-string v0, "$showToastMethodName"
-                        sput-object v0, $showToastMethodNameField
-                        return-void
-                    """.trimIndent()
-                    )
-                }.also { hookProviderClass.methods.add(it) }
+            patchClass.methods.first { it.name == "init" }.addInstructions(
+                0, """
+                const-string v0, "$gestureServiceFieldName"
+                sput-object v0, $gestureServiceFieldNameField
+                const-string v0, "$getPlayerMethodName"
+                sput-object v0, $getPlayerMethodNameField
+            """.trimIndent()
+            )
+            hookProviderClass.methods.first { it.name == "init" }.addInstructions(
+                0, """
+                const-string v0, "$getRenderServiceMethodName"
+                sput-object v0, $getRenderServiceMethodNameField
+                const-string v0, "$getAspectRatioMethodName"
+                sput-object v0, $getAspectRatioMethodNameField
+                const-string v0, "$setAspectRatioMethodName"
+                sput-object v0, $setAspectRatioMethodNameField
+                const-string v0, "$restoreMethodName"
+                sput-object v0, $restoreMethodNameField
+                const-string v0, "$getToastServiceMethodName"
+                sput-object v0, $getToastServiceMethodNameField
+                const-string v0, "$showToastMethodName"
+                sput-object v0, $showToastMethodNameField
+            """.trimIndent()
+            )
         } ?: throw PlayerResizableGestureListenerFingerprint.exception
         ResetResizeFunctionWidgetFingerprint.result?.mutableClass?.run {
             val textField = fields.first { it.type == "Landroid/widget/TextView;" }

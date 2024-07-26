@@ -142,34 +142,29 @@ object SubtitleImportSavePatch : MultiMethodBytecodePatch(
         val recordSelectedSubtitleMethodHook = hookInfoProviderClass.fields.first {
             it.name == "recordSelectedSubtitleMethod"
         }
-        hookInfoProviderClass.methods.first { it.name == "init" }.also { hookInfoProviderClass.methods.remove(it) }
-            .cloneMutable(registerCount = 1, clearImplementation = true).apply {
-                addInstructions(
-                    0, """
-                    const-string v0, "$getDanmakuParamsMethod"
-                    sput-object v0, $getDanmakuParamsMethodHook
-                    
-                    const-string v0, "$getDmViewReplyMethod"
-                    sput-object v0, $getDmViewReplyMethodHook
-                    
-                    const-string v0, "$setDmViewReplyMethod"
-                    sput-object v0, $setDmViewReplyMethodHook
-                    
-                    const-string v0, "$loadSubtitleMethod"
-                    sput-object v0, $loadSubtitleMethodHook
-                    
-                    const-string v0, "$hideWidgetMethod"
-                    sput-object v0, $hideWidgetMethodHook
-                    
-                    const-string v0, "$widgetTokenField"
-                    sput-object v0, $widgetTokenFieldHook
-                    
-                    const-string v0, "$recordSelectedSubtitleMethod"
-                    sput-object v0, $recordSelectedSubtitleMethodHook
-                    
-                    return-void
-                """.trimIndent()
-                )
-            }.also { hookInfoProviderClass.methods.add(it) }
+        hookInfoProviderClass.methods.first { it.name == "init" }.addInstructions(
+            0, """
+            const-string v0, "$getDanmakuParamsMethod"
+            sput-object v0, $getDanmakuParamsMethodHook
+            
+            const-string v0, "$getDmViewReplyMethod"
+            sput-object v0, $getDmViewReplyMethodHook
+            
+            const-string v0, "$setDmViewReplyMethod"
+            sput-object v0, $setDmViewReplyMethodHook
+            
+            const-string v0, "$loadSubtitleMethod"
+            sput-object v0, $loadSubtitleMethodHook
+            
+            const-string v0, "$hideWidgetMethod"
+            sput-object v0, $hideWidgetMethodHook
+            
+            const-string v0, "$widgetTokenField"
+            sput-object v0, $widgetTokenFieldHook
+            
+            const-string v0, "$recordSelectedSubtitleMethod"
+            sput-object v0, $recordSelectedSubtitleMethodHook
+        """.trimIndent()
+        )
     }
 }

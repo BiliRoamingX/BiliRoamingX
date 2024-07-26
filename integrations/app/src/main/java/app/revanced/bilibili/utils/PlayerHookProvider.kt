@@ -31,13 +31,19 @@ object PlayerHookProvider {
     @JvmStatic
     private var showToastMethodName = ""
 
+    @Keep
+    @JvmStatic
+    private var seekToMethodName = ""
+
     init {
         init()
     }
 
     @Keep
     @JvmStatic
-    private fun init() {
+    private fun init(): Int {
+        // keep one register
+        return 0
     }
 
     /**
@@ -87,5 +93,12 @@ object PlayerHookProvider {
             toast.location = 33
         }
         callMethod(getToastServiceMethodName)?.callMethod(showToastMethodName, toast)
+    }
+
+    /**
+     * @receiver player service instance
+     */
+    fun Any.seekTo(position: Int) {
+        callMethod(seekToMethodName, position, false)
     }
 }

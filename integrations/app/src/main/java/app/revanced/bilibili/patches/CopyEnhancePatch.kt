@@ -2,6 +2,7 @@ package app.revanced.bilibili.patches
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.text.SpannableStringBuilder
@@ -14,15 +15,18 @@ import app.revanced.bilibili.http.HttpClient
 import app.revanced.bilibili.model.AIConclusion
 import app.revanced.bilibili.model.AIConclusionJudge
 import app.revanced.bilibili.patches.main.ApplicationDelegate
+import app.revanced.bilibili.patches.main.Player
 import app.revanced.bilibili.patches.main.VideoInfoHolder
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
+import app.revanced.bilibili.utils.PlayerHookProvider.seekTo
 import app.revanced.bilibili.widget.OnLongClickOriginListener
 import com.bapis.bilibili.app.viewunite.common.DescType
 import com.bapis.bilibili.app.viewunite.v1.ViewReply
 import com.bilibili.bplus.followingcard.widget.EllipsizingTextView
 import com.bilibili.bplus.im.business.model.BaseTypedMessage
 import org.json.JSONObject
+import java.lang.ref.WeakReference
 
 object CopyEnhancePatch {
     private val DYNAMIC_COPYABLE_IDS = arrayOf(
@@ -39,8 +43,12 @@ object CopyEnhancePatch {
         }
     }
 
+    private var copyDialogRef = WeakReference<Dialog>(null)
+    private var aiConclusionDialogRef = WeakReference<Dialog>(null)
+
     @Keep
     @JvmStatic
+    @Suppress("UNUSED_PARAMETER")
     fun onCopyDesc(isBv: Boolean, desc: String): Boolean {
         if (!Settings.CommentCopy()) return false
         if (!Settings.EnhanceCommentCopy()) return true
@@ -260,6 +268,7 @@ object CopyEnhancePatch {
             setTextIsSelectable(true)
             movementMethod = LinkMovementMethod.getInstance()
         }
+        copyDialogRef = WeakReference(alertDialog)
     }
 
     fun judgeAiConclusion(aid: Long, mid: Long, cid: Long) {
@@ -339,10 +348,15 @@ object CopyEnhancePatch {
                     bold { appendLine(title.canonicalize()) }
                 }
                 line.partOutline.forEach { partLine ->
-                    val timestamp = partLine.timestamp.toLong().secondFormat()
+                    val timestamp = partLine.timestamp
+                    val timestampFormat = timestamp.toLong().secondFormat()
                     val content = partLine.content
                     absoluteSize(14.sp) {
-                        color(0xFF2196F3.toInt()) { append(timestamp) }
+                        clickable(0xFF2196F3.toInt(), onClick = {
+                            copyDialogRef.get()?.dismiss()
+                            aiConclusionDialogRef.get()?.dismiss()
+                            Player.current()?.seekTo(timestamp * 1000)
+                        }) { append(timestampFormat) }
                         append(' ')
                         appendLine(content.canonicalize())
                     }
@@ -358,6 +372,8 @@ object CopyEnhancePatch {
             .apply { show() }
         (alertDialog.findViewById<TextView>(android.R.id.message)).run {
             setTextIsSelectable(true)
+            movementMethod = LinkMovementMethod.getInstance()
         }
+        aiConclusionDialogRef = WeakReference(alertDialog)
     }
 }

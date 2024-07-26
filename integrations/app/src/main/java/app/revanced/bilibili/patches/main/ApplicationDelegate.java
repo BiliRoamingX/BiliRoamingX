@@ -434,6 +434,7 @@ public abstract class ApplicationDelegate extends Application {
                 }
             }
             VideoInfoHolder.removeCache(activity);
+            Player.remove(activity);
         }
 
         @Override
