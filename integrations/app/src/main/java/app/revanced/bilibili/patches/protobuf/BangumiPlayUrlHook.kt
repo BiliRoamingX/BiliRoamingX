@@ -267,7 +267,7 @@ object BangumiPlayUrlHook {
     private fun tryFixAidThailandRequest(req: PlayViewUniteReq) {
         if (!Settings.UnlockAreaLimit())
             return
-        if (req.extraContentMap.any { it.key == "season_id" } || req.extraContentMap.any { it.key == "ep_id" })
+        if (req.extraContentMap.any { it.key == "season_id" || it.key == "ep_id" })
             return
         val reqAid = req.vod.aid.toString()
         val reqCid = req.vod.cid.toString()
@@ -293,11 +293,14 @@ object BangumiPlayUrlHook {
         if (error == null || error !is BusinessException || error.code != 6002003/* 抱歉您所在地区不可观看！*/)
             return null
         val aid = req.vod.aid
-        if (aid == 0L) return null
-        if (req.extraContentMap.any { it.key == "season_id" } || req.extraContentMap.any { it.key == "ep_id" })
+        val bvid = req.bvid
+        if (aid == 0L && bvid.isEmpty())
+            return null
+        if (req.extraContentMap.any { it.key == "season_id" || it.key == "ep_id" })
             return null
         val viewReq = ViewReq().apply {
             this.aid = aid
+            this.bvid = bvid
             this.playerArgs = PlayerArgs().apply {
                 fnval = req.vod.fnval.toLong()
                 fnver = req.vod.fnver.toLong()
