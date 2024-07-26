@@ -51,7 +51,6 @@ import java.util.Objects;
 import app.revanced.bilibili.account.PassportChangeReceiver;
 import app.revanced.bilibili.patches.CustomThemePatch;
 import app.revanced.bilibili.patches.DpiPatch;
-import app.revanced.bilibili.patches.PlaybackSpeedPatch;
 import app.revanced.bilibili.patches.okhttp.BangumiSeasonHook;
 import app.revanced.bilibili.settings.Settings;
 import app.revanced.bilibili.utils.CrossProcessPreferences;
@@ -101,7 +100,6 @@ public abstract class ApplicationDelegate extends Application {
         Utils.async(2000L, CustomThemePatch::delayRefresh);
         if (Utils.isMainProcess()) {
             Utils.async(ApplicationDelegate::startLog);
-            Utils.async(PlaybackSpeedPatch::refreshOverrideSpeedList);
             SubtitleParamsCache.updateFont();
             KtUtils.getAreaTask();
             UposReplacer.getBaseUposList();

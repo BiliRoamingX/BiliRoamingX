@@ -8,19 +8,12 @@ import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.Keep
-import app.revanced.bilibili.settings.Setting
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import com.bilibili.music.podcast.view.PodcastSpeedSeekBar
 import tv.danmaku.ijk.media.player.IMediaPlayer
 
 object PlaybackSpeedPatch {
-    init {
-        Setting.registerPreferenceChangeListener { _, key ->
-            if (key == Settings.OverridePlaybackSpeed.key)
-                refreshOverrideSpeedList()
-        }
-    }
 
     @JvmStatic
     private val stockSpeedArray = floatArrayOf(2.0f, 1.5f, 1.25f, 1.0f, 0.75f, 0.5f)
@@ -98,26 +91,6 @@ object PlaybackSpeedPatch {
     @JvmStatic
     fun getOverrideReverseSpeedArray(original: FloatArray): FloatArray {
         return newSpeedReversedArray.let { if (it.isNotEmpty()) it else original }
-    }
-
-    @JvmStatic
-    fun refreshOverrideSpeedList() {
-        (newSpeedArray.takeIf { it.isNotEmpty() } ?: stockSpeedArray).let {
-            refreshMenuFuncSegmentSpeedArray(it)
-            refreshNewShareServiceSpeedArray(it)
-        }
-    }
-
-    @Keep
-    // codes will filled by patcher
-    @JvmStatic
-    private fun refreshMenuFuncSegmentSpeedArray(array: FloatArray) {
-    }
-
-    @Keep
-    // codes will filled by patcher
-    @JvmStatic
-    private fun refreshNewShareServiceSpeedArray(array: FloatArray) {
     }
 
     @Keep
