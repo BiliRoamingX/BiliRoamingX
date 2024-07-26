@@ -17,4 +17,10 @@ public class TintSwitchCompat extends SwitchCompat {
     public TintSwitchCompat(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
+
+    public void setThumbTintList(int i14) {
+    }
+
+    public void setTrackTintList(int i14) {
+    }
 }
