@@ -2,6 +2,7 @@ package app.revanced.bilibili.patches
 
 import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.utils.Constants
 import app.revanced.bilibili.utils.avOrBvPattern
 
 object ConfigPatch {
@@ -72,6 +73,8 @@ object ConfigPatch {
     @JvmStatic
     fun getConfig(key: String, defValue: String?, origin: String?): String? {
         //Logger.debug { "ConfigPatch, config of $key: $origin, default: $defValue" }
+        if ("ijkplayer.autoswitch_max_qn" == key)
+            return Constants.MAX_QN.toString()
         if (Settings.EnableAv() && "bv.enable_bv" == key)
             return "0"
         else if (Settings.EnableAv() && "bv.pattern_rule_av_only" == key)
