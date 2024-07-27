@@ -265,6 +265,7 @@ object Settings {
         }
     })
     @JvmField val DisallowCollectPrivacyInfo = BooleanSetting(key = "disallow_collect_privacy_info", needReboot = true)
+    @JvmField val DisableWebViewNonOfficialAlert = BooleanSetting(key = "disable_non_official_alert")
     // endregion
 
 

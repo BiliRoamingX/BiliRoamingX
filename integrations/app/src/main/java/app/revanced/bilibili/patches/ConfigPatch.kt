@@ -63,6 +63,8 @@ object ConfigPatch {
             return false
         else if ("ijkplayer.p2p_download" == key && Settings.PreferStableCdn())
             return false
+        else if ("ff.webview.controller.switch_tips_whitelist" == key && Settings.DisableWebViewNonOfficialAlert())
+            return false
         return origin
     }
 
@@ -78,7 +80,8 @@ object ConfigPatch {
             val halfScreenQuality = VideoQualityPatch.getMatchedHalfScreenQuality()
             if (halfScreenQuality != 0)
                 return halfScreenQuality.toString()
-        }
+        } else if (Settings.DisableWebViewNonOfficialAlert() && "base.h5_alert_whitelist" == key)
+            return ".*"
         return origin
     }
 }
