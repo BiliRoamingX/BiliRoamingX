@@ -4,12 +4,10 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.ActivityNotFoundException
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.text.InputType
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ScrollView
@@ -41,7 +39,6 @@ class MiscFragment : BiliRoamingBaseSettingFragment() {
             if (newValue == true) selectImage(SELECTION_LOGO)
             true
         }
-        findPreference<Preference>("route")?.onClick { route();true }
         disablePreference(
             key = Settings.CustomUpdate.key,
             { Utils.getString("biliroaming_custom_update_only_64") } to { !isOsArchArm64 },
@@ -174,31 +171,5 @@ class MiscFragment : BiliRoamingBaseSettingFragment() {
         }, Utils.getString("biliroaming_choose_image")), request)
     } catch (ex: ActivityNotFoundException) {
         Toasts.showShortWithId("biliroaming_pls_install_file_manager")
-    }
-
-    private fun route() {
-        val editText = EditText(context)
-        editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI
-        val hintUrl = Utils.getString("biliroaming_route_hint")
-        editText.hint = hintUrl
-        AlertDialog.Builder(context)
-            .setView(editText)
-            .setTitle(Utils.getString("biliroaming_route_title"))
-            .setNegativeButton(android.R.string.cancel, null)
-            .setPositiveButton("Go") { _, _ ->
-                val editUrl = editText.text.toString().trim()
-                val uri = Uri.parse(editUrl.ifEmpty { hintUrl })
-                runCatching {
-                    Utils.routeTo(uri, context)
-                    if (editUrl.isEmpty()) Utils.runOnMainThread(300) {
-                        Toasts.showShortWithId("biliroaming_you_were_cheated")
-                    }
-                }.onFailure {
-                    Logger.error(it) { "route failed, uri: $uri" }
-                    Toasts.showShortWithId("biliroaming_open_failed")
-                }
-            }.create().onShow {
-                getButton(DialogInterface.BUTTON_POSITIVE).isAllCaps = false
-            }.constraintSize(maxHeight = -1).show()
     }
 }

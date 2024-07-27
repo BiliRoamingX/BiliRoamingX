@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory>
+        <androidx.preference.Preference
+            android:key="route"
+            android:title="@string/biliroaming_route_title" />
+        <androidx.preference.Preference
+            android:key="export_access_key"
+            android:summary="@string/biliroaming_export_access_key_summary"
+            android:title="@string/biliroaming_export_access_key_title" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

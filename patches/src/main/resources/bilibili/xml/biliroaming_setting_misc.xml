@@ -61,9 +61,6 @@
             android:key="disable_non_official_alert"
             android:summary="@string/biliroaming_disable_non_official_alert_summary"
             android:title="@string/biliroaming_disable_non_official_alert_title" />
-        <androidx.preference.Preference
-            android:key="route"
-            android:title="@string/biliroaming_route_title" />
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory

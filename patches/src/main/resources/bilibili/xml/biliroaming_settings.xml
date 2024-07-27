@@ -48,6 +48,10 @@
             android:fragment="app.revanced.bilibili.settings.fragments.MiscFragment"
             android:key="misc"
             android:title="@string/biliroaming_misc_title" />
+        <androidx.preference.Preference
+            android:fragment="app.revanced.bilibili.settings.fragments.ToolFragment"
+            android:key="tool"
+            android:title="@string/biliroaming_tool_title" />
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory>
