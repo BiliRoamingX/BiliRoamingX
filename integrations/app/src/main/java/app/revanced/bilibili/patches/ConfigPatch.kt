@@ -1,6 +1,7 @@
 package app.revanced.bilibili.patches
 
 import androidx.annotation.Keep
+import app.revanced.bilibili.settings.BooleanSetting
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Constants
 import app.revanced.bilibili.utils.avOrBvPattern
@@ -35,37 +36,51 @@ object ConfigPatch {
         "ff_open_device_id_all",
     )
 
+    private open class Hook<T>(val enabled: () -> Boolean, val value: T, vararg val keys: String)
+
+    private class AbHook(setting: BooleanSetting, value: Boolean, vararg keys: String) :
+        Hook<Boolean>({ setting() }, value, *keys)
+
+    private class ConfigHook(setting: BooleanSetting, value: String, vararg keys: String) :
+        Hook<String>({ setting() }, value, *keys)
+
+    @JvmStatic
+    private val abHooks = listOf(
+        Hook({ true }, false, *alwaysDisabledAbKeys),
+        Hook({ true }, true, *alwaysEnabledAbKeys),
+        AbHook(Settings.DisallowCollectPrivacyInfo, false, *privacyInfoKeys),
+        AbHook(Settings.ForceOldFav, false, "ff_player_fav_new"),
+        AbHook(Settings.AddChannel, false, "ff_channel_redirect_to_search"),
+        AbHook(Settings.DisableAvif, true, "ff.image.avif_degrade", "ff_noavif_enable"),
+        AbHook(Settings.DisableP2PUpload, true, "ff_live_room_player_close_p2p"),
+        AbHook(Settings.DisableP2PUpload, false, "ijkplayer.p2p_hot_push", "ijkplayer.p2p_upload"),
+        AbHook(Settings.PreferStableCdn, false, "ijkplayer.p2p_download"),
+        AbHook(Settings.DisableWebViewNonOfficialAlert, false, "ff.webview.controller.switch_tips_whitelist"),
+    )
+
+    @JvmStatic
+    private val configHooks = listOf(
+        Hook({ true }, Constants.MAX_QN.toString(), "ijkplayer.autoswitch_max_qn"),
+        ConfigHook(Settings.EnableAv, "0", "bv.enable_bv"),
+        ConfigHook(Settings.EnableAv, avOrBvPattern, "bv.pattern_rule_av_only"),
+        ConfigHook(Settings.DisableWebViewNonOfficialAlert, ".*", "base.h5_alert_whitelist"),
+    )
+
     @Keep
     @JvmStatic
     fun getAb(key: String, defValue: Boolean?, origin: Boolean?): Boolean? {
         //Logger.debug { "ConfigPatch, ab of $key: $origin, default: $defValue" }
-        if (alwaysDisabledAbKeys.contains(key))
-            return false
-        if (alwaysEnabledAbKeys.contains(key))
-            return true
-        if (Settings.DisallowCollectPrivacyInfo() && privacyInfoKeys.contains(key))
-            return false
-        if ("ff_player_fav_new" == key && Settings.ForceOldFav())
-            return false
-        else if ("ff_unite_detail2" == key || "ff_unite_player" == key /*<7.39.0*/) {
+        val abHook = abHooks.find { it.keys.contains(key) }
+        if (abHook != null && abHook.enabled())
+            return abHook.value
+        if ("ff_unite_detail2" == key || "ff_unite_player" == key /*<7.39.0*/) {
             val playerVersion = Settings.PlayerVersion()
             if ("1" == playerVersion)
                 return false
             else if ("2" == playerVersion)
                 return true
             return origin
-        } else if ("ff_channel_redirect_to_search" == key && Settings.AddChannel())
-            return false
-        else if (("ff.image.avif_degrade" == key || "ff_noavif_enable" == key) && Settings.DisableAvif())
-            return true
-        else if ("ff_live_room_player_close_p2p" == key && Settings.DisableP2PUpload())
-            return true
-        else if (("ijkplayer.p2p_hot_push" == key || "ijkplayer.p2p_upload" == key) && Settings.DisableP2PUpload())
-            return false
-        else if ("ijkplayer.p2p_download" == key && Settings.PreferStableCdn())
-            return false
-        else if ("ff.webview.controller.switch_tips_whitelist" == key && Settings.DisableWebViewNonOfficialAlert())
-            return false
+        }
         return origin
     }
 
@@ -73,18 +88,15 @@ object ConfigPatch {
     @JvmStatic
     fun getConfig(key: String, defValue: String?, origin: String?): String? {
         //Logger.debug { "ConfigPatch, config of $key: $origin, default: $defValue" }
-        if ("ijkplayer.autoswitch_max_qn" == key)
-            return Constants.MAX_QN.toString()
-        if (Settings.EnableAv() && "bv.enable_bv" == key)
-            return "0"
-        else if (Settings.EnableAv() && "bv.pattern_rule_av_only" == key)
-            return avOrBvPattern
-        else if ("player.unite_login_qn" == key || "player.unite_unlogin_qn" == key) {
+        val configHook = configHooks.find { it.keys.contains(key) }
+        if (configHook != null && configHook.enabled())
+            return configHook.value
+        if ("player.unite_login_qn" == key || "player.unite_unlogin_qn" == key) {
             val halfScreenQuality = VideoQualityPatch.getMatchedHalfScreenQuality()
             if (halfScreenQuality != 0)
                 return halfScreenQuality.toString()
-        } else if (Settings.DisableWebViewNonOfficialAlert() && "base.h5_alert_whitelist" == key)
-            return ".*"
+            return origin
+        }
         return origin
     }
 }
