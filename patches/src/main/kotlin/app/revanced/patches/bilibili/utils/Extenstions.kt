@@ -123,11 +123,12 @@ val MultiMethodFingerprint.exception
     get() = PatchException("Failed to resolve ${this.javaClass.simpleName}")
 
 val String.className: String
-    get() {
-        return if (startsWith("L") && endsWith(";"))
-            substring(1, length - 1).replace('/', '.')
-        else replace('/', '.')
-    }
+    get() = if (startsWith("L") && endsWith(";"))
+        substring(1, length - 1).replace('/', '.')
+    else replace('/', '.')
+
+val String.classDescriptor: String
+    get() = "L${replace('.', '/')};"
 
 fun Field(
     definingClass: String,
