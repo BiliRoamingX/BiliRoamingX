@@ -10,6 +10,11 @@ import java.util.concurrent.TimeUnit
 
 object Subtitle : ApiHook() {
     var importedSubtitles = Pair<Long, MutableList<String>>(0L, mutableListOf())
+    private val s2cnDict: Map<String, String>
+        get() = mapOf(
+            "妳" to "你",
+            "掰掰" to "拜拜",
+        )
 
     override fun shouldHook(url: String, status: Int): Boolean {
         return status.isOk && (url.contains("zh_converter")
@@ -30,6 +35,7 @@ object Subtitle : ApiHook() {
                 Logger.error(it) { "Ass subtitle convert failed" }
             }.getOrNull() ?: return response
         }
+        @Suppress("CascadeIf")
         if (converter == "t2cn") {
             val dictReady = if (!SubtitleHelper.dictExist) {
                 runCatchingOrNull {
@@ -59,6 +65,10 @@ object Subtitle : ApiHook() {
             }.onFailure {
                 Logger.error(it) { "Subtitle translate from en to cn failed" }
             }.getOrDefault(SubtitleHelper.errorResponse("字幕翻译失败，请重试"))
+        } else if (converter == "s2cn") {
+            s2cnDict.forEach { (l, r) ->
+                newResponse = newResponse.replace(l, r)
+            }
         } else if (converter == "import") {
             val index = uri.getQueryParameter("import_index")?.toInt() ?: 0
             newResponse = importedSubtitles.second.getOrNull(index)

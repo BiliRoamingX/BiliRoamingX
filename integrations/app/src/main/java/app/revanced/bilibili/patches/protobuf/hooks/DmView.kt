@@ -130,56 +130,24 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
     private fun JSONArray.toSubtitles(): List<SubtitleItem> {
         val subList = mutableListOf<SubtitleItem>()
         val distinct = asSequence<JSONObject>().distinctBy { it.optString("key") }.toList()
-        val lanCodes = distinct.map { it.optString("key") }
-        // prefer select furry cn subtitle if official hans subtitle not exist,
-        // then consider kktv, iqiyi, mewatch, catchplay, friday
-        var replaceable = true
-        var hasCnFurry = false
-        var hasCnKKTV = false
-        var hasCnIqiyi = false
-        var hasCnMeWatch = false
-        var hasCnCatchPlay = false
-        var hasCnFriday = false
-        for (lanCode in lanCodes) {
-            if (lanCode == "zh-Hans")
-                replaceable = false
-            if (lanCode == "cn")
-                hasCnFurry = true
-            if (lanCode == "cn.kktv")
-                hasCnKKTV = true
-            if (lanCode == "cn.iqiyi")
-                hasCnIqiyi = true
-            if (lanCode == "cn.mewatch")
-                hasCnMeWatch = true
-            if (lanCode == "cn.catchplay")
-                hasCnCatchPlay = true
-            if (lanCode == "cn.friday")
-                hasCnFriday = true
-        }
-        val replaceToFurry = replaceable && hasCnFurry
-        val replaceToKKTV = replaceable && !replaceToFurry && hasCnKKTV
-        val replaceToIqiyi = replaceable && !replaceToFurry && !replaceToKKTV && hasCnIqiyi
-        val replaceToMeWatch =
-            replaceable && !replaceToFurry && !replaceToKKTV && !replaceToIqiyi && hasCnMeWatch
-        val replaceToCatchPlay =
-            replaceable && !replaceToFurry && !replaceToKKTV && !replaceToIqiyi && !replaceToMeWatch && hasCnCatchPlay
-        val replaceToFriday =
-            replaceable && !replaceToFurry && !replaceToKKTV && !replaceToIqiyi && !replaceToMeWatch && !replaceToCatchPlay && hasCnFriday
+        val replaceable = distinct.none { it.optString("key") == "zh-Hans" }
+        var replaced = false
         for (subtitle in distinct) {
             SubtitleItem().apply {
                 id = subtitle.optLong("id")
                 idStr = subtitle.optLong("id").toString()
                 subtitleUrl = subtitle.optString("url")
-                lan = subtitle.optString("key").let {
-                    if ((it == "cn" && replaceToFurry)
-                        || (it == "cn.kktv" && replaceToKKTV)
-                        || (it == "cn.iqiyi" && replaceToIqiyi)
-                        || (it == "cn.mewatch" && replaceToMeWatch)
-                        || (it == "cn.catchplay" && replaceToCatchPlay)
-                        || (it == "cn.friday" && replaceToFriday)
-                    ) "zh-Hans" else it
-                }
                 lanDoc = subtitle.optString("title").replace(furrySubNameExtRegex, "")
+                lan = subtitle.optString("key").let {
+                    if (replaceable && !replaced && !lanDoc.contains("机翻") && it.startsWith("cn")) {
+                        replaced = true
+                        "zh-Hans"
+                    } else it
+                }
+                if (lan == "zh-Hans" && subtitleUrl.contains("bstarstatic")) {
+                    subtitleUrl = Uri.parse(subtitleUrl).buildUpon()
+                        .appendQueryParameter("zh_converter", "s2cn").toString()
+                }
             }.let { subList.add(it) }
         }
         return subList
