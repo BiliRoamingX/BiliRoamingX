@@ -214,7 +214,8 @@ object BangumiPlayUrlHook {
             finalError?.let { throw it } ?: run {
                 if (allowDownloadUnite)
                     return fixDownloadProtoUnite(response)
-                return reply
+                syncVideoHistoryIfNeeded(req, response)
+                return response
             }
         val extraContent = req.extraContentMap
         val reqEpId = extraContent.getOrDefault("ep_id", "0").toLong()
@@ -226,7 +227,8 @@ object BangumiPlayUrlHook {
             finalError?.let { throw it } ?: run {
                 if (allowDownloadUnite)
                     return fixDownloadProtoUnite(response)
-                return reply
+                syncVideoHistoryIfNeeded(req, response)
+                return response
             }
         val supplement = PlayViewReply.parseFrom(supplementAny.value.toByteArray())
         if (Settings.UnlockAreaLimit() && needProxyUnite(response, supplement)) {
@@ -245,7 +247,7 @@ object BangumiPlayUrlHook {
                 } else {
                     reconstructResponseUnite(
                         req, response, supplement, content, allowDownloadUnite, thaiSeason, thaiEp
-                    )
+                    ).also { syncVideoHistoryIfNeeded(req, it) }
                 }
             } catch (e: CustomServerException) {
                 showPlayerErrorUnite(
@@ -256,11 +258,130 @@ object BangumiPlayUrlHook {
             if (allowDownloadUnite)
                 return fixDownloadProtoUnite(response)
             var newReply = response
+            syncVideoHistoryIfNeeded(req, newReply)
             if (Settings.BlockBangumiPageAds() || Settings.RemoveCmdDms())
                 newReply = purifyViewInfoUnite(newReply, supplement)
             return newReply
         }
         finalError?.let { throw it } ?: return reply
+    }
+
+    private fun syncVideoHistoryIfNeeded(req: PlayViewUniteReq, reply: PlayViewUniteReply?) {
+        reply ?: return
+        if (isDownloadUnite) return
+        val accessKeyMain = Settings.AccessKeyMain()
+        if (accessKeyMain.isEmpty() || accessKeyMain == Accounts.accessKey)
+            return
+        val videoType = reply.playArc.videoType
+        if (videoType != BizType.BIZ_TYPE_UGC && videoType != BizType.BIZ_TYPE_PGC)
+            return
+        if (videoType == BizType.BIZ_TYPE_PGC
+            && maybeThailand(reply.playArc.aid.toString(), reply.playArc.cid.toString())
+        ) return
+        val toastWithoutTime = Toast().apply {
+            button = Button().apply { text = "跳转播放" }
+            text = "你有最近观看的进度 "
+        }
+        if (videoType == BizType.BIZ_TYPE_UGC) {
+            val viewReply = com.bapis.bilibili.app.view.v1.ViewMoss().runCatchingOrNull {
+                view(com.bapis.bilibili.app.view.v1.ViewReq().apply {
+                    aid = req.vod.aid
+                    bvid = req.bvid
+                    fnval = req.vod.fnval
+                    fnver = req.vod.fnver
+                    forceHost = req.vod.forceHost
+                    fourk = if (req.vod.fourk) 1 else 0
+                    qn = req.vod.qn.toInt()
+                })
+            } ?: return
+            if (!viewReply.hasHistory()) return
+            val history = viewReply.history
+            reply.history = History().apply {
+                if (history.cid == reply.playArc.cid) {
+                    currentVideo = HistoryInfo().apply {
+                        lastPlayAid = reply.playArc.aid
+                        lastPlayCid = reply.playArc.cid
+                        progress = history.progress
+                        if (progress != -1L) {
+                            this.toastWithoutTime = toastWithoutTime
+                            toast = Toast().apply {
+                                button = Button()
+                                text = "已为您定位至上次观看位置"
+                            }
+                        }
+                    }
+                } else {
+                    val lastTitle = viewReply.pagesList.firstNotNullOfOrNull {
+                        if (it.page.cid == history.cid) it.page.part else null
+                    }.orEmpty()
+                    relatedVideo = HistoryInfo().apply {
+                        lastPlayAid = reply.playArc.aid
+                        lastPlayCid = history.cid
+                        progress = history.progress
+                        if (progress != -1L) {
+                            this.toastWithoutTime = toastWithoutTime
+                            toast = Toast().apply {
+                                button = Button().apply { text = "跳转播放" }
+                                text = "上次看到$lastTitle ${progress.secondFormat()} "
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            val playViewReply = PlayURLMoss().runCatchingOrNull {
+                playView(PlayViewReq().apply {
+                    dataControl = DataControl().apply {
+                        needWatchProgress = true
+                    }
+                    epId = req.extraContentMap.getOrDefault("ep_id", "0").toLong()
+                    seasonId = req.extraContentMap.getOrDefault("season_id", "0").toLong()
+                    fnval = req.vod.fnval
+                    fourk = req.vod.fourk
+                    fnver = req.vod.fnver
+                    forceHost = req.vod.forceHost
+                    qn = req.vod.qn
+                    preferCodecType = com.bapis.bilibili.pgc.gateway.player.v2.CodeType.CODE265
+                    isNeedViewInfo = true
+                    fromSpmid = "main.my-history.0.0"
+                    securityLevel = SecurityLevel.LEVEL_L1
+                    spmid = "pgc.pgc-video-detail.0.0"
+                })
+            } ?: return
+            val userStatus = playViewReply.business.userStatus
+            val current = if (userStatus.hasAidWatchProgress()) userStatus.aidWatchProgress else null
+            val last = if (userStatus.hasWatchProgress()) userStatus.watchProgress else null
+            reply.history = History().apply {
+                if (current != null) {
+                    currentVideo = HistoryInfo().apply {
+                        lastPlayAid = current.lastPlayAid
+                        lastPlayCid = current.lastPlayCid
+                        progress = current.progress
+                        if (progress != -1L) {
+                            this.toastWithoutTime = toastWithoutTime
+                            toast = Toast().apply {
+                                button = Button()
+                                text = current.toast.toastText.text
+                            }
+                        }
+                    }
+                }
+                if (last != null) {
+                    relatedVideo = HistoryInfo().apply {
+                        lastPlayAid = last.lastPlayAid
+                        lastPlayCid = last.lastPlayCid
+                        progress = last.progress
+                        if (progress != -1L) {
+                            this.toastWithoutTime = toastWithoutTime
+                            toast = Toast().apply {
+                                button = Button().apply { text = last.toast.button.text }
+                                text = last.toast.toastText.text
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // 主要用于修复8.4.0+版本泰区番剧下载

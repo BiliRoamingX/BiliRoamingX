@@ -96,17 +96,16 @@ object BiliRoamingApi {
         val errors = mutableMapOf<String, String>()
 
         for ((area, host) in hostList.toList().asReversed()) {
-            val accessKey = Accounts.accessKey
             val extraMap = if (area == Area.Thailand) mapOf(
                 "area" to area.value,
                 "appkey" to "7d089525d3611b1c",
                 "build" to "1001310",
                 "mobi_app" to "bstar_a",
                 "platform" to "android",
-                "access_key" to accessKey,
+                "access_key" to getFinalAccessKey(true),
             ) else mapOf(
                 "area" to area.value,
-                "access_key" to accessKey,
+                "access_key" to getFinalAccessKey(false),
             )
             val path = if (area == Area.Thailand) THAILAND_PATH_PLAYURL else PATH_PLAYURL
             val uri = Uri.Builder()

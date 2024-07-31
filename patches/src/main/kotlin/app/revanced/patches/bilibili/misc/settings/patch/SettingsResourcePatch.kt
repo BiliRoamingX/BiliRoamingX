@@ -73,6 +73,7 @@ object SettingsResourcePatch : ResourcePatch() {
         "biliroaming_dialog_argb_color_choose.xml",
         "biliroaming_dialog_color_choose.xml",
         "biliroaming_dialog_area_server.xml",
+        "biliroaming_dialog_access_key.xml",
         "biliroaming_search_bar.xml",
     )
     private val drawables = arrayOf(

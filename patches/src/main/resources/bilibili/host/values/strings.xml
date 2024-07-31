@@ -474,4 +474,8 @@
     <string name="biliroaming_disable_non_official_alert_title">禁用打开非官方网页警告</string>
     <string name="biliroaming_disable_non_official_alert_summary">禁用内部浏览器打开非官方网页时底部横条警告</string>
     <string name="biliroaming_tool_title">工具</string>
+    <string name="biliroaming_custom_access_key_title">自定义访问密钥</string>
+    <string name="biliroaming_custom_access_key_summary">自定义视频播放取流访问密钥，仅支持新版播放器</string>
+    <string name="biliroaming_key_main">主站</string>
+    <string name="biliroaming_key_th">泰区</string>
 </resources>

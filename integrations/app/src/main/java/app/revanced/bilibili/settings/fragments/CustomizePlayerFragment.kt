@@ -17,6 +17,7 @@ class CustomizePlayerFragment : BiliRoamingBaseSettingFragment() {
         findPreference<Preference>("default_speed")?.onClick { onPlaybackSpeedClick(false) }
         findPreference<Preference>("long_press_speed")?.onClick { onPlaybackSpeedClick(true) }
         findPreference<Preference>("override_speed")?.onClick { onPlaybackSpeedOverrideClick() }
+        findPreference<Preference>("custom_access_key")?.onClick { onCustomAccessKey() }
     }
 
     private fun onPlaybackSpeedClick(longPress: Boolean): Boolean {
@@ -90,6 +91,22 @@ class CustomizePlayerFragment : BiliRoamingBaseSettingFragment() {
                     }
                 }
             }.show()
+        return true
+    }
+
+    private fun onCustomAccessKey(): Boolean {
+        val layout = hostContext.inflateLayout("biliroaming_dialog_access_key")
+        val mainEdit = layout.findView<EditText>("biliroaming_key_main")
+        val thEdit = layout.findView<EditText>("biliroaming_key_th")
+        mainEdit.setText(Settings.AccessKeyMain())
+        thEdit.setText(Settings.AccessKeyThailand())
+        AlertDialog.Builder(context)
+            .setView(layout)
+            .setTitle(Utils.getString("biliroaming_custom_access_key_title"))
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                Settings.AccessKeyMain.save(mainEdit.text.toString().trim())
+                Settings.AccessKeyThailand.save(thEdit.text.toString().trim())
+            }.create().constraintSize(-1).show()
         return true
     }
 }

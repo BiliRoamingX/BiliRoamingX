@@ -776,3 +776,9 @@ fun maybeThailand(sid: String, epId: String = ""): Boolean {
 fun Date.format(pattern: String = "yyyy-MM-dd HH:mm:ss"): String {
     return SimpleDateFormat(pattern, Locale.getDefault()).format(this)
 }
+
+fun getFinalAccessKey(thailand: Boolean) = if (thailand) {
+    Settings.AccessKeyThailand().ifEmpty { Accounts.accessKey }
+} else {
+    Settings.AccessKeyMain().ifEmpty { Accounts.accessKey }
+}

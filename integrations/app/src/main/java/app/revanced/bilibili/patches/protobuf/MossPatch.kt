@@ -149,6 +149,17 @@ object MossPatch {
         }
     }
 
+    @Suppress("NOTHING_TO_INLINE")
+    private inline operator fun ArrayList<Map.Entry<String, String>>.set(key: String, value: String) {
+        for (i in 0 until size) {
+            if (get(i).key == key) {
+                removeAt(i)
+                break
+            }
+        }
+        add(AbstractMap.SimpleImmutableEntry(key, value))
+    }
+
     @Keep
     @JvmStatic
     fun hookBeforeRequest(url: String, headers: ArrayList<Map.Entry<String, String>>): String {
@@ -161,6 +172,8 @@ object MossPatch {
             if ((Utils.isPink() || Utils.isPlay()) && Settings.TrialVipQuality() && !Accounts.isEffectiveVip)
                 pinNetworkType(NetworkType.WIFI, headers)
         }
+        if (url.endsWith(PLAY_VIEW_UNITE_API))
+            headers["authorization"] = "identify_v1 ${getFinalAccessKey(false)}"
         return url
     }
 
@@ -172,17 +185,13 @@ object MossPatch {
             val newNetworkBin = Network.parseFrom(networkBinValue.base64Decode).apply {
                 this.type = type
             }.toByteArray().base64
-            headers.removeIf { (k, _) -> k == networkBinKey }
-            headers.add(AbstractMap.SimpleImmutableEntry(networkBinKey, newNetworkBin))
+            headers[networkBinKey] = newNetworkBin
         }
     }
 
     @Suppress("SameParameterValue")
     private fun fakeClient(client: Client, headers: ArrayList<Map.Entry<String, String>>) {
-        headers.removeIf { (k, _) -> k == "x-bili-metadata-bin" || k == "x-bili-device-bin" }
-        val metadata = grpcMetadataHeader(client)
-        val device = grpcDeviceHeader(client)
-        headers.add(AbstractMap.SimpleImmutableEntry("x-bili-metadata-bin", metadata))
-        headers.add(AbstractMap.SimpleImmutableEntry("x-bili-device-bin", device))
+        headers["x-bili-metadata-bin"] = grpcMetadataHeader(client)
+        headers["x-bili-device-bin"] = grpcDeviceHeader(client)
     }
 }
