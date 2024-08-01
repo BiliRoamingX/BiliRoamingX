@@ -36,7 +36,9 @@ object ConfigPatch {
         "ff_open_device_id_all",
     )
 
-    private open class Hook<T>(val enabled: () -> Boolean, val value: T, vararg val keys: String)
+    private open class Hook<T>(val enabled: () -> Boolean, val value: T, vararg val keys: String) {
+        constructor(value: T, vararg keys: String) : this({ true }, value, *keys)
+    }
 
     private class AbHook(setting: BooleanSetting, value: Boolean, vararg keys: String) :
         Hook<Boolean>({ setting() }, value, *keys)
@@ -46,8 +48,8 @@ object ConfigPatch {
 
     @JvmStatic
     private val abHooks = listOf(
-        Hook({ true }, false, *alwaysDisabledAbKeys),
-        Hook({ true }, true, *alwaysEnabledAbKeys),
+        Hook(false, *alwaysDisabledAbKeys),
+        Hook(true, *alwaysEnabledAbKeys),
         AbHook(Settings.DisallowCollectPrivacyInfo, false, *privacyInfoKeys),
         AbHook(Settings.ForceOldFav, false, "ff_player_fav_new"),
         AbHook(Settings.AddChannel, false, "ff_channel_redirect_to_search"),
@@ -60,7 +62,7 @@ object ConfigPatch {
 
     @JvmStatic
     private val configHooks = listOf(
-        Hook({ true }, Constants.MAX_QN.toString(), "ijkplayer.autoswitch_max_qn"),
+        Hook(Constants.MAX_QN.toString(), "ijkplayer.autoswitch_max_qn"),
         ConfigHook(Settings.EnableAv, "0", "bv.enable_bv"),
         ConfigHook(Settings.EnableAv, avOrBvPattern, "bv.pattern_rule_av_only"),
         ConfigHook(Settings.DisableWebViewNonOfficialAlert, ".*", "base.h5_alert_whitelist"),
