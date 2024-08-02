@@ -84,6 +84,7 @@ object Settings {
     @JvmField val BlockPopularRcmdUp = BooleanSetting(key = "block_popular_rcmd_up")
     @JvmField val BlockPopularLive = BooleanSetting(key = "block_popular_live")
     @JvmField val BlockHomeRecentUsed = BooleanSetting(key = "block_home_recent_used")
+    @JvmField val PegasusCoverRatio = StringSetting(key = "pegasus_cover_ratio", defValue = "0", needReboot = true)
     // endregion
 
 

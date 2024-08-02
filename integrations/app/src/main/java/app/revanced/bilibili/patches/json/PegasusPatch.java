@@ -757,7 +757,10 @@ public class PegasusPatch {
         return false;
     }
 
-    private static void disableAutoRefresh(Config config) {
+    private static void customPegasusConfig(Config config) {
+        float ratio = Float.parseFloat(Settings.PegasusCoverRatio.get());
+        if (config != null && ratio != 0f && !Utils.isHd())
+            config.smallCoverWhRatio = ratio;
         if (config == null || !shouldDisableAutoRefresh())
             return;
         if (Utils.isPink() || Utils.isBlue() || Utils.isPlay()) {
@@ -781,7 +784,7 @@ public class PegasusPatch {
     public static void pegasusHook(GeneralResponse<PegasusFeedResponse> response) {
         var data = response.data;
         if (data == null) return;
-        disableAutoRefresh(data.config);
+        customPegasusConfig(data.config);
         var items = data.items;
         if (items == null || items.isEmpty()) return;
         long playCountLimit = Settings.LowPlayCountLimit.get();
@@ -862,6 +865,9 @@ public class PegasusPatch {
 
     public static void pegasusHook(JSONObject data) throws JSONException {
         JSONObject config = data.optJSONObject("config");
+        float ratio = Float.parseFloat(Settings.PegasusCoverRatio.get());
+        if (config != null && ratio != 0f)
+            config.put("small_cover_wh_ratio", ratio);
         if (config != null && shouldDisableAutoRefresh()) {
             config.put("auto_refresh_time", 0);
             config.put("auto_refresh_time_by_appear", -1L);

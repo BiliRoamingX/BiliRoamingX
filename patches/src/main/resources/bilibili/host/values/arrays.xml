@@ -469,4 +469,14 @@
         <item>6</item>
         <item>7</item>
     </string-array>
+    <string-array name="biliroaming_pegasus_cover_ratio_entries">
+        <item>默认</item>
+        <item>16:9</item>
+        <item>4:3</item>
+    </string-array>
+    <string-array name="biliroaming_pegasus_cover_ratio_values">
+        <item>0</item>
+        <item>1.777778</item>
+        <item>1.333333</item>
+    </string-array>
 </resources>

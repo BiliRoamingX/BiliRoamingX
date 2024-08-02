@@ -73,3 +73,6 @@ class UposSettingFragment : BiliRoamingBaseSettingFragment()
 
 @SettingFragment("biliroaming_setting_story_ui_style")
 class StoryUIStyleFragment : BiliRoamingBaseSettingFragment()
+
+@SettingFragment("biliroaming_setting_cover_ratio")
+class PegasusCoverRatioFragment : BiliRoamingBaseSettingFragment()

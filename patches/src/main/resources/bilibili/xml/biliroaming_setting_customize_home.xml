@@ -64,5 +64,14 @@
             android:key="dynamic_no_up_recall"
             android:summary="@string/biliroaming_dynamic_no_up_recall_summary"
             android:title="@string/biliroaming_dynamic_no_up_recall_title" />
+        <tv.danmaku.bili.widget.preference.BLRadioGroupEntrancePreference
+            android:fragment="app.revanced.bilibili.settings.fragments.PegasusCoverRatioFragment"
+            android:key="pegasus_cover_ratio"
+            android:persistent="true"
+            android:title="@string/biliroaming_pegasus_cover_ratio_title"
+            app:migration_settings_type="none"
+            app:radioDefaultValue="0"
+            app:radioEntries="@array/biliroaming_pegasus_cover_ratio_entries"
+            app:radioEntryValues="@array/biliroaming_pegasus_cover_ratio_values" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

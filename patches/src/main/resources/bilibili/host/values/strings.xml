@@ -478,4 +478,6 @@
     <string name="biliroaming_custom_access_key_summary">自定义视频播放取流访问密钥，仅支持新版播放器</string>
     <string name="biliroaming_key_main">主站</string>
     <string name="biliroaming_key_th">泰区</string>
+    <string name="biliroaming_pegasus_cover_ratio_title">推荐封面比例</string>
+    <string name="biliroaming_pegasus_cover_ratio_summary">裁切实现自定义小卡（双列显示）推荐的封面比例</string>
 </resources>
