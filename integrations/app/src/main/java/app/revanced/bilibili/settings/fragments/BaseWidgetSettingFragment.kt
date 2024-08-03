@@ -66,6 +66,7 @@ abstract class BaseWidgetSettingFragment : BaseFragment() {
         val textView = tintView<TextView>().apply {
             text = name
             setSingleLine()
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
             ellipsize = TextUtils.TruncateAt.END
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,

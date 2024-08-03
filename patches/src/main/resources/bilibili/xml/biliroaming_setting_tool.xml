@@ -9,5 +9,9 @@
             android:key="export_access_key"
             android:summary="@string/biliroaming_export_access_key_summary"
             android:title="@string/biliroaming_export_access_key_title" />
+        <androidx.preference.Preference
+            android:key="export_cache_video"
+            android:summary="@string/biliroaming_export_cache_video_summary"
+            android:title="@string/biliroaming_export_cache_video_title" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>
