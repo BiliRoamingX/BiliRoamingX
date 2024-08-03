@@ -487,4 +487,5 @@
     <string name="biliroaming_exporting">后台导出中，请稍候</string>
     <string name="biliroaming_export_success">已成功导出至%s</string>
     <string name="biliroaming_export_failed">导出失败</string>
+    <string name="biliroaming_cache_not_found">未找到缓存视频</string>
 </resources>

@@ -18,7 +18,6 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.preference.Preference
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.revanced.bilibili.account.Accounts
@@ -28,6 +27,9 @@ import app.revanced.bilibili.model.showName
 import app.revanced.bilibili.patches.main.ApplicationDelegate
 import app.revanced.bilibili.settings.search.annotation.SettingFragment
 import app.revanced.bilibili.utils.*
+import app.revanced.bilibili.widget.RecyclerViewAdapter
+import app.revanced.bilibili.widget.RecyclerViewHolder
+import app.revanced.bilibili.widget.disableChangeAnimations
 import java.io.File
 
 @SettingFragment("biliroaming_setting_tool")
@@ -88,13 +90,17 @@ class ToolFragment : BiliRoamingBaseSettingFragment() {
                 return@mapNotNull null
             DownloadEntrySelection(entry, saveDir)
         }.toList()
+        if (entries.isEmpty()) {
+            Toasts.showShortWithId("biliroaming_cache_not_found")
+            return@async
+        }
         Utils.runOnMainThread {
             val context = hostContext
             val adapter = DownloadEntryAdapter(context, entries)
             val recyclerView = RecyclerView(context).apply {
                 this.adapter = adapter
                 layoutManager = LinearLayoutManager(context)
-                (itemAnimator as? DefaultItemAnimator)?.supportsChangeAnimations = false
+                disableChangeAnimations()
                 clipToPadding = true
                 updatePadding(top = 4.dp)
             }
@@ -162,16 +168,17 @@ class DownloadEntrySelection(val entry: DownloadEntry, val saveDir: File, var se
 class DownloadEntryAdapter(
     private val context: Context,
     private val entries: List<DownloadEntrySelection>
-) : RecyclerView.Adapter<DownloadEntryViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DownloadEntryViewHolder {
+) : RecyclerViewAdapter<DownloadEntryCell>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder<DownloadEntryCell> {
         val cell = DownloadEntryCell(context).apply {
             setRippleBackground()
-            layoutParams = RecyclerView.LayoutParams(
+            // don't use RecyclerView.LayoutParams, maybe obfuscated
+            layoutParams = ViewGroup.LayoutParams(
                 RecyclerView.LayoutParams.MATCH_PARENT,
                 RecyclerView.LayoutParams.WRAP_CONTENT
             )
         }
-        val viewHolder = DownloadEntryViewHolder(cell)
+        val viewHolder = RecyclerViewHolder(cell)
         cell.checkBox.isClickable = false
         cell.onClick {
             val pos = viewHolder.bindingAdapterPosition
@@ -184,10 +191,10 @@ class DownloadEntryAdapter(
 
     override fun getItemCount() = entries.size
 
-    override fun onBindViewHolder(holder: DownloadEntryViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewHolder<DownloadEntryCell>, position: Int) {
         val selection = entries[position]
-        holder.cell.name.text = selection.entry.showName
-        holder.cell.checkBox.isChecked = selection.selected
+        holder.view.name.text = selection.entry.showName
+        holder.view.checkBox.isChecked = selection.selected
     }
 
     fun selectOrCancelAll() {
@@ -204,8 +211,6 @@ class DownloadEntryAdapter(
         }
     }
 }
-
-class DownloadEntryViewHolder(val cell: DownloadEntryCell) : RecyclerView.ViewHolder(cell)
 
 @SuppressLint("ViewConstructor")
 class DownloadEntryCell(context: Context) : LinearLayout(context) {
