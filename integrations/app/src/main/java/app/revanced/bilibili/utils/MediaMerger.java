@@ -16,7 +16,19 @@ public class MediaMerger {
         MediaExtractor videoExtractor = new MediaExtractor();
         MediaExtractor audioExtractor = new MediaExtractor();
         MediaMuxer mediaMuxer = new MediaMuxer(outputPath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
+        try {
+            mergeInternal(videoExtractor, audioExtractor, mediaMuxer, videoPath, audioPath);
+        } finally {
+            mediaMuxer.release();
+            videoExtractor.release();
+            audioExtractor.release();
+        }
+    }
 
+    private static void mergeInternal(
+            MediaExtractor videoExtractor, MediaExtractor audioExtractor, MediaMuxer mediaMuxer,
+            String videoPath, String audioPath
+    ) throws IOException {
         // Set up video extractor
         videoExtractor.setDataSource(videoPath);
         MediaFormat videoFormat = selectTrack(videoExtractor, "video/");
@@ -41,10 +53,6 @@ public class MediaMerger {
             // Copy audio data
             copyTrack(audioExtractor, mediaMuxer, audioTrackIndex);
         }
-
-        mediaMuxer.release();
-        videoExtractor.release();
-        audioExtractor.release();
     }
 
     private static MediaFormat selectTrack(MediaExtractor extractor, String mimeType) throws IOException {

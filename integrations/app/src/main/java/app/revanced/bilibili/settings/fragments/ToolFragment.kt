@@ -31,6 +31,9 @@ import app.revanced.bilibili.widget.RecyclerViewAdapter
 import app.revanced.bilibili.widget.RecyclerViewHolder
 import app.revanced.bilibili.widget.disableChangeAnimations
 import java.io.File
+import java.util.concurrent.Executors
+import java.util.concurrent.Future
+import java.util.concurrent.atomic.AtomicInteger
 
 @SettingFragment("biliroaming_setting_tool")
 class ToolFragment : BiliRoamingBaseSettingFragment() {
@@ -109,8 +112,20 @@ class ToolFragment : BiliRoamingBaseSettingFragment() {
                 .setView(recyclerView)
                 .setPositiveButton(Utils.getString("biliroaming_export")) { _, _ ->
                     val selections = entries.filter { it.selected }
-                    if (selections.isNotEmpty())
-                        exportVideos(selections)
+                    if (selections.isNotEmpty()) {
+                        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+                            Utils.async { exportVideos(selections) }
+                        } else {
+                            val activity = ApplicationDelegate.requireTopActivity()
+                            activity.requestPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) { granted, shouldExplain ->
+                                if (granted) {
+                                    Utils.async { exportVideos(selections) }
+                                } else if (shouldExplain) {
+                                    Toasts.showShortWithId("biliroaming_write_storage_failed")
+                                }
+                            }
+                        }
+                    }
                 }
                 .setNegativeButton(Utils.getString("biliroaming_select_or_cancel_all"), null)
                 .setNeutralButton(android.R.string.cancel, null)
@@ -127,38 +142,40 @@ class ToolFragment : BiliRoamingBaseSettingFragment() {
     companion object {
         @JvmStatic
         private fun exportVideos(selections: List<DownloadEntrySelection>) {
+            Toasts.showShortWithId("biliroaming_exporting")
             val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            val videosDir = File(downloadsDir, "bilibili/videos")
-            fun save() = runCatching {
-                Toasts.showShortWithId("biliroaming_exporting")
-                videosDir.mkdirs()
-                for (selection in selections) {
-                    val entry = selection.entry
-                    val saveDir = selection.saveDir
-                    val videoPath = File(saveDir, "video.m4s").absolutePath
-                    val audioPath = File(saveDir, "audio.m4s").absolutePath
-                    val exportPath = File(videosDir, "${entry.saveFilename}.mp4").absolutePath
-                    MediaMerger.merge(videoPath, audioPath, exportPath)
-                }
-            }.onSuccess {
-                Toasts.showLongWithId("biliroaming_export_success", videosDir.absolutePath)
-                MediaScannerConnection.scanFile(Utils.getContext(), videosDir.list().orEmpty(), null, null)
-            }.onFailure {
-                Logger.error(it) { "cache video export failed" }
-                Toasts.showShortWithId("biliroaming_export_failed")
-            }
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-                Utils.async { save() }
-            } else {
-                val activity = ApplicationDelegate.requireTopActivity()
-                activity.requestPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) { granted, shouldExplain ->
-                    if (granted) {
-                        Utils.async { save() }
-                    } else if (shouldExplain) {
-                        Toasts.showShortWithId("biliroaming_write_storage_failed")
+            val videosDir = File(downloadsDir, "bilibili/videos").apply { mkdirs() }
+            val executors = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
+            val progress = AtomicInteger(0)
+            val failedCount = AtomicInteger(0)
+            val total = selections.size
+            val tasks = mutableListOf<Future<*>>()
+            for (selection in selections) {
+                val entry = selection.entry
+                val saveDir = selection.saveDir
+                val videoPath = File(saveDir, "video.m4s").absolutePath
+                val audioPath = File(saveDir, "audio.m4s").absolutePath
+                val exportPath = File(videosDir, "${entry.saveFilename}.mp4").absolutePath
+                executors.submit {
+                    runCatching {
+                        MediaMerger.merge(videoPath, audioPath, exportPath)
+                    }.onFailure {
+                        Logger.error(it) { "video merge failed, bvId: ${entry.bvid}, epId: ${entry.ep.episodeId}" }
+                        failedCount.incrementAndGet()
                     }
-                }
+                    val count = progress.incrementAndGet()
+                    if (count != total)
+                        Toasts.showShortWithId("biliroaming_export_progress", "$count/$total")
+                }.let { tasks.add(it) }
             }
+            tasks.forEach { it.runCatchingOrNull { get() } }
+            executors.shutdown()
+            when (failedCount.get()) {
+                0 -> Toasts.showLongWithId("biliroaming_export_success", videosDir.absolutePath)
+                total -> Toasts.showShortWithId("biliroaming_export_failed")
+                else -> Toasts.showLongWithId("biliroaming_export_success_partial", videosDir.absolutePath)
+            }
+            MediaScannerConnection.scanFile(Utils.getContext(), videosDir.list().orEmpty(), null, null)
         }
     }
 }
