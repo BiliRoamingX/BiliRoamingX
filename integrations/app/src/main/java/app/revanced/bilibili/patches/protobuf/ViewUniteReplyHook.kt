@@ -134,7 +134,7 @@ object ViewUniteReplyHook {
                     } else if (module.hasRelates()) {
                         PegasusPatch.filterViewUniteRelates(module, viewReply.viewBase.bizType)
                         BLRoutePatch.removePayloadUniteIfNeeded(module.relates.cardsList)
-                    } else if (module.hasCovenanter()) {
+                    } else if (module.hasCovenanter() || module.hasFollowLayer()) {
                         if (Settings.BlockFanGuide())
                             toRemoveIndexes.add(index)
                     } else if (module.hasLiveOrder()) {
