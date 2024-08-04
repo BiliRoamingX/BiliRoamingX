@@ -23,71 +23,84 @@ object InjectMoreSchemePatch : ResourcePatch() {
         context.document["AndroidManifest.xml"].use { dom ->
             dom["application"].children().find {
                 it.tagName == "activity" && it["android:name"] == "tv.danmaku.bili.ui.intent.IntentHandlerActivity"
-            }?.appendChild("intent-filter") {
-                appendChild("action") {
-                    this["android:name"] = "android.intent.action.VIEW"
+            }?.run {
+                appendChild("intent-filter") {
+                    appendChild("action") {
+                        this["android:name"] = "android.intent.action.VIEW"
+                    }
+                    appendChild("category") {
+                        this["android:name"] = "android.intent.category.DEFAULT"
+                    }
+                    appendChild("category") {
+                        this["android:name"] = "android.intent.category.BROWSABLE"
+                    }
+                    //region 直播
+                    appendChild("data") {
+                        this["android:scheme"] = "http"
+                        this["android:host"] = "live.bilibili.com"
+                    }
+                    appendChild("data") {
+                        this["android:scheme"] = "https"
+                        this["android:host"] = "live.bilibili.com"
+                    }
+                    //endregion
+                    //region 动态等
+                    appendChild("data") {
+                        this["android:scheme"] = "http"
+                        this["android:host"] = "m.bilibili.com"
+                    }
+                    appendChild("data") {
+                        this["android:scheme"] = "https"
+                        this["android:host"] = "m.bilibili.com"
+                    }
+                    //endregion
+                    appendChild("data") {
+                        this["android:scheme"] = "http"
+                        this["android:host"] = "www.bilibili.com"
+                    }
+                    appendChild("data") {
+                        this["android:scheme"] = "https"
+                        this["android:host"] = "www.bilibili.com"
+                    }
+                    appendChild("data") {
+                        this["android:scheme"] = "http"
+                        this["android:host"] = "t.bilibili.com"
+                    }
+                    appendChild("data") {
+                        this["android:scheme"] = "https"
+                        this["android:host"] = "t.bilibili.com"
+                    }
                 }
-                appendChild("category") {
-                    this["android:name"] = "android.intent.category.DEFAULT"
-                }
-                appendChild("category") {
-                    this["android:name"] = "android.intent.category.BROWSABLE"
-                }
-                //region 直播
-                appendChild("data") {
-                    this["android:scheme"] = "http"
-                    this["android:host"] = "live.bilibili.com"
-                }
-                appendChild("data") {
-                    this["android:scheme"] = "https"
-                    this["android:host"] = "live.bilibili.com"
-                }
-                //endregion
-                //region 动态等
-                appendChild("data") {
-                    this["android:scheme"] = "http"
-                    this["android:host"] = "m.bilibili.com"
-                }
-                appendChild("data") {
-                    this["android:scheme"] = "https"
-                    this["android:host"] = "m.bilibili.com"
-                }
-                //endregion
-                appendChild("data") {
-                    this["android:scheme"] = "http"
-                    this["android:host"] = "www.bilibili.com"
-                }
-                appendChild("data") {
-                    this["android:scheme"] = "https"
-                    this["android:host"] = "www.bilibili.com"
-                }
-                appendChild("data") {
-                    this["android:scheme"] = "http"
-                    this["android:host"] = "t.bilibili.com"
-                }
-                appendChild("data") {
-                    this["android:scheme"] = "https"
-                    this["android:host"] = "t.bilibili.com"
-                }
-                appendChild("data") {
-                    this["android:scheme"] = "http"
-                    this["android:host"] = "www.bilibili.tv"
-                    this["android:pathPattern"] = "/.*/play/.*"
-                }
-                appendChild("data") {
-                    this["android:scheme"] = "https"
-                    this["android:host"] = "www.bilibili.tv"
-                    this["android:pathPattern"] = "/.*/play/.*"
-                }
-                appendChild("data") {
-                    this["android:scheme"] = "http"
-                    this["android:host"] = "www.biliintl.com"
-                    this["android:pathPattern"] = "/.*/play/.*"
-                }
-                appendChild("data") {
-                    this["android:scheme"] = "https"
-                    this["android:host"] = "www.biliintl.com"
-                    this["android:pathPattern"] = "/.*/play/.*"
+                appendChild("intent-filter") {
+                    appendChild("action") {
+                        this["android:name"] = "android.intent.action.VIEW"
+                    }
+                    appendChild("category") {
+                        this["android:name"] = "android.intent.category.DEFAULT"
+                    }
+                    appendChild("category") {
+                        this["android:name"] = "android.intent.category.BROWSABLE"
+                    }
+                    appendChild("data") {
+                        this["android:scheme"] = "http"
+                        this["android:host"] = "www.bilibili.tv"
+                        this["android:pathPattern"] = "/.*/play/.*"
+                    }
+                    appendChild("data") {
+                        this["android:scheme"] = "https"
+                        this["android:host"] = "www.bilibili.tv"
+                        this["android:pathPattern"] = "/.*/play/.*"
+                    }
+                    appendChild("data") {
+                        this["android:scheme"] = "http"
+                        this["android:host"] = "www.biliintl.com"
+                        this["android:pathPattern"] = "/.*/play/.*"
+                    }
+                    appendChild("data") {
+                        this["android:scheme"] = "https"
+                        this["android:host"] = "www.biliintl.com"
+                        this["android:pathPattern"] = "/.*/play/.*"
+                    }
                 }
             }
         }
