@@ -5,21 +5,31 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.media.AudioAttributes
 import android.os.Build
 import androidx.annotation.RequiresApi
 
-@Suppress("ConvertObjectToDataObject")
+@Suppress("ConvertObjectToDataObject", "MemberVisibilityCanBePrivate")
 sealed class NcChannel(
     val id: String,
     val name: String,
-    val importance: Int = NotificationManager.IMPORTANCE_LOW
+    val importance: Int = NotificationManager.IMPORTANCE_DEFAULT,
+    val mute: Boolean = true,
 ) {
     object BiliRoamingX : NcChannel("biliroamingx", "哔哩漫游X")
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun toNative(): NotificationChannel {
         val finalId = Utils.getContext().packageName + "." + id
-        return NotificationChannel(finalId, name, importance)
+        return NotificationChannel(finalId, name, importance).apply {
+            if (mute) {
+                val audioAttributes = AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build()
+                setSound(null, audioAttributes)
+            }
+        }
     }
 }
 
