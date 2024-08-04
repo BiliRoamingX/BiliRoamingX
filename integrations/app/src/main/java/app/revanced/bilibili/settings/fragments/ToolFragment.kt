@@ -2,6 +2,7 @@ package app.revanced.bilibili.settings.fragments
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.NotificationManager
 import android.content.Context
 import android.content.DialogInterface
 import android.media.MediaScannerConnection
@@ -34,6 +35,7 @@ import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.random.Random
 
 @SettingFragment("biliroaming_setting_tool")
 class ToolFragment : BiliRoamingBaseSettingFragment() {
@@ -114,12 +116,12 @@ class ToolFragment : BiliRoamingBaseSettingFragment() {
                     val selections = entries.filter { it.selected }
                     if (selections.isNotEmpty()) {
                         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-                            Utils.async { exportVideos(selections) }
+                            exportVideos(selections)
                         } else {
                             val activity = ApplicationDelegate.requireTopActivity()
                             activity.requestPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) { granted, shouldExplain ->
                                 if (granted) {
-                                    Utils.async { exportVideos(selections) }
+                                    exportVideos(selections)
                                 } else if (shouldExplain) {
                                     Toasts.showShortWithId("biliroaming_write_storage_failed")
                                 }
@@ -145,37 +147,48 @@ class ToolFragment : BiliRoamingBaseSettingFragment() {
             Toasts.showShortWithId("biliroaming_exporting")
             val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             val videosDir = File(downloadsDir, "bilibili/videos").apply { mkdirs() }
-            val executors = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
-            val progress = AtomicInteger(0)
-            val failedCount = AtomicInteger(0)
+            val threadsCount = Runtime.getRuntime().availableProcessors().coerceAtLeast(2)
+            val executors = Executors.newFixedThreadPool(threadsCount)
+            val complete = AtomicInteger(0)
+            val success = AtomicInteger(0)
             val total = selections.size
             val tasks = mutableListOf<Future<*>>()
-            for (selection in selections) {
-                val entry = selection.entry
-                val saveDir = selection.saveDir
-                val videoPath = File(saveDir, "video.m4s").absolutePath
-                val audioPath = File(saveDir, "audio.m4s").absolutePath
-                val exportPath = File(videosDir, "${entry.saveFilename}.mp4").absolutePath
-                executors.submit {
-                    runCatching {
-                        MediaMerger.merge(videoPath, audioPath, exportPath)
-                    }.onFailure {
-                        Logger.error(it) { "video merge failed, bvId: ${entry.bvid}, epId: ${entry.ep.episodeId}" }
-                        failedCount.incrementAndGet()
-                    }
-                    val count = progress.incrementAndGet()
-                    if (count != total)
-                        Toasts.showShortWithId("biliroaming_export_progress", "$count/$total")
-                }.let { tasks.add(it) }
+            val context = Utils.getContext()
+            val notifyId = Random.nextInt()
+            val nm = context.requireSystemService<NotificationManager>()
+            executors.execute {
+                val initProgress = Triple(total, 0, false)
+                nm.showNotification(notifyId, "缓存视频导出中：0/$total", ongoing = true, progress = initProgress)
+                for (selection in selections) {
+                    val entry = selection.entry
+                    val saveDir = selection.saveDir
+                    val videoPath = File(saveDir, "video.m4s").absolutePath
+                    val audioPath = File(saveDir, "audio.m4s").absolutePath
+                    val exportPath = File(videosDir, "${entry.saveFilename}.mp4").absolutePath
+                    executors.submit {
+                        runCatching {
+                            MediaMerger.merge(videoPath, audioPath, exportPath)
+                            success.incrementAndGet()
+                        }.onFailure {
+                            Logger.error(it) { "video merge failed, bvId: ${entry.bvid}, epId: ${entry.ep.episodeId}" }
+                        }
+                        val completeCount = complete.incrementAndGet()
+                        val title = "缓存视频导出中：$completeCount/$total"
+                        val progress = Triple(total, completeCount, false)
+                        nm.showNotification(notifyId, title, entry.showName, ongoing = true, progress = progress)
+                    }.let { tasks.add(it) }
+                }
+                tasks.forEach { it.runCatchingOrNull { get() } }
+                val title = when (val successCount = success.get()) {
+                    0 -> "缓存视频导出完成，全部失败"
+                    total -> "缓存视频导出完成，全部成功"
+                    else -> "缓存视频导出完成，部分成功：$successCount/$total"
+                }
+                val text = "导出路径为：${videosDir.absolutePath}"
+                nm.showNotification(notifyId, title, text)
+                MediaScannerConnection.scanFile(context, videosDir.list().orEmpty(), null, null)
+                executors.shutdown()
             }
-            tasks.forEach { it.runCatchingOrNull { get() } }
-            executors.shutdown()
-            when (failedCount.get()) {
-                0 -> Toasts.showLongWithId("biliroaming_export_success", videosDir.absolutePath)
-                total -> Toasts.showShortWithId("biliroaming_export_failed")
-                else -> Toasts.showLongWithId("biliroaming_export_success_partial", videosDir.absolutePath)
-            }
-            MediaScannerConnection.scanFile(Utils.getContext(), videosDir.list().orEmpty(), null, null)
         }
     }
 }

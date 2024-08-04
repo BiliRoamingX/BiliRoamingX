@@ -481,13 +481,9 @@
     <string name="biliroaming_pegasus_cover_ratio_title">推荐封面比例</string>
     <string name="biliroaming_pegasus_cover_ratio_summary">裁切实现自定义小卡（双列显示）推荐的封面比例</string>
     <string name="biliroaming_export_cache_video_title">导出缓存视频</string>
-    <string name="biliroaming_export_cache_video_summary">将缓存的视频合并并保存为mp4格式</string>
+    <string name="biliroaming_export_cache_video_summary">将缓存的视频导出为mp4格式</string>
     <string name="biliroaming_export">导出</string>
     <string name="biliroaming_select_or_cancel_all">全选/不选</string>
-    <string name="biliroaming_exporting">后台导出中，请稍等</string>
-    <string name="biliroaming_export_success">全部成功导出至%s</string>
-    <string name="biliroaming_export_success_partial">部分成功导出至%s</string>
-    <string name="biliroaming_export_failed">导出失败</string>
+    <string name="biliroaming_exporting">后台导出中，进度以通知形式提醒</string>
     <string name="biliroaming_cache_not_found">未找到缓存视频</string>
-    <string name="biliroaming_export_progress">导出完成%s</string>
 </resources>

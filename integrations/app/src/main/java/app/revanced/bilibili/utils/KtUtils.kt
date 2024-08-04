@@ -782,3 +782,5 @@ fun getFinalAccessKey(thailand: Boolean) = if (thailand) {
 } else {
     Settings.AccessKeyMain().ifEmpty { Accounts.accessKey }
 }
+
+inline fun <reified T> Context.requireSystemService(): T = getSystemService(T::class.java)
