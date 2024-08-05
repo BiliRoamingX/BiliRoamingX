@@ -66,7 +66,8 @@ object VideoExporter {
                         MediaMerger.merge(videoPath, audioPath, exportPath)
                         success.incrementAndGet()
                     }.onFailure {
-                        Logger.error(it) { "video merge failed, bvId: ${entry.bvid}, epId: ${entry.ep.episodeId}" }
+                        Logger.error(it) { "video merge failed, avId: ${entry.avid}, epId: ${entry.ep.episodeId}, name: ${entry.showName}" }
+                        File(exportPath).delete()
                         nm.showNotification(notifyIdGenerator.getAndIncrement(), "缓存视频导出失败", entry.showName)
                     }
                     val completeCount = complete.incrementAndGet()

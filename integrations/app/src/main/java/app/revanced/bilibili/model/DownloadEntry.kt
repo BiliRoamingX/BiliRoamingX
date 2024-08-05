@@ -162,5 +162,5 @@ val DownloadEntry.saveFilename: String
     get() = if (isBangumi) {
         "$showName-${qualityPithyDescription}${qualitySuperscript}-ep${ep.episodeId}".toValidFatFilename()
     } else {
-        "$showName-${qualityPithyDescription}${qualitySuperscript}-$bvid".toValidFatFilename()
+        "$showName-${qualityPithyDescription}${qualitySuperscript}-${bvid.ifEmpty { "av$avid" }}".toValidFatFilename()
     }
