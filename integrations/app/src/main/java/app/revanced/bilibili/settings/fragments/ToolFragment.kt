@@ -2,14 +2,11 @@ package app.revanced.bilibili.settings.fragments
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.NotificationManager
 import android.content.Context
 import android.content.DialogInterface
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.text.InputType
 import android.util.TypedValue
 import android.view.Gravity
@@ -22,8 +19,6 @@ import androidx.preference.Preference
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.revanced.bilibili.account.Accounts
-import app.revanced.bilibili.model.DownloadEntry
-import app.revanced.bilibili.model.saveFilename
 import app.revanced.bilibili.model.showName
 import app.revanced.bilibili.patches.main.ApplicationDelegate
 import app.revanced.bilibili.settings.search.annotation.SettingFragment
@@ -31,11 +26,6 @@ import app.revanced.bilibili.utils.*
 import app.revanced.bilibili.widget.RecyclerViewAdapter
 import app.revanced.bilibili.widget.RecyclerViewHolder
 import app.revanced.bilibili.widget.disableChangeAnimations
-import java.io.File
-import java.util.concurrent.Executors
-import java.util.concurrent.Future
-import java.util.concurrent.atomic.AtomicInteger
-import kotlin.random.Random
 
 @SettingFragment("biliroaming_setting_tool")
 class ToolFragment : BiliRoamingBaseSettingFragment() {
@@ -48,7 +38,11 @@ class ToolFragment : BiliRoamingBaseSettingFragment() {
             true
         }
         findPreference<Preference>("export_cache_video")?.onClick {
-            showExportSelectDialog()
+            if (VideoExporter.exporting) {
+                Toasts.showShort("当前有导出任务进行中，请等待完成")
+            } else {
+                showExportSelectDialog()
+            }
             true
         }
     }
@@ -80,21 +74,7 @@ class ToolFragment : BiliRoamingBaseSettingFragment() {
     }
 
     private fun showExportSelectDialog() = Utils.async {
-        val downloadDir = File(Utils.getContext().getExternalFilesDir(null)!!.parentFile, "download")
-        val entries = downloadDir.listFiles().orEmpty().flatMap {
-            it.listFiles().orEmpty().asIterable()
-        }.mapNotNull { dir ->
-            val entry = File(dir, "entry.json").runCatchingOrNull {
-                inputStream().use { it.fromJson<DownloadEntry>() }
-            } ?: return@mapNotNull null
-            if (!entry.isCompleted)
-                return@mapNotNull null
-            val videoQuality = entry.videoQuality
-            val saveDir = File(dir, videoQuality.toString())
-            if (!saveDir.isDirectory)
-                return@mapNotNull null
-            DownloadEntrySelection(entry, saveDir)
-        }.toList()
+        val entries = VideoExporter.readAllCacheVideos()
         if (entries.isEmpty()) {
             Toasts.showShortWithId("biliroaming_cache_not_found")
             return@async
@@ -116,12 +96,12 @@ class ToolFragment : BiliRoamingBaseSettingFragment() {
                     val selections = entries.filter { it.selected }
                     if (selections.isNotEmpty()) {
                         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-                            exportVideos(selections)
+                            VideoExporter.exportVideos(selections)
                         } else {
                             val activity = ApplicationDelegate.requireTopActivity()
                             activity.requestPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) { granted, shouldExplain ->
                                 if (granted) {
-                                    exportVideos(selections)
+                                    VideoExporter.exportVideos(selections)
                                 } else if (shouldExplain) {
                                     Toasts.showShortWithId("biliroaming_write_storage_failed")
                                 }
@@ -140,60 +120,7 @@ class ToolFragment : BiliRoamingBaseSettingFragment() {
                 .show()
         }
     }
-
-    companion object {
-        @JvmStatic
-        private fun exportVideos(selections: List<DownloadEntrySelection>) {
-            Toasts.showShortWithId("biliroaming_exporting")
-            val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            val videosDir = File(downloadsDir, "bilibili/videos").apply { mkdirs() }
-            val threadsCount = Runtime.getRuntime().availableProcessors().coerceAtLeast(2)
-            val executors = Executors.newFixedThreadPool(threadsCount)
-            val complete = AtomicInteger(0)
-            val success = AtomicInteger(0)
-            val total = selections.size
-            val tasks = mutableListOf<Future<*>>()
-            val context = Utils.getContext()
-            val notifyId = Random.nextInt()
-            val nm = context.requireSystemService<NotificationManager>()
-            executors.execute {
-                val initProgress = Triple(total, 0, false)
-                nm.showNotification(notifyId, "缓存视频导出中：0/$total", ongoing = true, progress = initProgress)
-                for (selection in selections) {
-                    val entry = selection.entry
-                    val saveDir = selection.saveDir
-                    val videoPath = File(saveDir, "video.m4s").absolutePath
-                    val audioPath = File(saveDir, "audio.m4s").absolutePath
-                    val exportPath = File(videosDir, "${entry.saveFilename}.mp4").absolutePath
-                    executors.submit {
-                        runCatching {
-                            MediaMerger.merge(videoPath, audioPath, exportPath)
-                            success.incrementAndGet()
-                        }.onFailure {
-                            Logger.error(it) { "video merge failed, bvId: ${entry.bvid}, epId: ${entry.ep.episodeId}" }
-                        }
-                        val completeCount = complete.incrementAndGet()
-                        val title = "缓存视频导出中：$completeCount/$total"
-                        val progress = Triple(total, completeCount, false)
-                        nm.showNotification(notifyId, title, entry.showName, ongoing = true, progress = progress)
-                    }.let { tasks.add(it) }
-                }
-                tasks.forEach { it.runCatchingOrNull { get() } }
-                val title = when (val successCount = success.get()) {
-                    0 -> "缓存视频导出完成，全部失败"
-                    total -> "缓存视频导出完成，全部成功"
-                    else -> "缓存视频导出完成，部分成功：$successCount/$total"
-                }
-                val text = "导出路径为：${videosDir.absolutePath}"
-                nm.showNotification(notifyId, title, text)
-                MediaScannerConnection.scanFile(context, videosDir.list().orEmpty(), null, null)
-                executors.shutdown()
-            }
-        }
-    }
 }
-
-class DownloadEntrySelection(val entry: DownloadEntry, val saveDir: File, var selected: Boolean = false)
 
 class DownloadEntryAdapter(
     private val context: Context,
