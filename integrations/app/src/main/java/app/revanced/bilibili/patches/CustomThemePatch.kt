@@ -151,7 +151,7 @@ object CustomThemePatch {
     }
 
     @JvmStatic
-    private fun closeCustomSkin() {
+    fun closeCustomSkin() {
         if (Settings.Skin()) {
             Settings.Skin.save(false)
             Themes.unloadLoadEquip()
