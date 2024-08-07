@@ -5,6 +5,8 @@ import android.net.Uri;
 import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.bilibili.adcommon.basic.model.FeedAdInfo;
 import com.bilibili.app.comm.list.common.api.model.PlayerArgs;
 import com.bilibili.app.comm.list.common.data.DislikeReason;
 import com.bilibili.app.comm.list.common.data.ThreePointItem;
@@ -17,6 +19,9 @@ import java.util.List;
 @Keep
 public class BasicIndexItem {
     public long adIndex;
+    @Nullable
+    @JSONField(name = "ad_info", serialize = false)
+    public FeedAdInfo adInfo;
     @Nullable
     public String ad_cb;
     @Nullable
