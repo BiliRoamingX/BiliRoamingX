@@ -69,11 +69,11 @@ object Subtitle : ApiHook() {
             s2cnDict.forEach { (l, r) ->
                 newResponse = newResponse.replace(l, r)
             }
-        } else if (converter == "import") {
-            val index = uri.getQueryParameter("import_index")?.toInt() ?: 0
+        }
+        val index = uri.getQueryParameter("import_index")?.toInt() ?: -1
+        if (index != -1)
             newResponse = importedSubtitles.second.getOrNull(index)
                 ?: SubtitleHelper.errorResponse("暂无导入字幕")
-        }
         return newResponse
     }
 }
