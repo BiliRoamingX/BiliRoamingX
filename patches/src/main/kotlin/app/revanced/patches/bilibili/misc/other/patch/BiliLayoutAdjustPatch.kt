@@ -31,8 +31,9 @@ object BiliLayoutAdjustPatch : BytecodePatch(setOf(SetUnitedTabLayoutFingerprint
                     index to inst.registerA
                 } else null
             }
-            replaceInstruction(index1, "const/16 v$register1, 0xc")
-            replaceInstruction(index2, "const/16 v$register2, 0x8")
+            // change tab horizontal padding
+            replaceInstruction(index1, "const/16 v$register1, 0x10") // tab size <= 2
+            replaceInstruction(index2, "const/16 v$register2, 0xc")  // tab size > 2
         }
     }
 }
