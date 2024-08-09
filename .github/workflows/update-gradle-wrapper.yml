@@ -13,6 +13,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Update gradle wrapper
-        uses: gradle-update/update-gradle-wrapper-action@v1
+        uses: gradle-update/update-gradle-wrapper-action@main
         with:
           pr-title-template: 'build(deps): bump gradle from %sourceVersion% to %targetVersion%'
