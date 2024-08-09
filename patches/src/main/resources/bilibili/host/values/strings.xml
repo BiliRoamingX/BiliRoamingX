@@ -486,4 +486,6 @@
     <string name="biliroaming_select_or_cancel_all">全选/不选</string>
     <string name="biliroaming_exporting">后台导出中，进度以通知形式提醒</string>
     <string name="biliroaming_cache_not_found">未找到缓存视频</string>
+    <string name="biliroaming_pay_coins_title">2233娘投币</string>
+    <string name="biliroaming_pay_coins_summary">恢复旧版2233娘投币页面</string>
 </resources>
