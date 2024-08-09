@@ -22,5 +22,8 @@ class CustomizeVideoDetailFragment : BiliRoamingBaseSettingFragment() {
         disablePreference(Settings.SaveCommentImage.key, PrefsDisableReason.OfficialSupported) {
             Versions.ge7_76_0()
         }
+        disablePreference(Settings.StoryUIStyle.key, PrefsDisableReason.AppVersion) {
+            Versions.ge8_9_0()
+        }
     }
 }

@@ -54,7 +54,7 @@
             android:fragment="app.revanced.bilibili.settings.fragments.FilterStoryFragment"
             android:key="fragment_filter_story"
             android:title="@string/biliroaming_filter_story_title" />
-        <tv.danmaku.bili.widget.preference.BLRadioGroupEntrancePreference
+        <app.revanced.bilibili.widget.RadioGroupEntrancePreference
             android:fragment="app.revanced.bilibili.settings.fragments.StoryUIStyleFragment"
             android:key="story_ui_style"
             android:persistent="true"

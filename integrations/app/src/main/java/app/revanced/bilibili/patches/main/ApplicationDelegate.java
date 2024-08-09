@@ -60,6 +60,7 @@ import app.revanced.bilibili.utils.SubtitleParamsCache;
 import app.revanced.bilibili.utils.Themes;
 import app.revanced.bilibili.utils.UposReplacer;
 import app.revanced.bilibili.utils.Utils;
+import app.revanced.bilibili.utils.Versions;
 import tv.danmaku.bili.MainActivityV2;
 
 public abstract class ApplicationDelegate extends Application {
@@ -404,7 +405,7 @@ public abstract class ApplicationDelegate extends Application {
                 LayoutInflater layoutInflater = activity.getLayoutInflater();
                 LayoutInflater.Factory2 factory2 = layoutInflater.getFactory2();
                 Reflex.setObjectField(layoutInflater, "mFactory2", new SettingsLayoutFactory(factory2));
-            } else if (activity instanceof StoryVideoActivity) {
+            } else if (activity instanceof StoryVideoActivity && !Versions.ge8_9_0()) {
                 int storyUIStyle = Integer.parseInt(Settings.StoryUIStyle.get());
                 if (storyUIStyle != 0) {
                     SharedPreferences storyPrefs = KtUtils.getStoryPrefs();
