@@ -40,6 +40,7 @@ object OkHttpPatch {
         Subtitle,
         UnlockEpisodesForPlay,
         Upgrade,
+        ViewLikeTriple,
         VipAds,
         VipPrivilegeInfo,
     )
