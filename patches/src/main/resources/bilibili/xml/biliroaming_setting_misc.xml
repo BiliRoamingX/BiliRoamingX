@@ -153,11 +153,6 @@
         android:layout="@layout/bili_app_layout_preference_category_title"
         android:title="@string/biliroaming_always_enabled_title">
         <androidx.preference.Preference
-            android:key="prefs_pay_coins"
-            android:summary="@string/biliroaming_pay_coins_summary"
-            android:title="@string/biliroaming_pay_coins_title"
-            android:widgetLayout="@null" />
-        <androidx.preference.Preference
             android:key="prefs_clear_app_icon"
             android:summary="@string/biliroaming_clear_app_icon_summary"
             android:title="@string/biliroaming_clear_app_icon_title"
