@@ -234,7 +234,7 @@
     <string name="biliroaming_trial_vip_quality_title">无限试用会员画质</string>
     <string name="biliroaming_trial_vip_quality_summary">只解决试用次数问题，能否试用取决于官方接口，仅支持粉版，如不生效，尝试将播放器版本切换为旧版。</string>
     <string name="biliroaming_unstable_feature_title">实验性</string>
-    <string name="biliroaming_filter_story_title">过滤竖屏模式视频</string>
+    <string name="biliroaming_filter_story_title">竖屏模式视频过滤</string>
     <string name="biliroaming_skin_title">启用自制主题</string>
     <string name="biliroaming_skin_json_pref_title">导入自制主题配置</string>
     <string name="biliroaming_skin_import_from_file">从json文件导入</string>
