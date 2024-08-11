@@ -1,3 +1,5 @@
+import com.android.tools.build.apkzlib.zip.ZFile
+import org.gradle.internal.os.OperatingSystem
 import org.gradle.kotlin.dsl.support.listFilesOrdered
 
 plugins {
@@ -37,8 +39,9 @@ tasks.register("buildDexJar") {
     dependsOn(tasks.build)
 
     doLast {
+        val d8Name = OperatingSystem.current().getScriptName("d8")
         val d8 = File(System.getenv("ANDROID_HOME")).resolve("build-tools")
-            .listFilesOrdered().last().resolve("d8").absolutePath
+            .listFilesOrdered().last().resolve(d8Name).absolutePath
 
         val patchesJar = configurations.archives.get().allArtifacts.files.files.first().absolutePath
         val workingDirectory = layout.buildDirectory.dir("libs").get().asFile
@@ -48,9 +51,8 @@ tasks.register("buildDexJar") {
             commandLine = listOf(d8, "--release", patchesJar)
         }
 
-        exec {
-            workingDir = workingDirectory
-            commandLine = listOf("zip", "-u", patchesJar, "classes.dex")
+        ZFile.openReadWrite(File(patchesJar)).use {
+            it.add("classes.dex", File(workingDirectory, "classes.dex").inputStream())
         }
     }
 }
