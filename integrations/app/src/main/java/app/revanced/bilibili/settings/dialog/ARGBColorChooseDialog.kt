@@ -1,5 +1,6 @@
 package app.revanced.bilibili.settings.dialog
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
@@ -18,6 +19,7 @@ import app.revanced.bilibili.utils.*
  *
  * Copy & Modify from ColorChooseDialog on 2021/7/6
  */
+@SuppressLint("SetTextI18n")
 class ARGBColorChooseDialog(
     context: Context,
     defColor: Int,

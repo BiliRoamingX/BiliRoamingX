@@ -1,5 +1,6 @@
 package app.revanced.bilibili.patches
 
+import android.annotation.SuppressLint
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -95,6 +96,7 @@ object PlaybackSpeedPatch {
 
     @Keep
     @JvmStatic
+    @SuppressLint("SetTextI18n")
     fun onNewPlaybackSpeedSetting(setting: Any) {
         val newSpeedReversedArray = newSpeedReversedArray.takeIf { it.isNotEmpty() }
             ?: stockReverseSpeedArray

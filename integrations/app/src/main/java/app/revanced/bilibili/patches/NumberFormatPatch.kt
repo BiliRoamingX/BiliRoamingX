@@ -1,5 +1,6 @@
 package app.revanced.bilibili.patches
 
+import android.annotation.SuppressLint
 import android.widget.TextView
 import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import com.bilibili.app.authorspace.api.BiliMemberCard
 import tv.danmaku.bili.ui.main2.api.AccountMine
 
 @Keep
+@SuppressLint("SetTextI18n")
 object NumberFormatPatch {
     @JvmStatic
     fun onMineBindAccountState(fragment: Fragment, accountMine: AccountMine?) {
