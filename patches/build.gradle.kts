@@ -1,6 +1,7 @@
 import com.android.tools.build.apkzlib.zip.ZFile
 import org.gradle.internal.os.OperatingSystem
 import org.gradle.kotlin.dsl.support.listFilesOrdered
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -40,7 +41,12 @@ tasks.register("buildDexJar") {
 
     doLast {
         val d8Name = OperatingSystem.current().getScriptName("d8")
-        val d8 = File(System.getenv("ANDROID_HOME")).resolve("build-tools")
+        val sdkDir = System.getenv("ANDROID_HOME").orEmpty().ifEmpty {
+            rootProject.file("local.properties").takeIf { it.exists() }
+                ?.inputStream()?.let { Properties().apply { load(it) } }
+                ?.getProperty("sdk.dir")
+        }.orEmpty().ifEmpty { error("Android sdk not found.") }
+        val d8 = File(sdkDir).resolve("build-tools")
             .listFilesOrdered().last().resolve(d8Name).absolutePath
 
         val patchesJar = configurations.archives.get().allArtifacts.files.files.first().absolutePath
