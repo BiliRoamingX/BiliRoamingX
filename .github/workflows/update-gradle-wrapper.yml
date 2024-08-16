@@ -21,4 +21,5 @@ jobs:
       - name: Update gradle wrapper
         uses: zjns/update-gradle-wrapper-action@main
         with:
-          pr-title-template: 'build(deps): bump gradle from %sourceVersion% to %targetVersion%'
+          repo-token: ${{ secrets.GH_TOKEN }}
+          pr-title-template: 'build(deps): bump gradle wrapper from %sourceVersion% to %targetVersion%'
