@@ -12,7 +12,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Update gradle wrapper
-        uses: gradle-update/update-gradle-wrapper-action@main
+      - name: Set up JDK
+        uses: actions/setup-java@v4
         with:
-          pr-title-template: 'build(deps): bump gradle from %sourceVersion% to %targetVersion%'
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Update gradle wrapper
+        uses: zjns/update-gradle-wrapper-action@main
+        with:
+          repo-token: ${{ secrets.gh_token }}
+          pr-title-template: 'build(deps): bump gradle wrapper from %sourceVersion% to %targetVersion%'
