@@ -59,10 +59,10 @@ inline var View.isVisible: Boolean
         visibility = if (value) View.VISIBLE else View.GONE
     }
 
-inline fun <T : View> View.findView(idName: String): T =
+inline fun <T : View?> View.findView(idName: String): T =
     findViewById(Utils.getResId(idName, "id"))
 
-inline fun <T : View> Activity.findView(idName: String): T =
+inline fun <T : View?> Activity.findView(idName: String): T =
     findViewById(Utils.getResId(idName, "id"))
 
 inline fun View.setRippleBackground() = with(TypedValue()) {

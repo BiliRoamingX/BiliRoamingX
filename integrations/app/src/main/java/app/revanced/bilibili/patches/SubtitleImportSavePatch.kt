@@ -58,8 +58,8 @@ object SubtitleImportSavePatch {
     @JvmStatic
     @SuppressLint("InlinedApi")
     fun onCreateSubtitleWidget(widget: Any, view: View) {
-        val importButton = view.findView<View>("biliroaming_import_subtitle")
-        val saveButton = view.findView<View>("biliroaming_save_subtitle")
+        val importButton = view.findView<View?>("biliroaming_import_subtitle") ?: return
+        val saveButton = view.findView<View?>("biliroaming_save_subtitle") ?: return
         if (!Settings.SubtitleImportSave()) {
             importButton.hide()
             saveButton.hide()
