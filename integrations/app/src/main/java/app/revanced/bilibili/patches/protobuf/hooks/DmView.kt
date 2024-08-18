@@ -170,6 +170,7 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
             lanDoc = "漫游导入${order}"
             lanDocBrief = "导入"
             subtitleUrl = Uri.parse(delegateUrl).buildUpon()
+                .appendQueryParameter("zh_converter", "import")
                 .appendQueryParameter("import_index", index.toString())
                 .toString()
         }
