@@ -42,6 +42,7 @@ object Settings {
     @JvmField val PreferStableCdn = BooleanSetting(key = "prefer_stable_cdn", needReboot = true)
     @JvmField val AccessKeyMain = StringSetting(key = "access_key_main")
     @JvmField val AccessKeyThailand = StringSetting(key = "access_key_th")
+    @JvmField val RememberPlaybackSpeed = BooleanSetting(key = "remember_playback_speed")
     // endregion
 
 
@@ -277,5 +278,6 @@ object Settings {
     @JvmField val BgPlayingEnabled = BooleanSetting(key = "bg_playing_enabled")
     @JvmField val CustomColor = IntSetting(key = "biliroaming_custom_color", defValue = Color.WHITE)
     @JvmField val SkinJson = StringSetting(key = "skin_json", dependency = Skin)
+    @JvmField val SelectedPlaybackSpeed = FloatSetting(key = "selected_playback_speed")
     // endregion
 }

@@ -84,6 +84,10 @@
         <androidx.preference.SwitchPreferenceCompat
             android:key="disable_player_long_press"
             android:title="@string/biliroaming_disable_player_long_press_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="remember_playback_speed"
+            android:summary="@string/biliroaming_remember_playback_speed_summary"
+            android:title="@string/biliroaming_remember_playback_speed_title" />
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory

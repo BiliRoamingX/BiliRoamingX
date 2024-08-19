@@ -486,4 +486,6 @@
     <string name="biliroaming_select_or_cancel_all">全选/不选</string>
     <string name="biliroaming_exporting">后台导出中，进度以通知形式提醒</string>
     <string name="biliroaming_cache_not_found">未找到缓存视频</string>
+    <string name="biliroaming_remember_playback_speed_title">记住播放速度变化</string>
+    <string name="biliroaming_remember_playback_speed_summary">播放速度变化应用于所有视频</string>
 </resources>

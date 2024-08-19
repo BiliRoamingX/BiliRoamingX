@@ -68,9 +68,8 @@ object PlaybackSpeedPatch {
     fun defaultSpeed(player: IMediaPlayer?, speed: Float): Float {
         // only apply to video, not apply to podcast
         if (player != null && player.videoSarNum <= 0) return speed
-        val customSpeed = Settings.DefaultPlaybackSpeed()
-        val newSpeed = if (customSpeed != 0f && playerCache.get() !== player) {
-            customSpeed
+        val newSpeed = if (playerCache.get() !== player) {
+            defaultSpeed(speed)
         } else speed
         playerCache = WeakReference(player)
         return newSpeed
@@ -79,8 +78,24 @@ object PlaybackSpeedPatch {
     @Keep
     @JvmStatic
     fun defaultSpeed(speed: Float): Float {
-        val customSpeed = Settings.DefaultPlaybackSpeed()
-        return if (customSpeed != 0f) customSpeed else speed
+        val defaultSpeed = Settings.DefaultPlaybackSpeed()
+        return if (Settings.RememberPlaybackSpeed()) {
+            val selectedSpeed = Settings.SelectedPlaybackSpeed()
+            if (selectedSpeed == 0f && defaultSpeed != 0f) {
+                defaultSpeed
+            } else if (selectedSpeed != 0f) {
+                selectedSpeed
+            } else speed
+        } else if (defaultSpeed != 0f) {
+            defaultSpeed
+        } else speed
+    }
+
+    @Keep
+    @JvmStatic
+    fun onPlaybackSpeedSelected(speed: Float) {
+        if (Settings.RememberPlaybackSpeed())
+            Settings.SelectedPlaybackSpeed.save(speed)
     }
 
     @Keep
