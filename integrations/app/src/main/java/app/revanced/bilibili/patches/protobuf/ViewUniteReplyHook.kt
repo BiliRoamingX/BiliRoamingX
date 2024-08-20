@@ -60,6 +60,10 @@ object ViewUniteReplyHook {
         val storyEntrance = config.storyEntrance
         if (Settings.DisableStoryFull())
             storyEntrance.arcLandscapeStory = false
+        if (Settings.ReplaceStoryVideo()) {
+            storyEntrance.playStory = false
+            storyEntrance.arcPlayStory = false
+        }
         if (config.playerIcon != PlayerIcon.getDefaultInstance() || Settings.SkinJson().isEmpty())
             return
         val playIcon = Settings.SkinJson().runCatchingOrNull {

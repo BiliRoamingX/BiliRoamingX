@@ -41,6 +41,10 @@ object View : MossHook<ViewReq, ViewReply>() {
                 reply.arc.stat.reply = 0
             if (Settings.DisableStoryFull())
                 reply.config.arcLandscapeStory = false
+            if (Settings.ReplaceStoryVideo()) {
+                reply.config.playStory = false
+                reply.config.arcPlayStory = false
+            }
             if (reply.playerIcon == PlayerIcon.getDefaultInstance() && Settings.SkinJson().isNotEmpty()) {
                 val playIcon = Settings.SkinJson().runCatchingOrNull {
                     toJSONObject()
