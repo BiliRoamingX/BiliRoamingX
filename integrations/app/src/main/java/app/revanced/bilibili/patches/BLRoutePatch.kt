@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.annotation.Keep
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Logger
-import app.revanced.bilibili.utils.Versions
 import com.bapis.bilibili.app.view.v1.Relate
 import com.bapis.bilibili.app.viewunite.common.RelateCard
 import com.bapis.bilibili.app.viewunite.common.RelateCardType
@@ -27,28 +26,6 @@ object BLRoutePatch {
         Logger.debug { "Route uri: $uri" }
         val scheme = uri.scheme.orEmpty()
         val url = uri.toString()
-        if (Versions.ge8_5_0() && (url.startsWith("https://www.bilibili.com/read")
-                    || url.startsWith("http://www.bilibili.com/read")
-                    || (url.startsWith("bilibili://article") && uri.pathSegments.size == 1))
-        ) {
-            val id = uri.lastPathSegment.orEmpty().removePrefix("cv")
-            if (id.isNotEmpty() && id.all { it.isDigit() })
-                return Uri.Builder().scheme("https")
-                    .encodedAuthority("www.bilibili.com")
-                    .encodedPath("/opus/$id")
-                    .appendQueryParameter("opus_type", "article")
-                    .apply {
-                        for (name in uri.queryParameterNames)
-                            appendQueryParameter(name, uri.getQueryParameter(name))
-                        val commentId = uri.fragment.orEmpty().removePrefix("reply")
-                        if (commentId.isNotEmpty() && commentId.all { it.isDigit() }) {
-                            if (!uri.queryParameterNames.contains("comment_on"))
-                                appendQueryParameter("comment_on", "1")
-                            if (!uri.queryParameterNames.contains("comment_root_id"))
-                                appendQueryParameter("comment_root_id", commentId)
-                        }
-                    }.build()
-        }
         if (scheme == "bilibili") {
             val needRemovePayload = needRemovePayload()
             val authority = uri.encodedAuthority
