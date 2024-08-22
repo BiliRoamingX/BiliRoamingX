@@ -1,6 +1,7 @@
 #include <jni.h>
 #include <cstdlib>
 #include <android/log.h>
+#include <pthread.h>
 #include "dobby.h"
 
 #define LOG_TAG "BiliRoamingX"
@@ -16,6 +17,8 @@
 
 void fake_exit(int status) {
     LOGI("Exit function fake success, status: %d", status);
+    DobbyDestroy((void *) exit);
+    pthread_exit(nullptr);
 }
 
 JNIEXPORT JNICALL extern "C"
