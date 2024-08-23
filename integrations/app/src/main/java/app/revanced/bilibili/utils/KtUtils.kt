@@ -784,3 +784,8 @@ fun getFinalAccessKey(thailand: Boolean) = if (thailand) {
 }
 
 inline fun <reified T> Context.requireSystemService(): T = getSystemService(T::class.java)
+
+inline val String.safeContent: String
+    get() = Accounts.accessKey.let {
+        if (it.isNotEmpty() && isNotEmpty()) replace(it, "***") else it
+    }

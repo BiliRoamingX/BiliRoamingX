@@ -309,14 +309,14 @@ object HttpClient {
                 }
             } else {
                 val error = connection.errorStream?.readText(connection.contentEncoding)
-                Logger.error { "Request failed, url: $url, status: $status, error: $error" }
+                Logger.error { "Request failed, url: ${url.safeContent}, status: $status, error: $error" }
                 null
             }
         }
     }.onFailure {
-        Logger.error(it) { "Request failed, url: $url" }
+        Logger.error(it) { "Request failed, url: ${url.safeContent}" }
     }.getOrNull()?.also {
-        Logger.debug { "Request success, url: $url" }
-        Logger.debug { "Request success, result: ${it.plain()}" }
+        Logger.debug { "Request success, url: ${url.safeContent}" }
+        Logger.debug { "Request success, result: ${it.plain().safeContent}" }
     }
 }

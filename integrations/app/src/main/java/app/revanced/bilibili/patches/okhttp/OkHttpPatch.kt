@@ -7,6 +7,7 @@ import app.revanced.bilibili.patches.main.ApplicationDelegate
 import app.revanced.bilibili.patches.okhttp.hooks.*
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.Logger
+import app.revanced.bilibili.utils.safeContent
 import java.io.InputStream
 import java.util.zip.GZIPInputStream
 import java.util.zip.InflaterInputStream
@@ -50,7 +51,7 @@ object OkHttpPatch {
     fun shouldHook(url: String, code: Int): Boolean {
         if (!ApplicationDelegate.attached())
             return false
-        Logger.debug { "OkHttpPatch.shouldHook, code: %d, url: %s".format(code, url) }
+        Logger.debug { "OkHttpPatch.shouldHook, code: $code, url: ${url.safeContent}" }
         return (code == 200 && Settings.Debug()) || hooks.any { it.shouldHook(url, code) }
     }
 
@@ -84,9 +85,9 @@ object OkHttpPatch {
             "br" -> BrotliInputStream(respStream)
             else -> respStream
         }).bufferedReader().use { it.readText() }
-        Logger.debug { "OkHttpPatch.hook, code: %d, url: %s".format(code, url) }
-        Logger.debug { "OkHttpPatch.hook, request, encoding: $reqEncoding, content: $request" }
-        Logger.debug { "OkHttpPatch.hook, response, encoding: $respEncoding, content: $response" }
+        Logger.debug { "OkHttpPatch.hook, code: $code, url: ${url.safeContent}" }
+        Logger.debug { "OkHttpPatch.hook, request, encoding: $reqEncoding, content: ${request.safeContent}" }
+        Logger.debug { "OkHttpPatch.hook, response, encoding: $respEncoding, content: ${response.safeContent}" }
         return hook(url, code, request, response)
     }
 
