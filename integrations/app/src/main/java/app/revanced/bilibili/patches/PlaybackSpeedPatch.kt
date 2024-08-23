@@ -9,9 +9,11 @@ import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.Keep
+import app.revanced.bilibili.patches.main.ApplicationDelegate
 import app.revanced.bilibili.settings.Settings
 import app.revanced.bilibili.utils.*
 import com.bilibili.music.podcast.view.PodcastSpeedSeekBar
+import com.bilibili.video.story.StoryVideoActivity
 import tv.danmaku.ijk.media.player.IMediaPlayer
 import java.lang.ref.WeakReference
 
@@ -68,7 +70,7 @@ object PlaybackSpeedPatch {
     fun defaultSpeed(player: IMediaPlayer?, speed: Float): Float {
         // only apply to video, not apply to podcast
         if (player != null && player.videoSarNum <= 0) return speed
-        val newSpeed = if (playerCache.get() !== player) {
+        val newSpeed = if (playerCache.get() !== player || ApplicationDelegate.getTopActivity() is StoryVideoActivity) {
             defaultSpeed(speed)
         } else speed
         playerCache = WeakReference(player)

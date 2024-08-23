@@ -297,7 +297,7 @@ public abstract class ApplicationDelegate extends Application {
     }
 
     @Nullable
-    public static Activity getTopActivity() {
+    public static synchronized Activity getTopActivity() {
         var ref = activityRefs.peek();
         if (ref != null)
             return ref.get();
