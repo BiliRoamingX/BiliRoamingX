@@ -16,6 +16,7 @@ import com.bilibili.bililive.room.biz.shopping.beans.LiveShoppingInfo;
 import com.bilibili.bililive.room.biz.shopping.beans.LiveShoppingRecommendCardGoodsDetail;
 import com.bilibili.bililive.videoliveplayer.net.beans.attentioncard.LiveRoomRecommendCard;
 import com.bilibili.bililive.videoliveplayer.net.beans.gateway.roominfo.BiliLiveRoomInfo;
+import com.bilibili.bililive.videoliveplayer.net.beans.gateway.roominfo.LiveRoomDanmakuVoteCardInfo;
 import com.bilibili.bililive.videoliveplayer.net.beans.gateway.userinfo.BiliLiveRoomUserInfo;
 import com.bilibili.bililive.videoliveplayer.net.beans.gateway.userinfo.FunctionCard;
 import com.bilibili.bililive.videoliveplayer.net.beans.giftpendant.LiveGiftPendantInfo;
@@ -116,6 +117,10 @@ public class JSONPatch {
                 if (pendantInfo != null)
                     pendantInfo.liveGiftStarPendantInfo = null;
             }
+            if (keys.contains("plusOne")) try {
+                roomInfo.dmComboInfo = null;
+            } catch (Throwable ignored) {
+            }
             if (Settings.RemoveLiveMask.get()) try {
                 roomInfo.areaMaskInfo = null;
             } catch (Throwable ignored) {
@@ -197,6 +202,9 @@ public class JSONPatch {
                     }
                 }
             }
+        } else if ((!Utils.isHd() && data instanceof BiliLiveRoomInfo.DmComboInfo) || data instanceof LiveRoomDanmakuVoteCardInfo) {
+            if (Settings.PurifyLivePopups.get().contains("plusOne"))
+                return null;
         }
         return obj;
     }

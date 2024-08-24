@@ -73,6 +73,7 @@
         <item>正在去买</item>
         <item>礼物星球</item>
         <item>主播帮玩</item>
+        <item>各种+1</item>
     </string-array>
     <string-array name="biliroaming_live_popup_values">
         <item>shoppingCard</item>
@@ -85,6 +86,7 @@
         <item>gotoBuy</item>
         <item>giftStar</item>
         <item>playTogether</item>
+        <item>plusOne</item>
     </string-array>
     <string-array name="biliroaming_drawer_style_entries">
         <item>默认</item>

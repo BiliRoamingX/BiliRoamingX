@@ -22,9 +22,15 @@ public class BiliLiveRoomInfo {
     @JSONField(name = "new_switch_info")
     @Nullable
     public Map<String, Object> newSwitchInfo;
+    @JSONField(name = "dm_combo")
+    @Nullable
+    public DmComboInfo dmComboInfo;
 
     public static class FunctionCard {
         @Nullable
         public LiveRoomFollowCardInfo followCard;
+    }
+
+    public static class DmComboInfo {
     }
 }
