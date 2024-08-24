@@ -15,13 +15,13 @@
     <string name="biliroaming_need_reboot_dialog_confirm">立即重启</string>
     <string name="biliroaming_need_reboot_dialog_later">稍后</string>
     <string name="biliroaming_disable_story_full_title">隐藏竖屏按钮</string>
-    <string name="biliroaming_disable_story_full_summary">横屏稿件半屏时不显示竖屏按钮</string>
+    <string name="biliroaming_disable_story_full_summary">横屏视频半屏时不显示竖屏按钮</string>
     <string name="biliroaming_purify_splash_title">净化开屏页面</string>
     <string name="biliroaming_purify_splash_summary">去除启动客户端时的推广</string>
     <string name="biliroaming_teenagers_mode_dialog_title">关闭青少年模式弹窗</string>
     <string name="biliroaming_teenagers_mode_dialog_summary">仍可从侧滑菜单进入青少年模式</string>
     <string name="biliroaming_replace_story_video_title">替换竖屏模式视频</string>
-    <string name="biliroaming_replace_story_video_summary">替换竖屏模式视频为正常视频</string>
+    <string name="biliroaming_replace_story_video_summary">替换竖屏模式视频为正常视频，竖屏按钮需要到播放设置里的竖屏模式设置里关闭</string>
     <string name="biliroaming_search_category_title">搜索页</string>
     <string name="biliroaming_purify_search_title">净化搜索页面</string>
     <string name="biliroaming_purify_search_summary">去除热搜和推荐</string>
