@@ -75,6 +75,7 @@ sealed class Setting<out T : Any>(
         private var async = true
 
         init {
+            migrate()
             prefs.registerOnSharedPreferenceChangeListener(innerListener)
         }
 
@@ -88,6 +89,19 @@ sealed class Setting<out T : Any>(
                 load()
                 if (Utils.isMainProcess())
                     executeOnChangeAction(async)
+            }
+        }
+
+        private fun migrate() {
+            if (!prefs.getBoolean("migration_1", false)) {
+                prefs.edit(commit = true) {
+                    if (prefs.getBoolean("remove_video_cmd_dms", false)) {
+                        putBoolean("remove_video_cmd_dms", false)
+                        val popups = setOf("vote", "attention", "grade", "gradeSummary", "link", "other")
+                        putStringSet("remove_video_popups", popups)
+                    }
+                    putBoolean("migration_1", true)
+                }
             }
         }
 

@@ -69,6 +69,7 @@ object SettingsResourcePatch : ResourcePatch() {
         "biliroaming_setting_filter_story_by_type.xml",
         "biliroaming_setting_tool.xml",
         "biliroaming_setting_cover_ratio.xml",
+        "biliroaming_setting_video_popups.xml",
     )
     private val layouts = arrayOf(
         "biliroaming_dialog_argb_color_choose.xml",

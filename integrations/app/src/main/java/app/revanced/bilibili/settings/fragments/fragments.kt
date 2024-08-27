@@ -76,3 +76,6 @@ class StoryUIStyleFragment : BiliRoamingBaseSettingFragment()
 
 @SettingFragment("biliroaming_setting_cover_ratio")
 class PegasusCoverRatioFragment : BiliRoamingBaseSettingFragment()
+
+@SettingFragment("biliroaming_setting_video_popups")
+class RemoveVideoPopupsFragment : BiliRoamingBaseSettingFragment()

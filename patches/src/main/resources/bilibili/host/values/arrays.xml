@@ -481,4 +481,28 @@
         <item>1.777778</item>
         <item>1.333333</item>
     </string-array>
+    <string-array name="biliroaming_video_popup_entries">
+        <item>投票弹幕</item>
+        <item>三连关注弹幕</item>
+        <item>评分弹幕</item>
+        <item>评分总结弹幕</item>
+        <item>关联视频弹幕</item>
+        <item>其它</item>
+    </string-array>
+    <string-array name="biliroaming_video_popup_values">
+        <item>vote</item>
+        <item>attention</item>
+        <item>grade</item>
+        <item>gradeSummary</item>
+        <item>link</item>
+        <item>other</item>
+    </string-array>
+    <string-array name="biliroaming_video_popup_summaries">
+        <item />
+        <item />
+        <item />
+        <item />
+        <item />
+        <item>云视听小电视、免流引导、投资UP主、跳转应用等</item>
+    </string-array>
 </resources>

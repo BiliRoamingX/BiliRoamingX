@@ -21,10 +21,10 @@
             android:key="disable_story_full"
             android:summary="@string/biliroaming_disable_story_full_summary"
             android:title="@string/biliroaming_disable_story_full_title" />
-        <androidx.preference.SwitchPreferenceCompat
-            android:key="remove_video_cmd_dms"
-            android:summary="@string/biliroaming_remove_video_cmd_dms_summary"
-            android:title="@string/biliroaming_remove_video_cmd_dms_title" />
+        <androidx.preference.Preference
+            android:fragment="app.revanced.bilibili.settings.fragments.RemoveVideoPopupsFragment"
+            android:key="fragment_remove_video_popups"
+            android:title="@string/biliroaming_remove_video_popups_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="block_dm_feedback"
             android:summary="@string/biliroaming_block_dm_feedback_summary"

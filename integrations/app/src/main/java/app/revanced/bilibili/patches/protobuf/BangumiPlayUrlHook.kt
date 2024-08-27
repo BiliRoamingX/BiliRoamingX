@@ -176,7 +176,9 @@ object BangumiPlayUrlHook {
             }
         } else if (error == null && allowDownloadPGC) {
             return fixDownloadProto(response)
-        } else if (error == null && (Settings.BlockBangumiPageAds() || Settings.RemoveCmdDms())) {
+        } else if (error == null && (Settings.BlockBangumiPageAds()
+                    || Settings.RemoveVideoPopups().contains("other"))
+        ) {
             return purifyViewInfo(response)
         }
         if (error != null) throw error else return reply
@@ -259,7 +261,7 @@ object BangumiPlayUrlHook {
                 return fixDownloadProtoUnite(response)
             var newReply = response
             syncVideoHistoryIfNeeded(req, newReply)
-            if (Settings.BlockBangumiPageAds() || Settings.RemoveCmdDms())
+            if (Settings.BlockBangumiPageAds() || Settings.RemoveVideoPopups().contains("other"))
                 newReply = purifyViewInfoUnite(newReply, supplement)
             return newReply
         }
@@ -499,7 +501,7 @@ object BangumiPlayUrlHook {
         if (!isDownloadUnite && !Accounts.isEffectiveVip
             && Settings.TrialVipQuality()
         ) TrialQualityPatch.makeVipFree(playReply)
-        if (Settings.RemoveCmdDms()) {
+        if (Settings.RemoveVideoPopups().contains("other")) {
             playReply.viewInfo.toastsList.withIndex().filter { (_, toast) ->
                 toast.type == ToastType.VIP_DEFINITION_REMIND || toast.type == ToastType.VIP_CONTENT_REMIND
             }.map { it.index }.asReversed().forEach {
@@ -610,8 +612,8 @@ object BangumiPlayUrlHook {
                 mutableExtToastMap.clear()
             }
         }
-        if (Settings.RemoveCmdDms())
-            business.clearRecordInfo()
+        if (Settings.RemoveVideoPopups().contains("other"))
+            business.clearRecordInfo() // 番剧登记号
     }
 
     private fun purifyViewInfoUnite(

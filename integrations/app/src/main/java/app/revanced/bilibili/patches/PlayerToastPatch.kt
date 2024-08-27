@@ -14,7 +14,7 @@ object PlayerToastPatch {
         val title = playerToast.getExtraString("extra_title")
         val extra = playerToast.mToastExtra
         Logger.debug { "PlayerToast.onShow: ${extra.toJson()}" }
-        return Settings.RemoveCmdDms()
+        return Settings.RemoveVideoPopups().contains("other")
                 && title == Utils.getString("dialog_warning_data_flow_ugc")
     }
 }

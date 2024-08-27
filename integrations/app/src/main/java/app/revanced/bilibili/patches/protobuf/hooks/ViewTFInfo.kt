@@ -14,7 +14,7 @@ object ViewTFInfo : MossHook<TFInfoReq, TFInfoReply>() {
     }
 
     override fun hookBefore(req: TFInfoReq): Any? {
-        if (Settings.RemoveCmdDms())
+        if (Settings.RemoveVideoPopups().contains("other")) // 免流引导
             return HookFlags.STOP_EXECUTION
         return null
     }

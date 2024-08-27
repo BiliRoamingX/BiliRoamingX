@@ -40,8 +40,7 @@
     <string name="biliroaming_customize_drawer_title">需要展示的项目</string>
     <string name="biliroaming_drawer_style_title">页面样式</string>
     <string name="biliroaming_purify_drawer_reddot_title">净化红点</string>
-    <string name="biliroaming_remove_video_cmd_dms_title">移除视频浮窗</string>
-    <string name="biliroaming_remove_video_cmd_dms_summary">移除视频播放时出现的浮窗，包括三连关注、关联视频、投票弹幕、评分弹幕、投资当前UP主、跳转其他应用、免流引导等</string>
+    <string name="biliroaming_remove_video_popups_title">移除视频浮窗</string>
     <string name="biliroaming_remove_vip_section_title">移除我的大会员横幅</string>
     <string name="biliroaming_customize_home_title">首页</string>
     <string name="biliroaming_customize_home_summary">部分选项需要重启两次才能生效</string>

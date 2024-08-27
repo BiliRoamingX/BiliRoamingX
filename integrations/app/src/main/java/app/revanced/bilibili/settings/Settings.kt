@@ -144,7 +144,9 @@ object Settings {
     @JvmField val UnlockPlayLimit = BooleanSetting(key = "play_arc_conf")
     @JvmField val ReplaceStoryVideo = BooleanSetting(key = "replace_story_video")
     @JvmField val DisableStoryFull = BooleanSetting(key = "disable_story_full")
-    @JvmField val RemoveCmdDms = BooleanSetting(key = "remove_video_cmd_dms")
+    @JvmField @Deprecated("replaced by RemoveVideoPopups") val RemoveCmdDms =
+        BooleanSetting(key = "remove_video_cmd_dms")
+    @JvmField val RemoveVideoPopups = StringSetSetting(key = "remove_video_popups")
     @JvmField val BlockWordSearch = BooleanSetting(key = "block_word_search")
     @JvmField val BlockCommentGuide = BooleanSetting(key = "block_comment_guide")
     @JvmField val BlockVideoComment = BooleanSetting(key = "block_video_comment")

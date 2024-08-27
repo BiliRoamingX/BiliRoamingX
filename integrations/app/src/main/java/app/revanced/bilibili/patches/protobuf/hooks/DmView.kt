@@ -26,14 +26,32 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
         reply: DmViewReply?,
         error: MossException?
     ): DmViewReply? {
-        if (Settings.RemoveCmdDms() && reply != null) {
-            reply.clearActivityMeta()
+        val videoPopups = Settings.RemoveVideoPopups()
+        if (videoPopups.isNotEmpty() && reply != null) {
+            if (videoPopups.contains("other"))
+                reply.clearActivityMeta() // 云视听小电视
             runCatchingOrNull {
-                reply.clearCommand()
-                reply.clearQoe()
-                reply.dmMaskWallList.mapIndexedNotNull { index, wall ->
-                    if (wall.bizType == DmMaskWallBizType.AIGC) index else null
-                }.asReversed().forEach { reply.removeDmMaskWall(it) }
+                val types = arrayOf(9, 5, 11, 12, 2)
+                reply.command.commandDmsList.asReversed().forEachIndexed { index, dm ->
+                    if (videoPopups.contains("vote") && (dm.command == "#VOTE#" || dm.type == 9)) // 投票弹幕
+                        reply.command.removeCommandDms(index)
+                    else if (videoPopups.contains("attention") && (dm.command == "#ATTENTION#" || dm.type == 5)) // 三连关注弹幕
+                        reply.command.removeCommandDms(index)
+                    else if (videoPopups.contains("grade") && (dm.command == "#GRADE#" || dm.type == 11)) // 评分弹幕
+                        reply.command.removeCommandDms(index)
+                    else if (videoPopups.contains("gradeSummary") && (dm.command == "#GRADESUMMARY#" || dm.type == 12)) // 评分总结弹幕
+                        reply.command.removeCommandDms(index)
+                    else if (videoPopups.contains("link") && (dm.command == "#LINK#" || dm.type == 2)) // 关联视频弹幕
+                        reply.command.removeCommandDms(index)
+                    else if (videoPopups.contains("other") && dm.type !in types)
+                        reply.command.removeCommandDms(index)
+                }
+                if (videoPopups.contains("other")) {
+                    reply.clearQoe()
+                    reply.dmMaskWallList.mapIndexedNotNull { index, wall ->
+                        if (wall.bizType == DmMaskWallBizType.AIGC) index else null
+                    }.asReversed().forEach { reply.removeDmMaskWall(it) }
+                }
             }
             reply.clearUnknownFields()
         }

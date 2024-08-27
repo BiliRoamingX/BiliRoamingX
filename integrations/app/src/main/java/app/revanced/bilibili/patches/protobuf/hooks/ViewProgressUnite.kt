@@ -18,9 +18,29 @@ object ViewProgressUnite : MossHook<ViewProgressReq, ViewProgressReply>() {
         error: MossException?
     ): ViewProgressReply? {
         if (reply != null) {
-            if (Settings.RemoveCmdDms()) {
-                reply.clearDm()
-                reply.videoGuide.clearContractCard()
+            val videoPopups = Settings.RemoveVideoPopups()
+            if (videoPopups.isNotEmpty()) {
+                if (videoPopups.contains("attention"))
+                    reply.dm.clearAttention()
+                if (videoPopups.contains("other")) {
+                    reply.dm.clearCards()
+                    reply.videoGuide.clearContractCard()
+                }
+                val commands = arrayOf("#VOTE#", "#ATTENTION#", "#GRADE#", "#GRADESUMMARY#", "#LINK#")
+                reply.dm.commandDmsList.asReversed().forEachIndexed { index, dm ->
+                    if (videoPopups.contains("vote") && dm.command == "#VOTE#")
+                        reply.dm.removeCommandDms(index)
+                    else if (videoPopups.contains("attention") && dm.command == "#ATTENTION#")
+                        reply.dm.removeCommandDms(index)
+                    else if (videoPopups.contains("grade") && dm.command == "#GRADE#")
+                        reply.dm.removeCommandDms(index)
+                    else if (videoPopups.contains("gradeSummary") && dm.command == "#GRADESUMMARY#")
+                        reply.dm.removeCommandDms(index)
+                    else if (videoPopups.contains("link") && dm.command == "#LINK#")
+                        reply.dm.removeCommandDms(index)
+                    else if (videoPopups.contains("other") && dm.command !in commands)
+                        reply.dm.removeCommandDms(index)
+                }
             }
             if (Settings.DisableSegmentedSection())
                 reply.videoGuide.videoPoint.pointPermanent = false
