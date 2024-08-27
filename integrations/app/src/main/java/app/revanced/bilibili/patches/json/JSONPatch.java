@@ -112,10 +112,11 @@ public class JSONPatch {
             }
             if (keys.contains("banner"))
                 roomInfo.bannerInfo = null;
-            if (keys.contains("giftStar")) {
+            if (keys.contains("giftStar")) try {
                 LiveGiftPendantInfo pendantInfo = roomInfo.revenueGiftPendantInfo;
                 if (pendantInfo != null)
                     pendantInfo.liveGiftStarPendantInfo = null;
+            } catch (Throwable ignored) {
             }
             if (keys.contains("plusOne")) try {
                 roomInfo.dmComboInfo = null;
