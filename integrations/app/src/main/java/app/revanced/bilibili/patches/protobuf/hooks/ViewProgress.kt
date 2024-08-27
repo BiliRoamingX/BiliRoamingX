@@ -2,6 +2,7 @@ package app.revanced.bilibili.patches.protobuf.hooks
 
 import app.revanced.bilibili.patches.protobuf.MossHook
 import app.revanced.bilibili.settings.Settings
+import app.revanced.bilibili.utils.forEachIndexedReversed
 import com.bapis.bilibili.app.view.v1.ViewProgressReply
 import com.bapis.bilibili.app.view.v1.ViewProgressReq
 import com.bilibili.lib.moss.api.MossException
@@ -23,7 +24,7 @@ object ViewProgress : MossHook<ViewProgressReq, ViewProgressReply>() {
                 if (videoPopups.contains("attention"))
                     reply.videoGuide.clearAttention()
                 val commands = arrayOf("#VOTE#", "#ATTENTION#", "#GRADE#", "#GRADESUMMARY#", "#LINK#")
-                reply.videoGuide.commandDmsList.asReversed().forEachIndexed { index, dm ->
+                reply.videoGuide.commandDmsList.forEachIndexedReversed { index, dm ->
                     if (videoPopups.contains("vote") && dm.command == "#VOTE#")
                         reply.videoGuide.removeCommandDms(index)
                     else if (videoPopups.contains("attention") && dm.command == "#ATTENTION#")

@@ -789,3 +789,11 @@ inline val String.safeContent: String
     get() = Accounts.accessKey.let {
         if (it.isNotEmpty() && isNotEmpty()) replace(it, "***") else it
     }
+
+inline fun <T> List<T>.forEachIndexedReversed(action: (index: Int, T) -> Unit) {
+    var index = size - 1
+    while (index >= 0) {
+        action(index, this[index])
+        index--
+    }
+}

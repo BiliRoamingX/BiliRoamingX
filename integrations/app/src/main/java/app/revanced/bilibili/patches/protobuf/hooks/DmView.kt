@@ -32,7 +32,7 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
                 reply.clearActivityMeta() // 云视听小电视
             runCatchingOrNull {
                 val types = arrayOf(9, 5, 11, 12, 2)
-                reply.command.commandDmsList.asReversed().forEachIndexed { index, dm ->
+                reply.command.commandDmsList.forEachIndexedReversed { index, dm ->
                     if (videoPopups.contains("vote") && (dm.command == "#VOTE#" || dm.type == 9)) // 投票弹幕
                         reply.command.removeCommandDms(index)
                     else if (videoPopups.contains("attention") && (dm.command == "#ATTENTION#" || dm.type == 5)) // 三连关注弹幕
