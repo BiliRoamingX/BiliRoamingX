@@ -4,8 +4,13 @@ import java.util.List;
 
 public class SplashData {
     public List<Splash> splashList;
-    public List<ShowStrategy> strategyList;
+    public List<SplashShowStrategy> strategyList;
 
-    public static class ShowStrategy {
+    public final List<Splash> getSplashList() {
+        return this.splashList;
+    }
+
+    public final List<SplashShowStrategy> getStrategyList() {
+        return this.strategyList;
     }
 }

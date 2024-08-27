@@ -86,13 +86,19 @@ public class JSONPatch {
     private static Object parseObjectHookInternal(Object obj) {
         Object data = (obj instanceof GeneralResponse<?> resp) ? resp.data : obj;
         if (data instanceof SplashData splashData) {
-            if (Settings.PurifySplash.get()) {
+            if (Settings.PurifySplash.get()) try {
                 splashData.splashList.clear();
                 splashData.strategyList.clear();
+            } catch (Throwable ignored) {
+                splashData.getSplashList().clear();
+                splashData.getStrategyList().clear();
             }
         } else if (data instanceof SplashShowData showData) {
-            if (Settings.PurifySplash.get())
+            if (Settings.PurifySplash.get()) try {
                 showData.strategyList.clear();
+            } catch (Throwable ignored) {
+                showData.getStrategyList().clear();
+            }
         } else if (data instanceof EventEntranceModel) {
             if (Settings.PurifyGame.get()) {
                 // no problem, see com.bilibili.okretro.BiliApiDataCallback
