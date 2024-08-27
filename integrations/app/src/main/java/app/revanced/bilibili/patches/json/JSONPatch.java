@@ -75,6 +75,15 @@ public class JSONPatch {
 
     @Keep
     public static Object parseObjectHook(Object obj) {
+        try {
+            return parseObjectHookInternal(obj);
+        } catch (Throwable t) {
+            Logger.error(t, () -> "JSONPatch, parse object hook error");
+            throw t;
+        }
+    }
+
+    private static Object parseObjectHookInternal(Object obj) {
         Object data = (obj instanceof GeneralResponse<?> resp) ? resp.data : obj;
         if (data instanceof SplashData splashData) {
             if (Settings.PurifySplash.get()) {
@@ -212,6 +221,15 @@ public class JSONPatch {
 
     @Keep
     public static void parseArrayHook(Class<?> type, ArrayList<?> list) {
+        try {
+            parseArrayHookInternal(type, list);
+        } catch (Throwable t) {
+            Logger.error(t, () -> "JSONPatch, parse array hook error");
+            throw t;
+        }
+    }
+
+    private static void parseArrayHookInternal(Class<?> type, ArrayList<?> list) {
         if ((!Versions.ge7_64_0() && (type == SearchRank.class || type == SearchReferral.Guess.class))
                 || (Versions.ge7_39_0() && (type == com.bilibili.search2.api.SearchRank.class || type == com.bilibili.search2.api.SearchReferral.Guess.class))) {
             if (Settings.PurifySearch.get())
