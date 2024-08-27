@@ -76,7 +76,7 @@ object OverridePlaybackSpeedPatch : MultiMethodBytecodePatch(
                         && inst is OneRegisterInstruction
                         && inst.getReference<FieldReference>().type == "[F"
                     ) inst.registerA to index else null
-                } ?: throw StoryMenuFingerprint.exception
+                } ?: return@run
             addInstructions(
                 insertIndex, """
                 invoke-static {v$register}, Lapp/revanced/bilibili/patches/PlaybackSpeedPatch;->getOverrideSpeedArray([F)[F
