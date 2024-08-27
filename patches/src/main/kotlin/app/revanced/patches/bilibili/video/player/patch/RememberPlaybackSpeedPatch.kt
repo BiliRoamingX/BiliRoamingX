@@ -8,9 +8,14 @@ import app.revanced.patches.bilibili.misc.settings.patch.SettingsResourcePatch
 import app.revanced.patches.bilibili.patcher.patch.MultiMethodBytecodePatch
 import app.revanced.patches.bilibili.utils.exception
 import app.revanced.patches.bilibili.video.player.fingerprints.MenuServiceCreateSpeedFingerprint
+import app.revanced.patches.bilibili.video.player.fingerprints.PlaybackSpeedSettingFingerprint
 import app.revanced.patches.bilibili.video.player.fingerprints.PlayerSettingCreateSpeedFingerprint
 import app.revanced.patches.bilibili.video.player.fingerprints.PlayerSpeedChooseWidgetFingerprint
 import app.revanced.util.exception
+import app.revanced.util.getReference
+import com.android.tools.smali.dexlib2.Opcode
+import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
+import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 
 @Patch(
     name = "Remember playback speed",
@@ -24,7 +29,7 @@ import app.revanced.util.exception
 )
 object RememberPlaybackSpeedPatch : MultiMethodBytecodePatch(
     fingerprints = setOf(PlayerSettingCreateSpeedFingerprint, MenuServiceCreateSpeedFingerprint),
-    multiFingerprints = setOf(PlayerSpeedChooseWidgetFingerprint),
+    multiFingerprints = setOf(PlayerSpeedChooseWidgetFingerprint, PlaybackSpeedSettingFingerprint),
 ) {
     override fun execute(context: BytecodeContext) {
         super.execute(context)
@@ -67,6 +72,23 @@ object RememberPlaybackSpeedPatch : MultiMethodBytecodePatch(
         } ?: run {
             if (SettingsResourcePatch.isPink)
                 throw MenuServiceCreateSpeedFingerprint.exception
+        }
+        PlaybackSpeedSettingFingerprint.result.ifEmpty {
+            throw PlaybackSpeedSettingFingerprint.exception
+        }.forEach { r ->
+            val instructions = r.mutableMethod.implementation!!.instructions
+            val (index, register) = instructions.withIndex().firstNotNullOf { (index, inst) ->
+                if (inst.opcode == Opcode.INVOKE_DIRECT && inst.getReference<MethodReference>().let {
+                        it.returnType == "F" && it.parameterTypes == listOf("I")
+                    }) {
+                    index + 2 to (instructions[index + 1] as OneRegisterInstruction).registerA
+                } else null
+            }
+            r.mutableMethod.addInstructions(
+                index, """
+                invoke-static {v$register}, Lapp/revanced/bilibili/patches/PlaybackSpeedPatch;->onPlaybackSpeedSelected(F)V
+            """.trimIndent()
+            )
         }
     }
 }
