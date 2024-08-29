@@ -93,14 +93,11 @@ sealed class Setting<out T : Any>(
         }
 
         private fun migrate() {
-            if (!prefs.getBoolean("migration_1", false)) {
+            if (prefs.getBoolean("remove_video_cmd_dms", false)) {
                 prefs.edit(commit = true) {
-                    if (prefs.getBoolean("remove_video_cmd_dms", false)) {
-                        putBoolean("remove_video_cmd_dms", false)
-                        val popups = setOf("vote", "attention", "grade", "gradeSummary", "link", "other")
-                        putStringSet("remove_video_popups", popups)
-                    }
-                    putBoolean("migration_1", true)
+                    remove("remove_video_cmd_dms")
+                    val popups = setOf("vote", "attention", "grade", "gradeSummary", "link", "other")
+                    putStringSet("remove_video_popups", popups)
                 }
             }
         }
