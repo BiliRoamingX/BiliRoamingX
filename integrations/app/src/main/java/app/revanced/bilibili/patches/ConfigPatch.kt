@@ -15,6 +15,7 @@ object ConfigPatch {
         "player.volume.balance",                      // 音量均衡设置
         "ff_side_center_setting_entrance_visibility", // 首页头像入口设置
         "ff_united_video_setting",                    // 新版三点菜单
+        "ff_mod_opt_init_delay",                      // 延迟初始化模块
     )
 
     @JvmStatic
@@ -63,6 +64,8 @@ object ConfigPatch {
     @JvmStatic
     private val configHooks = listOf(
         Hook(Constants.MAX_QN.toString(), "ijkplayer.autoswitch_max_qn"),
+        Hook("5000", "modmanager.mod_opt_init_delay_time"), // 延迟5s初始化模块
+        Hook("1;600", "modmanager.mod_api_retry_config"), // 重试1次，间隔600ms
         ConfigHook(Settings.EnableAv, "0", "bv.enable_bv"),
         ConfigHook(Settings.EnableAv, avOrBvPattern, "bv.pattern_rule_av_only"),
         ConfigHook(Settings.DisableWebViewNonOfficialAlert, ".*", "base.h5_alert_whitelist"),
