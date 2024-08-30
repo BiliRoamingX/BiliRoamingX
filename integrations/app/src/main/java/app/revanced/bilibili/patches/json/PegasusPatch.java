@@ -7,7 +7,6 @@ import androidx.annotation.Keep;
 import com.bapis.bilibili.app.card.v1.Card;
 import com.bapis.bilibili.app.card.v1.SmallCoverV5;
 import com.bapis.bilibili.app.distribution.setting.pegasus.PegasusDeviceWithoutFplocalConfig;
-import com.bapis.bilibili.app.distribution.setting.pegasus.PegasusMidConfig;
 import com.bapis.bilibili.app.show.popular.v1.PopularReply;
 import com.bapis.bilibili.app.view.v1.Relate;
 import com.bapis.bilibili.app.view.v1.RelatesFeedReply;
@@ -862,12 +861,13 @@ public class PegasusPatch {
                     uidArray, categorySet, channelSet
             );
         });
-        align(items);
+        int column = data.config != null ? data.config.column : 2;
+        align(items, column);
         items.forEach(PegasusPatch::appendReasons);
     }
 
-    private static void align(ArrayList<BasicIndexItem> items) {
-        if (Utils.isHd() || getHomeFeedColumn() % 2 != 0) return;
+    private static void align(ArrayList<BasicIndexItem> items, int column) {
+        if (Utils.isHd() || column % 2 != 0) return;
         int smallCardCount = 0;
         int lastSmallCardIndex = -1;
         for (int i = items.size() - 1; i >= 0; i--) {
@@ -900,13 +900,6 @@ public class PegasusPatch {
                 || adCardType == 100 || adCardType == 98 || adCardType == 101
                 || adCardType == 103 || adCardType == 129 || adCardType == 133
                 || adCardType == 134 || adCardType == 136));
-    }
-
-    private static long getHomeFeedColumn() {
-        PegasusMidConfig midConfig = KtUtils.getDeviceSetting(PegasusMidConfig.class);
-        if (midConfig != null && midConfig.hasColumn())
-            return midConfig.getColumn().getValue();
-        return 2;
     }
 
     public static void pegasusHook(JSONObject data) throws JSONException {
@@ -998,12 +991,13 @@ public class PegasusPatch {
                     uidArray, categorySet, channelSet
             );
         });
-        align(items);
+        int column = config != null ? config.optInt("column", 2) : 2;
+        align(items, column);
         Jsons.forEach(items, PegasusPatch::appendReasons);
     }
 
-    private static void align(JSONArray items) throws JSONException {
-        if (Utils.isHd() || getHomeFeedColumn() % 2 != 0) return;
+    private static void align(JSONArray items, int column) throws JSONException {
+        if (Utils.isHd() || column % 2 != 0) return;
         int smallCardCount = 0;
         int lastSmallCardIndex = -1;
         for (int i = items.length() - 1; i >= 0; i--) {
