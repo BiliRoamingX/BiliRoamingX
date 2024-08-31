@@ -1117,6 +1117,7 @@ public class PegasusPatch {
     public static List<Integer> getToRemoveRelateCardIndexes(List<RelateCard> relateCards, BizType bizType) {
         boolean removeRelatePromote = Settings.RemoveRelatePromote.get();
         boolean removeRelateOnlyAv = Settings.RemoveRelateOnlyAv.get();
+        boolean removeRelateCharge = Settings.RemoveRelateCharge.get();
         boolean applyToVideo = Settings.HomeFilterApplyToVideo.get();
         long playCountLimit = Settings.LowPlayCountLimit.get();
         int shortDurationLimit = Settings.ShortDurationLimit.get();
@@ -1164,6 +1165,7 @@ public class PegasusPatch {
             RelateCard relate = relateCards.get(i);
             if (isPromoteRelateUnite(relate, removeRelatePromote)
                     || isNotAvRelateUnite(relate, removeRelateOnlyAv, bizType)
+                    || (removeRelateCharge && relate.getBasicInfo().getReportFlowData().contains("chg_plt_up"))
                     || (applyToVideo && (isLowPlayCountRelateUnite(relate, playCountLimit)
                     || isDurationInvalidRelateUnite(relate, shortDurationLimit, longDurationLimit)
                     || isContainsBlockKwdRelateUnite(relate, titleRegexMode, titleSet, titleRegexes, reasonRegexMode, reasonSet, reasonRegexes, upRegexMode, upSet, upRegexes, uidArray))))

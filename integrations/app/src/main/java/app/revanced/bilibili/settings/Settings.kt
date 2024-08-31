@@ -157,6 +157,7 @@ object Settings {
         BooleanSetting(key = "remove_video_relate_only_av", dependency = RemoveRelatePromote)
     @JvmField val RemoveRelateNothing =
         BooleanSetting(key = "remove_video_relate_nothing", dependency = RemoveRelateOnlyAv)
+    @JvmField val RemoveRelateCharge = BooleanSetting("remove_video_relate_charge")
     @JvmField val DisableAutoSelect = BooleanSetting(key = "disable_auto_select")
     @JvmField val DisableAutoSubscribe = BooleanSetting(key = "disable_auto_subscribe")
     @JvmField val FilterStory = StringSetSetting(key = "filter_story")

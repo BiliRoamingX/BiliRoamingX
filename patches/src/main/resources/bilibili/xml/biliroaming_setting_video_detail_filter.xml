@@ -3,23 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.preference.PreferenceCategory>
         <androidx.preference.SwitchPreferenceCompat
+            android:key="remove_video_relate_charge"
+            android:title="@string/biliroaming_rm_video_relate_charge_title" />
+        <androidx.preference.SwitchPreferenceCompat
             android:key="remove_video_relate_promote"
-            android:title="@string/biliroaming_rm_video_relate_promote_title"
-            android:summary="@string/biliroaming_rm_video_relate_promote_summary" />
+            android:summary="@string/biliroaming_rm_video_relate_promote_summary"
+            android:title="@string/biliroaming_rm_video_relate_promote_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:dependency="remove_video_relate_promote"
             android:key="remove_video_relate_only_av"
-            android:title="@string/biliroaming_rm_video_relate_only_av_title"
-            android:summary="@string/biliroaming_rm_video_relate_only_av_summary" />
+            android:summary="@string/biliroaming_rm_video_relate_only_av_summary"
+            android:title="@string/biliroaming_rm_video_relate_only_av_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:dependency="remove_video_relate_only_av"
             android:key="remove_video_relate_nothing"
-            android:title="@string/biliroaming_rm_video_relate_nothing_title"
-            android:summary="@string/biliroaming_rm_video_relate_nothing_summary" />
+            android:summary="@string/biliroaming_rm_video_relate_nothing_summary"
+            android:title="@string/biliroaming_rm_video_relate_nothing_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.FilterHomeRcmdByKeywordFragment"
             android:key="relate_keyword_filter"
-            android:title="@string/biliroaming_filter_by_keyword_title"
-            android:summary="@string/biliroaming_reapply_home_filter_summary" />
+            android:summary="@string/biliroaming_reapply_home_filter_summary"
+            android:title="@string/biliroaming_filter_by_keyword_title" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

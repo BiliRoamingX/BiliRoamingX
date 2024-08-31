@@ -191,6 +191,7 @@
     <string name="biliroaming_about_title">关于</string>
     <string name="biliroaming_project_title">项目地址</string>
     <string name="biliroaming_tg_title">TG更新频道</string>
+    <string name="biliroaming_rm_video_relate_charge_title">移除充电专属视频</string>
     <string name="biliroaming_rm_video_relate_promote_title">移除推广</string>
     <string name="biliroaming_rm_video_relate_promote_summary">游戏、课程、会员购、创作推广等</string>
     <string name="biliroaming_rm_video_relate_only_av_title">仅UP主投稿视频</string>
