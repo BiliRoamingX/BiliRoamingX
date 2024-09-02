@@ -24,13 +24,17 @@ object SubtitleImportSaveButtonPatch : ResourcePatch() {
             "bili_player_new_subtitle_function_widget",
             "bili_player_new_multi_subtitle_function_widget",
         )
+        var newUI = false
+        context.document["res/layout-land/${subtitleLayouts[1]}.xml"].use { dom ->
+            dom["androidx.constraintlayout.widget.ConstraintLayout"].walk {
+                if (it["android:id"] == "@id/large_subtitle_switch") newUI = true
+            }
+        }
         arrayOf("res/layout", "res/layout-land").flatMap { dir ->
             subtitleLayouts.map { "$dir/$it.xml" }
         }.forEach { xml ->
             context.document[xml].use { dom ->
                 val rootNode = dom["androidx.constraintlayout.widget.ConstraintLayout"]
-                var newUI = false
-                rootNode.walk { if (it["android:id"] == "@id/large_subtitle_switch") newUI = true }
                 if (!newUI) {
                     rootNode.appendChild("com.bilibili.magicasakura.widgets.TintTextView") {
                         this["android:textSize"] = "12sp"
@@ -89,6 +93,31 @@ object SubtitleImportSaveButtonPatch : ResourcePatch() {
                         this["app:layout_constraintLeft_toLeftOf"] = "@id/biliroaming_import_subtitle"
                         this["app:layout_constraintRight_toRightOf"] = "@id/biliroaming_import_subtitle"
                     }
+                    rootNode.walk {
+                        when (val id = it["android:id"]) {
+                            "@id/multi_subtitle_switch_text" -> it["android:layout_marginTop"] = "6dp"
+                            "@id/multi_subtitle_switch_hint" -> it["android:layout_marginBottom"] = "6dp"
+                            "@id/large_subtitle_switch_text" -> {
+                                it["android:layout_marginTop"] = "12dp"
+                                it["android:layout_marginBottom"] = "12dp"
+                            }
+
+                            "@id/double_column_subtitle_background",
+                            "@id/recycler_main", "@id/recycler_vice", "@id/recycler_single" -> {
+                                it["android:layout_height"] = "wrap_content"
+                                it["app:layout_constrainedHeight"] = "true"
+                                if (id == "@id/recycler_single")
+                                    it["android:layout_marginBottom"] = "21dp"
+                            }
+
+                            "@id/subtitle_close" -> {
+                                it["android:layout_height"] = "wrap_content"
+                                it["android:paddingTop"] = "12dp"
+                                it["android:paddingBottom"] = "12dp"
+                                it["android:layout_marginBottom"] = "21dp"
+                            }
+                        }
+                    }
                 } else {
                     rootNode.appendChild("com.bilibili.magicasakura.widgets.TintTextView") {
                         this["android:textSize"] = "14sp"
@@ -122,6 +151,19 @@ object SubtitleImportSaveButtonPatch : ResourcePatch() {
                         this["app:layout_constraintRight_toRightOf"] = "parent"
                     }
                 }
+            }
+        }
+        if (!newUI) return
+        context.document["res/layout-land/bili_player_single_col_subtitle_item_holder.xml"].use { dom ->
+            dom["TextView"].let {
+                it["android:layout_height"] = "wrap_content"
+                it["android:paddingTop"] = "12dp"
+                it["android:paddingBottom"] = "12dp"
+            }
+        }
+        arrayOf("bili_player_subtitle_main_item_holder", "bili_player_subtitle_vice_item_holder").forEach {
+            context.document["res/layout-land/$it.xml"].use { dom ->
+                dom["TextView"]["android:layout_height"] = "wrap_content"
             }
         }
     }
