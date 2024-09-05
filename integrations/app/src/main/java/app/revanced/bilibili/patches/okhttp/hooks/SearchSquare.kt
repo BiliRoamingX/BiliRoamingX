@@ -21,6 +21,11 @@ object SearchSquare : ApiHook() {
                 if ((type == "trending" && searchTypes.contains("trending"))
                     || (type == "recommend" && searchTypes.contains("recommend"))
                 ) it.optJSONObject("data")?.put("list", JSONArray())
+                if (type == "recommend") {
+                    it.optJSONObject("data")?.optJSONArray("list")?.forEach { e ->
+                        e.remove("recommend_reason")
+                    }
+                }
             }
         }.toString()
     }
