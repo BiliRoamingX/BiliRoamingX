@@ -198,7 +198,8 @@ object Settings {
 
 
     // region Group: 搜索页
-    @JvmField val PurifySearch = BooleanSetting(key = "purify_search")
+    @JvmField @Deprecated("replaced by PurifySearchTypes") val PurifySearch = BooleanSetting(key = "purify_search")
+    @JvmField val PurifySearchTypes = StringSetSetting(key = "purify_search_types")
     @JvmField val SearchBangumi = BooleanSetting(key = "search_area_bangumi")
     @JvmField val SearchMovie = BooleanSetting(key = "search_area_movie")
     @JvmField val FilterSearchType = StringSetSetting(key = "filter_search_type")

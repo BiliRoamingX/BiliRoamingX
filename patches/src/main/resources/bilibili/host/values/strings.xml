@@ -23,8 +23,7 @@
     <string name="biliroaming_replace_story_video_title">替换竖屏模式视频</string>
     <string name="biliroaming_replace_story_video_summary">替换竖屏模式视频为正常视频，竖屏按钮需要到播放设置里的竖屏模式设置里关闭</string>
     <string name="biliroaming_search_category_title">搜索页</string>
-    <string name="biliroaming_purify_search_title">净化搜索页面</string>
-    <string name="biliroaming_purify_search_summary">去除热搜和推荐</string>
+    <string name="biliroaming_purify_search_types_title">净化搜索页面</string>
     <string name="biliroaming_filter_search_type_title">按类型净化搜索结果</string>
     <string name="biliroaming_filter_search_type_summary">选择需要屏蔽的搜索结果类型</string>
     <string name="biliroaming_filter_search_keywords_title">按关键词净化搜索结果</string>

@@ -505,4 +505,14 @@
         <item />
         <item>云视听小电视、免流引导、投资UP主、跳转应用等</item>
     </string-array>
+    <string-array name="biliroaming_purify_search_type_entries">
+        <item>默认关键词</item>
+        <item>热搜</item>
+        <item>发现</item>
+    </string-array>
+    <string-array name="biliroaming_purify_search_type_values">
+        <item>words</item>
+        <item>trending</item>
+        <item>recommend</item>
+    </string-array>
 </resources>

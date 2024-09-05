@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <app.revanced.bilibili.widget.CheckBoxGroupPreference
+        android:entries="@array/biliroaming_purify_search_type_entries"
+        android:entryValues="@array/biliroaming_purify_search_type_values"
+        android:key="purify_search_types"
+        android:persistent="true"
+        app:migration_settings_type="none" />
+</androidx.preference.PreferenceScreen>

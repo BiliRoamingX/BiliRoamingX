@@ -79,3 +79,6 @@ class PegasusCoverRatioFragment : BiliRoamingBaseSettingFragment()
 
 @SettingFragment("biliroaming_setting_video_popups")
 class RemoveVideoPopupsFragment : BiliRoamingBaseSettingFragment()
+
+@SettingFragment("biliroaming_setting_purify_search_types")
+class PurifySearchTypesFragment : BiliRoamingBaseSettingFragment()

@@ -24,9 +24,6 @@ import com.bilibili.lib.homepage.mine.MenuGroup;
 import com.bilibili.okretro.GeneralResponse;
 import com.bilibili.pegasus.api.model.ChannelTabV2;
 import com.bilibili.pegasus.api.model.ChannelV2;
-import com.bilibili.search.api.DefaultKeyword;
-import com.bilibili.search.api.SearchRank;
-import com.bilibili.search.api.SearchReferral;
 import com.bilibili.video.story.api.StoryFeedResponse;
 
 import java.lang.reflect.Field;
@@ -183,9 +180,6 @@ public class JSONPatch {
             unlockOgvResponseV2(ogvApiResponseV2);
         } else if (data instanceof StoryFeedResponse feedResponse) {
             PegasusPatch.filterStory(feedResponse);
-        } else if ((!Versions.ge7_64_0() && (data instanceof SearchReferral || data instanceof DefaultKeyword)) || (Versions.ge7_39_0() && data instanceof com.bilibili.search2.api.SearchReferral)) {
-            if (Settings.PurifySearch.get())
-                return null;
         } else if (data instanceof EventSplashDataList splashList) {
             if (Settings.PurifySplash.get()) {
                 List<EventSplashData> eventList = splashList.getEventList();
@@ -227,20 +221,6 @@ public class JSONPatch {
 
     @Keep
     public static void parseArrayHook(Class<?> type, ArrayList<?> list) {
-        try {
-            parseArrayHookInternal(type, list);
-        } catch (Throwable t) {
-            Logger.error(t, () -> "JSONPatch, parse array hook error");
-            throw t;
-        }
-    }
-
-    private static void parseArrayHookInternal(Class<?> type, ArrayList<?> list) {
-        if ((!Versions.ge7_64_0() && (type == SearchRank.class || type == SearchReferral.Guess.class))
-                || (Versions.ge7_39_0() && (type == com.bilibili.search2.api.SearchRank.class || type == com.bilibili.search2.api.SearchReferral.Guess.class))) {
-            if (Settings.PurifySearch.get())
-                list.clear();
-        }
     }
 
     public static boolean shouldShowing(Set<? extends String> items, String item) {

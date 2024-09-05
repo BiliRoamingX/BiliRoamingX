@@ -12,7 +12,7 @@ object SearchDefaultWords : MossHook<DefaultWordsReq, DefaultWordsReq>() {
     }
 
     override fun hookBefore(req: DefaultWordsReq): Any? {
-        if (Settings.PurifySearch())
+        if (Settings.PurifySearchTypes().contains("words"))
             return HookFlags.STOP_EXECUTION
         return null
     }

@@ -93,11 +93,19 @@ sealed class Setting<out T : Any>(
         }
 
         private fun migrate() {
-            if (prefs.getBoolean("remove_video_cmd_dms", false)) {
-                prefs.edit(commit = true) {
+            if (Utils.isMainProcess() &&
+                (prefs.getBoolean("remove_video_cmd_dms", false)
+                        || prefs.getBoolean("purify_search", false))
+            ) prefs.edit(commit = true) {
+                if (prefs.getBoolean("remove_video_cmd_dms", false)) {
                     remove("remove_video_cmd_dms")
                     val popups = setOf("vote", "attention", "grade", "gradeSummary", "link", "other")
                     putStringSet("remove_video_popups", popups)
+                }
+                if (prefs.getBoolean("purify_search", false)) {
+                    remove("purify_search")
+                    val types = setOf("words", "trending", "recommend")
+                    putStringSet("purify_search_types", types)
                 }
             }
         }

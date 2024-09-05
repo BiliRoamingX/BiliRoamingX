@@ -10,10 +10,10 @@
             android:key="search_area_movie"
             android:summary="@string/biliroaming_search_area_movie_summary"
             android:title="@string/biliroaming_search_area_movie_title" />
-        <androidx.preference.SwitchPreferenceCompat
-            android:key="purify_search"
-            android:summary="@string/biliroaming_purify_search_summary"
-            android:title="@string/biliroaming_purify_search_title" />
+        <androidx.preference.Preference
+            android:fragment="app.revanced.bilibili.settings.fragments.PurifySearchTypesFragment"
+            android:key="fragment_purify_search_types"
+            android:title="@string/biliroaming_purify_search_types_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.FilterSearchTypeFragment"
             android:key="search_type"

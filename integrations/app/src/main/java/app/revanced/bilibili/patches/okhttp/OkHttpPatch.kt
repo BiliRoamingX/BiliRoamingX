@@ -32,6 +32,8 @@ object OkHttpPatch {
         RoomPlayInfo,
         SearchAll,
         SearchByType,
+        SearchDefaultWords,
+        SearchSquare,
         Season,
         SeasonRecommend,
         ShareChannels,
