@@ -33,6 +33,7 @@ object OkHttpPatch {
         SearchAll,
         SearchByType,
         SearchDefaultWords,
+        SearchRecommend,
         SearchSquare,
         Season,
         SeasonRecommend,
