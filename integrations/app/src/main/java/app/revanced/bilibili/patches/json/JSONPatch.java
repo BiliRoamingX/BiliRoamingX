@@ -522,8 +522,8 @@ public class JSONPatch {
                 case "article" -> space.article = null;
                 case "audio" -> space.audio = null;
                 case "season" -> space.season = null;
-                case "coinVideo" -> space.coinVideo = null;
-                case "recommendVideo" -> space.recommendVideo = null;
+                case "coinVideo" -> Reflex.setObjectField(space, "coinVideo", null);
+                case "recommendVideo" -> Reflex.setObjectField(space, "recommendVideo", null);
                 case "followComicList" -> space.followComicList = null;
                 case "spaceGame" -> space.spaceGame = null;
                 case "cheeseVideo" -> space.cheeseVideo = null;
