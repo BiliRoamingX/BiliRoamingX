@@ -10,8 +10,6 @@ import app.revanced.util.set
 import app.revanced.util.walk
 
 @Patch(
-    name = "Subtitle import and save button",
-    description = "注入导入及保存字幕按钮",
     compatiblePackages = [
         CompatiblePackage(name = "tv.danmaku.bili"),
         CompatiblePackage(name = "tv.danmaku.bilibilihd"),
@@ -150,19 +148,51 @@ object SubtitleImportSaveButtonPatch : ResourcePatch() {
                         this["app:layout_constraintLeft_toRightOf"] = "@id/biliroaming_import_subtitle"
                         this["app:layout_constraintRight_toRightOf"] = "parent"
                     }
+                    rootNode.walk {
+                        when (it["android:id"]) {
+                            "@id/multi_subtitle_switch_text" -> it["android:layout_marginTop"] = "6dp"
+                            "@id/multi_subtitle_switch_hint" -> it["android:layout_marginBottom"] = "6dp"
+                            "@id/large_subtitle_switch_text" -> {
+                                it["android:layout_marginTop"] = "12dp"
+                                it["android:layout_marginBottom"] = "12dp"
+                            }
+
+                            "@id/double_column_subtitle_background",
+                            "@id/recycler_main", "@id/recycler_vice", "@id/recycler_single" -> {
+                                it["android:layout_height"] = "wrap_content"
+                                it["app:layout_constrainedHeight"] = "true"
+                            }
+
+                            "@id/subtitle_close" -> {
+                                it["android:layout_height"] = "wrap_content"
+                                it["android:paddingTop"] = "12dp"
+                                it["android:paddingBottom"] = "12dp"
+                            }
+                        }
+                    }
                 }
             }
         }
         if (!newUI) return
-        context.document["res/layout-land/bili_player_single_col_subtitle_item_holder.xml"].use { dom ->
-            dom["TextView"].let {
-                it["android:layout_height"] = "wrap_content"
-                it["android:paddingTop"] = "12dp"
-                it["android:paddingBottom"] = "12dp"
+        arrayOf("res/layout", "res/layout-land").map {
+            "$it/bili_player_single_col_subtitle_item_holder.xml"
+        }.forEach { xml ->
+            context.document[xml].use { dom ->
+                dom["TextView"].let {
+                    it["android:layout_height"] = "wrap_content"
+                    it["android:paddingTop"] = "12dp"
+                    it["android:paddingBottom"] = "12dp"
+                    it["android:textColor"] = "@color/selector_bplayer_text_color_compound_button"
+                }
             }
         }
-        arrayOf("bili_player_subtitle_main_item_holder", "bili_player_subtitle_vice_item_holder").forEach {
-            context.document["res/layout-land/$it.xml"].use { dom ->
+        arrayOf("res/layout", "res/layout-land").flatMap { dir ->
+            arrayOf(
+                "bili_player_subtitle_main_item_holder",
+                "bili_player_subtitle_vice_item_holder",
+            ).map { "$dir/$it.xml" }
+        }.forEach { xml ->
+            context.document[xml].use { dom ->
                 dom["TextView"]["android:layout_height"] = "wrap_content"
             }
         }

@@ -25,7 +25,8 @@ import com.android.tools.smali.dexlib2.iface.reference.StringReference
         CompatiblePackage(name = "tv.danmaku.bili"),
         CompatiblePackage(name = "tv.danmaku.bilibilihd"),
         CompatiblePackage(name = "com.bilibili.app.in")
-    ]
+    ],
+    dependencies = [SubtitleImportSaveButtonPatch::class],
 )
 object SubtitleImportSavePatch : MultiMethodBytecodePatch(
     fingerprints = setOf(
