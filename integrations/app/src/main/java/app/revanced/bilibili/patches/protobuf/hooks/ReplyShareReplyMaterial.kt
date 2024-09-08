@@ -26,11 +26,14 @@ object ReplyShareReplyMaterial : MossHook<ShareReplyMaterialReq, ShareReplyMater
             val purifyUrl = ShareClick.purifyUrl(reply.qrcodeUrl)
             val uri = Uri.parse(purifyUrl)
             reply.qrcodeUrl = uri.buildUpon().apply {
-                encodedFragment(null)
                 if (!uri.queryParameterNames.contains("comment_on"))
                     appendQueryParameter("comment_on", "1")
                 if (!uri.queryParameterNames.contains("comment_root_id"))
                     appendQueryParameter("comment_root_id", req.rpid.toString())
+                val replyId = uri.getQueryParameter("comment_secondary_id").orEmpty().ifEmpty {
+                    uri.getQueryParameter("comment_root_id").orEmpty()
+                }.ifEmpty { req.rpid.toString() }
+                encodedFragment("reply$replyId")
             }.toString()
         }
         if (reply != null) {
