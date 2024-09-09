@@ -220,12 +220,12 @@ object BangumiPlayUrlHook {
                 return response
             }
         val extraContent = req.extraContentMap
-        val reqEpId = extraContent.getOrDefault("ep_id", "0").toLong()
-        val seasonId = extraContent.getOrDefault("season_id", "0").toLong()
+        var reqEpId = extraContent.getOrDefault("ep_id", "0").toLong()
+        var seasonId = extraContent.getOrDefault("season_id", "0").toLong()
             .takeIf { it != 0L } ?: bangumiInfoCache.firstNotNullOfOrNull {
             if (it.value.keys.contains(reqEpId)) it.key else null
         } ?: VideoInfoHolder.currentSeason()?.id ?: 0L
-        if (seasonId == 0L && reqEpId == 0L)
+        if (req.bvid.isEmpty() && req.vod.aid == 0L && seasonId == 0L && reqEpId == 0L)
             finalError?.let { throw it } ?: run {
                 if (allowDownloadUnite)
                     return fixDownloadProtoUnite(response)
@@ -233,6 +233,17 @@ object BangumiPlayUrlHook {
                 return response
             }
         val supplement = PlayViewReply.parseFrom(supplementAny.value.toByteArray())
+        if (seasonId == 0L && reqEpId == 0L) {
+            reqEpId = supplement.business.episodeInfo.epId.toLong()
+            seasonId = supplement.business.episodeInfo.seasonInfo.seasonId.toLong()
+            if (seasonId == 0L && reqEpId == 0L)
+                finalError?.let { throw it } ?: run {
+                    if (allowDownloadUnite)
+                        return fixDownloadProtoUnite(response)
+                    syncVideoHistoryIfNeeded(req, response)
+                    return response
+                }
+        }
         if (Settings.UnlockAreaLimit() && needProxyUnite(response, supplement)) {
             return try {
                 val (thaiSeason, thaiEp) = getThaiSeason(seasonId, reqEpId)
