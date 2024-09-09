@@ -5,6 +5,7 @@ import app.revanced.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.revanced.patcher.patch.BytecodePatch
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
+import app.revanced.patcher.util.proxy.mutableTypes.MutableMethod
 import app.revanced.patches.bilibili.utils.*
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction35c
@@ -41,5 +42,22 @@ object UnlockProtobufPatch : BytecodePatch() {
                     }
                 }
             }
+        // add back XXX method copy from executeXXX method
+        context.classes.filter {
+            it.type.startsWith("Lcom/bapis") && it.type.endsWith("Moss;")
+        }.forEach { c ->
+            c.proxy(context).run {
+                val newMethods = mutableListOf<MutableMethod>()
+                methods.forEach { m ->
+                    if (m.name.startsWith("execute") && m.name.length > 7 && m.returnType != "V") {
+                        val noPrefixName = m.name.substringAfter("execute").replaceFirstChar { it.lowercaseChar() }
+                        m.cloneMutable(name = noPrefixName).takeIf { mm ->
+                            methods.none { it == mm }
+                        }?.let { newMethods.add(it) }
+                    }
+                }
+                methods.addAll(newMethods)
+            }
+        }
     }
 }
