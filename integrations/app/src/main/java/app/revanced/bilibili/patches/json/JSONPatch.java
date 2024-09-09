@@ -535,6 +535,16 @@ public class JSONPatch {
                 case "nftShowModule" -> space.nftShowModule = null;
             }
         }
+        try {
+            if (space.buttonEntranceList != null) {
+                space.buttonEntranceList.removeIf(entrance -> {
+                    String moduleType = entrance.moduleType;
+                    return values.contains("chargeResult") && "charge".equals(moduleType)
+                            || values.contains("guard") && "navigation".equals(moduleType);
+                });
+            }
+        } catch (NoSuchFieldError ignored) {
+        }
     }
 
     private static void unlockOgvResponse(OgvApiResponse<?> response) {

@@ -98,6 +98,10 @@ public class BiliSpace {
     @JSONField(name = "nft_show_module")
     public BiliSpaceNftShowModule nftShowModule;
 
+    @Nullable
+    @JSONField(name = "space_button_list")
+    public List<BiliSpaceButtonEntrance> buttonEntranceList;
+
     @Keep
     public static class Tab {
         public List<Tab> items;
