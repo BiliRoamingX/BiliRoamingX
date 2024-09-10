@@ -57,8 +57,10 @@ object SearchAll : MossHook<SearchAllRequest, SearchAllResponse>() {
             types.add("bgm_media")
             types.add("pgc_media")
         }
-        if (types.contains("ad"))
+        if (types.contains("ad")) {
             types.add("product")
+            types.add("special_s")
+        }
         val toRemoveIndexes = mutableListOf<Int>()
         val contents = Settings.FilterSearchContent()
         val contentRegexMode = Settings.FilterSearchContentRegexMode()
