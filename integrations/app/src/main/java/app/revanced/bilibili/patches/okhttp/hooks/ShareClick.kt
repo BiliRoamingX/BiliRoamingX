@@ -23,6 +23,7 @@ object ShareClick : ApiHook() {
             WhitelistQuery("comment_root_id"),
             WhitelistQuery("comment_secondary_id"),
             WhitelistQuery("type"),
+            WhitelistQuery("itemsId"),
         )
 
     override fun shouldHook(url: String, status: Int): Boolean {
