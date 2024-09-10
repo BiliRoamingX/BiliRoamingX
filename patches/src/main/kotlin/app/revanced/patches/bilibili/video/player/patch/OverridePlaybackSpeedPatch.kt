@@ -4,19 +4,26 @@ import app.revanced.patcher.data.BytecodeContext
 import app.revanced.patcher.extensions.InstructionExtensions.addInstructions
 import app.revanced.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
 import app.revanced.patcher.extensions.InstructionExtensions.getInstruction
+import app.revanced.patcher.patch.PatchException
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
-import app.revanced.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
+import app.revanced.patcher.util.proxy.mutableTypes.MutableClass
+import app.revanced.patcher.util.proxy.mutableTypes.MutableMethod
 import app.revanced.patcher.util.smali.ExternalLabel
 import app.revanced.patches.bilibili.patcher.patch.MultiMethodBytecodePatch
-import app.revanced.patches.bilibili.utils.*
-import app.revanced.patches.bilibili.video.player.fingerprints.*
-import app.revanced.util.exception
+import app.revanced.patches.bilibili.utils.exception
+import app.revanced.patches.bilibili.utils.proxy
+import app.revanced.patches.bilibili.video.player.fingerprints.PlaybackSpeedSettingFingerprint
+import app.revanced.patches.bilibili.video.player.fingerprints.PlayerSpeedWidgetFingerprint
+import app.revanced.patches.bilibili.video.player.fingerprints.UnitePlayerSetSpeedMenuFingerprint
 import app.revanced.util.getReference
-import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
+import com.android.tools.smali.dexlib2.dexbacked.instruction.DexBackedArrayPayload
+import com.android.tools.smali.dexlib2.dexbacked.instruction.DexBackedInstruction31t
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.WideLiteralInstruction
+import com.android.tools.smali.dexlib2.iface.instruction.formats.ArrayPayload
+import com.android.tools.smali.dexlib2.iface.instruction.formats.Instruction11n
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 
 @Patch(
@@ -29,12 +36,7 @@ import com.android.tools.smali.dexlib2.iface.reference.FieldReference
     ]
 )
 object OverridePlaybackSpeedPatch : MultiMethodBytecodePatch(
-    fingerprints = setOf(
-        StoryMenuFingerprint,
-        MusicPlayerPanelFingerprint,
-    ),
     multiFingerprints = setOf(
-        SpeedFunctionWidgetFingerprint,
         PlaybackSpeedSettingFingerprint,
         PlayerSpeedWidgetFingerprint,
         UnitePlayerSetSpeedMenuFingerprint,
@@ -42,51 +44,10 @@ object OverridePlaybackSpeedPatch : MultiMethodBytecodePatch(
 ) {
     override fun execute(context: BytecodeContext) {
         super.execute(context)
-        SpeedFunctionWidgetFingerprint.result.mapNotNull { r ->
-            r.classDef.fields.firstNotNullOfOrNull { f ->
-                f.type.toClassDefOrNull(context)?.takeIf {
-                    it.interfaces == listOf("Landroid/view/View\$OnClickListener;")
-                }?.let {
-                    it.proxy(context).methods.first { it.name == "<init>" }
-                }
-            }
-        }.ifEmpty {
-            throw SpeedFunctionWidgetFingerprint.exception
-        }.forEach { m ->
-            val result = m.implementation!!.instructions.withIndex().firstNotNullOfOrNull { (index, inst) ->
-                if (inst.opcode == Opcode.IPUT_OBJECT
-                    && inst is OneRegisterInstruction
-                    && inst.getReference<FieldReference>().type == "[F"
-                ) index to inst.registerA else null
-            }
-            if (result != null) {
-                val (insertIndex, register) = result
-                m.addInstructions(
-                    insertIndex, """
-                    invoke-static {v$register}, Lapp/revanced/bilibili/patches/PlaybackSpeedPatch;->getOverrideSpeedArray([F)[F
-                    move-result-object v$register
-                """.trimIndent()
-                )
-            }
-        }
-        StoryMenuFingerprint.result?.mutableClass?.methods?.first { it.name == "<init>" }?.run {
-            val (register, insertIndex) = implementation!!.instructions.withIndex()
-                .firstNotNullOfOrNull { (index, inst) ->
-                    if (inst.opcode == Opcode.IPUT_OBJECT
-                        && inst is OneRegisterInstruction
-                        && inst.getReference<FieldReference>().type == "[F"
-                    ) inst.registerA to index else null
-                } ?: return@run
-            addInstructions(
-                insertIndex, """
-                invoke-static {v$register}, Lapp/revanced/bilibili/patches/PlaybackSpeedPatch;->getOverrideSpeedArray([F)[F
-                move-result-object v$register
-            """.trimIndent()
-            )
-        } ?: throw StoryMenuFingerprint.exception
-        PlaybackSpeedSettingFingerprint.result.map { r ->
+        val settingMethods = PlaybackSpeedSettingFingerprint.result.map { r ->
             r.mutableClass.methods.first { it.name == "<init>" }
-        }.ifEmpty {
+        }
+        settingMethods.ifEmpty {
             throw PlaybackSpeedSettingFingerprint.exception
         }.forEach { m ->
             val insertIndex = m.implementation!!.instructions.indexOfLast {
@@ -98,62 +59,6 @@ object OverridePlaybackSpeedPatch : MultiMethodBytecodePatch(
             """.trimIndent()
             )
         }
-        context.findClass("Lcom/bilibili/music/podcast/view/PodcastSpeedSeekBar;")?.mutableClass?.run {
-            val speedNameListField = fields.first { it.type == "Ljava/util/List;" }
-            val speedArrayField = fields.first { it.type == "[F" }.apply {
-                accessFlags = accessFlags.removeFinal()
-            }
-            methods.find { it.name == "<init>" && it.parameterTypes.size == 3 }?.run {
-                val insertIndex = implementation!!.instructions.indexOfFirst {
-                    it.opcode == Opcode.RETURN_VOID
-                }
-                addInstructions(
-                    insertIndex, """
-                    invoke-static {p0}, Lapp/revanced/bilibili/patches/PlaybackSpeedPatch;->onNewPodcastSpeedSeekBar(Lcom/bilibili/music/podcast/view/PodcastSpeedSeekBar;)V
-                """.trimIndent()
-                )
-            }
-            Method(
-                definingClass = type,
-                name = "getSpeedNameListForBiliRoaming",
-                returnType = "Ljava/util/List;",
-                accessFlags = AccessFlags.PUBLIC.value,
-                implementation = MethodImplementation(2)
-            ).toMutable().also { methods.add(it) }.addInstructions(
-                """
-                iget-object v0, p0, $speedNameListField
-                return-object v0
-            """.trimIndent()
-            )
-            Method(
-                definingClass = type,
-                name = "setSpeedArrayForBiliRoaming",
-                "V",
-                accessFlags = AccessFlags.PUBLIC.value,
-                parameters = listOf(MethodParameter(type = "[F", name = "array")),
-                implementation = MethodImplementation(registerCount = 2)
-            ).toMutable().also { methods.add(it) }.addInstructions(
-                """
-                iput-object p1, p0, $speedArrayField
-                return-void
-            """.trimIndent()
-            )
-        } /*?: throw PatchException("not found PodcastSpeedSeekBar")*/ // not exist on hd
-        MusicPlayerPanelFingerprint.result?.mutableClass?.methods?.first { it.name == "<init>" }?.run {
-            val (register, insertIndex) = implementation!!.instructions.withIndex()
-                .firstNotNullOfOrNull { (index, inst) ->
-                    if (inst.opcode == Opcode.IPUT_OBJECT
-                        && inst is OneRegisterInstruction
-                        && inst.getReference<FieldReference>().type == "[F"
-                    ) inst.registerA to index else null
-                } ?: throw MusicPlayerPanelFingerprint.exception
-            addInstructions(
-                insertIndex, """
-                invoke-static {v$register}, Lapp/revanced/bilibili/patches/PlaybackSpeedPatch;->getOverrideReverseSpeedArray([F)[F
-                move-result-object v$register
-            """.trimIndent()
-            )
-        } /*?: throw MusicPlayerPanelFingerprint.exception*/ // not exist on hd
         PlayerSpeedWidgetFingerprint.result.mapNotNull { r ->
             r.mutableClass.methods.firstNotNullOfOrNull { m ->
                 m.implementation?.instructions?.indexOfFirst {
@@ -183,6 +88,72 @@ object OverridePlaybackSpeedPatch : MultiMethodBytecodePatch(
                     lastIndex + 3, """
                     invoke-static {v$register}, Lapp/revanced/bilibili/patches/PlaybackSpeedPatch;->onUnitePlayerSetSpeedMenu([Ljava/lang/String;)[Ljava/lang/String;
                     move-result-object v$register
+                """.trimIndent()
+                )
+            }
+        }
+
+        val speedBytesList = listOf(2.0f, 1.5f, 1.25f, 1.0f, 0.75f, 0.5f).map { it.toBits() }
+        val speedBytesReversedList = speedBytesList.reversed()
+        val settingTypes = settingMethods.map { it.definingClass }
+
+        data class Info(val clazz: MutableClass, val method: MutableMethod, val index: Int, val register: Int)
+        context.classes.filterNot { c ->
+            c.type.let { settingTypes.contains(it) || it.startsWith("Lapp/revanced/bilibili/") || it.startsWith("Lkofua/") }
+        }.flatMap { c ->
+            c.methods.mapNotNull { m ->
+                val payload = m.implementation?.instructions?.find { inst ->
+                    inst is ArrayPayload && inst.arrayElements.let { it == speedBytesList || it == speedBytesReversedList }
+                } as? DexBackedArrayPayload
+                if (payload != null) {
+                    val (index, inst) = m.implementation?.instructions!!.withIndex().firstNotNullOf { (index, inst) ->
+                        if (inst.opcode == Opcode.FILL_ARRAY_DATA && inst is DexBackedInstruction31t
+                            && inst.let { it.instructionStart + it.codeOffset * 2 } == payload.instructionStart
+                        ) index to inst else null
+                    }
+                    val clazz = c.proxy(context)
+                    val method = clazz.methods.first { it == m }
+                    Info(clazz, method, index, inst.registerA)
+                } else null
+            }
+        }.ifEmpty {
+            throw PatchException("Retrieve speed array info failed")
+        }.forEach { (clazz, method, index, register) ->
+            val instructions = method.implementation!!.instructions
+            val payloadInst = instructions.first { inst ->
+                inst is ArrayPayload && inst.arrayElements.let { it == speedBytesList || it == speedBytesReversedList }
+            } as ArrayPayload
+            val reverse = payloadInst.arrayElements == speedBytesReversedList
+            val patchMethodName = if (reverse) "getOverrideReverseSpeedArray" else "getOverrideSpeedArray"
+            method.addInstructions(
+                index + 1, """
+                invoke-static {v$register}, Lapp/revanced/bilibili/patches/PlaybackSpeedPatch;->$patchMethodName([F)[F
+                move-result-object v$register
+            """.trimIndent()
+            )
+            // fix for StorySpeedDialogManager
+            if (method.parameterTypes.isEmpty() && method.returnType == "Landroid/app/Dialog;") {
+                val (constIndex, constRegister) = instructions.withIndex().reversed().firstNotNullOf { (index, inst) ->
+                    if (inst.opcode == Opcode.CONST_4 && inst is Instruction11n && inst.wideLiteral == 0x6L) {
+                        index to inst.registerA
+                    } else null
+                }
+                method.addInstructions(
+                    constIndex + 1, """
+                    invoke-static {}, Lapp/revanced/bilibili/patches/PlaybackSpeedPatch;->getOverrideSpeedArraySize()I
+                    move-result v$constRegister
+                """.trimIndent()
+                )
+            }
+            if (method.name == "<clinit>") {
+                clazz.methods.singleOrNull { m ->
+                    m.parameterTypes == listOf("F") && m.returnType == "V"
+                            && m.implementation?.instructions.orEmpty().any {
+                        it.opcode == Opcode.CONST_16 && it is WideLiteralInstruction && it.wideLiteral == 0x58L
+                    }
+                }?.addInstructions(
+                    0, """
+                    invoke-static {p1}, Lapp/revanced/bilibili/patches/PlaybackSpeedPatch;->onPlaybackSpeedSelected(F)V
                 """.trimIndent()
                 )
             }

@@ -11,8 +11,10 @@ import android.widget.TextView
 import androidx.annotation.Keep
 import app.revanced.bilibili.patches.main.ApplicationDelegate
 import app.revanced.bilibili.settings.Settings
-import app.revanced.bilibili.utils.*
-import com.bilibili.music.podcast.view.PodcastSpeedSeekBar
+import app.revanced.bilibili.utils.Reflex
+import app.revanced.bilibili.utils.Utils
+import app.revanced.bilibili.utils.children
+import app.revanced.bilibili.utils.dp
 import com.bilibili.video.story.StoryVideoActivity
 import tv.danmaku.ijk.media.player.IMediaPlayer
 import java.lang.ref.WeakReference
@@ -124,6 +126,12 @@ object PlaybackSpeedPatch {
 
     @Keep
     @JvmStatic
+    fun getOverrideSpeedArraySize(): Int {
+        return newSpeedArray.let { if (it.isNotEmpty()) it.size else 6 }
+    }
+
+    @Keep
+    @JvmStatic
     @SuppressLint("SetTextI18n")
     fun onNewPlaybackSpeedSetting(setting: Any) {
         val newSpeedReversedArray = newSpeedReversedArray.takeIf { it.isNotEmpty() }
@@ -188,19 +196,6 @@ object PlaybackSpeedPatch {
             ?.set(null, newSpeedIdMap.values.toIntArray())
         Reflex.findFirstFieldByExactTypeOrNull(clazz, FloatArray::class.java)
             ?.set(null, newSpeedReversedArray)
-    }
-
-    @Keep
-    @JvmStatic
-    fun onNewPodcastSpeedSeekBar(seekBar: PodcastSpeedSeekBar) {
-        val newSpeedReversedArray = newSpeedReversedArray.takeIf { it.isNotEmpty() }
-            ?: stockReverseSpeedArray
-        val speedNameList = seekBar.speedNameListForBiliRoaming.ifEmpty { return }
-        val pairClass = speedNameList.first().javaClass
-        speedNameList.clear()
-        speedNameList.addAll(newSpeedReversedArray.map { pairClass.new(it, "${it}x") })
-        seekBar.setSpeedArrayForBiliRoaming(newSpeedReversedArray)
-        seekBar.max = newSpeedReversedArray.lastIndex.coerceAtLeast(0) * 100
     }
 
     @Keep

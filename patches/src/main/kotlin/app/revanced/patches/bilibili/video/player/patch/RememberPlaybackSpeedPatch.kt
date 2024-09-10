@@ -7,10 +7,7 @@ import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patches.bilibili.misc.settings.patch.SettingsResourcePatch
 import app.revanced.patches.bilibili.patcher.patch.MultiMethodBytecodePatch
 import app.revanced.patches.bilibili.utils.exception
-import app.revanced.patches.bilibili.video.player.fingerprints.MenuServiceCreateSpeedFingerprint
-import app.revanced.patches.bilibili.video.player.fingerprints.PlaybackSpeedSettingFingerprint
-import app.revanced.patches.bilibili.video.player.fingerprints.PlayerSettingCreateSpeedFingerprint
-import app.revanced.patches.bilibili.video.player.fingerprints.PlayerSpeedChooseWidgetFingerprint
+import app.revanced.patches.bilibili.video.player.fingerprints.*
 import app.revanced.util.exception
 import app.revanced.util.getReference
 import com.android.tools.smali.dexlib2.Opcode
@@ -28,7 +25,11 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
     dependencies = [SettingsResourcePatch::class]
 )
 object RememberPlaybackSpeedPatch : MultiMethodBytecodePatch(
-    fingerprints = setOf(PlayerSettingCreateSpeedFingerprint, MenuServiceCreateSpeedFingerprint),
+    fingerprints = setOf(
+        PlayerSettingCreateSpeedFingerprint,
+        MenuServiceCreateSpeedFingerprint,
+        MenuFuncSegmentFingerprint,
+    ),
     multiFingerprints = setOf(PlayerSpeedChooseWidgetFingerprint, PlaybackSpeedSettingFingerprint),
 ) {
     override fun execute(context: BytecodeContext) {
@@ -90,5 +91,10 @@ object RememberPlaybackSpeedPatch : MultiMethodBytecodePatch(
             """.trimIndent()
             )
         }
+        MenuFuncSegmentFingerprint.result?.mutableMethod?.addInstructions(
+            0, """
+            invoke-static {p1}, Lapp/revanced/bilibili/patches/PlaybackSpeedPatch;->onPlaybackSpeedSelected(F)V
+        """.trimIndent()
+        )
     }
 }

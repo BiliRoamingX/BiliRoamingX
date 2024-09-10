@@ -31,7 +31,7 @@ object Settings {
     @JvmField val RememberLosslessSetting = BooleanSetting(key = "remember_lossless_setting")
     @JvmField val DefaultPlaybackSpeed = FloatSetting(key = "default_playback_speed")
     @JvmField val LongPressPlaybackSpeed = FloatSetting(key = "long_press_playback_speed")
-    @JvmField val OverridePlaybackSpeed = StringSetting(key = "playback_speed_override")
+    @JvmField val OverridePlaybackSpeed = StringSetting(key = "playback_speed_override", needReboot = true)
     @JvmField val TrialVipQuality = BooleanSetting(key = "trial_vip_quality")
     @JvmField val DisableSegmentedSection = BooleanSetting(key = "disable_segmented_section")
     @JvmField val DisableAutoNextPlay = BooleanSetting(key = "disable_auto_next_play")
