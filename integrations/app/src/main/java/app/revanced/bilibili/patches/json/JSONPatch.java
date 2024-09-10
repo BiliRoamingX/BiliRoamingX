@@ -9,6 +9,7 @@ import com.bilibili.ad.adview.videodetail.danmakuv2.model.Dm;
 import com.bilibili.ad.adview.videodetail.danmakuv2.model.DmAdvert;
 import com.bilibili.app.authorspace.api.BiliSpace;
 import com.bilibili.app.comm.list.widget.recommend.RecommendModeGuidanceConfig;
+import com.bilibili.app.gemini.ugc.feature.share.ShareIconResult;
 import com.bilibili.bililive.room.biz.reverse.bean.LiveRoomReserveInfo;
 import com.bilibili.bililive.room.biz.shopping.beans.LiveGoodsCardInfo;
 import com.bilibili.bililive.room.biz.shopping.beans.LiveShoppingGotoBuyInfo;
@@ -215,6 +216,9 @@ public class JSONPatch {
         } else if ((!Utils.isHd() && data instanceof BiliLiveRoomInfo.DmComboInfo) || data instanceof LiveRoomDanmakuVoteCardInfo) {
             if (Settings.PurifyLivePopups.get().contains("plusOne"))
                 return null;
+        } else if ((Utils.isHd() && data instanceof tv.danmaku.bili.videopage.player.features.share.ShareIconResult) || (!Utils.isHd() && data instanceof ShareIconResult)) {
+            // block share guide for old UGC player
+            return null;
         }
         return obj;
     }
