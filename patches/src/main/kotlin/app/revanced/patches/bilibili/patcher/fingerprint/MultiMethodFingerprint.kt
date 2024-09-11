@@ -34,6 +34,7 @@ abstract class MultiMethodFingerprint(
      * The result of the [MethodFingerprint].
      */
     var result = mutableListOf<MethodFingerprintResult>()
+    private var resolved = false
 
     companion object {
         /**
@@ -44,9 +45,12 @@ abstract class MultiMethodFingerprint(
          * @return True if the resolution was successful, false otherwise.
          */
         fun Iterable<MultiMethodFingerprint>.resolve(context: BytecodeContext, classes: Iterable<ClassDef>) {
-            for (fingerprint in this) // For each fingerprint
+            for (fingerprint in this) { // For each fingerprint
+                if (fingerprint.resolved) continue
                 for (classDef in classes) // search through all classes for the fingerprint
                     fingerprint.resolve(context, classDef)
+                fingerprint.resolved = true
+            }
         }
 
         /**
