@@ -28,6 +28,7 @@ object FakeNotInMultiWindowPatch : BytecodePatch() {
             "Lcom/bilibili/bangumi/ui/page/detail/BangumiDetailActivityV3;",
             "Lcom/bilibili/video/videodetail/VideoDetailsActivity;",
             "Lcom/bilibili/multitypeplayerV2/MultiTypeVideoContentActivity;",
+            "Lcom/bilibili/bililive/room/ui/roomv3/LiveRoomActivityV3;",
         )
         activityTypes.mapNotNull { context.findClass(it)?.mutableClass }.forEach { clazz ->
             Method(
