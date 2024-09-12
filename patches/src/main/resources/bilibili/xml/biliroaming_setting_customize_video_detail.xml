@@ -46,6 +46,10 @@
             android:key="not_lock_orientation"
             android:summary="@string/biliroaming_not_lock_orientation_summary"
             android:title="@string/biliroaming_not_lock_orientation_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="time_airborne"
+            android:summary="@string/biliroaming_time_airborne_summary"
+            android:title="@string/biliroaming_time_airborne_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.VideoDetailFilterFragment"
             android:key="fragment_video_relate"
