@@ -544,7 +544,8 @@ public class JSONPatch {
                 space.buttonEntranceList.removeIf(entrance -> {
                     String moduleType = entrance.moduleType;
                     return values.contains("chargeResult") && "charge".equals(moduleType)
-                            || values.contains("guard") && "navigation".equals(moduleType);
+                            || values.contains("guard") && "navigation".equals(moduleType)
+                            || values.contains("adV2") && "goods".equals(moduleType);
                 });
             }
         } catch (NoSuchFieldError ignored) {
