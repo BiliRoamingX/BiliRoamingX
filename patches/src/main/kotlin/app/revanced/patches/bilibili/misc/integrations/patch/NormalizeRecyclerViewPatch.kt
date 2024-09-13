@@ -42,10 +42,10 @@ object NormalizeRecyclerViewPatch : BytecodePatch(setOf(RecyclerViewHolderFinger
         }
         val myAdapterType = "app.revanced.bilibili.widget.RecyclerViewAdapter".classDescriptor
         context.findClass(myAdapterType)!!.mutableClass.run {
-            methods.first { it.name == "onCreateViewHolder" && it.accessFlags.isSynthetic() }
-                .returnType = recyclerViewHolderType
-            methods.first { it.name == "onBindViewHolder" && it.accessFlags.isSynthetic() }
-                .parameterTypes[0] = recyclerViewHolderType
+            methods.find { it.name == "onCreateViewHolder" && it.accessFlags.isSynthetic() }
+                ?.returnType = recyclerViewHolderType
+            methods.find { it.name == "onBindViewHolder" && it.accessFlags.isSynthetic() }
+                ?.parameterTypes?.set(0, recyclerViewHolderType)
         }
     }
 }

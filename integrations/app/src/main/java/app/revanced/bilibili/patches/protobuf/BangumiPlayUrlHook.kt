@@ -988,18 +988,20 @@ object BangumiPlayUrlHook {
                 }
             }
         }
-        val audio = (dashAudioList.find {
-            it.id == audioId
-        } ?: dashAudioList.first()).let { a ->
-            if (checkBaseUrl) a.apply {
-                if (!checkConnection(baseUrl))
-                    backupUrlList.find(checkConnection)?.let {
-                        baseUrl = it
-                    }
-            } else a
+        if (dashAudioList.isNotEmpty()) {
+            val audio = (dashAudioList.find {
+                it.id == audioId
+            } ?: dashAudioList.first()).let { a ->
+                if (checkBaseUrl) a.apply {
+                    if (!checkConnection(baseUrl))
+                        backupUrlList.find(checkConnection)?.let {
+                            baseUrl = it
+                        }
+                } else a
+            }
+            clearDashAudio()
+            addDashAudio(audio)
         }
-        clearDashAudio()
-        addDashAudio(audio)
     }
 
     private fun getHistory(
