@@ -6,6 +6,7 @@ import app.revanced.patcher.extensions.InstructionExtensions.addInstructionsWith
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patches.bilibili.misc.other.fingerprints.OnOgvDownloadFingerprint
+import app.revanced.patches.bilibili.misc.other.fingerprints.TheseusOnOgvDownloadFingerprint
 import app.revanced.patches.bilibili.misc.other.fingerprints.UniteDownloadMenuInvokeFingerprint
 import app.revanced.patches.bilibili.misc.settings.patch.SettingsResourcePatch
 import app.revanced.patches.bilibili.patcher.patch.MultiMethodBytecodePatch
@@ -26,7 +27,7 @@ import com.android.tools.smali.dexlib2.iface.value.IntEncodedValue
     dependencies = [ResourceMappingPatch::class, SettingsResourcePatch::class]
 )
 object CacheRedirectPatch : MultiMethodBytecodePatch(
-    fingerprints = setOf(UniteDownloadMenuInvokeFingerprint),
+    fingerprints = setOf(UniteDownloadMenuInvokeFingerprint, TheseusOnOgvDownloadFingerprint),
     multiFingerprints = setOf(OnOgvDownloadFingerprint)
 ) {
     override fun execute(context: BytecodeContext) {
@@ -94,6 +95,24 @@ object CacheRedirectPatch : MultiMethodBytecodePatch(
                 )
             }.also { r.mutableClass.methods.add(it) }
         }
+        TheseusOnOgvDownloadFingerprint.result?.run {
+            val originMethod = mutableMethod
+            originMethod.cloneMutable(registerCount = 3, clearImplementation = true).apply {
+                originMethod.name += "_Origin"
+                addInstructionsWithLabels(
+                    0, """
+                    const-string v0, "${originMethod.name}"
+                    invoke-static {p0, v0, p1}, Lapp/revanced/bilibili/patches/CacheRedirectPatch;->onTheseusOgvDownload(Ljava/lang/Object;Ljava/lang/String;Landroid/content/Context;)Z
+                    move-result v0
+                    if-eqz v0, :invoke_origin
+                    return-void
+                    :invoke_origin
+                    invoke-virtual {p0, p1}, $originMethod
+                    return-void
+                """.trimIndent()
+                )
+            }.also { mutableClass.methods.add(it) }
+        }
         // start from 7.80.0
         UniteDownloadMenuInvokeFingerprint.result?.run {
             val originMethodName = mutableMethod.name + "_Origin"
@@ -101,19 +120,20 @@ object CacheRedirectPatch : MultiMethodBytecodePatch(
                 mutableClass.methods.add(it)
             }
             val instructions = mutableMethod.implementation!!.instructions
-            if (instructions[0].opcode == Opcode.IGET_OBJECT && instructions[1].opcode == Opcode.INVOKE_STATIC) {
-                mutableMethod.addInstructionsWithLabels(
-                    2, """
-                    const-string v0, "$originMethodName"
-                    invoke-static {p0, v0}, Lapp/revanced/bilibili/patches/CacheRedirectPatch;->onUniteDownloadMenuClick(Ljava/lang/Object;Ljava/lang/String;)Z
-                    move-result v0
-                    if-eqz v0, :jump
-                    return-void
-                    :jump
-                    nop
-                """.trimIndent()
-                )
-            }
+            val index = if (instructions[0].opcode == Opcode.IGET_OBJECT
+                && instructions[1].opcode == Opcode.INVOKE_STATIC
+            ) 2 else 0
+            mutableMethod.addInstructionsWithLabels(
+                index, """
+                const-string v0, "$originMethodName"
+                invoke-static {p0, v0}, Lapp/revanced/bilibili/patches/CacheRedirectPatch;->onUniteDownloadMenuClick(Ljava/lang/Object;Ljava/lang/String;)Z
+                move-result v0
+                if-eqz v0, :jump
+                return-void
+                :jump
+                nop
+            """.trimIndent()
+            )
         }
     }
 }

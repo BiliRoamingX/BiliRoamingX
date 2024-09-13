@@ -65,6 +65,23 @@ object CacheRedirectPatch {
 
     @Keep
     @JvmStatic
+    fun onTheseusOgvDownload(
+        service: Any,
+        originMethod: String,
+        context: Context
+    ): Boolean {
+        if (!Settings.ExternalDownloader()) return false
+        val packageName = Settings.ExternalDownloaderName()
+            .ifEmpty { return false }
+        val videoUrl = VideoInfoHolder.currentVideoUrl() ?: return false
+        showConfirmDialog(context, videoUrl, packageName) {
+            service.callMethod(originMethod, context)
+        }
+        return true
+    }
+
+    @Keep
+    @JvmStatic
     fun onUniteDownloadMenuClick(self: Any, originMethod: String): Boolean {
         if (!Settings.ExternalDownloader()) return false
         val packageName = Settings.ExternalDownloaderName()
