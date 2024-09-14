@@ -16,7 +16,13 @@ import app.revanced.patcher.patch.annotation.Patch
     requiresIntegrations = true
 )
 object IntegrationsPatch : BytecodePatch() {
+    var danmakuFontSwitchPreferenceClassExist = false
+        private set
+
     override fun execute(context: BytecodeContext) {
+        danmakuFontSwitchPreferenceClassExist = context.classes.any {
+            it.type == "Lcom/bilibili/app/preferences/custom/DanmakuFontSwitchPreference;"
+        }
         val biliAppClass = context.findClass("Lcom/bilibili/gripper/BiliApp;")?.mutableClass
             ?: throw PatchException("BiliApp class not found")
         val appDelegateClass =
