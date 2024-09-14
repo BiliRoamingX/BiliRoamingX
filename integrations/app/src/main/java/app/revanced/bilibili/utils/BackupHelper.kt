@@ -169,11 +169,14 @@ object BackupHelper {
         val settingPrefs = Setting.prefs.edit()
         val vhPrefs = vhPrefs.edit()
 
-        fun JSONArray.exportTo(prefs: SharedPreferences.Editor) = forEach {
-            val key = it.optString("k")
-            val value = it.opt("v")
-            val type = it.optString("t")
-            prefs.mergeJsonItem(key, value, type)
+        fun JSONArray.exportTo(prefs: SharedPreferences.Editor) {
+            prefs.clear()
+            forEach {
+                val key = it.optString("k")
+                val value = it.opt("v")
+                val type = it.optString("t")
+                prefs.mergeJsonItem(key, value, type)
+            }
         }
 
         metaInfo.optJSONArray("settings")?.exportTo(settingPrefs)
