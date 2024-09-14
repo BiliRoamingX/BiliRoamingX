@@ -21,6 +21,7 @@ object ConfigPatch {
     @JvmStatic
     private val alwaysDisabledAbKeys = arrayOf(
         "security_defend_enabled",                    // 禁用安全防御，LibBili#d(long,com.bilibili.nativelibrary.Rt)V 定期检查，会通过 java API 获取签名等信息
+        "upper.auto_download_tag_mod",
     )
 
     @JvmStatic

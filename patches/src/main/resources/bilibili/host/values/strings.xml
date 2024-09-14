@@ -254,8 +254,8 @@
     <string name="biliroaming_text_fold_line">%1$s行</string>
     <string name="biliroaming_version_title">检查更新</string>
     <string name="biliroaming_version_summary_pattern">当前版本：%s</string>
-    <string name="biliroaming_block_modules_title">禁止下载 APP 基础组件库</string>
-    <string name="biliroaming_block_modules_summary">能节省存储空间，但会影响部分功能</string>
+    <string name="biliroaming_delay_download_modules_title">按需下载组件库</string>
+    <string name="biliroaming_delay_download_modules_summary">用到相应功能时才下载对应组件，节省存储空间</string>
     <string name="biliroaming_block_modules_exception_title">例外允许下载的组件</string>
     <string name="biliroaming_block_top_activity_title">隐藏右上角热门活动图标</string>
     <string name="biliroaming_backup_category_title">备份与恢复</string>

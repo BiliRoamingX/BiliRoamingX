@@ -16,10 +16,11 @@
             android:key="text_fold"
             android:summary="@string/biliroaming_text_fold_summary"
             android:title="@string/biliroaming_text_fold_title" />
-        <androidx.preference.Preference
-            android:fragment="app.revanced.bilibili.settings.fragments.BlockModuleFragment"
-            android:key="fragment_block_modules"
-            android:title="@string/biliroaming_block_modules_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="delay_download_modules"
+            android:summary="@string/biliroaming_delay_download_modules_summary"
+            android:title="@string/biliroaming_delay_download_modules_title" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="music_notification"
             android:summary="@string/biliroaming_music_notification_summary"

@@ -7,9 +7,6 @@ import app.revanced.bilibili.settings.search.annotation.SettingFragment
 @SettingFragment("biliroaming_setting_block_follow")
 class BlockFollowFragment : BiliRoamingBaseSettingFragment()
 
-@SettingFragment("biliroaming_setting_block_module")
-class BlockModuleFragment : BiliRoamingBaseSettingFragment()
-
 @SettingFragment("biliroaming_setting_customize_bottom")
 class CustomizeBottomFragment :
     BaseDynamicItemsFragment(Settings.ShowingBottomItems, JSONPatch.bottomItems)

@@ -244,14 +244,14 @@ object Settings {
         IntSetting(key = "text_fold_dyn_max_lines", defValue = Constants.DEF_DYN_MAX_LINES)
     @JvmField val TextFoldDynLinesToAll =
         IntSetting(key = "text_fold_dyn_lines_to_all", defValue = Constants.DEF_DYN_LINES_TO_ALL)
-    @JvmField val BlockModules = BooleanSetting(key = "block_modules", onChange = { value, async ->
-        if (value) if (async) {
-            Utils.async { deleteModuleResources() }
-        } else {
-            deleteModuleResources()
-        }
-    })
-    @JvmField val BlockModulesException = StringSetSetting(key = "block_modules_exception", dependency = BlockModules)
+    @JvmField val DelayDownloadModules =
+        BooleanSetting(key = "delay_download_modules", defValue = true, onChange = { value, async ->
+            if (value) if (async) {
+                Utils.async { deleteModuleResources() }
+            } else {
+                deleteModuleResources()
+            }
+        })
     @JvmField val MusicNotification = BooleanSetting(key = "music_notification", needReboot = true)
     @JvmField val PurifyShare = BooleanSetting(key = "purify_share")
     @JvmField val FuckMiniProgram = BooleanSetting(key = "mini_program")

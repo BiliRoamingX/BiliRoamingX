@@ -57,7 +57,6 @@ object SettingsResourcePatch : ResourcePatch() {
         "biliroaming_setting_block_follow.xml",
         "biliroaming_setting_filter_story.xml",
         "biliroaming_setting_misc.xml",
-        "biliroaming_setting_block_module.xml",
         "biliroaming_setting_backup.xml",
         "biliroaming_setting_player_version.xml",
         "biliroaming_setting_display_size.xml",
