@@ -35,7 +35,6 @@ object Subtitle : ApiHook() {
                 Logger.error(it) { "Ass subtitle convert failed" }
             }.getOrNull() ?: return response
         }
-        @Suppress("CascadeIf")
         if (converter == "t2cn") {
             val dictReady = if (!SubtitleHelper.dictExist) {
                 runCatchingOrNull {
@@ -69,11 +68,12 @@ object Subtitle : ApiHook() {
             s2cnDict.forEach { (l, r) ->
                 newResponse = newResponse.replace(l, r)
             }
+        } else if (converter == "import") {
+            val index = uri.getQueryParameter("import_index")?.toInt() ?: -1
+            if (index != -1)
+                newResponse = importedSubtitles.second.getOrNull(index)
+                    ?: SubtitleHelper.errorResponse("暂无导入字幕")
         }
-        val index = uri.getQueryParameter("import_index")?.toInt() ?: -1
-        if (index != -1)
-            newResponse = importedSubtitles.second.getOrNull(index)
-                ?: SubtitleHelper.errorResponse("暂无导入字幕")
         return newResponse
     }
 }

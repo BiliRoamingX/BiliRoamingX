@@ -787,7 +787,7 @@ inline fun <reified T> Context.requireSystemService(): T = getSystemService(T::c
 
 inline val String.safeContent: String
     get() = Accounts.accessKey.let {
-        if (it.isNotEmpty() && isNotEmpty()) replace(it, "***") else it
+        if (it.isNotEmpty() && isNotEmpty()) replace(it, "114514") else it
     }
 
 inline fun <T> List<T>.forEachIndexedReversed(action: (index: Int, T) -> Unit) {

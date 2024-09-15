@@ -17,7 +17,7 @@ object MossDebugPrinter {
         "com.bapis.bilibili.app.resource.v1.ModuleMoss#executeList",
     )
 
-    private var skipEnabled = false
+    private var skipEnabled = true
 
     @JvmStatic
     fun printBlocking(

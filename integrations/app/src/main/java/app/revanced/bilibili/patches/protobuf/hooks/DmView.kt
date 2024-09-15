@@ -156,13 +156,14 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
                 idStr = subtitle.optLong("id").toString()
                 subtitleUrl = subtitle.optString("url")
                 lanDoc = subtitle.optString("title").replace(furrySubNameExtRegex, "")
-                lan = subtitle.optString("key").let {
+                val lan = subtitle.optString("key")
+                this.lan = lan.let {
                     if (replaceable && !replaced && !lanDoc.contains("机翻") && it.startsWith("cn")) {
                         replaced = true
                         "zh-Hans"
                     } else it
                 }
-                if (lan == "zh-Hans" && subtitleUrl.contains("bstarstatic")) {
+                if (lan == "zh-Hans") {
                     subtitleUrl = Uri.parse(subtitleUrl).buildUpon()
                         .appendQueryParameter("zh_converter", "s2cn").toString()
                 }
@@ -179,18 +180,12 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
             return null
         return SubtitleItem().apply {
             val baseId = 114514L
-            val delegateUrl = subtitles.find { s ->
-                s.subtitleUrl.let { it.contains("aisubtitle") || it.contains("bstarstatic") }
-            }?.subtitleUrl ?: subtitles.first().subtitleUrl
             id = baseId + index
             idStr = id.toString()
             lan = importLan
             lanDoc = "漫游导入${order}"
             lanDocBrief = "导入"
-            subtitleUrl = Uri.parse(delegateUrl).buildUpon()
-                .appendQueryParameter("zh_converter", "import")
-                .appendQueryParameter("import_index", index.toString())
-                .toString()
+            subtitleUrl = "https://interface.bilibili.com/serverdate.js?zh_converter=import&import_index=$index"
         }
     }
 }
