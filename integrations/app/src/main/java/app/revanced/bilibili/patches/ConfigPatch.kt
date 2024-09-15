@@ -16,12 +16,14 @@ object ConfigPatch {
         "ff_side_center_setting_entrance_visibility", // 首页头像入口设置
         "ff_united_video_setting",                    // 新版三点菜单
         "ff_mod_opt_init_delay",                      // 延迟初始化模块
+        "story_new_three_point",                      // 新版竖屏模式三点菜单
+        "downloader.p2p_disabled",                    // 禁用P2P下载
     )
 
     @JvmStatic
     private val alwaysDisabledAbKeys = arrayOf(
         "security_defend_enabled",                    // 禁用安全防御，LibBili#d(long,com.bilibili.nativelibrary.Rt)V 定期检查，会通过 java API 获取签名等信息
-        "upper.auto_download_tag_mod",
+        "upper.auto_download_tag_mod",                // 禁止自动下载tag模块
     )
 
     @JvmStatic

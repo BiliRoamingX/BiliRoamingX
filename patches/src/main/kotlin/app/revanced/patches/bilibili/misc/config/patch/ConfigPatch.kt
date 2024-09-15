@@ -8,6 +8,7 @@ import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patcher.util.proxy.mutableTypes.MutableClass
 import app.revanced.patches.bilibili.misc.config.fingerprints.ABSourceFingerprint
 import app.revanced.patches.bilibili.misc.config.fingerprints.ConfigSourceFingerprint
+import app.revanced.patches.bilibili.misc.config.fingerprints.DDContractImplFingerprint
 import app.revanced.patches.bilibili.utils.cloneMutable
 import app.revanced.patches.bilibili.utils.proxy
 import app.revanced.util.exception
@@ -24,7 +25,9 @@ import app.revanced.patches.bilibili.misc.integrations.patch.ConfigPatch as Inte
         CompatiblePackage(name = "com.bilibili.app.in")
     ]
 )
-object ConfigPatch : BytecodePatch(fingerprints = setOf(ABSourceFingerprint, ConfigSourceFingerprint)) {
+object ConfigPatch : BytecodePatch(
+    fingerprints = setOf(ABSourceFingerprint, ConfigSourceFingerprint, DDContractImplFingerprint)
+) {
     override fun execute(context: BytecodeContext) {
         fun Method.isAb() = parameterTypes == listOf("Ljava/lang/String;", "Ljava/lang/Boolean;")
                 && returnType == "Ljava/lang/Boolean;"
@@ -77,6 +80,62 @@ object ConfigPatch : BytecodePatch(fingerprints = setOf(ABSourceFingerprint, Con
             it.proxy(context).run {
                 patchAb()
                 patchConfig()
+            }
+        }
+
+        val ddContractInterface = DDContractImplFingerprint.result?.classDef?.interfaces?.first()
+            ?: return
+        context.classes.filter { it.interfaces == listOf(ddContractInterface) }.forEach { c ->
+            c.proxy(context).run {
+                fun Method.args() = (0..parameterTypes.size).joinToString { "p$it" }
+
+                val getStringMethod = methods.first { m ->
+                    m.returnType == "Ljava/lang/String;" && m.parameterTypes.let {
+                        it[0] == "Ljava/lang/String;" && it[1] == "Ljava/lang/String;"
+                    }
+                }
+                getStringMethod.cloneMutable(
+                    registerCount = getStringMethod.parameterTypes.size + 2,
+                    clearImplementation = true
+                ).apply {
+                    getStringMethod.name += "_Origin"
+                    addInstructions(
+                        0, """
+                        invoke-virtual {${getStringMethod.args()}}, $getStringMethod
+                        move-result-object v0
+                        invoke-static {p1, p2, v0}, Lapp/revanced/bilibili/patches/ConfigPatch;->getConfig(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+                        move-result-object v0
+                        return-object v0
+                    """.trimIndent()
+                    )
+                }.also { methods.add(it) }
+
+                val getBooleanMethod = methods.first { m ->
+                    m.returnType == "Z" && m.parameterTypes.let {
+                        it[0] == "Ljava/lang/String;" && it[1] == "Z"
+                    }
+                }
+                getBooleanMethod.cloneMutable(
+                    registerCount = getBooleanMethod.parameterTypes.size + 3,
+                    clearImplementation = true
+                ).apply {
+                    getBooleanMethod.name += "_Origin"
+                    addInstructions(
+                        0, """
+                        invoke-virtual {${getBooleanMethod.args()}}, $getBooleanMethod
+                        move-result v0
+                        invoke-static {v0}, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
+                        move-result-object v0
+                        invoke-static {p2}, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
+                        move-result-object v1
+                        invoke-static {p1, v1, v0}, Lapp/revanced/bilibili/patches/ConfigPatch;->getAb(Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;)Ljava/lang/Boolean;
+                        move-result-object v0
+                        invoke-virtual {v0}, Ljava/lang/Boolean;->booleanValue()Z
+                        move-result v0
+                        return v0
+                    """.trimIndent()
+                    )
+                }.also { methods.add(it) }
             }
         }
     }
