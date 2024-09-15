@@ -198,6 +198,14 @@ object OkHttpPatch : MultiMethodBytecodePatch(
             
                 move-result v5
             
+                if-nez v5, :cond_2f
+            
+                const-string v5, ".ass"
+            
+                invoke-virtual {v10, v5}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+            
+                move-result v5
+            
                 if-eqz v5, :cond_ab
             
                 :cond_2f
