@@ -424,7 +424,7 @@
     </string-array>
     <string-array name="biliroaming_player_version_summaries">
         <item />
-        <item>较高版本中由于缺少官方维护，存在不能查看评论区图片等问题，不建议使用</item>
+        <item>较高版本上由于缺少官方维护，可能存在问题，不建议使用</item>
         <item />
     </string-array>
     <string-array name="biliroaming_display_size_entries">

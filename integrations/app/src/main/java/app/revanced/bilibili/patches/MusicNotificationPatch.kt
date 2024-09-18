@@ -118,10 +118,10 @@ object MusicNotificationPatch {
     }
 
     private inline fun <T> Any.getObjectFieldAsX(field: String) = try {
-        getObjectFieldAs<T>(field)
+        getFieldAs<T>(field)
     } catch (_: NoSuchFieldError) {
         val mFiled = "m${field.replaceFirstChar { it.uppercaseChar() }}"
-        getObjectFieldAs(mFiled)
+        getFieldAs(mFiled)
     }
 
     @Keep
@@ -138,7 +138,7 @@ object MusicNotificationPatch {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
             HiddenApiBypass.addHiddenApiExemptions("Landroid/widget/RemoteViews")
 
-        val actions = view.getObjectFieldAs<ArrayList<Any>>("mActions")
+        val actions = view.getFieldAs<ArrayList<Any>>("mActions")
         val buttons = mapOf(
             // only for live, live only has stop button
             stopId to ActionDesc(),
@@ -155,7 +155,7 @@ object MusicNotificationPatch {
         } ?: return old
 
         return Notification.Builder(
-            self.getObjectFieldAs<Service>(serviceField.name), old.channelId
+            self.getFieldAs<Service>(serviceField.name), old.channelId
         ).apply {
             setColor(old.color)
             setSmallIcon(old.smallIcon)
@@ -188,8 +188,8 @@ object MusicNotificationPatch {
                     }
 
                     onClickActionClass -> {
-                        val pendingIntent = action.getObjectField("mResponse")
-                            ?.getObjectFieldAs<PendingIntent?>("mPendingIntent")
+                        val pendingIntent = action.getField("mResponse")
+                            ?.getFieldAs<PendingIntent?>("mPendingIntent")
                         when (viewId) {
                             liveNotificationStopId -> {
                                 buttons[stopId]?.icon = liveNotificationStopIconId
@@ -199,7 +199,7 @@ object MusicNotificationPatch {
                     }
 
                     onClickPendingIntentActionClass -> {
-                        val pendingIntent = action.getObjectFieldAs<PendingIntent?>("pendingIntent")
+                        val pendingIntent = action.getFieldAs<PendingIntent?>("pendingIntent")
                         when (viewId) {
                             liveNotificationStopId -> {
                                 buttons[stopId]?.icon = liveNotificationStopIconId
@@ -236,11 +236,11 @@ object MusicNotificationPatch {
                     else -> intArrayOf(1, 2, 3)
                 }
             )
-            val token = self.getObjectField(serviceField.name)
-                ?.getObjectField(sessionField.name)
+            val token = self.getField(serviceField.name)
+                ?.getField(sessionField.name)
                 ?.callMethod(tokenMethod.name)?.run {
                     javaClass.declaredFields.firstNotNullOfOrNull {
-                        getObjectField(it.name) as? MediaSession.Token
+                        getField(it.name) as? MediaSession.Token
                     }
                 }
             token?.let { mediaStyle.setMediaSession(it) }

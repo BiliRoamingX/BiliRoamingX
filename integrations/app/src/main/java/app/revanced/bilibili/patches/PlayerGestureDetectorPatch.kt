@@ -62,7 +62,7 @@ object PlayerGestureDetectorPatch {
     @JvmStatic
     fun onScaleEnd(listener: Any, detector: ScaleGestureDetector) {
         if (!scaleToSwitchRatio()) return
-        val player = listener.getObjectField(gestureServiceFieldName)
+        val player = listener.getField(gestureServiceFieldName)
             ?.run { callMethod(getPlayerMethodName, this) } ?: return
         val oldRatio = player.getAspectRatio()
         val newRatio =

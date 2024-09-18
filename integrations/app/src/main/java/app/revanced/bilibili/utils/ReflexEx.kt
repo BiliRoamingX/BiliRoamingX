@@ -4,11 +4,11 @@ package app.revanced.bilibili.utils
 
 import app.revanced.bilibili.utils.Reflex.*
 
-inline fun Any.getIntField(field: String?) = getIntField(this, field)
+inline fun Any.getField(field: String?): Any? = getObjectField(this, field)
 
-inline fun Any.getObjectField(field: String?): Any? = getObjectField(this, field)
+inline fun <T> Any.getFieldAs(field: String?) = getObjectField(this, field) as T
 
-inline fun <T> Any.getObjectFieldAs(field: String?) = getObjectField(this, field) as T
+inline fun Any.setField(fieldName: String, value: Any?) = setObjectField(this, fieldName, value)
 
 inline fun <reified T> Any.getFirstFieldByExactType() =
     getFirstFieldByExactType(this, T::class.java) as T

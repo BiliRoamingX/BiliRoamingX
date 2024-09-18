@@ -67,10 +67,10 @@ object SubtitleImportSavePatch {
         }
         importButton.show()
         saveButton.show()
-        val interactLayerService = widget.getObjectField(
+        val interactLayerService = widget.getField(
             "interactLayerServiceForBiliRoaming"
         ) ?: return
-        val widgetService = widget.getObjectField(
+        val widgetService = widget.getField(
             "widgetServiceForBiliRoaming"
         ) ?: return
         importButton.onClick { button ->
@@ -111,7 +111,7 @@ object SubtitleImportSavePatch {
                 interactLayerService.callMethod(setDmViewReplyMethod, newDmViewReply)
                 interactLayerService.callMethod(loadSubtitleMethod, newSubtitle, null)
                 interactLayerService.callMethod(recordSelectedSubtitleMethod, false)
-                widgetService.callMethod(hideWidgetMethod, widget.getObjectField(widgetTokenField))
+                widgetService.callMethod(hideWidgetMethod, widget.getField(widgetTokenField))
                 Utils.runOnMainThread(800L) {
                     val gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
                     Toasts.showShortWithId("biliroaming_subtitle_import_success", gravity = gravity)
@@ -139,7 +139,7 @@ object SubtitleImportSavePatch {
                     }
                 }
             }
-            widgetService.callMethod(hideWidgetMethod, widget.getObjectField(widgetTokenField))
+            widgetService.callMethod(hideWidgetMethod, widget.getField(widgetTokenField))
         }
     }
 
