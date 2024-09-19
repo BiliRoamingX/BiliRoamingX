@@ -20,9 +20,7 @@ import app.revanced.util.copyResources
 )
 object AppIconPatch : ResourcePatch() {
     override fun execute(context: ResourceContext) {
-        val iconFiles = if (SettingsResourcePatch.isHd) arrayOf(
-            "ic_launcher_monochrome.png"
-        ) else arrayOf(
+        val iconFiles = arrayOf(
             "ic_launcher.png",
             "ic_launcher_background.png",
             "ic_launcher_foreground.png",
@@ -37,14 +35,15 @@ object AppIconPatch : ResourcePatch() {
             "mipmap-xxhdpi",
             "mipmap-xxxhdpi"
         )
+        val folder = if (SettingsResourcePatch.isHd) "bilibili/appicon-hd" else "bilibili/appicon"
         iconPaths.forEach {
-            context.copyResources("bilibili/appicon", ResourceGroup(it, *iconFiles))
+            context.copyResources(folder, ResourceGroup(it, *iconFiles))
         }
         ResourceGroup(
             "mipmap-anydpi-v26",
             "ic_launcher.xml", "ic_launcher_round.xml"
         ).let {
-            context.copyResources("bilibili/appicon", it)
+            context.copyResources(folder, it)
         }
     }
 }
