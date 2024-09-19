@@ -10,6 +10,7 @@ import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -23,6 +24,7 @@ import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.Keep;
@@ -32,6 +34,7 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import com.bilibili.app.preferences.BiliPreferencesActivity;
 import com.bilibili.bplus.im.setting.MessageTipItemActivity;
+import com.bilibili.lib.imageviewer.MediaViewerActivity;
 import com.bilibili.magicasakura.widgets.TintCheckBox;
 import com.bilibili.magicasakura.widgets.TintRadioButton;
 import com.bilibili.magicasakura.widgets.TintSwitchCompat;
@@ -443,6 +446,21 @@ public abstract class ApplicationDelegate extends Application {
             printLifecycle(activity, "onActivityResumed", false);
             if (activity instanceof MainActivityV2)
                 VideoInfoHolder.clearCache();
+            else if (activity instanceof MediaViewerActivity) {
+                Window window = activity.getWindow();
+                View decorView = window.getDecorView();
+                decorView.setFitsSystemWindows(false);
+                decorView.setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE           // 保持系统栏稳定，防止布局跳动
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION // 内容扩展到导航栏
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN     // 内容扩展到状态栏
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN            // 隐藏状态栏
+                );
+                window.setNavigationBarColor(Color.TRANSPARENT);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    window.setNavigationBarContrastEnforced(false);
+                }
+            }
         }
 
         @Override
