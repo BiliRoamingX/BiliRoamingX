@@ -186,6 +186,7 @@ object Settings {
     @JvmField val StoryUIStyle = StringSetting(key = "story_ui_style", defValue = "0")
     @JvmField val UnlockGif = BooleanSetting(key = "unlock_gif")
     @JvmField val TimeAirborne = BooleanSetting(key = "time_airborne")
+    @JvmField val OldDmPanel = BooleanSetting(key = "old_dm_panel")
     // endregion
 
 

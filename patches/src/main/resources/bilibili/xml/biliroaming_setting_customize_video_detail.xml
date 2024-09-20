@@ -50,6 +50,10 @@
             android:key="time_airborne"
             android:summary="@string/biliroaming_time_airborne_summary"
             android:title="@string/biliroaming_time_airborne_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="old_dm_panel"
+            android:summary="@string/biliroaming_old_dm_panel_summary"
+            android:title="@string/biliroaming_old_dm_panel_title" />
         <androidx.preference.Preference
             android:fragment="app.revanced.bilibili.settings.fragments.VideoDetailFilterFragment"
             android:key="fragment_video_relate"

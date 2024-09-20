@@ -55,6 +55,15 @@ object DmView : MossHook<DmViewReq, DmViewReply>() {
             }
             reply.clearUnknownFields()
         }
+        if (Settings.OldDmPanel() && reply != null) runCatchingOrNull {
+            val kv = reply.kv
+            if (kv.isNotEmpty()) {
+                kv.toJSONObject().apply {
+                    put("dm_config_panel_exp", false)
+                    reply.kv = toString()
+                }
+            }
+        }
         if (error !is NetworkException)
             return addSubtitles(req, reply)
         return super.hookAfter(req, reply, error)

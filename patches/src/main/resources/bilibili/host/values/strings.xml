@@ -489,4 +489,6 @@
     <string name="biliroaming_remember_playback_speed_summary">播放速度变化应用于所有视频</string>
     <string name="biliroaming_time_airborne_title">时间点空降</string>
     <string name="biliroaming_time_airborne_summary">使所有带有时间点的弹幕、分P或交互视频评论内的时间点均可以空降</string>
+    <string name="biliroaming_old_dm_panel_title">恢复旧版弹幕设置面板</string>
+    <string name="biliroaming_old_dm_panel_summary">目前主要区别在于旧版有弹幕优选，可以过滤更多弹幕</string>
 </resources>
