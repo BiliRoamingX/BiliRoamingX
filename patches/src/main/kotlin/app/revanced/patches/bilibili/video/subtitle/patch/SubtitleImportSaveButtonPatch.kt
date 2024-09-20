@@ -92,6 +92,7 @@ object SubtitleImportSaveButtonPatch : ResourcePatch() {
                         this["app:layout_constraintRight_toRightOf"] = "@id/biliroaming_import_subtitle"
                     }
                     rootNode.walk {
+                        it.removeAttribute("android:alpha")
                         when (val id = it["android:id"]) {
                             "@id/multi_subtitle_switch_text" -> it["android:layout_marginTop"] = "6dp"
                             "@id/multi_subtitle_switch_hint" -> it["android:layout_marginBottom"] = "6dp"
@@ -149,6 +150,7 @@ object SubtitleImportSaveButtonPatch : ResourcePatch() {
                         this["app:layout_constraintRight_toRightOf"] = "parent"
                     }
                     rootNode.walk {
+                        it.removeAttribute("android:alpha")
                         when (it["android:id"]) {
                             "@id/multi_subtitle_switch_text" -> it["android:layout_marginTop"] = "6dp"
                             "@id/multi_subtitle_switch_hint" -> it["android:layout_marginBottom"] = "6dp"
@@ -174,6 +176,9 @@ object SubtitleImportSaveButtonPatch : ResourcePatch() {
             }
         }
         if (!newUI) return
+        context.document["res/drawable/shape_rect_solid_ga9_day_color_8dp.xml"].use { dom ->
+            dom["solid"]["android:color"] = "@color/Ga9_u_alpha70"
+        }
         arrayOf("res/layout", "res/layout-land").map {
             "$it/bili_player_single_col_subtitle_item_holder.xml"
         }.forEach { xml ->
@@ -183,6 +188,7 @@ object SubtitleImportSaveButtonPatch : ResourcePatch() {
                     it["android:paddingTop"] = "12dp"
                     it["android:paddingBottom"] = "12dp"
                     it["android:textColor"] = "@color/selector_bplayer_text_color_compound_button"
+                    it.removeAttribute("android:alpha")
                 }
             }
         }
