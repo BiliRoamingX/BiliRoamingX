@@ -144,6 +144,10 @@ public class JSONPatch {
                 if (newSwitchInfo != null)
                     newSwitchInfo.put("room-player-watermark", 0);
             }
+            if (Settings.LiveNoBlock.get()) try {
+                roomInfo.blockInfo = null;
+            } catch (Throwable ignored) {
+            }
         } else if (data instanceof LiveRoomRecommendCard) {
             if (Settings.PurifyLivePopups.get().contains("follow"))
                 return null;

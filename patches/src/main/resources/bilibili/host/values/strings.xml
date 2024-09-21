@@ -491,4 +491,5 @@
     <string name="biliroaming_time_airborne_summary">使所有带有时间点的弹幕、分P或交互视频评论内的时间点均可以空降</string>
     <string name="biliroaming_old_dm_panel_title">恢复旧版弹幕设置面板</string>
     <string name="biliroaming_old_dm_panel_summary">目前主要区别在于旧版有弹幕优选，可以过滤更多弹幕</string>
+    <string name="biliroaming_live_no_block_title">屏蔽实名认证弹窗</string>
 </resources>

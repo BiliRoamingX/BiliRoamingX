@@ -35,5 +35,8 @@
             android:key="remove_live_watermark"
             android:summary="@string/biliroaming_remove_live_watermark_summary"
             android:title="@string/biliroaming_remove_live_watermark_title" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="live_no_block"
+            android:title="@string/biliroaming_live_no_block_title" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>
