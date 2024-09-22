@@ -5,6 +5,7 @@ import app.revanced.patcher.patch.ResourcePatch
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.util.*
+import java.io.File
 
 @Patch(
     name = "Bili adjust layout (resources)",
@@ -83,5 +84,149 @@ object BiliLayoutAdjustResourcesPatch : ResourcePatch() {
                 }
             }
         }
+        runCatching {
+            var playlistTitleNewLayout = true
+            context.document["res/layout/theseus_playlist_title.xml"].use { dom ->
+                dom.walk { if (it["android:id"] == "@id/current") playlistTitleNewLayout = false }
+            }
+            if (playlistTitleNewLayout) {
+                context["res/layout/theseus_playlist_title.xml", false]
+                    .takeIf { it.isFile }?.coverPlaylistTitleLayout()
+            }
+        }
     }
+
+    private fun File.coverPlaylistTitleLayout() = writeText(
+        """
+        <?xml version="1.0" encoding="utf-8"?>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@id/layout_top_bar"
+                android:layout_width="match_parent"
+                android:layout_height="19dp"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="3dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/theseus_shape_rect_radius2_ga3_fill" />
+            </FrameLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="12dp"
+                android:paddingTop="4dp"
+                android:paddingRight="12dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@id/left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/right"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.bilibili.magicasakura.widgets.TintTextView
+                        android:id="@id/title"
+                        style="@style/T16b"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/Text1"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@id/total"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.bilibili.magicasakura.widgets.TintTextView
+                        android:id="@id/total"
+                        style="@style/T12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/Text3"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@id/title"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@id/right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/left"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <LinearLayout
+                        android:id="@id/order_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@id/arrow"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@id/order_sort_icon"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            app:srcCompat="@drawable/ref_list_sort_positive_line"
+                            app:tint="@color/Text3" />
+
+                        <TextView
+                            android:id="@id/order_desc"
+                            style="@style/T12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="@string/theseus_playlist_default_order"
+                            android:textColor="@color/Text3" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@id/arrow"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/theseus_shape_arrow_button_bg"
+                        android:padding="4dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@id/order_layout"
+                        app:layout_constraintRight_toLeftOf="@id/offline_danmaku_input_parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ref_arrow_expand_line_500"
+                        app:tint="@color/Text3" />
+
+                    <FrameLayout
+                        android:id="@id/offline_danmaku_input_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@id/arrow"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    """.trimIndent()
+    )
 }
