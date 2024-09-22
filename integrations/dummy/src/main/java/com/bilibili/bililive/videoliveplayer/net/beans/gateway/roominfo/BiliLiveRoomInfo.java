@@ -33,6 +33,9 @@ public class BiliLiveRoomInfo {
     public static class FunctionCard {
         @Nullable
         public LiveRoomFollowCardInfo followCard;
+        @JSONField(name = "wish_list_card")
+        @Nullable
+        public LiveRoomWishlistCardInfo wishlistCard;
     }
 
     public static class DmComboInfo {

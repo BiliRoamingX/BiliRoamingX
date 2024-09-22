@@ -118,10 +118,15 @@ public class JSONPatch {
                 return null;
         } else if (data instanceof BiliLiveRoomInfo roomInfo) {
             Set<? extends String> keys = Settings.PurifyLivePopups.get();
+            BiliLiveRoomInfo.FunctionCard card = roomInfo.functionCard;
             if (keys.contains("follow")) {
-                BiliLiveRoomInfo.FunctionCard card = roomInfo.functionCard;
                 if (card != null)
                     card.followCard = null;
+            }
+            if (keys.contains("wish")) try {
+                if (card != null)
+                    card.wishlistCard = null;
+            } catch (Throwable ignored) {
             }
             if (keys.contains("banner"))
                 roomInfo.bannerInfo = null;
