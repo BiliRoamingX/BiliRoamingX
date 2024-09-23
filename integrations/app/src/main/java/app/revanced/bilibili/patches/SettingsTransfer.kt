@@ -74,4 +74,10 @@ object SettingsTransfer {
     fun uidCopyNoPrefix(): Boolean {
         return Settings.UidCopyNoPrefix()
     }
+
+    @Keep
+    @JvmStatic
+    fun delayDownloadModules(): Boolean {
+        return Settings.DelayDownloadModules()
+    }
 }
