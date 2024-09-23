@@ -749,6 +749,7 @@ fun deleteModuleResources() {
     } catch (t: Throwable) {
         Logger.error(t) { "Failed to delete module resources." }
     }
+    Utils.blkvPrefsByName("small_app_sp_apps_conf", true).edit { clear() }
 }
 
 fun deleteTopActivityEntrance() {
