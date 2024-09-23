@@ -134,7 +134,7 @@
     <string name="biliroaming_comment_copy_title">去除长按复制</string>
     <string name="biliroaming_comment_copy_summary">禁用长按评论/动态/视频简介复制到剪切板（减少误触）</string>
     <string name="biliroaming_comment_copy_enhance_title">长按自由复制</string>
-    <string name="biliroaming_comment_copy_enhance_summary">长按私信/评论/动态/视频简介时弹出自由选择对话框，需要开启“去除长按复制”</string>
+    <string name="biliroaming_comment_copy_enhance_summary">长按私信/评论/动态/视频简介时弹出自由选择对话框，需开启“去除长按复制”，新版评论需弹窗后点击复制按钮</string>
     <string name="biliroaming_block_comment_guide_title">屏蔽评论引导</string>
     <string name="biliroaming_block_comment_guide_summary">屏蔽详情页及评论页的评论引导提示</string>
     <string name="biliroaming_block_video_comment_title">屏蔽评论区</string>
@@ -323,7 +323,7 @@
     <string name="biliroaming_custom_splash_title">替换启动图</string>
     <string name="biliroaming_custom_splash_summary">替换启动图为自定义图片（不选择图片则隐藏）</string>
     <string name="biliroaming_custom_splash_logo_title">替换启动Logo</string>
-    <string name="biliroaming_custom_splash_logo_summary">替换启动Logo为自定义图片（不选择图片则隐藏，延迟生效）</string>
+    <string name="biliroaming_custom_splash_logo_summary">替换底部启动Logo为自定义图片（不选择图片则隐藏，延迟生效）</string>
     <string name="biliroaming_full_splash_title">强制满屏启动图</string>
     <string name="biliroaming_full_splash_summary">去两头留中间形式满屏，无论是否自定启动图</string>
     <string name="biliroaming_choose_image">选择一张图片</string>
