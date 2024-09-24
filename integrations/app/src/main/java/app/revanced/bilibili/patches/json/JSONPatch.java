@@ -175,6 +175,10 @@ public class JSONPatch {
                 } catch (Throwable ignored) {
                 }
             }
+            if (keys.contains("qoe")) try {
+                info.qoe = null;
+            } catch (Throwable ignored) {
+            }
         } else if (data instanceof LiveShoppingGotoBuyInfo) {
             if (Settings.PurifyLivePopups.get().contains("gotoBuy"))
                 return null;

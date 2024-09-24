@@ -75,6 +75,7 @@
         <item>主播帮玩</item>
         <item>各种+1</item>
         <item>心愿助力</item>
+        <item>直播效果打分</item>
     </string-array>
     <string-array name="biliroaming_live_popup_values">
         <item>shoppingCard</item>
@@ -89,6 +90,7 @@
         <item>playTogether</item>
         <item>plusOne</item>
         <item>wish</item>
+        <item>qoe</item>
     </string-array>
     <string-array name="biliroaming_drawer_style_entries">
         <item>默认</item>
