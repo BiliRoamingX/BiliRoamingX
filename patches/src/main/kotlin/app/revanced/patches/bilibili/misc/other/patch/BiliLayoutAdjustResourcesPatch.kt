@@ -8,8 +8,6 @@ import app.revanced.util.*
 import java.io.File
 
 @Patch(
-    name = "Bili adjust layout (resources)",
-    description = "调整部分布局UI",
     compatiblePackages = [
         CompatiblePackage(name = "tv.danmaku.bili"),
         CompatiblePackage(name = "tv.danmaku.bilibilihd"),
@@ -207,6 +205,7 @@ object BiliLayoutAdjustResourcesPatch : ResourcePatch() {
                         android:orientation="horizontal"
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp"
+                        android:layout_marginRight="8dp"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -339,6 +338,7 @@ object BiliLayoutAdjustResourcesPatch : ResourcePatch() {
                         android:orientation="horizontal"
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp"
+                        android:layout_marginRight="8dp"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
