@@ -3,7 +3,7 @@
 agp = "8.6.1"
 hiddenapibypass = "4.3"
 truetypeparser = "2.1.4"
-androidx-documentfile = "1.0.1"
+androidx-documentfile = "1.1.0"
 androidx-annotation = "1.8.2"
 androidx-appcompat = "1.7.0"
 androidx-preference = "1.2.1"
