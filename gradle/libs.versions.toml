@@ -12,7 +12,7 @@ protobuf = "4.28.2"
 kotlinx-serialization = "1.7.3"
 fastjson = "1.2.83"
 # patches
-revanced-patcher = "19.3.1"
+revanced-patcher = "19.3.1.2"
 smali = "3.0.3"
 gson = "2.11.0"
 kotlin = "2.0.20"

@@ -13,6 +13,7 @@ import app.revanced.patches.bilibili.utils.cloneMutable
 import app.revanced.patches.bilibili.utils.proxy
 import app.revanced.util.exception
 import com.android.tools.smali.dexlib2.iface.Method
+import com.android.tools.smali.dexlib2.Opcode
 import app.revanced.patches.bilibili.misc.integrations.patch.ConfigPatch as IntegrationConfigPatch
 
 @Patch(
@@ -138,5 +139,31 @@ object ConfigPatch : BytecodePatch(
                 }.also { methods.add(it) }
             }
         }
+
+        val configClazz = context.findClass("Lcom/bilibili/lib/performance/EntryPointKt;")!!.mutableClass
+        val originAbMethod = configClazz.methods.first { it.name == "getBooleanValue" }
+        val originConfigMethod = configClazz.methods.first { it.name == "getStringValue" }
+        val abIndex = originAbMethod.implementation!!.instructions
+            .indexOfLast { it.opcode == Opcode.INVOKE_INTERFACE }
+        val configIndex = originConfigMethod.implementation!!.instructions
+            .indexOfLast { it.opcode == Opcode.INVOKE_INTERFACE }
+        originAbMethod.addInstructions(
+            abIndex + 2, """
+            invoke-static {v2}, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
+            move-result-object v2
+            invoke-static {v0}, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
+            move-result-object v0
+            invoke-static {v1, v2, v0}, Lapp/revanced/bilibili/patches/ConfigPatch;->getAb(Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;)Ljava/lang/Boolean;
+            move-result-object v0
+            invoke-virtual {v0}, Ljava/lang/Boolean;->booleanValue()Z
+            move-result v0
+        """.trimIndent()
+        )
+        originConfigMethod.addInstructions(
+            configIndex + 2, """
+            invoke-static {v1, v2, v0}, Lapp/revanced/bilibili/patches/ConfigPatch;->getConfig(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+            move-result-object v0
+        """.trimIndent()
+        )
     }
 }
