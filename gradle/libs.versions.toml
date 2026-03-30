@@ -17,7 +17,7 @@ smali = "3.0.3"
 gson = "2.11.0"
 kotlin = "2.0.20"
 ksp = "2.0.20-1.0.25"
-kotlinpoet-ksp = "1.18.1"
+kotlinpoet-ksp = "2.3.0"
 
 [libraries]
 gradle-plugin-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
