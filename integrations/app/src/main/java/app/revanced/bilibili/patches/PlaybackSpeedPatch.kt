@@ -66,6 +66,18 @@ object PlaybackSpeedPatch {
 
     @JvmStatic
     private var playerCache = WeakReference<IMediaPlayer>(null)
+    
+    @Keep
+    @JvmStatic
+    fun onSetPlaySpeed(speed: Float): Float {
+        val stackTrace = Throwable().stackTrace
+        return when {
+            stackTrace.any { it.methodName.contains("trySelect") } -> {
+                longPressSpeed(2.0f)
+            }
+            else -> speed
+        }
+    }
 
     @Keep
     @JvmStatic

@@ -7,6 +7,7 @@ import app.revanced.patcher.patch.PatchException
 import app.revanced.patcher.patch.annotation.CompatiblePackage
 import app.revanced.patcher.patch.annotation.Patch
 import app.revanced.patches.bilibili.misc.settings.patch.SettingsResourcePatch
+import app.revanced.patches.bilibili.video.player.fingerprints.PlayerSeekToFingerprint
 import app.revanced.patches.bilibili.video.player.fingerprints.PlaySpeedManagerImplFingerprint
 import app.revanced.patches.bilibili.video.player.fingerprints.PlayerOnPreparedFingerprint
 import app.revanced.util.exception
@@ -25,7 +26,7 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
     dependencies = [SettingsResourcePatch::class]
 )
 object DefaultPlaybackSpeedPatch : BytecodePatch(
-    setOf(PlayerOnPreparedFingerprint, PlaySpeedManagerImplFingerprint)
+    setOf(PlayerOnPreparedFingerprint, PlaySpeedManagerImplFingerprint, PlayerSeekToFingerprint)
 ) {
     override fun execute(context: BytecodeContext) {
         PlayerOnPreparedFingerprint.result?.mutableMethod?.run {
@@ -52,5 +53,14 @@ object DefaultPlaybackSpeedPatch : BytecodePatch(
                 )
             } ?: throw PlaySpeedManagerImplFingerprint.exception
         }
+        
+        val playerClass = PlayerSeekToFingerprint.result?.mutableClass
+        val setPlaySpeedMethod = playerClass?.methods?.first { it.name == "setPlaySpeed" }
+        setPlaySpeedMethod?.addInstructions(
+            0, """
+            invoke-static {p1}, Lapp/revanced/bilibili/patches/PlaybackSpeedPatch;->onSetPlaySpeed(F)F
+            move-result p1
+        """.trimIndent()
+        )
     }
 }

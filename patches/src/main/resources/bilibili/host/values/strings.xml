@@ -492,4 +492,6 @@
     <string name="biliroaming_old_dm_panel_title">恢复旧版弹幕设置面板</string>
     <string name="biliroaming_old_dm_panel_summary">目前主要区别在于旧版有弹幕优选，可以过滤更多弹幕</string>
     <string name="biliroaming_live_no_block_title">屏蔽实名认证弹窗</string>
+    <string name="biliroaming_lock_long_press_title">长按倍速锁定</string>
+    <string name="biliroaming_lock_long_press_summary">长按时下滑锁定倍速播放</string>
 </resources>

@@ -43,6 +43,7 @@ object Settings {
     @JvmField val AccessKeyMain = StringSetting(key = "access_key_main")
     @JvmField val AccessKeyThailand = StringSetting(key = "access_key_th")
     @JvmField val RememberPlaybackSpeed = BooleanSetting(key = "remember_playback_speed")
+    @JvmField val LockLongPress = BooleanSetting(key = "lock_long_press")
     // endregion
 
 
